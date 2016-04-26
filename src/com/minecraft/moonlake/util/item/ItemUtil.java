@@ -12,6 +12,8 @@ import java.util.List;
 
 /**
  * Created by MoonLake on 2016/4/26.
+ * @version 1.0
+ * @author Month_Light
  */
 public class ItemUtil extends LoreUtil implements Itemlib {
 
@@ -87,11 +89,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      */
     @Override
     public ItemStack create(int id, int data, int amount, String name, String... lore) {
-        ItemStack item = create(id, data, amount, name);
-        ItemMeta meta = item.getItemMeta();
-        meta.setLore(Arrays.asList(Util.color(lore)));;
-        item.setItemMeta(meta);
-        return item;
+        return setLore(create(id, data, amount, name), lore);
     }
 
     /**
@@ -106,11 +104,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      */
     @Override
     public ItemStack create(int id, int data, int amount, String name, List<String> lore) {
-        ItemStack item = create(id, data, amount, name);
-        ItemMeta meta = item.getItemMeta();
-        meta.setLore(Util.color(lore));
-        item.setItemMeta(meta);;
-        return item;
+        return setLore(create(id, data, amount, name), lore);
     }
 
     /**
@@ -261,11 +255,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      */
     @Override
     public ItemStack create(Material id, int data, int amount, String name, String... lore) {
-        ItemStack item = create(id, data, amount, name);
-        ItemMeta meta = item.getItemMeta();
-        meta.setLore(Arrays.asList(Util.color(lore)));
-        item.setItemMeta(meta);
-        return item;
+        return setLore(create(id, data, amount, name), lore);
     }
 
     /**
@@ -280,10 +270,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      */
     @Override
     public ItemStack create(Material id, int data, int amount, String name, List<String> lore) {
-        ItemStack item = create(id, data, amount, name);
-        ItemMeta meta = item.getItemMeta();
-        meta.setLore(Util.color(lore));
-        item.setItemMeta(meta);
-        return item;
+        return setLore(create(id, data, amount, name), lore);
     }
 }

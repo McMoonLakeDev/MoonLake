@@ -20,11 +20,36 @@ public interface Lorelib {
     List<String> getLore(ItemStack item);
 
     /**
+     * 给物品栈设置标签
+     * @param item 物品栈
+     * @param lore 标签
+     * @return ItemStack
+     */
+    ItemStack setLore(ItemStack item, String... lore);
+
+    /**
+     * 给物品栈设置标签
+     * @param item 物品栈
+     * @param lore 标签
+     * @return ItemStack
+     */
+    ItemStack setLore(ItemStack item, List<String> lore);
+
+    /**
      * 给物品栈追加标签
      *
      * @param item 物品栈
      * @param lore 标签
      * @return ItemStack
      */
-    ItemStack addLore(ItemStack item, String lore);
+    ItemStack addLore(ItemStack item, String... lore);
+
+    /**
+     * 给物品栈追加标签
+     *
+     * @param item 物品栈
+     * @param lore 标签
+     * @return ItemStack
+     */
+    ItemStack addLore(ItemStack item, List<String> lore);
 }
