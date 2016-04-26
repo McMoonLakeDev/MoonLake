@@ -1,6 +1,10 @@
 package com.minecraft.moonlake;
 
 import com.minecraft.moonlake.api.MoonLake;
+import com.minecraft.moonlake.api.itemlib.Itemlib;
+import com.minecraft.moonlake.api.lorelib.Lorelib;
+import com.minecraft.moonlake.util.item.ItemUtil;
+import com.minecraft.moonlake.util.lore.LoreUtil;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,6 +19,8 @@ import java.util.Set;
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
 
     private MoonLake instance;
+    private Itemlib itemlib;
+    private Lorelib lorelib;
     private PluginDescriptionFile pdf;
 
     static { }
@@ -22,7 +28,29 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     public MoonLakePlugin() {
         // 构造函数
         instance = this;
+        itemlib = new ItemUtil();
+        lorelib = new LoreUtil();
         pdf = this.getDescription();
+    }
+
+    /**
+     * 获取物品支持库实例对象
+     *
+     * @return Itemlib
+     */
+    @Override
+    public Itemlib getItemlib() {
+        return itemlib;
+    }
+
+    /**
+     * 获取标签支持库实例对象
+     *
+     * @return Lorelib
+     */
+    @Override
+    public Lorelib getLorelib() {
+        return lorelib;
     }
 
     /**
