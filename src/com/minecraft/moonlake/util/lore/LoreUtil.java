@@ -149,15 +149,15 @@ public class LoreUtil implements Lorelib {
         if(temp == null) {
             return setLore(item, insertLore);
         }
-        if(index >= temp.size() - 1) {
+        if(index <= 0 || index >= temp.size()) {
             return addLore(item, insertLore);
         }
         List<String> lore = new ArrayList<String>();
-        for(int i = 0; i < index + 1; i++) {
+        for(int i = 0; i < index; i++) {
             lore.add(temp.get(i));
         }
         lore.addAll(Arrays.asList(Util.color(insertLore)));
-        for(int i = 0;i < temp.size() - index + 1; i++) {
+        for(int i = temp.size() - index; i < temp.size(); i++) {
             lore.add(temp.get(i));
         }
         return setLore(item, lore);
