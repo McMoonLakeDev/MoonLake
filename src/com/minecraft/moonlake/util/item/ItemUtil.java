@@ -545,13 +545,18 @@ public class ItemUtil extends LoreUtil implements Itemlib {
                 percentArr[i] = false;
             }
         }
+        else {
+            for(int i = 0; i < isPercent.length; i++) {
+                percentArr[i] = isPercent[i];
+            }
+        }
         Iterator<Map.Entry<AttributeType, Double>> iterator = typeDoubleMap.entrySet().iterator();
         while(iterator.hasNext()) {
 
             Map.Entry<AttributeType, Double> entry = iterator.next();
-            Util.notNull(entry, "待添加特殊属性的物品栈的属性类型是 null 值");
-
             AttributeType type = entry.getKey();
+
+            Util.notNull(type, "待添加特殊属性的物品栈的属性类型是 null 值");
 
             tag.set("Name", new net.minecraft.server.v1_9_R1.NBTTagString(type.getName()));
             tag.set("AttributeName", new net.minecraft.server.v1_9_R1.NBTTagString(type.getAttributeName()));
