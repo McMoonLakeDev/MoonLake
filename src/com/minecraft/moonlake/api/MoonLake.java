@@ -11,6 +11,13 @@ import com.minecraft.moonlake.api.lorelib.Lorelib;
 public interface MoonLake extends MoonLakeInfo {
 
     /**
+     * 给控制台输出日志
+     *
+     * @param log 日志
+     */
+    void log(String log);
+
+    /**
      * 获取物品支持库实例对象
      *
      * @return Itemlib

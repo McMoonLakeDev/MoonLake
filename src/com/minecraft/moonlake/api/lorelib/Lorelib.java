@@ -90,6 +90,14 @@ public interface Lorelib {
     String getLoreFromIndex(ItemStack item, int index);
 
     /**
+     * 给物品栈在指定索引删除标签
+     * @param item 物品栈
+     * @param index 索引
+     * @return 删除标签后的 ItemStack 如果索引越界则删除最后索引
+     */
+    ItemStack removeLoreFromIndex(ItemStack item, int index);
+
+    /**
      * 给物品栈在指定索引插入标签
      *
      * @param item 物品栈

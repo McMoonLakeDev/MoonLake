@@ -5,13 +5,14 @@ import com.minecraft.moonlake.util.Util;
 import com.minecraft.moonlake.util.lore.LoreUtil;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Arrays;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by MoonLake on 2016/4/26.
@@ -33,6 +34,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return ItemStack
      */
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(int id) {
         return new ItemStack(id);
     }
@@ -45,6 +47,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return ItemStack
      */
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(int id, int data) {
         return new ItemStack(id, data);
     }
@@ -58,6 +61,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return ItemStack
      */
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(int id, int data, int amount) {
         return new ItemStack(id, amount, (byte)data);
     }
@@ -318,6 +322,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 附魔后的 ItemStack
      */
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack enchantment(ItemStack item, int id, int lvl) {
         return enchantment(item, Enchantment.getById(id), lvl);
     }
@@ -333,5 +338,148 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     @Override
     public ItemStack enchantment(ItemStack item, String id, int lvl) {
         return enchantment(item, Enchantment.getByName(id), lvl);
+    }
+
+    /**
+     * 获取物品栈的附魔
+     *
+     * @param item 物品栈
+     * @return 附魔Map
+     */
+    @Override
+    public Map<Enchantment, Integer> getEnchantments(ItemStack item) {
+        Util.notNull(item, "待获取附魔的物品栈是 null 值");
+
+        return item.getItemMeta().getEnchants();
+    }
+
+    /**
+     * 获取物品栈的标示
+     *
+     * @param item 物品栈
+     * @return 标示数组
+     */
+    @Override
+    public Set<ItemFlag> getFlags(ItemStack item) {
+        Util.notNull(item, "待获取标示的物品栈是 null 值");
+
+        return item.getItemMeta().getItemFlags();
+    }
+
+    /**
+     * 给物品栈添加标示
+     *
+     * @param item  物品栈
+     * @param flags 标示
+     * @return 添加标示后的 ItemStack
+     */
+    @Override
+    public ItemStack addFlags(ItemStack item, ItemFlag... flags) {
+        Util.notNull(item, "待添加标示的物品栈是 null 值");
+        Util.notNull(flags, "待添加标示的物品栈的标示是 null 值");
+
+        ItemMeta meta = item.getItemMeta();
+        meta.addItemFlags(flags);
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    /**
+     * 给物品栈清除标示
+     *
+     * @param item  物品栈
+     * @param flags 标示
+     * @return 清除标示后的 ItemStack
+     */
+    @Override
+    public ItemStack removeFlags(ItemStack item, ItemFlag... flags) {
+        Util.notNull(item, "待删除标示的物品栈是 null 值");
+
+        ItemMeta meta = item.getItemMeta();
+        meta.removeItemFlags(flags);
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    /**
+     * 获取物品栈是否拥有标示
+     *
+     * @param item 物品栈
+     * @return 物品栈
+     */
+    @Override
+    public boolean hasFlag(ItemStack item) {
+        Util.notNull(item, "待获取标示的物品栈是 null 值");
+
+        return item.hasItemMeta() && item.getItemMeta().getItemFlags().size() >= 1;
+    }
+
+    /**
+     * 获取物品栈是否拥有标示
+     *
+     * @param item 物品栈
+     * @param flag 标示
+     * @return 物品栈
+     */
+    @Override
+    public boolean hasFlag(ItemStack item, ItemFlag flag) {
+        Util.notNull(item, "待获取标示的物品栈是 null 值");
+
+        return item.hasItemMeta() && item.getItemMeta().hasItemFlag(flag);
+    }
+
+    /**
+     * 设置物品栈是否无法破坏
+     *
+     * @param item 物品栈
+     * @param unbreakable 状态
+     * @return 设置后的 ItemStack
+     */
+    @Override
+    public ItemStack setUnbreakable(ItemStack item, boolean unbreakable) {
+        Util.notNull(item, "待设置的物品栈是 null 值");
+
+        ItemMeta meta = item.getItemMeta();
+        meta.spigot().setUnbreakable(unbreakable);
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    /**
+     * 设置物品栈是否无法破坏 (NMS映射设置不推荐使用)
+     *
+     * @param item 物品栈
+     * @param unbreakable 状态
+     * @return 设置后的 ItemStack 异常返回 null
+     */
+    @Override
+    public ItemStack setUnbreakableFromNMS(ItemStack item, boolean unbreakable) {
+        Util.notNull(item, "待设置的物品栈是 null 值");
+
+        Field field = null;
+        net.minecraft.server.v1_9_R1.ItemStack nms = null;
+
+        try {
+            field = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.class.getDeclaredField("handle");
+            field.setAccessible(true);
+            nms = (net.minecraft.server.v1_9_R1.ItemStack)field.get(item);
+        }
+        catch (Exception e) {
+            return null;
+        }
+        net.minecraft.server.v1_9_R1.NBTTagCompound tag = nms.getTag();
+        if(tag == null) {
+            tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+        }
+        tag.setByte("Unbreakable", unbreakable ? (byte)1 : (byte)0);
+        nms.setTag(tag);
+        org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack craftItem = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asCraftCopy(item);
+        try {
+            field.set(craftItem, nms);
+        }
+        catch (Exception e) {
+            return null;
+        }
+        return craftItem;
     }
 }

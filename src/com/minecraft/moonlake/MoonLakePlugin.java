@@ -5,6 +5,7 @@ import com.minecraft.moonlake.api.itemlib.Itemlib;
 import com.minecraft.moonlake.api.lorelib.Lorelib;
 import com.minecraft.moonlake.util.item.ItemUtil;
 import com.minecraft.moonlake.util.lore.LoreUtil;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,10 +19,13 @@ import java.util.Set;
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
 
-    private MoonLake instance;
-    private Itemlib itemlib;
-    private Lorelib lorelib;
-    private PluginDescriptionFile pdf;
+    private final MoonLake instance;
+    private final Itemlib itemlib;
+    private final Lorelib lorelib;
+    private final PluginDescriptionFile pdf;
+    private final String prefix = "[MoonLake]";
+    private final ConsoleCommandSender console;
+
     private static MoonLake staticInstance;
 
     static { }
@@ -30,9 +34,10 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         // 构造函数
         instance = this;
         staticInstance = this;
+        pdf = this.getDescription();
+        console = this.getServer().getConsoleSender();
         itemlib = new ItemUtil();
         lorelib = new LoreUtil();
-        pdf = this.getDescription();
     }
 
     /**
@@ -52,6 +57,16 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     @Deprecated
     public static MoonLake getInstances() {
         return staticInstance;
+    }
+
+    /**
+     * 给控制台输出日志
+     *
+     * @param log 日志
+     */
+    @Override
+    public void log(String log) {
+        console.sendMessage(prefix + " " + log);
     }
 
     /**

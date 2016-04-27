@@ -3,10 +3,12 @@ package com.minecraft.moonlake.api.itemlib;
 import com.minecraft.moonlake.api.lorelib.Lorelib;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by MoonLake on 2016/4/26.
@@ -239,4 +241,74 @@ public interface Itemlib extends Lorelib {
      * @return 附魔后的 ItemStack
      */
     ItemStack enchantment(ItemStack item, String id, int lvl);
+
+    /**
+     * 获取物品栈的附魔
+     *
+     * @param item 物品栈
+     * @return 附魔Map
+     */
+    Map<Enchantment, Integer> getEnchantments(ItemStack item);
+
+    /**
+     * 获取物品栈的标示
+     *
+     * @param item 物品栈
+     * @return 标示数组
+     */
+    Set<ItemFlag> getFlags(ItemStack item);
+
+    /**
+     * 给物品栈添加标示
+     *
+     * @param item 物品栈
+     * @param flags 标示
+     * @return 添加标示后的 ItemStack
+     */
+    ItemStack addFlags(ItemStack item, ItemFlag... flags);
+
+    /**
+     * 给物品栈清除标示
+     *
+     * @param item 物品栈
+     * @param flags 标示
+     * @return 清除标示后的 ItemStack
+     */
+    ItemStack removeFlags(ItemStack item, ItemFlag... flags);
+
+    /**
+     * 获取物品栈是否拥有标示
+     *
+     * @param item 物品栈
+     * @return 物品栈
+     */
+    boolean hasFlag(ItemStack item);
+
+    /**
+     * 获取物品栈是否拥有标示
+     *
+     * @param item 物品栈
+     * @param flag 标示
+     * @return 物品栈
+     */
+    boolean hasFlag(ItemStack item, ItemFlag flag);
+
+    /**
+     * 设置物品栈是否无法破坏
+     *
+     * @param item 物品栈
+     * @param unbreakable 状态
+     * @return 设置后的 ItemStack
+     */
+    ItemStack setUnbreakable(ItemStack item, boolean unbreakable);
+
+    /**
+     * 设置物品栈是否无法破坏 (NMS映射设置不推荐使用)
+     *
+     * @param item 物品栈
+     * @param unbreakable 状态
+     * @return 设置后的 ItemStack 异常返回 null
+     */
+    @Deprecated
+    ItemStack setUnbreakableFromNMS(ItemStack item, boolean unbreakable);
 }

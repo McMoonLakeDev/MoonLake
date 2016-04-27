@@ -177,6 +177,23 @@ public class LoreUtil implements Lorelib {
     }
 
     /**
+     * 给物品栈在指定索引删除标签
+     *
+     * @param item  物品栈
+     * @param index 索引
+     * @return 删除标签后的 ItemStack 如果索引越界则删除最后索引
+     */
+    @Override
+    public ItemStack removeLoreFromIndex(ItemStack item, int index) {
+        List<String> temp = getLore(item);
+        if(temp == null) {
+            return item;
+        }
+        temp.remove(index >= temp.size() ? temp.size() - 1 : index - 1);
+        return setLore(item, temp);
+    }
+
+    /**
      * 给物品栈在指定索引插入标签
      *
      * @param item 物品栈
