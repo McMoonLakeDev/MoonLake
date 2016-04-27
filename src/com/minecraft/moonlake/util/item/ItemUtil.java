@@ -287,7 +287,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 附魔后的 ItemStack
      */
     @Override
-    public ItemStack enchantment(ItemStack item, Enchantment ench, int lvl) {
+    public ItemStack addEnchantment(ItemStack item, Enchantment ench, int lvl) {
         Util.notNull(item, "待添加附魔的物品栈是 null 值");
         Util.notNull(ench, "待添加附魔的物品栈的附魔是 null 值");
 
@@ -303,7 +303,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 附魔后的 ItemStack
      */
     @Override
-    public ItemStack enchantment(ItemStack item, Map<Enchantment, Integer> ench) {
+    public ItemStack addEnchantment(ItemStack item, Map<Enchantment, Integer> ench) {
         Util.notNull(item, "待添加附魔的物品栈是 null 值");
         Util.notNull(ench, "待添加附魔的物品栈的附魔是 null 值");
 
@@ -321,8 +321,8 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      */
     @Override
     @SuppressWarnings("deprecation")
-    public ItemStack enchantment(ItemStack item, int id, int lvl) {
-        return enchantment(item, Enchantment.getById(id), lvl);
+    public ItemStack addEnchantment(ItemStack item, int id, int lvl) {
+        return addEnchantment(item, Enchantment.getById(id), lvl);
     }
 
     /**
@@ -334,8 +334,52 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 附魔后的 ItemStack
      */
     @Override
-    public ItemStack enchantment(ItemStack item, String id, int lvl) {
-        return enchantment(item, Enchantment.getByName(id), lvl);
+    public ItemStack addEnchantment(ItemStack item, String id, int lvl) {
+        return addEnchantment(item, Enchantment.getByName(id), lvl);
+    }
+
+    /**
+     * 给物品栈删除指定的附魔
+     *
+     * @param item 物品栈
+     * @param ench 附魔
+     * @return 删除附魔后的 ItemStack
+     */
+    @Override
+    public ItemStack removeEnchantment(ItemStack item, Enchantment ench) {
+        Util.notNull(item, "待删除附魔的物品栈是 null 值");
+
+        ItemMeta meta = item.getItemMeta();
+        if(meta.hasEnchant(ench)) {
+            meta.removeEnchant(ench);
+        }
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    /**
+     * 给物品栈删除指定的附魔
+     *
+     * @param item 物品栈
+     * @param id   附魔ID
+     * @return 删除附魔后的 ItemStack
+     */
+    @Override
+    @SuppressWarnings("deprecation")
+    public ItemStack removeEnchantment(ItemStack item, int id) {
+        return removeEnchantment(item, Enchantment.getById(id));
+    }
+
+    /**
+     * 给物品栈删除指定的附魔
+     *
+     * @param item 物品栈
+     * @param id   附魔类型
+     * @return 删除附魔后的 ItemStack
+     */
+    @Override
+    public ItemStack removeEnchantment(ItemStack item, String id) {
+        return removeEnchantment(item, Enchantment.getByName(id));
     }
 
     /**

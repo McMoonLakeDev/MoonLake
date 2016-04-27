@@ -212,7 +212,7 @@ public interface Itemlib extends Lorelib {
      * @param lvl 附魔等级
      * @return 附魔后的 ItemStack
      */
-    ItemStack enchantment(ItemStack item, Enchantment ench, int lvl);
+    ItemStack addEnchantment(ItemStack item, Enchantment ench, int lvl);
 
     /**
      * 给物品栈添加的附魔
@@ -221,7 +221,7 @@ public interface Itemlib extends Lorelib {
      * @param ench 附魔和等级Map
      * @return 附魔后的 ItemStack
      */
-    ItemStack enchantment(ItemStack item, Map<Enchantment, Integer> ench);
+    ItemStack addEnchantment(ItemStack item, Map<Enchantment, Integer> ench);
 
     /**
      * 给物品栈添加的附魔
@@ -231,7 +231,7 @@ public interface Itemlib extends Lorelib {
      * @param lvl 附魔等级
      * @return 附魔后的 ItemStack
      */
-    ItemStack enchantment(ItemStack item, int id, int lvl);
+    ItemStack addEnchantment(ItemStack item, int id, int lvl);
 
     /**
      * 给物品栈添加的附魔
@@ -241,7 +241,34 @@ public interface Itemlib extends Lorelib {
      * @param lvl 附魔等级
      * @return 附魔后的 ItemStack
      */
-    ItemStack enchantment(ItemStack item, String id, int lvl);
+    ItemStack addEnchantment(ItemStack item, String id, int lvl);
+
+    /**
+     * 给物品栈删除指定的附魔
+     *
+     * @param item 物品栈
+     * @param ench 附魔
+     * @return 删除附魔后的 ItemStack
+     */
+    ItemStack removeEnchantment(ItemStack item, Enchantment ench);
+
+    /**
+     * 给物品栈删除指定的附魔
+     *
+     * @param item 物品栈
+     * @param id 附魔ID
+     * @return 删除附魔后的 ItemStack
+     */
+    ItemStack removeEnchantment(ItemStack item, int id);
+
+    /**
+     * 给物品栈删除指定的附魔
+     *
+     * @param item 物品栈
+     * @param id 附魔类型
+     * @return 删除附魔后的 ItemStack
+     */
+    ItemStack removeEnchantment(ItemStack item, String id);
 
     /**
      * 获取物品栈的附魔
