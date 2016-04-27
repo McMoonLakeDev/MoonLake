@@ -12,10 +12,10 @@ import java.util.List;
 public interface Lorelib {
 
     /**
-     * 获取物品栈的标签
+     * 获取物品栈的标签集合
      *
      * @param item 物品栈
-     * @return String List
+     * @return 标签集合 如果物品栈没有标签则返回 null
      */
     List<String> getLore(ItemStack item);
 
@@ -24,7 +24,7 @@ public interface Lorelib {
      *
      * @param item 物品栈
      * @param lore 标签
-     * @return ItemStack
+     * @return 设置标签后的 ItemStack
      */
     ItemStack setLore(ItemStack item, String... lore);
 
@@ -33,7 +33,7 @@ public interface Lorelib {
      *
      * @param item 物品栈
      * @param lore 标签
-     * @return ItemStack
+     * @return 设置标签后的 ItemStack
      */
     ItemStack setLore(ItemStack item, List<String> lore);
 
@@ -42,7 +42,7 @@ public interface Lorelib {
      *
      * @param item 物品栈
      * @param lore 标签
-     * @return ItemStack
+     * @return 追加标签后的 ItemStack
      */
     ItemStack addLore(ItemStack item, String... lore);
 
@@ -51,9 +51,17 @@ public interface Lorelib {
      *
      * @param item 物品栈
      * @param lore 标签
-     * @return ItemStack
+     * @return 追加标签后的 ItemStack
      */
     ItemStack addLore(ItemStack item, List<String> lore);
+
+    /**
+     * 给物品栈清除标签
+     *
+     * @param item 物品栈
+     * @return 清理标签后的 ItemStack
+     */
+    ItemStack clearLore(ItemStack item);
 
     /**
      * 获取物品栈是否拥有标签
@@ -62,6 +70,15 @@ public interface Lorelib {
      * @return 是否拥有标签
      */
     boolean hasLore(ItemStack item);
+
+    /**
+     * 获取物品栈是否包含标签
+     *
+     * @param item 物品栈
+     * @param lore 标签
+     * @return 是否包含标签
+     */
+    boolean containsLore(ItemStack item, String... lore);
 
     /**
      * 获取物品栈指定索引的标签

@@ -23,16 +23,16 @@ public class LoreUtil implements Lorelib {
     }
 
     /**
-     * 获取物品栈的标签
+     * 获取物品栈的标签集合
      *
      * @param item 物品栈
-     * @return String List 如果物品栈没有标签则返回 null
+     * @return 标签集合 如果物品栈没有标签则返回 null
      */
     @Override
     public List<String> getLore(ItemStack item) {
         Util.notNull(item, "待获取标签的物品栈是 null 值");
 
-        return item.hasItemMeta() ? item.getItemMeta().hasLore() ? item.getItemMeta().getLore() : null : null;
+        return item.hasItemMeta() && item.getItemMeta().hasLore() ? item.getItemMeta().getLore() : null;
     }
 
     /**
@@ -40,7 +40,7 @@ public class LoreUtil implements Lorelib {
      *
      * @param item 物品栈
      * @param lore 标签
-     * @return ItemStack
+     * @return 设置标签后的 ItemStack
      */
     @Override
     public ItemStack setLore(ItemStack item, String... lore) {
@@ -57,7 +57,7 @@ public class LoreUtil implements Lorelib {
      *
      * @param item 物品栈
      * @param lore 标签
-     * @return ItemStack
+     * @return 设置标签后的 ItemStack
      */
     @Override
     public ItemStack setLore(ItemStack item, List<String> lore) {
@@ -74,7 +74,7 @@ public class LoreUtil implements Lorelib {
      *
      * @param item 物品栈
      * @param lore 标签
-     * @return ItemStack
+     * @return 追加标签后的 ItemStack
      */
     @Override
     public ItemStack addLore(ItemStack item, String... lore) {
@@ -95,7 +95,7 @@ public class LoreUtil implements Lorelib {
      *
      * @param item 物品栈
      * @param lore 标签
-     * @return ItemStack
+     * @return 追加标签后的 ItemStack
      */
     @Override
     public ItemStack addLore(ItemStack item, List<String> lore) {
@@ -112,6 +112,17 @@ public class LoreUtil implements Lorelib {
     }
 
     /**
+     * 给物品栈清除标签
+     *
+     * @param item 物品栈
+     * @return 清理标签后的 ItemStack
+     */
+    @Override
+    public ItemStack clearLore(ItemStack item) {
+        return null;
+    }
+
+    /**
      * 获取物品栈是否拥有标签
      *
      * @param item 物品栈
@@ -120,6 +131,31 @@ public class LoreUtil implements Lorelib {
     @Override
     public boolean hasLore(ItemStack item) {
         return getLore(item) != null;
+    }
+
+    /**
+     * 获取物品栈是否包含标签
+     *
+     * @param item 物品栈
+     * @param lore 标签
+     * @return 是否包含标签
+     */
+    @Override
+    public boolean containsLore(ItemStack item, String... lore) {
+        Util.notNull(item, "待包含标签数组是 null 值");
+
+        List<String> temp = getLore(item);
+        if(temp == null) {
+            return false;
+        }
+        boolean state = false;
+        for(int i = 0; i < lore.length; i++) {
+            state = temp.contains(lore[i]);
+            if(!state) {
+                break;
+            }
+        }
+        return state;
     }
 
     /**
