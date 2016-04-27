@@ -10,9 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by MoonLake on 2016/4/26.
@@ -486,29 +484,89 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     /**
      * 给物品栈设置特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
+     * @param item 物品栈
      * @param type 属性类型
      * @param count 属性数量
      * @param isPercent 是否百分比
-     * @return 设置特殊属性后的 ItemStack
+     * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
     @Override
-    public ItemStack setAttribute(AttributeType type, double count, boolean isPercent) {
+    public ItemStack setAttribute(ItemStack item, AttributeType type, double count, boolean isPercent) {
+        Util.notNull(item, "待设置的物品栈是 null 值");
         Util.notNull(type, "待添加特殊属性的物品栈的属性类型是 null 值");
 
-        return null;
+        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_9_R1.NBTTagCompound tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+        net.minecraft.server.v1_9_R1.NBTTagList tagAttList = nms.getTag().getList("AttributeModifiers", 10);
+        if(tagAttList == null) {
+            tagAttList = new net.minecraft.server.v1_9_R1.NBTTagList();
+        }
+        tag.set("Name", new net.minecraft.server.v1_9_R1.NBTTagString(type.getName()));
+        tag.set("AttributeName", new net.minecraft.server.v1_9_R1.NBTTagString(type.getAttributeName()));
+        tag.set("Amount", new net.minecraft.server.v1_9_R1.NBTTagDouble(count));
+        tag.set("Operation", new net.minecraft.server.v1_9_R1.NBTTagInt(isPercent ? 1 : 0));
+
+        UUID uuid = UUID.randomUUID();
+        tag.set("UUIDMost", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getMostSignificantBits()));
+        tag.set("UUIDLeast", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getLeastSignificantBits()));
+
+        tagAttList.add(tag);
+        nms.getTag().set("AttributeModifiers", tagAttList);
+
+        return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
     }
 
     /**
      * 给物品栈添加特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
+     * @param item 物品栈
      * @param typeDoubleMap 属性类型和数量Map
      * @param isPercent 是否百分比数组
-     * @return 设置特殊属性后的 ItemStack
+     * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
     @Override
-    public ItemStack addAttribute(Map<AttributeType, Double> typeDoubleMap, boolean... isPercent) {
+    public ItemStack addAttribute(ItemStack item, Map<AttributeType, Double> typeDoubleMap, boolean... isPercent) {
+        Util.notNull(item, "待设置的物品栈是 null 值");
         Util.notNull(typeDoubleMap, "待添加特殊属性的物品栈的属性类型是 null 值");
 
-        return null;
+        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_9_R1.NBTTagCompound tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+        net.minecraft.server.v1_9_R1.NBTTagList tagAttList = nms.getTag().getList("AttributeModifiers", 10);
+        if(tagAttList == null) {
+            tagAttList = new net.minecraft.server.v1_9_R1.NBTTagList();
+        }
+        int percentIndex = 0;
+        boolean[] percentArr = new boolean[typeDoubleMap.size()];
+        if(isPercent.length < typeDoubleMap.size()) {
+            for(int i = 0; i < isPercent.length; i++) {
+                percentArr[i] = isPercent[i];
+            }
+            for(int i = isPercent.length; i < typeDoubleMap.size(); i++) {
+                percentArr[i] = false;
+            }
+        }
+        Iterator<Map.Entry<AttributeType, Double>> iterator = typeDoubleMap.entrySet().iterator();
+        while(iterator.hasNext()) {
+
+            Map.Entry<AttributeType, Double> entry = iterator.next();
+            Util.notNull(entry, "待添加特殊属性的物品栈的属性类型是 null 值");
+
+            AttributeType type = entry.getKey();
+
+            tag.set("Name", new net.minecraft.server.v1_9_R1.NBTTagString(type.getName()));
+            tag.set("AttributeName", new net.minecraft.server.v1_9_R1.NBTTagString(type.getAttributeName()));
+            tag.set("Amount", new net.minecraft.server.v1_9_R1.NBTTagDouble(entry.getValue()));
+            tag.set("Operation", new net.minecraft.server.v1_9_R1.NBTTagInt(percentArr[percentIndex] ? 1 : 0));
+
+            UUID uuid = UUID.randomUUID();
+            tag.set("UUIDMost", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getMostSignificantBits()));
+            tag.set("UUIDLeast", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getLeastSignificantBits()));
+
+            tagAttList.add(tag);
+            percentIndex++;
+        }
+        nms.getTag().set("AttributeModifiers", tagAttList);
+
+        return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
     }
 }

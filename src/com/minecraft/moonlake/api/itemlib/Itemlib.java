@@ -316,23 +316,25 @@ public interface Itemlib extends Lorelib {
     /**
      * 给物品栈设置特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
+     * @param item 物品栈
      * @param type 属性类型
      * @param count 属性数量
      * @param isPercent 是否百分比
-     * @return 设置特殊属性后的 ItemStack
+     * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
     @Deprecated
-    ItemStack setAttribute(AttributeType type, double count, boolean isPercent);
+    ItemStack setAttribute(ItemStack item, AttributeType type, double count, boolean isPercent);
 
     /**
      * 给物品栈添加特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
+     * @param item 物品栈
      * @param typeDoubleMap 属性类型和数量Map
      * @param isPercent 是否百分比数组
-     * @return 设置特殊属性后的 ItemStack
+     * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
     @Deprecated
-    ItemStack addAttribute(Map<AttributeType, Double> typeDoubleMap, boolean... isPercent);
+    ItemStack addAttribute(ItemStack item, Map<AttributeType, Double> typeDoubleMap, boolean... isPercent);
 
     /**
      * 物品栈特殊属性类型枚举
@@ -342,37 +344,58 @@ public interface Itemlib extends Lorelib {
         /**
          * 物品栈特殊属性: 攻击伤害
          */
-        ATTACK_DAMAGE("AttackDamage", "generic.attackDamage"),
+        ATTACK_DAMAGE("AttackDamage", "damage", "generic.attackDamage"),
         /**
          * 物品栈特殊属性: 移动速度
          */
-        MOVE_SPEED("MoveSpeed", "generic.movementSpeed"),
+        MOVE_SPEED("MoveSpeed", "movement_speed", "generic.movementSpeed"),
         /**
          * 物品栈特殊属性: 击退抗性
          */
-        KNOCKBACK_RESISTANCE("KnockbackResistance", "generic.knockbackResistance"),
+        KNOCKBACK_RESISTANCE("KnockbackResistance", "knockback_resistance", "generic.knockbackResistance"),
         /**
          * 物品栈特殊属性: 血量上限
          */
-        MAX_HEALTH("MaxHealth", "generic.maxHealth"),
+        MAX_HEALTH("MaxHealth", "max_health", "generic.maxHealth"),
         /**
          * 物品栈特殊属性: 跟踪范围
          */
-        FOLLOW_RANGE("FollowRange", "generic.followRange"),
+        FOLLOW_RANGE("FollowRange", "follow_range", "generic.followRange"),
         ;
 
         private String type;
+        private String name;
         private String attributeName;
 
-        AttributeType(String type, String attributeName) {
+        AttributeType(String type, String name, String attributeName) {
             this.type = type;
+            this.name = name;
             this.attributeName = attributeName;
         }
 
+        /**
+         * 特殊属性的类型名
+         *
+         * @return 类型名
+         */
         public String getType() {
             return type;
         }
 
+        /**
+         * 特殊属性的名字
+         *
+         * @return 名字
+         */
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * 特殊属性的属性名
+         *
+         * @return 属性名
+         */
         public String getAttributeName() {
             return attributeName;
         }
