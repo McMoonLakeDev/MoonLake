@@ -4,11 +4,14 @@ import com.minecraft.moonlake.api.itemlib.Itemlib;
 import com.minecraft.moonlake.util.Util;
 import com.minecraft.moonlake.util.lore.LoreUtil;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by MoonLake on 2016/4/26.
@@ -271,5 +274,64 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     @Override
     public ItemStack create(Material id, int data, int amount, String name, List<String> lore) {
         return setLore(create(id, data, amount, name), lore);
+    }
+
+    /**
+     * 给物品栈添加的附魔
+     *
+     * @param item 物品栈
+     * @param ench 附魔
+     * @param lvl  附魔等级
+     * @return 附魔后的 ItemStack
+     */
+    @Override
+    public ItemStack enchantment(ItemStack item, Enchantment ench, int lvl) {
+        Util.notNull(item, "待添加附魔的物品栈是 null 值");
+        Util.notNull(ench, "待添加附魔的物品栈的附魔是 null 值");
+
+        item.addUnsafeEnchantment(ench, lvl);
+        return item;
+    }
+
+    /**
+     * 给物品栈添加的附魔
+     *
+     * @param item 物品栈
+     * @param ench 附魔和等级Map
+     * @return 附魔后的 ItemStack
+     */
+    @Override
+    public ItemStack enchantment(ItemStack item, Map<Enchantment, Integer> ench) {
+        Util.notNull(item, "待添加附魔的物品栈是 null 值");
+        Util.notNull(ench, "待添加附魔的物品栈的附魔是 null 值");
+
+        item.addUnsafeEnchantments(ench);
+        return item;
+    }
+
+    /**
+     * 给物品栈添加的附魔
+     *
+     * @param item 物品栈
+     * @param id   附魔ID
+     * @param lvl  附魔等级
+     * @return 附魔后的 ItemStack
+     */
+    @Override
+    public ItemStack enchantment(ItemStack item, int id, int lvl) {
+        return enchantment(item, Enchantment.getById(id), lvl);
+    }
+
+    /**
+     * 给物品栈添加的附魔
+     *
+     * @param item 物品栈
+     * @param id   附魔类型
+     * @param lvl  附魔等级
+     * @return 附魔后的 ItemStack
+     */
+    @Override
+    public ItemStack enchantment(ItemStack item, String id, int lvl) {
+        return enchantment(item, Enchantment.getByName(id), lvl);
     }
 }

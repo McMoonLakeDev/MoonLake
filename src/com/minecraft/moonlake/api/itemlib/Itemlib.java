@@ -2,9 +2,11 @@ package com.minecraft.moonlake.api.itemlib;
 
 import com.minecraft.moonlake.api.lorelib.Lorelib;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by MoonLake on 2016/4/26.
@@ -198,4 +200,43 @@ public interface Itemlib extends Lorelib {
      * @return ItemStack
      */
     ItemStack create(Material id, int data, int amount, String name, List<String> lore);
+
+    /**
+     * 给物品栈添加的附魔
+     *
+     * @param item 物品栈
+     * @param ench 附魔
+     * @param lvl 附魔等级
+     * @return 附魔后的 ItemStack
+     */
+    ItemStack enchantment(ItemStack item, Enchantment ench, int lvl);
+
+    /**
+     * 给物品栈添加的附魔
+     *
+     * @param item 物品栈
+     * @param ench 附魔和等级Map
+     * @return 附魔后的 ItemStack
+     */
+    ItemStack enchantment(ItemStack item, Map<Enchantment, Integer> ench);
+
+    /**
+     * 给物品栈添加的附魔
+     *
+     * @param item 物品栈
+     * @param id 附魔ID
+     * @param lvl 附魔等级
+     * @return 附魔后的 ItemStack
+     */
+    ItemStack enchantment(ItemStack item, int id, int lvl);
+
+    /**
+     * 给物品栈添加的附魔
+     *
+     * @param item 物品栈
+     * @param id 附魔类型
+     * @param lvl 附魔等级
+     * @return 附魔后的 ItemStack
+     */
+    ItemStack enchantment(ItemStack item, String id, int lvl);
 }

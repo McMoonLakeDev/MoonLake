@@ -22,15 +22,36 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     private Itemlib itemlib;
     private Lorelib lorelib;
     private PluginDescriptionFile pdf;
+    private static MoonLake staticInstance;
 
     static { }
 
     public MoonLakePlugin() {
         // 构造函数
         instance = this;
+        staticInstance = this;
         itemlib = new ItemUtil();
         lorelib = new LoreUtil();
         pdf = this.getDescription();
+    }
+
+    /**
+     * 获取 MoonLake 实例对象
+     *
+     * @return MoonLake
+     */
+    public MoonLake getInstance() {
+        return instance;
+    }
+
+    /**
+     * 获取 MoonLake 实例对象 (静态函数获取实例不建议使用)
+     *
+     * @return MoonLake
+     */
+    @Deprecated
+    public static MoonLake getInstances() {
+        return staticInstance;
     }
 
     /**
@@ -51,15 +72,6 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     @Override
     public Lorelib getLorelib() {
         return lorelib;
-    }
-
-    /**
-     * 获取 MoonLake 实例对象
-     *
-     * @return MoonLake
-     */
-    public MoonLake getInstance() {
-        return instance;
     }
 
     /**

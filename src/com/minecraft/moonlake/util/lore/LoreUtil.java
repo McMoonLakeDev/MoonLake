@@ -119,7 +119,12 @@ public class LoreUtil implements Lorelib {
      */
     @Override
     public ItemStack clearLore(ItemStack item) {
-        return null;
+        List<String> temp = getLore(item);
+        if(temp == null) {
+            return item;
+        }
+        temp.clear();
+        return setLore(item, temp);
     }
 
     /**
