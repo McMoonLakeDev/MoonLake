@@ -482,4 +482,33 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         }
         return craftItem;
     }
+
+    /**
+     * 给物品栈设置特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param type 属性类型
+     * @param count 属性数量
+     * @param isPercent 是否百分比
+     * @return 设置特殊属性后的 ItemStack
+     */
+    @Override
+    public ItemStack setAttribute(AttributeType type, double count, boolean isPercent) {
+        Util.notNull(type, "待添加特殊属性的物品栈的属性类型是 null 值");
+
+        return null;
+    }
+
+    /**
+     * 给物品栈添加特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param typeDoubleMap 属性类型和数量Map
+     * @param isPercent 是否百分比数组
+     * @return 设置特殊属性后的 ItemStack
+     */
+    @Override
+    public ItemStack addAttribute(Map<AttributeType, Double> typeDoubleMap, boolean... isPercent) {
+        Util.notNull(typeDoubleMap, "待添加特殊属性的物品栈的属性类型是 null 值");
+
+        return null;
+    }
 }

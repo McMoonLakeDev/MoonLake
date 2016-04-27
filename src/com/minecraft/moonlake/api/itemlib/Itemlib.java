@@ -1,6 +1,7 @@
 package com.minecraft.moonlake.api.itemlib;
 
 import com.minecraft.moonlake.api.lorelib.Lorelib;
+import com.minecraft.moonlake.util.Util;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -311,4 +312,105 @@ public interface Itemlib extends Lorelib {
      */
     @Deprecated
     ItemStack setUnbreakableFromNMS(ItemStack item, boolean unbreakable);
+
+    /**
+     * 给物品栈设置特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param type 属性类型
+     * @param count 属性数量
+     * @param isPercent 是否百分比
+     * @return 设置特殊属性后的 ItemStack
+     */
+    @Deprecated
+    ItemStack setAttribute(AttributeType type, double count, boolean isPercent);
+
+    /**
+     * 给物品栈添加特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param typeDoubleMap 属性类型和数量Map
+     * @param isPercent 是否百分比数组
+     * @return 设置特殊属性后的 ItemStack
+     */
+    @Deprecated
+    ItemStack addAttribute(Map<AttributeType, Double> typeDoubleMap, boolean... isPercent);
+
+    /**
+     * 物品栈特殊属性类型枚举
+     */
+    enum AttributeType {
+
+        /**
+         * 物品栈特殊属性: 攻击伤害
+         */
+        ATTACK_DAMAGE("AttackDamage", "generic.attackDamage"),
+        /**
+         * 物品栈特殊属性: 移动速度
+         */
+        MOVE_SPEED("MoveSpeed", "generic.movementSpeed"),
+        /**
+         * 物品栈特殊属性: 击退抗性
+         */
+        KNOCKBACK_RESISTANCE("KnockbackResistance", "generic.knockbackResistance"),
+        /**
+         * 物品栈特殊属性: 血量上限
+         */
+        MAX_HEALTH("MaxHealth", "generic.maxHealth"),
+        /**
+         * 物品栈特殊属性: 跟踪范围
+         */
+        FOLLOW_RANGE("FollowRange", "generic.followRange"),
+        ;
+
+        private String type;
+        private String attributeName;
+
+        AttributeType(String type, String attributeName) {
+            this.type = type;
+            this.attributeName = attributeName;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public String getAttributeName() {
+            return attributeName;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder toString = new StringBuilder("AttributeType{").append(type + "," + attributeName);
+            return toString.append("}").toString();
+        }
+
+        /**
+         * 将字串符序列化为物品栈特殊属性对象
+         *
+         * @param type 物品栈特殊属性类型
+         * @return AttributeType 如果不存在类型则返回 null
+         */
+        public static AttributeType fromType(String type) {
+            Util.notNull(type, "待转换的特殊属性类型是 null 值");
+
+            switch (type.toLowerCase()) {
+                case "attackdamage":
+                case "attack_damage":
+                    return ATTACK_DAMAGE;
+                case "movespeed":
+                case "move_speed":
+                    return MOVE_SPEED;
+                case "knockbackresistance":
+                case "knockback_resistance":
+                    return KNOCKBACK_RESISTANCE;
+                case "maxhealth":
+                case "max_health":
+                    return MAX_HEALTH;
+                case "followrange":
+                case "follow_range":
+                    return FOLLOW_RANGE;
+                default:
+                    return null;
+            }
+        }
+    }
 }
