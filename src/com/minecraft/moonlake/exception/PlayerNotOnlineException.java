@@ -5,7 +5,7 @@ package com.minecraft.moonlake.exception;
  * @version 1.0
  * @author Month_Light
  */
-public class PlayerNotOnlineException extends Exception {
+public class PlayerNotOnlineException extends RuntimeException {
 
     public PlayerNotOnlineException() {
         super("Player is not online.");

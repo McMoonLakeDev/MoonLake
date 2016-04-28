@@ -35,6 +35,7 @@ public interface Playerlib {
      * @param player 玩家名
      * @return OfflinePlayer
      */
+    @Deprecated
     OfflinePlayer getOfflinePlayer(String player);
 
     /**
@@ -58,10 +59,10 @@ public interface Playerlib {
      * 给玩家发送网络数据包
      *
      * @param player 玩家名
-     * @param packet 数据包
+     * @param packets 数据包
      * @throws PlayerNotOnlineException 玩家不在线则抛出异常
      */
-    void sendPacket(String player, net.minecraft.server.v1_9_R1.Packet<?> packet);
+    void sendPacket(String player, net.minecraft.server.v1_9_R1.Packet<?>... packets);
 
     /**
      * 给玩家发送标题数据包
