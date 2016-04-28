@@ -2,6 +2,7 @@ package com.minecraft.moonlake.api;
 
 import com.minecraft.moonlake.api.itemlib.Itemlib;
 import com.minecraft.moonlake.api.lorelib.Lorelib;
+import com.minecraft.moonlake.api.playerlib.Playerlib;
 
 /**
  * Created by MoonLake on 2016/4/26.
@@ -30,4 +31,11 @@ public interface MoonLake extends MoonLakeInfo {
      * @return Lorelib
      */
     Lorelib getLorelib();
+
+    /**
+     * 获取玩家支持库实例对象
+     *
+     * @return Playerlib
+     */
+    Playerlib getPlayerlib();
 }

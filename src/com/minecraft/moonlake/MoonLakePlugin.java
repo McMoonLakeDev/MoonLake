@@ -3,8 +3,10 @@ package com.minecraft.moonlake;
 import com.minecraft.moonlake.api.MoonLake;
 import com.minecraft.moonlake.api.itemlib.Itemlib;
 import com.minecraft.moonlake.api.lorelib.Lorelib;
+import com.minecraft.moonlake.api.playerlib.Playerlib;
 import com.minecraft.moonlake.util.item.ItemUtil;
 import com.minecraft.moonlake.util.lore.LoreUtil;
+import com.minecraft.moonlake.util.player.PlayerUtil;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,6 +24,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     private final MoonLake instance;
     private final Itemlib itemlib;
     private final Lorelib lorelib;
+    private final Playerlib playerlib;
     private final PluginDescriptionFile pdf;
     private final String prefix = "[MoonLake]";
     private final ConsoleCommandSender console;
@@ -38,6 +41,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         console = this.getServer().getConsoleSender();
         itemlib = new ItemUtil();
         lorelib = new LoreUtil();
+        playerlib = new PlayerUtil();
     }
 
     /**
@@ -87,6 +91,16 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     @Override
     public Lorelib getLorelib() {
         return lorelib;
+    }
+
+    /**
+     * 获取玩家支持库实例对象
+     *
+     * @return Playerlib
+     */
+    @Override
+    public Playerlib getPlayerlib() {
+        return playerlib;
     }
 
     /**
