@@ -258,9 +258,7 @@ public class PlayerUtil implements Playerlib {
             field.setAccessible(true);
             field.set(ppoplhf, tabheader);
         }
-        catch (Exception e) {
-            ;
-        }
+        catch (Exception e) { }
         sendPacket(player, ppoplhf);
     }
 

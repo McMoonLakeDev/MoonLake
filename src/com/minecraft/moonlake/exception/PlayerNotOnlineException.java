@@ -8,7 +8,7 @@ package com.minecraft.moonlake.exception;
 public class PlayerNotOnlineException extends RuntimeException {
 
     public PlayerNotOnlineException() {
-        super("Player is not online.");
+        super("Player is not online");
     }
 
     public PlayerNotOnlineException(String message) {
