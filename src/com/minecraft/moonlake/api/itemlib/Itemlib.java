@@ -341,7 +341,7 @@ public interface Itemlib extends Lorelib {
     ItemStack setUnbreakableFromNMS(ItemStack item, boolean unbreakable);
 
     /**
-     * 给物品栈设置特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     * 给物品栈添加特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
      * @param item 物品栈
      * @param type 属性类型
@@ -350,7 +350,7 @@ public interface Itemlib extends Lorelib {
      * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
     @Deprecated
-    ItemStack setAttribute(ItemStack item, AttributeType type, double count, boolean isPercent);
+    ItemStack addAttribute(ItemStack item, AttributeType type, double count, boolean isPercent);
 
     /**
      * 给物品栈添加特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
@@ -362,6 +362,61 @@ public interface Itemlib extends Lorelib {
      */
     @Deprecated
     ItemStack addAttribute(ItemStack item, Map<AttributeType, Double> typeDoubleMap, boolean... isPercent);
+
+    /**
+     * 设置物品栈的攻击伤害属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param item 物品栈
+     * @param count 属性数量
+     * @param isPercent 是否百分比
+     * @return 设置攻击伤害属性后的 ItemStack
+     */
+    @Deprecated
+    ItemStack setItemAttackDamage(ItemStack item, double count, boolean isPercent);
+
+    /**
+     * 设置物品栈的血量上限属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param item 物品栈
+     * @param count 属性数量
+     * @param isPercent 是否百分比
+     * @return 设置血量上限属性后的 ItemStack
+     */
+    @Deprecated
+    ItemStack setItemMaxHealth(ItemStack item, double count, boolean isPercent);
+
+    /**
+     * 设置物品栈的移动速度属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param item 物品栈
+     * @param count 属性数量
+     * @param isPercent 是否百分比
+     * @return 设置移动速度属性后的 ItemStack
+     */
+    @Deprecated
+    ItemStack setItemMoveSpeed(ItemStack item, double count, boolean isPercent);
+
+    /**
+     * 设置物品栈的击退抗性属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param item 物品栈
+     * @param count 属性数量
+     * @param isPercent 是否百分比
+     * @return 设置击退抗性属性后的 ItemStack
+     */
+    @Deprecated
+    ItemStack setItemKnockbackResistance(ItemStack item, double count, boolean isPercent);
+
+    /**
+     * 设置物品栈的跟踪范围属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param item 物品栈
+     * @param count 属性数量
+     * @param isPercent 是否百分比
+     * @return 设置跟踪范围属性后的 ItemStack
+     */
+    @Deprecated
+    ItemStack setItemFollowRange(ItemStack item, double count, boolean isPercent);
 
     /**
      * 物品栈特殊属性类型枚举

@@ -32,7 +32,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return ItemStack
      */
     @Override
-    @SuppressWarnings("deprecation")
     public ItemStack create(int id) {
         return new ItemStack(id);
     }
@@ -45,7 +44,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return ItemStack
      */
     @Override
-    @SuppressWarnings("deprecation")
     public ItemStack create(int id, int data) {
         return new ItemStack(id, data);
     }
@@ -59,7 +57,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return ItemStack
      */
     @Override
-    @SuppressWarnings("deprecation")
     public ItemStack create(int id, int data, int amount) {
         return new ItemStack(id, amount, (byte)data);
     }
@@ -348,6 +345,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     @Override
     public ItemStack removeEnchantment(ItemStack item, Enchantment ench) {
         Util.notNull(item, "待删除附魔的物品栈是 null 值");
+        Util.notNull(ench, "待删除附魔的物品栈的附魔是 null 值");
 
         ItemMeta meta = item.getItemMeta();
         if(meta.hasEnchant(ench)) {
@@ -495,6 +493,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 设置后的 ItemStack 异常返回 null
      */
     @Override
+    @Deprecated
     public ItemStack setUnbreakableFromNMS(ItemStack item, boolean unbreakable) {
         Util.notNull(item, "待设置的物品栈是 null 值");
 
@@ -526,7 +525,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     }
 
     /**
-     * 给物品栈设置特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     * 给物品栈添加特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
      * @param item 物品栈
      * @param type 属性类型
@@ -535,7 +534,8 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
     @Override
-    public ItemStack setAttribute(ItemStack item, AttributeType type, double count, boolean isPercent) {
+    @Deprecated
+    public ItemStack addAttribute(ItemStack item, AttributeType type, double count, boolean isPercent) {
         Util.notNull(item, "待设置的物品栈是 null 值");
         Util.notNull(type, "待添加特殊属性的物品栈的属性类型是 null 值");
 
@@ -569,6 +569,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
     @Override
+    @Deprecated
     public ItemStack addAttribute(ItemStack item, Map<AttributeType, Double> typeDoubleMap, boolean... isPercent) {
         Util.notNull(item, "待设置的物品栈是 null 值");
         Util.notNull(typeDoubleMap, "待添加特殊属性的物品栈的属性类型是 null 值");
@@ -617,5 +618,75 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         nms.getTag().set("AttributeModifiers", tagAttList);
 
         return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
+    }
+
+    /**
+     * 设置物品栈的攻击伤害属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param item      物品栈
+     * @param count     属性数量
+     * @param isPercent 是否百分比
+     * @return 设置攻击伤害属性后的 ItemStack
+     */
+    @Override
+    @Deprecated
+    public ItemStack setItemAttackDamage(ItemStack item, double count, boolean isPercent) {
+        return addAttribute(item, AttributeType.ATTACK_DAMAGE, count, isPercent);
+    }
+
+    /**
+     * 设置物品栈的血量上限属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param item      物品栈
+     * @param count     属性数量
+     * @param isPercent 是否百分比
+     * @return 设置血量上限属性后的 ItemStack
+     */
+    @Override
+    @Deprecated
+    public ItemStack setItemMaxHealth(ItemStack item, double count, boolean isPercent) {
+        return addAttribute(item, AttributeType.MAX_HEALTH, count, isPercent);
+    }
+
+    /**
+     * 设置物品栈的移动速度属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param item      物品栈
+     * @param count     属性数量
+     * @param isPercent 是否百分比
+     * @return 设置移动速度属性后的 ItemStack
+     */
+    @Override
+    @Deprecated
+    public ItemStack setItemMoveSpeed(ItemStack item, double count, boolean isPercent) {
+        return addAttribute(item, AttributeType.MOVE_SPEED, count, isPercent);
+    }
+
+    /**
+     * 设置物品栈的击退抗性属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param item      物品栈
+     * @param count     属性数量
+     * @param isPercent 是否百分比
+     * @return 设置击退抗性属性后的 ItemStack
+     */
+    @Override
+    @Deprecated
+    public ItemStack setItemKnockbackResistance(ItemStack item, double count, boolean isPercent) {
+        return addAttribute(item, AttributeType.KNOCKBACK_RESISTANCE, count, isPercent);
+    }
+
+    /**
+     * 设置物品栈的跟踪范围属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param item      物品栈
+     * @param count     属性数量
+     * @param isPercent 是否百分比
+     * @return 设置跟踪范围属性后的 ItemStack
+     */
+    @Override
+    @Deprecated
+    public ItemStack setItemFollowRange(ItemStack item, double count, boolean isPercent) {
+        return addAttribute(item, AttributeType.FOLLOW_RANGE, count, isPercent);
     }
 }
