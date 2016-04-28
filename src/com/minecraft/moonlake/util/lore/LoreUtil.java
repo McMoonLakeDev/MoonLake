@@ -168,12 +168,12 @@ public class LoreUtil implements Lorelib {
      *
      * @param item 物品栈
      * @param index 索引
-     * @return 索引标签 如果物品栈没有标签或索引越界则返回空
+     * @return 索引标签 如果物品栈没有标签或索引越界则返回 null
      */
     @Override
     public String getLoreFromIndex(ItemStack item, int index) {
         List<String> temp = getLore(item);
-        return temp != null && temp.size() - 1 <= index ? temp.get(index) : "";
+        return temp != null && temp.size() - 1 <= index ? temp.get(index) : null;
     }
 
     /**

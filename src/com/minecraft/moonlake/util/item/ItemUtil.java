@@ -317,7 +317,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 附魔后的 ItemStack
      */
     @Override
-    @SuppressWarnings("deprecation")
     public ItemStack addEnchantment(ItemStack item, int id, int lvl) {
         return addEnchantment(item, Enchantment.getById(id), lvl);
     }
@@ -363,7 +362,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 删除附魔后的 ItemStack
      */
     @Override
-    @SuppressWarnings("deprecation")
     public ItemStack removeEnchantment(ItemStack item, int id) {
         return removeEnchantment(item, Enchantment.getById(id));
     }
@@ -623,8 +621,8 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     /**
      * 设置物品栈的攻击伤害属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
-     * @param item      物品栈
-     * @param count     属性数量
+     * @param item 物品栈
+     * @param count 属性数量
      * @param isPercent 是否百分比
      * @return 设置攻击伤害属性后的 ItemStack
      */
@@ -637,8 +635,8 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     /**
      * 设置物品栈的血量上限属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
-     * @param item      物品栈
-     * @param count     属性数量
+     * @param item 物品栈
+     * @param count 属性数量
      * @param isPercent 是否百分比
      * @return 设置血量上限属性后的 ItemStack
      */
@@ -651,8 +649,8 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     /**
      * 设置物品栈的移动速度属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
-     * @param item      物品栈
-     * @param count     属性数量
+     * @param item 物品栈
+     * @param count 属性数量
      * @param isPercent 是否百分比
      * @return 设置移动速度属性后的 ItemStack
      */
@@ -665,8 +663,8 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     /**
      * 设置物品栈的击退抗性属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
-     * @param item      物品栈
-     * @param count     属性数量
+     * @param item 物品栈
+     * @param count 属性数量
      * @param isPercent 是否百分比
      * @return 设置击退抗性属性后的 ItemStack
      */
@@ -679,8 +677,8 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     /**
      * 设置物品栈的跟踪范围属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
-     * @param item      物品栈
-     * @param count     属性数量
+     * @param item 物品栈
+     * @param count 属性数量
      * @param isPercent 是否百分比
      * @return 设置跟踪范围属性后的 ItemStack
      */

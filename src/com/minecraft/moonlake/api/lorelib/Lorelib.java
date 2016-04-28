@@ -85,7 +85,7 @@ public interface Lorelib {
      *
      * @param item 物品栈
      * @param index 索引
-     * @return 索引标签 如果物品栈没有标签或索引越界则返回空
+     * @return 索引标签 如果物品栈没有标签或索引越界则返回 null
      */
     String getLoreFromIndex(ItemStack item, int index);
 
