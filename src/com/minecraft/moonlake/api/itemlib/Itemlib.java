@@ -608,6 +608,15 @@ public interface Itemlib extends Lorelib {
          */
         ARMOR_TOUGHNESS("ArmorToughness", "armorToughness", "generic.armorToughness"),
 
+        /**
+         * 玩家特殊属性: 攻击速度
+         */
+        ATTACK_SPEED("AttackSpeed", "attackSpeed", "generic.attackSpeed"),
+
+        /**
+         * 玩家特殊属性: 幸运
+         */
+        LUCK("Luck", "luck", "generic.luck"),
         ;
 
         private String type;
@@ -678,6 +687,18 @@ public interface Itemlib extends Lorelib {
                 case "followrange":
                 case "follow_range":
                     return FOLLOW_RANGE;
+                case "armor":
+                case "armordefense":
+                case "armor_defense":
+                    return ARMOR_DEFENSE;
+                case "armortoughness":
+                case "armor_toughness":
+                    return ARMOR_TOUGHNESS;
+                case "attackspeed":
+                case "attack_speed":
+                    return ATTACK_SPEED;
+                case "luck":
+                    return LUCK;
                 default:
                     return null;
             }
@@ -693,7 +714,7 @@ public interface Itemlib extends Lorelib {
              */
             MAIN_HAND("MainHand", "mainhand"),
             /**
-             * 特殊属性槽位: 右手
+             * 特殊属性槽位: 副手
              */
             OFF_HAND("OffHand", "offhand"),
             /**
