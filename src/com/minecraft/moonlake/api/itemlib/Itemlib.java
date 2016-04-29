@@ -237,6 +237,33 @@ public interface Itemlib extends Lorelib {
     ItemStack createPotion(PotionEnum potion, String potionEffect, int amount, String name);
 
     /**
+     * 创建默认基础药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @return 药水 ItemStack
+     */
+    ItemStack createBasePotion(String potionEffect);
+
+    /**
+     * 创建默认基础药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount 药水数量
+     * @return 药水 ItemStack
+     */
+    ItemStack createBasePotion(String potionEffect, int amount);
+
+    /**
+     * 创建默认基础药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount 药水数量
+     * @param name 药水名称
+     * @return 药水 ItemStack
+     */
+    ItemStack createBasePotion(String potionEffect, int amount, String name);
+
+    /**
      * 创建默认投掷药水物品栈对象
      *
      * @param potionEffect 药水效果 (PotionEffectEnum)

@@ -336,6 +336,42 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     }
 
     /**
+     * 创建默认基础药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createBasePotion(String potionEffect) {
+        return createPotion(PotionEnum.POTION, potionEffect);
+    }
+
+    /**
+     * 创建默认基础药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount       药水数量
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createBasePotion(String potionEffect, int amount) {
+        return createPotion(PotionEnum.POTION, potionEffect, amount);
+    }
+
+    /**
+     * 创建默认基础药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount       药水数量
+     * @param name         药水名称
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createBasePotion(String potionEffect, int amount, String name) {
+        return createPotion(PotionEnum.POTION, potionEffect, amount, name);
+    }
+
+    /**
      * 创建默认投掷药水物品栈对象
      *
      * @param potionEffect 药水效果 (PotionEffectEnum)
