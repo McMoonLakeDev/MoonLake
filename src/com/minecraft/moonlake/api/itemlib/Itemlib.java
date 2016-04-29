@@ -594,48 +594,48 @@ public interface Itemlib extends Lorelib {
     boolean isArmor(Material type);
 
     /**
-     * 物品栈特殊属性类型枚举
+     * <h>物品栈特殊属性类型枚举: <a href="http://minecraft-zh.gamepedia.com/%E5%B1%9E%E6%80%A7#.E5.B1.9E.E6.80.A7">属性详情</a></h>
      */
     enum AttributeType {
 
         /**
-         * 物品栈特殊属性: 攻击伤害 (min: 0, max: 1.7x10<sup>308</sup>)
+         * 物品栈特殊属性: 攻击伤害 (def: 1, min: 0, max: 1.7x10<sup>308</sup>)
          */
         ATTACK_DAMAGE("AttackDamage", "damage", "generic.attackDamage"),
         /**
-         * 物品栈特殊属性: 移动速度 (min: 0, max: 1.7x10<sup>308</sup>)
+         * 物品栈特殊属性: 移动速度 (def: 0.7*, min: 0, max: 1.7x10<sup>308</sup>)
          */
         MOVE_SPEED("MoveSpeed", "movement_speed", "generic.movementSpeed"),
         /**
-         * 物品栈特殊属性: 击退抗性 (min: 0, max: 1)
+         * 物品栈特殊属性: 击退抗性 (def: 0, min: 0, max: 1)
          */
         KNOCKBACK_RESISTANCE("KnockbackResistance", "knockback_resistance", "generic.knockbackResistance"),
         /**
-         * 物品栈特殊属性: 血量上限 (min: 0, max: 1.7x10<sup>308</sup>)
+         * 物品栈特殊属性: 血量上限 (def: 20, min: 0, max: 1.7x10<sup>308</sup>)
          */
         MAX_HEALTH("MaxHealth", "max_health", "generic.maxHealth"),
         /**
-         * 物品栈特殊属性: 跟踪范围 (min: 0, max: 2048)
+         * 物品栈特殊属性: 跟踪范围 (def: 32, min: 0, max: 2048)
          */
         FOLLOW_RANGE("FollowRange", "follow_range", "generic.followRange"),
 
         /**
-         * 物品栈特殊属性: 盔甲防御 (min: 0, max: 30)
+         * 物品栈特殊属性: 盔甲防御 (def: 0, min: 0, max: 30)
          */
         ARMOR_DEFENSE("ArmorDefense", "armor", "generic.armor"),
 
         /**
-         * 物品栈特殊属性: 盔甲韧性 (min: 0, max: 20)
+         * 物品栈特殊属性: 盔甲韧性 (def: 0, min: 0, max: 20)
          */
         ARMOR_TOUGHNESS("ArmorToughness", "armorToughness", "generic.armorToughness"),
 
         /**
-         * 玩家特殊属性: 攻击速度 (min: 0, max: 1024)
+         * 玩家特殊属性: 攻击速度 (def: 4, min: 0, max: 1024)
          */
         ATTACK_SPEED("AttackSpeed", "attackSpeed", "generic.attackSpeed"),
 
         /**
-         * 玩家特殊属性: 幸运 (min: -1024, max: 1024)
+         * 玩家特殊属性: 幸运 (def: 0, min: -1024, max: 1024)
          */
         LUCK("Luck", "luck", "generic.luck"),
         ;
@@ -726,7 +726,7 @@ public interface Itemlib extends Lorelib {
         }
 
         /**
-         * 特殊属性生效的槽位
+         * <h1>特殊属性生效的槽位: <a href="http://minecraft-zh.gamepedia.com/%E5%B1%9E%E6%80%A7#.E5.B1.9E.E6.80.A7.E5.BA.94.E7.94.A8">槽位详情</a></h1>
          */
         public enum Slot {
 

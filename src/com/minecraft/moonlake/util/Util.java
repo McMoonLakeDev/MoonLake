@@ -19,7 +19,8 @@ public final class Util {
     private Util() {}
 
     /**
-     * 将字串符文本序列化为颜色 (&)
+     * <h1>将字串符文本序列化为颜色 (&)</h1>
+     * <img src="http://a2.qpic.cn/psb?/V146eXZS0CF2Hk/kvJ2xbLnUa7lHBXQI61bD05xx5DwHpyx.4C.hf2Nk7g!/b/dKwAAAAAAAAA&bo=vALxAbwC8QEDByI!&rf=viewer_4"></img>
      *
      * @param text 文本
      * @return 颜色文本
@@ -32,7 +33,8 @@ public final class Util {
     }
 
     /**
-     * 将字串符文本数组序列化为颜色 (&)
+     * <h1>将字串符文本序列化为颜色 (&)</h1>
+     * <img src="http://a2.qpic.cn/psb?/V146eXZS0CF2Hk/kvJ2xbLnUa7lHBXQI61bD05xx5DwHpyx.4C.hf2Nk7g!/b/dKwAAAAAAAAA&bo=vALxAbwC8QEDByI!&rf=viewer_4"></img>
      *
      * @param textArr 文本数组
      * @return 颜色文本数组
@@ -48,7 +50,8 @@ public final class Util {
     }
 
     /**
-     * 将字符串文本集合序列化为颜色 (&)
+     * <h1>将字串符文本序列化为颜色 (&)</h1>
+     * <img src="http://a2.qpic.cn/psb?/V146eXZS0CF2Hk/kvJ2xbLnUa7lHBXQI61bD05xx5DwHpyx.4C.hf2Nk7g!/b/dKwAAAAAAAAA&bo=vALxAbwC8QEDByI!&rf=viewer_4"></img>
      *
      * @param textList 文本集合
      * @return 颜色文本集合
@@ -62,7 +65,7 @@ public final class Util {
     }
 
     /**
-     * 格式化字串符文本
+     * <h1>格式化字串符文本</h1>
      *
      * @param key 需格式化的字串符
      * @param values 格式化的值
@@ -76,7 +79,7 @@ public final class Util {
     }
 
     /**
-     * 获取当前系统的时间 (年-月-日 时:分:秒)
+     * <h1>获取当前系统的时间 (年-月-日 时:分:秒)</h1>
      *
      * @return 当前系统时间
      */
@@ -85,7 +88,7 @@ public final class Util {
     }
 
     /**
-     * 获取当前系统的时间
+     * <h1>获取当前系统的时间</h1>
      *
      * @param format 时间格式
      * @return 当前系统时间
@@ -100,7 +103,7 @@ public final class Util {
     }
 
     /**
-     * 四舍五入保留位数
+     * <h1>四舍五入保留位数</h1>
      *
      * @param value 需要保留的值
      * @param bit 保留的位数
@@ -111,7 +114,7 @@ public final class Util {
     }
 
     /**
-     * 验证对象是否为 null 则抛出异常
+     * <h1>验证对象是否为 null 则抛出异常</h1>
      *
      * @param object Object
      */
@@ -120,7 +123,7 @@ public final class Util {
     }
 
     /**
-     * 验证对象是否为 null 则抛出异常
+     * <h1>验证对象是否为 null 则抛出异常</h1>
      *
      * @param object Object
      * @param message Exception Message

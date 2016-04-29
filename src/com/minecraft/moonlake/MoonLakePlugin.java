@@ -20,7 +20,7 @@ import java.util.Set;
 /**
  * <h1>Minecraft MoonLake Core API Plugin</h1>
  * <h6>By Month_Light Q: 1327516533</h6>
- * @version 1.1
+ * @version 1.2
  * @author Month_Light
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
