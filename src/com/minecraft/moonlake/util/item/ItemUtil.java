@@ -336,6 +336,78 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     }
 
     /**
+     * 创建默认投掷药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createSplashPotion(String potionEffect) {
+        return createPotion(PotionEnum.SPLASH_POTION, potionEffect);
+    }
+
+    /**
+     * 创建默认投掷药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount       药水数量
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createSplashPotion(String potionEffect, int amount) {
+        return createPotion(PotionEnum.SPLASH_POTION, potionEffect, amount);
+    }
+
+    /**
+     * 创建默认投掷药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount       药水数量
+     * @param name         药水名称
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createSplashPotion(String potionEffect, int amount, String name) {
+        return createPotion(PotionEnum.SPLASH_POTION, potionEffect, amount, name);
+    }
+
+    /**
+     * 创建默认滞留药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createLingeringPotion(String potionEffect) {
+        return createPotion(PotionEnum.LINGERING_POTION, potionEffect);
+    }
+
+    /**
+     * 创建默认滞留药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount       药水数量
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createLingeringPotion(String potionEffect, int amount) {
+        return createPotion(PotionEnum.LINGERING_POTION, potionEffect, amount);
+    }
+
+    /**
+     * 创建默认滞留药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount       药水数量
+     * @param name         药水名称
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createLingeringPotion(String potionEffect, int amount, String name) {
+        return createPotion(PotionEnum.LINGERING_POTION, potionEffect, amount, name);
+    }
+
+    /**
      * 给物品栈添加的附魔
      *
      * @param item 物品栈

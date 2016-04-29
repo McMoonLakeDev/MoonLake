@@ -237,6 +237,60 @@ public interface Itemlib extends Lorelib {
     ItemStack createPotion(PotionEnum potion, String potionEffect, int amount, String name);
 
     /**
+     * 创建默认投掷药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @return 药水 ItemStack
+     */
+    ItemStack createSplashPotion(String potionEffect);
+
+    /**
+     * 创建默认投掷药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount 药水数量
+     * @return 药水 ItemStack
+     */
+    ItemStack createSplashPotion(String potionEffect, int amount);
+
+    /**
+     * 创建默认投掷药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount 药水数量
+     * @param name 药水名称
+     * @return 药水 ItemStack
+     */
+    ItemStack createSplashPotion(String potionEffect, int amount, String name);
+
+    /**
+     * 创建默认滞留药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @return 药水 ItemStack
+     */
+    ItemStack createLingeringPotion(String potionEffect);
+
+    /**
+     * 创建默认滞留药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount 药水数量
+     * @return 药水 ItemStack
+     */
+    ItemStack createLingeringPotion(String potionEffect, int amount);
+
+    /**
+     * 创建默认滞留药水物品栈对象
+     *
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount 药水数量
+     * @param name 药水名称
+     * @return 药水 ItemStack
+     */
+    ItemStack createLingeringPotion(String potionEffect, int amount, String name);
+
+    /**
      * 给物品栈添加的附魔
      *
      * @param item 物品栈
@@ -468,6 +522,17 @@ public interface Itemlib extends Lorelib {
          * 物品栈特殊属性: 跟踪范围
          */
         FOLLOW_RANGE("FollowRange", "follow_range", "generic.followRange"),
+
+        /**
+         * 物品栈特殊属性: 盔甲防御
+         */
+        ARMOR("Armor", "armor", "generic.armor"),
+
+        /**
+         * 物品栈特殊属性: 盔甲韧性
+         */
+        ARMOR_TOUGHNESS("ArmorToughness", "armorToughness", "generic.armorToughness"),
+
         ;
 
         private String type;
