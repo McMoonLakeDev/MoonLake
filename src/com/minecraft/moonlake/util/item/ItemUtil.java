@@ -860,7 +860,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     @Override
-    public ItemStack setArmorDefense(ItemStack armor, double count, boolean isPercent) {
+    public ItemStack setItemArmorDefense(ItemStack armor, double count, boolean isPercent) {
         if(!isArmor(armor))
             throw new NotArmorItemException();
         return addAttribute(armor, AttributeType.ARMOR_DEFENSE, count, isPercent);
@@ -872,11 +872,11 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param armor     护甲物品栈
      * @param count     属性数量
      * @param isPercent 是否百分比
-     * @return 设置护甲防御属性后的 ItemStack
+     * @return 设置护甲韧性属性后的 ItemStack
      * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     @Override
-    public ItemStack setArmorToughness(ItemStack armor, double count, boolean isPercent) {
+    public ItemStack setItemArmorToughness(ItemStack armor, double count, boolean isPercent) {
         if(!isArmor(armor))
             throw new NotArmorItemException();
         return addAttribute(armor, AttributeType.ARMOR_TOUGHNESS, count, isPercent);
@@ -892,7 +892,19 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     public boolean isArmor(ItemStack item) {
         Util.notNull(item, "待判断的物品栈对象是 null 值");
 
-        Material type = item.getType();
+        return isArmor(item.getType());
+    }
+
+    /**
+     * 判断物品栈类型是否是护甲物品栈类型
+     *
+     * @param type 物品栈类型
+     * @return 是否是护甲物品栈类型
+     */
+    @Override
+    public boolean isArmor(Material type) {
+        Util.notNull(type, "待判断的物品栈类型对象是 null 值");
+
         return
                 type == Material.LEATHER_HELMET ||
                 type == Material.LEATHER_CHESTPLATE ||

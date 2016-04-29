@@ -533,7 +533,7 @@ public interface Itemlib extends Lorelib {
      * @return 设置护甲防御属性后的 ItemStack
      * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
-    ItemStack setArmorDefense(ItemStack armor, double count, boolean isPercent);
+    ItemStack setItemArmorDefense(ItemStack armor, double count, boolean isPercent);
 
     /**
      * 设置护甲物品栈的护甲韧性属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
@@ -544,7 +544,7 @@ public interface Itemlib extends Lorelib {
      * @return 设置护甲防御属性后的 ItemStack
      * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
-    ItemStack setArmorToughness(ItemStack armor, double count, boolean isPercent);
+    ItemStack setItemArmorToughness(ItemStack armor, double count, boolean isPercent);
 
     /**
      * 判断物品栈是否是护甲物品栈
@@ -553,6 +553,14 @@ public interface Itemlib extends Lorelib {
      * @return 是否是护甲物品栈
      */
     boolean isArmor(ItemStack item);
+
+    /**
+     * 判断物品栈类型是否是护甲物品栈类型
+     *
+     * @param type 物品栈类型
+     * @return 是否是护甲物品栈类型
+     */
+    boolean isArmor(Material type);
 
     /**
      * 物品栈特殊属性类型枚举
