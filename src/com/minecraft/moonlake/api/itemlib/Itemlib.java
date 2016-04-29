@@ -2,11 +2,11 @@ package com.minecraft.moonlake.api.itemlib;
 
 import com.minecraft.moonlake.api.lorelib.Lorelib;
 import com.minecraft.moonlake.exception.NotArmorItemException;
+import com.minecraft.moonlake.exception.NotToolItemException;
 import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.util.Util;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
@@ -533,6 +533,17 @@ public interface Itemlib extends Lorelib {
     ItemStack setItemFollowRange(ItemStack item, double count, boolean isPercent, AttributeType.Slot slot);
 
     /**
+     * 设置物品栈的幸运属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param item 物品栈
+     * @param count 属性数量
+     * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
+     * @return 设置幸运属性后的 ItemStack
+     */
+    ItemStack setItemLuck(ItemStack item, double count, boolean isPercent, AttributeType.Slot slot);
+
+    /**
      * 设置护甲物品栈的护甲防御属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
      * @param armor 护甲物品栈
@@ -557,6 +568,18 @@ public interface Itemlib extends Lorelib {
     ItemStack setItemArmorToughness(ItemStack armor, double count, boolean isPercent, AttributeType.Slot slot);
 
     /**
+     * 设置工具物品栈的攻击速度属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param tool 工具物品栈
+     * @param count 属性数量
+     * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
+     * @return 设置攻击速度属性后的 ItemStack
+     * @throws NotToolItemException 如果物品栈不是工具类型则抛出异常
+     */
+    ItemStack setItemToolAttackSpeed(ItemStack tool, double count, boolean isPercent, AttributeType.Slot slot);
+
+    /**
      * 判断物品栈是否是护甲物品栈
      *
      * @param item 物品栈
@@ -573,48 +596,64 @@ public interface Itemlib extends Lorelib {
     boolean isArmor(Material type);
 
     /**
+     * 判断物品栈是否是工具物品栈
+     *
+     * @param item 物品栈
+     * @return 是否是工具物品栈
+     */
+    boolean isTool(ItemStack item);
+
+    /**
+     * 判断物品栈类型是否是工具物品栈类型
+     *
+     * @param type 物品栈类型
+     * @return 是否是工具物品栈类型
+     */
+    boolean isTool(Material type);
+
+    /**
      * 物品栈特殊属性类型枚举
      */
     enum AttributeType {
 
         /**
-         * 物品栈特殊属性: 攻击伤害
+         * 物品栈特殊属性: 攻击伤害 (min: 0, max: 1.7x10<sup>308</sup>)
          */
         ATTACK_DAMAGE("AttackDamage", "damage", "generic.attackDamage"),
         /**
-         * 物品栈特殊属性: 移动速度
+         * 物品栈特殊属性: 移动速度 (min: 0, max: 1.7x10<sup>308</sup>)
          */
         MOVE_SPEED("MoveSpeed", "movement_speed", "generic.movementSpeed"),
         /**
-         * 物品栈特殊属性: 击退抗性
+         * 物品栈特殊属性: 击退抗性 (min: 0, max: 1)
          */
         KNOCKBACK_RESISTANCE("KnockbackResistance", "knockback_resistance", "generic.knockbackResistance"),
         /**
-         * 物品栈特殊属性: 血量上限
+         * 物品栈特殊属性: 血量上限 (min: 0, max: 1.7x10<sup>308</sup>)
          */
         MAX_HEALTH("MaxHealth", "max_health", "generic.maxHealth"),
         /**
-         * 物品栈特殊属性: 跟踪范围
+         * 物品栈特殊属性: 跟踪范围 (min: 0, max: 2048)
          */
         FOLLOW_RANGE("FollowRange", "follow_range", "generic.followRange"),
 
         /**
-         * 物品栈特殊属性: 盔甲防御
+         * 物品栈特殊属性: 盔甲防御 (min: 0, max: 30)
          */
         ARMOR_DEFENSE("ArmorDefense", "armor", "generic.armor"),
 
         /**
-         * 物品栈特殊属性: 盔甲韧性
+         * 物品栈特殊属性: 盔甲韧性 (min: 0, max: 20)
          */
         ARMOR_TOUGHNESS("ArmorToughness", "armorToughness", "generic.armorToughness"),
 
         /**
-         * 玩家特殊属性: 攻击速度
+         * 玩家特殊属性: 攻击速度 (min: 0, max: 1024)
          */
         ATTACK_SPEED("AttackSpeed", "attackSpeed", "generic.attackSpeed"),
 
         /**
-         * 玩家特殊属性: 幸运
+         * 玩家特殊属性: 幸运 (min: -1024, max: 1024)
          */
         LUCK("Luck", "luck", "generic.luck"),
         ;

@@ -46,10 +46,6 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         itemlib = new ItemUtil();
         lorelib = new LoreUtil();
         playerlib = new PlayerUtil();
-
-        // 属性测试: 将铁剑的攻击力修改为 10 点当在主手时
-        org.bukkit.inventory.ItemStack test = getInstance().getItemlib().create(Material.IRON_SWORD);
-        test = getInstance().getItemlib().addAttribute(test, Itemlib.AttributeType.ATTACK_DAMAGE, 10, false, Itemlib.AttributeType.Slot.MAIN_HAND);
     }
 
     /**
