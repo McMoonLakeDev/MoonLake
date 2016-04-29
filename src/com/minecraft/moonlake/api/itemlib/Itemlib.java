@@ -1,6 +1,8 @@
 package com.minecraft.moonlake.api.itemlib;
 
 import com.minecraft.moonlake.api.lorelib.Lorelib;
+import com.minecraft.moonlake.type.potion.PotionEffectEnum;
+import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.util.Util;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -205,6 +207,36 @@ public interface Itemlib extends Lorelib {
     ItemStack create(Material id, int data, int amount, String name, List<String> lore);
 
     /**
+     * 创建默认药水物品栈对象
+     *
+     * @param potion 药水类型
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @return 药水 ItemStack
+     */
+    ItemStack createPotion(PotionEnum potion, String potionEffect);
+
+    /**
+     * 创建默认药水物品栈对象
+     *
+     * @param potion 药水类型
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount 数量
+     * @return 药水 ItemStack
+     */
+    ItemStack createPotion(PotionEnum potion, String potionEffect, int amount);
+
+    /**
+     * 创建默认药水物品栈对象
+     *
+     * @param potion 药水类型
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount 药水数量
+     * @param name 药水名称
+     * @return 药水 ItemStack
+     */
+    ItemStack createPotion(PotionEnum potion, String potionEffect, int amount, String name);
+
+    /**
      * 给物品栈添加的附魔
      *
      * @param item 物品栈
@@ -349,7 +381,6 @@ public interface Itemlib extends Lorelib {
      * @param isPercent 是否百分比
      * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
-    @Deprecated
     ItemStack addAttribute(ItemStack item, AttributeType type, double count, boolean isPercent);
 
     /**
@@ -360,7 +391,6 @@ public interface Itemlib extends Lorelib {
      * @param isPercent 是否百分比数组
      * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
-    @Deprecated
     ItemStack addAttribute(ItemStack item, Map<AttributeType, Double> typeDoubleMap, boolean... isPercent);
 
     /**
@@ -371,7 +401,6 @@ public interface Itemlib extends Lorelib {
      * @param isPercent 是否百分比
      * @return 设置攻击伤害属性后的 ItemStack
      */
-    @Deprecated
     ItemStack setItemAttackDamage(ItemStack item, double count, boolean isPercent);
 
     /**
@@ -382,7 +411,6 @@ public interface Itemlib extends Lorelib {
      * @param isPercent 是否百分比
      * @return 设置血量上限属性后的 ItemStack
      */
-    @Deprecated
     ItemStack setItemMaxHealth(ItemStack item, double count, boolean isPercent);
 
     /**
@@ -393,7 +421,6 @@ public interface Itemlib extends Lorelib {
      * @param isPercent 是否百分比
      * @return 设置移动速度属性后的 ItemStack
      */
-    @Deprecated
     ItemStack setItemMoveSpeed(ItemStack item, double count, boolean isPercent);
 
     /**
@@ -404,7 +431,6 @@ public interface Itemlib extends Lorelib {
      * @param isPercent 是否百分比
      * @return 设置击退抗性属性后的 ItemStack
      */
-    @Deprecated
     ItemStack setItemKnockbackResistance(ItemStack item, double count, boolean isPercent);
 
     /**
@@ -415,7 +441,6 @@ public interface Itemlib extends Lorelib {
      * @param isPercent 是否百分比
      * @return 设置跟踪范围属性后的 ItemStack
      */
-    @Deprecated
     ItemStack setItemFollowRange(ItemStack item, double count, boolean isPercent);
 
     /**

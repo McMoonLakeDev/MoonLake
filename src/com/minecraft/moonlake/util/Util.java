@@ -2,7 +2,11 @@ package com.minecraft.moonlake.util;
 
 import org.bukkit.ChatColor;
 
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,6 +23,7 @@ public final class Util {
      *
      * @param text 文本
      * @return 颜色文本
+     * @throws IllegalArgumentException 参数空指针则抛出异常
      */
     public static String color(String text) {
         notNull(text, "待序列化颜色文本是 null 值");
@@ -31,6 +36,7 @@ public final class Util {
      *
      * @param textArr 文本数组
      * @return 颜色文本数组
+     * @throws IllegalArgumentException 参数空指针则抛出异常
      */
     public static String[] color(String[] textArr) {
         notNull(textArr, "待序列化颜色文本数组是 null 值");
@@ -46,12 +52,62 @@ public final class Util {
      *
      * @param textList 文本集合
      * @return 颜色文本集合
+     * @throws IllegalArgumentException 参数空指针则抛出异常
      */
     public static List<String> color(List<String> textList) {
         notNull(textList, "待序列化颜色文本集合是 null 值");
 
         String[] textArr = textList.toArray(new String[textList.size()]);
         return Arrays.asList(color(textArr));
+    }
+
+    /**
+     * 格式化字串符文本
+     *
+     * @param key 需格式化的字串符
+     * @param values 格式化的值
+     * @return 格式化后的字符串
+     * @throws IllegalArgumentException 参数空指针则抛出异常
+     */
+    public static String format(String key, Object... values) {
+        notNull(key, "待格式化的字符串是 null 值");
+
+        return String.format(key, values);
+    }
+
+    /**
+     * 获取当前系统的时间 (年-月-日 时:分:秒)
+     *
+     * @return 当前系统时间
+     */
+    public static String getSystemTime() {
+        return getSystemTime("yyyy-MM-dd hh:mm:ss");
+    }
+
+    /**
+     * 获取当前系统的时间
+     *
+     * @param format 时间格式
+     * @return 当前系统时间
+     * @throws IllegalArgumentException 参数空指针则抛出异常
+     */
+    public static String getSystemTime(String format) {
+        notNull(format, "待格式化的时间格式是 null 值");
+
+        Date date = new Date();
+        DateFormat df = new SimpleDateFormat(format);
+        return df.format(date);
+    }
+
+    /**
+     * 四舍五入保留位数
+     *
+     * @param value 需要保留的值
+     * @param bit 保留的位数
+     * @return 四舍五入后的值
+     */
+    public static double rounding(double value, int bit) {
+        return new BigDecimal(value).setScale(bit, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     /**

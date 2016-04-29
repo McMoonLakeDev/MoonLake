@@ -1,6 +1,8 @@
 package com.minecraft.moonlake.util.item;
 
 import com.minecraft.moonlake.api.itemlib.Itemlib;
+import com.minecraft.moonlake.type.potion.PotionEffectEnum;
+import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.util.Util;
 import com.minecraft.moonlake.util.lore.LoreUtil;
 import org.bukkit.Material;
@@ -276,6 +278,64 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     }
 
     /**
+     * 创建默认药水物品栈对象
+     *
+     * @param potion       药水类型
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createPotion(PotionEnum potion, String potionEffect) {
+        return createPotion(potion, potionEffect, 1);
+    }
+
+    /**
+     * 创建默认药水物品栈对象
+     *
+     * @param potion       药水类型
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount       数量
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createPotion(PotionEnum potion, String potionEffect, int amount) {
+        Util.notNull(potion, "待创建的药水物品栈的类型是 null 值");
+        Util.notNull(potionEffect, "待创建的药水物品栈的效果类型是 null 值");
+
+        ItemStack item = create(potion.getMaterial(), 0, amount);
+        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_9_R1.NBTTagCompound tag = nms.getTag();
+
+        if(tag == null) {
+            tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+        }
+        tag.setString("Potion", potionEffect);
+        nms.setTag(tag);
+
+        return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
+    }
+
+    /**
+     * 创建默认药水物品栈对象
+     *
+     * @param potion       药水类型
+     * @param potionEffect 药水效果 (PotionEffectEnum)
+     * @param amount       药水数量
+     * @param name         药水名称
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createPotion(PotionEnum potion, String potionEffect, int amount, String name) {
+        Util.notNull(name, "待创建的药水物品栈的名称是 null 值");
+
+        ItemStack item = createPotion(potion, potionEffect, amount);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(Util.color(name));
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    /**
      * 给物品栈添加的附魔
      *
      * @param item 物品栈
@@ -532,7 +592,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
     @Override
-    @Deprecated
     public ItemStack addAttribute(ItemStack item, AttributeType type, double count, boolean isPercent) {
         Util.notNull(item, "待设置的物品栈是 null 值");
         Util.notNull(type, "待添加特殊属性的物品栈的属性类型是 null 值");
@@ -567,7 +626,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
     @Override
-    @Deprecated
     public ItemStack addAttribute(ItemStack item, Map<AttributeType, Double> typeDoubleMap, boolean... isPercent) {
         Util.notNull(item, "待设置的物品栈是 null 值");
         Util.notNull(typeDoubleMap, "待添加特殊属性的物品栈的属性类型是 null 值");
@@ -627,7 +685,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 设置攻击伤害属性后的 ItemStack
      */
     @Override
-    @Deprecated
     public ItemStack setItemAttackDamage(ItemStack item, double count, boolean isPercent) {
         return addAttribute(item, AttributeType.ATTACK_DAMAGE, count, isPercent);
     }
@@ -641,7 +698,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 设置血量上限属性后的 ItemStack
      */
     @Override
-    @Deprecated
     public ItemStack setItemMaxHealth(ItemStack item, double count, boolean isPercent) {
         return addAttribute(item, AttributeType.MAX_HEALTH, count, isPercent);
     }
@@ -655,7 +711,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 设置移动速度属性后的 ItemStack
      */
     @Override
-    @Deprecated
     public ItemStack setItemMoveSpeed(ItemStack item, double count, boolean isPercent) {
         return addAttribute(item, AttributeType.MOVE_SPEED, count, isPercent);
     }
@@ -683,7 +738,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 设置跟踪范围属性后的 ItemStack
      */
     @Override
-    @Deprecated
     public ItemStack setItemFollowRange(ItemStack item, double count, boolean isPercent) {
         return addAttribute(item, AttributeType.FOLLOW_RANGE, count, isPercent);
     }

@@ -4,6 +4,8 @@ import com.minecraft.moonlake.api.MoonLake;
 import com.minecraft.moonlake.api.itemlib.Itemlib;
 import com.minecraft.moonlake.api.lorelib.Lorelib;
 import com.minecraft.moonlake.api.playerlib.Playerlib;
+import com.minecraft.moonlake.type.potion.PotionEffectEnum;
+import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.util.item.ItemUtil;
 import com.minecraft.moonlake.util.lore.LoreUtil;
 import com.minecraft.moonlake.util.player.PlayerUtil;
@@ -43,6 +45,9 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         itemlib = new ItemUtil();
         lorelib = new LoreUtil();
         playerlib = new PlayerUtil();
+
+        // 创建药水测试
+        getInstance().getItemlib().createPotion(PotionEnum.POTION, PotionEffectEnum.INVISIBILITY.getBase(), 1);
     }
 
     /**
