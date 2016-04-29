@@ -120,7 +120,7 @@ public class PlayerUtil implements Playerlib {
     public void sendTitlePacket(String player, String title) {
         Util.notNull(title, "待发送的标题数据包标题是 null 值");
 
-        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + Util.color(title) + "\"}");
+        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(title) + "\"}");
         PacketPlayOutTitle ppot = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc);
 
         sendPacket(player, ppot);
@@ -139,8 +139,8 @@ public class PlayerUtil implements Playerlib {
         Util.notNull(title, "待发送的标题数据包标题是 null 值");
         Util.notNull(subTitle, "待发送的标题数据包子标题是 null 值");
 
-        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + Util.color(title) + "\"}");
-        IChatBaseComponent icbc2 = IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + Util.color(subTitle) + "\"}");
+        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(title) + "\"}");
+        IChatBaseComponent icbc2 = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(subTitle) + "\"}");
         PacketPlayOutTitle ppot = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc);
         PacketPlayOutTitle ppot2 = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc2);
 
@@ -161,7 +161,7 @@ public class PlayerUtil implements Playerlib {
     public void sendTitlePacket(String player, String title, int drTime, int plTime, int dcTime) {
         Util.notNull(title, "待发送的标题数据包标题是 null 值");
 
-        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + Util.color(title) + "\"}");
+        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(title) + "\"}");
         PacketPlayOutTitle ppot = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc);
         PacketPlayOutTitle ppot2 = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TIMES, null, drTime, plTime, dcTime);
 
@@ -184,8 +184,8 @@ public class PlayerUtil implements Playerlib {
         Util.notNull(title, "待发送的标题数据包标题是 null 值");
         Util.notNull(subTitle, "待发送的标题数据包子标题是 null 值");
 
-        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + Util.color(title) + "\"}");
-        IChatBaseComponent icbc2 = IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + Util.color(subTitle) + "\"}");
+        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(title) + "\"}");
+        IChatBaseComponent icbc2 = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(subTitle) + "\"}");
         PacketPlayOutTitle ppot = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc);
         PacketPlayOutTitle ppot2 = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc2);
         PacketPlayOutTitle ppot3 = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TIMES, null, drTime, plTime, dcTime);
@@ -205,7 +205,7 @@ public class PlayerUtil implements Playerlib {
     public void sendChatPacket(String player, String message, ChatPacketMode mode) {
         Util.notNull(message, "待发送的聊天数据包消息是 null 值");
 
-        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + Util.color(message) + "\"}");
+        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(message) + "\"}");
         PacketPlayOutChat ppoc = new PacketPlayOutChat(icbc, mode == null ? (byte)1 : mode.getMode());
 
         sendPacket(player, ppoc);
@@ -277,9 +277,23 @@ public class PlayerUtil implements Playerlib {
                 instance.getLocation().getY(),
                 instance.getLocation().getZ(),
                 Float.MAX_VALUE, new ArrayList<BlockPosition>(),
-                new Vec3D(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE));
-
+                new Vec3D(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE)
+        );
         sendPacket(player, ppoe);
+    }
+
+    /**
+     * 给玩家发送基础聊天消息
+     *
+     * @param player 玩家名
+     * @param bc     基础聊天
+     */
+    @Override
+    public void sendMessage(String player, BaseChat bc) {
+        Util.notNull(bc, "待发送基础聊天消息的是 null 值");
+
+        Player instance = notOnline(player);
+        instance.spigot().sendMessage(bc);
     }
 
     /**
@@ -288,6 +302,7 @@ public class PlayerUtil implements Playerlib {
      * @param player 玩家名
      * @return Player
      */
+    @Override
     public Player notOnline(String player) {
         Player instance = getPlayer(player);
         if(instance == null || !instance.isOnline()) {

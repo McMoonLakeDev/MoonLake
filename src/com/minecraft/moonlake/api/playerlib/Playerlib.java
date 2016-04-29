@@ -1,6 +1,7 @@
 package com.minecraft.moonlake.api.playerlib;
 
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
+import com.minecraft.moonlake.util.player.BaseChat;
 import net.minecraft.server.v1_9_R1.Packet;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -156,6 +157,14 @@ public interface Playerlib {
     void sendCrashClientPacket(String player);
 
     /**
+     * 给玩家发送基础聊天消息
+     *
+     * @param player 玩家名
+     * @param bc 基础聊天
+     */
+    void sendMessage(String player, BaseChat bc);
+
+    /**
      * 聊天数据包的执行方式
      */
     enum ChatPacketMode {
@@ -184,4 +193,12 @@ public interface Playerlib {
             return mode;
         }
     }
+
+    /**
+     * 判断玩家是否不在线则抛出异常否则返回 Player 实例对象
+     *
+     * @param player 玩家名
+     * @return Player
+     */
+    Player notOnline(String player);
 }
