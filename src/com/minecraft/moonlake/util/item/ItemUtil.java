@@ -697,10 +697,11 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param type 属性类型
      * @param count 属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
     @Override
-    public ItemStack addAttribute(ItemStack item, AttributeType type, double count, boolean isPercent) {
+    public ItemStack addAttribute(ItemStack item, AttributeType type, double count, boolean isPercent, AttributeType.Slot slot) {
         Util.notNull(item, "待设置的物品栈是 null 值");
         Util.notNull(type, "待添加特殊属性的物品栈的属性类型是 null 值");
 
@@ -709,6 +710,9 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         net.minecraft.server.v1_9_R1.NBTTagList tagAttList = nms.getTag().getList("AttributeModifiers", 10);
         if(tagAttList == null) {
             tagAttList = new net.minecraft.server.v1_9_R1.NBTTagList();
+        }
+        if(slot != null) {
+            tag.set("Slot", new net.minecraft.server.v1_9_R1.NBTTagString(slot.getSlot()));
         }
         tag.set("Name", new net.minecraft.server.v1_9_R1.NBTTagString(type.getName()));
         tag.set("AttributeName", new net.minecraft.server.v1_9_R1.NBTTagString(type.getAttributeName()));
@@ -731,10 +735,11 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param item 物品栈
      * @param typeDoubleMap 属性类型和数量Map
      * @param isPercent 是否百分比数组
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
     @Override
-    public ItemStack addAttribute(ItemStack item, Map<AttributeType, Double> typeDoubleMap, boolean... isPercent) {
+    public ItemStack addAttribute(ItemStack item, Map<AttributeType, Double> typeDoubleMap, boolean[] isPercent, AttributeType.Slot slot) {
         Util.notNull(item, "待设置的物品栈是 null 值");
         Util.notNull(typeDoubleMap, "待添加特殊属性的物品栈的属性类型是 null 值");
 
@@ -767,6 +772,9 @@ public class ItemUtil extends LoreUtil implements Itemlib {
 
             Util.notNull(type, "待添加特殊属性的物品栈的属性类型是 null 值");
 
+            if(slot != null) {
+                tag.set("Slot", new net.minecraft.server.v1_9_R1.NBTTagString(slot.getSlot()));
+            }
             tag.set("Name", new net.minecraft.server.v1_9_R1.NBTTagString(type.getName()));
             tag.set("AttributeName", new net.minecraft.server.v1_9_R1.NBTTagString(type.getAttributeName()));
             tag.set("Amount", new net.minecraft.server.v1_9_R1.NBTTagDouble(entry.getValue()));
@@ -790,11 +798,12 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param item 物品栈
      * @param count 属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置攻击伤害属性后的 ItemStack
      */
     @Override
-    public ItemStack setItemAttackDamage(ItemStack item, double count, boolean isPercent) {
-        return addAttribute(item, AttributeType.ATTACK_DAMAGE, count, isPercent);
+    public ItemStack setItemAttackDamage(ItemStack item, double count, boolean isPercent, AttributeType.Slot slot) {
+        return addAttribute(item, AttributeType.ATTACK_DAMAGE, count, isPercent, slot);
     }
 
     /**
@@ -803,11 +812,12 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param item 物品栈
      * @param count 属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置血量上限属性后的 ItemStack
      */
     @Override
-    public ItemStack setItemMaxHealth(ItemStack item, double count, boolean isPercent) {
-        return addAttribute(item, AttributeType.MAX_HEALTH, count, isPercent);
+    public ItemStack setItemMaxHealth(ItemStack item, double count, boolean isPercent, AttributeType.Slot slot) {
+        return addAttribute(item, AttributeType.MAX_HEALTH, count, isPercent, slot);
     }
 
     /**
@@ -816,11 +826,12 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param item 物品栈
      * @param count 属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置移动速度属性后的 ItemStack
      */
     @Override
-    public ItemStack setItemMoveSpeed(ItemStack item, double count, boolean isPercent) {
-        return addAttribute(item, AttributeType.MOVE_SPEED, count, isPercent);
+    public ItemStack setItemMoveSpeed(ItemStack item, double count, boolean isPercent, AttributeType.Slot slot) {
+        return addAttribute(item, AttributeType.MOVE_SPEED, count, isPercent, slot);
     }
 
     /**
@@ -829,12 +840,13 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param item 物品栈
      * @param count 属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置击退抗性属性后的 ItemStack
      */
     @Override
     @Deprecated
-    public ItemStack setItemKnockbackResistance(ItemStack item, double count, boolean isPercent) {
-        return addAttribute(item, AttributeType.KNOCKBACK_RESISTANCE, count, isPercent);
+    public ItemStack setItemKnockbackResistance(ItemStack item, double count, boolean isPercent, AttributeType.Slot slot) {
+        return addAttribute(item, AttributeType.KNOCKBACK_RESISTANCE, count, isPercent, slot);
     }
 
     /**
@@ -843,11 +855,12 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param item 物品栈
      * @param count 属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置跟踪范围属性后的 ItemStack
      */
     @Override
-    public ItemStack setItemFollowRange(ItemStack item, double count, boolean isPercent) {
-        return addAttribute(item, AttributeType.FOLLOW_RANGE, count, isPercent);
+    public ItemStack setItemFollowRange(ItemStack item, double count, boolean isPercent, AttributeType.Slot slot) {
+        return addAttribute(item, AttributeType.FOLLOW_RANGE, count, isPercent, slot);
     }
 
     /**
@@ -856,14 +869,15 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param armor     护甲物品栈
      * @param count     属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置护甲防御属性后的 ItemStack
      * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     @Override
-    public ItemStack setItemArmorDefense(ItemStack armor, double count, boolean isPercent) {
+    public ItemStack setItemArmorDefense(ItemStack armor, double count, boolean isPercent, AttributeType.Slot slot) {
         if(!isArmor(armor))
             throw new NotArmorItemException();
-        return addAttribute(armor, AttributeType.ARMOR_DEFENSE, count, isPercent);
+        return addAttribute(armor, AttributeType.ARMOR_DEFENSE, count, isPercent, slot);
     }
 
     /**
@@ -872,14 +886,15 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param armor     护甲物品栈
      * @param count     属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置护甲韧性属性后的 ItemStack
      * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     @Override
-    public ItemStack setItemArmorToughness(ItemStack armor, double count, boolean isPercent) {
+    public ItemStack setItemArmorToughness(ItemStack armor, double count, boolean isPercent, AttributeType.Slot slot) {
         if(!isArmor(armor))
             throw new NotArmorItemException();
-        return addAttribute(armor, AttributeType.ARMOR_TOUGHNESS, count, isPercent);
+        return addAttribute(armor, AttributeType.ARMOR_TOUGHNESS, count, isPercent, slot);
     }
 
     /**

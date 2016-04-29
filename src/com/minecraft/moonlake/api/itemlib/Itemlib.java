@@ -6,6 +6,7 @@ import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.util.Util;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
@@ -460,9 +461,10 @@ public interface Itemlib extends Lorelib {
      * @param type 属性类型
      * @param count 属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
-    ItemStack addAttribute(ItemStack item, AttributeType type, double count, boolean isPercent);
+    ItemStack addAttribute(ItemStack item, AttributeType type, double count, boolean isPercent, AttributeType.Slot slot);
 
     /**
      * 给物品栈添加特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
@@ -470,9 +472,10 @@ public interface Itemlib extends Lorelib {
      * @param item 物品栈
      * @param typeDoubleMap 属性类型和数量Map
      * @param isPercent 是否百分比数组
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
-    ItemStack addAttribute(ItemStack item, Map<AttributeType, Double> typeDoubleMap, boolean... isPercent);
+    ItemStack addAttribute(ItemStack item, Map<AttributeType, Double> typeDoubleMap, boolean[] isPercent, AttributeType.Slot slot);
 
     /**
      * 设置物品栈的攻击伤害属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
@@ -480,9 +483,10 @@ public interface Itemlib extends Lorelib {
      * @param item 物品栈
      * @param count 属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置攻击伤害属性后的 ItemStack
      */
-    ItemStack setItemAttackDamage(ItemStack item, double count, boolean isPercent);
+    ItemStack setItemAttackDamage(ItemStack item, double count, boolean isPercent, AttributeType.Slot slot);
 
     /**
      * 设置物品栈的血量上限属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
@@ -490,9 +494,10 @@ public interface Itemlib extends Lorelib {
      * @param item 物品栈
      * @param count 属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置血量上限属性后的 ItemStack
      */
-    ItemStack setItemMaxHealth(ItemStack item, double count, boolean isPercent);
+    ItemStack setItemMaxHealth(ItemStack item, double count, boolean isPercent, AttributeType.Slot slot);
 
     /**
      * 设置物品栈的移动速度属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
@@ -500,9 +505,10 @@ public interface Itemlib extends Lorelib {
      * @param item 物品栈
      * @param count 属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置移动速度属性后的 ItemStack
      */
-    ItemStack setItemMoveSpeed(ItemStack item, double count, boolean isPercent);
+    ItemStack setItemMoveSpeed(ItemStack item, double count, boolean isPercent, AttributeType.Slot slot);
 
     /**
      * 设置物品栈的击退抗性属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
@@ -510,9 +516,10 @@ public interface Itemlib extends Lorelib {
      * @param item 物品栈
      * @param count 属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置击退抗性属性后的 ItemStack
      */
-    ItemStack setItemKnockbackResistance(ItemStack item, double count, boolean isPercent);
+    ItemStack setItemKnockbackResistance(ItemStack item, double count, boolean isPercent, AttributeType.Slot slot);
 
     /**
      * 设置物品栈的跟踪范围属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
@@ -520,9 +527,10 @@ public interface Itemlib extends Lorelib {
      * @param item 物品栈
      * @param count 属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置跟踪范围属性后的 ItemStack
      */
-    ItemStack setItemFollowRange(ItemStack item, double count, boolean isPercent);
+    ItemStack setItemFollowRange(ItemStack item, double count, boolean isPercent, AttributeType.Slot slot);
 
     /**
      * 设置护甲物品栈的护甲防御属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
@@ -530,10 +538,11 @@ public interface Itemlib extends Lorelib {
      * @param armor 护甲物品栈
      * @param count 属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置护甲防御属性后的 ItemStack
      * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
-    ItemStack setItemArmorDefense(ItemStack armor, double count, boolean isPercent);
+    ItemStack setItemArmorDefense(ItemStack armor, double count, boolean isPercent, AttributeType.Slot slot);
 
     /**
      * 设置护甲物品栈的护甲韧性属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
@@ -541,10 +550,11 @@ public interface Itemlib extends Lorelib {
      * @param armor 护甲物品栈
      * @param count 属性数量
      * @param isPercent 是否百分比
+     * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置护甲防御属性后的 ItemStack
      * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
-    ItemStack setItemArmorToughness(ItemStack armor, double count, boolean isPercent);
+    ItemStack setItemArmorToughness(ItemStack armor, double count, boolean isPercent, AttributeType.Slot slot);
 
     /**
      * 判断物品栈是否是护甲物品栈
@@ -670,6 +680,66 @@ public interface Itemlib extends Lorelib {
                     return FOLLOW_RANGE;
                 default:
                     return null;
+            }
+        }
+
+        /**
+         * 特殊属性生效的槽位
+         */
+        public enum Slot {
+
+            /**
+             * 特殊属性槽位: 主手
+             */
+            MAIN_HAND("MainHand", "mainhand"),
+            /**
+             * 特殊属性槽位: 右手
+             */
+            OFF_HAND("OffHand", "offhand"),
+            /**
+             * 特殊属性槽位: 头
+             */
+            HEAD("Head", "head"),
+            /**
+             * 特殊属性槽位: 胸
+             */
+            CHEST("Chest", "chest"),
+            /**
+             * 特殊属性槽位: 腿
+             */
+            LEGS("Legs", "legs"),
+            /**
+             * 特殊属性槽位: 脚
+             */
+            FEET("Feet", "feet"),
+
+            ;
+
+            private String type;
+            private String slot;
+
+            Slot(String type, String slot) {
+                this.type = type;
+                this.slot = slot;
+            }
+
+            /**
+             * 特殊属性槽位类型名
+             *
+             * @return 类型名
+             */
+            @Deprecated
+            public String getType() {
+                return type;
+            }
+
+            /**
+             * 特殊属性槽位名
+             *
+             * @return 槽位名
+             */
+            public String getSlot() {
+                return slot;
             }
         }
     }

@@ -9,6 +9,7 @@ import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.util.item.ItemUtil;
 import com.minecraft.moonlake.util.lore.LoreUtil;
 import com.minecraft.moonlake.util.player.PlayerUtil;
+import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -46,8 +47,9 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         lorelib = new LoreUtil();
         playerlib = new PlayerUtil();
 
-        // 创建药水测试
-        getInstance().getItemlib().createPotion(PotionEnum.POTION, PotionEffectEnum.INVISIBILITY.getBase(), 1);
+        // 属性测试: 将铁剑的攻击力修改为 10 点当在主手时
+        org.bukkit.inventory.ItemStack test = getInstance().getItemlib().create(Material.IRON_SWORD);
+        test = getInstance().getItemlib().addAttribute(test, Itemlib.AttributeType.ATTACK_DAMAGE, 10, false, Itemlib.AttributeType.Slot.MAIN_HAND);
     }
 
     /**
