@@ -3,6 +3,6 @@ main: com.minecraft.moonlake.MoonLakePlugin
 version: 1.1
 prefix: MoonLake
 description: Minecraft MoonLake Core API Plugin
-website: http://www.mcyszh.net/
+website: http://www.mcyszh.com/
 author: Month_Light
 authors: [Month_Light, MoonLake]
