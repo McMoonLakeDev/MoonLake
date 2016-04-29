@@ -16,11 +16,11 @@ public enum PotionEnum {
     /**
      * 药水类型枚举: 投掷药水
      */
-    SPLASH_POTION("Splash_Potion", Material.SPLASH_POTION),
+    SPLASH_POTION("SplashPotion", Material.SPLASH_POTION),
     /**
      * 药水类型枚举: 滞留药水
      */
-    LINGERING_POTION("Lingering_Potion", Material.LINGERING_POTION);
+    LINGERING_POTION("LingeringPotion", Material.LINGERING_POTION);
 
     private String type;
     private Material material;

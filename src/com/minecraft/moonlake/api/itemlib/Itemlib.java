@@ -1,7 +1,7 @@
 package com.minecraft.moonlake.api.itemlib;
 
 import com.minecraft.moonlake.api.lorelib.Lorelib;
-import com.minecraft.moonlake.type.potion.PotionEffectEnum;
+import com.minecraft.moonlake.exception.NotArmorItemException;
 import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.util.Util;
 import org.bukkit.Material;
@@ -525,6 +525,36 @@ public interface Itemlib extends Lorelib {
     ItemStack setItemFollowRange(ItemStack item, double count, boolean isPercent);
 
     /**
+     * 设置护甲物品栈的护甲防御属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param armor 护甲物品栈
+     * @param count 属性数量
+     * @param isPercent 是否百分比
+     * @return 设置护甲防御属性后的 ItemStack
+     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
+     */
+    ItemStack setArmorDefense(ItemStack armor, double count, boolean isPercent);
+
+    /**
+     * 设置护甲物品栈的护甲韧性属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param armor 护甲物品栈
+     * @param count 属性数量
+     * @param isPercent 是否百分比
+     * @return 设置护甲防御属性后的 ItemStack
+     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
+     */
+    ItemStack setArmorToughness(ItemStack armor, double count, boolean isPercent);
+
+    /**
+     * 判断物品栈是否是护甲物品栈
+     *
+     * @param item 物品栈
+     * @return 是否是护甲物品栈
+     */
+    boolean isArmor(ItemStack item);
+
+    /**
      * 物品栈特殊属性类型枚举
      */
     enum AttributeType {
@@ -553,7 +583,7 @@ public interface Itemlib extends Lorelib {
         /**
          * 物品栈特殊属性: 盔甲防御
          */
-        ARMOR("Armor", "armor", "generic.armor"),
+        ARMOR_DEFENSE("ArmorDefense", "armor", "generic.armor"),
 
         /**
          * 物品栈特殊属性: 盔甲韧性

@@ -1,7 +1,7 @@
 package com.minecraft.moonlake.util.item;
 
 import com.minecraft.moonlake.api.itemlib.Itemlib;
-import com.minecraft.moonlake.type.potion.PotionEffectEnum;
+import com.minecraft.moonlake.exception.NotArmorItemException;
 import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.util.Util;
 import com.minecraft.moonlake.util.lore.LoreUtil;
@@ -848,5 +848,71 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     @Override
     public ItemStack setItemFollowRange(ItemStack item, double count, boolean isPercent) {
         return addAttribute(item, AttributeType.FOLLOW_RANGE, count, isPercent);
+    }
+
+    /**
+     * 设置护甲物品栈的护甲防御属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param armor     护甲物品栈
+     * @param count     属性数量
+     * @param isPercent 是否百分比
+     * @return 设置护甲防御属性后的 ItemStack
+     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
+     */
+    @Override
+    public ItemStack setArmorDefense(ItemStack armor, double count, boolean isPercent) {
+        if(!isArmor(armor))
+            throw new NotArmorItemException();
+        return addAttribute(armor, AttributeType.ARMOR_DEFENSE, count, isPercent);
+    }
+
+    /**
+     * 设置护甲物品栈的护甲韧性属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param armor     护甲物品栈
+     * @param count     属性数量
+     * @param isPercent 是否百分比
+     * @return 设置护甲防御属性后的 ItemStack
+     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
+     */
+    @Override
+    public ItemStack setArmorToughness(ItemStack armor, double count, boolean isPercent) {
+        if(!isArmor(armor))
+            throw new NotArmorItemException();
+        return addAttribute(armor, AttributeType.ARMOR_TOUGHNESS, count, isPercent);
+    }
+
+    /**
+     * 判断物品栈是否是护甲物品栈
+     *
+     * @param item 物品栈
+     * @return 是否是护甲物品栈
+     */
+    @Override
+    public boolean isArmor(ItemStack item) {
+        Util.notNull(item, "待判断的物品栈对象是 null 值");
+
+        Material type = item.getType();
+        return
+                type == Material.LEATHER_HELMET ||
+                type == Material.LEATHER_CHESTPLATE ||
+                type == Material.LEATHER_LEGGINGS ||
+                type == Material.LEATHER_BOOTS ||
+                type == Material.CHAINMAIL_HELMET ||
+                type == Material.CHAINMAIL_CHESTPLATE ||
+                type == Material.CHAINMAIL_LEGGINGS ||
+                type == Material.CHAINMAIL_BOOTS ||
+                type == Material.IRON_HELMET ||
+                type == Material.IRON_CHESTPLATE ||
+                type == Material.IRON_LEGGINGS ||
+                type == Material.IRON_BOOTS ||
+                type == Material.DIAMOND_HELMET ||
+                type == Material.DIAMOND_CHESTPLATE ||
+                type == Material.DIAMOND_LEGGINGS ||
+                type == Material.DIAMOND_BOOTS ||
+                type == Material.GOLD_HELMET ||
+                type == Material.GOLD_CHESTPLATE ||
+                type == Material.GOLD_LEGGINGS ||
+                type == Material.GOLD_BOOTS;
     }
 }
