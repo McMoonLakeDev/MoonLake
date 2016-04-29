@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 /**
- * Created by MoonLake on 2016/4/26.
+ * <h1>提供物品栈的标签API函数 (添加、删除、插入等等)</h1>
  * @version 1.0
  * @author Month_Light
  */

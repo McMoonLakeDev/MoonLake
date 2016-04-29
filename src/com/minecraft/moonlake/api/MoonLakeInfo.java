@@ -3,7 +3,7 @@ package com.minecraft.moonlake.api;
 import java.util.Set;
 
 /**
- * Created by MoonLake on 2016/4/26.
+ * <h1>MoonLake Core API Plugin Info Interface</h1>
  * @version 1.0
  * @author Month_Light
  */

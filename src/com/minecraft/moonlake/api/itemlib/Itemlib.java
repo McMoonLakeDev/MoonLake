@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by MoonLake on 2016/4/26.
+ * <h1>提供物品栈的API函数 (创建、添加效果等等)</h1>
  * @version 1.0
  * @author Month_Light
  */

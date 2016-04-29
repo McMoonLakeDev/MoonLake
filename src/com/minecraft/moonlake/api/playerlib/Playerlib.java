@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 /**
- * Created by MoonLake on 2016/4/27.
+ * <h1>提供玩家的API函数 (数据包、网络延迟等等)</h1>
  * @version 1.0
  * @author Month_Light
  */

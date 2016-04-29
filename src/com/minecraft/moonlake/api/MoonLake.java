@@ -5,7 +5,7 @@ import com.minecraft.moonlake.api.lorelib.Lorelib;
 import com.minecraft.moonlake.api.playerlib.Playerlib;
 
 /**
- * Created by MoonLake on 2016/4/26.
+ * <h1>主实例对象API接口提供 (子API、特殊函数等等)</h1>
  * @version 1.0
  * @author Month_Light
  */

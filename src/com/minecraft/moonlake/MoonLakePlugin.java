@@ -15,8 +15,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by MoonLake on 2016/4/26.
- * @version 1.0
+ * <h1>Minecraft MoonLake Core API Plugin</h1>
+ * <h6>By Month_Light Q: 1327516533</h6>
+ * @version 1.1
  * @author Month_Light
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
