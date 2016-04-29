@@ -2,7 +2,6 @@ package com.minecraft.moonlake.util.item;
 
 import com.minecraft.moonlake.api.itemlib.Itemlib;
 import com.minecraft.moonlake.exception.NotArmorItemException;
-import com.minecraft.moonlake.exception.NotToolItemException;
 import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.util.Util;
 import com.minecraft.moonlake.util.lore.LoreUtil;
@@ -913,20 +912,17 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     }
 
     /**
-     * 设置工具物品栈的攻击速度属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     * 设置物品栈的攻击速度属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
-     * @param tool      工具物品栈
+     * @param item      物品栈
      * @param count     属性数量
      * @param isPercent 是否百分比
      * @param slot      属性生效的槽位 如果全部槽位则 null 值
      * @return 设置攻击速度属性后的 ItemStack
-     * @throws NotToolItemException 如果物品栈不是工具类型则抛出异常
      */
     @Override
-    public ItemStack setItemToolAttackSpeed(ItemStack tool, double count, boolean isPercent, AttributeType.Slot slot) {
-        if(!isTool(tool))
-            throw new NotToolItemException();
-        return addAttribute(tool, AttributeType.ATTACK_SPEED, count, isPercent, slot);
+    public ItemStack setItemAttackSpeed(ItemStack item, double count, boolean isPercent, AttributeType.Slot slot) {
+        return addAttribute(item, AttributeType.ATTACK_SPEED, count, isPercent, slot);
     }
 
     /**
@@ -973,60 +969,5 @@ public class ItemUtil extends LoreUtil implements Itemlib {
                 type == Material.GOLD_CHESTPLATE ||
                 type == Material.GOLD_LEGGINGS ||
                 type == Material.GOLD_BOOTS;
-    }
-
-    /**
-     * 判断物品栈是否是工具物品栈
-     *
-     * @param item 物品栈
-     * @return 是否是工具物品栈
-     */
-    @Override
-    public boolean isTool(ItemStack item) {
-        Util.notNull(item, "待判断的物品栈对象是 null 值");
-
-        return isTool(item.getType());
-    }
-
-    /**
-     * 判断物品栈类型是否是工具物品栈类型
-     *
-     * @param type 物品栈类型
-     * @return 是否是工具物品栈类型
-     */
-    @Override
-    public boolean isTool(Material type) {
-        Util.notNull(type, "待判断的物品栈类型对象是 null 值");
-
-        return
-                type == Material.WOOD_SWORD ||
-                type == Material.STONE_SWORD ||
-                type == Material.IRON_SWORD ||
-                type == Material.GOLD_SWORD ||
-                type == Material.DIAMOND_SWORD ||
-
-                type == Material.WOOD_PICKAXE ||
-                type == Material.STONE_PICKAXE ||
-                type == Material.IRON_PICKAXE ||
-                type == Material.GOLD_PICKAXE ||
-                type == Material.DIAMOND_PICKAXE ||
-
-                type == Material.WOOD_AXE ||
-                type == Material.STONE_AXE ||
-                type == Material.IRON_AXE ||
-                type == Material.GOLD_AXE ||
-                type == Material.DIAMOND_AXE ||
-
-                type == Material.WOOD_SPADE ||
-                type == Material.STONE_SPADE ||
-                type == Material.IRON_SPADE ||
-                type == Material.GOLD_SPADE ||
-                type == Material.DIAMOND_SPADE ||
-
-                type == Material.WOOD_HOE ||
-                type == Material.STONE_HOE ||
-                type == Material.IRON_HOE ||
-                type == Material.GOLD_HOE ||
-                type == Material.DIAMOND_HOE;
     }
 }

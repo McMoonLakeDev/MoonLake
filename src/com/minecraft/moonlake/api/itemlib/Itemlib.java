@@ -2,7 +2,6 @@ package com.minecraft.moonlake.api.itemlib;
 
 import com.minecraft.moonlake.api.lorelib.Lorelib;
 import com.minecraft.moonlake.exception.NotArmorItemException;
-import com.minecraft.moonlake.exception.NotToolItemException;
 import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.util.Util;
 import org.bukkit.Material;
@@ -568,16 +567,15 @@ public interface Itemlib extends Lorelib {
     ItemStack setItemArmorToughness(ItemStack armor, double count, boolean isPercent, AttributeType.Slot slot);
 
     /**
-     * 设置工具物品栈的攻击速度属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     * 设置物品栈的攻击速度属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
-     * @param tool 工具物品栈
+     * @param item 物品栈
      * @param count 属性数量
      * @param isPercent 是否百分比
      * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置攻击速度属性后的 ItemStack
-     * @throws NotToolItemException 如果物品栈不是工具类型则抛出异常
      */
-    ItemStack setItemToolAttackSpeed(ItemStack tool, double count, boolean isPercent, AttributeType.Slot slot);
+    ItemStack setItemAttackSpeed(ItemStack item, double count, boolean isPercent, AttributeType.Slot slot);
 
     /**
      * 判断物品栈是否是护甲物品栈
@@ -594,22 +592,6 @@ public interface Itemlib extends Lorelib {
      * @return 是否是护甲物品栈类型
      */
     boolean isArmor(Material type);
-
-    /**
-     * 判断物品栈是否是工具物品栈
-     *
-     * @param item 物品栈
-     * @return 是否是工具物品栈
-     */
-    boolean isTool(ItemStack item);
-
-    /**
-     * 判断物品栈类型是否是工具物品栈类型
-     *
-     * @param type 物品栈类型
-     * @return 是否是工具物品栈类型
-     */
-    boolean isTool(Material type);
 
     /**
      * 物品栈特殊属性类型枚举
