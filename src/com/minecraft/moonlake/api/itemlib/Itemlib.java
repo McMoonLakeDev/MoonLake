@@ -483,6 +483,22 @@ public interface Itemlib extends Lorelib, Potionlib {
     boolean isArmor(Material type);
 
     /**
+     * 判断物品栈是否是药水物品栈
+     *
+     * @param item 物品栈
+     * @return 是否是药水物品栈
+     */
+    boolean isPotion(ItemStack item);
+
+    /**
+     * 判断物品栈类型是否是药水物品栈类型
+     *
+     * @param type 物品栈类型
+     * @return 是否是药水物品栈类型
+     */
+    boolean isPotion(Material type);
+
+    /**
      * <h>物品栈特殊属性类型枚举: <a href="http://minecraft-zh.gamepedia.com/%E5%B1%9E%E6%80%A7#.E5.B1.9E.E6.80.A7">属性详情</a></h>
      */
     enum AttributeType {

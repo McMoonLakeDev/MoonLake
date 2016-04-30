@@ -3,6 +3,7 @@ package com.minecraft.moonlake.util.item;
 import com.minecraft.moonlake.api.itemlib.Itemlib;
 import com.minecraft.moonlake.api.potionlib.CustomPotionEffect;
 import com.minecraft.moonlake.exception.NotArmorItemException;
+import com.minecraft.moonlake.exception.NotPotionItemException;
 import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.util.Util;
 import com.minecraft.moonlake.util.lore.LoreUtil;
@@ -448,37 +449,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * 创建自定义的药水物品栈对象
      *
      * @param potion             药水类型
-     * @param customPotionEffect 自定义药水效果
-     * @return 药水 ItemStack
-     */
-    @Override
-    public ItemStack createCustomPotion(PotionEnum potion, CustomPotionEffect customPotionEffect) {
-        Util.notNull(potion, "待创建的药水物品栈的类型是 null 值");
-        Util.notNull(customPotionEffect, "待创建的药水物品栈的自定义效果是 null 值");
-
-        ItemStack item = create(potion.getMaterial());
-        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(item);
-        net.minecraft.server.v1_9_R1.NBTTagCompound tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
-        net.minecraft.server.v1_9_R1.NBTTagList potionList = nms.getTag().getList("CustomPotionEffects", 10);
-        if(potionList == null) {
-            potionList = new net.minecraft.server.v1_9_R1.NBTTagList();
-        }
-        tag.set("Id", new net.minecraft.server.v1_9_R1.NBTTagByte((byte)customPotionEffect.getId()));
-        tag.set("Amplifier", new net.minecraft.server.v1_9_R1.NBTTagByte((byte)customPotionEffect.getAmplifier()));
-        tag.set("Duration", new net.minecraft.server.v1_9_R1.NBTTagInt(customPotionEffect.getDuration()));
-        tag.set("Ambient", new net.minecraft.server.v1_9_R1.NBTTagByte(customPotionEffect.isAmbient() ? (byte)1 : (byte)0));
-        tag.set("ShowParticles", new net.minecraft.server.v1_9_R1.NBTTagByte(customPotionEffect.isShowParticles() ? (byte)1 : (byte)0));
-
-        potionList.add(tag);
-        nms.getTag().set("CustomPotionEffects", potionList);
-
-        return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
-    }
-
-    /**
-     * 创建自定义的药水物品栈对象
-     *
-     * @param potion             药水类型
      * @param customPotionEffect 自定义药水效果数组
      * @return 药水 ItemStack
      */
@@ -487,27 +457,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         Util.notNull(potion, "待创建的药水物品栈的类型是 null 值");
         Util.notNull(customPotionEffect, "待创建的药水物品栈的自定义效果是 null 值");
 
-        ItemStack item = create(potion.getMaterial());
-        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(item);
-        net.minecraft.server.v1_9_R1.NBTTagList potionList = nms.getTag().getList("CustomPotionEffects", 10);
-        if(potionList == null) {
-            potionList = new net.minecraft.server.v1_9_R1.NBTTagList();
-        }
-        for(int i = 0; i < customPotionEffect.length; i++) {
-
-            CustomPotionEffect cpe = customPotionEffect[i];
-            net.minecraft.server.v1_9_R1.NBTTagCompound tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
-            tag.set("Id", new net.minecraft.server.v1_9_R1.NBTTagByte((byte)cpe.getId()));
-            tag.set("Amplifier", new net.minecraft.server.v1_9_R1.NBTTagByte((byte)cpe.getAmplifier()));
-            tag.set("Duration", new net.minecraft.server.v1_9_R1.NBTTagInt(cpe.getDuration()));
-            tag.set("Ambient", new net.minecraft.server.v1_9_R1.NBTTagByte(cpe.isAmbient() ? (byte)1 : (byte)0));
-            tag.set("ShowParticles", new net.minecraft.server.v1_9_R1.NBTTagByte(cpe.isShowParticles() ? (byte)1 : (byte)0));
-
-            potionList.add(tag);
-        }
-        nms.getTag().set("CustomPotionEffects", potionList);
-
-        return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
+        return addCustomPotion(create(potion.getMaterial()), customPotionEffect);
     }
 
     /**
@@ -553,6 +503,611 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     @Override
     public ItemStack createCustomPotion(PotionEnum potion, int id, int amplifier, int duration, boolean ambient, boolean showParticles) {
         return createCustomPotion(potion, new CustomPotionEffect(id, amplifier, duration, ambient, showParticles));
+    }
+
+    /**
+     * 创建自定义的药水物品栈对象
+     *
+     * @param potion             药水类型
+     * @param amount             药水数量
+     * @param customPotionEffect 自定义药水效果数组
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomPotion(PotionEnum potion, int amount, CustomPotionEffect... customPotionEffect) {
+        Util.notNull(potion, "待创建的药水物品栈的类型是 null 值");
+        Util.notNull(customPotionEffect, "待创建的药水物品栈的自定义效果是 null 值");
+
+        return addCustomPotion(create(potion.getMaterial(), 0, amount), customPotionEffect);
+    }
+
+    /**
+     * 创建自定义的药水物品栈对象
+     *
+     * @param potion    药水类型
+     * @param amount    药水数量
+     * @param id        药水ID
+     * @param amplifier 药水等级
+     * @param duration  药水时间
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomPotion(PotionEnum potion, int amount, int id, int amplifier, int duration) {
+        return createCustomPotion(potion, amount, new CustomPotionEffect(id, amplifier, duration));
+    }
+
+    /**
+     * 创建自定义的药水物品栈对象
+     *
+     * @param potion        药水类型
+     * @param amount        药水数量
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomPotion(PotionEnum potion, int amount, int id, int amplifier, int duration, boolean showParticles) {
+        return createCustomPotion(potion, amount, new CustomPotionEffect(id, amplifier, duration, showParticles));
+    }
+
+    /**
+     * 创建自定义的药水物品栈对象
+     *
+     * @param potion        药水类型
+     * @param amount        药水数量
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param ambient       是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomPotion(PotionEnum potion, int amount, int id, int amplifier, int duration, boolean ambient, boolean showParticles) {
+        return createCustomPotion(potion, amount, new CustomPotionEffect(id, amplifier, duration, ambient, showParticles));
+    }
+
+    /**
+     * 创建自定义的药水物品栈对象
+     *
+     * @param potion             药水类型
+     * @param amount             药水数量
+     * @param name               药水名称
+     * @param customPotionEffect 自定义药水效果数组
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomPotion(PotionEnum potion, int amount, String name, CustomPotionEffect... customPotionEffect) {
+        Util.notNull(potion, "待创建的药水物品栈的类型是 null 值");
+        Util.notNull(customPotionEffect, "待创建的药水物品栈的自定义效果是 null 值");
+
+        return addCustomPotion(create(potion.getMaterial(), 0, amount, name), customPotionEffect);
+    }
+
+    /**
+     * 创建自定义的药水物品栈对象
+     *
+     * @param potion    药水类型
+     * @param amount    药水数量
+     * @param name      药水名称
+     * @param id        药水ID
+     * @param amplifier 药水等级
+     * @param duration  药水时间
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomPotion(PotionEnum potion, int amount, String name, int id, int amplifier, int duration) {
+        return createCustomPotion(potion, amount, name, new CustomPotionEffect(id, amplifier, duration));
+    }
+
+    /**
+     * 创建自定义的药水物品栈对象
+     *
+     * @param potion        药水类型
+     * @param amount        药水数量
+     * @param name          药水名称
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomPotion(PotionEnum potion, int amount, String name, int id, int amplifier, int duration, boolean showParticles) {
+        return createCustomPotion(potion, amount, name, new CustomPotionEffect(id, amplifier, duration, showParticles));
+    }
+
+    /**
+     * 创建自定义的药水物品栈对象
+     *
+     * @param potion        药水类型
+     * @param amount        药水数量
+     * @param name          药水名称
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param ambient       是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomPotion(PotionEnum potion, int amount, String name, int id, int amplifier, int duration, boolean ambient, boolean showParticles) {
+        return createCustomPotion(potion, amount, name, new CustomPotionEffect(id, amplifier, duration, ambient, showParticles));
+    }
+
+    /**
+     * 创建自定义的基础药水物品栈对象
+     *
+     * @param customPotionEffect 自定义药水效果数组
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomBasePotion(CustomPotionEffect... customPotionEffect) {
+        return createCustomPotion(PotionEnum.POTION, customPotionEffect);
+    }
+
+    /**
+     * 创建自定义的基础药水物品栈对象
+     *
+     * @param amount             药水数量
+     * @param customPotionEffect 自定义药水效果数组
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomBasePotion(int amount, CustomPotionEffect... customPotionEffect) {
+        return createCustomPotion(PotionEnum.POTION, amount, customPotionEffect);
+    }
+
+    /**
+     * 创建自定义的基础药水物品栈对象
+     *
+     * @param amount    药水数量
+     * @param id        药水ID
+     * @param amplifier 药水等级
+     * @param duration  药水时间
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomBasePotion(int amount, int id, int amplifier, int duration) {
+        return createCustomPotion(PotionEnum.POTION, new CustomPotionEffect(id, amplifier, duration));
+    }
+
+    /**
+     * 创建自定义的基础药水物品栈对象
+     *
+     * @param amount        药水数量
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomBasePotion(int amount, int id, int amplifier, int duration, boolean showParticles) {
+        return createCustomPotion(PotionEnum.POTION, new CustomPotionEffect(id, amplifier, duration, showParticles));
+    }
+
+    /**
+     * 创建自定义的基础药水物品栈对象
+     *
+     * @param amount        药水数量
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param ambient       是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomBasePotion(int amount, int id, int amplifier, int duration, boolean ambient, boolean showParticles) {
+        return createCustomPotion(PotionEnum.POTION, new CustomPotionEffect(id, amplifier, duration, ambient, showParticles));
+    }
+
+    /**
+     * 创建自定义的基础药水物品栈对象
+     *
+     * @param amount             药水数量
+     * @param name               药水名称
+     * @param customPotionEffect 自定义药水效果数组
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomBasePotion(int amount, String name, CustomPotionEffect... customPotionEffect) {
+        return createCustomPotion(PotionEnum.POTION, amount, name, customPotionEffect);
+    }
+
+    /**
+     * 创建自定义的基础药水物品栈对象
+     *
+     * @param amount    药水数量
+     * @param name      药水名称
+     * @param id        药水ID
+     * @param amplifier 药水等级
+     * @param duration  药水时间
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomBasePotion(int amount, String name, int id, int amplifier, int duration) {
+        return createCustomPotion(PotionEnum.POTION, amount, name, new CustomPotionEffect(id, amplifier, duration));
+    }
+
+    /**
+     * 创建自定义的基础药水物品栈对象
+     *
+     * @param amount        药水数量
+     * @param name          药水名称
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomBasePotion(int amount, String name, int id, int amplifier, int duration, boolean showParticles) {
+        return createCustomPotion(PotionEnum.POTION, amount, name, new CustomPotionEffect(id, amplifier, duration, showParticles));
+    }
+
+    /**
+     * 创建自定义的基础药水物品栈对象
+     *
+     * @param amount        药水数量
+     * @param name          药水名称
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param ambient       是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomBasePotion(int amount, String name, int id, int amplifier, int duration, boolean ambient, boolean showParticles) {
+        return createCustomPotion(PotionEnum.POTION, amount, name, new CustomPotionEffect(id, amplifier, duration, ambient, showParticles));
+    }
+
+    /**
+     * 创建自定义的投掷药水物品栈对象
+     *
+     * @param customPotionEffect 自定义药水效果数组
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomSplashPotion(CustomPotionEffect... customPotionEffect) {
+        return createCustomPotion(PotionEnum.SPLASH_POTION, customPotionEffect);
+    }
+
+    /**
+     * 创建自定义的投掷药水物品栈对象
+     *
+     * @param amount             药水数量
+     * @param customPotionEffect 自定义药水效果数组
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomSplashPotion(int amount, CustomPotionEffect... customPotionEffect) {
+        return createCustomPotion(PotionEnum.SPLASH_POTION, amount, customPotionEffect);
+    }
+
+    /**
+     * 创建自定义的投掷药水物品栈对象
+     *
+     * @param amount    药水数量
+     * @param id        药水ID
+     * @param amplifier 药水等级
+     * @param duration  药水时间
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomSplashPotion(int amount, int id, int amplifier, int duration) {
+        return createCustomPotion(PotionEnum.SPLASH_POTION, amount, new CustomPotionEffect(id, amplifier, duration));
+    }
+
+    /**
+     * 创建自定义的投掷药水物品栈对象
+     *
+     * @param amount        药水数量
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomSplashPotion(int amount, int id, int amplifier, int duration, boolean showParticles) {
+        return createCustomPotion(PotionEnum.SPLASH_POTION, amount, new CustomPotionEffect(id, amplifier, duration, showParticles));
+    }
+
+    /**
+     * 创建自定义的投掷药水物品栈对象
+     *
+     * @param amount        药水数量
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param ambient       是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomSplashPotion(int amount, int id, int amplifier, int duration, boolean ambient, boolean showParticles) {
+        return createCustomPotion(PotionEnum.SPLASH_POTION, amount, new CustomPotionEffect(id, amplifier, duration, ambient, showParticles));
+    }
+
+    /**
+     * 创建自定义的投掷药水物品栈对象
+     *
+     * @param amount             药水数量
+     * @param name               药水名称
+     * @param customPotionEffect 自定义药水效果数组
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomSplashPotion(int amount, String name, CustomPotionEffect... customPotionEffect) {
+        return createCustomPotion(PotionEnum.SPLASH_POTION, amount, name, customPotionEffect);
+    }
+
+    /**
+     * 创建自定义的投掷药水物品栈对象
+     *
+     * @param amount    药水数量
+     * @param name      药水名称
+     * @param id        药水ID
+     * @param amplifier 药水等级
+     * @param duration  药水时间
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomSplashPotion(int amount, String name, int id, int amplifier, int duration) {
+        return createCustomPotion(PotionEnum.SPLASH_POTION, amount, new CustomPotionEffect(id, amplifier, duration));
+    }
+
+    /**
+     * 创建自定义的投掷药水物品栈对象
+     *
+     * @param amount        药水数量
+     * @param name          药水名称
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomSplashPotion(int amount, String name, int id, int amplifier, int duration, boolean showParticles) {
+        return createCustomPotion(PotionEnum.SPLASH_POTION, amount, new CustomPotionEffect(id, amplifier, duration, showParticles));
+    }
+
+    /**
+     * 创建自定义的投掷药水物品栈对象
+     *
+     * @param amount        药水数量
+     * @param name          药水名称
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param ambient       是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomSplashPotion(int amount, String name, int id, int amplifier, int duration, boolean ambient, boolean showParticles) {
+        return createCustomPotion(PotionEnum.SPLASH_POTION, amount, new CustomPotionEffect(id, amplifier, duration, ambient, showParticles));
+    }
+
+    /**
+     * 创建自定义的滞留药水物品栈对象
+     *
+     * @param customPotionEffect 自定义药水效果数组
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomLingeringPotion(CustomPotionEffect... customPotionEffect) {
+        return createCustomPotion(PotionEnum.LINGERING_POTION, customPotionEffect);
+    }
+
+    /**
+     * 创建自定义的滞留药水物品栈对象
+     *
+     * @param amount             药水数量
+     * @param customPotionEffect 自定义药水效果数组
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomLingeringPotion(int amount, CustomPotionEffect... customPotionEffect) {
+        return createCustomPotion(PotionEnum.LINGERING_POTION, amount, customPotionEffect);
+    }
+
+    /**
+     * 创建自定义的滞留药水物品栈对象
+     *
+     * @param amount    药水数量
+     * @param id        药水ID
+     * @param amplifier 药水等级
+     * @param duration  药水时间
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomLingeringPotion(int amount, int id, int amplifier, int duration) {
+        return createCustomPotion(PotionEnum.LINGERING_POTION, amount, new CustomPotionEffect(id, amplifier, duration));
+    }
+
+    /**
+     * 创建自定义的滞留药水物品栈对象
+     *
+     * @param amount        药水数量
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomLingeringPotion(int amount, int id, int amplifier, int duration, boolean showParticles) {
+        return createCustomPotion(PotionEnum.LINGERING_POTION, amount, new CustomPotionEffect(id, amplifier, duration, showParticles));
+    }
+
+    /**
+     * 创建自定义的滞留药水物品栈对象
+     *
+     * @param amount        药水数量
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param ambient       是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomLingeringPotion(int amount, int id, int amplifier, int duration, boolean ambient, boolean showParticles) {
+        return createCustomPotion(PotionEnum.LINGERING_POTION, amount, new CustomPotionEffect(id, amplifier, duration, ambient, showParticles));
+    }
+
+    /**
+     * 创建自定义的滞留药水物品栈对象
+     *
+     * @param amount             药水数量
+     * @param name               药水名称
+     * @param customPotionEffect 自定义药水效果数组
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomLingeringPotion(int amount, String name, CustomPotionEffect... customPotionEffect) {
+        return createCustomPotion(PotionEnum.LINGERING_POTION, amount, name, customPotionEffect);
+    }
+
+    /**
+     * 创建自定义的滞留药水物品栈对象
+     *
+     * @param amount    药水数量
+     * @param name      药水名称
+     * @param id        药水ID
+     * @param amplifier 药水等级
+     * @param duration  药水时间
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomLingeringPotion(int amount, String name, int id, int amplifier, int duration) {
+        return createCustomPotion(PotionEnum.LINGERING_POTION, amount, name, new CustomPotionEffect(id, amplifier, duration));
+    }
+
+    /**
+     * 创建自定义的滞留药水物品栈对象
+     *
+     * @param amount        药水数量
+     * @param name          药水名称
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomLingeringPotion(int amount, String name, int id, int amplifier, int duration, boolean showParticles) {
+        return createCustomPotion(PotionEnum.LINGERING_POTION, amount, name, new CustomPotionEffect(id, amplifier, duration, showParticles));
+    }
+
+    /**
+     * 创建自定义的滞留药水物品栈对象
+     *
+     * @param amount        药水数量
+     * @param name          药水名称
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param ambient       是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomLingeringPotion(int amount, String name, int id, int amplifier, int duration, boolean ambient, boolean showParticles) {
+        return createCustomPotion(PotionEnum.LINGERING_POTION, amount, name, new CustomPotionEffect(id, amplifier, duration, ambient, showParticles));
+    }
+
+    /**
+     * 给药水物品栈添加自定义药水效果
+     *
+     * @param potion             药水物品栈
+     * @param customPotionEffect 自定义药水效果数组
+     * @return 添加药水效果后的 ItemStack
+     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
+     */
+    @Override
+    public ItemStack addCustomPotion(ItemStack potion, CustomPotionEffect... customPotionEffect) {
+        Util.notNull(potion, "待添加的药水物品栈的类型是 null 值");
+        Util.notNull(customPotionEffect, "待添加的药水物品栈的自定义效果是 null 值");
+
+        if(!isPotion(potion)) {
+            throw new NotPotionItemException();
+        }
+        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(potion);
+        net.minecraft.server.v1_9_R1.NBTTagList potionList = nms.getTag().getList("CustomPotionEffects", 10);
+        if(potionList == null) {
+            potionList = new net.minecraft.server.v1_9_R1.NBTTagList();
+        }
+        for(int i = 0; i < customPotionEffect.length; i++) {
+
+            CustomPotionEffect cpe = customPotionEffect[i];
+            net.minecraft.server.v1_9_R1.NBTTagCompound tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+            tag.set("Id", new net.minecraft.server.v1_9_R1.NBTTagByte((byte)cpe.getId()));
+            tag.set("Amplifier", new net.minecraft.server.v1_9_R1.NBTTagByte((byte)cpe.getAmplifier()));
+            tag.set("Duration", new net.minecraft.server.v1_9_R1.NBTTagInt(cpe.getDuration()));
+            tag.set("Ambient", new net.minecraft.server.v1_9_R1.NBTTagByte(cpe.isAmbient() ? (byte)1 : (byte)0));
+            tag.set("ShowParticles", new net.minecraft.server.v1_9_R1.NBTTagByte(cpe.isShowParticles() ? (byte)1 : (byte)0));
+
+            potionList.add(tag);
+        }
+        nms.getTag().set("CustomPotionEffects", potionList);
+
+        return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
+    }
+
+    /**
+     * 给药水物品栈添加自定义药水效果
+     *
+     * @param potion    药水物品栈
+     * @param id        效果ID
+     * @param amplifier 效果等级
+     * @param duration  效果时间
+     * @return 添加药水效果后的 ItemStack
+     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
+     */
+    @Override
+    public ItemStack addCustomPotion(ItemStack potion, int id, int amplifier, int duration) {
+        return addCustomPotion(potion, new CustomPotionEffect(id, amplifier, duration));
+    }
+
+    /**
+     * 给药水物品栈添加自定义药水效果
+     *
+     * @param potion        药水物品栈
+     * @param id            效果ID
+     * @param amplifier     效果等级
+     * @param duration      效果时间
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 添加药水效果后的 ItemStack
+     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
+     */
+    @Override
+    public ItemStack addCustomPotion(ItemStack potion, int id, int amplifier, int duration, boolean showParticles) {
+        return addCustomPotion(potion, new CustomPotionEffect(id, amplifier, duration, showParticles));
+    }
+
+    /**
+     * 给药水物品栈添加自定义药水效果
+     *
+     * @param potion        药水物品栈
+     * @param id            效果ID
+     * @param amplifier     效果等级
+     * @param duration      效果时间
+     * @param ambient       是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 添加药水效果后的 ItemStack
+     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
+     */
+    @Override
+    public ItemStack addCustomPotion(ItemStack potion, int id, int amplifier, int duration, boolean ambient, boolean showParticles) {
+        return addCustomPotion(potion, new CustomPotionEffect(id, amplifier, duration, ambient, showParticles));
     }
 
 
@@ -1082,5 +1637,34 @@ public class ItemUtil extends LoreUtil implements Itemlib {
                 type == Material.GOLD_CHESTPLATE ||
                 type == Material.GOLD_LEGGINGS ||
                 type == Material.GOLD_BOOTS;
+    }
+
+    /**
+     * 判断物品栈是否是药水物品栈
+     *
+     * @param item 物品栈
+     * @return 是否是药水物品栈
+     */
+    @Override
+    public boolean isPotion(ItemStack item) {
+        Util.notNull(item, "待判断的物品栈对象是 null 值");
+
+        return isPotion(item.getType());
+    }
+
+    /**
+     * 判断物品栈类型是否是药水物品栈类型
+     *
+     * @param type 物品栈类型
+     * @return 是否是药水物品栈类型
+     */
+    @Override
+    public boolean isPotion(Material type) {
+        Util.notNull(type, "待判断的物品栈类型对象是 null 值");
+
+        return
+                type == Material.POTION ||
+                type == Material.SPLASH_POTION ||
+                type == Material.LINGERING_POTION;
     }
 }

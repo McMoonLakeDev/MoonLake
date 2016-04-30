@@ -56,22 +56,47 @@ public class CustomPotionEffect {
         this.showParticles = showParticles;
     }
 
+    /**
+     * 自定义药水效果的ID
+     *
+     * @return 效果ID
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * 自定义药水效果的等级
+     *
+     * @return 效果等级
+     */
     public int getAmplifier() {
         return amplifier;
     }
 
+    /**
+     * 自定义药水效果的时间
+     *
+     * @return 效果时间
+     */
     public int getDuration() {
         return duration;
     }
 
+    /**
+     * 自定义药水效果的是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     *
+     * @return 透明度
+     */
     public boolean isAmbient() {
         return ambient;
     }
 
+    /**
+     * 自定义药水效果的是否在玩家被药水效果影响的周围出现粒子效果
+     *
+     * @return 粒子效果
+     */
     public boolean isShowParticles() {
         return showParticles;
     }
@@ -82,19 +107,11 @@ public class CustomPotionEffect {
         if(obj == null) {
             return false;
         }
-        if(obj instanceof CustomPotionEffect) {
-
-            CustomPotionEffect cpe = (CustomPotionEffect)obj;
-
-            return
-                    this == cpe &&
-                    id == cpe.getId() &&
-                    amplifier == cpe.getAmplifier() &&
-                    duration == cpe.getDuration() &&
-                    ambient == cpe.isAmbient() &&
-                    showParticles == cpe.isShowParticles();
+        if(!(obj instanceof CustomPotionEffect)) {
+            return false;
         }
-        return false;
+        CustomPotionEffect cpe = (CustomPotionEffect)obj;
+        return cpe.hashCode() == this.hashCode();
     }
 
     @Override
@@ -109,5 +126,12 @@ public class CustomPotionEffect {
 
         CustomPotionEffect cpe = new CustomPotionEffect(id, amplifier, duration, ambient, showParticles);
         return cpe;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Integer.hashCode(getId());
+        result = 29 * result + Integer.hashCode(getAmplifier()) + Integer.hashCode(getDuration());
+        return result;
     }
 }
