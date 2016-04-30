@@ -859,7 +859,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      */
     @Override
     public ItemStack createCustomSplashPotion(int amount, String name, int id, int amplifier, int duration) {
-        return createCustomPotion(PotionEnum.SPLASH_POTION, amount, new CustomPotionEffect(id, amplifier, duration));
+        return createCustomPotion(PotionEnum.SPLASH_POTION, amount, name, new CustomPotionEffect(id, amplifier, duration));
     }
 
     /**
@@ -875,7 +875,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      */
     @Override
     public ItemStack createCustomSplashPotion(int amount, String name, int id, int amplifier, int duration, boolean showParticles) {
-        return createCustomPotion(PotionEnum.SPLASH_POTION, amount, new CustomPotionEffect(id, amplifier, duration, showParticles));
+        return createCustomPotion(PotionEnum.SPLASH_POTION, amount, name, new CustomPotionEffect(id, amplifier, duration, showParticles));
     }
 
     /**
@@ -892,7 +892,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      */
     @Override
     public ItemStack createCustomSplashPotion(int amount, String name, int id, int amplifier, int duration, boolean ambient, boolean showParticles) {
-        return createCustomPotion(PotionEnum.SPLASH_POTION, amount, new CustomPotionEffect(id, amplifier, duration, ambient, showParticles));
+        return createCustomPotion(PotionEnum.SPLASH_POTION, amount, name, new CustomPotionEffect(id, amplifier, duration, ambient, showParticles));
     }
 
     /**
@@ -1041,23 +1041,28 @@ public class ItemUtil extends LoreUtil implements Itemlib {
             throw new NotPotionItemException();
         }
         net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(potion);
-        net.minecraft.server.v1_9_R1.NBTTagList potionList = nms.getTag().getList("CustomPotionEffects", 10);
+        net.minecraft.server.v1_9_R1.NBTTagCompound tag = nms.getTag();
+        if(tag == null) {
+            tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+        }
+        net.minecraft.server.v1_9_R1.NBTTagList potionList = tag.getList("CustomPotionEffects", 10);
         if(potionList == null) {
             potionList = new net.minecraft.server.v1_9_R1.NBTTagList();
         }
         for(int i = 0; i < customPotionEffect.length; i++) {
 
             CustomPotionEffect cpe = customPotionEffect[i];
-            net.minecraft.server.v1_9_R1.NBTTagCompound tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
-            tag.set("Id", new net.minecraft.server.v1_9_R1.NBTTagByte((byte)cpe.getId()));
-            tag.set("Amplifier", new net.minecraft.server.v1_9_R1.NBTTagByte((byte)cpe.getAmplifier()));
-            tag.set("Duration", new net.minecraft.server.v1_9_R1.NBTTagInt(cpe.getDuration()));
-            tag.set("Ambient", new net.minecraft.server.v1_9_R1.NBTTagByte(cpe.isAmbient() ? (byte)1 : (byte)0));
-            tag.set("ShowParticles", new net.minecraft.server.v1_9_R1.NBTTagByte(cpe.isShowParticles() ? (byte)1 : (byte)0));
+            net.minecraft.server.v1_9_R1.NBTTagCompound pf = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+            pf.set("Id", new net.minecraft.server.v1_9_R1.NBTTagByte((byte)cpe.getId()));
+            pf.set("Amplifier", new net.minecraft.server.v1_9_R1.NBTTagByte((byte)cpe.getAmplifier()));
+            pf.set("Duration", new net.minecraft.server.v1_9_R1.NBTTagInt(cpe.getDuration()));
+            pf.set("Ambient", new net.minecraft.server.v1_9_R1.NBTTagByte(cpe.isAmbient() ? (byte)1 : (byte)0));
+            pf.set("ShowParticles", new net.minecraft.server.v1_9_R1.NBTTagByte(cpe.isShowParticles() ? (byte)1 : (byte)0));
 
-            potionList.add(tag);
+            potionList.add(pf);
         }
-        nms.getTag().set("CustomPotionEffects", potionList);
+        tag.set("CustomPotionEffects", potionList);
+        nms.setTag(tag);
 
         return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
     }
