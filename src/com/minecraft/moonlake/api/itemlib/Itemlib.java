@@ -1,8 +1,8 @@
 package com.minecraft.moonlake.api.itemlib;
 
 import com.minecraft.moonlake.api.lorelib.Lorelib;
+import com.minecraft.moonlake.api.potionlib.Potionlib;
 import com.minecraft.moonlake.exception.NotArmorItemException;
-import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.util.Util;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -18,7 +18,7 @@ import java.util.Set;
  * @version 1.0
  * @author Month_Light
  */
-public interface Itemlib extends Lorelib {
+public interface Itemlib extends Lorelib, Potionlib {
 
     /**
      * 创建物品栈对象
@@ -205,117 +205,6 @@ public interface Itemlib extends Lorelib {
      * @return ItemStack
      */
     ItemStack create(Material id, int data, int amount, String name, List<String> lore);
-
-    /**
-     * 创建默认药水物品栈对象
-     *
-     * @param potion 药水类型
-     * @param potionEffect 药水效果 (PotionEffectEnum)
-     * @return 药水 ItemStack
-     */
-    ItemStack createPotion(PotionEnum potion, String potionEffect);
-
-    /**
-     * 创建默认药水物品栈对象
-     *
-     * @param potion 药水类型
-     * @param potionEffect 药水效果 (PotionEffectEnum)
-     * @param amount 数量
-     * @return 药水 ItemStack
-     */
-    ItemStack createPotion(PotionEnum potion, String potionEffect, int amount);
-
-    /**
-     * 创建默认药水物品栈对象
-     *
-     * @param potion 药水类型
-     * @param potionEffect 药水效果 (PotionEffectEnum)
-     * @param amount 药水数量
-     * @param name 药水名称
-     * @return 药水 ItemStack
-     */
-    ItemStack createPotion(PotionEnum potion, String potionEffect, int amount, String name);
-
-    /**
-     * 创建默认基础药水物品栈对象
-     *
-     * @param potionEffect 药水效果 (PotionEffectEnum)
-     * @return 药水 ItemStack
-     */
-    ItemStack createBasePotion(String potionEffect);
-
-    /**
-     * 创建默认基础药水物品栈对象
-     *
-     * @param potionEffect 药水效果 (PotionEffectEnum)
-     * @param amount 药水数量
-     * @return 药水 ItemStack
-     */
-    ItemStack createBasePotion(String potionEffect, int amount);
-
-    /**
-     * 创建默认基础药水物品栈对象
-     *
-     * @param potionEffect 药水效果 (PotionEffectEnum)
-     * @param amount 药水数量
-     * @param name 药水名称
-     * @return 药水 ItemStack
-     */
-    ItemStack createBasePotion(String potionEffect, int amount, String name);
-
-    /**
-     * 创建默认投掷药水物品栈对象
-     *
-     * @param potionEffect 药水效果 (PotionEffectEnum)
-     * @return 药水 ItemStack
-     */
-    ItemStack createSplashPotion(String potionEffect);
-
-    /**
-     * 创建默认投掷药水物品栈对象
-     *
-     * @param potionEffect 药水效果 (PotionEffectEnum)
-     * @param amount 药水数量
-     * @return 药水 ItemStack
-     */
-    ItemStack createSplashPotion(String potionEffect, int amount);
-
-    /**
-     * 创建默认投掷药水物品栈对象
-     *
-     * @param potionEffect 药水效果 (PotionEffectEnum)
-     * @param amount 药水数量
-     * @param name 药水名称
-     * @return 药水 ItemStack
-     */
-    ItemStack createSplashPotion(String potionEffect, int amount, String name);
-
-    /**
-     * 创建默认滞留药水物品栈对象
-     *
-     * @param potionEffect 药水效果 (PotionEffectEnum)
-     * @return 药水 ItemStack
-     */
-    ItemStack createLingeringPotion(String potionEffect);
-
-    /**
-     * 创建默认滞留药水物品栈对象
-     *
-     * @param potionEffect 药水效果 (PotionEffectEnum)
-     * @param amount 药水数量
-     * @return 药水 ItemStack
-     */
-    ItemStack createLingeringPotion(String potionEffect, int amount);
-
-    /**
-     * 创建默认滞留药水物品栈对象
-     *
-     * @param potionEffect 药水效果 (PotionEffectEnum)
-     * @param amount 药水数量
-     * @param name 药水名称
-     * @return 药水 ItemStack
-     */
-    ItemStack createLingeringPotion(String potionEffect, int amount, String name);
 
     /**
      * 给物品栈添加的附魔

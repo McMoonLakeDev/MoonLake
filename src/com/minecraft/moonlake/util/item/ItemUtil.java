@@ -1,6 +1,7 @@
 package com.minecraft.moonlake.util.item;
 
 import com.minecraft.moonlake.api.itemlib.Itemlib;
+import com.minecraft.moonlake.api.potionlib.CustomPotionEffect;
 import com.minecraft.moonlake.exception.NotArmorItemException;
 import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.util.Util;
@@ -442,6 +443,118 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     public ItemStack createLingeringPotion(String potionEffect, int amount, String name) {
         return createPotion(PotionEnum.LINGERING_POTION, potionEffect, amount, name);
     }
+
+    /**
+     * 创建自定义的药水物品栈对象
+     *
+     * @param potion             药水类型
+     * @param customPotionEffect 自定义药水效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomPotion(PotionEnum potion, CustomPotionEffect customPotionEffect) {
+        Util.notNull(potion, "待创建的药水物品栈的类型是 null 值");
+        Util.notNull(customPotionEffect, "待创建的药水物品栈的自定义效果是 null 值");
+
+        ItemStack item = create(potion.getMaterial());
+        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_9_R1.NBTTagCompound tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+        net.minecraft.server.v1_9_R1.NBTTagList potionList = nms.getTag().getList("CustomPotionEffects", 10);
+        if(potionList == null) {
+            potionList = new net.minecraft.server.v1_9_R1.NBTTagList();
+        }
+        tag.set("Id", new net.minecraft.server.v1_9_R1.NBTTagByte((byte)customPotionEffect.getId()));
+        tag.set("Amplifier", new net.minecraft.server.v1_9_R1.NBTTagByte((byte)customPotionEffect.getAmplifier()));
+        tag.set("Duration", new net.minecraft.server.v1_9_R1.NBTTagInt(customPotionEffect.getDuration()));
+        tag.set("Ambient", new net.minecraft.server.v1_9_R1.NBTTagByte(customPotionEffect.isAmbient() ? (byte)1 : (byte)0));
+        tag.set("ShowParticles", new net.minecraft.server.v1_9_R1.NBTTagByte(customPotionEffect.isShowParticles() ? (byte)1 : (byte)0));
+
+        potionList.add(tag);
+        nms.getTag().set("CustomPotionEffects", potionList);
+
+        return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
+    }
+
+    /**
+     * 创建自定义的药水物品栈对象
+     *
+     * @param potion             药水类型
+     * @param customPotionEffect 自定义药水效果数组
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomPotion(PotionEnum potion, CustomPotionEffect... customPotionEffect) {
+        Util.notNull(potion, "待创建的药水物品栈的类型是 null 值");
+        Util.notNull(customPotionEffect, "待创建的药水物品栈的自定义效果是 null 值");
+
+        ItemStack item = create(potion.getMaterial());
+        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_9_R1.NBTTagList potionList = nms.getTag().getList("CustomPotionEffects", 10);
+        if(potionList == null) {
+            potionList = new net.minecraft.server.v1_9_R1.NBTTagList();
+        }
+        for(int i = 0; i < customPotionEffect.length; i++) {
+
+            CustomPotionEffect cpe = customPotionEffect[i];
+            net.minecraft.server.v1_9_R1.NBTTagCompound tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+            tag.set("Id", new net.minecraft.server.v1_9_R1.NBTTagByte((byte)cpe.getId()));
+            tag.set("Amplifier", new net.minecraft.server.v1_9_R1.NBTTagByte((byte)cpe.getAmplifier()));
+            tag.set("Duration", new net.minecraft.server.v1_9_R1.NBTTagInt(cpe.getDuration()));
+            tag.set("Ambient", new net.minecraft.server.v1_9_R1.NBTTagByte(cpe.isAmbient() ? (byte)1 : (byte)0));
+            tag.set("ShowParticles", new net.minecraft.server.v1_9_R1.NBTTagByte(cpe.isShowParticles() ? (byte)1 : (byte)0));
+
+            potionList.add(tag);
+        }
+        nms.getTag().set("CustomPotionEffects", potionList);
+
+        return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
+    }
+
+    /**
+     * 创建自定义的药水物品栈对象
+     *
+     * @param potion    药水类型
+     * @param id        药水ID
+     * @param amplifier 药水等级
+     * @param duration  药水时间
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomPotion(PotionEnum potion, int id, int amplifier, int duration) {
+        return createCustomPotion(potion, new CustomPotionEffect(id, amplifier, duration));
+    }
+
+    /**
+     * 创建自定义的药水物品栈对象
+     *
+     * @param potion        药水类型
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomPotion(PotionEnum potion, int id, int amplifier, int duration, boolean showParticles) {
+        return createCustomPotion(potion, new CustomPotionEffect(id, amplifier, duration, showParticles));
+    }
+
+    /**
+     * 创建自定义的药水物品栈对象
+     *
+     * @param potion        药水类型
+     * @param id            药水ID
+     * @param amplifier     药水等级
+     * @param duration      药水时间
+     * @param ambient       是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return 药水 ItemStack
+     */
+    @Override
+    public ItemStack createCustomPotion(PotionEnum potion, int id, int amplifier, int duration, boolean ambient, boolean showParticles) {
+        return createCustomPotion(potion, new CustomPotionEffect(id, amplifier, duration, ambient, showParticles));
+    }
+
 
     /**
      * 给物品栈添加的附魔

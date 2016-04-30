@@ -210,7 +210,7 @@ public class LoreUtil implements Lorelib {
         if(index <= 0 || index >= temp.size()) {
             return addLore(item, insertLore);
         }
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         for(int i = 0; i < index; i++) {
             lore.add(temp.get(i));
         }

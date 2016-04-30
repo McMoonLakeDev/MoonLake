@@ -4,6 +4,7 @@ import com.minecraft.moonlake.api.MoonLake;
 import com.minecraft.moonlake.api.itemlib.Itemlib;
 import com.minecraft.moonlake.api.lorelib.Lorelib;
 import com.minecraft.moonlake.api.playerlib.Playerlib;
+import com.minecraft.moonlake.api.potionlib.CustomPotionEffect;
 import com.minecraft.moonlake.type.potion.PotionEffectEnum;
 import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.util.item.ItemUtil;
@@ -46,6 +47,10 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         itemlib = new ItemUtil();
         lorelib = new LoreUtil();
         playerlib = new PlayerUtil();
+
+        // 创建自定义药水测试: 幸运10持续60秒不显示粒子效果
+        CustomPotionEffect customPotionEffect = new CustomPotionEffect(26, 9, 60 * 20, false);
+        org.bukkit.inventory.ItemStack test = getInstance().getItemlib().createCustomPotion(PotionEnum.POTION, customPotionEffect);
     }
 
     /**
