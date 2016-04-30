@@ -133,4 +133,25 @@ public final class Util {
             throw new IllegalArgumentException(message);
         }
     }
+
+    /**
+     * <h1>验证字符串是否为 null 或 empty 则抛出异常</h1>
+     *
+     * @param str String
+     */
+    public static void notEmpty(String str) {
+        notEmpty(str, "The String is Null or Empty");
+    }
+
+    /**
+     * <h1>验证字符串是否为 null 或 empty 则抛出异常</h1>
+     *
+     * @param str String
+     * @param message Exception Message
+     */
+    public static void notEmpty(String str, String message) {
+        if(str == null || str.length() == 0) {
+            throw new IllegalArgumentException(message);
+        }
+    }
 }

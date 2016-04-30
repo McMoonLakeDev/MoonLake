@@ -48,9 +48,8 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         lorelib = new LoreUtil();
         playerlib = new PlayerUtil();
 
-        // 创建自定义药水测试: 幸运10持续60秒不显示粒子效果
-        CustomPotionEffect customPotionEffect = new CustomPotionEffect(26, 9, 60 * 20, false);
-        org.bukkit.inventory.ItemStack test = getInstance().getItemlib().createCustomPotion(PotionEnum.POTION, customPotionEffect);
+        // 创建自定义投掷药水测试: 幸运10持续60秒不显示粒子效果
+        org.bukkit.inventory.ItemStack test = getInstance().getItemlib().createCustomSplashPotion(1, 26, 9, 60 * 20, false);
     }
 
     /**

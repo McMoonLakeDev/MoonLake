@@ -7,7 +7,7 @@ package com.minecraft.moonlake.api.potionlib;
  */
 public class CustomPotionEffect {
 
-    private int id;
+    private final int id;
     private int amplifier;
     private int duration;
     private boolean ambient;
@@ -90,6 +90,42 @@ public class CustomPotionEffect {
      */
     public boolean isAmbient() {
         return ambient;
+    }
+
+    /**
+     * 设置自定义药水效果的等级
+     *
+     * @param amplifier 效果等级, 此值为0则为1级
+     */
+    public void setAmplifier(int amplifier) {
+        this.amplifier = amplifier;
+    }
+
+    /**
+     * 设置自定义药水效果的时间
+     *
+     * @param duration 效果时间, 此值为20则为1秒
+     */
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    /**
+     * 设置自定义药水效果的透明度
+     *
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     */
+    public void setAmbient(boolean ambient) {
+        this.ambient = ambient;
+    }
+
+    /**
+     * 设置自定义药水效果的可见
+     *
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     */
+    public void setShowParticles(boolean showParticles) {
+        this.showParticles = showParticles;
     }
 
     /**

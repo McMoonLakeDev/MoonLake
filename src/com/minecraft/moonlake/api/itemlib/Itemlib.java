@@ -582,12 +582,6 @@ public interface Itemlib extends Lorelib, Potionlib {
             return attributeName;
         }
 
-        @Override
-        public String toString() {
-            StringBuilder toString = new StringBuilder("AttributeType{").append(type + "," + attributeName);
-            return toString.append("}").toString();
-        }
-
         /**
          * 将字串符序列化为物品栈特殊属性对象
          *
@@ -595,7 +589,7 @@ public interface Itemlib extends Lorelib, Potionlib {
          * @return AttributeType 如果不存在类型则返回 null
          */
         public static AttributeType fromType(String type) {
-            Util.notNull(type, "待转换的特殊属性类型是 null 值");
+            Util.notEmpty(type, "待转换的特殊属性类型是 null 值");
 
             switch (type.toLowerCase()) {
                 case "attackdamage":
@@ -687,6 +681,35 @@ public interface Itemlib extends Lorelib, Potionlib {
              */
             public String getSlot() {
                 return slot;
+            }
+
+            /**
+             * 将字串符序列化为物品栈特殊属性槽位对象
+             *
+             * @param type 物品栈特殊属性槽位类型
+             * @return Slot 如果不存在类型则返回 null
+             */
+            public static Slot fromType(String type) {
+                Util.notEmpty(type, "待转换的特殊属性类型槽位是 null 值");
+
+                switch (type.toLowerCase()) {
+                    case "mainhand":
+                    case "main_hand":
+                        return MAIN_HAND;
+                    case "offhand":
+                    case "off_hand":
+                        return OFF_HAND;
+                    case "head":
+                        return HEAD;
+                    case "chest":
+                        return CHEST;
+                    case "legs":
+                        return LEGS;
+                    case "feet":
+                        return FEET;
+                    default:
+                        return null;
+                }
             }
         }
     }

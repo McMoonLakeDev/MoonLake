@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.type.potion;
 
+import com.minecraft.moonlake.util.Util;
 import org.bukkit.Material;
 
 /**
@@ -47,5 +48,28 @@ public enum PotionEnum {
      */
     public Material getMaterial() {
         return material;
+    }
+
+    /**
+     * 将字串符序列化为药水类型对象
+     *
+     * @param type 药水类型
+     * @return PotionEnum 如果不存在类型则返回 null
+     */
+    public static PotionEnum fromType(String type) {
+        Util.notEmpty(type, "待转换的药水类型是 null 值");
+
+        switch (type.toLowerCase()) {
+            case "potion":
+                return POTION;
+            case "splashpotion":
+            case "splash_potion":
+                return SPLASH_POTION;
+            case "lingeringpotion":
+            case "lingering_potion":
+                return LINGERING_POTION;
+            default:
+                return null;
+        }
     }
 }

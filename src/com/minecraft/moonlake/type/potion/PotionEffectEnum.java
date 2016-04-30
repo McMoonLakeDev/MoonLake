@@ -1,5 +1,7 @@
 package com.minecraft.moonlake.type.potion;
 
+import com.minecraft.moonlake.util.Util;
+
 /**
  * Created by MoonLake on 2016/4/29.
  * @version 1.0
@@ -127,5 +129,63 @@ public enum PotionEffectEnum {
      */
     public String getLong() {
         return _long;
+    }
+
+    /**
+     * 将字串符序列化为药水效果对象
+     *
+     * @param type 药水效果类型
+     * @return PotionEffectEnum 如果不存在类型则返回 null
+     */
+    public static PotionEffectEnum fromType(String type) {
+        Util.notEmpty(type, "待转换的药水效果是 null 值");
+
+        switch (type.toLowerCase()) {
+            case "water":
+                return WATER;
+            case "mundane":
+            case "mundanewater":
+            case "mundane_water":
+                return MUNDANE_WATER;
+            case "thick":
+            case "thickwater":
+            case "thick_water":
+                return THICK_WATER;
+            case "awkward":
+            case "awkwardwater":
+            case "awkward_water":
+                return AWKWARD_WATER;
+            case "nightvision":
+            case "night_vision":
+                return NIGHT_VISION;
+            case "invisibility":
+                return INVISIBILITY;
+            case "leaping":
+                return LEAPING;
+            case "fireresistance":
+            case "fire_resistance":
+                return FIRE_RESISTANCE;
+            case "swiftness":
+                return SWIFTNESS;
+            case "slowness":
+                return SLOWNESS;
+            case "waterbreathing":
+            case "water_breathing":
+                return WATER_BREATHING;
+            case "healing":
+                return HEALING;
+            case "harming":
+                return HARMING;
+            case "poison":
+                return POISON;
+            case "regeneration":
+                return REGENERATION;
+            case "strength":
+                return STRENGTH;
+            case "weakness":
+                return WEAKNESS;
+            default:
+                return null;
+        }
     }
 }
