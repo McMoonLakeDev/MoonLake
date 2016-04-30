@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * <h1>Minecraft MoonLake Core API Plugin</h1>
+ * <h1>Minecraft <a href="http://www.mcyszh.com">MoonLake</a> Core API Plugin</h1>
  * <h6>By Month_Light Q: 1327516533</h6>
  * @version 1.2
  * @author Month_Light
@@ -47,9 +47,6 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         itemlib = new ItemUtil();
         lorelib = new LoreUtil();
         playerlib = new PlayerUtil();
-
-        // 创建自定义投掷药水测试: 幸运10持续60秒不显示粒子效果
-        org.bukkit.inventory.ItemStack test = getInstance().getItemlib().createCustomSplashPotion(1, 26, 9, 60 * 20, false);
     }
 
     /**
