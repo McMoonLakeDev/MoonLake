@@ -366,15 +366,6 @@ public interface Itemlib extends Lorelib, Potionlib {
     ItemStack addAttribute(ItemStack item, Map<AttributeType, Double> typeDoubleMap, boolean[] isPercent, AttributeType.Slot... slot);
 
     /**
-     * 给物品栈添加特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
-     *
-     * @param item 物品栈
-     * @param attributeStack 特殊属性数组
-     * @return 设置特殊属性后的 ItemStack 异常返回 null
-     */
-    ItemStack addAttribute(ItemStack item, AttributeStack... attributeStack);
-
-    /**
      * 获取物品栈的特殊属性集合
      *
      * @param item 物品栈

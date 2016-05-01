@@ -1422,25 +1422,30 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         Util.notNull(type, "待添加特殊属性的物品栈的属性类型是 null 值");
 
         net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(item);
-        net.minecraft.server.v1_9_R1.NBTTagCompound tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
-        net.minecraft.server.v1_9_R1.NBTTagList tagAttList = nms.getTag().getList("AttributeModifiers", 10);
+        net.minecraft.server.v1_9_R1.NBTTagCompound tag = nms.getTag();
+        if(tag == null) {
+            tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+        }
+        net.minecraft.server.v1_9_R1.NBTTagList tagAttList = tag.getList("AttributeModifiers", 10);
         if(tagAttList == null) {
             tagAttList = new net.minecraft.server.v1_9_R1.NBTTagList();
         }
+        net.minecraft.server.v1_9_R1.NBTTagCompound att = new net.minecraft.server.v1_9_R1.NBTTagCompound();
         if(slot != null) {
-            tag.set("Slot", new net.minecraft.server.v1_9_R1.NBTTagString(slot.getSlot()));
+            att.set("Slot", new net.minecraft.server.v1_9_R1.NBTTagString(slot.getSlot()));
         }
-        tag.set("Name", new net.minecraft.server.v1_9_R1.NBTTagString(type.getName()));
-        tag.set("AttributeName", new net.minecraft.server.v1_9_R1.NBTTagString(type.getAttributeName()));
-        tag.set("Amount", new net.minecraft.server.v1_9_R1.NBTTagDouble(count));
-        tag.set("Operation", new net.minecraft.server.v1_9_R1.NBTTagInt(isPercent ? 1 : 0));
+        att.set("Name", new net.minecraft.server.v1_9_R1.NBTTagString(type.getName()));
+        att.set("AttributeName", new net.minecraft.server.v1_9_R1.NBTTagString(type.getAttributeName()));
+        att.set("Amount", new net.minecraft.server.v1_9_R1.NBTTagDouble(count));
+        att.set("Operation", new net.minecraft.server.v1_9_R1.NBTTagInt(isPercent ? 1 : 0));
 
         UUID uuid = UUID.randomUUID();
-        tag.set("UUIDMost", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getMostSignificantBits()));
-        tag.set("UUIDLeast", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getLeastSignificantBits()));
+        att.set("UUIDMost", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getMostSignificantBits()));
+        att.set("UUIDLeast", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getLeastSignificantBits()));
 
-        tagAttList.add(tag);
-        nms.getTag().set("AttributeModifiers", tagAttList);
+        tagAttList.add(att);
+        tag.set("AttributeModifiers", tagAttList);
+        nms.setTag(tag);
 
         return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
     }
@@ -1460,26 +1465,15 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         Util.notNull(typeDoubleMap, "待添加特殊属性的物品栈的属性类型是 null 值");
 
         net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(item);
-        net.minecraft.server.v1_9_R1.NBTTagCompound tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
-        net.minecraft.server.v1_9_R1.NBTTagList tagAttList = nms.getTag().getList("AttributeModifiers", 10);
+        net.minecraft.server.v1_9_R1.NBTTagCompound tag = nms.getTag();
+        if(tag == null) {
+            tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+        }
+        net.minecraft.server.v1_9_R1.NBTTagList tagAttList = tag.getList("AttributeModifiers", 10);
         if(tagAttList == null) {
             tagAttList = new net.minecraft.server.v1_9_R1.NBTTagList();
         }
-        int percentIndex = 0;
-        boolean[] percentArr = new boolean[typeDoubleMap.size()];
-        if(isPercent.length < typeDoubleMap.size()) {
-            for(int i = 0; i < isPercent.length; i++) {
-                percentArr[i] = isPercent[i];
-            }
-            for(int i = isPercent.length; i < typeDoubleMap.size(); i++) {
-                percentArr[i] = false;
-            }
-        }
-        else {
-            for(int i = 0; i < isPercent.length; i++) {
-                percentArr[i] = isPercent[i];
-            }
-        }
+        int index = 0;
         Iterator<Map.Entry<AttributeType, Double>> iterator = typeDoubleMap.entrySet().iterator();
         while(iterator.hasNext()) {
 
@@ -1488,48 +1482,26 @@ public class ItemUtil extends LoreUtil implements Itemlib {
 
             Util.notNull(type, "待添加特殊属性的物品栈的属性类型是 null 值");
 
-            if(slot != null) {
-                tag.set("Slot", new net.minecraft.server.v1_9_R1.NBTTagString(slot[percentIndex].getSlot()));
+            net.minecraft.server.v1_9_R1.NBTTagCompound att = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+            if(slot != null && slot[index] != null) {
+                att.set("Slot", new net.minecraft.server.v1_9_R1.NBTTagString(slot[index].getSlot()));
             }
-            tag.set("Name", new net.minecraft.server.v1_9_R1.NBTTagString(type.getName()));
-            tag.set("AttributeName", new net.minecraft.server.v1_9_R1.NBTTagString(type.getAttributeName()));
-            tag.set("Amount", new net.minecraft.server.v1_9_R1.NBTTagDouble(entry.getValue()));
-            tag.set("Operation", new net.minecraft.server.v1_9_R1.NBTTagInt(percentArr[percentIndex] ? 1 : 0));
+            att.set("Name", new net.minecraft.server.v1_9_R1.NBTTagString(type.getName()));
+            att.set("AttributeName", new net.minecraft.server.v1_9_R1.NBTTagString(type.getAttributeName()));
+            att.set("Amount", new net.minecraft.server.v1_9_R1.NBTTagDouble(entry.getValue()));
+            att.set("Operation", new net.minecraft.server.v1_9_R1.NBTTagInt(isPercent[index] ? 1 : 0));
 
             UUID uuid = UUID.randomUUID();
-            tag.set("UUIDMost", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getMostSignificantBits()));
-            tag.set("UUIDLeast", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getLeastSignificantBits()));
+            att.set("UUIDMost", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getMostSignificantBits()));
+            att.set("UUIDLeast", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getLeastSignificantBits()));
 
-            tagAttList.add(tag);
-            percentIndex++;
+            tagAttList.add(att);
+            index++;
         }
-        nms.getTag().set("AttributeModifiers", tagAttList);
+        tag.set("AttributeModifiers", tagAttList);
+        nms.setTag(tag);
 
         return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
-    }
-
-    /**
-     * 给物品栈添加特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
-     *
-     * @param item           物品栈
-     * @param attributeStack 特殊属性数组
-     * @return 设置特殊属性后的 ItemStack 异常返回 null
-     */
-    @Override
-    public ItemStack addAttribute(ItemStack item, AttributeStack... attributeStack) {
-        Util.notNull(item, "待设置的物品栈是 null 值");
-        Util.notNull(attributeStack, "待添加的特殊属性是 null 值");
-
-        Map<AttributeType, Double> typeDoubleMap = new HashMap<>();
-        boolean[] percentArr = new boolean[attributeStack.length];
-        AttributeType.Slot[] attSlotArr = new AttributeType.Slot[attributeStack.length];
-
-        for(int i = 0; i < attributeStack.length; i++) {
-            typeDoubleMap.put(attributeStack[i].getType(), attributeStack[i].getAmount());
-            percentArr[i] = attributeStack[i].isPercent();
-            attSlotArr[i] = attributeStack[i].getSlot();
-        }
-        return addAttribute(item, typeDoubleMap, percentArr, attSlotArr);
     }
 
     /**
