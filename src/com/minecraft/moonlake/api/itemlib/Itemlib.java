@@ -484,6 +484,14 @@ public interface Itemlib extends Lorelib, Potionlib {
     ItemStack setItemAttackSpeed(ItemStack item, double count, boolean isPercent, AttributeType.Slot slot);
 
     /**
+     * 将字串符类型序列化为物品栈标示
+     *
+     * @param type 类型
+     * @return 物品栈标示 如果不存在则返回 null
+     */
+    ItemFlag getItemFlagFromType(String type);
+
+    /**
      * 判断物品栈是否是护甲物品栈
      *
      * @param item 物品栈

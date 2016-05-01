@@ -1708,6 +1708,37 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     }
 
     /**
+     * 将字串符类型序列化为物品栈标示
+     *
+     * @param type 类型
+     * @return 物品栈标示 如果不存在则返回 null
+     */
+    @Override
+    public ItemFlag getItemFlagFromType(String type) {
+        Util.notEmpty(type, "待转换的类型标示是 null 值");
+
+        switch (type.toLowerCase()){
+            case "enchants":
+                return ItemFlag.HIDE_ENCHANTS;
+            case "attributes":
+                return ItemFlag.HIDE_ATTRIBUTES;
+            case "unbreakable":
+                return ItemFlag.HIDE_UNBREAKABLE;
+            case "destroys":
+                return ItemFlag.HIDE_DESTROYS;
+            case "placed":
+            case "placedon":
+            case "placed_on":
+                return ItemFlag.HIDE_PLACED_ON;
+            case "potioneffects":
+            case "potion_effects":
+                return ItemFlag.HIDE_POTION_EFFECTS;
+            default:
+                return null;
+        }
+    }
+
+    /**
      * 判断物品栈是否是护甲物品栈
      *
      * @param item 物品栈
