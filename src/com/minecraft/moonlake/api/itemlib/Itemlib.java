@@ -483,6 +483,22 @@ public interface Itemlib extends Lorelib, Potionlib {
     boolean isArmor(Material type);
 
     /**
+     * 判断物品栈类型是否是皮革护甲物品栈类型
+     *
+     * @param item 物品栈类型
+     * @return 是否是皮革护甲物品栈类型
+     */
+    boolean isLeatherArmor(ItemStack item);
+
+    /**
+     * 判断物品栈类型是否是皮革护甲物品栈类型
+     *
+     * @param type 物品栈类型
+     * @return 是否是皮革护甲物品栈类型
+     */
+    boolean isLeatherArmor(Material type);
+
+    /**
      * 判断物品栈是否是药水物品栈
      *
      * @param item 物品栈

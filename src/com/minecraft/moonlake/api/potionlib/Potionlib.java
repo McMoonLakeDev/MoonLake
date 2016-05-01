@@ -4,6 +4,8 @@ import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.exception.NotPotionItemException;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Set;
+
 /**
  * <h1>提供药水物品栈的API函数 (创建、添加效果等等)</h1>
  * @version 1.0
@@ -623,4 +625,13 @@ public interface Potionlib {
      * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
      */
     ItemStack addCustomPotion(ItemStack potion, int id, int amplifier, int duration, boolean ambient, boolean showParticles);
+
+    /**
+     * 获取药水物品栈的自定义药水效果集合
+     *
+     * @param potion 药水物品栈
+     * @return 自定义药水效果集合 如果药水没有自定义效果则返回空集合
+     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
+     */
+    Set<CustomPotionEffect> getCustomPoionEffectList(ItemStack potion);
 }

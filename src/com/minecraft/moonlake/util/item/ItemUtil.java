@@ -1115,6 +1115,48 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         return addCustomPotion(potion, new CustomPotionEffect(id, amplifier, duration, ambient, showParticles));
     }
 
+    /**
+     * 获取药水物品栈的自定义药水效果集合
+     *
+     * @param potion 药水物品栈
+     * @return 自定义药水效果集合 如果药水没有自定义效果则返回空集合
+     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
+     */
+    @Override
+    public Set<CustomPotionEffect> getCustomPoionEffectList(ItemStack potion) {
+        Util.notNull(potion, "待添加的药水物品栈的类型是 null 值");
+
+        if(!isPotion(potion))
+            throw new NotPotionItemException();
+
+        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(potion);
+        net.minecraft.server.v1_9_R1.NBTTagCompound tag = nms.getTag();
+        if(tag == null) {
+            // 没有自定义药水效果则返回空集合
+            return new HashSet<>();
+        }
+        net.minecraft.server.v1_9_R1.NBTTagList potionList = tag.getList("CustomPotionEffects", 10);
+        if(potionList == null || potionList.size() <= 0) {
+            // 没有自定义药水效果则返回空集合
+            return new HashSet<>();
+        }
+        List<CustomPotionEffect> cpeList = new ArrayList<>();
+        for(int i = 0; i < potionList.size(); i++) {
+            net.minecraft.server.v1_9_R1.NBTTagCompound pf = potionList.get(i);
+            if(pf != null) {
+                CustomPotionEffect cep = new CustomPotionEffect(
+                        (int)pf.getByte("Id"),
+                        (int)pf.getByte("Amplifier"),
+                        pf.getInt("Duration"),
+                        pf.getByte("Ambient") == 1,
+                        pf.getByte("ShowParticles") == 1
+                );
+                cpeList.add(cep);
+            }
+        }
+        return cpeList.size() >= 1 ? new HashSet<>(cpeList) : new HashSet<CustomPotionEffect>();
+    }
+
 
     /**
      * 给物品栈添加的附魔
@@ -1642,6 +1684,36 @@ public class ItemUtil extends LoreUtil implements Itemlib {
                 type == Material.GOLD_CHESTPLATE ||
                 type == Material.GOLD_LEGGINGS ||
                 type == Material.GOLD_BOOTS;
+    }
+
+    /**
+     * 判断物品栈类型是否是皮革护甲物品栈类型
+     *
+     * @param item 物品栈类型
+     * @return 是否是皮革护甲物品栈类型
+     */
+    @Override
+    public boolean isLeatherArmor(ItemStack item) {
+        Util.notNull(item, "待判断的物品栈对象是 null 值");
+
+        return isLeatherArmor(item.getType());
+    }
+
+    /**
+     * 判断物品栈类型是否是皮革护甲物品栈类型
+     *
+     * @param type 物品栈类型
+     * @return 是否是皮革护甲物品栈类型
+     */
+    @Override
+    public boolean isLeatherArmor(Material type) {
+        Util.notNull(type, "待判断的物品栈类型对象是 null 值");
+
+        return
+                type == Material.LEATHER_HELMET ||
+                type == Material.LEATHER_CHESTPLATE ||
+                type == Material.LEATHER_LEGGINGS ||
+                type == Material.LEATHER_BOOTS ;
     }
 
     /**
