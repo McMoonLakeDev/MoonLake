@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.util.item;
 
+import com.minecraft.moonlake.api.itemlib.AttributeStack;
 import com.minecraft.moonlake.api.itemlib.Itemlib;
 import com.minecraft.moonlake.api.potionlib.CustomPotionEffect;
 import com.minecraft.moonlake.exception.NotArmorItemException;
@@ -1454,7 +1455,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
     @Override
-    public ItemStack addAttribute(ItemStack item, Map<AttributeType, Double> typeDoubleMap, boolean[] isPercent, AttributeType.Slot slot) {
+    public ItemStack addAttribute(ItemStack item, Map<AttributeType, Double> typeDoubleMap, boolean[] isPercent, AttributeType.Slot... slot) {
         Util.notNull(item, "待设置的物品栈是 null 值");
         Util.notNull(typeDoubleMap, "待添加特殊属性的物品栈的属性类型是 null 值");
 
@@ -1488,7 +1489,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
             Util.notNull(type, "待添加特殊属性的物品栈的属性类型是 null 值");
 
             if(slot != null) {
-                tag.set("Slot", new net.minecraft.server.v1_9_R1.NBTTagString(slot.getSlot()));
+                tag.set("Slot", new net.minecraft.server.v1_9_R1.NBTTagString(slot[percentIndex].getSlot()));
             }
             tag.set("Name", new net.minecraft.server.v1_9_R1.NBTTagString(type.getName()));
             tag.set("AttributeName", new net.minecraft.server.v1_9_R1.NBTTagString(type.getAttributeName()));
@@ -1505,6 +1506,72 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         nms.getTag().set("AttributeModifiers", tagAttList);
 
         return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
+    }
+
+    /**
+     * 给物品栈添加特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param item           物品栈
+     * @param attributeStack 特殊属性数组
+     * @return 设置特殊属性后的 ItemStack 异常返回 null
+     */
+    @Override
+    public ItemStack addAttribute(ItemStack item, AttributeStack... attributeStack) {
+        Util.notNull(item, "待设置的物品栈是 null 值");
+        Util.notNull(attributeStack, "待添加的特殊属性是 null 值");
+
+        Map<AttributeType, Double> typeDoubleMap = new HashMap<>();
+        boolean[] percentArr = new boolean[attributeStack.length];
+        AttributeType.Slot[] attSlotArr = new AttributeType.Slot[attributeStack.length];
+
+        for(int i = 0; i < attributeStack.length; i++) {
+            typeDoubleMap.put(attributeStack[i].getType(), attributeStack[i].getAmount());
+            percentArr[i] = attributeStack[i].isPercent();
+            attSlotArr[i] = attributeStack[i].getSlot();
+        }
+        return addAttribute(item, typeDoubleMap, percentArr, attSlotArr);
+    }
+
+    /**
+     * 获取物品栈的特殊属性集合
+     *
+     * @param item 物品栈
+     * @return 特殊属性集合 如果物品栈没有特殊属性则返回空集合
+     */
+    @Override
+    public Set<AttributeStack> getAttributeList(ItemStack item) {
+        Util.notNull(item, "待获取的物品栈是 null 值");
+
+        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_9_R1.NBTTagCompound tag = nms.getTag();
+        if(tag == null) {
+            // 物品没有特殊属性则返回空集合
+            return new HashSet<>();
+        }
+        net.minecraft.server.v1_9_R1.NBTTagList attList = tag.getList("AttributeModifiers", 10);
+        if(attList == null || attList.size() <= 0) {
+            // 物品没有特殊属性则返回空集合
+            return new HashSet<>();
+        }
+        List<AttributeStack> attStackList = new ArrayList<>();
+        for(int i = 0; i < attList.size(); i++) {
+
+            net.minecraft.server.v1_9_R1.NBTTagCompound att = attList.get(i);
+            if(att != null) {
+                AttributeType attType = AttributeType.fromType(att.getString("AttributeName"));
+                AttributeType.Slot attSlot = AttributeType.Slot.fromType(att.getString("Slot"));
+                if(attType != null) {
+                    AttributeStack attStack = new AttributeStack(
+                            attType,
+                            attSlot,
+                            att.getDouble("Amount"),
+                            att.getInt("Operation")
+                    );
+                    attStackList.add(attStack);
+                }
+            }
+        }
+        return attStackList.size() >= 1 ? new HashSet<>(attStackList) : new HashSet<AttributeStack>();
     }
 
     /**

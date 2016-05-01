@@ -363,7 +363,24 @@ public interface Itemlib extends Lorelib, Potionlib {
      * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置特殊属性后的 ItemStack 异常返回 null
      */
-    ItemStack addAttribute(ItemStack item, Map<AttributeType, Double> typeDoubleMap, boolean[] isPercent, AttributeType.Slot slot);
+    ItemStack addAttribute(ItemStack item, Map<AttributeType, Double> typeDoubleMap, boolean[] isPercent, AttributeType.Slot... slot);
+
+    /**
+     * 给物品栈添加特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
+     *
+     * @param item 物品栈
+     * @param attributeStack 特殊属性数组
+     * @return 设置特殊属性后的 ItemStack 异常返回 null
+     */
+    ItemStack addAttribute(ItemStack item, AttributeStack... attributeStack);
+
+    /**
+     * 获取物品栈的特殊属性集合
+     *
+     * @param item 物品栈
+     * @return 特殊属性集合 如果物品栈没有特殊属性则返回空集合
+     */
+    Set<AttributeStack> getAttributeList(ItemStack item);
 
     /**
      * 设置物品栈的攻击伤害属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
@@ -610,30 +627,39 @@ public interface Itemlib extends Lorelib, Potionlib {
             switch (type.toLowerCase()) {
                 case "attackdamage":
                 case "attack_damage":
+                case "generic.attackDamage":
                     return ATTACK_DAMAGE;
                 case "movespeed":
                 case "move_speed":
+                case "generic.movementSpeed":
                     return MOVE_SPEED;
                 case "knockbackresistance":
                 case "knockback_resistance":
+                case "generic.knockbackResistance":
                     return KNOCKBACK_RESISTANCE;
                 case "maxhealth":
                 case "max_health":
+                case "generic.maxHealth":
                     return MAX_HEALTH;
                 case "followrange":
                 case "follow_range":
+                case "generic.followRange":
                     return FOLLOW_RANGE;
                 case "armor":
                 case "armordefense":
                 case "armor_defense":
+                case "generic.armor":
                     return ARMOR_DEFENSE;
                 case "armortoughness":
                 case "armor_toughness":
+                case "generic.armorToughness":
                     return ARMOR_TOUGHNESS;
                 case "attackspeed":
                 case "attack_speed":
+                case "generic.attackSpeed":
                     return ATTACK_SPEED;
                 case "luck":
+                case "generic.luck":
                     return LUCK;
                 default:
                     return null;
