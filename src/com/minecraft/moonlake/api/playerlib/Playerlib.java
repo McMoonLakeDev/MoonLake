@@ -1,8 +1,7 @@
 package com.minecraft.moonlake.api.playerlib;
 
-import com.minecraft.moonlake.exception.PlayerNotOnlineException;
+import com.minecraft.moonlake.exception.player.PlayerNotOnlineException;
 import com.minecraft.moonlake.util.player.BaseChat;
-import net.minecraft.server.v1_9_R1.Packet;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -56,15 +55,6 @@ public interface Playerlib {
      * @throws PlayerNotOnlineException 玩家不在线则抛出异常
      */
     int getPing(String player);
-
-    /**
-     * 给玩家发送网络数据包
-     *
-     * @param player 玩家名
-     * @param packets 数据包
-     * @throws PlayerNotOnlineException 玩家不在线则抛出异常
-     */
-    void sendPacket(String player, Packet<?>... packets);
 
     /**
      * 给玩家发送标题数据包

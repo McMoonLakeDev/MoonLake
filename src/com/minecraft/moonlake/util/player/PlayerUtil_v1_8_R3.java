@@ -1,12 +1,10 @@
 package com.minecraft.moonlake.util.player;
 
 import com.minecraft.moonlake.api.playerlib.Playerlib;
-import com.minecraft.moonlake.exception.PlayerNotOnlineException;
+import com.minecraft.moonlake.exception.player.PlayerNotOnlineException;
 import com.minecraft.moonlake.util.Util;
-import net.minecraft.server.v1_9_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
@@ -18,11 +16,11 @@ import java.util.UUID;
  * @version 1.0
  * @author Month_Light
  */
-public class PlayerUtil implements Playerlib {
+public class PlayerUtil_v1_8_R3 implements Playerlib {
 
     static {}
 
-    public PlayerUtil() {
+    public PlayerUtil_v1_8_R3() {
 
     }
 
@@ -89,7 +87,8 @@ public class PlayerUtil implements Playerlib {
     @Override
     public int getPing(String player) {
         Player instance = notOnline(player);
-        return ((CraftPlayer)instance).getHandle().ping;
+
+        return ((org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer) instance).getHandle().ping;
     }
 
     /**
@@ -99,13 +98,12 @@ public class PlayerUtil implements Playerlib {
      * @param packets 数据包
      * @throws PlayerNotOnlineException 玩家不在线则抛出异常
      */
-    @Override
-    public void sendPacket(String player, net.minecraft.server.v1_9_R1.Packet<?>... packets) {
+    public void sendPacket(String player, net.minecraft.server.v1_8_R3.Packet<?>... packets) {
         Util.notNull(packets, "待发送的网络数据包是 null 值");
 
         Player instance = notOnline(player);
         for(int i = 0; i < packets.length; i++) {
-            ((CraftPlayer)instance).getHandle().playerConnection.sendPacket(packets[i]);
+            ((org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer)instance).getHandle().playerConnection.sendPacket(packets[i]);
         }
     }
 
@@ -120,8 +118,8 @@ public class PlayerUtil implements Playerlib {
     public void sendTitlePacket(String player, String title) {
         Util.notNull(title, "待发送的标题数据包标题是 null 值");
 
-        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(title) + "\"}");
-        PacketPlayOutTitle ppot = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc);
+        net.minecraft.server.v1_8_R3.IChatBaseComponent icbc = net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(title) + "\"}");
+        net.minecraft.server.v1_8_R3.PacketPlayOutTitle ppot = new net.minecraft.server.v1_8_R3.PacketPlayOutTitle(net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction.TITLE, icbc);
 
         sendPacket(player, ppot);
     }
@@ -139,10 +137,10 @@ public class PlayerUtil implements Playerlib {
         Util.notNull(title, "待发送的标题数据包标题是 null 值");
         Util.notNull(subTitle, "待发送的标题数据包子标题是 null 值");
 
-        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(title) + "\"}");
-        IChatBaseComponent icbc2 = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(subTitle) + "\"}");
-        PacketPlayOutTitle ppot = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc);
-        PacketPlayOutTitle ppot2 = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc2);
+        net.minecraft.server.v1_8_R3.IChatBaseComponent icbc = net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(title) + "\"}");
+        net.minecraft.server.v1_8_R3.IChatBaseComponent icbc2 = net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(subTitle) + "\"}");
+        net.minecraft.server.v1_8_R3.PacketPlayOutTitle ppot = new net.minecraft.server.v1_8_R3.PacketPlayOutTitle(net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction.TITLE, icbc);
+        net.minecraft.server.v1_8_R3.PacketPlayOutTitle ppot2 = new net.minecraft.server.v1_8_R3.PacketPlayOutTitle(net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc2);
 
         sendPacket(player, ppot2, ppot);
     }
@@ -161,9 +159,9 @@ public class PlayerUtil implements Playerlib {
     public void sendTitlePacket(String player, String title, int drTime, int plTime, int dcTime) {
         Util.notNull(title, "待发送的标题数据包标题是 null 值");
 
-        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(title) + "\"}");
-        PacketPlayOutTitle ppot = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc);
-        PacketPlayOutTitle ppot2 = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TIMES, null, drTime, plTime, dcTime);
+        net.minecraft.server.v1_8_R3.IChatBaseComponent icbc = net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(title) + "\"}");
+        net.minecraft.server.v1_8_R3.PacketPlayOutTitle ppot = new net.minecraft.server.v1_8_R3.PacketPlayOutTitle(net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction.TITLE, icbc);
+        net.minecraft.server.v1_8_R3.PacketPlayOutTitle ppot2 = new net.minecraft.server.v1_8_R3.PacketPlayOutTitle(net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction.TIMES, null, drTime, plTime, dcTime);
 
         sendPacket(player, ppot2, ppot);
     }
@@ -184,11 +182,11 @@ public class PlayerUtil implements Playerlib {
         Util.notNull(title, "待发送的标题数据包标题是 null 值");
         Util.notNull(subTitle, "待发送的标题数据包子标题是 null 值");
 
-        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(title) + "\"}");
-        IChatBaseComponent icbc2 = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(subTitle) + "\"}");
-        PacketPlayOutTitle ppot = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc);
-        PacketPlayOutTitle ppot2 = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc2);
-        PacketPlayOutTitle ppot3 = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TIMES, null, drTime, plTime, dcTime);
+        net.minecraft.server.v1_8_R3.IChatBaseComponent icbc = net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(title) + "\"}");
+        net.minecraft.server.v1_8_R3.IChatBaseComponent icbc2 = net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(subTitle) + "\"}");
+        net.minecraft.server.v1_8_R3.PacketPlayOutTitle ppot = new net.minecraft.server.v1_8_R3.PacketPlayOutTitle(net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction.TITLE, icbc);
+        net.minecraft.server.v1_8_R3.PacketPlayOutTitle ppot2 = new net.minecraft.server.v1_8_R3.PacketPlayOutTitle(net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc2);
+        net.minecraft.server.v1_8_R3.PacketPlayOutTitle ppot3 = new net.minecraft.server.v1_8_R3.PacketPlayOutTitle(net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction.TIMES, null, drTime, plTime, dcTime);
 
         sendPacket(player, ppot3, ppot2, ppot);
     }
@@ -205,8 +203,8 @@ public class PlayerUtil implements Playerlib {
     public void sendChatPacket(String player, String message, ChatPacketMode mode) {
         Util.notNull(message, "待发送的聊天数据包消息是 null 值");
 
-        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(message) + "\"}");
-        PacketPlayOutChat ppoc = new PacketPlayOutChat(icbc, mode == null ? (byte)1 : mode.getMode());
+        net.minecraft.server.v1_8_R3.IChatBaseComponent icbc = net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Util.color(message) + "\"}");
+        net.minecraft.server.v1_8_R3.PacketPlayOutChat ppoc = new net.minecraft.server.v1_8_R3.PacketPlayOutChat(icbc, mode == null ? (byte)1 : mode.getMode());
 
         sendPacket(player, ppoc);
     }
@@ -248,9 +246,9 @@ public class PlayerUtil implements Playerlib {
         Util.notNull(header, "待发送的Tab列表数据包头文本是 null 值");
         Util.notNull(footer, "待发送的Tab列表数据包脚文本是 null 值");
 
-        IChatBaseComponent tabheader = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + header + "\"}");
-        IChatBaseComponent tabfooter = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + footer + "\"}");
-        PacketPlayOutPlayerListHeaderFooter ppoplhf = new PacketPlayOutPlayerListHeaderFooter(tabfooter);
+        net.minecraft.server.v1_8_R3.IChatBaseComponent tabheader = net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + header + "\"}");
+        net.minecraft.server.v1_8_R3.IChatBaseComponent tabfooter = net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + footer + "\"}");
+        net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter ppoplhf = new net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter(tabfooter);
         Field field = null;
 
         try {
@@ -272,12 +270,12 @@ public class PlayerUtil implements Playerlib {
     public void sendCrashClientPacket(String player) {
 
         Player instance = notOnline(player);
-        PacketPlayOutExplosion ppoe = new PacketPlayOutExplosion(
+        net.minecraft.server.v1_8_R3.PacketPlayOutExplosion ppoe = new net.minecraft.server.v1_8_R3.PacketPlayOutExplosion(
                 instance.getLocation().getX(),
                 instance.getLocation().getY(),
                 instance.getLocation().getZ(),
-                Float.MAX_VALUE, new ArrayList<BlockPosition>(),
-                new Vec3D(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE)
+                Float.MAX_VALUE, new ArrayList<net.minecraft.server.v1_8_R3.BlockPosition>(),
+                new net.minecraft.server.v1_8_R3.Vec3D(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE)
         );
         sendPacket(player, ppoe);
     }

@@ -2,8 +2,10 @@ package com.minecraft.moonlake.api.itemlib;
 
 import com.minecraft.moonlake.api.lorelib.Lorelib;
 import com.minecraft.moonlake.api.potionlib.Potionlib;
-import com.minecraft.moonlake.exception.NotArmorItemException;
+import com.minecraft.moonlake.exception.item.NotArmorItemException;
+import com.minecraft.moonlake.exception.item.NotBookItemException;
 import com.minecraft.moonlake.util.Util;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -483,6 +485,85 @@ public interface Itemlib extends Lorelib, Potionlib {
     ItemFlag getItemFlagFromType(String type);
 
     /**
+     * 获取物品栈的特殊属性
+     *
+     * @param item 物品栈
+     * @param type 属性类型
+     * @return 特殊属性数据类 如果物品栈没有此属性则返回 null
+     */
+    AttributeStack getItemAttributeFromType(ItemStack item, AttributeType type);
+
+    /**
+     * 获取物品栈的特殊属性
+     *
+     * @param item 物品栈
+     * @param type 属性类型
+     * @return 特殊属性数据类 如果物品栈没有此属性则返回 null
+     */
+    AttributeStack getItemAttributeFromType(ItemStack item, String type);
+
+    /**
+     * 设置皮革护甲物品栈的颜色
+     *
+     * @param leatherArmor 皮革护甲物品栈
+     * @param color 颜色
+     * @return 设置颜色后的皮革护甲物品栈
+     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
+     */
+    ItemStack setLeatherArmorColor(ItemStack leatherArmor, Color color);
+
+    /**
+     * 设置皮革护甲物品栈的颜色
+     *
+     * @param leatherArmor 皮革护甲物品栈
+     * @param r 红色值 (min: 0, max: 255)
+     * @param g 绿色值 (min: 0, max: 255)
+     * @param b 蓝色值 (min: 0, max: 255)
+     * @return 设置颜色后的皮革护甲物品栈
+     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
+     */
+    ItemStack setLeatherArmorColorRGB(ItemStack leatherArmor, int r, int g, int b);
+
+    /**
+     * 设置皮革护甲物品栈的颜色
+     *
+     * @param leatherArmor 皮革护甲物品栈
+     * @param g 绿色值 (min: 0, max: 255)
+     * @param b 蓝色值 (min: 0, max: 255)
+     * @param r 红色值 (min: 0, max: 255)
+     * @return 设置颜色后的皮革护甲物品栈
+     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
+     */
+    ItemStack setLeatherArmorColorGBR(ItemStack leatherArmor, int g, int b, int r);
+
+    /**
+     * 获取皮革护甲物品栈的颜色
+     *
+     * @param leatherArmor 皮革护甲物品栈
+     * @return 皮革护甲物品栈的颜色
+     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
+     */
+    Color getLeatherArmorColor(ItemStack leatherArmor);
+
+    /**
+     * 获取成书物品栈的页内容集合
+     *
+     * @param book 成书物品栈
+     * @return 成书的页内容集合 如果成书没有内容则返回空集合
+     * @throws NotBookItemException 如果物品栈不是成书类型则抛出异常
+     */
+    Set<String> getBookPageCentents(ItemStack book);
+
+    /**
+     * 获取成书物品栈的作者
+     *
+     * @param book 成书物品栈
+     * @return 成书的作者 如果成书没有作者则返回 null
+     * @throws NotBookItemException 如果物品栈不是成书类型则抛出异常
+     */
+    String getBookAuther(ItemStack book);
+
+    /**
      * 判断物品栈是否是护甲物品栈
      *
      * @param item 物品栈
@@ -529,6 +610,22 @@ public interface Itemlib extends Lorelib, Potionlib {
      * @return 是否是药水物品栈类型
      */
     boolean isPotion(Material type);
+
+    /**
+     * 判断物品栈是否是成书物品栈
+     *
+     * @param item 物品栈
+     * @return 是否是成书物品栈
+     */
+    boolean isWrittenBook(ItemStack item);
+
+    /**
+     * 判断物品栈类型是否是成书物品栈类型
+     *
+     * @param type 物品栈类型
+     * @return 是否是成书物品栈类型
+     */
+    boolean isWrittenBook(Material type);
 
     /**
      * <h>物品栈特殊属性类型枚举: <a href="http://minecraft-zh.gamepedia.com/%E5%B1%9E%E6%80%A7#.E5.B1.9E.E6.80.A7">属性详情</a></h>

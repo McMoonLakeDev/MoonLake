@@ -1,7 +1,7 @@
 package com.minecraft.moonlake.api.potionlib;
 
 import com.minecraft.moonlake.type.potion.PotionEnum;
-import com.minecraft.moonlake.exception.NotPotionItemException;
+import com.minecraft.moonlake.exception.item.NotPotionItemException;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;

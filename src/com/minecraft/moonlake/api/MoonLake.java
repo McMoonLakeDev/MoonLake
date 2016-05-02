@@ -9,7 +9,7 @@ import com.minecraft.moonlake.api.playerlib.Playerlib;
  * @version 1.0
  * @author Month_Light
  */
-public interface MoonLake extends MoonLakeInfo {
+public interface MoonLake extends MoonLakeInfo, BukkitInfo {
 
     /**
      * 给控制台输出日志
