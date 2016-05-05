@@ -6,7 +6,6 @@ import com.minecraft.moonlake.api.lorelib.Lorelib;
 import com.minecraft.moonlake.api.playerlib.Playerlib;
 import com.minecraft.moonlake.util.item.ItemUtil;
 import com.minecraft.moonlake.util.lore.LoreUtil;
-import com.minecraft.moonlake.util.player.PlayerUtil_v1_8_R3;
 import com.minecraft.moonlake.util.player.PlayerUtil_v1_9_R1;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -31,8 +30,6 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     private final String prefix = "[MoonLake]";
     private final ConsoleCommandSender console;
 
-    private String version = "";
-
     private static MoonLake staticInstance;
 
     static { }
@@ -43,18 +40,9 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         staticInstance = this;
         pdf = this.getDescription();
         console = this.getServer().getConsoleSender();
-        version = getBukkitVersion();
         itemlib = new ItemUtil();
         lorelib = new LoreUtil();
-
-        if(version.equals("v1_9_R1")) {
-            // server version 1.9
-            playerlib = new PlayerUtil_v1_9_R1();
-        }
-        else {
-            // server version 1.8
-            playerlib = new PlayerUtil_v1_8_R3();
-        }
+        playerlib = new PlayerUtil_v1_9_R1();
     }
 
     /**

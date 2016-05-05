@@ -6,6 +6,9 @@
       <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
       <element id="file-copy" path="$PROJECT_DIR$/README.md" />
       <element id="file-copy" path="$PROJECT_DIR$/LICENSE" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
     </root>
   </artifact>
 </component>
