@@ -6,7 +6,7 @@ import com.minecraft.moonlake.api.lorelib.Lorelib;
 import com.minecraft.moonlake.api.playerlib.Playerlib;
 import com.minecraft.moonlake.util.item.ItemUtil;
 import com.minecraft.moonlake.util.lore.LoreUtil;
-import com.minecraft.moonlake.util.player.PlayerUtil_v1_9_R1;
+import com.minecraft.moonlake.util.player.PlayerUtil;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,7 +17,7 @@ import java.util.Set;
 /**
  * <h1>Minecraft <a href="http://www.mcyszh.com">MoonLake</a> Core API Plugin</h1>
  * <h6>By Month_Light Q: 1327516533</h6>
- * @version 1.3.1
+ * @version 1.3.2
  * @author Month_Light
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
@@ -42,7 +42,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         console = this.getServer().getConsoleSender();
         itemlib = new ItemUtil();
         lorelib = new LoreUtil();
-        playerlib = new PlayerUtil_v1_9_R1();
+        playerlib = new PlayerUtil();
     }
 
     /**

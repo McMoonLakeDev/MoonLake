@@ -1,6 +1,5 @@
 package com.minecraft.moonlake.util.item;
 
-import com.minecraft.moonlake.MoonLakePlugin;
 import com.minecraft.moonlake.api.itemlib.AttributeStack;
 import com.minecraft.moonlake.api.itemlib.Itemlib;
 import com.minecraft.moonlake.api.potionlib.CustomPotionEffect;
@@ -312,16 +311,16 @@ public class ItemUtil extends LoreUtil implements Itemlib {
 
         ItemStack item = create(potion.getMaterial(), 0, amount);
 
-        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(item);
-        net.minecraft.server.v1_9_R1.NBTTagCompound tag = nms.getTag();
+        net.minecraft.server.v1_9_R2.ItemStack nms = org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_9_R2.NBTTagCompound tag = nms.getTag();
 
         if(tag == null) {
-            tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+            tag = new net.minecraft.server.v1_9_R2.NBTTagCompound();
         }
         tag.setString("Potion", potionEffect);
         nms.setTag(tag);
 
-        return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
+        return org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack.asBukkitCopy(nms);
     }
 
     /**
@@ -1047,31 +1046,31 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         if(!isPotion(potion)) {
             throw new NotPotionItemException();
         }
-        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(potion);
-        net.minecraft.server.v1_9_R1.NBTTagCompound tag = nms.getTag();
+        net.minecraft.server.v1_9_R2.ItemStack nms = org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack.asNMSCopy(potion);
+        net.minecraft.server.v1_9_R2.NBTTagCompound tag = nms.getTag();
         if (tag == null) {
-            tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+            tag = new net.minecraft.server.v1_9_R2.NBTTagCompound();
         }
-        net.minecraft.server.v1_9_R1.NBTTagList potionList = tag.getList("CustomPotionEffects", 10);
+        net.minecraft.server.v1_9_R2.NBTTagList potionList = tag.getList("CustomPotionEffects", 10);
         if (potionList == null) {
-            potionList = new net.minecraft.server.v1_9_R1.NBTTagList();
+            potionList = new net.minecraft.server.v1_9_R2.NBTTagList();
         }
         for (int i = 0; i < customPotionEffect.length; i++) {
 
             CustomPotionEffect cpe = customPotionEffect[i];
-            net.minecraft.server.v1_9_R1.NBTTagCompound pf = new net.minecraft.server.v1_9_R1.NBTTagCompound();
-            pf.set("Id", new net.minecraft.server.v1_9_R1.NBTTagByte((byte) cpe.getId()));
-            pf.set("Amplifier", new net.minecraft.server.v1_9_R1.NBTTagByte((byte) cpe.getAmplifier()));
-            pf.set("Duration", new net.minecraft.server.v1_9_R1.NBTTagInt(cpe.getDuration()));
-            pf.set("Ambient", new net.minecraft.server.v1_9_R1.NBTTagByte(cpe.isAmbient() ? (byte) 1 : (byte) 0));
-            pf.set("ShowParticles", new net.minecraft.server.v1_9_R1.NBTTagByte(cpe.isShowParticles() ? (byte) 1 : (byte) 0));
+            net.minecraft.server.v1_9_R2.NBTTagCompound pf = new net.minecraft.server.v1_9_R2.NBTTagCompound();
+            pf.set("Id", new net.minecraft.server.v1_9_R2.NBTTagByte((byte) cpe.getId()));
+            pf.set("Amplifier", new net.minecraft.server.v1_9_R2.NBTTagByte((byte) cpe.getAmplifier()));
+            pf.set("Duration", new net.minecraft.server.v1_9_R2.NBTTagInt(cpe.getDuration()));
+            pf.set("Ambient", new net.minecraft.server.v1_9_R2.NBTTagByte(cpe.isAmbient() ? (byte) 1 : (byte) 0));
+            pf.set("ShowParticles", new net.minecraft.server.v1_9_R2.NBTTagByte(cpe.isShowParticles() ? (byte) 1 : (byte) 0));
 
             potionList.add(pf);
         }
         tag.set("CustomPotionEffects", potionList);
         nms.setTag(tag);
 
-        return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
+        return org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack.asBukkitCopy(nms);
     }
 
     /**
@@ -1136,20 +1135,20 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         if(!isPotion(potion))
             throw new NotPotionItemException();
 
-        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(potion);
-        net.minecraft.server.v1_9_R1.NBTTagCompound tag = nms.getTag();
+        net.minecraft.server.v1_9_R2.ItemStack nms = org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack.asNMSCopy(potion);
+        net.minecraft.server.v1_9_R2.NBTTagCompound tag = nms.getTag();
         if (tag == null) {
             // 没有自定义药水效果则返回空集合
             return new HashSet<>();
         }
-        net.minecraft.server.v1_9_R1.NBTTagList potionList = tag.getList("CustomPotionEffects", 10);
+        net.minecraft.server.v1_9_R2.NBTTagList potionList = tag.getList("CustomPotionEffects", 10);
         if (potionList == null || potionList.size() <= 0) {
             // 没有自定义药水效果则返回空集合
             return new HashSet<>();
         }
         List<CustomPotionEffect> cpeList = new ArrayList<>();
         for (int i = 0; i < potionList.size(); i++) {
-            net.minecraft.server.v1_9_R1.NBTTagCompound pf = potionList.get(i);
+            net.minecraft.server.v1_9_R2.NBTTagCompound pf = potionList.get(i);
             if (pf != null) {
                 CustomPotionEffect cep = new CustomPotionEffect(
                         (int) pf.getByte("Id"),
@@ -1386,22 +1385,22 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         Util.notNull(item, "待设置的物品栈是 null 值");
 
         Field field = null;
-        net.minecraft.server.v1_9_R1.ItemStack nms = null;
+        net.minecraft.server.v1_9_R2.ItemStack nms = null;
 
         try {
-            field = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.class.getDeclaredField("handle");
+            field = org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack.class.getDeclaredField("handle");
             field.setAccessible(true);
-            nms = (net.minecraft.server.v1_9_R1.ItemStack) field.get(item);
+            nms = (net.minecraft.server.v1_9_R2.ItemStack) field.get(item);
         } catch (Exception e) {
             return null;
         }
-        net.minecraft.server.v1_9_R1.NBTTagCompound tag = nms.getTag();
+        net.minecraft.server.v1_9_R2.NBTTagCompound tag = nms.getTag();
         if (tag == null) {
-            tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+            tag = new net.minecraft.server.v1_9_R2.NBTTagCompound();
         }
         tag.setByte("Unbreakable", unbreakable ? (byte) 1 : (byte) 0);
         nms.setTag(tag);
-        org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack craftItem = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asCraftCopy(item);
+        org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack craftItem = org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack.asCraftCopy(item);
         try {
             field.set(craftItem, nms);
         } catch (Exception e) {
@@ -1425,33 +1424,33 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         Util.notNull(item, "待设置的物品栈是 null 值");
         Util.notNull(type, "待添加特殊属性的物品栈的属性类型是 null 值");
 
-        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(item);
-        net.minecraft.server.v1_9_R1.NBTTagCompound tag = nms.getTag();
+        net.minecraft.server.v1_9_R2.ItemStack nms = org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_9_R2.NBTTagCompound tag = nms.getTag();
         if (tag == null) {
-            tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+            tag = new net.minecraft.server.v1_9_R2.NBTTagCompound();
         }
-        net.minecraft.server.v1_9_R1.NBTTagList tagAttList = tag.getList("AttributeModifiers", 10);
+        net.minecraft.server.v1_9_R2.NBTTagList tagAttList = tag.getList("AttributeModifiers", 10);
         if (tagAttList == null) {
-            tagAttList = new net.minecraft.server.v1_9_R1.NBTTagList();
+            tagAttList = new net.minecraft.server.v1_9_R2.NBTTagList();
         }
-        net.minecraft.server.v1_9_R1.NBTTagCompound att = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+        net.minecraft.server.v1_9_R2.NBTTagCompound att = new net.minecraft.server.v1_9_R2.NBTTagCompound();
         if (slot != null) {
-            att.set("Slot", new net.minecraft.server.v1_9_R1.NBTTagString(slot.getSlot()));
+            att.set("Slot", new net.minecraft.server.v1_9_R2.NBTTagString(slot.getSlot()));
         }
-        att.set("Name", new net.minecraft.server.v1_9_R1.NBTTagString(type.getName()));
-        att.set("AttributeName", new net.minecraft.server.v1_9_R1.NBTTagString(type.getAttributeName()));
-        att.set("Amount", new net.minecraft.server.v1_9_R1.NBTTagDouble(count));
-        att.set("Operation", new net.minecraft.server.v1_9_R1.NBTTagInt(isPercent ? 1 : 0));
+        att.set("Name", new net.minecraft.server.v1_9_R2.NBTTagString(type.getName()));
+        att.set("AttributeName", new net.minecraft.server.v1_9_R2.NBTTagString(type.getAttributeName()));
+        att.set("Amount", new net.minecraft.server.v1_9_R2.NBTTagDouble(count));
+        att.set("Operation", new net.minecraft.server.v1_9_R2.NBTTagInt(isPercent ? 1 : 0));
 
         UUID uuid = UUID.randomUUID();
-        att.set("UUIDMost", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getMostSignificantBits()));
-        att.set("UUIDLeast", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getLeastSignificantBits()));
+        att.set("UUIDMost", new net.minecraft.server.v1_9_R2.NBTTagLong(uuid.getMostSignificantBits()));
+        att.set("UUIDLeast", new net.minecraft.server.v1_9_R2.NBTTagLong(uuid.getLeastSignificantBits()));
 
         tagAttList.add(att);
         tag.set("AttributeModifiers", tagAttList);
         nms.setTag(tag);
 
-        return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
+        return org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack.asBukkitCopy(nms);
     }
 
     /**
@@ -1468,14 +1467,14 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         Util.notNull(item, "待设置的物品栈是 null 值");
         Util.notNull(typeDoubleMap, "待添加特殊属性的物品栈的属性类型是 null 值");
 
-        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(item);
-        net.minecraft.server.v1_9_R1.NBTTagCompound tag = nms.getTag();
+        net.minecraft.server.v1_9_R2.ItemStack nms = org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_9_R2.NBTTagCompound tag = nms.getTag();
         if (tag == null) {
-            tag = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+            tag = new net.minecraft.server.v1_9_R2.NBTTagCompound();
         }
-        net.minecraft.server.v1_9_R1.NBTTagList tagAttList = tag.getList("AttributeModifiers", 10);
+        net.minecraft.server.v1_9_R2.NBTTagList tagAttList = tag.getList("AttributeModifiers", 10);
         if (tagAttList == null) {
-            tagAttList = new net.minecraft.server.v1_9_R1.NBTTagList();
+            tagAttList = new net.minecraft.server.v1_9_R2.NBTTagList();
         }
         int index = 0;
         Iterator<Map.Entry<AttributeType, Double>> iterator = typeDoubleMap.entrySet().iterator();
@@ -1486,18 +1485,18 @@ public class ItemUtil extends LoreUtil implements Itemlib {
 
             Util.notNull(type, "待添加特殊属性的物品栈的属性类型是 null 值");
 
-            net.minecraft.server.v1_9_R1.NBTTagCompound att = new net.minecraft.server.v1_9_R1.NBTTagCompound();
+            net.minecraft.server.v1_9_R2.NBTTagCompound att = new net.minecraft.server.v1_9_R2.NBTTagCompound();
             if (slot != null && slot[index] != null) {
-                att.set("Slot", new net.minecraft.server.v1_9_R1.NBTTagString(slot[index].getSlot()));
+                att.set("Slot", new net.minecraft.server.v1_9_R2.NBTTagString(slot[index].getSlot()));
             }
-            att.set("Name", new net.minecraft.server.v1_9_R1.NBTTagString(type.getName()));
-            att.set("AttributeName", new net.minecraft.server.v1_9_R1.NBTTagString(type.getAttributeName()));
-            att.set("Amount", new net.minecraft.server.v1_9_R1.NBTTagDouble(entry.getValue()));
-            att.set("Operation", new net.minecraft.server.v1_9_R1.NBTTagInt(isPercent[index] ? 1 : 0));
+            att.set("Name", new net.minecraft.server.v1_9_R2.NBTTagString(type.getName()));
+            att.set("AttributeName", new net.minecraft.server.v1_9_R2.NBTTagString(type.getAttributeName()));
+            att.set("Amount", new net.minecraft.server.v1_9_R2.NBTTagDouble(entry.getValue()));
+            att.set("Operation", new net.minecraft.server.v1_9_R2.NBTTagInt(isPercent[index] ? 1 : 0));
 
             UUID uuid = UUID.randomUUID();
-            att.set("UUIDMost", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getMostSignificantBits()));
-            att.set("UUIDLeast", new net.minecraft.server.v1_9_R1.NBTTagLong(uuid.getLeastSignificantBits()));
+            att.set("UUIDMost", new net.minecraft.server.v1_9_R2.NBTTagLong(uuid.getMostSignificantBits()));
+            att.set("UUIDLeast", new net.minecraft.server.v1_9_R2.NBTTagLong(uuid.getLeastSignificantBits()));
 
             tagAttList.add(att);
             index++;
@@ -1505,7 +1504,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         tag.set("AttributeModifiers", tagAttList);
         nms.setTag(tag);
 
-        return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(nms);
+        return org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack.asBukkitCopy(nms);
     }
 
     /**
@@ -1518,13 +1517,13 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     public Set<AttributeStack> getAttributeList(ItemStack item) {
         Util.notNull(item, "待获取的物品栈是 null 值");
 
-        net.minecraft.server.v1_9_R1.ItemStack nms = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(item);
-        net.minecraft.server.v1_9_R1.NBTTagCompound tag = nms.getTag();
+        net.minecraft.server.v1_9_R2.ItemStack nms = org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_9_R2.NBTTagCompound tag = nms.getTag();
         if (tag == null) {
             // 物品没有特殊属性则返回空集合
             return new HashSet<>();
         }
-        net.minecraft.server.v1_9_R1.NBTTagList attList = tag.getList("AttributeModifiers", 10);
+        net.minecraft.server.v1_9_R2.NBTTagList attList = tag.getList("AttributeModifiers", 10);
         if (attList == null || attList.size() <= 0) {
             // 物品没有特殊属性则返回空集合
             return new HashSet<>();
@@ -1532,7 +1531,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         List<AttributeStack> attStackList = new ArrayList<>();
         for (int i = 0; i < attList.size(); i++) {
 
-            net.minecraft.server.v1_9_R1.NBTTagCompound att = attList.get(i);
+            net.minecraft.server.v1_9_R2.NBTTagCompound att = attList.get(i);
             if (att != null) {
                 AttributeType attType = AttributeType.fromType(att.getString("AttributeName"));
                 AttributeType.Slot attSlot = AttributeType.Slot.fromType(att.getString("Slot"));
