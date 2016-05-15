@@ -84,7 +84,7 @@ public final class Util {
      * @return 当前系统时间
      */
     public static String getSystemTime() {
-        return getSystemTime("yyyy-MM-dd hh:mm:ss");
+        return getSystemTime("yyyy-MM-dd HH:mm:ss");
     }
 
     /**

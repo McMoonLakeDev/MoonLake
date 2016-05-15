@@ -23,6 +23,15 @@ import java.util.Set;
 public interface Itemlib extends Lorelib, Potionlib {
 
     /**
+     * 设置物品栈的名称
+     *
+     * @param item 物品栈
+     * @param name 名称
+     * @return ItemStack
+     */
+    ItemStack setName(ItemStack item, String name);
+
+    /**
      * 创建物品栈对象
      *
      * @param id 物品ID
