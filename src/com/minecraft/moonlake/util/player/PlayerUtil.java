@@ -298,6 +298,22 @@ public class PlayerUtil implements Playerlib {
     }
 
     /**
+     * 获取玩家某个物品是否还有冷却时间
+     *
+     * @param player 玩家名
+     * @param type   物品类型
+     * @return true 还有冷却时间 else 无冷却时间
+     */
+    @Override
+    public boolean hasItemCooldown(String player, Material type) {
+        Util.notNull(type, "待获取的物品冷却时间物品类型是 null 值");
+
+        Player instance = notOnline(player);
+
+        return ((org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer)instance).getHandle().db().a(org.bukkit.craftbukkit.v1_9_R2.util.CraftMagicNumbers.getItem(type));
+    }
+
+    /**
      * 给玩家发送基础聊天消息
      *
      * @param player 玩家名
