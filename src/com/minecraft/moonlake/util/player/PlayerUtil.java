@@ -292,12 +292,9 @@ public class PlayerUtil implements Playerlib {
     public void sendItemCooldownPacket(String player, Material type, int tick) {
         Util.notNull(type, "待发送的物品冷却时间数据包物品类型是 null 值");
 
-        Player intance = notOnline(player);
-        net.minecraft.server.v1_9_R2.PacketPlayOutSetCooldown pposc = new net.minecraft.server.v1_9_R2.PacketPlayOutSetCooldown(
-                org.bukkit.craftbukkit.v1_9_R2.util.CraftMagicNumbers.getItem(type),
-                tick
-        );
-        sendPacket(player, pposc);
+        Player instance = notOnline(player);
+
+        ((org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer)instance).getHandle().db().a(org.bukkit.craftbukkit.v1_9_R2.util.CraftMagicNumbers.getItem(type), tick);
     }
 
     /**
