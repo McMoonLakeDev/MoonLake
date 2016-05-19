@@ -2,6 +2,7 @@ package com.minecraft.moonlake.api.playerlib;
 
 import com.minecraft.moonlake.exception.player.PlayerNotOnlineException;
 import com.minecraft.moonlake.util.player.BaseChat;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -145,6 +146,15 @@ public interface Playerlib {
      * @throws PlayerNotOnlineException 玩家不在线则抛出异常
      */
     void sendCrashClientPacket(String player);
+
+    /**
+     * 给玩家发送物品冷却时间数据包
+     *
+     * @param player 玩家名
+     * @param type 物品类型
+     * @param tick 冷却的时间
+     */
+    void sendItemCooldownPacket(String player, Material type, int tick);
 
     /**
      * 给玩家发送基础聊天消息

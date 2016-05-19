@@ -4,6 +4,7 @@ import com.minecraft.moonlake.api.playerlib.Playerlib;
 import com.minecraft.moonlake.exception.player.PlayerNotOnlineException;
 import com.minecraft.moonlake.util.Util;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -278,6 +279,25 @@ public class PlayerUtil implements Playerlib {
                 new net.minecraft.server.v1_9_R2.Vec3D(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE)
         );
         sendPacket(player, ppoe);
+    }
+
+    /**
+     * 给玩家发送物品冷却时间数据包
+     *
+     * @param player 玩家名
+     * @param type   物品类型
+     * @param tick   冷却的时间
+     */
+    @Override
+    public void sendItemCooldownPacket(String player, Material type, int tick) {
+        Util.notNull(type, "待发送的物品冷却时间数据包物品类型是 null 值");
+
+        Player intance = notOnline(player);
+        net.minecraft.server.v1_9_R2.PacketPlayOutSetCooldown pposc = new net.minecraft.server.v1_9_R2.PacketPlayOutSetCooldown(
+                org.bukkit.craftbukkit.v1_9_R2.util.CraftMagicNumbers.getItem(type),
+                tick
+        );
+        sendPacket(player, pposc);
     }
 
     /**
