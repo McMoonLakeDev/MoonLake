@@ -11,10 +11,10 @@ import java.util.List;
 
 /**
  * Created by MoonLake on 2016/4/26.
- * @version 1.0
+ * @version 1.1.2
  * @author Month_Light
  */
-public final class Util {
+public class Util {
 
     private Util() {}
 
