@@ -17,7 +17,7 @@ import java.util.Set;
 /**
  * <h1>Minecraft <a href="http://www.mcyszh.com">MoonLake</a> Core API Plugin</h1>
  * <h6>By Month_Light Q: 1327516533</h6>
- * @version 1.3.2
+ * @version 1.4.0
  * @author Month_Light
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
@@ -216,8 +216,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     public int getReleaseNumber() {
         String version = getBukkitVersion();
         String[] versionSplit = version.split("_");
-        String releaseVersion = versionSplit[versionSplit.length - 1];
-        releaseVersion = releaseVersion.contains("R") ? releaseVersion.replace('R', ' ') : "1";
+        String releaseVersion = versionSplit[1];
         return Integer.parseInt(releaseVersion);
     }
 }

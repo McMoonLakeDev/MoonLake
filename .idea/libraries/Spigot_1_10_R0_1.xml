@@ -1,13 +1,13 @@
 <component name="libraryTable">
-  <library name="Spigot-1.9.4-R0.1">
+  <library name="Spigot-1.10-R0.1">
     <CLASSES>
-      <root url="jar://D:/eclipse_zh/Spigot-1.9.4-R0.1.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/api/spigot/Spigot-1.10-R0.1.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="https://hub.spigotmc.org/javadocs/spigot/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://D:/eclipse_zh/Spigot-1.9.4-R0.1.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/api/spigot/Spigot-1.10-R0.1.jar!/" />
     </SOURCES>
   </library>
 </component>

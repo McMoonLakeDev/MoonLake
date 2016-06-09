@@ -1,7 +1,7 @@
 package com.minecraft.moonlake.api.playerlib;
 
 import com.minecraft.moonlake.exception.player.PlayerNotOnlineException;
-import com.minecraft.moonlake.util.player.BaseChat;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -169,9 +169,17 @@ public interface Playerlib {
      * 给玩家发送基础聊天消息
      *
      * @param player 玩家名
-     * @param bc 基础聊天
+     * @param baseComponent 基础聊天
      */
-    void sendMessage(String player, BaseChat bc);
+    void sendBaseChat(String player, BaseComponent baseComponent);
+
+    /**
+     * 给玩家发送基础聊天消息
+     *
+     * @param player 玩家名
+     * @param baseComponent 基础聊天
+     */
+    void sendBaseChat(String player, BaseComponent... baseComponent);
 
     /**
      * 聊天数据包的执行方式
