@@ -2,7 +2,6 @@ package com.minecraft.moonlake.api.itemlib;
 
 import com.minecraft.moonlake.api.lorelib.Lorelib;
 import com.minecraft.moonlake.api.potionlib.Potionlib;
-import com.minecraft.moonlake.exception.item.NotArmorItemException;
 import com.minecraft.moonlake.exception.item.NotBookItemException;
 import com.minecraft.moonlake.util.Util;
 import org.bukkit.Color;

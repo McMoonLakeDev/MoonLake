@@ -1658,12 +1658,9 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param isPercent 是否百分比
      * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置护甲防御属性后的 ItemStack
-     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     @Override
     public ItemStack setItemArmorDefense(ItemStack armor, double count, boolean isPercent, AttributeType.Slot slot) {
-        if(!isArmor(armor))
-            throw new NotArmorItemException();
         return addAttribute(armor, AttributeType.ARMOR_DEFENSE, count, isPercent, slot);
     }
 
@@ -1675,12 +1672,9 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param isPercent 是否百分比
      * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置护甲韧性属性后的 ItemStack
-     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     @Override
     public ItemStack setItemArmorToughness(ItemStack armor, double count, boolean isPercent, AttributeType.Slot slot) {
-        if(!isArmor(armor))
-            throw new NotArmorItemException();
         return addAttribute(armor, AttributeType.ARMOR_TOUGHNESS, count, isPercent, slot);
     }
 

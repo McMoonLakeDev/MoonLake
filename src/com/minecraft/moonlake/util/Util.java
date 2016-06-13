@@ -16,8 +16,6 @@ import java.util.List;
  */
 public class Util {
 
-    private Util() {}
-
     /**
      * <h1>将字串符文本序列化为颜色 (&)</h1>
      * <img src="http://a2.qpic.cn/psb?/V146eXZS0CF2Hk/kvJ2xbLnUa7lHBXQI61bD05xx5DwHpyx.4C.hf2Nk7g!/b/dKwAAAAAAAAA&bo=vALxAbwC8QEDByI!&rf=viewer_4"></img>
