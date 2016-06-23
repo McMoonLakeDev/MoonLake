@@ -1,6 +1,6 @@
-package com.minecraft.moonlake.mmorpg.lib.encrypt.md5;
+package com.minecraft.moonlake.api.encrypt.md5;
 
-import com.minecraft.moonlake.mmorpg.lib.encrypt.Encrypt;
+import com.minecraft.moonlake.api.encrypt.Encrypt;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

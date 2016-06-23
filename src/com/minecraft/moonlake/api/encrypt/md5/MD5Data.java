@@ -1,6 +1,6 @@
-package com.minecraft.moonlake.mmorpg.lib.encrypt.md5;
+package com.minecraft.moonlake.api.encrypt.md5;
 
-import com.minecraft.moonlake.mmorpg.lib.encrypt.EncryptData;
+import com.minecraft.moonlake.api.encrypt.EncryptData;
 
 /**
  * Created by MoonLake on 2016/6/4.

@@ -1,4 +1,4 @@
-package com.minecraft.moonlake.mmorpg.lib.encrypt;
+package com.minecraft.moonlake.lib.encrypt;
 
 /**
  * Created by MoonLake on 2016/6/4.
