@@ -1211,8 +1211,8 @@ public class ItemUtil extends LoreUtil implements Itemlib {
 
                     CustomPotionEffect cpe = new CustomPotionEffect(
 
-                            (int) Reflect.getMethod(NBTTagCompound, "getByte", String.class).invoke(pf, "Id"),
-                            (int) Reflect.getMethod(NBTTagCompound, "getByte", String.class).invoke(pf, "Amplifier"),
+                            (byte) Reflect.getMethod(NBTTagCompound, "getByte", String.class).invoke(pf, "Id"),
+                            (byte) Reflect.getMethod(NBTTagCompound, "getByte", String.class).invoke(pf, "Amplifier"),
                             (int) Reflect.getMethod(NBTTagCompound, "getInt", String.class).invoke(pf, "Duration"),
                             ((byte)Reflect.getMethod(NBTTagCompound, "getByte", String.class).invoke(pf, "Ambient") == 1),
                             ((byte)Reflect.getMethod(NBTTagCompound, "getByte", String.class).invoke(pf, "ShowParticles") == 1)
