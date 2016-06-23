@@ -1106,7 +1106,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
 
                 Reflect.getMethod(NBTTagList, "add", NBTTagCompound).invoke(potionList, pf);
             }
-            Reflect.getMethod(NBTTagCompound, "set", String.class, Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTBase")).invoke("CustomPotionEffects", potionList);
+            Reflect.getMethod(NBTTagCompound, "set", String.class, Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTBase")).invoke(tag, "CustomPotionEffects", potionList);
             Reflect.getMethod(ItemStack, "setTag", NBTTagCompound).invoke(NMSItemStack, tag);
 
             return (ItemStack) Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack).invoke(null, NMSItemStack);
@@ -1488,7 +1488,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
             Reflect.getMethod(NBTTagCompound, "setLong", String.class, Long.class).invoke("UUIDLeast", uuid.getLeastSignificantBits());
 
             Reflect.getMethod(NBTTagList, "add", NBTTagCompound).invoke(attList, att);
-            Reflect.getMethod(NBTTagCompound, "set", String.class, Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTBase")).invoke(tag, attList);
+            Reflect.getMethod(NBTTagCompound, "set", String.class, Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTBase")).invoke(tag, "AttributeModifiers", attList);
             Reflect.getMethod(ItemStack, "setTag", NBTTagCompound).invoke(NMSItemStack, tag);
 
             return (ItemStack) Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack.class).invoke(null, NMSItemStack);
@@ -1561,7 +1561,7 @@ public class ItemUtil extends LoreUtil implements Itemlib {
                 Reflect.getMethod(NBTTagList, "add", NBTTagCompound).invoke(attList, att);
                 index++;
             }
-            Reflect.getMethod(NBTTagCompound, "set", String.class, Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTBase")).invoke(tag, attList);
+            Reflect.getMethod(NBTTagCompound, "set", String.class, Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTBase")).invoke(tag, "AttributeModifiers", attList);
             Reflect.getMethod(ItemStack, "setTag", NBTTagCompound).invoke(NMSItemStack, tag);
             return (ItemStack) Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack.class).invoke(null, NMSItemStack);
         }
