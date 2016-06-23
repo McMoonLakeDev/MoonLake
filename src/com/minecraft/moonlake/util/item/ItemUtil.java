@@ -6,6 +6,7 @@ import com.minecraft.moonlake.api.potionlib.CustomPotionEffect;
 import com.minecraft.moonlake.exception.item.NotArmorItemException;
 import com.minecraft.moonlake.exception.item.NotBookItemException;
 import com.minecraft.moonlake.exception.item.NotPotionItemException;
+import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.util.Util;
 import com.minecraft.moonlake.util.lore.LoreUtil;
@@ -18,12 +19,11 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**
  * Created by MoonLake on 2016/4/26.
- * @version 1.0
+ * @version 1.2
  * @author Month_Light
  */
 public class ItemUtil extends LoreUtil implements Itemlib {
@@ -327,16 +327,29 @@ public class ItemUtil extends LoreUtil implements Itemlib {
 
         ItemStack item = create(potion.getMaterial(), 0, amount);
 
-        net.minecraft.server.v1_10_R1.ItemStack nms = org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack.asNMSCopy(item);
-        net.minecraft.server.v1_10_R1.NBTTagCompound tag = nms.getTag();
+        try {
 
-        if(tag == null) {
-            tag = new net.minecraft.server.v1_10_R1.NBTTagCompound();
+            Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
+            Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
+            Class<?> NBTTagCompound = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
+
+            Object NMSItemStack = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class).invoke(null, item);
+            Object tag = Reflect.getMethod(ItemStack, "getTag").invoke(NMSItemStack);
+
+            if(tag == null) {
+
+                tag = Reflect.instantiateObject(NBTTagCompound);
+            }
+            Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke(tag, "Potion", potionEffect);
+            Reflect.getMethod(ItemStack, "setTag", NBTTagCompound).invoke(NMSItemStack, tag);
+
+            return (ItemStack) Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack).invoke(null, NMSItemStack);
         }
-        tag.setString("Potion", potionEffect);
-        nms.setTag(tag);
+        catch (Exception e) {
 
-        return org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack.asBukkitCopy(nms);
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -1059,34 +1072,50 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         Util.notNull(potion, "待添加的药水物品栈的类型是 null 值");
         Util.notNull(customPotionEffect, "待添加的药水物品栈的自定义效果是 null 值");
 
-        if(!isPotion(potion)) {
+        if(!isPotion(potion))
             throw new NotPotionItemException();
-        }
-        net.minecraft.server.v1_10_R1.ItemStack nms = org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack.asNMSCopy(potion);
-        net.minecraft.server.v1_10_R1.NBTTagCompound tag = nms.getTag();
-        if (tag == null) {
-            tag = new net.minecraft.server.v1_10_R1.NBTTagCompound();
-        }
-        net.minecraft.server.v1_10_R1.NBTTagList potionList = tag.getList("CustomPotionEffects", 10);
-        if (potionList == null) {
-            potionList = new net.minecraft.server.v1_10_R1.NBTTagList();
-        }
-        for (int i = 0; i < customPotionEffect.length; i++) {
 
-            CustomPotionEffect cpe = customPotionEffect[i];
-            net.minecraft.server.v1_10_R1.NBTTagCompound pf = new net.minecraft.server.v1_10_R1.NBTTagCompound();
-            pf.set("Id", new net.minecraft.server.v1_10_R1.NBTTagByte((byte) cpe.getId()));
-            pf.set("Amplifier", new net.minecraft.server.v1_10_R1.NBTTagByte((byte) cpe.getAmplifier()));
-            pf.set("Duration", new net.minecraft.server.v1_10_R1.NBTTagInt(cpe.getDuration()));
-            pf.set("Ambient", new net.minecraft.server.v1_10_R1.NBTTagByte(cpe.isAmbient() ? (byte) 1 : (byte) 0));
-            pf.set("ShowParticles", new net.minecraft.server.v1_10_R1.NBTTagByte(cpe.isShowParticles() ? (byte) 1 : (byte) 0));
+        try {
 
-            potionList.add(pf);
+            Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
+            Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
+            Class<?> NBTTagCompound = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
+            Class<?> NBTTagList = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagList");
+
+            Object NMSItemStack = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class).invoke(null, potion);
+            Object tag = Reflect.getMethod(ItemStack, "getTag").invoke(NMSItemStack);
+
+            if(tag == null) {
+
+                tag = Reflect.instantiateObject(NBTTagCompound);
+            }
+            Object potionList = Reflect.getMethod(NBTTagCompound, "getList", String.class, Integer.class).invoke(tag, "CustomPotionEffects", 10);
+
+            if(potionList == null) {
+
+                potionList = Reflect.instantiateObject(NBTTagList);
+            }
+            for(CustomPotionEffect cpe : customPotionEffect) {
+
+                Object pf = Reflect.instantiateObject(NBTTagCompound);
+                Reflect.getMethod(NBTTagCompound, "setByte", String.class, Byte.class).invoke(pf, "Id", (byte)cpe.getId());
+                Reflect.getMethod(NBTTagCompound, "setByte", String.class, Byte.class).invoke(pf, "Amplifier", (byte)cpe.getAmplifier());
+                Reflect.getMethod(NBTTagCompound, "setInt", String.class, Integer.class).invoke(pf, "Duration", cpe.getDuration());
+                Reflect.getMethod(NBTTagCompound, "setByte", String.class, Byte.class).invoke(pf, "Ambient", (byte)(cpe.isAmbient() ? 1 : 0));
+                Reflect.getMethod(NBTTagCompound, "setByte", String.class, Byte.class).invoke(pf, "ShowParticles", (byte)(cpe.isShowParticles() ? 1 : 0));
+
+                Reflect.getMethod(NBTTagList, "add", NBTTagCompound).invoke(potionList, pf);
+            }
+            Reflect.getMethod(NBTTagCompound, "set", String.class, Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTBase")).invoke("CustomPotionEffects", potionList);
+            Reflect.getMethod(ItemStack, "setTag", NBTTagCompound).invoke(NMSItemStack, tag);
+
+            return (ItemStack) Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack).invoke(null, NMSItemStack);
         }
-        tag.set("CustomPotionEffects", potionList);
-        nms.setTag(tag);
+        catch (Exception e) {
 
-        return org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack.asBukkitCopy(nms);
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -1151,34 +1180,54 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         if(!isPotion(potion))
             throw new NotPotionItemException();
 
-        net.minecraft.server.v1_10_R1.ItemStack nms = org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack.asNMSCopy(potion);
-        net.minecraft.server.v1_10_R1.NBTTagCompound tag = nms.getTag();
-        if (tag == null) {
-            // 没有自定义药水效果则返回空集合
-            return new HashSet<>();
-        }
-        net.minecraft.server.v1_10_R1.NBTTagList potionList = tag.getList("CustomPotionEffects", 10);
-        if (potionList == null || potionList.size() <= 0) {
-            // 没有自定义药水效果则返回空集合
-            return new HashSet<>();
-        }
-        List<CustomPotionEffect> cpeList = new ArrayList<>();
-        for (int i = 0; i < potionList.size(); i++) {
-            net.minecraft.server.v1_10_R1.NBTTagCompound pf = potionList.get(i);
-            if (pf != null) {
-                CustomPotionEffect cep = new CustomPotionEffect(
-                        (int) pf.getByte("Id"),
-                        (int) pf.getByte("Amplifier"),
-                        pf.getInt("Duration"),
-                        pf.getByte("Ambient") == 1,
-                        pf.getByte("ShowParticles") == 1
-                );
-                cpeList.add(cep);
-            }
-        }
-        return cpeList.size() >= 1 ? new HashSet<>(cpeList) : new HashSet<CustomPotionEffect>();
-    }
+        try {
 
+            Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
+            Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
+            Class<?> NBTTagCompound = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
+            Class<?> NBTTagList = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagList");
+
+            Object NMSItemStack = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class).invoke(null, potion);
+            Object tag = Reflect.getMethod(ItemStack, "getTag").invoke(NMSItemStack);
+
+            if(tag == null) {
+
+                tag = Reflect.instantiateObject(NBTTagCompound);
+            }
+            Object potionList = Reflect.getMethod(NBTTagCompound, "getList", String.class, Integer.class).invoke(tag, "CustomPotionEffects", 10);
+
+            if(potionList == null) {
+
+                potionList = Reflect.instantiateObject(NBTTagList);
+            }
+            List<CustomPotionEffect> cpeList = new ArrayList<>();
+            int size = (int) Reflect.getMethod(NBTTagList, "size").invoke(potionList);
+
+            for(int i = 0; i < size; i++) {
+
+                Object pf = Reflect.getMethod(NBTTagList, "get", Integer.class).invoke(potionList, i);
+
+                if(pf != null) {
+
+                    CustomPotionEffect cpe = new CustomPotionEffect(
+
+                            (int) Reflect.getMethod(NBTTagCompound, "getByte", String.class).invoke(pf, "Id"),
+                            (int) Reflect.getMethod(NBTTagCompound, "getByte", String.class).invoke(pf, "Amplifier"),
+                            (int) Reflect.getMethod(NBTTagCompound, "getInt", String.class).invoke(pf, "Duration"),
+                            ((byte)Reflect.getMethod(NBTTagCompound, "getByte", String.class).invoke(pf, "Ambient") == 1),
+                            ((byte)Reflect.getMethod(NBTTagCompound, "getByte", String.class).invoke(pf, "ShowParticles") == 1)
+                    );
+                    cpeList.add(cpe);
+                }
+            }
+            return cpeList.size() > 0 ? new HashSet<>(cpeList) : new HashSet<CustomPotionEffect>();
+        }
+        catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return new HashSet<>();
+    }
 
     /**
      * 给物品栈添加的附魔
@@ -1389,43 +1438,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     }
 
     /**
-     * 设置物品栈是否无法破坏 (NMS映射设置不推荐使用)
-     *
-     * @param item 物品栈
-     * @param unbreakable 状态
-     * @return 设置后的 ItemStack 异常返回 null
-     */
-    @Override
-    @Deprecated
-    public ItemStack setUnbreakableFromNMS(ItemStack item, boolean unbreakable) {
-        Util.notNull(item, "待设置的物品栈是 null 值");
-
-        Field field = null;
-        net.minecraft.server.v1_10_R1.ItemStack nms = null;
-
-        try {
-            field = org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack.class.getDeclaredField("handle");
-            field.setAccessible(true);
-            nms = (net.minecraft.server.v1_10_R1.ItemStack) field.get(item);
-        } catch (Exception e) {
-            return null;
-        }
-        net.minecraft.server.v1_10_R1.NBTTagCompound tag = nms.getTag();
-        if (tag == null) {
-            tag = new net.minecraft.server.v1_10_R1.NBTTagCompound();
-        }
-        tag.setByte("Unbreakable", unbreakable ? (byte) 1 : (byte) 0);
-        nms.setTag(tag);
-        org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack craftItem = org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack.asCraftCopy(item);
-        try {
-            field.set(craftItem, nms);
-        } catch (Exception e) {
-            return null;
-        }
-        return craftItem;
-    }
-
-    /**
      * 给物品栈添加特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
      * @param item 物品栈
@@ -1440,33 +1452,52 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         Util.notNull(item, "待设置的物品栈是 null 值");
         Util.notNull(type, "待添加特殊属性的物品栈的属性类型是 null 值");
 
-        net.minecraft.server.v1_10_R1.ItemStack nms = org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack.asNMSCopy(item);
-        net.minecraft.server.v1_10_R1.NBTTagCompound tag = nms.getTag();
-        if (tag == null) {
-            tag = new net.minecraft.server.v1_10_R1.NBTTagCompound();
-        }
-        net.minecraft.server.v1_10_R1.NBTTagList tagAttList = tag.getList("AttributeModifiers", 10);
-        if (tagAttList == null) {
-            tagAttList = new net.minecraft.server.v1_10_R1.NBTTagList();
-        }
-        net.minecraft.server.v1_10_R1.NBTTagCompound att = new net.minecraft.server.v1_10_R1.NBTTagCompound();
-        if (slot != null) {
-            att.set("Slot", new net.minecraft.server.v1_10_R1.NBTTagString(slot.getSlot()));
-        }
-        att.set("Name", new net.minecraft.server.v1_10_R1.NBTTagString(type.getName()));
-        att.set("AttributeName", new net.minecraft.server.v1_10_R1.NBTTagString(type.getAttributeName()));
-        att.set("Amount", new net.minecraft.server.v1_10_R1.NBTTagDouble(count));
-        att.set("Operation", new net.minecraft.server.v1_10_R1.NBTTagInt(isPercent ? 1 : 0));
+        try {
 
-        UUID uuid = UUID.randomUUID();
-        att.set("UUIDMost", new net.minecraft.server.v1_10_R1.NBTTagLong(uuid.getMostSignificantBits()));
-        att.set("UUIDLeast", new net.minecraft.server.v1_10_R1.NBTTagLong(uuid.getLeastSignificantBits()));
+            Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
+            Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
+            Class<?> NBTTagCompound = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
+            Class<?> NBTTagList = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagList");
 
-        tagAttList.add(att);
-        tag.set("AttributeModifiers", tagAttList);
-        nms.setTag(tag);
+            Object NMSItemStack = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class).invoke(null, item);
+            Object tag = Reflect.getMethod(ItemStack, "getTag").invoke(NMSItemStack);
 
-        return org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack.asBukkitCopy(nms);
+            if(tag == null) {
+
+                tag = Reflect.instantiateObject(NBTTagCompound);
+            }
+            Object attList = Reflect.getMethod(NBTTagCompound, "getList", String.class, Integer.class).invoke(tag, "AttributeModifiers", 10);
+
+            if(attList == null) {
+
+                attList = Reflect.instantiateObject(NBTTagList);
+            }
+            Object att = Reflect.instantiateObject(NBTTagCompound);
+
+            if(slot != null) {
+
+                Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke("Slot", slot.getSlot());
+            }
+            Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke("Name", type.getName());
+            Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke("AttributeName", type.getAttributeName());
+            Reflect.getMethod(NBTTagCompound, "setDouble", String.class, Double.class).invoke("Amount", count);
+            Reflect.getMethod(NBTTagCompound, "setInt", String.class, Integer.class).invoke("Operation", isPercent ? 1 : 0);
+
+            UUID uuid = UUID.randomUUID();
+            Reflect.getMethod(NBTTagCompound, "setLong", String.class, Long.class).invoke("UUIDMost", uuid.getMostSignificantBits());
+            Reflect.getMethod(NBTTagCompound, "setLong", String.class, Long.class).invoke("UUIDLeast", uuid.getLeastSignificantBits());
+
+            Reflect.getMethod(NBTTagList, "add", NBTTagCompound).invoke(attList, att);
+            Reflect.getMethod(NBTTagCompound, "set", String.class, Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTBase")).invoke(tag, attList);
+            Reflect.getMethod(ItemStack, "setTag", NBTTagCompound).invoke(NMSItemStack, tag);
+
+            return (ItemStack) Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack.class).invoke(null, NMSItemStack);
+        }
+        catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -1483,44 +1514,62 @@ public class ItemUtil extends LoreUtil implements Itemlib {
         Util.notNull(item, "待设置的物品栈是 null 值");
         Util.notNull(typeDoubleMap, "待添加特殊属性的物品栈的属性类型是 null 值");
 
-        net.minecraft.server.v1_10_R1.ItemStack nms = org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack.asNMSCopy(item);
-        net.minecraft.server.v1_10_R1.NBTTagCompound tag = nms.getTag();
-        if (tag == null) {
-            tag = new net.minecraft.server.v1_10_R1.NBTTagCompound();
-        }
-        net.minecraft.server.v1_10_R1.NBTTagList tagAttList = tag.getList("AttributeModifiers", 10);
-        if (tagAttList == null) {
-            tagAttList = new net.minecraft.server.v1_10_R1.NBTTagList();
-        }
-        int index = 0;
-        Iterator<Map.Entry<AttributeType, Double>> iterator = typeDoubleMap.entrySet().iterator();
-        while (iterator.hasNext()) {
+        try {
 
-            Map.Entry<AttributeType, Double> entry = iterator.next();
-            AttributeType type = entry.getKey();
+            Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
+            Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
+            Class<?> NBTTagCompound = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
+            Class<?> NBTTagList = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagList");
 
-            Util.notNull(type, "待添加特殊属性的物品栈的属性类型是 null 值");
+            Object NMSItemStack = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class).invoke(null, item);
+            Object tag = Reflect.getMethod(ItemStack, "getTag").invoke(NMSItemStack);
 
-            net.minecraft.server.v1_10_R1.NBTTagCompound att = new net.minecraft.server.v1_10_R1.NBTTagCompound();
-            if (slot != null && slot[index] != null) {
-                att.set("Slot", new net.minecraft.server.v1_10_R1.NBTTagString(slot[index].getSlot()));
+            if(tag == null) {
+
+                tag = Reflect.instantiateObject(NBTTagCompound);
             }
-            att.set("Name", new net.minecraft.server.v1_10_R1.NBTTagString(type.getName()));
-            att.set("AttributeName", new net.minecraft.server.v1_10_R1.NBTTagString(type.getAttributeName()));
-            att.set("Amount", new net.minecraft.server.v1_10_R1.NBTTagDouble(entry.getValue()));
-            att.set("Operation", new net.minecraft.server.v1_10_R1.NBTTagInt(isPercent[index] ? 1 : 0));
+            Object attList = Reflect.getMethod(NBTTagCompound, "getList", String.class, Integer.class).invoke(tag, "AttributeModifiers", 10);
 
-            UUID uuid = UUID.randomUUID();
-            att.set("UUIDMost", new net.minecraft.server.v1_10_R1.NBTTagLong(uuid.getMostSignificantBits()));
-            att.set("UUIDLeast", new net.minecraft.server.v1_10_R1.NBTTagLong(uuid.getLeastSignificantBits()));
+            if(attList == null) {
 
-            tagAttList.add(att);
-            index++;
+                attList = Reflect.instantiateObject(NBTTagList);
+            }
+            Object att = Reflect.instantiateObject(NBTTagCompound);
+            int index = 0;
+            Iterator<Map.Entry<AttributeType, Double>> iterator = typeDoubleMap.entrySet().iterator();
+
+            while (iterator.hasNext()) {
+
+                Map.Entry<AttributeType, Double> entry = iterator.next();
+                AttributeType type = entry.getKey();
+
+                Util.notNull(type, "待添加特殊属性的物品栈的属性类型是 null 值");
+
+                if(slot != null) {
+
+                    Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke("Slot", slot[index].getSlot());
+                }
+                Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke("Name", type.getName());
+                Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke("AttributeName", type.getAttributeName());
+                Reflect.getMethod(NBTTagCompound, "setDouble", String.class, Double.class).invoke("Amount", entry.getValue());
+                Reflect.getMethod(NBTTagCompound, "setInt", String.class, Integer.class).invoke("Operation", isPercent[index] ? 1 : 0);
+
+                UUID uuid = UUID.randomUUID();
+                Reflect.getMethod(NBTTagCompound, "setLong", String.class, Long.class).invoke("UUIDMost", uuid.getMostSignificantBits());
+                Reflect.getMethod(NBTTagCompound, "setLong", String.class, Long.class).invoke("UUIDLeast", uuid.getLeastSignificantBits());
+
+                Reflect.getMethod(NBTTagList, "add", NBTTagCompound).invoke(attList, att);
+                index++;
+            }
+            Reflect.getMethod(NBTTagCompound, "set", String.class, Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTBase")).invoke(tag, attList);
+            Reflect.getMethod(ItemStack, "setTag", NBTTagCompound).invoke(NMSItemStack, tag);
+            return (ItemStack) Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack.class).invoke(null, NMSItemStack);
         }
-        tag.set("AttributeModifiers", tagAttList);
-        nms.setTag(tag);
+        catch (Exception e) {
 
-        return org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack.asBukkitCopy(nms);
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -1533,36 +1582,57 @@ public class ItemUtil extends LoreUtil implements Itemlib {
     public Set<AttributeStack> getAttributeList(ItemStack item) {
         Util.notNull(item, "待获取的物品栈是 null 值");
 
-        net.minecraft.server.v1_10_R1.ItemStack nms = org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack.asNMSCopy(item);
-        net.minecraft.server.v1_10_R1.NBTTagCompound tag = nms.getTag();
-        if (tag == null) {
-            // 物品没有特殊属性则返回空集合
-            return new HashSet<>();
-        }
-        net.minecraft.server.v1_10_R1.NBTTagList attList = tag.getList("AttributeModifiers", 10);
-        if (attList == null || attList.size() <= 0) {
-            // 物品没有特殊属性则返回空集合
-            return new HashSet<>();
-        }
-        List<AttributeStack> attStackList = new ArrayList<>();
-        for (int i = 0; i < attList.size(); i++) {
+        try {
 
-            net.minecraft.server.v1_10_R1.NBTTagCompound att = attList.get(i);
-            if (att != null) {
-                AttributeType attType = AttributeType.fromType(att.getString("AttributeName"));
-                AttributeType.Slot attSlot = AttributeType.Slot.fromType(att.getString("Slot"));
-                if (attType != null) {
-                    AttributeStack attStack = new AttributeStack(
-                            attType,
-                            attSlot,
-                            att.getDouble("Amount"),
-                            att.getInt("Operation")
-                    );
-                    attStackList.add(attStack);
+            Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
+            Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
+            Class<?> NBTTagCompound = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
+            Class<?> NBTTagList = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagList");
+
+            Object NMSItemStack = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class).invoke(null, item);
+            Object tag = Reflect.getMethod(ItemStack, "getTag").invoke(NMSItemStack);
+
+            if(tag == null) {
+
+                tag = Reflect.instantiateObject(NBTTagCompound);
+            }
+            Object attList = Reflect.getMethod(NBTTagCompound, "getList", String.class, Integer.class).invoke(tag, "AttributeModifiers", 10);
+
+            if(attList == null) {
+
+                attList = Reflect.instantiateObject(NBTTagList);
+            }
+            List<AttributeStack> attStackList = new ArrayList<>();
+            int size = (int) Reflect.getMethod(NBTTagList, "size").invoke(attList);
+
+            for(int i = 0; i < size; i++) {
+
+                Object att = Reflect.getMethod(NBTTagList, "get", Integer.class).invoke(attList, i);
+
+                if(att != null) {
+
+                    AttributeType attType = AttributeType.fromType((String) Reflect.getMethod(NBTTagCompound, "getString", String.class).invoke(att, "AttributeName"));
+                    AttributeType.Slot attSlot = AttributeType.Slot.fromType((String) Reflect.getMethod(NBTTagCompound, "getString", String.class).invoke(att, "Slot"));
+
+                    if(attType != null) {
+
+                        AttributeStack attStack = new AttributeStack(
+
+                                attType, attSlot,
+                                (Double) Reflect.getMethod(NBTTagCompound, "getDouble", String.class).invoke(att, "Amount"),
+                                (Integer) Reflect.getMethod(NBTTagCompound, "getInte", String.class).invoke(att, "Operation")
+                        );
+                        attStackList.add(attStack);
+                    }
                 }
             }
+            return attStackList.size() > 0 ? new HashSet<>(attStackList) : new HashSet<AttributeStack>();
         }
-        return attStackList.size() >= 1 ? new HashSet<>(attStackList) : new HashSet<AttributeStack>();
+        catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return new HashSet<>();
     }
 
     /**

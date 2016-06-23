@@ -2,6 +2,7 @@ package com.minecraft.moonlake.api.itemlib;
 
 import com.minecraft.moonlake.api.lorelib.Lorelib;
 import com.minecraft.moonlake.api.potionlib.Potionlib;
+import com.minecraft.moonlake.exception.item.NotArmorItemException;
 import com.minecraft.moonlake.exception.item.NotBookItemException;
 import com.minecraft.moonlake.util.Util;
 import org.bukkit.Color;
@@ -16,7 +17,7 @@ import java.util.Set;
 
 /**
  * <h1>提供物品栈的API函数 (创建、添加效果等等)</h1>
- * @version 1.0
+ * @version 1.2
  * @author Month_Light
  */
 public interface Itemlib extends Lorelib, Potionlib {
@@ -343,16 +344,6 @@ public interface Itemlib extends Lorelib, Potionlib {
     ItemStack setUnbreakable(ItemStack item, boolean unbreakable);
 
     /**
-     * 设置物品栈是否无法破坏 (NMS映射设置不推荐使用)
-     *
-     * @param item 物品栈
-     * @param unbreakable 状态
-     * @return 设置后的 ItemStack 异常返回 null
-     */
-    @Deprecated
-    ItemStack setUnbreakableFromNMS(ItemStack item, boolean unbreakable);
-
-    /**
      * 给物品栈添加特殊属性 (NMS映射设置不推荐使用 && 谨慎设置数量防止蹦服)
      *
      * @param item 物品栈
@@ -457,7 +448,6 @@ public interface Itemlib extends Lorelib, Potionlib {
      * @param isPercent 是否百分比
      * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置护甲防御属性后的 ItemStack
-     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     ItemStack setItemArmorDefense(ItemStack armor, double count, boolean isPercent, AttributeType.Slot slot);
 
@@ -469,7 +459,6 @@ public interface Itemlib extends Lorelib, Potionlib {
      * @param isPercent 是否百分比
      * @param slot 属性生效的槽位 如果全部槽位则 null 值
      * @return 设置护甲防御属性后的 ItemStack
-     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     ItemStack setItemArmorToughness(ItemStack armor, double count, boolean isPercent, AttributeType.Slot slot);
 
