@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.api.playerlib;
 
+import com.minecraft.moonlake.api.nms.packet.PacketPlayOutChat;
 import com.minecraft.moonlake.exception.player.PlayerNotOnlineException;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Material;
@@ -109,7 +110,7 @@ public interface Playerlib {
      * @param mode 执行方式
      * @throws PlayerNotOnlineException 玩家不在线则抛出异常
      */
-    void sendChatPacket(String player, String message, ChatPacketMode mode);
+    void sendChatPacket(String player, String message, PacketPlayOutChat.Mode mode);
 
     /**
      * 给玩家发送默认聊天数据包
@@ -138,14 +139,6 @@ public interface Playerlib {
      * @throws PlayerNotOnlineException 玩家不在线则抛出异常
      */
     void sendTabListPacket(String player, String header, String footer);
-
-    /**
-     * 给玩家发送崩溃客户端数据包 (谨慎使用)
-     *
-     * @param player 玩家名
-     * @throws PlayerNotOnlineException 玩家不在线则抛出异常
-     */
-    void sendCrashClientPacket(String player);
 
     /**
      * 给玩家发送物品冷却时间数据包

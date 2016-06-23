@@ -14,7 +14,7 @@ public class PacketPlayOutTitle implements Packet<PacketPlayOutTitle> {
     private String title;
     private String subTitle;
     private int drTime;
-    private int psTime;
+    private int plTime;
     private int dcTime;
 
     public PacketPlayOutTitle(String title) {
@@ -27,17 +27,17 @@ public class PacketPlayOutTitle implements Packet<PacketPlayOutTitle> {
         this(title, subTitle, -1, -1, -1);
     }
 
-    public PacketPlayOutTitle(String title, int drTime, int psTime, int dcTime) {
+    public PacketPlayOutTitle(String title, int drTime, int plTime, int dcTime) {
 
-        this(title, null, drTime, psTime, dcTime);
+        this(title, null, drTime, plTime, dcTime);
     }
 
-    public PacketPlayOutTitle(String title, String subTitle, int drTime, int psTime, int dcTime) {
+    public PacketPlayOutTitle(String title, String subTitle, int drTime, int plTime, int dcTime) {
 
         this.title = title;
         this.subTitle = subTitle;
         this.drTime = drTime;
-        this.psTime = psTime;
+        this.plTime = plTime;
         this.dcTime = dcTime;
     }
 
@@ -55,7 +55,7 @@ public class PacketPlayOutTitle implements Packet<PacketPlayOutTitle> {
             Object icbc2 = subTitle != null ? ChatSerializerA.invoke(null, "{\"text\": \"" + subTitle + "\"}") : null;
 
             Method EnumTitleActionA = Reflect.getMethod(EnumTitleAction, "a", String.class);
-            Object ppop = Reflect.instantiateObject(PacketPlayOutTitle, drTime, psTime, dcTime);
+            Object ppop = Reflect.instantiateObject(PacketPlayOutTitle, drTime, plTime, dcTime);
             Object ppop2 = Reflect.instantiateObject(PacketPlayOutTitle, EnumTitleActionA.invoke(null, "TITLE"), icbc);
             Object ppop3 = icbc2 != null ? Reflect.instantiateObject(PacketPlayOutTitle, EnumTitleActionA.invoke(null, "SUBTITLE"), icbc2) : null;
 
