@@ -14,14 +14,34 @@ public class PacketPlayOutChat implements Packet<PacketPlayOutChat> {
     private String chat;
     private Mode mode;
 
+    public PacketPlayOutChat(String chat, Mode mode) {
+
+        this.chat = chat;
+        this.mode = mode;
+    }
+
     public PacketPlayOutChat(String chat) {
 
         this(chat, Mode.DEFAULT);
     }
 
-    public PacketPlayOutChat(String chat, Mode mode) {
+    public String getChat() {
+
+        return chat;
+    }
+
+    public void setChat(String chat) {
 
         this.chat = chat;
+    }
+
+    public Mode getMode() {
+
+        return mode;
+    }
+
+    public void setMode(Mode mode) {
+
         this.mode = mode;
     }
 

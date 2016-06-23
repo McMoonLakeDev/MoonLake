@@ -41,6 +41,56 @@ public class PacketPlayOutTitle implements Packet<PacketPlayOutTitle> {
         this.dcTime = dcTime;
     }
 
+    public String getTitle() {
+
+        return title;
+    }
+
+    public void setTitle(String title) {
+
+        this.title = title;
+    }
+
+    public String getSubTitle() {
+
+        return subTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+
+        this.subTitle = subTitle;
+    }
+
+    public int getDrTime() {
+
+        return drTime;
+    }
+
+    public void setDrTime(int drTime) {
+
+        this.drTime = drTime;
+    }
+
+    public int getPlTime() {
+
+        return plTime;
+    }
+
+    public void setPlTime(int plTime) {
+
+        this.plTime = plTime;
+    }
+
+    public int getDcTime() {
+
+        return dcTime;
+    }
+
+    public void setDcTime(int dcTime) {
+
+        this.dcTime = dcTime;
+    }
+
     @Override
     public void send(String... names) {
 

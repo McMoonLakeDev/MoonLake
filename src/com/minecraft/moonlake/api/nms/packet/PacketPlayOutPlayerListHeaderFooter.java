@@ -25,6 +25,26 @@ public class PacketPlayOutPlayerListHeaderFooter implements Packet<PacketPlayOut
         this.footer = footer;
     }
 
+    public String getHeader() {
+
+        return header;
+    }
+
+    public void setHeader(String header) {
+
+        this.header = header;
+    }
+
+    public String getFooter() {
+
+        return footer;
+    }
+
+    public void setFooter(String footer) {
+
+        this.footer = footer;
+    }
+
     @Override
     public void send(String... names) {
 
