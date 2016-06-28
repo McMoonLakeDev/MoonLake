@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Created by MoonLake on 2016/6/4.
  */
-public final class MD5Encrypt implements Encrypt {
+public class MD5Encrypt implements Encrypt {
 
     private String source;
 
@@ -35,7 +35,6 @@ public final class MD5Encrypt implements Encrypt {
      *
      * @param source 字符串源
      */
-    @Override
     public void setSource(String source) {
 
         this.source = source;
@@ -46,7 +45,6 @@ public final class MD5Encrypt implements Encrypt {
      *
      * @return
      */
-    @Override
     public String getSource() {
 
         return source;
@@ -94,59 +92,5 @@ public final class MD5Encrypt implements Encrypt {
             return new MD5(md5);
         }
         return null;
-    }
-
-    private class MD5 implements MD5Data {
-
-        private final String md5;
-
-        public MD5(String md5) {
-
-            this.md5 = md5;
-        }
-
-        /**
-         * 获取 MD5 加密后的 32 位数据
-         *
-         * @return 32 位 MD5 数据
-         */
-        @Override
-        public String to32Bit() {
-
-            return md5;
-        }
-
-        /**
-         * 获取 MD5 加密后的 32 位大写数据
-         *
-         * @return 32 位 MD5 大写数据
-         */
-        @Override
-        public String to32BitUpperCase() {
-
-            return to32Bit().toUpperCase();
-        }
-
-        /**
-         * 获取 MD5 加密后的 16 位数据
-         *
-         * @return 16 位 MD5 数据
-         */
-        @Override
-        public String to16Bit() {
-
-            return md5.substring(8, 24);
-        }
-
-        /**
-         * 获取 MD5 加密后的 16 位大写数据
-         *
-         * @return 16 位 MD5 大写数据
-         */
-        @Override
-        public String to16BitUpperCase() {
-
-            return to16Bit().toUpperCase();
-        }
     }
 }
