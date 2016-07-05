@@ -41,7 +41,7 @@ public class ItemBuilder {
 
     public ItemBuilder setDisplayName(String displayName) {
 
-        this.meta.setDisplayName(displayName);
+        this.meta.setDisplayName(Util.color(displayName));
 
         return this;
     }

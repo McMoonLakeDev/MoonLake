@@ -1476,22 +1476,22 @@ public class ItemUtil extends LoreUtil implements Itemlib {
 
             if(slot != null) {
 
-                Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke("Slot", slot.getSlot());
+                Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke(att, "Slot", slot.getSlot());
             }
-            Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke("Name", type.getName());
-            Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke("AttributeName", type.getAttributeName());
-            Reflect.getMethod(NBTTagCompound, "setDouble", String.class, Double.class).invoke("Amount", count);
-            Reflect.getMethod(NBTTagCompound, "setInt", String.class, Integer.class).invoke("Operation", isPercent ? 1 : 0);
+            Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke(att, "Name", type.getName());
+            Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke(att, "AttributeName", type.getAttributeName());
+            Reflect.getMethod(NBTTagCompound, "setDouble", String.class, Double.class).invoke(att, "Amount", count);
+            Reflect.getMethod(NBTTagCompound, "setInt", String.class, Integer.class).invoke(att, "Operation", isPercent ? 1 : 0);
 
             UUID uuid = UUID.randomUUID();
-            Reflect.getMethod(NBTTagCompound, "setLong", String.class, Long.class).invoke("UUIDMost", uuid.getMostSignificantBits());
-            Reflect.getMethod(NBTTagCompound, "setLong", String.class, Long.class).invoke("UUIDLeast", uuid.getLeastSignificantBits());
+            Reflect.getMethod(NBTTagCompound, "setLong", String.class, Long.class).invoke(att, "UUIDMost", uuid.getMostSignificantBits());
+            Reflect.getMethod(NBTTagCompound, "setLong", String.class, Long.class).invoke(att, "UUIDLeast", uuid.getLeastSignificantBits());
 
             Reflect.getMethod(NBTTagList, "add", NBTTagCompound).invoke(attList, att);
             Reflect.getMethod(NBTTagCompound, "set", String.class, Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTBase")).invoke(tag, "AttributeModifiers", attList);
             Reflect.getMethod(ItemStack, "setTag", NBTTagCompound).invoke(NMSItemStack, tag);
 
-            return (ItemStack) Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack.class).invoke(null, NMSItemStack);
+            return (ItemStack) Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack).invoke(null, NMSItemStack);
         }
         catch (Exception e) {
 
@@ -1547,23 +1547,23 @@ public class ItemUtil extends LoreUtil implements Itemlib {
 
                 if(slot != null) {
 
-                    Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke("Slot", slot[index].getSlot());
+                    Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke(att, "Slot", slot[index].getSlot());
                 }
-                Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke("Name", type.getName());
-                Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke("AttributeName", type.getAttributeName());
-                Reflect.getMethod(NBTTagCompound, "setDouble", String.class, Double.class).invoke("Amount", entry.getValue());
-                Reflect.getMethod(NBTTagCompound, "setInt", String.class, Integer.class).invoke("Operation", isPercent[index] ? 1 : 0);
+                Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke(att, "Name", type.getName());
+                Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke(att, "AttributeName", type.getAttributeName());
+                Reflect.getMethod(NBTTagCompound, "setDouble", String.class, Double.class).invoke(att, "Amount", entry.getValue());
+                Reflect.getMethod(NBTTagCompound, "setInt", String.class, Integer.class).invoke(att, "Operation", isPercent[index] ? 1 : 0);
 
                 UUID uuid = UUID.randomUUID();
-                Reflect.getMethod(NBTTagCompound, "setLong", String.class, Long.class).invoke("UUIDMost", uuid.getMostSignificantBits());
-                Reflect.getMethod(NBTTagCompound, "setLong", String.class, Long.class).invoke("UUIDLeast", uuid.getLeastSignificantBits());
+                Reflect.getMethod(NBTTagCompound, "setLong", String.class, Long.class).invoke(att, "UUIDMost", uuid.getMostSignificantBits());
+                Reflect.getMethod(NBTTagCompound, "setLong", String.class, Long.class).invoke(att, "UUIDLeast", uuid.getLeastSignificantBits());
 
                 Reflect.getMethod(NBTTagList, "add", NBTTagCompound).invoke(attList, att);
                 index++;
             }
             Reflect.getMethod(NBTTagCompound, "set", String.class, Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTBase")).invoke(tag, "AttributeModifiers", attList);
             Reflect.getMethod(ItemStack, "setTag", NBTTagCompound).invoke(NMSItemStack, tag);
-            return (ItemStack) Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack.class).invoke(null, NMSItemStack);
+            return (ItemStack) Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack).invoke(null, NMSItemStack);
         }
         catch (Exception e) {
 
