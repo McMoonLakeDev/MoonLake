@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -74,6 +75,20 @@ public class Util {
         notNull(key, "待格式化的字符串是 null 值");
 
         return String.format(key, values);
+    }
+
+    /**
+     * <h1>格式化字符串文本</h1>
+     *
+     * @param key 需格式化的字串符
+     * @param values 格式化的值
+     * @return 格式化后的字符串
+     * @throws IllegalArgumentException 参数空指针则抛出异常
+     */
+    public static String mformat(String key, Object... values) {
+        notNull(key, "待格式化的字符串是 null 值");
+
+        return MessageFormat.format(key, values);
     }
 
     /**
