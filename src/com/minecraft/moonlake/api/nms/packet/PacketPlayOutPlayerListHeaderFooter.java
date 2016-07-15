@@ -62,7 +62,7 @@ public class PacketPlayOutPlayerListHeaderFooter implements Packet<PacketPlayOut
             if(icbc2 != null) {
 
                 Field b = Reflect.getField(PacketPlayOutPlayerListHeaderFooter, true, "b");
-                b.set(ppoplhf, footer);
+                b.set(ppoplhf, icbc2);
             }
             Class<?> Packet = Reflect.PackageType.MINECRAFT_SERVER.getClass("Packet");
             Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
