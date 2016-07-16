@@ -64,6 +64,19 @@ public class Util {
     }
 
     /**
+     * <h1>将颜色字符串进行反序列化</h1>
+     *
+     * @param color 颜色文本
+     * @return 清除颜色后的文本
+     * @throws IllegalArgumentException 参数空指针则抛出异常
+     */
+    public static String fColor(String color) {
+        notNull(color, "待反序列化的颜色文本是 null 值");
+
+        return color.replaceAll("§([0-9a-fA-Fk-oK-OrR]?)", "");
+    }
+
+    /**
      * <h1>格式化字串符文本</h1>
      *
      * @param key 需格式化的字串符

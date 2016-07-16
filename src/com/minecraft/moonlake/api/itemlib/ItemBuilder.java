@@ -1,15 +1,13 @@
 package com.minecraft.moonlake.api.itemlib;
 
 import com.minecraft.moonlake.MoonLakePlugin;
-import com.minecraft.moonlake.util.Util;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,8 +18,7 @@ public class ItemBuilder {
     private final Itemlib itemlib;
 
     private ItemStack item;
-    private ItemMeta meta;
-    private List<String> lores;
+    private int data;
 
     public ItemBuilder(int id) {
 
@@ -33,6 +30,11 @@ public class ItemBuilder {
         this(Material.getMaterial(id), data);
     }
 
+    public ItemBuilder(int id, int data, String displayName) {
+
+        this(Material.getMaterial(id), data, displayName);
+    }
+
     public ItemBuilder(Material type) {
 
         this(type, 0);
@@ -40,22 +42,21 @@ public class ItemBuilder {
 
     public ItemBuilder(Material type, int data) {
 
+        this.data = data;
         this.item = new ItemStack(type, 1, (short)data);
-        this.meta = item.getItemMeta();
-        this.lores = new ArrayList<>();
         this.itemlib = MoonLakePlugin.getInstances().getItemlib();
+    }
+
+    public ItemBuilder(Material type, int data, String displayName) {
+
+        this.data = data;
+        this.itemlib = MoonLakePlugin.getInstances().getItemlib();
+        this.item = itemlib.create(type, data, 1, displayName);
     }
 
     public ItemBuilder setAmount(int amount) {
 
         this.item.setAmount(amount);
-
-        return this;
-    }
-
-    public ItemBuilder setDisplayName(String displayName) {
-
-        this.meta.setDisplayName(Util.color(displayName));
 
         return this;
     }
@@ -76,35 +77,42 @@ public class ItemBuilder {
 
     public ItemBuilder addFlag(ItemFlag... flags) {
 
-        this.meta.addItemFlags(flags);
+        this.item = itemlib.addFlags(item, flags);
 
         return this;
     }
 
     public ItemBuilder removeFlag(ItemFlag... flags) {
 
-        this.meta.removeItemFlags(flags);
+        this.item = itemlib.removeFlags(item, flags);
 
         return this;
     }
 
     public ItemBuilder addLore(String lore) {
 
-        this.lores.add(lore);
+        this.item = itemlib.addLore(item, lore);
 
         return this;
     }
 
     public ItemBuilder addLores(String... lores) {
 
-        this.lores.addAll(Arrays.asList(lores));
+        this.item = itemlib.addLore(item, lores);
 
         return this;
     }
 
-    public ItemBuilder removeLore(String lore) {
+    public ItemBuilder addLores(List<String> lores) {
 
-        this.lores.remove(lore);
+        this.item = itemlib.addLore(item, lores);
+
+        return this;
+    }
+
+    public ItemBuilder removeLore() {
+
+        this.item = itemlib.setLore(item, new ArrayList<String>());
 
         return this;
     }
@@ -144,20 +152,6 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder addFlags(ItemFlag... flags) {
-
-        this.meta.addItemFlags(flags);
-
-        return this;
-    }
-
-    public ItemBuilder removeFlags(ItemFlag... flags) {
-
-        this.meta.removeItemFlags(flags);
-
-        return this;
-    }
-
     public ItemBuilder setUnbreakable(boolean unbreakable) {
 
         this.item = itemlib.setUnbreakable(item, unbreakable);
@@ -165,10 +159,14 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemStack build() {
+    public ItemBuilder setLeatherColor(Color color) {
 
-        this.meta.setLore(Util.color(lores));
-        this.item.setItemMeta(this.meta);
+        this.item = itemlib.setLeatherArmorColor(item, color);
+
+        return this;
+    }
+
+    public ItemStack build() {
 
         return this.item.clone();
     }
