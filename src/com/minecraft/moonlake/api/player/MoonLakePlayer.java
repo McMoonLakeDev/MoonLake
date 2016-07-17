@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.skinme.SkinmePlayer;
 import com.minecraft.moonlake.exception.player.PlayerNotOnlineException;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.*;
@@ -7,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -18,13 +20,15 @@ import org.bukkit.util.Vector;
 import java.net.InetSocketAddress;
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * <h1>月色之湖服务器 玩家 接口类 (仅供继承)</h1>
  *
  * @see com.minecraft.moonlake.api.player.AbstractPlayer
  */
-public interface MoonLakePlayer extends NMSPlayer, InventoryHolder, Comparable<MoonLakePlayer> {
+public interface MoonLakePlayer extends NMSPlayer, NetPlayer, SkinmePlayer, InventoryHolder, Comparable<MoonLakePlayer> {
 
     /**
      * 获取此玩家的 Bukkit 玩家对象
@@ -39,6 +43,13 @@ public interface MoonLakePlayer extends NMSPlayer, InventoryHolder, Comparable<M
      * @return 名称
      */
     String getName();
+
+    /**
+     * 获取此玩家的 UUID
+     *
+     * @return UUID
+     */
+    UUID getUniqueId();
 
     /**
      * 获取此玩家的显示名称
@@ -65,6 +76,8 @@ public interface MoonLakePlayer extends NMSPlayer, InventoryHolder, Comparable<M
      * 设置此玩家的 TAB 列表名称
      *
      * @param listName 列表名称
+     * @throws IllegalArgumentException 如果名称已经被占用抛出异常
+     * @throws IllegalArgumentException 如果名称的长度小于 0 或大于 64 抛出异常
      */
     void setListName(String listName);
 
@@ -149,6 +162,7 @@ public interface MoonLakePlayer extends NMSPlayer, InventoryHolder, Comparable<M
      * 设置此玩家的当前血量
      *
      * @param health 血量
+     * @throws IllegalArgumentException 如果血量小于 0 或者大于 maxHealth 则抛出异常
      */
     void setHealth(double health);
 
@@ -198,6 +212,7 @@ public interface MoonLakePlayer extends NMSPlayer, InventoryHolder, Comparable<M
      * 设置此玩家的飞行速度
      *
      * @param flySpeed 飞行速度
+     * @throws IllegalArgumentException 如果飞行速度小于 -1 或大于 1 抛出异常
      */
     void setFlySpeed(float flySpeed);
 
@@ -235,6 +250,13 @@ public interface MoonLakePlayer extends NMSPlayer, InventoryHolder, Comparable<M
      * @param entity 实体对象
      */
     void setSpectatorTarget(Entity entity);
+
+    /**
+     * 将此玩家强制受到伤害
+     *
+     * @param damage  伤害
+     */
+    void damage(double damage);
 
     /**
      * 将此玩家强制受到伤害
@@ -329,6 +351,7 @@ public interface MoonLakePlayer extends NMSPlayer, InventoryHolder, Comparable<M
      * 设置此玩家的行走速度
      *
      * @param speed 行走速度
+     * @throws IllegalArgumentException 如果行走速度小于 -1 或大于 1 抛出异常
      */
     void setWalkSpeed(float speed);
 
@@ -497,6 +520,13 @@ public interface MoonLakePlayer extends NMSPlayer, InventoryHolder, Comparable<M
     ItemStack getItemInOffHand();
 
     /**
+     * 获取此玩家的鼠标中物品
+     *
+     * @return 鼠标中物品
+     */
+    ItemStack getItemOnCursor();
+
+    /**
      * 设置此玩家的主手中物品
      *
      * @param item 物品栈
@@ -565,6 +595,21 @@ public interface MoonLakePlayer extends NMSPlayer, InventoryHolder, Comparable<M
      * @param color 药水粒子的颜色
      */
     void addPotionEffect(PotionEffectType type, int level, int time, boolean ambient, boolean particles, Color color);
+
+    /**
+     * 获取此玩家是否拥有药水效果
+     *
+     * @param type 药水效果类型
+     * @return true 则拥有此效果类型 else 没有
+     */
+    boolean hasPotionEffect(PotionEffectType type);
+
+    /**
+     * 清除此玩家的指定药水效果
+     *
+     * @param type 药水效果类型
+     */
+    void removePotionEffect(PotionEffectType type);
 
     /**
      * 给玩家背包给予指定物品栈
@@ -675,7 +720,7 @@ public interface MoonLakePlayer extends NMSPlayer, InventoryHolder, Comparable<M
      *
      * @param vector 矢量
      */
-    void setVector(Vector vector);
+    void setVelocity(Vector vector);
 
     /**
      * 设置此玩家的无敌时间 (Tick)
@@ -766,6 +811,30 @@ public interface MoonLakePlayer extends NMSPlayer, InventoryHolder, Comparable<M
     void setWeather(WeatherType weather);
 
     /**
+     * 获取此玩家的客户端天气
+     *
+     * @return 天气类型
+     */
+    WeatherType getWeather();
+
+    /**
+     * 获取此玩家的客户端时间
+     *
+     * @return 时间
+     */
+    long getTime();
+
+    /**
+     * 重置此玩家的客户端天气
+     */
+    void resetWeather();
+
+    /**
+     * 重置此玩家的客户端时间
+     */
+    void resetTime();
+
+    /**
      * 获取此玩家的游戏模式
      *
      * @return 游戏模式
@@ -785,6 +854,160 @@ public interface MoonLakePlayer extends NMSPlayer, InventoryHolder, Comparable<M
      * @param mode 模式
      */
     void setGameMode(GameMode mode);
+
+    /**
+     * 重置此玩家的最大血量
+     */
+    void resetMaxHealth();
+
+    /**
+     * 获取此玩家是否滑翔状态
+     *
+     * @return 是否滑翔
+     */
+    boolean isGliding();
+
+    /**
+     * 设置此玩家是否滑翔状态
+     *
+     * @param gliding 是否滑翔
+     */
+    void setGliding(boolean gliding);
+
+    /**
+     * 清除此玩家的所有药水效果
+     */
+    void clearPotionEffect();
+
+    /**
+     * 获取此玩家的眼部位置
+     *
+     * @return 眼部位置
+     */
+    Location getEyeLocation();
+
+    /**
+     * 获取此玩家的摔落距离
+     *
+     * @return 摔落距离
+     */
+    float getFallDistance();
+
+    /**
+     * 设置此玩家的摔落距离
+     *
+     * @param fallDistance 摔落距离
+     */
+    void setFallDistance(float fallDistance);
+
+    /**
+     * 获取此玩家的方向矢量对象
+     *
+     * @return 方向矢量
+     */
+    Vector getDirection();
+
+    /**
+     * 获取此玩家的最后受伤伤害
+     *
+     * @return 受伤伤害
+     */
+    double getLastDamage();
+
+    /**
+     * 获取此玩家的最后受伤原因
+     *
+     * @return 受伤原因
+     */
+    EntityDamageEvent getLastDamageCause();
+
+    /**
+     * 获取此玩家准星的目标方块
+     *
+     * @param transparent 无视的方块类型
+     * @param maxDistance 最大距离
+     * @return 目标方块
+     */
+    Block getTargetBlock(Set<Material> transparent, int maxDistance);
+
+    /**
+     * 设置此玩家是否可以拾取物品
+     *
+     * @param pickup 是否可以拾取
+     */
+    void setCanPickupItems(boolean pickup);
+
+    /**
+     * 获取此玩家是否可以拾取物品
+     *
+     * @return 是否可以拾取
+     */
+    boolean isCanPickupItems();
+
+    /**
+     * 设置此玩家是否发光
+     *
+     * @param flag 是否发光
+     */
+    void setGlowing(boolean flag);
+
+    /**
+     * 获取此实体是否发光
+     *
+     * @return 是否发光
+     */
+    boolean isGlowing();
+
+    /**
+     * 设置此玩家是否坚不可摧 (无敌)
+     *
+     * @param flag 是否坚不可摧
+     */
+    void setInvulnerable(boolean flag);
+
+    /**
+     * 获取此玩家是否坚不可摧 (无敌)
+     *
+     * @return 是否坚不可摧
+     */
+    boolean isInvulnerable();
+
+    /**
+     * 获取此玩家是否沉默
+     *
+     * @return 是否沉默
+     */
+    boolean isSilent();
+
+    /**
+     * 设置此玩家是否沉默
+     *
+     * @param flag 是否沉默
+     */
+    void setSilent(boolean flag);
+
+    /**
+     * 获取此玩家是否拥有重力
+     *
+     * @return 是否拥有重力
+     */
+    boolean hasGravity();
+
+    /**
+     * 设置此玩家是否拥有重力
+     *
+     * @param gravity 是否拥有重力
+     */
+    void setGravity(boolean gravity);
+
+    /**
+     * 设置此玩家的客户端材质包
+     *
+     * @param url 材质包地址
+     * @throws IllegalArgumentException 如果材质包的地址是 null 抛出异常
+     * @throws IllegalArgumentException 如果材质包的地址长度大于 40 抛出异常
+     */
+    void setResourcePack(String url);
 
     /**
      * 获取此玩家的网络套接字地址

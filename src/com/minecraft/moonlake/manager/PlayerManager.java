@@ -27,7 +27,7 @@ public class PlayerManager extends MoonLakeManager {
      * @param name 玩家名
      * @return 玩家对象 没有则返回 null
      */
-    public static Player getPlayerFromName(String name) {
+    public static Player fromName(String name) {
 
         return Bukkit.getServer().getPlayer(name);
     }
@@ -38,7 +38,7 @@ public class PlayerManager extends MoonLakeManager {
      * @param uuid 玩家 UUID
      * @return 玩家对象 没有则返回 null
      */
-    public static Player getPlayerFromName(UUID uuid) {
+    public static Player fromUUID(UUID uuid) {
 
         return Bukkit.getServer().getPlayer(uuid);
     }

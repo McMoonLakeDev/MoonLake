@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.exception.player.PlayerNotOnlineException;
 import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.util.Util;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -8,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -20,6 +22,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by MoonLake on 2016/7/16.
@@ -32,7 +36,7 @@ public class AbstractPlayer implements MoonLakePlayer {
     public AbstractPlayer(String name) {
 
         this.name = name;
-        this.player = Bukkit.getServer().getPlayer(name);
+        this.player = PlayerManager.fromName(name);
     }
 
     /**
@@ -55,6 +59,17 @@ public class AbstractPlayer implements MoonLakePlayer {
     public String getName() {
 
         return name;
+    }
+
+    /**
+     * 获取此玩家的 UUID
+     *
+     * @return UUID
+     */
+    @Override
+    public UUID getUniqueId() {
+
+        return player.getUniqueId();
     }
 
     /**
@@ -94,6 +109,8 @@ public class AbstractPlayer implements MoonLakePlayer {
      * 设置此玩家的 TAB 列表名称
      *
      * @param listName 列表名称
+     * @throws IllegalArgumentException 如果名称已经被占用抛出异常
+     * @throws IllegalArgumentException 如果名称的长度小于 0 或大于 64 抛出异常
      */
     @Override
     public void setListName(String listName) {
@@ -186,13 +203,11 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void giveHealth(double amount) {
 
-        // 如果当前血量加上数量大于或等于最大血量
         if(getHealth() + amount >= getMaxHealth()) {
-            // 则直接恢复满
+
             setHealth(getMaxHealth());
             return;
         }
-        // 否则添加血量
         setHealth(getHealth() + amount);
     }
 
@@ -204,13 +219,11 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void takeHealth(double amount) {
 
-        // 如果当前血量减去数量小于或等于 0
         if(getHealth() - amount <= 0d) {
-            // 则直接设置0血，也就是死亡
+
             setHealth(0d);
             return;
         }
-        // 否则减去指定血量
         setHealth(getHealth() - amount);
     }
 
@@ -240,7 +253,7 @@ public class AbstractPlayer implements MoonLakePlayer {
      * 设置此玩家的当前血量
      *
      * @param health 血量
-     * @throws IllegalArgumentException 如果参数小于 0 或者大于 maxHealth 则抛出异常 {@literal < 0 or >} {@link #getMaxHealth()}
+     * @throws IllegalArgumentException 如果血量小于 0 或者大于 maxHealth 则抛出异常
      */
     @Override
     public void setHealth(double health) {
@@ -299,7 +312,8 @@ public class AbstractPlayer implements MoonLakePlayer {
      */
     @Override
     public float getFlySpeed() {
-        return 0;
+
+        return player.getFlySpeed();
     }
 
     /**
@@ -309,17 +323,20 @@ public class AbstractPlayer implements MoonLakePlayer {
      */
     @Override
     public int getFoodLevel() {
-        return 0;
+
+        return player.getFoodLevel();
     }
 
     /**
      * 设置此玩家的飞行速度
      *
      * @param flySpeed 飞行速度
+     * @throws IllegalArgumentException 如果飞行速度小于 -1 或大于 1 抛出异常
      */
     @Override
     public void setFlySpeed(float flySpeed) {
 
+        player.setFlySpeed(flySpeed);
     }
 
     /**
@@ -330,6 +347,7 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void setFoodLevel(int foodLevel) {
 
+        player.setFoodLevel(foodLevel);
     }
 
     /**
@@ -374,6 +392,17 @@ public class AbstractPlayer implements MoonLakePlayer {
     public void setSpectatorTarget(Entity entity) {
 
         player.setSpectatorTarget(entity);
+    }
+
+    /**
+     * 将此玩家强制受到伤害
+     *
+     * @param damage  伤害
+     */
+    @Override
+    public void damage(double damage) {
+
+        player.damage(damage);
     }
 
     /**
@@ -506,9 +535,10 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     /**
-     * 设置此玩家的行走速度 (-1f - 1f)
+     * 设置此玩家的行走速度
      *
      * @param speed 行走速度
+     * @throws IllegalArgumentException 如果行走速度小于 -1 或大于 1 抛出异常
      */
     @Override
     public void setWalkSpeed(float speed) {
@@ -666,7 +696,8 @@ public class AbstractPlayer implements MoonLakePlayer {
      */
     @Override
     public Block getTargetBlock(int distance) {
-        return null;
+
+        return getTargetBlock(null, distance);
     }
 
     /**
@@ -761,6 +792,17 @@ public class AbstractPlayer implements MoonLakePlayer {
     public ItemStack getItemInOffHand() {
 
         return getInventory().getItemInOffHand();
+    }
+
+    /**
+     * 获取此玩家的鼠标中物品
+     *
+     * @return 鼠标中物品
+     */
+    @Override
+    public ItemStack getItemOnCursor() {
+
+        return player.getItemOnCursor();
     }
 
     /**
@@ -866,6 +908,29 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     /**
+     * 获取此玩家是否拥有药水效果
+     *
+     * @param type 药水效果类型
+     * @return true 则拥有此效果类型 else 没有
+     */
+    @Override
+    public boolean hasPotionEffect(PotionEffectType type) {
+
+        return player.hasPotionEffect(type);
+    }
+
+    /**
+     * 清除此玩家的指定药水效果
+     *
+     * @param type 药水效果类型
+     */
+    @Override
+    public void removePotionEffect(PotionEffectType type) {
+
+        player.removePotionEffect(type);
+    }
+
+    /**
      * 给玩家背包给予指定物品栈
      *
      * @param items 物品栈
@@ -918,7 +983,7 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void onKick(String message) {
 
-        player.kickPlayer("你被服务器封禁,原因: " + message);
+        player.kickPlayer("你被服务器踢出,原因: " + message);
     }
 
     /**
@@ -1018,7 +1083,8 @@ public class AbstractPlayer implements MoonLakePlayer {
      */
     @Override
     public boolean isSprinting() {
-        return false;
+
+        return player.isSprinting();
     }
 
     /**
@@ -1038,7 +1104,7 @@ public class AbstractPlayer implements MoonLakePlayer {
      * @param vector 矢量
      */
     @Override
-    public void setVector(Vector vector) {
+    public void setVelocity(Vector vector) {
 
         player.setVelocity(vector);
     }
@@ -1118,7 +1184,7 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void onHide(String target) {
 
-        Player targetPlayer = PlayerManager.getPlayerFromName(target);
+        Player targetPlayer = PlayerManager.fromName(target);
 
         if(targetPlayer != null) {
 
@@ -1134,7 +1200,7 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void onShow(String target) {
 
-        Player targetPlayer = PlayerManager.getPlayerFromName(target);
+        Player targetPlayer = PlayerManager.fromName(target);
 
         if(targetPlayer != null) {
 
@@ -1151,7 +1217,7 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public boolean canSee(String target) {
 
-        Player targetPlayer = PlayerManager.getPlayerFromName(target);
+        Player targetPlayer = PlayerManager.fromName(target);
 
         return targetPlayer != null && player.canSee(targetPlayer);
     }
@@ -1191,6 +1257,46 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     /**
+     * 获取此玩家的客户端天气
+     *
+     * @return 天气类型
+     */
+    @Override
+    public WeatherType getWeather() {
+
+        return player.getPlayerWeather();
+    }
+
+    /**
+     * 获取此玩家的客户端时间
+     *
+     * @return 时间
+     */
+    @Override
+    public long getTime() {
+
+        return player.getPlayerTime();
+    }
+
+    /**
+     * 重置此玩家的客户端天气
+     */
+    @Override
+    public void resetWeather() {
+
+        player.resetPlayerWeather();
+    }
+
+    /**
+     * 重置此玩家的客户端时间
+     */
+    @Override
+    public void resetTime() {
+
+        player.resetPlayerTime();
+    }
+
+    /**
      * 获取此玩家的游戏模式
      *
      * @return 游戏模式
@@ -1226,6 +1332,256 @@ public class AbstractPlayer implements MoonLakePlayer {
     public void setGameMode(GameMode mode) {
 
         player.setGameMode(mode);
+    }
+
+    /**
+     * 重置此玩家的血量
+     */
+    @Override
+    public void resetMaxHealth() {
+
+        player.resetMaxHealth();
+    }
+
+    /**
+     * 获取此玩家是否滑翔状态
+     *
+     * @return 是否滑翔
+     */
+    @Override
+    public boolean isGliding() {
+
+        return player.isGliding();
+    }
+
+    /**
+     * 设置此玩家是否滑翔状态
+     *
+     * @param gliding 是否滑翔
+     */
+    @Override
+    public void setGliding(boolean gliding) {
+
+        player.setGliding(gliding);
+    }
+
+    /**
+     * 清除此玩家的所有药水效果
+     */
+    @Override
+    public void clearPotionEffect() {
+
+        if(player != null && !player.getActivePotionEffects().isEmpty()) {
+
+            for(PotionEffect potionEffect : player.getActivePotionEffects()) {
+
+                if(potionEffect != null && player.hasPotionEffect(potionEffect.getType())) {
+
+                    player.removePotionEffect(potionEffect.getType());
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取此玩家的眼部位置
+     *
+     * @return 眼部位置
+     */
+    @Override
+    public Location getEyeLocation() {
+
+        return player.getEyeLocation();
+    }
+
+    /**
+     * 获取此玩家的摔落距离
+     *
+     * @return 摔落距离
+     */
+    @Override
+    public float getFallDistance() {
+
+        return player.getFallDistance();
+    }
+
+    /**
+     * 设置此玩家的摔落距离
+     *
+     * @param fallDistance 摔落距离
+     */
+    @Override
+    public void setFallDistance(float fallDistance) {
+
+        player.setFallDistance(fallDistance);
+    }
+
+    /**
+     * 获取此玩家的方向矢量对象
+     *
+     * @return 方向矢量
+     */
+    @Override
+    public Vector getDirection() {
+
+        return getLocation().getDirection();
+    }
+
+    /**
+     * 获取此玩家的最后受伤伤害
+     *
+     * @return 受伤伤害
+     */
+    @Override
+    public double getLastDamage() {
+
+        return player.getLastDamage();
+    }
+
+    /**
+     * 获取此玩家的最后受伤原因
+     *
+     * @return 受伤原因
+     */
+    public EntityDamageEvent getLastDamageCause() {
+
+        return player.getLastDamageCause();
+    }
+
+    /**
+     * 获取此玩家准星的目标方块
+     *
+     * @param transparent 无视的方块类型
+     * @param maxDistance 最大距离
+     * @return 目标方块
+     */
+    @Override
+    public Block getTargetBlock(Set<Material> transparent, int maxDistance) {
+
+        return player.getTargetBlock(transparent, maxDistance);
+    }
+
+    /**
+     * 设置此玩家是否可以拾取物品
+     *
+     * @param pickup 是否可以拾取
+     */
+    @Override
+    public void setCanPickupItems(boolean pickup) {
+
+        player.setCanPickupItems(pickup);
+    }
+
+    /**
+     * 获取此玩家是否可以拾取物品
+     *
+     * @return 是否可以拾取
+     */
+    @Override
+    public boolean isCanPickupItems() {
+
+        return player.getCanPickupItems();
+    }
+
+    /**
+     * 设置此玩家是否发光
+     *
+     * @param flag 是否发光
+     */
+    @Override
+    public void setGlowing(boolean flag) {
+
+        player.setGlowing(flag);
+    }
+
+    /**
+     * 获取此实体是否发光
+     *
+     * @return 是否发光
+     */
+    @Override
+    public boolean isGlowing() {
+
+        return player.isGlowing();
+    }
+
+    /**
+     * 设置此玩家是否坚不可摧 (无敌)
+     *
+     * @param flag 是否坚不可摧
+     */
+    @Override
+    public void setInvulnerable(boolean flag) {
+
+        player.setInvulnerable(flag);
+    }
+
+    /**
+     * 获取此玩家是否坚不可摧 (无敌)
+     *
+     * @return 是否坚不可摧
+     */
+    @Override
+    public boolean isInvulnerable() {
+
+        return player.isInvulnerable();
+    }
+
+    /**
+     * 获取此玩家是否沉默
+     *
+     * @return 是否沉默
+     */
+    @Override
+    public boolean isSilent() {
+
+        return player.isSilent();
+    }
+
+    /**
+     * 设置此玩家是否沉默
+     *
+     * @param flag 是否沉默
+     */
+    @Override
+    public void setSilent(boolean flag) {
+
+        player.setSilent(flag);
+    }
+
+    /**
+     * 获取此玩家是否拥有重力
+     *
+     * @return 是否拥有重力
+     */
+    @Override
+    public boolean hasGravity() {
+
+        return player.hasGravity();
+    }
+
+    /**
+     * 设置此玩家是否拥有重力
+     *
+     * @param gravity 是否拥有重力
+     */
+    @Override
+    public void setGravity(boolean gravity) {
+
+        player.setGravity(gravity);
+    }
+
+    /**
+     * 设置此玩家的客户端材质包
+     *
+     * @param url 材质包地址
+     * @throws IllegalArgumentException 如果材质包的地址是 null 抛出异常
+     * @throws IllegalArgumentException 如果材质包的地址长度大于 40 抛出异常
+     */
+    @Override
+    public void setResourcePack(String url) {
+
+        player.setResourcePack(url);
     }
 
     /**
