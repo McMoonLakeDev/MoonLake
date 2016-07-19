@@ -2,12 +2,15 @@ package com.minecraft.moonlake.util;
 
 import org.bukkit.ChatColor;
 
+import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -73,7 +76,7 @@ public class Util {
     public static String fColor(String color) {
         notNull(color, "待反序列化的颜色文本是 null 值");
 
-        return color.replaceAll("§([0-9a-fA-Fk-oK-OrR]?)", "");
+        return color.replaceAll("&([0-9a-fA-Fk-oK-OrR]?)|§([0-9a-fA-Fk-oK-OrR]?)", "");
     }
 
     /**
@@ -179,5 +182,78 @@ public class Util {
         if(str == null || str.length() == 0) {
             throw new IllegalArgumentException(message);
         }
+    }
+
+    /**
+     * 将指定字符串源转换到缓冲图片对象
+     *
+     * @param font 字体
+     * @param string 字符串
+     * @return  缓冲图片对象
+     */
+    public static BufferedImage stringToBufferedImage(Font font, String... string) {
+
+        BufferedImage image = getStringImage(font, string);
+        Graphics graphics = image.getGraphics();
+        graphics.setColor(Color.black);
+        graphics.setFont(font);
+
+        FontMetrics fontMetrics = graphics.getFontMetrics();
+
+        for(int i = 0; i < string.length; i++) {
+
+            graphics.drawString(string[i], 0, i * fontMetrics.getHeight() + 15);
+        }
+        graphics.dispose();
+
+        return image;
+    }
+
+    /**
+     * 获取字符串所占图片的宽度、高度的缓存图片对象
+     *
+     * @param font 字体
+     * @param strs 字符串源
+     * @return 缓存图片对象
+     */
+    public static BufferedImage getStringImage(Font font, String... strs) {
+
+        BufferedImage image = new BufferedImage(1, 1, 6);
+        Graphics graphics = image.getGraphics();
+        graphics.setFont(font);
+
+        FontRenderContext fontRenderContext = graphics.getFontMetrics().getFontRenderContext();
+        Rectangle2D rectangle2D = font.getStringBounds(getStringArrayMaxLengthString(strs), fontRenderContext);
+        graphics.dispose();
+
+        int width = (int)Math.ceil(rectangle2D.getWidth());
+        int height = 0;
+
+        for(int i = 0; i < strs.length; i++) {
+
+            height += (int)Math.ceil(rectangle2D.getHeight());
+        }
+        return new BufferedImage(width, height, 6);
+    }
+
+    /**
+     * 获取字符串数据最大长度的字符串
+     *
+     * @param strs 字符串数组
+     * @return 最大长度的字符串
+     */
+    public static String getStringArrayMaxLengthString(String[] strs) {
+
+        java.util.List<Integer> list = new ArrayList<>();
+        Map<Integer, String> map = new HashMap<>();
+
+        for(int i = 0; i < strs.length; i++) {
+
+            list.add(strs[i].length());
+            map.put(strs[i].length(), strs[i]);
+        }
+        Collections.sort(list);
+
+        return map.get(list.get(list.size() - 1));
     }
 }

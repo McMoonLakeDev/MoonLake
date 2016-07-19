@@ -9,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -1582,6 +1583,31 @@ public class AbstractPlayer implements MoonLakePlayer {
     public void setResourcePack(String url) {
 
         player.setResourcePack(url);
+    }
+
+    /**
+     * 在此玩家发射弹丸源实体
+     *
+     * @param projectile 弹丸子类
+     * @return 弹丸源
+     */
+    @Override
+    public <T extends Projectile> T launcherProjectile(Class<? extends T> projectile) {
+
+        return player.launchProjectile(projectile);
+    }
+
+    /**
+     * 在此玩家发射弹丸源实体
+     *
+     * @param projectile 弹丸子类
+     * @param vector     矢量
+     * @return 弹丸源
+     */
+    @Override
+    public <T extends Projectile> T launcherProjectile(Class<? extends T> projectile, Vector vector) {
+
+        return player.launchProjectile(projectile, vector);
     }
 
     /**

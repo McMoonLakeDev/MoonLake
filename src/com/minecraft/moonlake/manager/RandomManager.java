@@ -23,4 +23,16 @@ public class RandomManager extends MoonLakeManager {
 
         return random;
     }
+
+    /**
+     * 获取指定范围的整数型随机数
+     *
+     * @param min 最低范围
+     * @param max 最大范围
+     * @return 范围内的随机数
+     */
+    public static int getRandomNumber(int min, int max) {
+
+        return Math.abs(random.nextInt()) % (max - min + 1) + min;
+    }
 }

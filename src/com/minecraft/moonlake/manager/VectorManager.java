@@ -83,4 +83,20 @@ public class VectorManager extends MoonLakeManager {
 
         return new Vector(x, 0d, z);
     }
+
+    /**
+     * 将一个矢量对象绕 Y 轴向指定角度旋转
+     *
+     * @param vector 矢量
+     * @param angle 角度
+     * @return 旋转角度后的矢量
+     */
+    public static Vector rotateAroundAxisY(Vector vector, double angle) {
+
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
+        double x = vector.getX() * cos + vector.getZ() * sin;
+        double z = vector.getX() * -sin + vector.getZ() * cos;
+        return vector.setX(x).setZ(z);
+    }
 }

@@ -3,10 +3,13 @@ package com.minecraft.moonlake.manager;
 import com.google.common.collect.Sets;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.reflect.Reflect;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.spigotmc.SpigotConfig;
 
 import java.lang.reflect.Field;
@@ -286,6 +289,45 @@ public class EntityManager extends MoonLakeManager {
             }
         }
         return entityList;
+    }
+
+    /**
+     * 给予指定实体真实的伤害
+     *
+     * @param source 源实体
+     * @param damager 攻击者实体
+     * @param damage 真实伤害
+     */
+    public static void realDamage(LivingEntity source, MoonLakePlayer damager, double damage) {
+
+        realDamage(source, damager.getBukkitPlayer(), damage);
+    }
+
+    /**
+     * 给予指定实体真实的伤害
+     *
+     * @param source 源实体
+     * @param damager 攻击者实体
+     * @param damage 真实伤害
+     */
+    public static void realDamage(LivingEntity source, LivingEntity damager, double damage) {
+
+        if(source != null && !source.isDead() && damager != null && !damager.isDead() && damage > 0d) {
+
+            EntityDamageByEntityEvent edbee = new EntityDamageByEntityEvent(damager, source, EntityDamageEvent.DamageCause.CUSTOM, damage);
+
+            source.damage(0d, damager);
+            source.setLastDamageCause(edbee);
+
+            Bukkit.getServer().getPluginManager().callEvent(edbee);
+
+            if(source.getHealth() <= damage) {
+
+                source.setHealth(0d);
+                return;
+            }
+            source.setHealth(source.getHealth() - damage);
+        }
     }
 
     /**

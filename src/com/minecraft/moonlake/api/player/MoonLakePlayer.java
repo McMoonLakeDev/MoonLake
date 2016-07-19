@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -1008,6 +1009,25 @@ public interface MoonLakePlayer extends NMSPlayer, NetPlayer, SkinmePlayer, Inve
      * @throws IllegalArgumentException 如果材质包的地址长度大于 40 抛出异常
      */
     void setResourcePack(String url);
+
+    /**
+     * 在此玩家发射弹丸源实体
+     *
+     * @param projectile 弹丸子类
+     * @param <T> 弹丸子类
+     * @return 弹丸源
+     */
+    <T extends Projectile> T launcherProjectile(Class<? extends T> projectile);
+
+    /**
+     * 在此玩家发射弹丸源实体
+     *
+     * @param projectile 弹丸子类
+     * @param vector 矢量
+     * @param <T> 弹丸子类
+     * @return 弹丸源
+     */
+    <T extends Projectile> T launcherProjectile(Class<? extends T> projectile, Vector vector);
 
     /**
      * 获取此玩家的网络套接字地址
