@@ -1,9 +1,12 @@
 package com.minecraft.moonlake.manager;
 
 import com.minecraft.moonlake.api.playerlib.Playerlib;
+import com.minecraft.moonlake.reflect.Reflect;
+import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 /**
@@ -41,5 +44,34 @@ public class PlayerManager extends MoonLakeManager {
     public static Player fromUUID(UUID uuid) {
 
         return Bukkit.getServer().getPlayer(uuid);
+    }
+
+    /**
+     * 获取指定玩家的游戏简介
+     *
+     * @param player 玩家
+     * @return 游戏简介 异常则返回 null
+     */
+    public static GameProfile getProfile(Player player) {
+
+        GameProfile profile = null;
+
+        try {
+
+            Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
+            Class<?> EntityPlayer = Reflect.PackageType.MINECRAFT_SERVER.getClass("EntityPlayer");
+            Class<?> EntityHuman = Reflect.PackageType.MINECRAFT_SERVER.getClass("EntityHuman");
+
+            Method getHandle = Reflect.getMethod(CraftPlayer, "getHandle");
+            Object NMSPlayer = getHandle.invoke(player);
+
+            Method getProfile = Reflect.getMethod(EntityHuman, "getProfile");
+            return (GameProfile) getProfile.invoke(NMSPlayer);
+        }
+        catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return profile;
     }
 }

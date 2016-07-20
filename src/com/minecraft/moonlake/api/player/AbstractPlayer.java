@@ -1,8 +1,10 @@
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.nms.packet.Packet;
 import com.minecraft.moonlake.exception.player.PlayerNotOnlineException;
 import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.util.Util;
+import com.mojang.authlib.GameProfile;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -71,6 +73,17 @@ public class AbstractPlayer implements MoonLakePlayer {
     public UUID getUniqueId() {
 
         return player.getUniqueId();
+    }
+
+    /**
+     * 获取此玩家的游戏简介
+     *
+     * @return 游戏简介
+     */
+    @Override
+    public GameProfile getProfile() {
+
+        return PlayerManager.getProfile(getBukkitPlayer());
     }
 
     /**
@@ -1687,6 +1700,21 @@ public class AbstractPlayer implements MoonLakePlayer {
     public int getPing() {
 
         return PlayerManager.getLibrary().getPing(getName());
+    }
+
+    /**
+     * 给玩家发送数据包
+     *
+     * @param packet 数据包
+     * @throws PlayerNotOnlineException 玩家不在线则抛出异常
+     */
+    @Override
+    public void sendPacket(Packet<?> packet) {
+
+        if(packet != null) {
+
+            packet.send(getName());
+        }
     }
 
     /**

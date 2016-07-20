@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.nms.packet.Packet;
 import com.minecraft.moonlake.exception.player.PlayerNotOnlineException;
 import org.bukkit.Material;
 
@@ -14,6 +15,14 @@ public interface NMSPlayer {
      * @return Ping 值
      */
     int getPing();
+
+    /**
+     * 给玩家发送数据包
+     *
+     * @param packet 数据包
+     * @throws PlayerNotOnlineException 玩家不在线则抛出异常
+     */
+    void sendPacket(Packet<?> packet);
 
     /**
      * 给玩家发送标题数据包

@@ -1,7 +1,9 @@
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.nms.packet.Packet;
 import com.minecraft.moonlake.api.skinme.SkinmePlayer;
 import com.minecraft.moonlake.exception.player.PlayerNotOnlineException;
+import com.mojang.authlib.GameProfile;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -51,6 +53,13 @@ public interface MoonLakePlayer extends NMSPlayer, NetPlayer, SkinmePlayer, Inve
      * @return UUID
      */
     UUID getUniqueId();
+
+    /**
+     * 获取此玩家的游戏简介
+     *
+     * @return 游戏简介
+     */
+    GameProfile getProfile();
 
     /**
      * 获取此玩家的显示名称
@@ -1056,6 +1065,14 @@ public interface MoonLakePlayer extends NMSPlayer, NetPlayer, SkinmePlayer, Inve
      * @return Ping 值
      */
     int getPing();
+
+    /**
+     * 给玩家发送数据包
+     *
+     * @param packet 数据包
+     * @throws PlayerNotOnlineException 玩家不在线则抛出异常
+     */
+    void sendPacket(Packet<?> packet);
 
     /**
      * 给玩家发送标题数据包

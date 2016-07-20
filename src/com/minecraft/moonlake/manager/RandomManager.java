@@ -1,6 +1,7 @@
 package com.minecraft.moonlake.manager;
 
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * Created by MoonLake on 2016/7/17.
@@ -34,5 +35,15 @@ public class RandomManager extends MoonLakeManager {
     public static int getRandomNumber(int min, int max) {
 
         return Math.abs(random.nextInt()) % (max - min + 1) + min;
+    }
+
+    /**
+     * 获取随机的 UUID 对象
+     *
+     * @return UUID
+     */
+    public static UUID getRandomUUID() {
+
+        return UUID.randomUUID();
     }
 }
