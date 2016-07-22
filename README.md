@@ -18,7 +18,7 @@ By Month_Light
 * 这是我们未来即将开发的 API 功能
 * 1. 更多数据包的封装
 * 2. 玩家的网络操作类封装
-* 3. 修改玩家的皮肤和披风的封装 [GO](http://github.com/u2g/MoonLakeSkinme "MoonLake Skinme Plugin")
+* 3. 修改玩家的皮肤和披风的封装 :point_right:[GO](http://github.com/u2g/MoonLakeSkinme "MoonLake Skinme Plugin")
 * 4. 提供数据库 `MySQL` 的操作类封装
 
 ## 使用方法
@@ -49,6 +49,10 @@ public void onEnable() {
   // 前置插件 MoonLake 加载成功
 }
 ```
+## 其他插件
+* `MoonLakeKitPvP` 职业战争插件 :point_right:[GO](http://github.com/u2g/MoonLakeKitPvP "MoonLake KitPvP Plugin")
+* `MoonLakeSkinme` 玩家皮肤披风操作插件 :point_right:[GO](http://github.com/u2g/MoonLakeSkinme "MoonLake Skinme Plugin")
+* `MoonLakeEconomy` 基于 `MySQL` 的经济插件 :point_right:[GO](http://github.com/u2g/MoonLakeEconomy "MoonLake Economy Plugin")
 
 Website: [MoonLake](http://www.mcyszh.com "MoonLake Website")<br />
 Minecraft MoonLake Core API Plugin

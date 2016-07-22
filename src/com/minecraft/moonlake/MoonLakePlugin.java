@@ -17,12 +17,11 @@ import java.util.Set;
 /**
  * <h1>Minecraft <a href="http://www.mcyszh.com">MoonLake</a> Core API Plugin</h1>
  * <h6>By Month_Light Q: 1327516533</h6>
- * @version 1.5
+ * @version 1.5.2
  * @author Month_Light
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
 
-    private final MoonLake instance;
     private final Itemlib itemlib;
     private final Lorelib lorelib;
     private final Playerlib playerlib;
@@ -30,7 +29,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     private final String prefix = "[MoonLake]";
     private final ConsoleCommandSender console;
 
-    private static MoonLake staticInstance;
+    private static MoonLake MAIN;
 
     public static void main(String[] args) {
 
@@ -38,12 +37,14 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
 
     static { }
 
+
     public MoonLakePlugin() {
-        // 构造函数
-        instance = this;
-        staticInstance = this;
-        pdf = this.getDescription();
+
+        MAIN = this;
+
         console = this.getServer().getConsoleSender();
+
+        pdf = this.getDescription();
         itemlib = new ItemUtil();
         lorelib = new LoreUtil();
         playerlib = new PlayerUtil();
@@ -55,7 +56,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
      * @return MoonLake
      */
     public MoonLake getInstance() {
-        return instance;
+        return MAIN;
     }
 
     /**
@@ -65,7 +66,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
      */
     @Deprecated
     public static MoonLake getInstances() {
-        return staticInstance;
+        return MAIN;
     }
 
     /**
