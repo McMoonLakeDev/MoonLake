@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.api.nms.packet;
 
+import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -25,5 +26,43 @@ public final class PacketManager {
             index++;
         }
         return players;
+    }
+
+    /**
+     * 获取玩家名数组对象从玩家数组
+     *
+     * @param players 玩家数组
+     * @return 玩家名数组对象
+     */
+    public static String[] getNamesfromPlayers(Player... players) {
+
+        String[] names = new String[players.length];
+        int index = 0;
+
+        for(Player player : players) {
+
+            names[index] = player.getName();
+            index++;
+        }
+        return names;
+    }
+
+    /**
+     * 获取玩家名数组对象从玩家数组
+     *
+     * @param players 玩家数组
+     * @return 玩家名数组对象
+     */
+    public static String[] getNamesfromPlayers(MoonLakePlayer... players) {
+
+        String[] names = new String[players.length];
+        int index = 0;
+
+        for(MoonLakePlayer player : players) {
+
+            names[index] = player.getName();
+            index++;
+        }
+        return names;
     }
 }

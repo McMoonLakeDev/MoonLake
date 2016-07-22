@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 /**
  * Created by MoonLake on 2016/6/23.
  */
-public class PacketPlayOutPlayerListHeaderFooter implements Packet<PacketPlayOutPlayerListHeaderFooter> {
+public class PacketPlayOutPlayerListHeaderFooter extends PacketAbstract<PacketPlayOutPlayerListHeaderFooter> {
 
     private String header;
     private String footer;

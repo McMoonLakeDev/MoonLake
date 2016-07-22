@@ -1,8 +1,6 @@
 package com.minecraft.moonlake.api.nms.packet;
 
 import com.minecraft.moonlake.reflect.Reflect;
-import com.mojang.authlib.GameProfile;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
@@ -14,7 +12,7 @@ import java.util.List;
 /**
  * Created by MoonLake on 2016/7/20.
  */
-public class PacketPlayOutPlayerInfo implements Packet<PacketPlayOutPlayerInfo> {
+public class PacketPlayOutPlayerInfo extends PacketAbstract<PacketPlayOutPlayerInfo> {
 
     private PlayerInfoAction action;
     private List<Player> playerList;
@@ -93,72 +91,6 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketPlayOutPlayerInfo> 
         catch (Exception e) {
 
             e.printStackTrace();
-        }
-    }
-
-    public class PlayerInfoData {
-
-        private int latency;
-        private GameMode gameMode;
-        private GameProfile profile;
-        private String displayName;
-
-        public PlayerInfoData(GameProfile profile, String displayName) {
-
-            this(profile, displayName, GameMode.SURVIVAL);
-        }
-
-        public PlayerInfoData(GameProfile profile, String displayName, GameMode gameMode) {
-
-            this(profile, displayName, GameMode.SURVIVAL, 0);
-        }
-
-        public PlayerInfoData(GameProfile profile, String displayName, GameMode gameMode, int latency) {
-
-            this.profile = profile;
-            this.displayName = displayName;
-            this.gameMode = gameMode;
-            this.latency = latency;
-        }
-
-        public int getLatency() {
-
-            return latency;
-        }
-
-        public void setLatency(int latency) {
-
-            this.latency = latency;
-        }
-
-        public GameMode getGameMode() {
-
-            return gameMode;
-        }
-
-        public void setGameMode(GameMode gameMode) {
-
-            this.gameMode = gameMode;
-        }
-
-        public GameProfile getProfile() {
-
-            return profile;
-        }
-
-        public void setProfile(GameProfile profile) {
-
-            this.profile = profile;
-        }
-
-        public String getDisplayName() {
-
-            return displayName;
-        }
-
-        public void setDisplayName(String displayName) {
-
-            this.displayName = displayName;
         }
     }
 

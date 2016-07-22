@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 /**
  * Created by MoonLake on 2016/6/23.
  */
-public class PacketPlayOutTitle implements Packet<PacketPlayOutTitle> {
+public class PacketPlayOutTitle extends PacketAbstract<PacketPlayOutTitle> {
 
     private String title;
     private String subTitle;

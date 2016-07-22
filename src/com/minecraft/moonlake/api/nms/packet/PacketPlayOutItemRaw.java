@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 /**
  * Created by MoonLake on 2016/6/24.
  */
-public class PacketPlayOutItemRaw implements Packet<PacketPlayOutItemRaw> {
+public class PacketPlayOutItemRaw extends PacketAbstract<PacketPlayOutItemRaw> {
 
     private ItemStack item;
     private String start;

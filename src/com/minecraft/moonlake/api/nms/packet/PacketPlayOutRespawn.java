@@ -1,0 +1,220 @@
+package com.minecraft.moonlake.api.nms.packet;
+
+import com.minecraft.moonlake.reflect.Reflect;
+import org.bukkit.GameMode;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+/**
+ * Created by MoonLake on 2016/7/21.
+ */
+public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
+
+    private int worldDimensionId;
+    private WorldDifficulty worldDifficulty;
+    private GameMode worldGameMode;
+    private WorldType worldType;
+
+    public PacketPlayOutRespawn(int worldDimensionId, WorldDifficulty worldDifficulty, GameMode worldGameMode, WorldType worldType) {
+
+        this.worldDimensionId = worldDimensionId;
+        this.worldDifficulty = worldDifficulty;
+        this.worldGameMode = worldGameMode;
+        this.worldType = worldType;
+    }
+
+    public PacketPlayOutRespawn(Entity entity) {
+
+        try {
+
+            Class<?> World = Reflect.PackageType.MINECRAFT_SERVER.getClass("World");
+            Class<?> Entity = Reflect.PackageType.MINECRAFT_SERVER.getClass("Entity");
+            Class<?> WorldType = Reflect.PackageType.MINECRAFT_SERVER.getClass("WorldType");
+            Class<?> WorldProvider = Reflect.PackageType.MINECRAFT_SERVER.getClass("WorldProvider");
+            Class<?> DimensionManager = Reflect.PackageType.MINECRAFT_SERVER.getClass("DimensionManager");
+            Class<?> CraftEntity = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftEntity");
+
+            Object NMSEntity = Reflect.getMethod(CraftEntity, "getHandle").invoke(entity);
+            Object NMSWorld = Reflect.getMethod(Entity, "getWorld").invoke(NMSEntity);
+
+            Field worldProvider = Reflect.getField(World, true, "worldProvider");
+            Object instanceWorldProvider = worldProvider.get(NMSWorld);
+            Object instanceWorldDifficulty = Reflect.getMethod(World, "getDifficulty").invoke(NMSWorld);
+            Object NMSDimensionManager = Reflect.getMethod(WorldProvider, "getDimensionManager").invoke(instanceWorldProvider);
+
+            int dimensionId = (int)Reflect.getMethod(DimensionManager, "getDimensionID").invoke(NMSDimensionManager);
+
+            Method valueOf = Reflect.getMethod(Enum.class, "valueOf", String.class);
+            Object name = Reflect.getMethod(Enum.class, "name").invoke(instanceWorldDifficulty);
+            WorldDifficulty worldDifficulty = WorldDifficulty.valueOf((String)valueOf.invoke(instanceWorldDifficulty, name));
+
+            Object instanceWorldType = Reflect.getMethod(World, "L").invoke(NMSWorld);
+            String name1 = ((String)Reflect.getMethod(WorldType, "name").invoke(instanceWorldType)).toUpperCase();
+            PacketPlayOutRespawn.WorldType worldType = PacketPlayOutRespawn.WorldType.valueOf(name1);
+            GameMode worldGameMode = entity instanceof Player ? ((Player)entity).getGameMode() : GameMode.SURVIVAL;
+
+            this.worldDimensionId = dimensionId;
+            this.worldDifficulty = worldDifficulty;
+            this.worldGameMode = worldGameMode;
+            this.worldType = worldType;
+        }
+        catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    public int getWorldDimensionId() {
+
+        return worldDimensionId;
+    }
+
+    public void setWorldDimensionId(int worldDimensionId) {
+
+        this.worldDimensionId = worldDimensionId;
+    }
+
+    public WorldDifficulty getWorldDifficulty() {
+
+        return worldDifficulty;
+    }
+
+    public void setWorldDifficulty(WorldDifficulty worldDifficulty) {
+
+        this.worldDifficulty = worldDifficulty;
+    }
+
+    public GameMode getWorldGameMode() {
+
+        return worldGameMode;
+    }
+
+    public void setWorldGameMode(GameMode worldGameMode) {
+
+        this.worldGameMode = worldGameMode;
+    }
+
+    public WorldType getWorldType() {
+
+        return worldType;
+    }
+
+    public void setWorldType(WorldType worldType) {
+
+        this.worldType = worldType;
+    }
+
+    /**
+     * 将此数据包发送给指定玩家
+     *
+     * @param names 玩家名
+     */
+    @Override
+    public void send(String... names) {
+
+        try {
+
+            Class<?> WorldType = Reflect.PackageType.MINECRAFT_SERVER.getClass("WorldType");
+            Class<?> EnumDifficulty = Reflect.PackageType.MINECRAFT_SERVER.getClass("EnumDifficulty");
+            Class<?> EnumGamemode = Reflect.PackageType.MINECRAFT_SERVER.getClass("EnumGamemode");
+            Class<?> PacketPlayOutRespawn = Reflect.PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutRespawn");
+
+            Method getById = Reflect.getMethod(EnumDifficulty, "getById", Integer.class);
+            Object instanceWorldDifficulty = getById.invoke(null, worldDifficulty.getId());
+
+            String worldTypeFieldName = worldType.getName().toUpperCase();
+            Object instanceWorldType = Reflect.getField(WorldType, true, worldTypeFieldName);
+
+            Method getById1 = Reflect.getMethod(EnumGamemode, "getById", Integer.class);
+            Object instanceWorldGameMode = getById1.invoke(null, worldGameMode.getValue());
+
+            Object ppor = Reflect.instantiateObject(PacketPlayOutRespawn, worldDimensionId, instanceWorldDifficulty, instanceWorldType, instanceWorldGameMode);
+
+            Class<?> Packet = Reflect.PackageType.MINECRAFT_SERVER.getClass("Packet");
+            Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
+            Class<?> EntityPlayer = Reflect.PackageType.MINECRAFT_SERVER.getClass("EntityPlayer");
+            Class<?> PlayerConnection = Reflect.PackageType.MINECRAFT_SERVER.getClass("PlayerConnection");
+
+            Method getHandle = Reflect.getMethod(CraftPlayer, "getHandle");
+            Player[] players = PacketManager.getPlayersfromNames(names);
+
+            Method sendPacket = Reflect.getMethod(PlayerConnection, "sendPacket", Packet);
+
+            for(Player player : players) {
+
+                Object NMSPlayer = getHandle.invoke(player);
+                Field playerConnection = Reflect.getField(EntityPlayer, true, "playerConnection");
+
+                sendPacket.invoke(playerConnection.get(NMSPlayer), ppor);
+            }
+        }
+        catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 世界难度类型
+     */
+    public enum WorldDifficulty {
+
+        /**
+         * 世界难度类型: 和平
+         */
+        PEACEFUL(0),
+        /**
+         * 世界难度类型: 简单
+         */
+        EASY(1),
+        /**
+         * 世界难度类型: 普通
+         */
+        NORMAL(2),
+        /**
+         * 世界难度类型: 困难
+         */
+        HARD(3),;
+
+        private final int id;
+
+        WorldDifficulty(int id) {
+
+            this.id = id;
+        }
+
+        public int getId() {
+
+            return id;
+        }
+    }
+
+    /**
+     * 世界类型
+     */
+    public enum WorldType {
+
+        NORMAL("default"),
+        FLAT("flat"),
+        VERSION_1_1("default_1_1"),
+        LARGE_BIOMES("largeBiomes"),
+        AMPLIFIED("amplified"),
+        DEBUG_ALL_BLOCK_STATES("debug_all_block_states"),
+        CUSTOMIZED("customized"),;
+
+        private final String name;
+
+        WorldType(String name) {
+
+            this.name = name;
+        }
+
+        public String getName() {
+
+            return name;
+        }
+    }
+}

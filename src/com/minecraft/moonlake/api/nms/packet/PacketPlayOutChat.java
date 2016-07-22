@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 /**
  * Created by MoonLake on 2016/6/23.
  */
-public class PacketPlayOutChat implements Packet<PacketPlayOutChat> {
+public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
 
     private String chat;
     private Mode mode;
