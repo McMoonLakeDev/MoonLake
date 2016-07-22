@@ -30,7 +30,7 @@ import java.util.UUID;
  *
  * @see com.minecraft.moonlake.api.player.AbstractPlayer
  */
-public interface MoonLakePlayer extends NMSPlayer, NetPlayer, InventoryHolder, Comparable<MoonLakePlayer> {
+public interface MoonLakePlayer extends NMSPlayer, NetPlayer, SkinmePlayer, InventoryHolder, Comparable<MoonLakePlayer> {
 
     /**
      * 获取此玩家的 Bukkit 玩家对象

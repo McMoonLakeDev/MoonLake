@@ -18,7 +18,7 @@ By Month_Light
 * 这是我们未来即将开发的 API 功能
 * 1. 更多数据包的封装
 * 2. 玩家的网络操作类封装
-* 3. 提供修改玩家的皮肤和披风的封装
+* 3. 修改玩家的皮肤和披风的封装 [GO](http://github.com/u2g/MoonLakeSkinme "MoonLake Skinme Plugin")
 * 4. 提供数据库 `MySQL` 的操作类封装
 
 ## 使用方法
