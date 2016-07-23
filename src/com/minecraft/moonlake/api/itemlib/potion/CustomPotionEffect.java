@@ -1,4 +1,4 @@
-package com.minecraft.moonlake.api.potionlib;
+package com.minecraft.moonlake.api.itemlib.potion;
 
 /**
  * <h1>自定义药水效果: <a href="http://minecraft-zh.gamepedia.com/%E7%8A%B6%E6%80%81%E6%95%88%E6%9E%9C">效果详情</a></h1>

@@ -2,7 +2,7 @@ package com.minecraft.moonlake.util.item;
 
 import com.minecraft.moonlake.api.itemlib.AttributeStack;
 import com.minecraft.moonlake.api.itemlib.Itemlib;
-import com.minecraft.moonlake.api.potionlib.CustomPotionEffect;
+import com.minecraft.moonlake.api.itemlib.potion.CustomPotionEffect;
 import com.minecraft.moonlake.exception.item.NotArmorItemException;
 import com.minecraft.moonlake.exception.item.NotBookItemException;
 import com.minecraft.moonlake.exception.item.NotPotionItemException;

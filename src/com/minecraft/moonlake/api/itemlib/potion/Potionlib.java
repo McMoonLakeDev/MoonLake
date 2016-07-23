@@ -1,4 +1,4 @@
-package com.minecraft.moonlake.api.potionlib;
+package com.minecraft.moonlake.api.itemlib.potion;
 
 import com.minecraft.moonlake.type.potion.PotionEnum;
 import com.minecraft.moonlake.exception.item.NotPotionItemException;
