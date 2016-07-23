@@ -13,43 +13,26 @@ import org.bukkit.inventory.meta.FireworkMeta;
  */
 public class FireworkBuilder {
 
-    private FireworkMeta fireworkMeta;
-
     public FireworkBuilder() {
 
     }
 
-    public FireworkBuilder setPower(int power) {
-
-        this.fireworkMeta.setPower(power);
-
-        return this;
-    }
-
-    public FireworkBuilder addEffect(FireworkEffect fireworkEffect) {
-
-        this.fireworkMeta.addEffect(fireworkEffect);
-
-        return this;
-    }
-
-    public FireworkBuilder clearEffects() {
-
-        this.fireworkMeta.clearEffects();
-
-        return this;
-    }
-
-    public ItemStack buildToItemStack() {
+    public ItemStack buildToItemStack(int power, FireworkEffect... effects) {
 
         ItemStack firework = new ItemBuilder(Material.FIREWORK).build();
+        FireworkMeta fireworkMeta = (FireworkMeta) firework.getItemMeta();
+        fireworkMeta.setPower(power);
+        fireworkMeta.addEffects(effects);
         firework.setItemMeta(fireworkMeta);
         return firework.clone();
     }
 
-    public Firework buildToFirework(Location location) {
+    public Firework buildToFirework(int power, Location location, FireworkEffect... effects) {
 
         Firework firework = location.getWorld().spawn(location, Firework.class);
+        FireworkMeta fireworkMeta = firework.getFireworkMeta();
+        fireworkMeta.setPower(power);
+        fireworkMeta.addEffects(effects);
         firework.setFireworkMeta(fireworkMeta);
         return firework;
     }

@@ -13,6 +13,7 @@ public class FireworkEffectBuilder {
 
     public FireworkEffectBuilder() {
 
+        this.builder = FireworkEffect.builder();
     }
 
     public FireworkEffectBuilder withType(FireworkType type) {
