@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="MoonLake-Source">
+    <output-path>$USER_HOME$/Desktop/api/doc</output-path>
+    <root id="archive" name="MoonLake-Source.jar">
+      <element id="dir-copy" path="$PROJECT_DIR$/src" />
+      <element id="file-copy" path="$PROJECT_DIR$/LICENSE" />
+      <element id="file-copy" path="$PROJECT_DIR$/README.md" />
+    </root>
+  </artifact>
+</component>

@@ -1,13 +1,8 @@
 package com.minecraft.moonlake.api.nms.packet;
 
+import com.minecraft.moonlake.MoonLakePlugin;
 import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.entity.Player;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by MoonLake on 2016/7/20.
@@ -15,12 +10,12 @@ import java.util.List;
 public class PacketPlayOutPlayerInfo extends PacketAbstract<PacketPlayOutPlayerInfo> {
 
     private PlayerInfoAction action;
-    private List<Player> playerList;
+    private Player player;
 
-    public PacketPlayOutPlayerInfo(PlayerInfoAction action, Player... players) {
+    public PacketPlayOutPlayerInfo(PlayerInfoAction action, Player player) {
 
         this.action = action;
-        this.playerList = Arrays.asList(players);
+        this.player = player;
     }
 
     public PlayerInfoAction getAction() {
@@ -33,14 +28,14 @@ public class PacketPlayOutPlayerInfo extends PacketAbstract<PacketPlayOutPlayerI
         this.action = action;
     }
 
-    public List<Player> getPlayerList() {
+    public Player getPlayer() {
 
-        return playerList;
+        return player;
     }
 
-    public void setPlayerList(List<Player> playerList) {
+    public void setPlayer(Player player) {
 
-        this.playerList = playerList;
+        this.player = player;
     }
 
     /**
@@ -51,48 +46,30 @@ public class PacketPlayOutPlayerInfo extends PacketAbstract<PacketPlayOutPlayerI
     @Override
     public void send(String... names) {
 
-        if(playerList.isEmpty()) {
+    }
 
-            return;
-        }
+    /**
+     * 自动匹配此数据包对象
+     *
+     * @param action 信息交互
+     * @param player 玩家
+     * @return 数据包对象
+     */
+    public static <T extends PacketPlayOutPlayerInfo> T autoMatch(PlayerInfoAction action, Player player) {
+
+        String version = MoonLakePlugin.getInstances().getBukkitVersion();
+
         try {
 
-            Class<?> PacketPlayOutPlayerInfo = Reflect.PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPlayerInfo");
-            Class<?> EnumPlayerInfoAction = Reflect.PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
+            Class<?> target = Class.forName("com.minecraft.moonlake.api.nms.packet.PacketPlayOutPlayerInfo_" + version);
 
-            Class<?> Packet = Reflect.PackageType.MINECRAFT_SERVER.getClass("Packet");
-            Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
-            Class<?> EntityPlayer = Reflect.PackageType.MINECRAFT_SERVER.getClass("EntityPlayer");
-            Class<?> PlayerConnection = Reflect.PackageType.MINECRAFT_SERVER.getClass("PlayerConnection");
-
-            Method valueOf = Reflect.getMethod(EnumPlayerInfoAction, "valueOf", String.class);
-            Object EnumPlayerInfoAction0 = valueOf.invoke(null, action.name());
-
-            List<net.minecraft.server.v1_10_R1.EntityPlayer> EntityPlayerList = new ArrayList<>();
-            Method getHandle = Reflect.getMethod(CraftPlayer, "getHandle");
-
-            for(Player player : playerList) {
-
-                EntityPlayerList.add((net.minecraft.server.v1_10_R1.EntityPlayer) getHandle.invoke(player));
-            }
-            net.minecraft.server.v1_10_R1.EntityPlayer[] EntityPlayerArray = EntityPlayerList.toArray(new net.minecraft.server.v1_10_R1.EntityPlayer[EntityPlayerList.size()]);
-            Object ppopi = Reflect.instantiateObject(PacketPlayOutPlayerInfo, EnumPlayerInfoAction0, EntityPlayerArray);
-
-            Player[] players = PacketManager.getPlayersfromNames(names);
-            Method sendPacket = Reflect.getMethod(PlayerConnection, "sendPacket", Packet);
-
-            for(Player player : players) {
-
-                Object NMSPlayer = getHandle.invoke(player);
-                Field playerConnection = Reflect.getField(EntityPlayer, true, "playerConnection");
-
-                sendPacket.invoke(playerConnection.get(NMSPlayer), ppopi);
-            }
+            return (T) Reflect.instantiateObject(target, action, player);
         }
         catch (Exception e) {
 
             e.printStackTrace();
         }
+        return null;
     }
 
     public enum PlayerInfoAction {

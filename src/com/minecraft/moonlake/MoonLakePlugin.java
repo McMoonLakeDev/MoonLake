@@ -17,7 +17,7 @@ import java.util.Set;
 /**
  * <h1>Minecraft <a href="http://www.mcyszh.com">MoonLake</a> Core API Plugin</h1>
  * <h6>By Month_Light Q: 1327516533</h6>
- * @version 1.6
+ * @version 1.6.1
  * @author Month_Light
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
