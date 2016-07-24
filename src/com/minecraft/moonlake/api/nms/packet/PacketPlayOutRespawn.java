@@ -18,6 +18,14 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
     private GameMode worldGameMode;
     private WorldType worldType;
 
+    public PacketPlayOutRespawn(WorldDimension worldDimension, WorldDifficulty worldDifficulty, GameMode worldGameMode, WorldType worldType) {
+
+        this.worldDimensionId = worldDimension.getId();
+        this.worldDifficulty = worldDifficulty;
+        this.worldGameMode = worldGameMode;
+        this.worldType = worldType;
+    }
+
     public PacketPlayOutRespawn(int worldDimensionId, WorldDifficulty worldDifficulty, GameMode worldGameMode, WorldType worldType) {
 
         this.worldDimensionId = worldDimensionId;
@@ -34,6 +42,7 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
             Class<?> Entity = Reflect.PackageType.MINECRAFT_SERVER.getClass("Entity");
             Class<?> WorldType = Reflect.PackageType.MINECRAFT_SERVER.getClass("WorldType");
             Class<?> WorldProvider = Reflect.PackageType.MINECRAFT_SERVER.getClass("WorldProvider");
+            Class<?> EnumDifficulty = Reflect.PackageType.MINECRAFT_SERVER.getClass("EnumDifficulty");
             Class<?> DimensionManager = Reflect.PackageType.MINECRAFT_SERVER.getClass("DimensionManager");
             Class<?> CraftEntity = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftEntity");
 
@@ -47,9 +56,8 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
 
             int dimensionId = (int)Reflect.getMethod(DimensionManager, "getDimensionID").invoke(NMSDimensionManager);
 
-            Method valueOf = Reflect.getMethod(Enum.class, "valueOf", String.class);
-            Object name = Reflect.getMethod(Enum.class, "name").invoke(instanceWorldDifficulty);
-            WorldDifficulty worldDifficulty = WorldDifficulty.valueOf((String)valueOf.invoke(instanceWorldDifficulty, name));
+            Object name = Reflect.getMethod(EnumDifficulty, "name").invoke(instanceWorldDifficulty);
+            WorldDifficulty worldDifficulty = PacketPlayOutRespawn.WorldDifficulty.valueOf((String) name);
 
             Object instanceWorldType = Reflect.getMethod(World, "L").invoke(NMSWorld);
             String name1 = ((String)Reflect.getMethod(WorldType, "name").invoke(instanceWorldType)).toUpperCase();
@@ -125,8 +133,8 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
             Method getById = Reflect.getMethod(EnumDifficulty, "getById", Integer.class);
             Object instanceWorldDifficulty = getById.invoke(null, worldDifficulty.getId());
 
-            String worldTypeFieldName = worldType.getName().toUpperCase();
-            Object instanceWorldType = Reflect.getField(WorldType, true, worldTypeFieldName);
+            String worldTypeFieldName = worldType.name().toUpperCase();
+            Object instanceWorldType = Reflect.getField(WorldType, true, worldTypeFieldName).get(null);
 
             Method getById1 = Reflect.getMethod(EnumGamemode, "getById", Integer.class);
             Object instanceWorldGameMode = getById1.invoke(null, worldGameMode.getValue());
@@ -154,6 +162,37 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
         catch (Exception e) {
 
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 世界维度类型
+     */
+    public enum WorldDimension {
+
+        /**
+         * 世界维度类型: 主世界
+         */
+        OVERWORLD(0),
+        /**
+         * 世界维度类型: 地狱
+         */
+        NETHER(-1),
+        /**
+         * 世界维度类型: 末地
+         */
+        THE_END(1),;
+
+        private final int id;
+
+        WorldDimension(int id) {
+
+            this.id = id;
+        }
+
+        public int getId() {
+
+            return id;
         }
     }
 
@@ -197,24 +236,12 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
      */
     public enum WorldType {
 
-        NORMAL("default"),
-        FLAT("flat"),
-        VERSION_1_1("default_1_1"),
-        LARGE_BIOMES("largeBiomes"),
-        AMPLIFIED("amplified"),
-        DEBUG_ALL_BLOCK_STATES("debug_all_block_states"),
-        CUSTOMIZED("customized"),;
-
-        private final String name;
-
-        WorldType(String name) {
-
-            this.name = name;
-        }
-
-        public String getName() {
-
-            return name;
-        }
+        NORMAL,
+        FLAT,
+        LARGE_BIOMES,
+        AMPLIFIED,
+        DEBUG_ALL_BLOCK_STATES,
+        CUSTOMIZED,
+        NORMAL_1_1,;
     }
 }

@@ -16,6 +16,13 @@ public abstract class PacketAbstract<T extends Packet> implements Packet<T> {
     /**
      * 将此数据包发送给指定玩家
      *
+     * @param names 玩家名
+     */
+    public abstract void send(String... names);
+
+    /**
+     * 将此数据包发送给指定玩家
+     *
      * @param players 玩家
      */
     @Override

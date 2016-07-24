@@ -60,22 +60,23 @@ public class PacketPlayOutPlayerInfo extends PacketAbstract<PacketPlayOutPlayerI
             Class<?> PacketPlayOutPlayerInfo = Reflect.PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPlayerInfo");
             Class<?> EnumPlayerInfoAction = Reflect.PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
 
-            Method valueOf = Reflect.getMethod(EnumPlayerInfoAction, "valueOf", String.class);
-            Object EnumPlayerInfoAction0 = valueOf.invoke(null, action.name());
-
             Class<?> Packet = Reflect.PackageType.MINECRAFT_SERVER.getClass("Packet");
             Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
             Class<?> EntityPlayer = Reflect.PackageType.MINECRAFT_SERVER.getClass("EntityPlayer");
             Class<?> PlayerConnection = Reflect.PackageType.MINECRAFT_SERVER.getClass("PlayerConnection");
 
-            List<Object> EntityPlayerList = new ArrayList<>();
+            Method valueOf = Reflect.getMethod(EnumPlayerInfoAction, "valueOf", String.class);
+            Object EnumPlayerInfoAction0 = valueOf.invoke(null, action.name());
+
+            List<net.minecraft.server.v1_10_R1.EntityPlayer> EntityPlayerList = new ArrayList<>();
             Method getHandle = Reflect.getMethod(CraftPlayer, "getHandle");
 
             for(Player player : playerList) {
 
-                EntityPlayerList.add(getHandle.invoke(player));
+                EntityPlayerList.add((net.minecraft.server.v1_10_R1.EntityPlayer) getHandle.invoke(player));
             }
-            Object ppopi = Reflect.instantiateObject(PacketPlayOutPlayerInfo, EnumPlayerInfoAction0, EntityPlayerList.iterator());
+            net.minecraft.server.v1_10_R1.EntityPlayer[] EntityPlayerArray = EntityPlayerList.toArray(new net.minecraft.server.v1_10_R1.EntityPlayer[EntityPlayerList.size()]);
+            Object ppopi = Reflect.instantiateObject(PacketPlayOutPlayerInfo, EnumPlayerInfoAction0, EntityPlayerArray);
 
             Player[] players = PacketManager.getPlayersfromNames(names);
             Method sendPacket = Reflect.getMethod(PlayerConnection, "sendPacket", Packet);

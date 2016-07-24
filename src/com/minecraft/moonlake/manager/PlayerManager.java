@@ -7,7 +7,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -57,6 +59,27 @@ public class PlayerManager extends MoonLakeManager {
         Collection<? extends Player> collection = Bukkit.getServer().getOnlinePlayers();
 
         return collection.toArray(new Player[collection.size()]);
+    }
+
+    /**
+     * 获取在线玩家的数组对象除了目标玩家
+     *
+     * @param target 目标玩家
+     * @return 在线玩家数组除了目标玩家
+     */
+    public static Player[] getOnlinesExceptTarget(Player target) {
+
+        Player[] onlines = getOnlines();
+        List<Player> playerList = new ArrayList<>();
+
+        for(Player player : onlines) {
+
+            if(!player.equals(target)) {
+
+                playerList.add(player);
+            }
+        }
+        return playerList.toArray(new Player[playerList.size()]);
     }
 
     /**

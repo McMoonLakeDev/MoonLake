@@ -17,9 +17,9 @@ public class IoManager extends MoonLakeManager {
      * @param out 输出文件对象
      * @param is 输入流
      */
-    public static void outInputSteam(File out, InputStream is) {
+    public static void outInputStream(File out, InputStream is) {
 
-        outInputSteam(out, is, 1024);
+        outInputStream(out, is, 1024);
     }
 
     /**
@@ -29,7 +29,7 @@ public class IoManager extends MoonLakeManager {
      * @param is 输入流
      * @param buf 缓冲区大小
      */
-    public static void outInputSteam(File out, InputStream is, int buf) {
+    public static void outInputStream(File out, InputStream is, int buf) {
 
         FileOutputStream fs = null;
 

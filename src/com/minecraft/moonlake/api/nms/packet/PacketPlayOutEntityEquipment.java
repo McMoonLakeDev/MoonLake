@@ -6,6 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -71,12 +72,15 @@ public class PacketPlayOutEntityEquipment extends PacketAbstract<PacketPlayOutEn
         try {
 
             Class<?> PacketPlayOutEntityEquipment = Reflect.PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutEntityEquipment");
+            Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
             Class<?> EnumItemSlot = Reflect.PackageType.MINECRAFT_SERVER.getClass("EnumItemSlot");
             Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
 
-            Object instanceSlot = Reflect.getMethod(EnumItemSlot, "a", String.class).invoke(null, slot.name().toLowerCase());
+            Object instanceSlot = Reflect.getMethod(EnumItemSlot, "valueOf", String.class).invoke(null, slot.name());
             Object NMSItemStack = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class).invoke(null, itemStack);
-            Object ppoee = Reflect.instantiateObject(PacketPlayOutEntityEquipment, entityId, instanceSlot, NMSItemStack);
+
+            Constructor<?> Constructor = Reflect.getConstructor(PacketPlayOutEntityEquipment, Integer.class, EnumItemSlot, ItemStack);
+            Object ppoee = Constructor.newInstance(entityId, instanceSlot, NMSItemStack);
 
             Class<?> Packet = Reflect.PackageType.MINECRAFT_SERVER.getClass("Packet");
             Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");

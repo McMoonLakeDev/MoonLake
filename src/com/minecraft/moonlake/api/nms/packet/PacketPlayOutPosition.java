@@ -1,6 +1,7 @@
 package com.minecraft.moonlake.api.nms.packet;
 
 import com.minecraft.moonlake.reflect.Reflect;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
@@ -20,6 +21,16 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
     private float pitch;
     private Set<PlayerTeleportFlag> flags;
     private int g;
+
+    public PacketPlayOutPosition(Location location) {
+
+        this(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch(), null, 0);
+    }
+
+    public PacketPlayOutPosition(Location location, Set<PlayerTeleportFlag> flags, int g) {
+
+        this(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch(), flags, g);
+    }
 
     public PacketPlayOutPosition(double x, double y, double z) {
 
