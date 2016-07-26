@@ -17,7 +17,7 @@ import java.util.Set;
 /**
  * <h1>Minecraft <a href="http://www.mcyszh.com">MoonLake</a> Core API Plugin</h1>
  * <h6>By Month_Light Q: 1327516533</h6>
- * @version 1.6.1
+ * @version 1.6.5
  * @author Month_Light
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
@@ -48,6 +48,12 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         itemlib = new ItemUtil();
         lorelib = new LoreUtil();
         playerlib = new PlayerUtil();
+    }
+
+    @Override
+    public void onEnable() {
+
+        this.log("月色之湖核心 API 插件 v" + getPluginVersion() + " 成功加载.");
     }
 
     /**

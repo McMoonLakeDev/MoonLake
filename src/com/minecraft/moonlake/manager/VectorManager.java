@@ -35,7 +35,7 @@ public class VectorManager extends MoonLakeManager {
      * @param data 字符串数据
      * @return Vector 对象 序列化失败则返回 null
      */
-    public static Vector fromXYZ(String data) {
+    public static Vector getBVfromXYZ(String data) {
 
         if(!data.contains(",")) return null;
         Vector vector = null;

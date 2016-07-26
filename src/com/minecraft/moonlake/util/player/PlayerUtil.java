@@ -1,9 +1,11 @@
 package com.minecraft.moonlake.util.player;
 
+import com.minecraft.moonlake.MoonLakePlugin;
 import com.minecraft.moonlake.api.nms.packet.PacketPlayOutChat;
 import com.minecraft.moonlake.api.nms.packet.PacketPlayOutPlayerListHeaderFooter;
 import com.minecraft.moonlake.api.nms.packet.PacketPlayOutTitle;
 import com.minecraft.moonlake.api.playerlib.Playerlib;
+import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.player.PlayerNotOnlineException;
 import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.util.Util;
@@ -18,7 +20,7 @@ import java.util.UUID;
 
 /**
  * Created by MoonLake on 2016/4/28.
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public class PlayerUtil implements Playerlib {
@@ -233,6 +235,7 @@ public class PlayerUtil implements Playerlib {
      * @param player 玩家名
      * @param type   物品类型
      * @param tick   冷却的时间
+     * @throws com.minecraft.moonlake.exception.IllegalBukkitVersionException 如果您的服务器 Bukkit 版本低于 1.9 则抛出异常
      */
     @Override
     public void sendItemCooldownPacket(String player, Material type, int tick) {
@@ -242,6 +245,25 @@ public class PlayerUtil implements Playerlib {
 
         try {
 
+            String version = MoonLakePlugin.getInstances().getBukkitVersion();
+            String name = "";
+
+            if(version.equals("v1_9_R1")) {
+
+                name = "da";
+            }
+            else if(version.equals("v1_9_R2")) {
+
+                name = "db";
+            }
+            else if(version.equals("v1_10_R1")) {
+
+                name = "df";
+            }
+            else {
+
+                throw new IllegalBukkitVersionException();
+            }
             Class<?> Item = Reflect.PackageType.MINECRAFT_SERVER.getClass("Item");
             Class<?> EntityHuman = Reflect.PackageType.MINECRAFT_SERVER.getClass("EntityHuman");
             Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
@@ -250,7 +272,7 @@ public class PlayerUtil implements Playerlib {
             Class<?> CraftMagicNumbers = Reflect.PackageType.CRAFTBUKKIT_UTIL.getClass("CraftMagicNumbers");
 
             Object NMSPlayer = Reflect.getMethod(CraftPlayer, "getHandle").invoke(instance);
-            Object ItemCooldownInstance = Reflect.getMethod(EntityHuman, "df").invoke(NMSPlayer);
+            Object ItemCooldownInstance = Reflect.getMethod(EntityHuman, name).invoke(NMSPlayer);
 
             Method a = Reflect.getMethod(ItemCooldown, "a", Item, Integer.class);
             a.invoke(ItemCooldownInstance, Reflect.getMethod(CraftMagicNumbers, "getItem", Material.class).invoke(null, type), tick);
@@ -266,6 +288,7 @@ public class PlayerUtil implements Playerlib {
      *
      * @param player 玩家名
      * @param type   物品类型
+     * @throws com.minecraft.moonlake.exception.IllegalBukkitVersionException 如果您的服务器 Bukkit 版本低于 1.9 则抛出异常
      * @return true 还有冷却时间 else 无冷却时间
      */
     @Override
@@ -276,6 +299,25 @@ public class PlayerUtil implements Playerlib {
 
         try {
 
+            String version = MoonLakePlugin.getInstances().getBukkitVersion();
+            String name = "";
+
+            if(version.equals("v1_9_R1")) {
+
+                name = "da";
+            }
+            else if(version.equals("v1_9_R2")) {
+
+                name = "db";
+            }
+            else if(version.equals("v1_10_R1")) {
+
+                name = "df";
+            }
+            else {
+
+                throw new IllegalBukkitVersionException();
+            }
             Class<?> Item = Reflect.PackageType.MINECRAFT_SERVER.getClass("Item");
             Class<?> EntityHuman = Reflect.PackageType.MINECRAFT_SERVER.getClass("EntityHuman");
             Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
@@ -284,7 +326,7 @@ public class PlayerUtil implements Playerlib {
             Class<?> CraftMagicNumbers = Reflect.PackageType.CRAFTBUKKIT_UTIL.getClass("CraftMagicNumbers");
 
             Object NMSPlayer = Reflect.getMethod(CraftPlayer, "getHandle").invoke(instance);
-            Object ItemCooldownInstance = Reflect.getMethod(EntityHuman, "df").invoke(NMSPlayer);
+            Object ItemCooldownInstance = Reflect.getMethod(EntityHuman, name).invoke(NMSPlayer);
 
             Method a = Reflect.getMethod(ItemCooldown, "a", Item);
             return (boolean) a.invoke(ItemCooldownInstance, Reflect.getMethod(CraftMagicNumbers, "getItem", Material.class).invoke(null, type));

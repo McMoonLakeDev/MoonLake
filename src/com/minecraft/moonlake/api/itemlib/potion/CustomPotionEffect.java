@@ -136,38 +136,4 @@ public class CustomPotionEffect {
     public boolean isShowParticles() {
         return showParticles;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-
-        if(obj == null) {
-            return false;
-        }
-        if(!(obj instanceof CustomPotionEffect)) {
-            return false;
-        }
-        CustomPotionEffect cpe = (CustomPotionEffect)obj;
-        return cpe.hashCode() == this.hashCode();
-    }
-
-    @Override
-    public String toString() {
-
-        StringBuilder toString = new StringBuilder("CustomPotionEffect{").append(id + ",").append(amplifier + ",").append(duration + ",").append(ambient + ",").append(showParticles);
-        return toString.append("}").toString();
-    }
-
-    @Override
-    public CustomPotionEffect clone() {
-
-        CustomPotionEffect cpe = new CustomPotionEffect(id, amplifier, duration, ambient, showParticles);
-        return cpe;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Integer.hashCode(getId());
-        result = 29 * result + Integer.hashCode(getAmplifier()) + Integer.hashCode(getDuration());
-        return result;
-    }
 }

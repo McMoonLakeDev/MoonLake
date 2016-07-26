@@ -340,7 +340,7 @@ public class EntityManager extends MoonLakeManager {
      */
     public static void setMovementSpeed(Entity entity, double value) {
 
-        set(entity, AttributeType.MOVEMENT_SPEED, value);
+        setAttribute(entity, AttributeType.MOVEMENT_SPEED, value);
     }
 
     /**
@@ -351,7 +351,7 @@ public class EntityManager extends MoonLakeManager {
      */
     public static double getMovementSpeed(Entity entity) {
 
-        return get(entity, AttributeType.MOVEMENT_SPEED);
+        return getAttribute(entity, AttributeType.MOVEMENT_SPEED);
     }
 
     /**
@@ -364,7 +364,7 @@ public class EntityManager extends MoonLakeManager {
      */
     public static void setKnockBackResistance(Entity entity, double value) {
 
-        set(entity, AttributeType.KNOCK_BACK_RESISTANCE, value);
+        setAttribute(entity, AttributeType.KNOCK_BACK_RESISTANCE, value);
     }
 
     /**
@@ -375,7 +375,7 @@ public class EntityManager extends MoonLakeManager {
      */
     public static double getKnockBackResistance(Entity entity) {
 
-        return get(entity, AttributeType.KNOCK_BACK_RESISTANCE);
+        return getAttribute(entity, AttributeType.KNOCK_BACK_RESISTANCE);
     }
 
     /**
@@ -388,7 +388,7 @@ public class EntityManager extends MoonLakeManager {
      */
     public static void setDamage(Entity entity, double value) {
 
-        set(entity, AttributeType.ATTACK_DAMAGE, value);
+        setAttribute(entity, AttributeType.ATTACK_DAMAGE, value);
     }
 
     /**
@@ -399,7 +399,7 @@ public class EntityManager extends MoonLakeManager {
      */
     public static double getDamage(Entity entity) {
 
-        return get(entity, AttributeType.ATTACK_DAMAGE);
+        return getAttribute(entity, AttributeType.ATTACK_DAMAGE);
     }
 
     /**
@@ -426,7 +426,7 @@ public class EntityManager extends MoonLakeManager {
      */
     public static void setMaxHealth(Entity entity, double value, boolean regain) {
 
-        set(entity, AttributeType.MAX_HEALTH, value);
+        setAttribute(entity, AttributeType.MAX_HEALTH, value);
 
         if(regain && entity instanceof LivingEntity) {
 
@@ -444,7 +444,7 @@ public class EntityManager extends MoonLakeManager {
      */
     public static void setFollowRange(Entity entity, double value) {
 
-        set(entity, AttributeType.FOLLOW_RANGE, value);
+        setAttribute(entity, AttributeType.FOLLOW_RANGE, value);
     }
 
     /**
@@ -455,7 +455,7 @@ public class EntityManager extends MoonLakeManager {
      */
     public static double getFollowRange(Entity entity) {
 
-        return get(entity, AttributeType.FOLLOW_RANGE);
+        return getAttribute(entity, AttributeType.FOLLOW_RANGE);
     }
 
     /**
@@ -465,7 +465,7 @@ public class EntityManager extends MoonLakeManager {
      * @param type 属性类型
      * @param value 值
      */
-    public static void set(Entity entity, AttributeType type, double value) {
+    public static void setAttribute(Entity entity, AttributeType type, double value) {
 
         try {
 
@@ -497,7 +497,7 @@ public class EntityManager extends MoonLakeManager {
      * @param type 属性类型
      * @return 属性类型的值 异常返回 -1
      */
-    public static double get(Entity entity, AttributeType type) {
+    public static double getAttribute(Entity entity, AttributeType type) {
 
         try {
 

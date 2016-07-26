@@ -1142,6 +1142,7 @@ public interface MoonLakePlayer extends NMSPlayer, NetPlayer, SkinmePlayer, Inve
      * @param player 玩家名
      * @param type 物品类型
      * @param tick 冷却的时间
+     * @throws com.minecraft.moonlake.exception.IllegalBukkitVersionException 如果您的服务器 Bukkit 版本低于 1.9 则抛出异常
      */
     void sendItemCooldownPacket(Material type, int tick);
 
@@ -1150,6 +1151,7 @@ public interface MoonLakePlayer extends NMSPlayer, NetPlayer, SkinmePlayer, Inve
      *
      * @param player 玩家名
      * @param type 物品类型
+     * @throws com.minecraft.moonlake.exception.IllegalBukkitVersionException 如果您的服务器 Bukkit 版本低于 1.9 则抛出异常
      * @return true 还有冷却时间 else 无冷却时间
      */
     boolean hasItemCooldown(Material type);
