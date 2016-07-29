@@ -146,6 +146,7 @@ public interface Playerlib {
      * @param player 玩家名
      * @param type 物品类型
      * @param tick 冷却的时间
+     * @throws com.minecraft.moonlake.exception.IllegalBukkitVersionException 如果您的服务器 Bukkit 版本低于 1.9 则抛出异常
      */
     void sendItemCooldownPacket(String player, Material type, int tick);
 
@@ -155,6 +156,7 @@ public interface Playerlib {
      * @param player 玩家名
      * @param type 物品类型
      * @return true 还有冷却时间 else 无冷却时间
+     * @throws com.minecraft.moonlake.exception.IllegalBukkitVersionException 如果您的服务器 Bukkit 版本低于 1.9 则抛出异常
      */
     boolean hasItemCooldown(String player, Material type);
 

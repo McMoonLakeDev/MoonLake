@@ -120,7 +120,7 @@ public class MySQLQueryUpdate extends MySQLQueryAbstract {
      * 执行 MySQL 的更新表的指定字段的除以值
      *
      * @param field 字段
-     * @param value 乘以值
+     * @param value 除以值
      * @return 实例
      */
     public MySQLQueryUpdate divide(String field, Number value) throws IllegalMySQLException {
