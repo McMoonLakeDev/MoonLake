@@ -72,17 +72,12 @@ public class MySQLDatabaseUtil implements MySQLDatabase, MoonLakeCore {
         try {
 
             DatabaseMetaData dbmd = connection.getConnection().getMetaData();
-            ResultSet resultSet = dbmd.getTables(connection.getDB(), null, null, new String[] { "TABLE" });
+            ResultSet resultSet = dbmd.getTables(null, null, null, new String[] { "TABLE" });
             Set<MySQLTable> tableSet = new HashSet<>();
 
             while(resultSet.next()) {
 
-                String tableSchem = resultSet.getString("TABLE_SCHEM");
-
-                if(connection.getUsername().equals(tableSchem)) {
-
-                    tableSet.add(new MySQLTableUtil(connection, this, resultSet.getString("TABLE_NAME")));
-                }
+                tableSet.add(new MySQLTableUtil(connection, this, resultSet.getString("TABLE_NAME")));
             }
             return tableSet;
         }

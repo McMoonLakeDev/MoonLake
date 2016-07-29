@@ -2,6 +2,7 @@ package com.minecraft.moonlake.api.mysql.query;
 
 import com.minecraft.moonlake.api.mysql.MySQLConnection;
 import com.minecraft.moonlake.api.mysql.MySQLTable;
+import com.minecraft.moonlake.exception.IllegalMySQLException;
 
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
@@ -43,6 +44,98 @@ public class MySQLQueryUpdate extends MySQLQueryAbstract {
         values.add(value);
 
         sql = (sql + " " + field + "=?");
+
+        comma = true;
+
+        return this;
+    }
+
+    /**
+     * 执行 MySQL 的更新表的指定字段的加上值
+     *
+     * @param field 字段
+     * @param value 加上值
+     * @return 实例
+     */
+    public MySQLQueryUpdate add(String field, Number value) {
+
+        if(comma) {
+
+            sql += ",";
+        }
+        values.add(value);
+
+        sql = (sql + " " + field + "=" + field + "+?");
+
+        comma = true;
+
+        return this;
+    }
+
+    /**
+     * 执行 MySQL 的更新表的指定字段的减少值
+     *
+     * @param field 字段
+     * @param value 减少值
+     * @return 实例
+     */
+    public MySQLQueryUpdate subtract(String field, Number value) {
+
+        if(comma) {
+
+            sql += ",";
+        }
+        values.add(value);
+
+        sql = (sql + " " + field + "=" + field + "-?");
+
+        comma = true;
+
+        return this;
+    }
+
+    /**
+     * 执行 MySQL 的更新表的指定字段的乘以值
+     *
+     * @param field 字段
+     * @param value 乘以值
+     * @return 实例
+     */
+    public MySQLQueryUpdate multiply(String field, Number value) {
+
+        if(comma) {
+
+            sql += ",";
+        }
+        values.add(value);
+
+        sql = (sql + " " + field + "=" + field + "*?");
+
+        comma = true;
+
+        return this;
+    }
+
+    /**
+     * 执行 MySQL 的更新表的指定字段的除以值
+     *
+     * @param field 字段
+     * @param value 乘以值
+     * @return 实例
+     */
+    public MySQLQueryUpdate divide(String field, Number value) throws IllegalMySQLException {
+
+        if(value.doubleValue() == 0d) {
+
+            throw new IllegalMySQLException("Can not be divided by zero.");
+        }
+        if(comma) {
+
+            sql += ",";
+        }
+        values.add(value);
+
+        sql = (sql + " " + field + "=" + field + "/?");
 
         comma = true;
 
