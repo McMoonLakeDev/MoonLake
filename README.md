@@ -6,6 +6,7 @@ By Month_Light
 做到的 NMS 功能，例如数据包封装、物品栈操作类、玩家操作类。
 ## 功能
 * 玩家 `Player` 操作
+* 数据库 `MySQL` 操作
 * 管理类 `Manager` 操作
 * 加密类 `Encrypt` 操作
 * 物品栈 `ItemStack` 操作
@@ -19,7 +20,6 @@ By Month_Light
 * 1. 更多数据包的封装
 * 2. 玩家的网络操作类封装
 * 3. 修改玩家的皮肤和披风的封装 :point_right:[GO](http://github.com/u2g/MoonLakeSkinme "MoonLake Skinme Plugin")
-* 4. 提供数据库 `MySQL` 的操作类封装
 
 ## 使用方法
 注意将您的插件内 `plugin.yml` 添加 `depend: [MoonLake]` 前置支持
@@ -48,6 +48,32 @@ public void onEnable() {
   }
   // 前置插件 MoonLake 加载成功
 }
+```
+数据库的简单 demo 测试
+```java
+// 获取 MySQL 连接对象: 地址、端口、数据库、用户名、用户密码, [编码] (默认 utf-8)
+MySQLConnection mysql = MySQLManager.getConnection("127.0.0.1", 3306, "mydb", "myuser", "mypwd");
+MySQLDatabase database = mysql.getDatabase();
+MySQLTable myTable = database.getTable("myTable");
+
+// 获取结果集
+MySQLResultSet resultSet = myTable.querySelect().where("name", "yourname").execute();
+
+// 判断是否拥有此数据
+if(!resultSet.next()) {
+  // 没有数据则插入新的数据
+  myTable.queryInsert().field("name").value("yourname").execute();
+}
+
+// 更新数据
+myTable.queryUpdate().set("name", "newname").where("name", "yourname").execute();
+// 删除数据
+myTable.queryDelete().where("name", "newname").execute();
+
+// 关闭结果集
+resultSet.close();
+// 关闭连接对象
+mysql.close();
 ```
 ## 其他插件
 * `MoonLakeKitPvP` 职业战争插件 :point_right:[GO](http://github.com/u2g/MoonLakeKitPvP "MoonLake KitPvP Plugin")
