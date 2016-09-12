@@ -1,5 +1,6 @@
 package com.minecraft.moonlake;
 
+import com.minecraft.moonlake.api.MLogger;
 import com.minecraft.moonlake.api.MoonLake;
 import com.minecraft.moonlake.api.itemlib.Itemlib;
 import com.minecraft.moonlake.api.lorelib.Lorelib;
@@ -7,7 +8,6 @@ import com.minecraft.moonlake.api.playerlib.Playerlib;
 import com.minecraft.moonlake.util.item.ItemUtil;
 import com.minecraft.moonlake.util.lore.LoreUtil;
 import com.minecraft.moonlake.util.player.PlayerUtil;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -17,33 +17,27 @@ import java.util.Set;
 /**
  * <h1>Minecraft <a href="http://www.mcyszh.com">MoonLake</a> Core API Plugin</h1>
  * <h6>By Month_Light Q: 1327516533</h6>
- * @version 1.6.6
+ * @version 1.6.8
  * @author Month_Light
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
 
+    private final MLogger mLogger;
     private final Itemlib itemlib;
     private final Lorelib lorelib;
     private final Playerlib playerlib;
     private final PluginDescriptionFile pdf;
     private final String prefix = "[MoonLake]";
-    private final ConsoleCommandSender console;
 
     private static MoonLake MAIN;
 
-    public static void main(String[] args) {
-
-    }
-
     static { }
-
 
     public MoonLakePlugin() {
 
         MAIN = this;
 
-        console = this.getServer().getConsoleSender();
-
+        mLogger = new MLogger.Wrapped("MoonLake");
         pdf = this.getDescription();
         itemlib = new ItemUtil();
         lorelib = new LoreUtil();
@@ -82,7 +76,19 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
      */
     @Override
     public void log(String log) {
-        console.sendMessage(prefix + " " + log);
+
+        mLogger.log(log);
+    }
+
+    /**
+     * 获取控制台日志对象
+     *
+     * @return 日志对象
+     */
+    @Override
+    public MLogger getMLogger() {
+
+        return mLogger;
     }
 
     /**
@@ -92,6 +98,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
      */
     @Override
     public Itemlib getItemlib() {
+
         return itemlib;
     }
 
@@ -102,6 +109,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
      */
     @Override
     public Lorelib getLorelib() {
+
         return lorelib;
     }
 
@@ -112,6 +120,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
      */
     @Override
     public Playerlib getPlayerlib() {
+
         return playerlib;
     }
 
@@ -122,6 +131,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
      */
     @Override
     public String getPluginPrefix() {
+
         return pdf.getPrefix();
     }
 
@@ -132,6 +142,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
      */
     @Override
     public String getPluginName() {
+
         return pdf.getName();
     }
 
@@ -142,6 +153,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
      */
     @Override
     public String getPluginMain() {
+
         return pdf.getMain();
     }
 
@@ -152,6 +164,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
      */
     @Override
     public String getPluginVersion() {
+
         return pdf.getVersion();
     }
 
@@ -162,6 +175,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
      */
     @Override
     public String getPluginWebsite() {
+
         return pdf.getWebsite();
     }
 
@@ -172,6 +186,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
      */
     @Override
     public String getPluginDescription() {
+
         return pdf.getDescription();
     }
 
@@ -182,7 +197,8 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
      */
     @Override
     public Set<String> getPluginAuthers() {
-        return new HashSet<String>(pdf.getAuthors());
+
+        return new HashSet<>(pdf.getAuthors());
     }
 
     /**
@@ -192,7 +208,8 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
      */
     @Override
     public Set<String> getPluginDepends() {
-        return new HashSet<String>(pdf.getDepend());
+
+        return new HashSet<>(pdf.getDepend());
     }
 
     /**
@@ -202,7 +219,8 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
      */
     @Override
     public Set<String> getPluginSoftDepends() {
-        return new HashSet<String>(pdf.getSoftDepend());
+
+        return new HashSet<>(pdf.getSoftDepend());
     }
 
     /**

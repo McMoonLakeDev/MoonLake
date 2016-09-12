@@ -44,12 +44,28 @@ public class IoManager extends MoonLakeManager {
 
                 fs.write(buff, 0, len);
             }
-            fs.close();
-            is.close();
         }
         catch (Exception e) {
 
             getMain().log("写出输入流文件时异常: " + e.getMessage());
+        }
+        finally {
+        	
+        	try {
+        		
+        		if(fs != null) {
+        			
+        			fs.flush();
+        			fs.close();
+        		}
+        		if(is != null) {
+        			
+        			is.close();
+        		}
+        	}
+        	catch(Exception e) {
+        		
+        	}
         }
     }
 

@@ -336,7 +336,7 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @param value 值
      *
-     * @see com.minecraft.moonlake.mmorpg.manager.EntityManager.Attribute.AttributeType#MOVEMENT_SPEED
+     * @see com.minecraft.moonlake.ConfigPath.manager.EntityManager.Attribute.AttributeType#MOVEMENT_SPEED
      */
     public static void setMovementSpeed(Entity entity, double value) {
 
@@ -360,7 +360,7 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @param value 值
      *
-     * @see com.minecraft.moonlake.mmorpg.manager.EntityManager.Attribute.AttributeType#KNOCK_BACK_RESISTANCE
+     * @see com.minecraft.moonlake.ConfigPath.manager.EntityManager.Attribute.AttributeType#KNOCK_BACK_RESISTANCE
      */
     public static void setKnockBackResistance(Entity entity, double value) {
 
@@ -384,7 +384,7 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @param value 值
      *
-     * @see com.minecraft.moonlake.mmorpg.manager.EntityManager.Attribute.AttributeType#ATTACK_DAMAGE
+     * @see com.minecraft.moonlake.ConfigPath.manager.EntityManager.Attribute.AttributeType#ATTACK_DAMAGE
      */
     public static void setDamage(Entity entity, double value) {
 
@@ -408,7 +408,7 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @param value 值
      *
-     * @see com.minecraft.moonlake.mmorpg.manager.EntityManager.Attribute.AttributeType#MAX_HEALTH
+     * @see com.minecraft.moonlake.ConfigPath.manager.EntityManager.Attribute.AttributeType#MAX_HEALTH
      */
     public static void setMaxHealth(Entity entity, double value) {
 
@@ -422,7 +422,7 @@ public class EntityManager extends MoonLakeManager {
      * @param value 值
      * @param regain 是否恢复
      *
-     * @see com.minecraft.moonlake.mmorpg.manager.EntityManager.Attribute.AttributeType#MAX_HEALTH
+     * @see com.minecraft.moonlake.ConfigPath.manager.EntityManager.Attribute.AttributeType#MAX_HEALTH
      */
     public static void setMaxHealth(Entity entity, double value, boolean regain) {
 
@@ -440,7 +440,7 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @param value 值
      *
-     * @see com.minecraft.moonlake.mmorpg.manager.EntityManager.Attribute.AttributeType#FOLLOW_RANGE
+     * @see com.minecraft.moonlake.ConfigPath.manager.EntityManager.Attribute.AttributeType#FOLLOW_RANGE
      */
     public static void setFollowRange(Entity entity, double value) {
 

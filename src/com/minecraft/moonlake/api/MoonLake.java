@@ -14,9 +14,18 @@ public interface MoonLake extends MoonLakeInfo, BukkitInfo {
     /**
      * 给控制台输出日志
      *
+     * @see MLogger#log(String)
      * @param log 日志
      */
+    @Deprecated
     void log(String log);
+
+    /**
+     * 获取控制台日志对象
+     *
+     * @return 日志对象
+     */
+    MLogger getMLogger();
 
     /**
      * 获取物品支持库实例对象
