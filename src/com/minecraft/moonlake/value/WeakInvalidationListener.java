@@ -1,7 +1,7 @@
 package com.minecraft.moonlake.value;
 
-import com.minecraft.moonlake.api.Observable;
-import com.minecraft.moonlake.api.WeakListener;
+import com.minecraft.moonlake.binding.Observable;
+import com.minecraft.moonlake.binding.WeakListener;
 
 import java.lang.ref.WeakReference;
 

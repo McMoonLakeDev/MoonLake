@@ -31,8 +31,6 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
 
     private static MoonLake MAIN;
 
-    static { }
-
     public MoonLakePlugin() {
 
         MAIN = this;

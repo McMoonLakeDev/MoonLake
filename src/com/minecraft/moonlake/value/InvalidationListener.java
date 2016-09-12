@@ -1,6 +1,6 @@
 package com.minecraft.moonlake.value;
 
-import com.minecraft.moonlake.api.Observable;
+import com.minecraft.moonlake.binding.Observable;
 
 /**
  * Created by MoonLake on 2016/9/11.

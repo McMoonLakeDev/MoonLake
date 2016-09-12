@@ -1,4 +1,4 @@
-package com.minecraft.moonlake.api;
+package com.minecraft.moonlake.binding;
 
 /**
  * Created by MoonLake on 2016/9/11.

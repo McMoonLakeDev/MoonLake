@@ -1,6 +1,5 @@
 package com.minecraft.moonlake.binding;
 
-import com.minecraft.moonlake.api.Observable;
 import com.minecraft.moonlake.value.InvalidationListener;
 
 import java.lang.ref.WeakReference;

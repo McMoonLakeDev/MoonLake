@@ -1,6 +1,5 @@
 package com.minecraft.moonlake.binding;
 
-import com.minecraft.moonlake.api.Observable;
 import com.minecraft.moonlake.collections.ObservableList;
 import com.minecraft.moonlake.value.ObservableValue;
 

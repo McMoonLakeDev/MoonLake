@@ -1,7 +1,5 @@
 package com.minecraft.moonlake.binding;
 
-import com.minecraft.moonlake.api.WeakListener;
-
 /**
  * Created by MoonLake on 2016/9/11.
  */
