@@ -2,7 +2,7 @@ package com.minecraft.moonlake.manager;
 
 import com.minecraft.moonlake.data.Conversions;
 import com.minecraft.moonlake.data.NBTTagData;
-import com.minecraft.moonlake.data.util.NBTTagDataUtil;
+import com.minecraft.moonlake.data.NBTTagDataWrapped;
 import com.minecraft.moonlake.reflect.Reflect;
 
 import java.util.List;
@@ -32,27 +32,27 @@ public class NBTManager extends MoonLakeManager {
             // the nbt data is number
             if(data.matches("([0-9]+)b|([-+]?)([0-9]+)b")) {
                 // nbt byte
-                return new NBTTagDataUtil(Conversions.toByte(data.replace("b", "")));
+                return new NBTTagDataWrapped(Conversions.toByte(data.replace("b", "")));
             }
             else if(data.matches("([0-9]+)s|([-+]?)([0-9]+)s")) {
                 // nbt short
-                return new NBTTagDataUtil(Conversions.toShort(data.replace("s", "")));
+                return new NBTTagDataWrapped(Conversions.toShort(data.replace("s", "")));
             }
             else if(data.matches("([0-9]+)|([-+]?)([0-9]+)")) {
                 // nbt int
-                return new NBTTagDataUtil(Conversions.toInt(data.replace(" ", "")));
+                return new NBTTagDataWrapped(Conversions.toInt(data.replace(" ", "")));
             }
             else if(data.matches("([0-9]+)L|([-+]?)([0-9]+)L")) {
                 // nbt long
-                return new NBTTagDataUtil(Conversions.toLong(data.replace("L", "")));
+                return new NBTTagDataWrapped(Conversions.toLong(data.replace("L", "")));
             }
             else if(data.matches("([0-9]+)f|([-+]?)([0-9]+)f")) {
                 // nbt float
-                return new NBTTagDataUtil(Conversions.toFloat(data.replace("f", "")));
+                return new NBTTagDataWrapped(Conversions.toFloat(data.replace("f", "")));
             }
             else if(data.matches("([0-9]+)d|([-+]?)([0-9]+)d")) {
                 // nbt double
-                return new NBTTagDataUtil(Conversions.toDouble(data.replace("d", "")));
+                return new NBTTagDataWrapped(Conversions.toDouble(data.replace("d", "")));
             }
         }
         return null;
@@ -113,7 +113,7 @@ public class NBTManager extends MoonLakeManager {
         }
         catch (Exception e) {
 
-            getMain().log("获取 NBT 标签属性类时异常: " + e.getMessage());
+            getMain().getMLogger().warn("获取 NBT 标签属性类时异常: " + e.getMessage());
         }
         return value;
     }

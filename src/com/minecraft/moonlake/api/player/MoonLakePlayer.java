@@ -1,7 +1,6 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.nms.packet.Packet;
-import com.minecraft.moonlake.exception.player.PlayerNotOnlineException;
 import com.mojang.authlib.GameProfile;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.*;
@@ -30,7 +29,7 @@ import java.util.UUID;
  *
  * @see com.minecraft.moonlake.api.player.AbstractPlayer
  */
-public interface MoonLakePlayer extends NMSPlayer, NetPlayer, SkinmePlayer, InventoryHolder, Comparable<MoonLakePlayer> {
+public interface MoonLakePlayer extends NMSPlayer, InternetPlayer, SkinmePlayer, InventoryHolder, Comparable<MoonLakePlayer> {
 
     /**
      * 获取此玩家的 Bukkit 玩家对象

@@ -1,6 +1,6 @@
 package com.minecraft.moonlake.type.potion;
 
-import com.minecraft.moonlake.util.Util;
+import com.minecraft.moonlake._temp.util.Util;
 import org.bukkit.Material;
 
 /**
@@ -27,6 +27,7 @@ public enum PotionEnum {
     private Material material;
 
     PotionEnum(String type, Material material) {
+
         this.type = type;
         this.material = material;
     }
@@ -38,6 +39,7 @@ public enum PotionEnum {
      */
     @Deprecated
     public String getType() {
+
         return type;
     }
 
@@ -47,6 +49,7 @@ public enum PotionEnum {
      * @return 材料
      */
     public Material getMaterial() {
+
         return material;
     }
 
@@ -57,6 +60,7 @@ public enum PotionEnum {
      * @return PotionEnum 如果不存在类型则返回 null
      */
     public static PotionEnum fromType(String type) {
+
         Util.notEmpty(type, "待转换的药水类型是 null 值");
 
         switch (type.toLowerCase()) {

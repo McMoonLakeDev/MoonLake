@@ -1,13 +1,12 @@
 package com.minecraft.moonlake;
 
-import com.minecraft.moonlake.api.MLogger;
 import com.minecraft.moonlake.api.MoonLake;
-import com.minecraft.moonlake.api.itemlib.Itemlib;
-import com.minecraft.moonlake.api.lorelib.Lorelib;
-import com.minecraft.moonlake.api.playerlib.Playerlib;
-import com.minecraft.moonlake.util.item.ItemUtil;
-import com.minecraft.moonlake.util.lore.LoreUtil;
-import com.minecraft.moonlake.util.player.PlayerUtil;
+import com.minecraft.moonlake.logger.MLogger;
+import com.minecraft.moonlake.logger.MLoggerWrapped;
+import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
+import com.minecraft.moonlake.property.ReadOnlyStringProperty;
+import com.minecraft.moonlake.property.SimpleIntegerProperty;
+import com.minecraft.moonlake.property.SimpleStringProperty;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,227 +22,109 @@ import java.util.Set;
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
 
     private final MLogger mLogger;
-    private final Itemlib itemlib;
-    private final Lorelib lorelib;
-    private final Playerlib playerlib;
-    private final PluginDescriptionFile pdf;
-    private final String prefix = "[MoonLake]";
+    private final PluginDescriptionFile description;
 
     private static MoonLake MAIN;
 
     public MoonLakePlugin() {
 
-        MAIN = this;
-
-        mLogger = new MLogger.Wrapped("MoonLake");
-        pdf = this.getDescription();
-        itemlib = new ItemUtil();
-        lorelib = new LoreUtil();
-        playerlib = new PlayerUtil();
+        this.description = getDescription();
+        this.mLogger = new MLoggerWrapped("MoonLake");
     }
 
     @Override
     public void onEnable() {
 
-        this.log("月色之湖核心 API 插件 v" + getPluginVersion() + " 成功加载.");
+        MAIN = this;
+
+        this.getMLogger().log("月色之湖核心 API 插件 v" + getPluginVersion().get() + " 成功加载.");
     }
 
-    /**
-     * 获取 MoonLake 实例对象
-     *
-     * @return MoonLake
-     */
     public MoonLake getInstance() {
+
         return MAIN;
     }
 
-    /**
-     * 获取 MoonLake 实例对象 (静态函数获取实例不建议使用)
-     *
-     * @return MoonLake
-     */
     @Deprecated
     public static MoonLake getInstances() {
+
         return MAIN;
     }
 
-    /**
-     * 给控制台输出日志
-     *
-     * @param log 日志
-     */
-    @Override
-    public void log(String log) {
-
-        mLogger.log(log);
-    }
-
-    /**
-     * 获取控制台日志对象
-     *
-     * @return 日志对象
-     */
     @Override
     public MLogger getMLogger() {
 
         return mLogger;
     }
 
-    /**
-     * 获取物品支持库实例对象
-     *
-     * @return Itemlib
-     */
     @Override
-    public Itemlib getItemlib() {
+    public ReadOnlyStringProperty getPluginPrefix() {
 
-        return itemlib;
+        return new SimpleStringProperty(description.getPrefix());
     }
 
-    /**
-     * 获取标签支持库实例对象
-     *
-     * @return Lorelib
-     */
     @Override
-    public Lorelib getLorelib() {
+    public ReadOnlyStringProperty getPluginName() {
 
-        return lorelib;
+        return new SimpleStringProperty(description.getName());
     }
 
-    /**
-     * 获取玩家支持库实例对象
-     *
-     * @return Playerlib
-     */
     @Override
-    public Playerlib getPlayerlib() {
+    public ReadOnlyStringProperty getPluginMain() {
 
-        return playerlib;
+        return new SimpleStringProperty(description.getMain());
     }
 
-    /**
-     * 获取插件的称号
-     *
-     * @return Prefix
-     */
     @Override
-    public String getPluginPrefix() {
+    public ReadOnlyStringProperty getPluginVersion() {
 
-        return pdf.getPrefix();
+        return new SimpleStringProperty(description.getVersion());
     }
 
-    /**
-     * 获取插件的名字
-     *
-     * @return Name
-     */
     @Override
-    public String getPluginName() {
+    public ReadOnlyStringProperty getPluginWebsite() {
 
-        return pdf.getName();
+        return new SimpleStringProperty(description.getWebsite());
     }
 
-    /**
-     * 获取插件的主类
-     *
-     * @return MainClass
-     */
     @Override
-    public String getPluginMain() {
+    public ReadOnlyStringProperty getPluginDescription() {
 
-        return pdf.getMain();
+        return new SimpleStringProperty(description.getDescription());
     }
 
-    /**
-     * 获取插件的版本
-     *
-     * @return Version
-     */
-    @Override
-    public String getPluginVersion() {
-
-        return pdf.getVersion();
-    }
-
-    /**
-     * 获取插件的网站
-     *
-     * @return Website
-     */
-    @Override
-    public String getPluginWebsite() {
-
-        return pdf.getWebsite();
-    }
-
-    /**
-     * 获取插件的简介
-     *
-     * @return Description
-     */
-    @Override
-    public String getPluginDescription() {
-
-        return pdf.getDescription();
-    }
-
-    /**
-     * 获取插件的作者
-     *
-     * @return Auther
-     */
     @Override
     public Set<String> getPluginAuthers() {
 
-        return new HashSet<>(pdf.getAuthors());
+        return new HashSet<>(description.getAuthors());
     }
 
-    /**
-     * 获取插件的依赖
-     *
-     * @return Depend
-     */
     @Override
     public Set<String> getPluginDepends() {
 
-        return new HashSet<>(pdf.getDepend());
+        return new HashSet<>(description.getDepend());
     }
 
-    /**
-     * 获取插件的软依赖
-     *
-     * @return SoftDepend
-     */
     @Override
     public Set<String> getPluginSoftDepends() {
 
-        return new HashSet<>(pdf.getSoftDepend());
+        return new HashSet<>(description.getSoftDepend());
     }
 
-    /**
-     * 获取 Bukkit 服务器的版本
-     *
-     * @return 版本
-     */
     @Override
-    public String getBukkitVersion() {
+    public ReadOnlyStringProperty getBukkitVersion() {
 
         String packageName = getServer().getClass().getPackage().getName();
         String[] packageSplit = packageName.split("\\.");
-        return packageSplit[packageSplit.length - 1];
+        return new SimpleStringProperty(packageSplit[packageSplit.length - 1]);
     }
 
-    /**
-     * 获取 Bukkit 服务器的版本号
-     *
-     * @return 版本号
-     */
     @Override
-    public int getReleaseNumber() {
-        String version = getBukkitVersion();
+    public ReadOnlyIntegerProperty getReleaseNumber() {
+
+        String version = getBukkitVersion().get();
         String[] versionSplit = version.split("_");
         String releaseVersion = versionSplit[1];
-        return Integer.parseInt(releaseVersion);
+        return new SimpleIntegerProperty(Integer.parseInt(releaseVersion));
     }
 }

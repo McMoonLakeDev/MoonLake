@@ -7,11 +7,9 @@ package com.minecraft.moonlake.exception;
  */
 public class MoonLakeException extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
-
     public MoonLakeException() {
 
-        this("the moonlake plugin exception");
+        this("The moonlake plugin exception");
     }
 
     public MoonLakeException(String message) {

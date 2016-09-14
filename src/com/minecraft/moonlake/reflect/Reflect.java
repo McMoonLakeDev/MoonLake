@@ -1,6 +1,6 @@
 package com.minecraft.moonlake.reflect;
 
-import com.minecraft.moonlake.MoonLakePlugin;
+import org.bukkit.Bukkit;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -14,15 +14,6 @@ import java.util.Map;
  */
 public class Reflect {
 
-    private final static String SERVER_VERSION;
-    private final static Integer SERVER_VERSION_NUMBER;
-
-    static {
-
-        SERVER_VERSION = MoonLakePlugin.getInstances().getBukkitVersion();
-        SERVER_VERSION_NUMBER = MoonLakePlugin.getInstances().getReleaseNumber();
-    }
-
     /**
      * 获取 Bukkit 的服务端版本
      *
@@ -30,7 +21,9 @@ public class Reflect {
      */
     public static String getServerVersion() {
 
-        return SERVER_VERSION;
+        String packageName = Bukkit.getServer().getClass().getPackage().getName();
+        String[] packageSplit = packageName.split("\\.");
+        return packageSplit[packageSplit.length - 1];
     }
 
     /**
@@ -40,7 +33,10 @@ public class Reflect {
      */
     public static Integer getServerVersionNumber() {
 
-        return SERVER_VERSION_NUMBER;
+        String version = getServerVersion();
+        String[] versionSplit = version.split("_");
+        String releaseVersion = versionSplit[1];
+        return Integer.parseInt(releaseVersion);
     }
 
     /**

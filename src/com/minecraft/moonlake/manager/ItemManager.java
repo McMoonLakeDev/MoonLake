@@ -1,9 +1,8 @@
 package com.minecraft.moonlake.manager;
 
 import com.google.common.io.BaseEncoding;
-import com.minecraft.moonlake.api.itemlib.Itemlib;
 import com.minecraft.moonlake.data.NBTTagData;
-import com.minecraft.moonlake.data.util.NBTTagDataUtil;
+import com.minecraft.moonlake.data.NBTTagDataWrapped;
 import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -18,16 +17,6 @@ import java.lang.reflect.Method;
  * Created by MoonLake on 2016/7/17.
  */
 public class ItemManager extends MoonLakeManager {
-
-    /**
-     * 获取月色之湖物品支持库实例对象
-     *
-     * @return 物品支持库实例对象
-     */
-    public static Itemlib getLibrary() {
-
-        return getMain().getItemlib();
-    }
 
     /**
      * 设置物品栈 NBT 标签指定键的值
@@ -58,7 +47,7 @@ public class ItemManager extends MoonLakeManager {
         }
         catch (Exception e) {
 
-            getMain().log("设置物品栈的 NBT 标签属性时异常: " + e.getMessage());
+            getMain().getMLogger().warn("设置物品栈的 NBT 标签属性时异常: " + e.getMessage());
         }
         return item;
     }
@@ -103,7 +92,7 @@ public class ItemManager extends MoonLakeManager {
                         Method c_ = Reflect.getMethod(NBTTagString, "c_");
                         String data = (String)c_.invoke(baseObject);
 
-                        tagData = new NBTTagDataUtil(data);
+                        tagData = new NBTTagDataWrapped(data);
                     }
                     else {
 
@@ -113,7 +102,7 @@ public class ItemManager extends MoonLakeManager {
             }
             catch (Exception e) {
 
-                getMain().log("获取物品栈的 NBT 标签属性时异常: " + e.getMessage());
+                getMain().getMLogger().warn("获取物品栈的 NBT 标签属性时异常: " + e.getMessage());
             }
         }
         return tagData;
@@ -153,7 +142,7 @@ public class ItemManager extends MoonLakeManager {
             }
             catch (Exception e) {
 
-                getMain().log("获取物品栈的 NBT 标签属性时异常: " + e.getMessage());
+                getMain().getMLogger().warn("获取物品栈的 NBT 标签属性时异常: " + e.getMessage());
             }
         }
         return null;
@@ -183,7 +172,7 @@ public class ItemManager extends MoonLakeManager {
         }
         catch (Exception e) {
 
-            getMain().log("获取物品栈的 NBT 标签属性时异常: " + e.getMessage());
+            getMain().getMLogger().warn("获取物品栈的 NBT 标签属性时异常: " + e.getMessage());
         }
         return result;
     }
@@ -221,7 +210,7 @@ public class ItemManager extends MoonLakeManager {
         }
         catch (Exception e) {
 
-            getMain().log("获取物品栈的 NBT 标签属性时异常: " + e.getMessage());
+            getMain().getMLogger().warn("获取物品栈的 NBT 标签属性时异常: " + e.getMessage());
         }
         return "";
     }
@@ -373,7 +362,7 @@ public class ItemManager extends MoonLakeManager {
             }
             catch (Exception e) {
 
-                getMain().log("序列化物品栈时异常: " + e.getMessage());
+                getMain().getMLogger().warn("序列化物品栈时异常: " + e.getMessage());
             }
             finally {
 
@@ -385,7 +374,7 @@ public class ItemManager extends MoonLakeManager {
                     }
                     catch (Exception e) {
 
-                        getMain().log("序列化物品栈时关闭输出流时异常: " + e.getMessage());
+                        getMain().getMLogger().warn("序列化物品栈时关闭输出流时异常: " + e.getMessage());
                     }
                 }
             }
@@ -425,7 +414,7 @@ public class ItemManager extends MoonLakeManager {
             }
             catch (Exception e) {
 
-                getMain().log("反序列化字符串数据时异常: " + e.getMessage());
+                getMain().getMLogger().warn("反序列化字符串数据时异常: " + e.getMessage());
             }
             finally {
 
@@ -437,7 +426,7 @@ public class ItemManager extends MoonLakeManager {
                     }
                     catch (Exception e) {
 
-                        getMain().log("反序列化字符串数据时关闭输入流时异常: " + e.getMessage());
+                        getMain().getMLogger().warn("反序列化字符串数据时关闭输入流时异常: " + e.getMessage());
                     }
                 }
             }

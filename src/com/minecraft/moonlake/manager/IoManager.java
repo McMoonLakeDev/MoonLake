@@ -1,6 +1,6 @@
 package com.minecraft.moonlake.manager;
 
-import com.minecraft.moonlake.util.Util;
+import com.minecraft.moonlake._temp.util.Util;
 
 import java.io.*;
 import java.util.HashMap;
@@ -47,7 +47,7 @@ public class IoManager extends MoonLakeManager {
         }
         catch (Exception e) {
 
-            getMain().log("写出输入流文件时异常: " + e.getMessage());
+            getMain().getMLogger().warn("写出输入流文件时异常: " + e.getMessage());
         }
         finally {
         	
@@ -127,7 +127,7 @@ public class IoManager extends MoonLakeManager {
             }
             catch (Exception e) {
 
-                getMain().log("读取语言文件时异常: " + e.getMessage());
+                getMain().getMLogger().warn("读取语言文件时异常: " + e.getMessage());
             }
             finally {
 
@@ -144,7 +144,7 @@ public class IoManager extends MoonLakeManager {
                 }
                 catch (Exception e) {
 
-                    getMain().log("关闭语言文件流时异常: " + e.getMessage());
+                    getMain().getMLogger().warn("关闭语言文件流时异常: " + e.getMessage());
                 }
             }
         }

@@ -1,7 +1,7 @@
 package com.minecraft.moonlake.api.mysql;
 
 import com.minecraft.moonlake.manager.MoonLakeManager;
-import com.minecraft.moonlake.util.mysql.MySQLConnectionUtil;
+import com.minecraft.moonlake.mysql.MySQLConnectionUtil;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

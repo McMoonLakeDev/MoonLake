@@ -3,7 +3,7 @@ package com.minecraft.moonlake.api.mysql.query;
 import com.minecraft.moonlake.api.mysql.MySQLConnection;
 import com.minecraft.moonlake.api.mysql.MySQLTable;
 import com.minecraft.moonlake.api.mysql.resultset.MySQLResultSet;
-import com.minecraft.moonlake.util.mysql.MySQLResultSetUtil;
+import com.minecraft.moonlake.mysql.MySQLResultSetUtil;
 
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;

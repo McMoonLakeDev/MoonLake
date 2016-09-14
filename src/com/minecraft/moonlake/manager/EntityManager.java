@@ -60,7 +60,7 @@ public class EntityManager extends MoonLakeManager {
         }
         catch (Exception e) {
 
-            getMain().log("清除实体 UUID 为 '" + entity.getUniqueId().toString() + "' 的路径发现者 AI 时异常: " + e.getMessage());
+            getMain().getMLogger().warn("清除实体 UUID 为 '" + entity.getUniqueId().toString() + "' 的路径发现者 AI 时异常: " + e.getMessage());
         }
     }
 
@@ -93,7 +93,7 @@ public class EntityManager extends MoonLakeManager {
         }
         catch (Exception e) {
 
-            getMain().log("设置实体 UUID 为 '" + entity.getUniqueId().toString() + "' 的 NBT 标签属性时异常: " + e.getMessage());
+            getMain().getMLogger().warn("设置实体 UUID 为 '" + entity.getUniqueId().toString() + "' 的 NBT 标签属性时异常: " + e.getMessage());
         }
     }
 
@@ -111,7 +111,7 @@ public class EntityManager extends MoonLakeManager {
         }
         catch (Exception e) {
 
-            getMain().log("设置实体 UUID 为 '" + entity.getUniqueId().toString() + "' 的 NoAI 属性时异常: " + e.getMessage());
+            getMain().getMLogger().warn("设置实体 UUID 为 '" + entity.getUniqueId().toString() + "' 的 NoAI 属性时异常: " + e.getMessage());
         }
     }
 
@@ -129,7 +129,7 @@ public class EntityManager extends MoonLakeManager {
         }
         catch (Exception e) {
 
-            getMain().log("设置实体 UUID 为 '" + entity.getUniqueId().toString() + " ' 的 Silent 属性时异常: " + e.getMessage());
+            getMain().getMLogger().warn("设置实体 UUID 为 '" + entity.getUniqueId().toString() + " ' 的 Silent 属性时异常: " + e.getMessage());
         }
     }
 
@@ -147,7 +147,7 @@ public class EntityManager extends MoonLakeManager {
         }
         catch (Exception e) {
 
-            getMain().log("设置实体 UUID 为 '" + entity.getUniqueId().toString() + " ' 的 Invulnerable 属性时异常: " + e.getMessage());
+            getMain().getMLogger().warn("设置实体 UUID 为 '" + entity.getUniqueId().toString() + " ' 的 Invulnerable 属性时异常: " + e.getMessage());
         }
     }
 
@@ -486,7 +486,7 @@ public class EntityManager extends MoonLakeManager {
         }
         catch (Exception e) {
 
-            getMain().log("设置实体 UUID 为 '" + entity.getUniqueId().toString() + "' 的 " + type.getType() + " 时异常: " + e.getMessage());
+            getMain().getMLogger().warn("设置实体 UUID 为 '" + entity.getUniqueId().toString() + "' 的 " + type.getType() + " 时异常: " + e.getMessage());
         }
     }
 
@@ -518,7 +518,7 @@ public class EntityManager extends MoonLakeManager {
         }
         catch (Exception e) {
 
-            getMain().log("获取实体 UUID 为 '" + entity.getUniqueId().toString() + "' 的 " + type.getType() + " 时异常: " + e.getMessage());
+            getMain().getMLogger().warn("获取实体 UUID 为 '" + entity.getUniqueId().toString() + "' 的 " + type.getType() + " 时异常: " + e.getMessage());
         }
         return -1d;
     }

@@ -1,6 +1,6 @@
 package com.minecraft.moonlake.type.potion;
 
-import com.minecraft.moonlake.util.Util;
+import com.minecraft.moonlake._temp.util.Util;
 
 /**
  * Created by MoonLake on 2016/4/29.
@@ -99,6 +99,7 @@ public enum PotionEffectEnum {
      */
     @Deprecated
     public String getType() {
+
         return type;
     }
 
@@ -108,6 +109,7 @@ public enum PotionEffectEnum {
      * @return 基础
      */
     public String getBase() {
+
         return _1;
     }
 
@@ -118,6 +120,7 @@ public enum PotionEffectEnum {
      * @throws NullPointerException 药水效果没有升级版则抛出异常
      */
     public String getUp() {
+
         return _2;
     }
 
@@ -128,6 +131,7 @@ public enum PotionEffectEnum {
      * @throws NullPointerException 药水效果没有延长版则抛出异常
      */
     public String getLong() {
+
         return _long;
     }
 
@@ -138,6 +142,7 @@ public enum PotionEffectEnum {
      * @return PotionEffectEnum 如果不存在类型则返回 null
      */
     public static PotionEffectEnum fromType(String type) {
+
         Util.notEmpty(type, "待转换的药水效果是 null 值");
 
         switch (type.toLowerCase()) {

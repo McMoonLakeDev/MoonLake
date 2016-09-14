@@ -1,7 +1,6 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.nms.packet.Packet;
-import com.minecraft.moonlake.exception.player.PlayerNotOnlineException;
 import org.bukkit.Material;
 
 /**
@@ -20,7 +19,6 @@ public interface NMSPlayer {
      * 给玩家发送数据包
      *
      * @param packet 数据包
-     * @throws PlayerNotOnlineException 玩家不在线则抛出异常
      */
     void sendPacket(Packet<?> packet);
 
@@ -29,7 +27,6 @@ public interface NMSPlayer {
      *
      * @param player 玩家名
      * @param title 标题
-     * @throws PlayerNotOnlineException 玩家不在线则抛出异常
      */
     void sendTitlePacket(String title);
 
@@ -39,7 +36,6 @@ public interface NMSPlayer {
      * @param player 玩家名
      * @param title 标题
      * @param subTitle 子标题
-     * @throws PlayerNotOnlineException 玩家不在线则抛出异常
      */
     void sendTitlePacket(String title, String subTitle);
 
@@ -51,7 +47,6 @@ public interface NMSPlayer {
      * @param drTime 淡入时间
      * @param plTime 停留时间
      * @param dcTime 淡出时间
-     * @throws PlayerNotOnlineException 玩家不在线则抛出异常
      */
     void sendTitlePacket(String title, int drTime, int plTime, int dcTime);
 
@@ -64,7 +59,6 @@ public interface NMSPlayer {
      * @param drTime 淡入时间
      * @param plTime 停留时间
      * @param dcTime 淡出时间
-     * @throws PlayerNotOnlineException 玩家不在线则抛出异常
      */
     void sendTitlePacket(String title, String subTitle, int drTime, int plTime, int dcTime);
 
@@ -73,7 +67,6 @@ public interface NMSPlayer {
      *
      * @param player 玩家名
      * @param message 消息
-     * @throws PlayerNotOnlineException 玩家不在线则抛出异常
      */
     void sendMainChatPacket(String message);
 
@@ -83,7 +76,6 @@ public interface NMSPlayer {
      * @param player 玩家名
      * @param header 头文本
      * @param footer 脚文本
-     * @throws PlayerNotOnlineException 玩家不在线则抛出异常
      */
     void sendTabListPacket(String header, String footer);
 

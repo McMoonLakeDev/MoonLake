@@ -1,6 +1,5 @@
 package com.minecraft.moonlake.manager;
 
-import com.minecraft.moonlake.api.playerlib.Playerlib;
 import com.minecraft.moonlake.reflect.Reflect;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
@@ -16,16 +15,6 @@ import java.util.UUID;
  * Created by MoonLake on 2016/7/17.
  */
 public class PlayerManager extends MoonLakeManager {
-
-    /**
-     * 获取月色之湖玩家支持库实例对象
-     *
-     * @return 玩家支持库实例对象
-     */
-    public static Playerlib getLibrary() {
-
-        return getMain().getPlayerlib();
-    }
 
     /**
      * 获取指定玩家对象从目标名称
