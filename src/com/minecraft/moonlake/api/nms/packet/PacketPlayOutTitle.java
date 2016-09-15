@@ -13,9 +13,9 @@ public class PacketPlayOutTitle extends PacketAbstract<PacketPlayOutTitle> {
 
     private String title;
     private String subTitle;
-    private int drTime;
-    private int plTime;
-    private int dcTime;
+    private int fadeIn;
+    private int stay;
+    private int fadeOut;
 
     public PacketPlayOutTitle(String title) {
 
@@ -27,18 +27,18 @@ public class PacketPlayOutTitle extends PacketAbstract<PacketPlayOutTitle> {
         this(title, subTitle, -1, -1, -1);
     }
 
-    public PacketPlayOutTitle(String title, int drTime, int plTime, int dcTime) {
+    public PacketPlayOutTitle(String title, int fadeIn, int stay, int fadeOut) {
 
-        this(title, null, drTime, plTime, dcTime);
+        this(title, null, fadeIn, stay, fadeOut);
     }
 
-    public PacketPlayOutTitle(String title, String subTitle, int drTime, int plTime, int dcTime) {
+    public PacketPlayOutTitle(String title, String subTitle, int fadeIn, int stay, int fadeOut) {
 
         this.title = title;
         this.subTitle = subTitle;
-        this.drTime = drTime;
-        this.plTime = plTime;
-        this.dcTime = dcTime;
+        this.fadeIn = fadeIn;
+        this.stay = stay;
+        this.fadeOut = fadeOut;
     }
 
     public String getTitle() {
@@ -61,34 +61,34 @@ public class PacketPlayOutTitle extends PacketAbstract<PacketPlayOutTitle> {
         this.subTitle = subTitle;
     }
 
-    public int getDrTime() {
+    public int getFadeIn() {
 
-        return drTime;
+        return fadeIn;
     }
 
-    public void setDrTime(int drTime) {
+    public void setFadIn(int fadeIn) {
 
-        this.drTime = drTime;
+        this.fadeIn = fadeIn;
     }
 
-    public int getPlTime() {
+    public int getStay() {
 
-        return plTime;
+        return stay;
     }
 
-    public void setPlTime(int plTime) {
+    public void setStay(int stay) {
 
-        this.plTime = plTime;
+        this.stay = stay;
     }
 
-    public int getDcTime() {
+    public int getFadeOut() {
 
-        return dcTime;
+        return fadeOut;
     }
 
-    public void setDcTime(int dcTime) {
+    public void setFadeOut(int fadeOut) {
 
-        this.dcTime = dcTime;
+        this.fadeOut = fadeOut;
     }
 
     @Override
@@ -105,7 +105,7 @@ public class PacketPlayOutTitle extends PacketAbstract<PacketPlayOutTitle> {
             Object icbc2 = subTitle != null ? ChatSerializerA.invoke(null, "{\"text\": \"" + subTitle + "\"}") : null;
 
             Method EnumTitleActionA = Reflect.getMethod(EnumTitleAction, "a", String.class);
-            Object ppop = Reflect.instantiateObject(PacketPlayOutTitle, drTime, plTime, dcTime);
+            Object ppop = Reflect.instantiateObject(PacketPlayOutTitle, fadeIn, stay, fadeOut);
             Object ppop2 = Reflect.instantiateObject(PacketPlayOutTitle, EnumTitleActionA.invoke(null, "TITLE"), icbc);
             Object ppop3 = icbc2 != null ? Reflect.instantiateObject(PacketPlayOutTitle, EnumTitleActionA.invoke(null, "SUBTITLE"), icbc2) : null;
 

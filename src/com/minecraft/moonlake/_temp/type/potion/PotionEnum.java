@@ -1,4 +1,4 @@
-package com.minecraft.moonlake.type.potion;
+package com.minecraft.moonlake._temp.type.potion;
 
 import com.minecraft.moonlake._temp.util.Util;
 import org.bukkit.Material;

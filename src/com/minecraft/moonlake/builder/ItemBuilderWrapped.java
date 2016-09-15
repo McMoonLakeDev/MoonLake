@@ -4,6 +4,7 @@ import com.minecraft.moonlake.api.item.ItemLibrary;
 import com.minecraft.moonlake.api.item.ItemLibraryFactory;
 import com.minecraft.moonlake.api.item.ItemLibraryFactorys;
 import com.minecraft.moonlake.api.item.ItemBuilder;
+import com.minecraft.moonlake.api.item.AttributeModify;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -251,6 +252,38 @@ public class ItemBuilderWrapped implements ItemBuilder {
     public ItemBuilder setLeatherColor(int red, int green, int blue) {
 
         itemLibrary.setLeatherColor(itemStack, red, green, blue);
+
+        return this;
+    }
+
+    @Override
+    public ItemBuilder setUnbreakable(boolean unbreakable) {
+
+        itemLibrary.setUnbreakable(itemStack, unbreakable);
+
+        return this;
+    }
+
+    @Override
+    public ItemBuilder setAttribute(AttributeModify.Type type, AttributeModify.Operation operation, double amount) {
+
+        itemLibrary.setAttribute(itemStack, type, operation, amount);
+
+        return this;
+    }
+
+    @Override
+    public ItemBuilder setAttribute(AttributeModify.Type type, AttributeModify.Slot slot, AttributeModify.Operation operation, double amount) {
+
+        itemLibrary.setAttribute(itemStack, type, slot, operation, amount);
+
+        return this;
+    }
+
+    @Override
+    public ItemBuilder setAttribute(AttributeModify attribute) {
+
+        itemLibrary.setAttribute(itemStack, attribute);
 
         return this;
     }

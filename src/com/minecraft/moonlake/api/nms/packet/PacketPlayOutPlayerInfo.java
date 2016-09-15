@@ -57,7 +57,7 @@ public class PacketPlayOutPlayerInfo extends PacketAbstract<PacketPlayOutPlayerI
      */
     public static <T extends PacketPlayOutPlayerInfo> T autoMatch(PlayerInfoAction action, Player player) {
 
-        String version = MoonLakePlugin.getInstances().getBukkitVersion();
+        String version = MoonLakePlugin.getInstances().getBukkitVersion().get();
 
         try {
 

@@ -1,9 +1,7 @@
 package com.minecraft.moonlake._temp.itemlib;
 
-import com.minecraft.moonlake._temp.lorelib.Lorelib;
 import com.minecraft.moonlake._temp.itemlib.potion.Potionlib;
-import com.minecraft.moonlake.exception.item.NotArmorItemException;
-import com.minecraft.moonlake.exception.item.NotBookItemException;
+import com.minecraft.moonlake._temp.lorelib.Lorelib;
 import com.minecraft.moonlake._temp.util.Util;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -505,7 +503,6 @@ public interface Itemlib extends Lorelib, Potionlib {
      * @param leatherArmor 皮革护甲物品栈
      * @param color 颜色
      * @return 设置颜色后的皮革护甲物品栈
-     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     ItemStack setLeatherArmorColor(ItemStack leatherArmor, Color color);
 
@@ -517,7 +514,6 @@ public interface Itemlib extends Lorelib, Potionlib {
      * @param g 绿色值 (min: 0, max: 255)
      * @param b 蓝色值 (min: 0, max: 255)
      * @return 设置颜色后的皮革护甲物品栈
-     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     ItemStack setLeatherArmorColorRGB(ItemStack leatherArmor, int r, int g, int b);
 
@@ -529,7 +525,6 @@ public interface Itemlib extends Lorelib, Potionlib {
      * @param b 蓝色值 (min: 0, max: 255)
      * @param r 红色值 (min: 0, max: 255)
      * @return 设置颜色后的皮革护甲物品栈
-     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     ItemStack setLeatherArmorColorGBR(ItemStack leatherArmor, int g, int b, int r);
 
@@ -538,7 +533,6 @@ public interface Itemlib extends Lorelib, Potionlib {
      *
      * @param leatherArmor 皮革护甲物品栈
      * @return 皮革护甲物品栈的颜色
-     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     Color getLeatherArmorColor(ItemStack leatherArmor);
 
@@ -547,7 +541,6 @@ public interface Itemlib extends Lorelib, Potionlib {
      *
      * @param book 成书物品栈
      * @return 成书的页内容集合 如果成书没有内容则返回空集合
-     * @throws NotBookItemException 如果物品栈不是成书类型则抛出异常
      */
     Set<String> getBookPageCentents(ItemStack book);
 
@@ -556,7 +549,6 @@ public interface Itemlib extends Lorelib, Potionlib {
      *
      * @param book 成书物品栈
      * @return 成书的作者 如果成书没有作者则返回 null
-     * @throws NotBookItemException 如果物品栈不是成书类型则抛出异常
      */
     String getBookAuther(ItemStack book);
 

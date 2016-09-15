@@ -1,6 +1,7 @@
 package com.minecraft.moonlake.api.item;
 
 import com.minecraft.moonlake.api.item.meta.MetaLibrary;
+import com.minecraft.moonlake.api.item.potion.PotionLibrary;
 import com.minecraft.moonlake.api.item.skull.SkullLibrary;
 import com.minecraft.moonlake.builder.ItemBuilderWrapped;
 import org.bukkit.Material;
@@ -70,6 +71,16 @@ public class ItemLibraryFactorys {
      * @return AttributeLibrary
      */
     public static AttributeLibrary attribute() {
+
+        return item();
+    }
+
+    /**
+     * 获取 PotionLibrary 对象
+     *
+     * @return PotionLibrary
+     */
+    public PotionLibrary potion() {
 
         return item();
     }

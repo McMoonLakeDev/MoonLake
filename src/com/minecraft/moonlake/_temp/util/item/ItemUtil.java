@@ -3,13 +3,10 @@ package com.minecraft.moonlake._temp.util.item;
 import com.minecraft.moonlake._temp.itemlib.AttributeStack;
 import com.minecraft.moonlake._temp.itemlib.Itemlib;
 import com.minecraft.moonlake._temp.itemlib.potion.CustomPotionEffect;
-import com.minecraft.moonlake.exception.item.NotArmorItemException;
-import com.minecraft.moonlake.exception.item.NotBookItemException;
-import com.minecraft.moonlake.exception.item.NotPotionItemException;
-import com.minecraft.moonlake.reflect.Reflect;
-import com.minecraft.moonlake.type.potion.PotionEnum;
+import com.minecraft.moonlake._temp.type.potion.PotionEnum;
 import com.minecraft.moonlake._temp.util.Util;
 import com.minecraft.moonlake._temp.util.lore.LoreUtil;
+import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -1065,15 +1062,11 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param potion             药水物品栈
      * @param customPotionEffect 自定义药水效果数组
      * @return 添加药水效果后的 ItemStack
-     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
      */
     @Override
     public ItemStack addCustomPotion(ItemStack potion, CustomPotionEffect... customPotionEffect) {
         Util.notNull(potion, "待添加的药水物品栈的类型是 null 值");
         Util.notNull(customPotionEffect, "待添加的药水物品栈的自定义效果是 null 值");
-
-        if(!isPotion(potion))
-            throw new NotPotionItemException();
 
         try {
 
@@ -1126,7 +1119,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param amplifier 效果等级
      * @param duration  效果时间
      * @return 添加药水效果后的 ItemStack
-     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
      */
     @Override
     public ItemStack addCustomPotion(ItemStack potion, int id, int amplifier, int duration) {
@@ -1142,7 +1134,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param duration      效果时间
      * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
      * @return 添加药水效果后的 ItemStack
-     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
      */
     @Override
     public ItemStack addCustomPotion(ItemStack potion, int id, int amplifier, int duration, boolean showParticles) {
@@ -1159,7 +1150,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param ambient       是否减少玩家被药水效果影响的周围出现粒子效果的透明度
      * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
      * @return 添加药水效果后的 ItemStack
-     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
      */
     @Override
     public ItemStack addCustomPotion(ItemStack potion, int id, int amplifier, int duration, boolean ambient, boolean showParticles) {
@@ -1171,14 +1161,10 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      *
      * @param potion 药水物品栈
      * @return 自定义药水效果集合 如果药水没有自定义效果则返回空集合
-     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
      */
     @Override
     public Set<CustomPotionEffect> getCustomPoionEffectList(ItemStack potion) {
         Util.notNull(potion, "待添加的药水物品栈的类型是 null 值");
-
-        if(!isPotion(potion))
-            throw new NotPotionItemException();
 
         try {
 
@@ -1829,12 +1815,9 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param leatherArmor 皮革护甲物品栈
      * @param color        颜色
      * @return 设置颜色后的皮革护甲物品栈
-     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     @Override
     public ItemStack setLeatherArmorColor(ItemStack leatherArmor, Color color) {
-        if(!isLeatherArmor(leatherArmor))
-            throw new NotArmorItemException();
 
         LeatherArmorMeta laMeta = (LeatherArmorMeta)leatherArmor.getItemMeta();
         laMeta.setColor(color);
@@ -1850,7 +1833,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param g            绿色值 (min: 0, max: 255)
      * @param b            蓝色值 (min: 0, max: 255)
      * @return 设置颜色后的皮革护甲物品栈
-     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     @Override
     public ItemStack setLeatherArmorColorRGB(ItemStack leatherArmor, int r, int g, int b) {
@@ -1865,7 +1847,6 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      * @param b            蓝色值 (min: 0, max: 255)
      * @param r            红色值 (min: 0, max: 255)
      * @return 设置颜色后的皮革护甲物品栈
-     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     @Override
     public ItemStack setLeatherArmorColorGBR(ItemStack leatherArmor, int g, int b, int r) {
@@ -1877,12 +1858,9 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      *
      * @param leatherArmor 皮革护甲物品栈
      * @return 皮革护甲物品栈的颜色
-     * @throws NotArmorItemException 如果物品栈不是护甲类型则抛出异常
      */
     @Override
     public Color getLeatherArmorColor(ItemStack leatherArmor) {
-        if(!isLeatherArmor(leatherArmor))
-            throw new NotArmorItemException();
 
         return ((LeatherArmorMeta)leatherArmor.getItemMeta()).getColor();
     }
@@ -1892,13 +1870,9 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      *
      * @param book 成书物品栈
      * @return 成书的页内容集合 如果成书没有内容则返回空集合
-     * @throws NotBookItemException 如果物品栈不是成书类型则抛出异常
      */
     @Override
     public Set<String> getBookPageCentents(ItemStack book) {
-        if(!isWrittenBook(book))
-            throw new NotBookItemException();
-
         BookMeta bMeta = (BookMeta)book.getItemMeta();
         return bMeta.hasPages() ? new HashSet<>(bMeta.getPages()) : new HashSet<String>();
     }
@@ -1908,13 +1882,9 @@ public class ItemUtil extends LoreUtil implements Itemlib {
      *
      * @param book 成书物品栈
      * @return 成书的作者 如果成书没有作者则返回 null
-     * @throws NotBookItemException 如果物品栈不是成书类型则抛出异常
      */
     @Override
     public String getBookAuther(ItemStack book) {
-        if(!isWrittenBook(book))
-            throw new NotBookItemException();
-
         BookMeta bMeta = (BookMeta)book.getItemMeta();
         return bMeta.hasAuthor() ? bMeta.getAuthor() : null;
     }

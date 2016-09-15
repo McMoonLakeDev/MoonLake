@@ -1,6 +1,9 @@
 package com.minecraft.moonlake.player;
 
 import com.minecraft.moonlake.MoonLakePlugin;
+import com.minecraft.moonlake.api.nms.packet.PacketPlayOutChat;
+import com.minecraft.moonlake.api.nms.packet.PacketPlayOutPlayerListHeaderFooter;
+import com.minecraft.moonlake.api.nms.packet.PacketPlayOutTitle;
 import com.minecraft.moonlake.api.player.NMSPlayerLibrary;
 import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
@@ -51,36 +54,43 @@ public class NMSPlayerExpression implements NMSPlayerLibrary {
     @Override
     public void sendTitlePacket(String player, String title) {
 
+        new PacketPlayOutTitle(title).send(player);
     }
 
     @Override
     public void sendTitlePacket(String player, String title, String subTitle) {
 
+        new PacketPlayOutTitle(title, subTitle).send(player);
     }
 
     @Override
     public void sendTitlePacket(String player, String title, int fadeIn, int stay, int fadeOut) {
 
+        new PacketPlayOutTitle(title, fadeIn, stay, fadeOut).send(player);
     }
 
     @Override
     public void sendTitlePacket(String player, String title, String subTitle, int fadeIn, int stay, int fadeOut) {
 
+        new PacketPlayOutTitle(title, subTitle, fadeIn, stay, fadeOut).send(player);
     }
 
     @Override
     public void sendMainChatPacket(String player, String message) {
 
+        new PacketPlayOutChat(message, PacketPlayOutChat.Mode.MAIN).send(player);
     }
 
     @Override
     public void sendTabListPacket(String player, String header) {
 
+        new PacketPlayOutPlayerListHeaderFooter(header).send(player);
     }
 
     @Override
     public void sendTabListPacket(String player, String header, String footer) {
 
+        new PacketPlayOutPlayerListHeaderFooter(header, footer).send(player);
     }
 
     @Override

@@ -84,7 +84,6 @@ public class PlayerManager extends MoonLakeManager {
         try {
 
             Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
-            Class<?> EntityPlayer = Reflect.PackageType.MINECRAFT_SERVER.getClass("EntityPlayer");
             Class<?> EntityHuman = Reflect.PackageType.MINECRAFT_SERVER.getClass("EntityHuman");
 
             Method getHandle = Reflect.getMethod(CraftPlayer, "getHandle");

@@ -1,7 +1,6 @@
 package com.minecraft.moonlake._temp.itemlib.potion;
 
-import com.minecraft.moonlake.type.potion.PotionEnum;
-import com.minecraft.moonlake.exception.item.NotPotionItemException;
+import com.minecraft.moonlake._temp.type.potion.PotionEnum;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;
@@ -583,7 +582,6 @@ public interface Potionlib {
      * @param potion 药水物品栈
      * @param customPotionEffect 自定义药水效果数组
      * @return 添加药水效果后的 ItemStack
-     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
      */
     ItemStack addCustomPotion(ItemStack potion, CustomPotionEffect... customPotionEffect);
 
@@ -595,7 +593,6 @@ public interface Potionlib {
      * @param amplifier 效果等级
      * @param duration 效果时间
      * @return 添加药水效果后的 ItemStack
-     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
      */
     ItemStack addCustomPotion(ItemStack potion, int id, int amplifier, int duration);
 
@@ -608,7 +605,6 @@ public interface Potionlib {
      * @param duration 效果时间
      * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
      * @return 添加药水效果后的 ItemStack
-     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
      */
     ItemStack addCustomPotion(ItemStack potion, int id, int amplifier, int duration, boolean showParticles);
 
@@ -622,7 +618,6 @@ public interface Potionlib {
      * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
      * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
      * @return 添加药水效果后的 ItemStack
-     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
      */
     ItemStack addCustomPotion(ItemStack potion, int id, int amplifier, int duration, boolean ambient, boolean showParticles);
 
@@ -631,7 +626,6 @@ public interface Potionlib {
      *
      * @param potion 药水物品栈
      * @return 自定义药水效果集合 如果药水没有自定义效果则返回空集合
-     * @throws NotPotionItemException 如果物品栈不是药水类型则抛出异常
      */
     Set<CustomPotionEffect> getCustomPoionEffectList(ItemStack potion);
 }

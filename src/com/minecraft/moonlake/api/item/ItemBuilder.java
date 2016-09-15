@@ -219,4 +219,43 @@ public interface ItemBuilder {
      * @throws IllegalArgumentException 如果颜色 RGB 不符合值范围则抛出异常 (0 - 255)
      */
     ItemBuilder setLeatherColor(int red, int green, int blue);
+
+    /**
+     * 设置物品栈是否无法破坏
+     *
+     * @param unbreakable 是否无法破坏
+     */
+    ItemBuilder setUnbreakable(boolean unbreakable);
+
+    /**
+     * 设置物品栈的特殊属性项
+     *
+     * @param type 属性类型
+     * @param operation 属性运算模式
+     * @param amount 属性值
+     * @throws IllegalArgumentException 如果属性类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果属性运算模式对象为 {@code null} 则抛出异常
+     */
+    ItemBuilder setAttribute(AttributeModify.Type type, AttributeModify.Operation operation, double amount);
+
+    /**
+     * 设置物品栈的特殊属性项
+     *
+     * @param type 属性类型
+     * @param slot 属性生效槽位
+     * @param operation 属性运算模式
+     * @param amount 属性值
+     * @throws IllegalArgumentException 如果属性类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果属性生效槽位对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果属性运算模式对象为 {@code null} 则抛出异常
+     */
+    ItemBuilder setAttribute(AttributeModify.Type type, AttributeModify.Slot slot, AttributeModify.Operation operation, double amount);
+
+    /**
+     * 设置物品栈的特殊属性项
+     *
+     * @param attribute 特殊属性
+     * @throws IllegalArgumentException 如果特殊属性对象为 {@code null} 则抛出异常
+     */
+    ItemBuilder setAttribute(AttributeModify attribute);
 }
