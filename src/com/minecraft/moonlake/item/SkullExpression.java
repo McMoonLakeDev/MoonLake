@@ -51,7 +51,7 @@ public class SkullExpression extends CraftExpression implements SkullLibrary {
 
         ItemStack itemStack = createSkull(skullOwner);
 
-        setDisplayName(itemStack, displayName);
+        itemStack = setDisplayName(itemStack, displayName);
 
         return itemStack;
     }

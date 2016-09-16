@@ -91,7 +91,7 @@ public class MySQLQueryInsert extends MySQLQueryAbstract {
         }
         catch (Exception e) {
 
-            getInstance().log("执行数据库的声明对象的插入语句时异常: " + e.getMessage());
+            getInstance().getMLogger().warn("执行数据库的声明对象的插入语句时异常: " + e.getMessage());
         }
         return null;
     }

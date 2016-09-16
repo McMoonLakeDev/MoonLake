@@ -1,10 +1,9 @@
 package com.minecraft.moonlake.builder;
 
-import com.minecraft.moonlake.api.item.ItemLibrary;
-import com.minecraft.moonlake.api.item.ItemLibraryFactory;
-import com.minecraft.moonlake.api.item.ItemLibraryFactorys;
-import com.minecraft.moonlake.api.item.ItemBuilder;
-import com.minecraft.moonlake.api.item.AttributeModify;
+import com.minecraft.moonlake.api.item.*;
+import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
+import com.minecraft.moonlake.api.item.potion.PotionEffectType;
+import com.minecraft.moonlake.api.item.potion.PotionType;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -20,8 +19,8 @@ import java.util.Map;
  */
 public class ItemBuilderWrapped implements ItemBuilder {
 
-    private final ItemStack itemStack;
     private final ItemLibrary itemLibrary;
+    private ItemStack itemStack;
 
     public ItemBuilderWrapped(ItemStack itemStack) {
 
@@ -56,10 +55,50 @@ public class ItemBuilderWrapped implements ItemBuilder {
         this(ItemLibraryFactorys.craft().create(material, data, amount, displayName, lore));
     }
 
+    public ItemBuilderWrapped(PotionType potion) {
+
+        this(potion.getMaterial());
+    }
+
+    public ItemBuilderWrapped(PotionType potion, int data) {
+
+        this(potion.getMaterial(), data);
+    }
+
+    public ItemBuilderWrapped(PotionType potion, int data, int amount) {
+
+        this(potion.getMaterial(), data, amount);
+    }
+
+    public ItemBuilderWrapped(PotionType potion, int data, int amount, String displayName) {
+
+        this(potion.getMaterial(), data, amount, displayName);
+    }
+
+    public ItemBuilderWrapped(PotionType potion, int data, int amount, String displayName, String... lore) {
+
+        this(potion.getMaterial(), data, amount, displayName, lore);
+    }
+
+    protected void update(ItemStack itemStack) {
+
+        this.itemStack = itemStack;
+    }
+    
+    protected ItemStack get() {
+        
+        return this.itemStack;
+    }
+    
+    protected ItemLibrary library() {
+        
+        return this.itemLibrary;
+    }
+
     @Override
     public ItemBuilder setDisplayName(String displayName) {
         
-        itemLibrary.setDisplayName(itemStack, displayName);
+        update(library().setDisplayName(get(), displayName));
         
         return this;
     }
@@ -67,7 +106,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder setAmount(int amount) {
 
-        itemLibrary.setAmount(itemStack, amount);
+        update(library().setAmount(get(), amount));
 
         return this;
     }
@@ -75,7 +114,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder setDurability(int durability) {
 
-        itemLibrary.setDurability(itemStack, durability);
+        update(library().setDurability(get(), durability));
 
         return this;
     }
@@ -83,7 +122,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder resetDurability() {
 
-        itemLibrary.resetDurability(itemStack);
+        update(library().resetDurability(get()));
 
         return this;
     }
@@ -91,7 +130,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder addDurability(int durability) {
 
-        itemLibrary.addDurability(itemStack, durability);
+        update(library().addDurability(get(), durability));
 
         return this;
     }
@@ -99,7 +138,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder takeDurability(int durability) {
 
-        itemLibrary.takeDurability(itemStack, durability);
+        update(library().takeDurability(get(), durability));
 
         return this;
     }
@@ -107,7 +146,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder setLore(String... lore) {
 
-        itemLibrary.setLore(itemStack, lore);
+        update(library().setLore(get(), lore));
 
         return this;
     }
@@ -115,7 +154,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder setLore(Collection<? extends String> lore) {
 
-        itemLibrary.setLore(itemStack, lore);
+        update(library().setLore(get(), lore));
 
         return this;
     }
@@ -123,7 +162,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder addLore(String... lore) {
 
-        itemLibrary.addLore(itemStack, lore);
+        update(library().addLore(get(), lore));
 
         return this;
     }
@@ -131,7 +170,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder addLore(Collection<? extends String> lore) {
 
-        itemLibrary.addLore(itemStack, lore);
+        update(library().addLore(get(), lore));
 
         return this;
     }
@@ -139,7 +178,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder clearLore() {
 
-        itemLibrary.clearLore(itemStack);
+        update(library().clearLore(get()));
 
         return this;
     }
@@ -147,7 +186,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder addEnchantment(Enchantment enchantment, int level) {
 
-        itemLibrary.addEnchantment(itemStack, enchantment, level);
+        update(library().addEnchantment(get(), enchantment, level));
 
         return this;
     }
@@ -155,7 +194,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder addEnchantment(Map<Enchantment, Integer> enchantmentMap) {
 
-        itemLibrary.addEnchantment(itemStack, enchantmentMap);
+        update(library().addEnchantment(get(), enchantmentMap));
 
         return this;
     }
@@ -163,7 +202,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder addSafeEnchantment(Enchantment enchantment, int level) {
 
-        itemLibrary.addSafeEnchantment(itemStack, enchantment, level);
+        update(library().addSafeEnchantment(get(), enchantment, level));
 
         return this;
     }
@@ -171,7 +210,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder addSafeEnchantment(Map<Enchantment, Integer> enchantmentMap) {
 
-        itemLibrary.addSafeEnchantment(itemStack, enchantmentMap);
+        update(library().addSafeEnchantment(get(), enchantmentMap));
 
         return this;
     }
@@ -179,7 +218,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder removeEnchantment(Enchantment enchantment) {
 
-        itemLibrary.removeEnchantment(itemStack, enchantment);
+        update(library().removeEnchantment(get(), enchantment));
 
         return this;
     }
@@ -187,7 +226,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder removeEnchantment(Collection<? extends Enchantment> enchantments) {
 
-        itemLibrary.removeEnchantment(itemStack, enchantments);
+        update(library().removeEnchantment(get(), enchantments));
 
         return this;
     }
@@ -195,7 +234,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder clearEnchantment() {
 
-        itemLibrary.clearEnchantment(itemStack);
+        update(library().clearEnchantment(get()));
 
         return this;
     }
@@ -203,7 +242,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder addFlags(ItemFlag... flags) {
 
-        itemLibrary.addFlags(itemStack, flags);
+        update(library().addFlags(get(), flags));
 
         return this;
     }
@@ -211,7 +250,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder addFlags(Collection<? extends ItemFlag> flags) {
 
-        itemLibrary.addFlags(itemStack, flags);
+        update(library().addFlags(get(), flags));
 
         return this;
     }
@@ -219,7 +258,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder removeFlags(ItemFlag... flags) {
 
-        itemLibrary.removeFlags(itemStack, flags);
+        update(library().removeFlags(get(), flags));
 
         return this;
     }
@@ -227,7 +266,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder removeFlags(Collection<? extends ItemFlag> flags) {
 
-        itemLibrary.removeFlags(itemStack, flags);
+        update(library().removeFlags(get(), flags));
 
         return this;
     }
@@ -235,7 +274,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder clearFlags() {
 
-        itemLibrary.clearFlags(itemStack);
+        update(library().clearFlags(get()));
 
         return this;
     }
@@ -243,7 +282,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder setLeatherColor(Color color) {
 
-        itemLibrary.setLeatherColor(itemStack, color);
+        update(library().setLeatherColor(get(), color));
 
         return this;
     }
@@ -251,7 +290,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder setLeatherColor(int red, int green, int blue) {
 
-        itemLibrary.setLeatherColor(itemStack, red, green, blue);
+        update(library().setLeatherColor(get(), red, green, blue));
 
         return this;
     }
@@ -259,7 +298,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder setUnbreakable(boolean unbreakable) {
 
-        itemLibrary.setUnbreakable(itemStack, unbreakable);
+        update(library().setUnbreakable(get(), unbreakable));
 
         return this;
     }
@@ -267,7 +306,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder setAttribute(AttributeModify.Type type, AttributeModify.Operation operation, double amount) {
 
-        itemLibrary.setAttribute(itemStack, type, operation, amount);
+        update(library().setAttribute(get(), type, operation, amount));
 
         return this;
     }
@@ -275,7 +314,7 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder setAttribute(AttributeModify.Type type, AttributeModify.Slot slot, AttributeModify.Operation operation, double amount) {
 
-        itemLibrary.setAttribute(itemStack, type, slot, operation, amount);
+        update(library().setAttribute(get(), type, slot, operation, amount));
 
         return this;
     }
@@ -283,7 +322,47 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemBuilder setAttribute(AttributeModify attribute) {
 
-        itemLibrary.setAttribute(itemStack, attribute);
+        update(library().setAttribute(get(), attribute));
+
+        return this;
+    }
+
+    @Override
+    public ItemBuilder setCustomPotion(PotionEffectCustom... effect) {
+
+        update(library().setCustomPotion(get(), effect));
+
+        return this;
+    }
+
+    @Override
+    public ItemBuilder setCustomPotion(Collection<? extends PotionEffectCustom> effect) {
+
+        update(library().setCustomPotion(get(), effect));
+
+        return this;
+    }
+
+    @Override
+    public ItemBuilder setCustomPotion(PotionEffectType effectType, int amplifier, int duration) {
+
+        update(library().setCustomPotion(get(), effectType, amplifier, duration));
+
+        return this;
+    }
+
+    @Override
+    public ItemBuilder setCustomPotion(PotionEffectType effectType, int amplifier, int duration, boolean ambient) {
+
+        update(library().setCustomPotion(get(), effectType, amplifier, duration, ambient));
+
+        return this;
+    }
+
+    @Override
+    public ItemBuilder setCustomPotion(PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        update(library().setCustomPotion(get(), effectType, amplifier, duration, ambient, showParticles));
 
         return this;
     }
@@ -297,6 +376,6 @@ public class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemStack build(boolean safeObj) {
 
-        return safeObj ? itemStack.clone() : itemStack;
+        return safeObj ? get().clone() : get();
     }
 }

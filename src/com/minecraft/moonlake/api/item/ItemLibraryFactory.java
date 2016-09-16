@@ -2,6 +2,7 @@ package com.minecraft.moonlake.api.item;
 
 import com.minecraft.moonlake.api.item.meta.MetaLibrary;
 import com.minecraft.moonlake.api.item.potion.PotionLibrary;
+import com.minecraft.moonlake.api.item.potion.PotionType;
 import com.minecraft.moonlake.api.item.skull.SkullLibrary;
 import com.minecraft.moonlake.builder.ItemBuilderWrapped;
 import com.minecraft.moonlake.item.*;
@@ -93,7 +94,7 @@ public class ItemLibraryFactory {
      */
     public PotionLibrary potion() {
 
-        return new PotionExpression();
+        return new ItemExpressionWrapped();
     }
 
     /**
@@ -179,5 +180,78 @@ public class ItemLibraryFactory {
     public ItemBuilder itemBuilder(Material material, int data, int amount, String displayName, String... lore) {
 
         return new ItemBuilderWrapped(material, data, amount, displayName, lore);
+    }
+
+    /**
+     * 获取 ItemBuilder 实例对象
+     *
+     * @param potion 药水类型
+     * @return ItemBuilder
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     */
+    public ItemBuilder itemBuilder(PotionType potion) {
+
+        return new ItemBuilderWrapped(potion);
+    }
+
+    /**
+     * 获取 ItemBuilder 实例对象
+     *
+     * @param potion 药水类型
+     * @param data 物品栈数据
+     * @return ItemBuilder
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     */
+    public ItemBuilder itemBuilder(PotionType potion, int data) {
+
+        return new ItemBuilderWrapped(potion, data);
+    }
+
+    /**
+     * 获取 ItemBuilder 实例对象
+     *
+     * @param potion 药水类型
+     * @param data 物品栈数据
+     * @param amount 物品栈数量
+     * @return ItemBuilder
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     */
+    public ItemBuilder itemBuilder(PotionType potion, int data, int amount) {
+
+        return new ItemBuilderWrapped(potion, data, amount);
+    }
+
+    /**
+     * 获取 ItemBuilder 实例对象
+     *
+     * @param potion 药水类型
+     * @param data 物品栈数据
+     * @param amount 物品栈数量
+     * @param displayName 物品栈显示名称
+     * @return ItemBuilder
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果显示名称对象为 {@code null} 则抛出异常
+     */
+    public ItemBuilder itemBuilder(PotionType potion, int data, int amount, String displayName) {
+
+        return new ItemBuilderWrapped(potion, data, amount, displayName);
+    }
+
+    /**
+     * 获取 ItemBuilder 实例对象
+     *
+     * @param potion 药水类型
+     * @param data 物品栈数据
+     * @param amount 物品栈数量
+     * @param displayName 物品栈显示名称
+     * @param lore 物品栈标签信息
+     * @return ItemBuilder
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果显示名称对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果标签信息对象为 {@code null} 则抛出异常
+     */
+    public ItemBuilder itemBuilder(PotionType potion, int data, int amount, String displayName, String... lore) {
+
+        return new ItemBuilderWrapped(potion, data, amount, displayName, lore);
     }
 }

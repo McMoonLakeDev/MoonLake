@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.manager;
 
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -13,7 +14,7 @@ import java.util.*;
 public class BlockManager extends MoonLakeManager {
 
     /**
-     * Falling Block Type Ignore List.
+     * 坠落方块无视的方块类型集合
      */
     private final static Set<Material> FALLING_BLOCK_IGNORE_SET;
 
@@ -49,12 +50,17 @@ public class BlockManager extends MoonLakeManager {
         FALLING_BLOCK_IGNORE_SET.add(Material.STEP);
     }
 
+    private BlockManager() {
+
+    }
+
     /**
      * 获取指定位置的半径内的方块
      *
      * @param location 位置
      * @param radius 半径
      * @return 方块集合
+     * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
      */
     public static List<Block> getBlocksInRadius(Location location, int radius) {
 
@@ -68,6 +74,7 @@ public class BlockManager extends MoonLakeManager {
      * @param radius 半径
      * @param hollow 是否空洞
      * @return 方块集合
+     * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
      */
     public static List<Block> getBlocksInRadius(Location location, int radius, boolean hollow) {
 
@@ -82,8 +89,11 @@ public class BlockManager extends MoonLakeManager {
      * @param hollow 是否空洞
      * @param ignoreBlock 无视的方块
      * @return 方块集合
+     * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
      */
     public static List<Block> getBlocksInRadius(Location location, int radius, boolean hollow, Set<Material> ignoreBlock) {
+
+        Validate.notNull(location, "The localtion object is null.");
 
         List<Block> blockList = new ArrayList<>();
         int bX = location.getBlockX();
@@ -119,6 +129,7 @@ public class BlockManager extends MoonLakeManager {
      * @param location 位置
      * @param radius 半径
      * @return 坠落方块类型方块集合
+     * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
      */
     public static List<Block> getFallingBlocksInRadius(Location location, int radius) {
 
@@ -132,8 +143,11 @@ public class BlockManager extends MoonLakeManager {
      * @param radius 半径
      * @param hollow 是否空洞
      * @return 坠落方块类型方块集合
+     * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
      */
     public static List<Block> getFallingBlocksInRadius(Location location, int radius, boolean hollow) {
+
+        Validate.notNull(location, "The localtion object is null.");
 
         List<Block> blockList = new ArrayList<>();
         int bX = location.getBlockX();

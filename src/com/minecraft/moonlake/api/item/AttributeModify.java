@@ -44,12 +44,12 @@ public final class AttributeModify {
 
     public AttributeModify(Type type, Operation operation, double amount) {
 
-        this(type, null, operation, amount);
+        this(type, Slot.ALL, operation, amount);
     }
 
     public AttributeModify(Type type, Operation operation, double amount, UUID uuid) {
 
-        this(type, null, operation, amount, uuid);
+        this(type, Slot.ALL, operation, amount, uuid);
     }
 
     public AttributeModify(Type type, Slot slot, Operation operation, double amount) {

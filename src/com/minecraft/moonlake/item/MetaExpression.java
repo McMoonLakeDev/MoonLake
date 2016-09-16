@@ -28,7 +28,7 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
     }
 
     @Override
-    public void setDisplayName(ItemStack itemStack, String displayName) {
+    public ItemStack setDisplayName(ItemStack itemStack, String displayName) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(displayName, "The itemstack displayName object is null.");
@@ -41,22 +41,27 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
             itemStack.setItemMeta(itemMeta);
             itemStack.setDurability((short)100);
         }
+        return itemStack;
     }
 
     @Override
-    public void setAmount(ItemStack itemStack, int amount) {
+    public ItemStack setAmount(ItemStack itemStack, int amount) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
         itemStack.setAmount(amount);
+
+        return itemStack;
     }
 
     @Override
-    public void setDurability(ItemStack itemStack, int durability) {
+    public ItemStack setDurability(ItemStack itemStack, int durability) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
         itemStack.setDurability((short) durability);
+
+        return itemStack;
     }
 
     @Override
@@ -68,29 +73,29 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
     }
 
     @Override
-    public void resetDurability(ItemStack itemStack) {
+    public ItemStack resetDurability(ItemStack itemStack) {
 
-        setDurability(itemStack, 0); // set durability to 0 be recipe itemstack
+        return setDurability(itemStack, 0); // set durability to 0 be recipe itemstack
     }
 
     @Override
-    public void addDurability(ItemStack itemStack, int durability) {
+    public ItemStack addDurability(ItemStack itemStack, int durability) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
         int nowDurability = itemStack.getDurability();
 
-        setDurability(itemStack, nowDurability - durability); // set durability subtract be add durability
+        return setDurability(itemStack, nowDurability - durability); // set durability subtract be add durability
     }
 
     @Override
-    public void takeDurability(ItemStack itemStack, int durability) {
+    public ItemStack takeDurability(ItemStack itemStack, int durability) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
         int nowDurability = itemStack.getDurability();
 
-        setDurability(itemStack, nowDurability + durability); // set durability add be add durability
+        return setDurability(itemStack, nowDurability + durability); // set durability add be add durability
     }
 
     @Override
@@ -118,16 +123,16 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
     }
 
     @Override
-    public void setLore(ItemStack itemStack, String... lore) {
+    public ItemStack setLore(ItemStack itemStack, String... lore) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(lore, "The itemstack lore object is null.");
 
-        setLore(itemStack, Arrays.asList(lore));
+        return setLore(itemStack, Arrays.asList(lore));
     }
 
     @Override
-    public void setLore(ItemStack itemStack, Collection<? extends String> lore) {
+    public ItemStack setLore(ItemStack itemStack, Collection<? extends String> lore) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(lore, "The itemstack lore object is null.");
@@ -144,17 +149,18 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
                 itemStack.setItemMeta(itemMeta);
             }
         }
+        return itemStack;
     }
 
     @Override
-    public void addLore(ItemStack itemStack, String... lore) {
+    public ItemStack addLore(ItemStack itemStack, String... lore) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(lore, "The itemstack lore object is null.");
 
         if(lore.length <= 0) {
 
-            return;
+            return itemStack;
         }
         Set<String> sourceLore = getLores(itemStack);
 
@@ -164,18 +170,18 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
         }
         sourceLore.addAll(Arrays.asList(lore));
 
-        setLore(itemStack, sourceLore);
+        return setLore(itemStack, sourceLore);
     }
 
     @Override
-    public void addLore(ItemStack itemStack, Collection<? extends String> lore) {
+    public ItemStack addLore(ItemStack itemStack, Collection<? extends String> lore) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(lore, "The itemstack lore object is null.");
 
         if(lore.size() <= 0) {
 
-            return;
+            return itemStack;
         }
         Set<String> sourceLore = getLores(itemStack);
 
@@ -185,15 +191,15 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
         }
         sourceLore.addAll(lore);
 
-        setLore(itemStack, sourceLore);
+        return setLore(itemStack, sourceLore);
     }
 
     @Override
-    public void clearLore(ItemStack itemStack) {
+    public ItemStack clearLore(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        setLore(itemStack, new ArrayList<>());
+        return setLore(itemStack, new ArrayList<>());
     }
 
     @Override
@@ -285,16 +291,18 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
     }
 
     @Override
-    public void addEnchantment(ItemStack itemStack, Enchantment enchantment, int level) {
+    public ItemStack addEnchantment(ItemStack itemStack, Enchantment enchantment, int level) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(enchantment, "The itemstack enchantment object is null.");
 
         itemStack.addUnsafeEnchantment(enchantment, level);
+
+        return itemStack;
     }
 
     @Override
-    public void addEnchantment(ItemStack itemStack, Map<Enchantment, Integer> enchantmentMap) {
+    public ItemStack addEnchantment(ItemStack itemStack, Map<Enchantment, Integer> enchantmentMap) {
 
         Validate.notNull(enchantmentMap, "The itemstack enchantment map object is null.");
 
@@ -305,20 +313,23 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
                 addEnchantment(itemStack, entry.getKey(), entry.getValue());
             }
         }
+        return itemStack;
     }
 
     @Override
-    public void addSafeEnchantment(ItemStack itemStack, Enchantment enchantment, int level) {
+    public ItemStack addSafeEnchantment(ItemStack itemStack, Enchantment enchantment, int level) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(enchantment, "The itemstack enchantment object is null.");
         Validate.isTrue(level >= enchantment.getStartLevel() && level <= enchantment.getMaxLevel(), "The itemstack enchantment level not safe.");
 
         itemStack.addEnchantment(enchantment, level);
+
+        return itemStack;
     }
 
     @Override
-    public void addSafeEnchantment(ItemStack itemStack, Map<Enchantment, Integer> enchantmentMap) {
+    public ItemStack addSafeEnchantment(ItemStack itemStack, Map<Enchantment, Integer> enchantmentMap) {
 
         Validate.notNull(enchantmentMap, "The itemstack enchantment map object is null.");
 
@@ -329,19 +340,22 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
                 addSafeEnchantment(itemStack, entry.getKey(), entry.getValue());
             }
         }
+        return itemStack;
     }
 
     @Override
-    public void removeEnchantment(ItemStack itemStack, Enchantment enchantment) {
+    public ItemStack removeEnchantment(ItemStack itemStack, Enchantment enchantment) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(enchantment, "The itemstack enchantment object is null.");
 
         itemStack.removeEnchantment(enchantment);
+
+        return itemStack;
     }
 
     @Override
-    public void removeEnchantment(ItemStack itemStack, Collection<? extends Enchantment> enchantments) {
+    public ItemStack removeEnchantment(ItemStack itemStack, Collection<? extends Enchantment> enchantments) {
 
         Validate.notNull(enchantments, "The itemstack enchantment collection object is null.");
 
@@ -352,10 +366,11 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
                 removeEnchantment(itemStack, enchantment);
             }
         }
+        return itemStack;
     }
 
     @Override
-    public void clearEnchantment(ItemStack itemStack) {
+    public ItemStack clearEnchantment(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack enchantment collection object is null.");
 
@@ -365,6 +380,7 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
 
             enchantmentMap.keySet().forEach(itemStack::removeEnchantment);
         }
+        return itemStack;
     }
 
     @Override
@@ -391,7 +407,7 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
     }
 
     @Override
-    public void addFlags(ItemStack itemStack, ItemFlag... flags) {
+    public ItemStack addFlags(ItemStack itemStack, ItemFlag... flags) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(flags, "The itemstack flag object is null.");
@@ -400,14 +416,16 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         if(itemMeta == null) {
 
-            return;
+            return itemStack;
         }
         itemMeta.addItemFlags(flags);
         itemStack.setItemMeta(itemMeta);
+
+        return itemStack;
     }
 
     @Override
-    public void addFlags(ItemStack itemStack, Collection<? extends ItemFlag> flags) {
+    public ItemStack addFlags(ItemStack itemStack, Collection<? extends ItemFlag> flags) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(flags, "The itemstack flag object is null.");
@@ -416,14 +434,16 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         if(itemMeta == null) {
 
-            return;
+            return itemStack;
         }
         itemMeta.addItemFlags(flags.toArray(new ItemFlag[flags.size()]));
         itemStack.setItemMeta(itemMeta);
+
+        return itemStack;
     }
 
     @Override
-    public void removeFlags(ItemStack itemStack, ItemFlag... flags) {
+    public ItemStack removeFlags(ItemStack itemStack, ItemFlag... flags) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(flags, "The itemstack flag object is null.");
@@ -432,14 +452,16 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         if(itemMeta == null) {
 
-            return;
+            return itemStack;
         }
         itemMeta.removeItemFlags(flags);
         itemStack.setItemMeta(itemMeta);
+
+        return itemStack;
     }
 
     @Override
-    public void removeFlags(ItemStack itemStack, Collection<? extends ItemFlag> flags) {
+    public ItemStack removeFlags(ItemStack itemStack, Collection<? extends ItemFlag> flags) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(flags, "The itemstack flag object is null.");
@@ -448,10 +470,12 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         if(itemMeta == null) {
 
-            return;
+            return itemStack;
         }
         itemMeta.removeItemFlags(flags.toArray(new ItemFlag[flags.size()]));
         itemStack.setItemMeta(itemMeta);
+
+        return itemStack;
     }
 
     @Override
@@ -483,19 +507,19 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
     }
 
     @Override
-    public void clearFlags(ItemStack itemStack) {
+    public ItemStack clearFlags(ItemStack itemStack) {
 
         Set<ItemFlag> flagSet = getFlags(itemStack);
 
         if(flagSet == null || flagSet.size() <= 0) {
 
-            return;
+            return itemStack;
         }
-        removeFlags(itemStack, flagSet);
+        return removeFlags(itemStack, flagSet);
     }
 
     @Override
-    public void setLeatherColor(ItemStack itemStack, Color color) {
+    public ItemStack setLeatherColor(ItemStack itemStack, Color color) {
 
         Validate.notNull(itemStack, "The itemstack flag object is null.");
         Validate.isTrue(ItemLibraryFactorys.item().isLeatherArmor(itemStack), "The itemstack type not leather.");
@@ -503,16 +527,18 @@ public class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         if(!itemStack.hasItemMeta()) {
 
-            return;
+            return itemStack;
         }
         LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
         leatherArmorMeta.setColor(color);
         itemStack.setItemMeta(leatherArmorMeta);
+
+        return itemStack;
     }
 
     @Override
-    public void setLeatherColor(ItemStack itemStack, int red, int green, int blue) {
+    public ItemStack setLeatherColor(ItemStack itemStack, int red, int green, int blue) {
 
-        setLeatherColor(itemStack, Color.fromRGB(red, green, blue));
+        return setLeatherColor(itemStack, Color.fromRGB(red, green, blue));
     }
 }

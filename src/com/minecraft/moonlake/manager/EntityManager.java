@@ -3,6 +3,7 @@ package com.minecraft.moonlake.manager;
 import com.google.common.collect.Sets;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.reflect.Reflect;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -24,14 +25,19 @@ import java.util.Set;
  */
 public class EntityManager extends MoonLakeManager {
 
+    private EntityManager() {
+
+    }
+
     /**
      * 清除实体的路径发现者 AI
      *
      * @param entity 实体
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     public static void removePathFinders(Entity entity) {
 
-        if(entity == null) return;
+        Validate.notNull(entity, "The entity object is null.");
 
         try {
 
@@ -70,8 +76,11 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @param key 键
      * @param value 值
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     public static void setTagValue(Entity entity, String key, Object value) {
+
+        Validate.notNull(entity, "The entity object is null.");
 
         try {
 
@@ -102,6 +111,7 @@ public class EntityManager extends MoonLakeManager {
      *
      * @param entity 实体
      * @param flag 是否无 AI
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     public static void setNoAI(Entity entity, boolean flag) {
 
@@ -120,6 +130,7 @@ public class EntityManager extends MoonLakeManager {
      *
      * @param entity 实体
      * @param flag 是否沉默
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     public static void setSilent(Entity entity, boolean flag) {
 
@@ -138,6 +149,7 @@ public class EntityManager extends MoonLakeManager {
      *
      * @param entity 实体
      * @param flag 是否坚不可摧
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     public static void setInvulnerable(Entity entity, boolean flag) {
 
@@ -157,6 +169,7 @@ public class EntityManager extends MoonLakeManager {
      * @param location 位置
      * @param radius 半径
      * @return 实体集合
+     * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
      */
     public static List<LivingEntity> getEntityInRadius(Location location, double radius) {
 
@@ -170,9 +183,13 @@ public class EntityManager extends MoonLakeManager {
      * @param radius 半径
      * @param owner 无视主人
      * @return 实体集合
+     * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果主人对象为 {@code null} 则抛出异常
      */
     public static List<LivingEntity> getEntityInRadius(Location location, double radius, Player owner) {
 
+        Validate.notNull(owner, "The owner object is null.");
+
         List<LivingEntity> entityList = getEntityInRadius(location, radius);
 
         for(int i = 0; i < entityList.size(); i++) {
@@ -197,9 +214,13 @@ public class EntityManager extends MoonLakeManager {
      * @param owner 无视主人
      * @param ignoreEntity 无视的实体
      * @return 实体集合
+     * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果主人对象为 {@code null} 则抛出异常
      */
     public static List<LivingEntity> getEntityInRadius(Location location, double radius, Player owner, Set<Class<? extends LivingEntity>> ignoreEntity) {
 
+        Validate.notNull(owner, "The owner object is null.");
+
         List<LivingEntity> entityList = getEntityInRadius(location, radius, ignoreEntity);
 
         for(int i = 0; i < entityList.size(); i++) {
@@ -223,8 +244,12 @@ public class EntityManager extends MoonLakeManager {
      * @param radius 半径
      * @param owner 无视主人
      * @return 实体集合
+     * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果主人对象为 {@code null} 则抛出异常
      */
     public static List<LivingEntity> getEntityInRadius(Location location, double radius, MoonLakePlayer owner) {
+
+        Validate.notNull(owner, "The owner object is null.");
 
         List<LivingEntity> entityList = getEntityInRadius(location, radius);
 
@@ -250,8 +275,13 @@ public class EntityManager extends MoonLakeManager {
      * @param owner 无视主人
      * @param ignoreEntity 无视的实体
      * @return 实体集合
+     * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果主人对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果忽略实体对象为 {@code null} 则抛出异常
      */
     public static List<LivingEntity> getEntityInRadius(Location location, double radius, MoonLakePlayer owner, Set<Class<? extends LivingEntity>> ignoreEntity) {
+
+        Validate.notNull(owner, "The owner object is null.");
 
         List<LivingEntity> entityList = getEntityInRadius(location, radius, ignoreEntity);
 
@@ -276,8 +306,13 @@ public class EntityManager extends MoonLakeManager {
      * @param radius 半径
      * @param ignoreEntity 无视的实体
      * @return 实体集合
+     * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果忽略实体对象为 {@code null} 则抛出异常
      */
     public static List<LivingEntity> getEntityInRadius(Location location, double radius, Set<Class<? extends LivingEntity>> ignoreEntity) {
+
+        Validate.notNull(location, "The location object is null.");
+        Validate.notNull(ignoreEntity, "The ignoreEntity set object is null.");
 
         List<LivingEntity> entityList = new ArrayList<>();
 
@@ -297,6 +332,8 @@ public class EntityManager extends MoonLakeManager {
      * @param source 源实体
      * @param damager 攻击者实体
      * @param damage 真实伤害
+     * @throws IllegalArgumentException 如果源实体对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果攻击者实体对象为 {@code null} 则抛出异常
      */
     public static void realDamage(LivingEntity source, MoonLakePlayer damager, double damage) {
 
@@ -309,10 +346,15 @@ public class EntityManager extends MoonLakeManager {
      * @param source 源实体
      * @param damager 攻击者实体
      * @param damage 真实伤害
+     * @throws IllegalArgumentException 如果源实体对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果攻击者实体对象为 {@code null} 则抛出异常
      */
     public static void realDamage(LivingEntity source, LivingEntity damager, double damage) {
 
-        if(source != null && !source.isDead() && damager != null && !damager.isDead() && damage > 0d) {
+        Validate.notNull(source, "The entity source object is null.");
+        Validate.notNull(damager, "The entity damager object is null.");
+
+        if(!source.isDead() && !damager.isDead() && damage > 0d) {
 
             EntityDamageByEntityEvent edbee = new EntityDamageByEntityEvent(damager, source, EntityDamageEvent.DamageCause.CUSTOM, damage);
 
@@ -335,8 +377,8 @@ public class EntityManager extends MoonLakeManager {
      *
      * @param entity 实体
      * @param value 值
-     *
-     * @see com.minecraft.moonlake.ConfigPath.manager.EntityManager.Attribute.AttributeType#MOVEMENT_SPEED
+     * @see AttributeType#MOVEMENT_SPEED
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     public static void setMovementSpeed(Entity entity, double value) {
 
@@ -348,6 +390,7 @@ public class EntityManager extends MoonLakeManager {
      *
      * @param entity 实体
      * @return 实体的移动速度值 异常返回 -1
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     public static double getMovementSpeed(Entity entity) {
 
@@ -359,8 +402,8 @@ public class EntityManager extends MoonLakeManager {
      *
      * @param entity 实体
      * @param value 值
-     *
-     * @see com.minecraft.moonlake.ConfigPath.manager.EntityManager.Attribute.AttributeType#KNOCK_BACK_RESISTANCE
+     * @see AttributeType#KNOCK_BACK_RESISTANCE
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     public static void setKnockBackResistance(Entity entity, double value) {
 
@@ -372,6 +415,7 @@ public class EntityManager extends MoonLakeManager {
      *
      * @param entity 实体
      * @return 实体的击退抗性值 异常返回 -1
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     public static double getKnockBackResistance(Entity entity) {
 
@@ -383,8 +427,8 @@ public class EntityManager extends MoonLakeManager {
      *
      * @param entity 实体
      * @param value 值
-     *
-     * @see com.minecraft.moonlake.ConfigPath.manager.EntityManager.Attribute.AttributeType#ATTACK_DAMAGE
+     * @see AttributeType#ATTACK_DAMAGE
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     public static void setDamage(Entity entity, double value) {
 
@@ -396,6 +440,7 @@ public class EntityManager extends MoonLakeManager {
      *
      * @param entity 实体
      * @return 实体的攻击伤害值 异常返回 -1
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     public static double getDamage(Entity entity) {
 
@@ -407,8 +452,8 @@ public class EntityManager extends MoonLakeManager {
      *
      * @param entity 实体
      * @param value 值
-     *
-     * @see com.minecraft.moonlake.ConfigPath.manager.EntityManager.Attribute.AttributeType#MAX_HEALTH
+     * @see AttributeType#MAX_HEALTH
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     public static void setMaxHealth(Entity entity, double value) {
 
@@ -421,8 +466,8 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @param value 值
      * @param regain 是否恢复
-     *
-     * @see com.minecraft.moonlake.ConfigPath.manager.EntityManager.Attribute.AttributeType#MAX_HEALTH
+     * @see AttributeType#MAX_HEALTH
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     public static void setMaxHealth(Entity entity, double value, boolean regain) {
 
@@ -439,8 +484,8 @@ public class EntityManager extends MoonLakeManager {
      *
      * @param entity 实体
      * @param value 值
-     *
-     * @see com.minecraft.moonlake.ConfigPath.manager.EntityManager.Attribute.AttributeType#FOLLOW_RANGE
+     * @see AttributeType#FOLLOW_RANGE
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     public static void setFollowRange(Entity entity, double value) {
 
@@ -452,6 +497,7 @@ public class EntityManager extends MoonLakeManager {
      *
      * @param entity 实体
      * @return 实体的追踪范围 异常返回 -1
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     public static double getFollowRange(Entity entity) {
 
@@ -464,8 +510,13 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @param type 属性类型
      * @param value 值
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果属性类型对象为 {@code null} 则抛出异常
      */
     public static void setAttribute(Entity entity, AttributeType type, double value) {
+
+        Validate.notNull(entity, "The entity object is null.");
+        Validate.notNull(type, "The attribute type object is null.");
 
         try {
 
@@ -496,8 +547,13 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @param type 属性类型
      * @return 属性类型的值 异常返回 -1
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果属性类型对象为 {@code null} 则抛出异常
      */
     public static double getAttribute(Entity entity, AttributeType type) {
+
+        Validate.notNull(entity, "The entity object is null.");
+        Validate.notNull(type, "The attribute type object is null.");
 
         try {
 
@@ -529,8 +585,11 @@ public class EntityManager extends MoonLakeManager {
      * @param type 类型
      * @param value 值
      * @return 属性符合的值
+     * @throws IllegalArgumentException 如果属性类型对象为 {@code null} 则抛出异常
      */
     protected final static double valueCheck(AttributeType type, double value) {
+
+        Validate.notNull(type, "The attribute type object is null.");
 
         double min = Math.max(type.getMin(), value);
 

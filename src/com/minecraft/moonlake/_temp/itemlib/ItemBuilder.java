@@ -1,6 +1,5 @@
 package com.minecraft.moonlake._temp.itemlib;
 
-import com.minecraft.moonlake.MoonLakePlugin;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -43,15 +42,15 @@ public class ItemBuilder {
     public ItemBuilder(Material type, int data) {
 
         this.data = data;
+        this.itemlib = null;
         this.item = new ItemStack(type, 1, (short)data);
-        this.itemlib = MoonLakePlugin.getInstances().getItemlib();
     }
 
     public ItemBuilder(Material type, int data, String displayName) {
 
         this.data = data;
-        this.itemlib = MoonLakePlugin.getInstances().getItemlib();
-        this.item = itemlib.create(type, data, 1, displayName);
+        this.itemlib = null;
+        this.item = new ItemStack(type, 1, (short) data);
     }
 
     /**

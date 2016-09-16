@@ -2,6 +2,8 @@ package com.minecraft.moonlake.item;
 
 import com.minecraft.moonlake.api.item.AttributeModify;
 import com.minecraft.moonlake.api.item.potion.PotionBase;
+import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
+import com.minecraft.moonlake.api.item.potion.PotionEffectType;
 import com.minecraft.moonlake.api.item.potion.PotionType;
 import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
 import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
@@ -67,9 +69,9 @@ public class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public void setUnbreakable(ItemStack itemStack, boolean unbreakable) {
+    public ItemStack setUnbreakable(ItemStack itemStack, boolean unbreakable) {
 
-        skullExpression.setUnbreakable(itemStack, unbreakable);
+        return skullExpression.setUnbreakable(itemStack, unbreakable);
     }
 
     @Override
@@ -79,27 +81,57 @@ public class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public void setAttribute(ItemStack itemStack, AttributeModify attribute) {
+    public ItemStack setAttribute(ItemStack itemStack, AttributeModify attribute) {
 
-        skullExpression.setAttribute(itemStack, attribute);
+        return skullExpression.setAttribute(itemStack, attribute);
     }
 
     @Override
-    public void setAttribute(ItemStack itemStack, AttributeModify.Type type, AttributeModify.Operation operation, double amount) {
+    public ItemStack setAttribute(ItemStack itemStack, AttributeModify.Type type, AttributeModify.Operation operation, double amount) {
 
-        skullExpression.setAttribute(itemStack, type, operation, amount);
+        return skullExpression.setAttribute(itemStack, type, operation, amount);
     }
 
     @Override
-    public void setAttribute(ItemStack itemStack, AttributeModify.Type type, AttributeModify.Slot slot, AttributeModify.Operation operation, double amount) {
+    public ItemStack setAttribute(ItemStack itemStack, AttributeModify.Type type, AttributeModify.Slot slot, AttributeModify.Operation operation, double amount) {
 
-        skullExpression.setAttribute(itemStack, type, slot, operation, amount);
+        return skullExpression.setAttribute(itemStack, type, slot, operation, amount);
     }
 
     @Override
     public List<AttributeModify> getAttributes(ItemStack itemStack) {
 
         return skullExpression.getAttributes(itemStack);
+    }
+
+    @Override
+    public ItemStack setCustomPotion(ItemStack itemStack, PotionEffectCustom... effects) {
+
+        return skullExpression.setCustomPotion(itemStack, effects);
+    }
+
+    @Override
+    public ItemStack setCustomPotion(ItemStack itemStack, Collection<? extends PotionEffectCustom> effects) {
+
+        return skullExpression.setCustomPotion(itemStack, effects);
+    }
+
+    @Override
+    public ItemStack setCustomPotion(ItemStack itemStack, PotionEffectType effectType, int amplifier, int duration) {
+
+        return skullExpression.setCustomPotion(itemStack, effectType, amplifier, duration);
+    }
+
+    @Override
+    public ItemStack setCustomPotion(ItemStack itemStack, PotionEffectType effectType, int amplifier, int duration, boolean ambient) {
+
+        return skullExpression.setCustomPotion(itemStack, effectType, amplifier, duration, ambient);
+    }
+
+    @Override
+    public ItemStack setCustomPotion(ItemStack itemStack, PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        return skullExpression.setCustomPotion(itemStack, effectType, amplifier, duration, showParticles);
     }
 
     @Override
@@ -265,21 +297,111 @@ public class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public void setDisplayName(ItemStack itemStack, String displayName) {
+    public ItemStack createCustomPotion(PotionType type, PotionEffectCustom... effects) {
 
-        skullExpression.setDisplayName(itemStack, displayName);
+        return skullExpression.createCustomPotion(type, effects);
     }
 
     @Override
-    public void setAmount(ItemStack itemStack, int amount) {
+    public ItemStack createCustomPotion(PotionType type, int amount, PotionEffectCustom... effects) {
 
-        skullExpression.setAmount(itemStack, amount);
+        return skullExpression.createCustomPotion(type, amount, effects);
     }
 
     @Override
-    public void setDurability(ItemStack itemStack, int durability) {
+    public ItemStack createCustomPotion(PotionType type, int amount, String displayName, PotionEffectCustom... effects) {
 
-        skullExpression.setDurability(itemStack, durability);
+        return skullExpression.createCustomPotion(type, amount, displayName, effects);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, Collection<? extends PotionEffectCustom> effects) {
+
+        return skullExpression.createCustomPotion(type, effects);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, int amount, Collection<? extends PotionEffectCustom> effects) {
+
+        return skullExpression.createCustomPotion(type, amount, effects);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, int amount, String displayName, Collection<? extends PotionEffectCustom> effects) {
+
+        return skullExpression.createCustomPotion(type, amount, displayName, effects);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, PotionEffectType effectType, int amplifier, int duration) {
+
+        return skullExpression.createCustomPotion(type, effectType, amplifier, duration);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, int amount, PotionEffectType effectType, int amplifier, int duration) {
+
+        return skullExpression.createCustomPotion(type, amount, effectType, amplifier, duration);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, int amount, String displayName, PotionEffectType effectType, int amplifier, int duration) {
+
+        return skullExpression.createCustomPotion(type, amount, displayName, effectType, amplifier, duration);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, PotionEffectType effectType, int amplifier, int duration, boolean ambient) {
+
+        return skullExpression.createCustomPotion(type, effectType, amplifier, duration, ambient);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, int amount, PotionEffectType effectType, int amplifier, int duration, boolean ambient) {
+
+        return skullExpression.createCustomPotion(type, amount, effectType, amplifier, duration, ambient);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, int amount, String displayName, PotionEffectType effectType, int amplifier, int duration, boolean ambient) {
+
+        return skullExpression.createCustomPotion(type, amount, displayName, effectType, amplifier, duration, ambient);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        return skullExpression.createCustomPotion(type, effectType, amplifier, duration, ambient, showParticles);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, int amount, PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        return skullExpression.createCustomPotion(type, amount, effectType, amplifier, duration, ambient, showParticles);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, int amount, String displayName, PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        return skullExpression.createCustomPotion(type, amount, displayName, effectType, amplifier, duration, ambient, showParticles);
+    }
+
+    @Override
+    public ItemStack setDisplayName(ItemStack itemStack, String displayName) {
+
+        return skullExpression.setDisplayName(itemStack, displayName);
+    }
+
+    @Override
+    public ItemStack setAmount(ItemStack itemStack, int amount) {
+
+        return skullExpression.setAmount(itemStack, amount);
+    }
+
+    @Override
+    public ItemStack setDurability(ItemStack itemStack, int durability) {
+
+        return skullExpression.setDurability(itemStack, durability);
     }
 
     @Override
@@ -289,21 +411,21 @@ public class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public void resetDurability(ItemStack itemStack) {
+    public ItemStack resetDurability(ItemStack itemStack) {
 
-        skullExpression.resetDurability(itemStack);
+        return skullExpression.resetDurability(itemStack);
     }
 
     @Override
-    public void addDurability(ItemStack itemStack, int durability) {
+    public ItemStack addDurability(ItemStack itemStack, int durability) {
 
-        skullExpression.addDurability(itemStack, durability);
+        return skullExpression.addDurability(itemStack, durability);
     }
 
     @Override
-    public void takeDurability(ItemStack itemStack, int durability) {
+    public ItemStack takeDurability(ItemStack itemStack, int durability) {
 
-        skullExpression.takeDurability(itemStack, durability);
+        return skullExpression.takeDurability(itemStack, durability);
     }
 
     @Override
@@ -319,33 +441,33 @@ public class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public void setLore(ItemStack itemStack, String... lore) {
+    public ItemStack setLore(ItemStack itemStack, String... lore) {
 
-        skullExpression.setLore(itemStack, lore);
+        return skullExpression.setLore(itemStack, lore);
     }
 
     @Override
-    public void setLore(ItemStack itemStack, Collection<? extends String> lore) {
+    public ItemStack setLore(ItemStack itemStack, Collection<? extends String> lore) {
 
-        skullExpression.setLore(itemStack, lore);
+        return skullExpression.setLore(itemStack, lore);
     }
 
     @Override
-    public void addLore(ItemStack itemStack, String... lore) {
+    public ItemStack addLore(ItemStack itemStack, String... lore) {
 
-        skullExpression.addLore(itemStack, lore);
+        return skullExpression.addLore(itemStack, lore);
     }
 
     @Override
-    public void addLore(ItemStack itemStack, Collection<? extends String> lore) {
+    public ItemStack addLore(ItemStack itemStack, Collection<? extends String> lore) {
 
-        skullExpression.addLore(itemStack, lore);
+        return skullExpression.addLore(itemStack, lore);
     }
 
     @Override
-    public void clearLore(ItemStack itemStack) {
+    public ItemStack clearLore(ItemStack itemStack) {
 
-        skullExpression.clearLore(itemStack);
+        return skullExpression.clearLore(itemStack);
     }
 
     @Override
@@ -385,45 +507,45 @@ public class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public void addEnchantment(ItemStack itemStack, Enchantment enchantment, int level) {
+    public ItemStack addEnchantment(ItemStack itemStack, Enchantment enchantment, int level) {
 
-        skullExpression.addEnchantment(itemStack, enchantment, level);
+        return skullExpression.addEnchantment(itemStack, enchantment, level);
     }
 
     @Override
-    public void addEnchantment(ItemStack itemStack, Map<Enchantment, Integer> enchantmentMap) {
+    public ItemStack addEnchantment(ItemStack itemStack, Map<Enchantment, Integer> enchantmentMap) {
 
-        skullExpression.addEnchantment(itemStack, enchantmentMap);
+        return skullExpression.addEnchantment(itemStack, enchantmentMap);
     }
 
     @Override
-    public void addSafeEnchantment(ItemStack itemStack, Enchantment enchantment, int level) {
+    public ItemStack addSafeEnchantment(ItemStack itemStack, Enchantment enchantment, int level) {
 
-        skullExpression.addSafeEnchantment(itemStack, enchantment, level);
+        return skullExpression.addSafeEnchantment(itemStack, enchantment, level);
     }
 
     @Override
-    public void addSafeEnchantment(ItemStack itemStack, Map<Enchantment, Integer> enchantmentMap) {
+    public ItemStack addSafeEnchantment(ItemStack itemStack, Map<Enchantment, Integer> enchantmentMap) {
 
-        skullExpression.addSafeEnchantment(itemStack, enchantmentMap);
+        return skullExpression.addSafeEnchantment(itemStack, enchantmentMap);
     }
 
     @Override
-    public void removeEnchantment(ItemStack itemStack, Enchantment enchantment) {
+    public ItemStack removeEnchantment(ItemStack itemStack, Enchantment enchantment) {
 
-        skullExpression.removeEnchantment(itemStack, enchantment);
+        return skullExpression.removeEnchantment(itemStack, enchantment);
     }
 
     @Override
-    public void removeEnchantment(ItemStack itemStack, Collection<? extends Enchantment> enchantments) {
+    public ItemStack removeEnchantment(ItemStack itemStack, Collection<? extends Enchantment> enchantments) {
 
-        skullExpression.removeEnchantment(itemStack, enchantments);
+        return skullExpression.removeEnchantment(itemStack, enchantments);
     }
 
     @Override
-    public void clearEnchantment(ItemStack itemStack) {
+    public ItemStack clearEnchantment(ItemStack itemStack) {
 
-        skullExpression.clearEnchantment(itemStack);
+        return skullExpression.clearEnchantment(itemStack);
     }
 
     @Override
@@ -439,27 +561,27 @@ public class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public void addFlags(ItemStack itemStack, ItemFlag... flags) {
+    public ItemStack addFlags(ItemStack itemStack, ItemFlag... flags) {
 
-        skullExpression.addFlags(itemStack, flags);
+        return skullExpression.addFlags(itemStack, flags);
     }
 
     @Override
-    public void addFlags(ItemStack itemStack, Collection<? extends ItemFlag> flags) {
+    public ItemStack addFlags(ItemStack itemStack, Collection<? extends ItemFlag> flags) {
 
-        skullExpression.addFlags(itemStack, flags);
+        return skullExpression.addFlags(itemStack, flags);
     }
 
     @Override
-    public void removeFlags(ItemStack itemStack, ItemFlag... flags) {
+    public ItemStack removeFlags(ItemStack itemStack, ItemFlag... flags) {
 
-        skullExpression.removeFlags(itemStack, flags);
+        return skullExpression.removeFlags(itemStack, flags);
     }
 
     @Override
-    public void removeFlags(ItemStack itemStack, Collection<? extends ItemFlag> flags) {
+    public ItemStack removeFlags(ItemStack itemStack, Collection<? extends ItemFlag> flags) {
 
-        skullExpression.removeFlags(itemStack, flags);
+        return skullExpression.removeFlags(itemStack, flags);
     }
 
     @Override
@@ -469,20 +591,20 @@ public class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public void clearFlags(ItemStack itemStack) {
+    public ItemStack clearFlags(ItemStack itemStack) {
 
-        skullExpression.clearFlags(itemStack);
+        return skullExpression.clearFlags(itemStack);
     }
 
     @Override
-    public void setLeatherColor(ItemStack itemStack, Color color) {
+    public ItemStack setLeatherColor(ItemStack itemStack, Color color) {
 
-        skullExpression.setLeatherColor(itemStack, color);
+        return skullExpression.setLeatherColor(itemStack, color);
     }
 
     @Override
-    public void setLeatherColor(ItemStack itemStack, int red, int green, int blue) {
+    public ItemStack setLeatherColor(ItemStack itemStack, int red, int green, int blue) {
 
-        skullExpression.setLeatherColor(itemStack, red, green, blue);
+        return skullExpression.setLeatherColor(itemStack, red, green, blue);
     }
 }

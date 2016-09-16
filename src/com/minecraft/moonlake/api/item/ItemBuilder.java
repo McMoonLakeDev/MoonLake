@@ -1,5 +1,7 @@
 package com.minecraft.moonlake.api.item;
 
+import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
+import com.minecraft.moonlake.api.item.potion.PotionEffectType;
 import org.bukkit.Color;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -258,4 +260,60 @@ public interface ItemBuilder {
      * @throws IllegalArgumentException 如果特殊属性对象为 {@code null} 则抛出异常
      */
     ItemBuilder setAttribute(AttributeModify attribute);
+
+    /**
+     * 设置药水物品栈的自定义药水效果
+     *
+     * @param effect 药水自定义效果
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果药水自定义效果对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.*Potion} 则抛出异常
+     */
+    ItemBuilder setCustomPotion(PotionEffectCustom... effect);
+
+    /**
+     * 设置药水物品栈的自定义药水效果
+     *
+     * @param effect 药水自定义效果
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果药水自定义效果对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.*Potion} 则抛出异常
+     */
+    ItemBuilder setCustomPotion(Collection<? extends PotionEffectCustom> effect);
+
+    /**
+     * 设置药水物品栈的自定义药水效果
+     *
+     * @param effectType 药水效果类型
+     * @param amplifier 药水效果等级
+     * @param duration 药水效果时间
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.*Potion} 则抛出异常
+     */
+    ItemBuilder setCustomPotion(PotionEffectType effectType, int amplifier, int duration);
+
+    /**
+     * 设置药水物品栈的自定义药水效果
+     *
+     * @param effectType 药水效果类型
+     * @param amplifier 药水效果等级
+     * @param duration 药水效果时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.*Potion} 则抛出异常
+     */
+    ItemBuilder setCustomPotion(PotionEffectType effectType, int amplifier, int duration, boolean ambient);
+
+    /**
+     * 设置药水物品栈的自定义药水效果
+     *
+     * @param effectType 药水效果类型
+     * @param amplifier 药水效果等级
+     * @param duration 药水效果时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.*Potion} 则抛出异常
+     */
+    ItemBuilder setCustomPotion(PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles);
 }
