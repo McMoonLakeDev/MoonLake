@@ -1,4 +1,4 @@
-package com.minecraft.moonlake.player;
+package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
 import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
@@ -7,7 +7,7 @@ import org.bukkit.Material;
 /**
  * Created by MoonLake on 2016/9/14.
  */
-public class PlayerExpressionWrapped extends PlayerExpression {
+class PlayerExpressionWrapped extends PlayerExpression {
 
     private final NMSPlayerExpression nmsPlayerExpression;
 

@@ -1,7 +1,5 @@
 package com.minecraft.moonlake.api.player;
 
-import com.minecraft.moonlake.player.PlayerExpressionWrapped;
-
 /**
  * Created by MoonLake on 2016/9/14.
  */

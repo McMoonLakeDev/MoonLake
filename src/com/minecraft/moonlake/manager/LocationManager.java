@@ -10,6 +10,10 @@ import org.bukkit.World;
  */
 public class LocationManager extends MoonLakeManager {
 
+    private LocationManager() {
+
+    }
+
     /**
      * 将字符串数据转换到位置对象
      *

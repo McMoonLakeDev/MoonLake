@@ -1,11 +1,9 @@
-package com.minecraft.moonlake.player;
+package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.MoonLakePlugin;
 import com.minecraft.moonlake.api.nms.packet.PacketPlayOutChat;
 import com.minecraft.moonlake.api.nms.packet.PacketPlayOutPlayerListHeaderFooter;
 import com.minecraft.moonlake.api.nms.packet.PacketPlayOutTitle;
-import com.minecraft.moonlake.api.player.NMSPlayerLibrary;
-import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
@@ -22,7 +20,7 @@ import java.lang.reflect.Method;
 /**
  * Created by MoonLake on 2016/9/14.
  */
-public class NMSPlayerExpression implements NMSPlayerLibrary {
+class NMSPlayerExpression implements NMSPlayerLibrary {
 
     public NMSPlayerExpression() {
 

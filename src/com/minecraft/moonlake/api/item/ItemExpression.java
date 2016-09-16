@@ -1,6 +1,5 @@
-package com.minecraft.moonlake.item;
+package com.minecraft.moonlake.api.item;
 
-import com.minecraft.moonlake.api.item.ItemLibrary;
 import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
 import com.minecraft.moonlake.property.SimpleBooleanProperty;
 import com.minecraft.moonlake.validate.Validate;
@@ -10,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Created by MoonLake on 2016/9/12.
  */
-public abstract class ItemExpression implements ItemLibrary {
+abstract class ItemExpression implements ItemLibrary {
 
     public ItemExpression() {
 

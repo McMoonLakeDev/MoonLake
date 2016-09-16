@@ -4,6 +4,7 @@ import com.google.common.io.BaseEncoding;
 import com.minecraft.moonlake.data.NBTTagData;
 import com.minecraft.moonlake.data.NBTTagDataWrapped;
 import com.minecraft.moonlake.reflect.Reflect;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,6 +19,10 @@ import java.lang.reflect.Method;
  */
 public class ItemManager extends MoonLakeManager {
 
+    private ItemManager() {
+
+    }
+
     /**
      * 设置物品栈 NBT 标签指定键的值
      *
@@ -25,8 +30,11 @@ public class ItemManager extends MoonLakeManager {
      * @param key 键
      * @param value 值
      * @return 改变 NBT 标签属性后的物品栈对象 异常返回 源
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
     public static ItemStack setTagValue(ItemStack item, String key, Object value) {
+
+        Validate.notNull(item, "The itemstack object is null.");
 
         try {
 
@@ -58,8 +66,11 @@ public class ItemManager extends MoonLakeManager {
      * @param item 物品栈
      * @param key 键
      * @return 物品栈指定 NBT 标签属性的值 异常或没有返回 null
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
     public static NBTTagData getTagValue(ItemStack item, String key) {
+
+        Validate.notNull(item, "The itemstack object is null.");
 
         NBTTagData tagData = null;
 
@@ -114,8 +125,11 @@ public class ItemManager extends MoonLakeManager {
      * @param item 物品栈
      * @param key 键
      * @return 物品栈指定 NBT 标签属性的字符串值 异常或没有返回 null
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
     public static String getTagStringValue(ItemStack item, String key) {
+
+        Validate.notNull(item, "The itemstack object is null.");
 
         if(hasTag(item)) {
 
@@ -153,8 +167,11 @@ public class ItemManager extends MoonLakeManager {
      *
      * @param item 物品栈
      * @return true 拥有 NBT 标签属性 else 没有
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
     public static boolean hasTag(ItemStack item) {
+
+        Validate.notNull(item, "The itemstack object is null.");
 
         boolean result = false;
 
@@ -183,6 +200,7 @@ public class ItemManager extends MoonLakeManager {
      * @param item 物品栈
      * @param key 键
      * @return true 拥有 NBT 标签属性键 else 没有
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
     public static boolean hasTagKey(ItemStack item, String key) {
 
@@ -193,8 +211,11 @@ public class ItemManager extends MoonLakeManager {
      * 获取物品栈 NBT 标签的字符串值
      * @param item 物品栈
      * @return 字符串 NBT 标签值 异常返回空
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
     public static String getTagString(ItemStack item) {
+
+        Validate.notNull(item, "The itemstack object is null.");
 
         try {
 
@@ -220,8 +241,11 @@ public class ItemManager extends MoonLakeManager {
      *
      * @param item 物品栈
      * @return 物品栈的显示名 没有则返回 类型名
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    public static String getItemDisplayName(ItemStack item) {
+    public static String getDisplayName(ItemStack item) {
+
+        Validate.notNull(item, "The itemstack object is null.");
 
         return item.hasItemMeta() && item.getItemMeta().hasDisplayName() ? item.getItemMeta().getDisplayName() : item.getType().name();
     }
@@ -296,8 +320,8 @@ public class ItemManager extends MoonLakeManager {
      */
     public static boolean compareDisplayName(ItemStack source, ItemStack target) {
 
-        String sourceName = getItemDisplayName(source);
-        String targetName = getItemDisplayName(target);
+        String sourceName = getDisplayName(source);
+        String targetName = getDisplayName(target);
 
         return (sourceName == null && targetName == null) || (sourceName != null && targetName != null && sourceName.equals(targetName));
     }
@@ -333,8 +357,11 @@ public class ItemManager extends MoonLakeManager {
      *
      * @param item 物品栈
      * @return 物品栈字符串数据 异常返回 null
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
     public static String serialize(ItemStack item) {
+
+        Validate.notNull(item, "The itemstack object is null.");
 
         if(!isAir(item)) {
 
@@ -374,7 +401,7 @@ public class ItemManager extends MoonLakeManager {
                     }
                     catch (Exception e) {
 
-                        getMain().getMLogger().warn("序列化物品栈时关闭输出流时异常: " + e.getMessage());
+                        e.printStackTrace();
                     }
                 }
             }
@@ -387,10 +414,13 @@ public class ItemManager extends MoonLakeManager {
      *
      * @param data 字符串数据
      * @return 物品栈对象 异常返回 null
+     * @throws IllegalArgumentException 如果字符串数据对象为 {@code null} 则抛出异常
      */
     public static ItemStack deserialize(String data) {
 
-        if(data != null && !data.isEmpty()) {
+        Validate.notNull(data, "The string data object is null.");
+
+        if(!data.isEmpty()) {
 
             ByteArrayInputStream inputStream = null;
 
@@ -426,7 +456,7 @@ public class ItemManager extends MoonLakeManager {
                     }
                     catch (Exception e) {
 
-                        getMain().getMLogger().warn("反序列化字符串数据时关闭输入流时异常: " + e.getMessage());
+                        e.printStackTrace();
                     }
                 }
             }

@@ -1,6 +1,5 @@
-package com.minecraft.moonlake.item;
+package com.minecraft.moonlake.api.item;
 
-import com.minecraft.moonlake.api.item.CraftLibrary;
 import com.minecraft.moonlake.api.item.potion.PotionBase;
 import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.api.item.potion.PotionEffectType;
@@ -16,7 +15,7 @@ import java.util.Collection;
 /**
  * Created by MoonLake on 2016/9/12.
  */
-public class CraftExpression extends MetaExpression implements CraftLibrary {
+class CraftExpression extends MetaExpression implements CraftLibrary {
 
     public CraftExpression() {
 

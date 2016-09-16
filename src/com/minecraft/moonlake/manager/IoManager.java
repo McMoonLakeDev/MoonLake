@@ -14,6 +14,10 @@ import java.util.Map;
  */
 public class IoManager extends MoonLakeManager {
 
+    private IoManager() {
+
+    }
+
     /**
      * 将输入流写出到指定文件对象
      *

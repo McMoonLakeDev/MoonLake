@@ -1,6 +1,5 @@
-package com.minecraft.moonlake.item;
+package com.minecraft.moonlake.api.item;
 
-import com.minecraft.moonlake.api.item.ItemLibraryFactorys;
 import com.minecraft.moonlake.api.item.meta.MetaLibrary;
 import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
 import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * Created by MoonLake on 2016/9/12.
  */
-public class MetaExpression extends AttributeExpression implements MetaLibrary {
+class MetaExpression extends AttributeExpression implements MetaLibrary {
 
     public MetaExpression() {
 

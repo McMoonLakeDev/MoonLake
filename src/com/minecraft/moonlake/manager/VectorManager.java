@@ -7,6 +7,10 @@ import org.bukkit.util.Vector;
  */
 public class VectorManager extends MoonLakeManager {
 
+    private VectorManager() {
+
+    }
+
     /**
      * 将 Bukkit 的 Vector 对象转换为 XYZ 坐标
      *

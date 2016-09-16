@@ -1,4 +1,4 @@
-package com.minecraft.moonlake.item;
+package com.minecraft.moonlake.api.item;
 
 import com.minecraft.moonlake.api.item.skull.SkullLibrary;
 import com.minecraft.moonlake.exception.NotImplementedException;
@@ -14,7 +14,7 @@ import java.net.URL;
 /**
  * Created by MoonLake on 2016/9/13.
  */
-public class SkullExpression extends CraftExpression implements SkullLibrary {
+class SkullExpression extends CraftExpression implements SkullLibrary {
 
     public SkullExpression() {
 

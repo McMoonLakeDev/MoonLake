@@ -1,8 +1,5 @@
-package com.minecraft.moonlake.item;
+package com.minecraft.moonlake.api.item;
 
-import com.minecraft.moonlake.api.item.AttributeLibrary;
-import com.minecraft.moonlake.api.item.AttributeModify;
-import com.minecraft.moonlake.api.item.ItemLibraryFactorys;
 import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.api.item.potion.PotionEffectType;
 import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
@@ -17,7 +14,7 @@ import java.util.*;
 /**
  * Created by MoonLake on 2016/9/13.
  */
-public class AttributeExpression implements AttributeLibrary {
+class AttributeExpression implements AttributeLibrary {
 
     public AttributeExpression() {
 

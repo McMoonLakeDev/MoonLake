@@ -20,6 +20,10 @@ public class NBTManager extends MoonLakeManager {
         NBTTAG_NUMBER_PATTERN = Pattern.compile("(([0-9]+)([bB|sS|lL|fF|dD|]?)|([-+]?)([0-9]+)([bB|sS|lL|fF|dD|]?))|(([0-9]+)|([-+]?)([0-9]+))");
     }
 
+    private NBTManager() {
+
+    }
+
     /**
      * 将 NBT 标签属性的字符串值转换到 NBT 数据对象
      *

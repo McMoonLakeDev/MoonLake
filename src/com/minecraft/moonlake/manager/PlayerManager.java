@@ -1,6 +1,7 @@
 package com.minecraft.moonlake.manager;
 
 import com.minecraft.moonlake.reflect.Reflect;
+import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,11 +17,16 @@ import java.util.UUID;
  */
 public class PlayerManager extends MoonLakeManager {
 
+    private PlayerManager() {
+
+    }
+
     /**
      * 获取指定玩家对象从目标名称
      *
      * @param name 玩家名
      * @return 玩家对象 没有则返回 null
+     * @throws IllegalArgumentException 如果玩家名字对象为 {@code null} 则抛出异常
      */
     public static Player fromName(String name) {
 
@@ -32,6 +38,7 @@ public class PlayerManager extends MoonLakeManager {
      *
      * @param uuid 玩家 UUID
      * @return 玩家对象 没有则返回 null
+     * @throws IllegalArgumentException 如果玩家 UUID 对象为 {@code null} 则抛出异常
      */
     public static Player fromUUID(UUID uuid) {
 
@@ -55,8 +62,11 @@ public class PlayerManager extends MoonLakeManager {
      *
      * @param target 目标玩家
      * @return 在线玩家数组除了目标玩家
+     * @throws IllegalArgumentException 如果目标玩家对象为 {@code null} 则抛出异常
      */
     public static Player[] getOnlinesExceptTarget(Player target) {
+
+        Validate.notNull(target, "The player target object is null.");
 
         Player[] onlines = getOnlines();
         List<Player> playerList = new ArrayList<>();
@@ -76,8 +86,11 @@ public class PlayerManager extends MoonLakeManager {
      *
      * @param player 玩家
      * @return 游戏简介 异常则返回 null
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
      */
     public static GameProfile getProfile(Player player) {
+
+        Validate.notNull(player, "The player object is null.");
 
         GameProfile profile = null;
 

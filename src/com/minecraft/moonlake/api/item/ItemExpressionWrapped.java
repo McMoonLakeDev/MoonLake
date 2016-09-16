@@ -1,6 +1,5 @@
-package com.minecraft.moonlake.item;
+package com.minecraft.moonlake.api.item;
 
-import com.minecraft.moonlake.api.item.AttributeModify;
 import com.minecraft.moonlake.api.item.potion.PotionBase;
 import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.api.item.potion.PotionEffectType;
@@ -23,7 +22,7 @@ import java.util.Set;
 /**
  * Created by MoonLake on 2016/9/13.
  */
-public class ItemExpressionWrapped extends ItemExpression {
+class ItemExpressionWrapped extends ItemExpression {
     
     private final SkullExpression skullExpression;
 

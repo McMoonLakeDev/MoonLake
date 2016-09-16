@@ -1,6 +1,5 @@
-package com.minecraft.moonlake.player;
+package com.minecraft.moonlake.api.player;
 
-import com.minecraft.moonlake.api.player.PlayerLibrary;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -10,7 +9,7 @@ import java.util.UUID;
 /**
  * Created by MoonLake on 2016/9/14.
  */
-public abstract class PlayerExpression implements PlayerLibrary {
+abstract class PlayerExpression implements PlayerLibrary {
 
     public PlayerExpression() {
 
