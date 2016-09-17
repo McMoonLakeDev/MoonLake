@@ -1,6 +1,6 @@
 package com.minecraft.moonlake.manager;
 
-import com.minecraft.moonlake._temp.util.Util;
+import com.minecraft.moonlake.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -94,19 +94,19 @@ public class LocationManager extends MoonLakeManager {
 
                 return
                         location.getWorld().getName() + "," +
-                        Util.rounding(location.getX(), bit) + "," +
-                        Util.rounding(location.getY(), bit) + "," +
-                        Util.rounding(location.getZ(), bit) + "," +
-                        Util.rounding(location.getYaw(), bit) + "," +
-                        Util.rounding(location.getPitch(), bit);
+                                StringUtil.rounding(location.getX(), bit) + "," +
+                                StringUtil.rounding(location.getY(), bit) + "," +
+                                StringUtil.rounding(location.getZ(), bit) + "," +
+                                StringUtil.rounding(location.getYaw(), bit) + "," +
+                                StringUtil.rounding(location.getPitch(), bit);
             }
             else {
 
                 return
                         location.getWorld().getName() + "," +
-                        Util.rounding(location.getX(), bit) + "," +
-                        Util.rounding(location.getY(), bit) + "," +
-                        Util.rounding(location.getZ(), bit);
+                                StringUtil.rounding(location.getX(), bit) + "," +
+                                StringUtil.rounding(location.getY(), bit) + "," +
+                                StringUtil.rounding(location.getZ(), bit);
             }
         }
         return "none,0,0,0,0,0";

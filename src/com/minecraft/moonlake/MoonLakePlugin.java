@@ -14,9 +14,32 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * <h1>Minecraft <a href="http://www.mcyszh.com">MoonLake</a> Core API Plugin</h1>
- * <h6>By Month_Light Q: 1327516533</h6>
- * @version 1.6.8
+ * <hr />
+ * <div>
+ *     <h1>Minecraft MoonLake Core API Plugin</h1>
+ *     <p>By Month_Light Ver: 1.7</p>
+ *     <p>Website: <a href="http://www.mcyszh.com" target="_blank" style="text-decoration: none;">MoonLake Website</a></p>
+ *     <p>QQ Group: 377607025 -> <a href="http://jq.qq.com/?_wv=1027&k=2IfPFrH" target="_blank">Jump</a></p>
+ * </div>
+ * <hr />
+ * <div>
+ *     <h1>目前已经实现的功能有:</h1>
+ *     <ul>
+ *          <li>玩家支持库 {@link com.minecraft.moonlake.api.player.PlayerLibrary}</li>
+ *          <li>物品栈支持库 {@link com.minecraft.moonlake.api.item.ItemLibrary}</li>
+ *          <li>数据库支持库 {@link com.minecraft.moonlake.api.mysql.MySQLConnection}</li>
+ *          <li>花式消息支持库 {@link com.minecraft.moonlake.api.fancy.FancyMessage}</li>
+ *          <li>NMS 数据包发送 {@link com.minecraft.moonlake.api.nms.packet.Packet}</li>
+ *      </ul>
+ *      <p>更多功能开发中 _(:з」∠)_</p>
+ * </div>
+ * <hr />
+ * <div>
+ *     <h1>此项目完全属于开源项目，如需修改和添加功能请到 <a href="http://github.com/u2g/MoonLake" target="_blank">GitHub</a> 进行 Fork 操作.</h1>
+ *     <h1>修改操作请您遵守 <a href="https://github.com/u2g/MoonLake/blob/master/LICENSE" target="_blank">GPLv3</a> 协议，您必须公开修改过的所有代码！</h1>
+ * </div>
+ *
+ * @version 1.7
  * @author Month_Light
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {

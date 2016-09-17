@@ -1,6 +1,5 @@
-package com.minecraft.moonlake.builder;
+package com.minecraft.moonlake.api.item;
 
-import com.minecraft.moonlake.api.item.*;
 import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.api.item.potion.PotionEffectType;
 import com.minecraft.moonlake.api.item.potion.PotionType;
@@ -17,7 +16,7 @@ import java.util.Map;
 /**
  * Created by MoonLake on 2016/9/13.
  */
-public class ItemBuilderWrapped implements ItemBuilder {
+class ItemBuilderWrapped implements ItemBuilder {
 
     private final ItemLibrary itemLibrary;
     private ItemStack itemStack;

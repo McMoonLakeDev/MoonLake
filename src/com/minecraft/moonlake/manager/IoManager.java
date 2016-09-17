@@ -1,6 +1,6 @@
 package com.minecraft.moonlake.manager;
 
-import com.minecraft.moonlake._temp.util.Util;
+import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
 
 import java.io.*;
@@ -194,11 +194,11 @@ public class IoManager extends MoonLakeManager {
 
                     if (value.charAt(0) != '#') {
 
-                        temp.put(key, Util.color(prefix + value));
+                        temp.put(key, StringUtil.toColor(prefix + value).get());
                     }
                     else {
 
-                        temp.put(key, Util.color(value.substring(1)));
+                        temp.put(key, StringUtil.toColor(value.substring(1)).get());
                     }
                 }
             }

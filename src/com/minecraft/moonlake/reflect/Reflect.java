@@ -1,6 +1,8 @@
 package com.minecraft.moonlake.reflect;
 
 import com.minecraft.moonlake.MoonLakePlugin;
+import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
+import com.minecraft.moonlake.property.ReadOnlyStringProperty;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -14,13 +16,13 @@ import java.util.Map;
  */
 public class Reflect {
 
-    private final static String SERVER_VERSION;
-    private final static Integer SERVER_VERSION_NUMBER;
+    private final static ReadOnlyStringProperty SERVER_VERSION;
+    private final static ReadOnlyIntegerProperty SERVER_VERSION_NUMBER;
 
     static {
 
-        SERVER_VERSION = MoonLakePlugin.getInstances().getBukkitVersion().get();
-        SERVER_VERSION_NUMBER = MoonLakePlugin.getInstances().getReleaseNumber().get();
+        SERVER_VERSION = MoonLakePlugin.getInstances().getBukkitVersion();
+        SERVER_VERSION_NUMBER = MoonLakePlugin.getInstances().getReleaseNumber();
     }
 
     /**
@@ -30,7 +32,7 @@ public class Reflect {
      */
     public static String getServerVersion() {
 
-        return SERVER_VERSION;
+        return SERVER_VERSION.get();
     }
 
     /**
@@ -38,9 +40,9 @@ public class Reflect {
      *
      * @return 版本号 10
      */
-    public static Integer getServerVersionNumber() {
+    public static int getServerVersionNumber() {
 
-        return SERVER_VERSION_NUMBER;
+        return SERVER_VERSION_NUMBER.get();
     }
 
     /**

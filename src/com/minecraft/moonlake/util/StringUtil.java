@@ -1,12 +1,10 @@
 package com.minecraft.moonlake.util;
 
-import com.minecraft.moonlake.property.ReadOnlyObjectProperty;
-import com.minecraft.moonlake.property.ReadOnlyStringProperty;
-import com.minecraft.moonlake.property.SimpleObjectProperty;
-import com.minecraft.moonlake.property.SimpleStringProperty;
+import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.ChatColor;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -227,5 +225,30 @@ public class StringUtil {
         DateFormat dateFormat = new SimpleDateFormat(format);
 
         return new SimpleStringProperty(dateFormat.format(new Date()));
+    }
+
+    /**
+     * 将指定双精度浮点数按保留 {@code 2} 位数四舍五入
+     *
+     * @param value 值
+     * @return 最终值
+     */
+    public static ReadOnlyDoubleProperty rounding(double value) {
+
+        return rounding(value, 2);
+    }
+
+    /**
+     * 将指定双精度浮点数按指定位数四舍五入
+     *
+     * @param value 值
+     * @param bit 保留位数
+     * @return 最终值
+     */
+    public static ReadOnlyDoubleProperty rounding(double value, int bit) {
+
+        value = new BigDecimal(value).setScale(bit, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+        return new SimpleDoubleProperty(value);
     }
 }
