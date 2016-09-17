@@ -32,11 +32,6 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
         Validate.notNull(skullOwner, "The itemstack skull owner object is null.");
 
         ItemStack itemStack = createSkull();
-
-        if(!itemStack.hasItemMeta()) {
-
-            return null;
-        }
         SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
         skullMeta.setOwner(skullOwner);
         itemStack.setItemMeta(skullMeta);
@@ -73,7 +68,7 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
 
         Validate.notNull(itemStack, "The itemstack skull object is null.");
 
-        if(itemStack.getType() != Material.SKULL_ITEM || !itemStack.hasItemMeta()) {
+        if(itemStack.getType() != Material.SKULL_ITEM) {
 
             return null;
         }

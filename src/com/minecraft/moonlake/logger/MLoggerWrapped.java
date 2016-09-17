@@ -40,7 +40,7 @@ public final class MLoggerWrapped implements MLogger {
     @Override
     public void log(String message) {
 
-        log(Level.SEVERE, message);
+        log(Level.FINE, message);
     }
 
     @Override
@@ -53,6 +53,12 @@ public final class MLoggerWrapped implements MLogger {
     public void info(String message) {
 
         log(Level.INFO, message);
+    }
+
+    @Override
+    public void error(String message) {
+
+        log(Level.SEVERE, message);
     }
 
     protected void log(Level level, String message) {

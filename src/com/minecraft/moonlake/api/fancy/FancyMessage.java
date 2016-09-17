@@ -172,9 +172,9 @@ public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable
     FancyMessage then(TextualComponent text);
 
     /**
-     * 构造花式消息对象
+     * 创建花式消息对象
      */
-    FancyMessage build();
+    FancyMessage create();
 
     /**
      * 将花式消息对象转换到 Json 字符串

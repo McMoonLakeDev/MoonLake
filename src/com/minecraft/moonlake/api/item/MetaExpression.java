@@ -32,13 +32,12 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(displayName, "The itemstack displayName object is null.");
 
-        ItemMeta itemMeta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : null;
+        ItemMeta itemMeta = itemStack.getItemMeta();
 
         if(itemMeta != null) {
 
             itemMeta.setDisplayName(StringUtil.toColor(displayName).get());
             itemStack.setItemMeta(itemMeta);
-            itemStack.setDurability((short)100);
         }
         return itemStack;
     }
@@ -108,7 +107,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        ItemMeta itemMeta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : null;
+        ItemMeta itemMeta = itemStack.getItemMeta();
 
         if(itemMeta == null || !itemMeta.hasLore()) {
 
@@ -124,9 +123,6 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
     @Override
     public ItemStack setLore(ItemStack itemStack, String... lore) {
 
-        Validate.notNull(itemStack, "The itemstack object is null.");
-        Validate.notNull(lore, "The itemstack lore object is null.");
-
         return setLore(itemStack, Arrays.asList(lore));
     }
 
@@ -136,7 +132,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(lore, "The itemstack lore object is null.");
 
-        ItemMeta itemMeta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : null;
+        ItemMeta itemMeta = itemStack.getItemMeta();
 
         if(itemMeta != null) {
 
@@ -309,7 +305,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
             for(Map.Entry<Enchantment, Integer> entry : enchantmentMap.entrySet()) {
 
-                addEnchantment(itemStack, entry.getKey(), entry.getValue());
+                itemStack = addEnchantment(itemStack, entry.getKey(), entry.getValue());
             }
         }
         return itemStack;
@@ -336,7 +332,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
             for(Map.Entry<Enchantment, Integer> entry : enchantmentMap.entrySet()) {
 
-                addSafeEnchantment(itemStack, entry.getKey(), entry.getValue());
+                itemStack = addSafeEnchantment(itemStack, entry.getKey(), entry.getValue());
             }
         }
         return itemStack;
@@ -362,7 +358,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
             for(final Enchantment enchantment : enchantments) {
 
-                removeEnchantment(itemStack, enchantment);
+                itemStack = removeEnchantment(itemStack, enchantment);
             }
         }
         return itemStack;
@@ -377,7 +373,10 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         if(enchantmentMap != null && enchantmentMap.size() > 0) {
 
-            enchantmentMap.keySet().forEach(itemStack::removeEnchantment);
+            for(final Enchantment enchantment : enchantmentMap.keySet()) {
+
+                itemStack = removeEnchantment(itemStack, enchantment);
+            }
         }
         return itemStack;
     }
@@ -396,7 +395,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        ItemMeta itemMeta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : null;
+        ItemMeta itemMeta = itemStack.getItemMeta();
 
         if(itemMeta == null) {
 
@@ -411,7 +410,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(flags, "The itemstack flag object is null.");
 
-        ItemMeta itemMeta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : null;
+        ItemMeta itemMeta = itemStack.getItemMeta();
 
         if(itemMeta == null) {
 
@@ -429,7 +428,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(flags, "The itemstack flag object is null.");
 
-        ItemMeta itemMeta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : null;
+        ItemMeta itemMeta = itemStack.getItemMeta();
 
         if(itemMeta == null) {
 
@@ -447,7 +446,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(flags, "The itemstack flag object is null.");
 
-        ItemMeta itemMeta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : null;
+        ItemMeta itemMeta = itemStack.getItemMeta();
 
         if(itemMeta == null) {
 
@@ -465,7 +464,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(flags, "The itemstack flag object is null.");
 
-        ItemMeta itemMeta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : null;
+        ItemMeta itemMeta = itemStack.getItemMeta();
 
         if(itemMeta == null) {
 

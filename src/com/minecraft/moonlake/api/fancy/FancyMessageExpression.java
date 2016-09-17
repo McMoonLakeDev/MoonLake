@@ -2,8 +2,10 @@ package com.minecraft.moonlake.api.fancy;
 
 import com.google.gson.stream.JsonWriter;
 import com.minecraft.moonlake.json.JsonRepresentedObject;
+import com.minecraft.moonlake.manager.ItemManager;
 import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.property.*;
+import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -202,9 +204,16 @@ class FancyMessageExpression implements FancyMessage {
 
         Validate.notNull(itemStack, "The tooltip itemstack object is null.");
 
-        // not yet implemented
-        //onHover("show_item", itemStack);
+        String tag = ItemManager.getTagString(itemStack);
 
+        onHover("show_item", new FancyJsonString(
+
+                StringUtil.format("{id:\"minecraft:%1$s\",Damage:%2$s,Count:%3$s,tag:%4$s}",
+                                  itemStack.getType().name().toLowerCase(),
+                                  itemStack.getDurability(),
+                                  itemStack.getAmount(),
+                                  tag == null ? "{}" : tag)
+                        .get()));
         return this;
     }
 
@@ -275,7 +284,7 @@ class FancyMessageExpression implements FancyMessage {
     }
 
     @Override
-    public FancyMessage build() {
+    public FancyMessage create() {
 
         toJsonString();
 
@@ -314,7 +323,7 @@ class FancyMessageExpression implements FancyMessage {
 
         if(jsonString.get() == null) {
 
-            build();
+            create();
         }
         Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tellraw " + player.getName() + " " + jsonString.get());
     }

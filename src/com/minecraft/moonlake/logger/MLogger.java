@@ -34,4 +34,11 @@ public interface MLogger {
      * @param message 消息
      */
     void info(String message);
+
+    /**
+     * 在控制台输出错误消息
+     *
+     * @param message 消息
+     */
+    void error(String message);
 }
