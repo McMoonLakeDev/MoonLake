@@ -1,4 +1,4 @@
-package com.minecraft.moonlake._temp.encrypt;
+package com.minecraft.moonlake.encrypt;
 
 /**
  * Created by MoonLake on 2016/6/4.

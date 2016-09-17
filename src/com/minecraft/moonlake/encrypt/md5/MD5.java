@@ -1,15 +1,19 @@
-package com.minecraft.moonlake._temp.encrypt.md5;
+package com.minecraft.moonlake.encrypt.md5;
+
+import com.minecraft.moonlake.encrypt.EncryptData;
+import com.minecraft.moonlake.property.ReadOnlyStringProperty;
+import com.minecraft.moonlake.property.SimpleStringProperty;
 
 /**
  * Created by MoonLake on 2016/6/28.
  */
-public class MD5 implements MD5Data {
+public class MD5 implements EncryptData {
 
-    private final String md5;
+    private ReadOnlyStringProperty md5;
 
     public MD5(String md5) {
 
-        this.md5 = md5;
+        this.md5 = new SimpleStringProperty(md5);
     }
 
     /**
@@ -17,10 +21,9 @@ public class MD5 implements MD5Data {
      *
      * @return 32 位 MD5 数据
      */
-    @Override
     public String to32Bit() {
 
-        return md5;
+        return md5.get();
     }
 
     /**
@@ -28,7 +31,6 @@ public class MD5 implements MD5Data {
      *
      * @return 32 位 MD5 大写数据
      */
-    @Override
     public String to32BitUpperCase() {
 
         return to32Bit().toUpperCase();
@@ -39,10 +41,9 @@ public class MD5 implements MD5Data {
      *
      * @return 16 位 MD5 数据
      */
-    @Override
     public String to16Bit() {
 
-        return md5.substring(8, 24);
+        return md5.get().substring(8, 24);
     }
 
     /**
@@ -50,7 +51,6 @@ public class MD5 implements MD5Data {
      *
      * @return 16 位 MD5 大写数据
      */
-    @Override
     public String to16BitUpperCase() {
 
         return to16Bit().toUpperCase();
