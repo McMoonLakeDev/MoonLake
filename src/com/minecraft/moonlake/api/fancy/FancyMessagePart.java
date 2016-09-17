@@ -49,14 +49,14 @@ class FancyMessagePart implements JsonRepresentedObject, Cloneable {
 
             for (final FancyMessageStyle style : styles.get()) {
 
-                jsonWriter.name(style.getType()).value(true);
+                jsonWriter.name(style.getType().toLowerCase()).value(true);
             }
             if (clickAction.get() != null && clickActionValue.get() != null) {
 
                 jsonWriter.name("clickEvent")
                         .beginObject()
                         .name("action").value(clickAction.get())
-                        .name("value").value(clickAction.get())
+                        .name("value").value(clickActionValue.get())
                         .endObject();
             }
             if (hoverAction.get() != null && hoverAction.get() != null) {

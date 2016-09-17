@@ -8,6 +8,7 @@ import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -68,7 +69,7 @@ class FancyMessageExpression implements FancyMessage {
     @Override
     public Iterator<FancyMessagePart> iterator() {
 
-        return null;
+        return partList.get().iterator();
     }
 
     @Override
@@ -104,6 +105,8 @@ class FancyMessageExpression implements FancyMessage {
     @Override
     public FancyMessage style(FancyMessageStyle... style) {
 
+        Validate.notNull(style, "The fancy message style object is null.");
+
         getLaster().styles.get().addAll(Arrays.asList(style));
 
         dirty.set(true);
@@ -114,6 +117,8 @@ class FancyMessageExpression implements FancyMessage {
     @Override
     public FancyMessage file(String path) {
 
+        Validate.notNull(path, "The fancy message file path object is null.");
+
         onClick("open_file", path);
 
         return this;
@@ -121,6 +126,8 @@ class FancyMessageExpression implements FancyMessage {
 
     @Override
     public FancyMessage link(String url) {
+
+        Validate.notNull(url, "The fancy message url object is null.");
 
         onClick("open_url", url);
 
@@ -130,6 +137,8 @@ class FancyMessageExpression implements FancyMessage {
     @Override
     public FancyMessage suggest(String command) {
 
+        Validate.notNull(command, "The fancy message suggest command object is null.");
+
         onClick("suggest_command", command);
 
         return this;
@@ -137,6 +146,8 @@ class FancyMessageExpression implements FancyMessage {
 
     @Override
     public FancyMessage insert(String command) {
+
+        Validate.notNull(command, "The fancy message insert command object is null.");
 
         getLaster().insertion.set(command);
 
@@ -148,6 +159,8 @@ class FancyMessageExpression implements FancyMessage {
     @Override
     public FancyMessage command(String command) {
 
+        Validate.notNull(command, "The fancy message run command object is null.");
+
         onClick("run_command", command);
 
         return this;
@@ -156,6 +169,8 @@ class FancyMessageExpression implements FancyMessage {
     @Override
     public FancyMessage tooltip(String text) {
 
+        Validate.notNull(text, "The tooltip text object is null.");
+
         onHover("show_text", new FancyJsonString(text));
 
         return this;
@@ -163,6 +178,8 @@ class FancyMessageExpression implements FancyMessage {
 
     @Override
     public FancyMessage tooltip(String... texts) {
+
+        Validate.notNull(texts, "The tooltip text object is null.");
 
         StringBuilder builder = new StringBuilder();
 
@@ -176,11 +193,25 @@ class FancyMessageExpression implements FancyMessage {
             }
         }
         tooltip(builder.toString());
+
+        return this;
+    }
+
+    @Override
+    public FancyMessage tooltip(ItemStack itemStack) {
+
+        Validate.notNull(itemStack, "The tooltip itemstack object is null.");
+
+        // not yet implemented
+        //onHover("show_item", itemStack);
+
         return this;
     }
 
     @Override
     public FancyMessage tooltipAchievement(String name) {
+
+        Validate.notNull(name, "The tooltip achievement name object is null.");
 
         onHover("show_achievement", new FancyJsonString("achievement." + name));
 
@@ -190,7 +221,9 @@ class FancyMessageExpression implements FancyMessage {
     @Override
     public FancyMessage translationReplacements(String... replacements) {
 
-        for (String str : replacements) {
+        Validate.notNull(replacements, "The translation replacements object is null.");
+
+        for (final String str : replacements) {
 
             getLaster().translationReplacements.get().add(new FancyJsonString(str));
         }
@@ -202,7 +235,9 @@ class FancyMessageExpression implements FancyMessage {
     @Override
     public FancyMessage translationReplacements(FancyMessage... replacements) {
 
-        for (FancyMessage fancyMessage : replacements) {
+        Validate.notNull(replacements, "The translation replacements object is null.");
+
+        for (final FancyMessage fancyMessage : replacements) {
 
             getLaster().translationReplacements.get().add(fancyMessage);
         }
@@ -240,6 +275,14 @@ class FancyMessageExpression implements FancyMessage {
     }
 
     @Override
+    public FancyMessage build() {
+
+        toJsonString();
+
+        return this;
+    }
+
+    @Override
     public ReadOnlyStringProperty toJsonString() {
 
         if (!dirty.get() && jsonString.get() != null) {
@@ -269,6 +312,10 @@ class FancyMessageExpression implements FancyMessage {
 
         Validate.notNull(player, "The player object is null.");
 
+        if(jsonString.get() == null) {
+
+            build();
+        }
         Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tellraw " + player.getName() + " " + jsonString.get());
     }
 

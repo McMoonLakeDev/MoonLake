@@ -1,7 +1,5 @@
 package com.minecraft.moonlake.api.fancy;
 
-import com.minecraft.moonlake.api.item.FancyMessageExpression;
-
 /**
  * Created by MoonLake on 2016/9/16.
  */
@@ -21,7 +19,7 @@ public class FancyMessageFactory {
      *
      * @return FancyMessageFactory
      */
-    public FancyMessageFactory get() {
+    public static FancyMessageFactory get() {
 
         if(fancyMessageInstance == null) {
 

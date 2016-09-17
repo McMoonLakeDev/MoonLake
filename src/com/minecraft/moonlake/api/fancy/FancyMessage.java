@@ -4,6 +4,7 @@ import com.minecraft.moonlake.json.JsonRepresentedObject;
 import com.minecraft.moonlake.property.ReadOnlyStringProperty;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Iterator;
 
@@ -113,6 +114,14 @@ public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable
     FancyMessage tooltip(String... texts);
 
     /**
+     * 设置此花式消息移动上后显示物品栈
+     *
+     * @param itemStack 物品栈
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     */
+    FancyMessage tooltip(ItemStack itemStack);
+
+    /**
      * 设置此花式消息移动上后显示成就
      *
      * @see org.bukkit.Achievement
@@ -161,6 +170,11 @@ public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable
      * @throws IllegalArgumentException 如果文本对象为 {@code null} 则抛出异常
      */
     FancyMessage then(TextualComponent text);
+
+    /**
+     * 构造花式消息对象
+     */
+    FancyMessage build();
 
     /**
      * 将花式消息对象转换到 Json 字符串
