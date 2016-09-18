@@ -1,5 +1,7 @@
 package com.minecraft.moonlake.api.nms.packet;
 
+import com.minecraft.moonlake.property.SimpleStringProperty;
+import com.minecraft.moonlake.property.StringProperty;
 import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.entity.Player;
 
@@ -11,8 +13,8 @@ import java.lang.reflect.Method;
  */
 public class PacketPlayOutPlayerListHeaderFooter extends PacketAbstract<PacketPlayOutPlayerListHeaderFooter> {
 
-    private String header;
-    private String footer;
+    private StringProperty header;
+    private StringProperty footer;
 
     public PacketPlayOutPlayerListHeaderFooter(String header) {
 
@@ -21,28 +23,18 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketAbstract<PacketPl
 
     public PacketPlayOutPlayerListHeaderFooter(String header, String footer) {
 
-        this.header = header;
-        this.footer = footer;
+        this.header = new SimpleStringProperty(header);
+        this.footer = new SimpleStringProperty(footer);
     }
 
-    public String getHeader() {
+    public StringProperty getHeader() {
 
         return header;
     }
 
-    public void setHeader(String header) {
-
-        this.header = header;
-    }
-
-    public String getFooter() {
+    public StringProperty getFooter() {
 
         return footer;
-    }
-
-    public void setFooter(String footer) {
-
-        this.footer = footer;
     }
 
     @Override
@@ -54,8 +46,8 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketAbstract<PacketPl
             Class<?> ChatSerializer = Reflect.PackageType.MINECRAFT_SERVER.getClass("IChatBaseComponent$ChatSerializer");
 
             Method ChatSerializerA = Reflect.getMethod(ChatSerializer, "a", String.class);
-            Object icbc = ChatSerializerA.invoke(null, "{\"text\": \"" + header + "\"}");
-            Object icbc2 = footer != null ? ChatSerializerA.invoke(null, "{\"text\": \"" + footer + "\"}") : null;
+            Object icbc = ChatSerializerA.invoke(null, "{\"text\": \"" + header.get() + "\"}");
+            Object icbc2 = footer.get() != null ? ChatSerializerA.invoke(null, "{\"text\": \"" + footer.get() + "\"}") : null;
 
             Object ppoplhf = Reflect.instantiateObject(PacketPlayOutPlayerListHeaderFooter, icbc);
 

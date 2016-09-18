@@ -1,5 +1,7 @@
 package com.minecraft.moonlake.api.nms.packet;
 
+import com.minecraft.moonlake.property.ObjectProperty;
+import com.minecraft.moonlake.property.SimpleObjectProperty;
 import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -12,34 +14,29 @@ import java.lang.reflect.Method;
  */
 public class PacketPlayOutEntityDestroy extends PacketAbstract<PacketPlayOutEntityDestroy> {
 
-    private int[] entityIds;
+    private ObjectProperty<int[]> entityIds;
 
     public PacketPlayOutEntityDestroy(int... entityIds) {
 
-        this.entityIds = entityIds;
+        this.entityIds = new SimpleObjectProperty<>(entityIds);
     }
 
     public PacketPlayOutEntityDestroy(Entity... entities) {
 
-        this.entityIds = new int[entities.length];
+        this.entityIds = new SimpleObjectProperty<>(new int[entities.length]);
 
         int index = 0;
 
         for(Entity entity : entities) {
 
-            this.entityIds[index] = entity.getEntityId();
+            this.entityIds.get()[index] = entity.getEntityId();
             index++;
         }
     }
 
-    public int[] getEntityIds() {
+    public ObjectProperty<int[]> getEntityIds() {
 
         return entityIds;
-    }
-
-    public void setEntityIds(int[] entityIds) {
-
-        this.entityIds = entityIds;
     }
 
     /**
@@ -54,7 +51,7 @@ public class PacketPlayOutEntityDestroy extends PacketAbstract<PacketPlayOutEnti
 
             Class<?> PacketPlayOutEntityDestroy = Reflect.PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutEntityDestroy");
 
-            Object ppoed = Reflect.instantiateObject(PacketPlayOutEntityDestroy, entityIds);
+            Object ppoed = Reflect.instantiateObject(PacketPlayOutEntityDestroy, entityIds.get());
 
             Class<?> Packet = Reflect.PackageType.MINECRAFT_SERVER.getClass("Packet");
             Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");

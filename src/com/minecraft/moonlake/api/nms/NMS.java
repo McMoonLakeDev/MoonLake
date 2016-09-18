@@ -5,5 +5,7 @@ package com.minecraft.moonlake.api.nms;
  */
 public class NMS {
 
+    private NMS() {
 
+    }
 }

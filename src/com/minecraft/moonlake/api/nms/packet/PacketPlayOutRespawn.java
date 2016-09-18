@@ -1,5 +1,9 @@
 package com.minecraft.moonlake.api.nms.packet;
 
+import com.minecraft.moonlake.property.IntegerProperty;
+import com.minecraft.moonlake.property.ObjectProperty;
+import com.minecraft.moonlake.property.SimpleIntegerProperty;
+import com.minecraft.moonlake.property.SimpleObjectProperty;
 import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
@@ -13,25 +17,22 @@ import java.lang.reflect.Method;
  */
 public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
 
-    private int worldDimensionId;
-    private WorldDifficulty worldDifficulty;
-    private GameMode worldGameMode;
-    private WorldType worldType;
+    private IntegerProperty worldDimensionId;
+    private ObjectProperty<WorldDifficulty> worldDifficulty;
+    private ObjectProperty<GameMode> worldGameMode;
+    private ObjectProperty<WorldType> worldType;
 
     public PacketPlayOutRespawn(WorldDimension worldDimension, WorldDifficulty worldDifficulty, GameMode worldGameMode, WorldType worldType) {
 
-        this.worldDimensionId = worldDimension.getId();
-        this.worldDifficulty = worldDifficulty;
-        this.worldGameMode = worldGameMode;
-        this.worldType = worldType;
+        this(worldDimension.getId(), worldDifficulty, worldGameMode, worldType);
     }
 
     public PacketPlayOutRespawn(int worldDimensionId, WorldDifficulty worldDifficulty, GameMode worldGameMode, WorldType worldType) {
 
-        this.worldDimensionId = worldDimensionId;
-        this.worldDifficulty = worldDifficulty;
-        this.worldGameMode = worldGameMode;
-        this.worldType = worldType;
+        this.worldDimensionId = new SimpleIntegerProperty(worldDimensionId);
+        this.worldDifficulty = new SimpleObjectProperty<>(worldDifficulty);
+        this.worldGameMode = new SimpleObjectProperty<>(worldGameMode);
+        this.worldType = new SimpleObjectProperty<>(worldType);
     }
 
     public PacketPlayOutRespawn(Entity entity) {
@@ -64,10 +65,10 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
             PacketPlayOutRespawn.WorldType worldType = PacketPlayOutRespawn.WorldType.valueOf(name1);
             GameMode worldGameMode = entity instanceof Player ? ((Player)entity).getGameMode() : GameMode.SURVIVAL;
 
-            this.worldDimensionId = dimensionId;
-            this.worldDifficulty = worldDifficulty;
-            this.worldGameMode = worldGameMode;
-            this.worldType = worldType;
+            this.worldDimensionId = new SimpleIntegerProperty(dimensionId);
+            this.worldDifficulty = new SimpleObjectProperty<>(worldDifficulty);
+            this.worldGameMode = new SimpleObjectProperty<>(worldGameMode);
+            this.worldType = new SimpleObjectProperty<>(worldType);
         }
         catch (Exception e) {
 
@@ -75,44 +76,24 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
         }
     }
 
-    public int getWorldDimensionId() {
+    public IntegerProperty getWorldDimensionId() {
 
         return worldDimensionId;
     }
 
-    public void setWorldDimensionId(int worldDimensionId) {
-
-        this.worldDimensionId = worldDimensionId;
-    }
-
-    public WorldDifficulty getWorldDifficulty() {
+    public ObjectProperty<WorldDifficulty> getWorldDifficulty() {
 
         return worldDifficulty;
     }
 
-    public void setWorldDifficulty(WorldDifficulty worldDifficulty) {
-
-        this.worldDifficulty = worldDifficulty;
-    }
-
-    public GameMode getWorldGameMode() {
+    public ObjectProperty<GameMode> getWorldGameMode() {
 
         return worldGameMode;
     }
 
-    public void setWorldGameMode(GameMode worldGameMode) {
-
-        this.worldGameMode = worldGameMode;
-    }
-
-    public WorldType getWorldType() {
+    public ObjectProperty<WorldType> getWorldType() {
 
         return worldType;
-    }
-
-    public void setWorldType(WorldType worldType) {
-
-        this.worldType = worldType;
     }
 
     /**
@@ -131,15 +112,15 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
             Class<?> PacketPlayOutRespawn = Reflect.PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutRespawn");
 
             Method getById = Reflect.getMethod(EnumDifficulty, "getById", Integer.class);
-            Object instanceWorldDifficulty = getById.invoke(null, worldDifficulty.getId());
+            Object instanceWorldDifficulty = getById.invoke(null, worldDifficulty.get().getId());
 
-            String worldTypeFieldName = worldType.name().toUpperCase();
+            String worldTypeFieldName = worldType.get().name().toUpperCase();
             Object instanceWorldType = Reflect.getField(WorldType, true, worldTypeFieldName).get(null);
 
             Method getById1 = Reflect.getMethod(EnumGamemode, "getById", Integer.class);
-            Object instanceWorldGameMode = getById1.invoke(null, worldGameMode.getValue());
+            Object instanceWorldGameMode = getById1.invoke(null, worldGameMode.get().getValue());
 
-            Object ppor = Reflect.instantiateObject(PacketPlayOutRespawn, worldDimensionId, instanceWorldDifficulty, instanceWorldType, instanceWorldGameMode);
+            Object ppor = Reflect.instantiateObject(PacketPlayOutRespawn, worldDimensionId.get(), instanceWorldDifficulty, instanceWorldType, instanceWorldGameMode);
 
             Class<?> Packet = Reflect.PackageType.MINECRAFT_SERVER.getClass("Packet");
             Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");

@@ -1,5 +1,9 @@
 package com.minecraft.moonlake.api.nms.packet;
 
+import com.minecraft.moonlake.property.ObjectProperty;
+import com.minecraft.moonlake.property.SimpleObjectProperty;
+import com.minecraft.moonlake.property.SimpleStringProperty;
+import com.minecraft.moonlake.property.StringProperty;
 import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.entity.Player;
 
@@ -11,13 +15,13 @@ import java.lang.reflect.Method;
  */
 public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
 
-    private String chat;
-    private Mode mode;
+    private StringProperty chat;
+    private ObjectProperty<Mode> mode;
 
     public PacketPlayOutChat(String chat, Mode mode) {
 
-        this.chat = chat;
-        this.mode = mode;
+        this.chat = new SimpleStringProperty(chat);
+        this.mode = new SimpleObjectProperty<>(mode);
     }
 
     public PacketPlayOutChat(String chat) {
@@ -25,24 +29,14 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
         this(chat, Mode.DEFAULT);
     }
 
-    public String getChat() {
+    public StringProperty getChat() {
 
         return chat;
     }
 
-    public void setChat(String chat) {
-
-        this.chat = chat;
-    }
-
-    public Mode getMode() {
+    public ObjectProperty<Mode> getMode() {
 
         return mode;
-    }
-
-    public void setMode(Mode mode) {
-
-        this.mode = mode;
     }
 
     @Override
@@ -54,9 +48,9 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
             Class<?> ChatSerializer = Reflect.PackageType.MINECRAFT_SERVER.getClass("IChatBaseComponent$ChatSerializer");
 
             Method ChatSerializerA = Reflect.getMethod(ChatSerializer, "a", String.class);
-            Object icbc = ChatSerializerA.invoke(null, "{\"text\": \"" + chat + "\"}");
+            Object icbc = ChatSerializerA.invoke(null, "{\"text\": \"" + chat.get() + "\"}");
 
-            Object ppoc = Reflect.instantiateObject(PacketPlayOutChat, icbc, mode != null ? mode.getMode() : (byte)1);
+            Object ppoc = Reflect.instantiateObject(PacketPlayOutChat, icbc, mode.get() != null ? mode.get() : (byte)1);
 
             Class<?> Packet = Reflect.PackageType.MINECRAFT_SERVER.getClass("Packet");
             Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");

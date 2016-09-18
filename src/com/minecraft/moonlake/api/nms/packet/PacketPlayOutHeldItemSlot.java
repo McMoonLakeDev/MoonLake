@@ -1,5 +1,7 @@
 package com.minecraft.moonlake.api.nms.packet;
 
+import com.minecraft.moonlake.property.IntegerProperty;
+import com.minecraft.moonlake.property.SimpleIntegerProperty;
 import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.entity.Player;
 
@@ -11,21 +13,16 @@ import java.lang.reflect.Method;
  */
 public class PacketPlayOutHeldItemSlot extends PacketAbstract<PacketPlayOutHeldItemSlot> {
 
-    private int heldItemSlot;
+    private IntegerProperty heldItemSlot;
 
     public PacketPlayOutHeldItemSlot(int heldItemSlot) {
 
-        this.heldItemSlot = heldItemSlot;
+        this.heldItemSlot = new SimpleIntegerProperty(heldItemSlot);
     }
 
-    public int getHeldItemSlot() {
+    public IntegerProperty getHeldItemSlot() {
 
         return heldItemSlot;
-    }
-
-    public void setHeldItemSlot(int heldItemSlot) {
-
-        this.heldItemSlot = heldItemSlot;
     }
 
     /**
@@ -40,7 +37,7 @@ public class PacketPlayOutHeldItemSlot extends PacketAbstract<PacketPlayOutHeldI
 
             Class<?> PacketPlayOutHeldItemSlot = Reflect.PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutHeldItemSlot");
 
-            Object ppohis = Reflect.instantiateObject(PacketPlayOutHeldItemSlot, heldItemSlot);
+            Object ppohis = Reflect.instantiateObject(PacketPlayOutHeldItemSlot, heldItemSlot.get());
 
             Class<?> Packet = Reflect.PackageType.MINECRAFT_SERVER.getClass("Packet");
             Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");

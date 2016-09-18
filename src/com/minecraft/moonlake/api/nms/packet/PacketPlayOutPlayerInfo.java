@@ -1,41 +1,33 @@
 package com.minecraft.moonlake.api.nms.packet;
 
 import com.minecraft.moonlake.MoonLakePlugin;
+import com.minecraft.moonlake.property.ObjectProperty;
+import com.minecraft.moonlake.property.SimpleObjectProperty;
 import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.entity.Player;
 
 /**
  * Created by MoonLake on 2016/7/20.
  */
-public class PacketPlayOutPlayerInfo extends PacketAbstract<PacketPlayOutPlayerInfo> {
+public abstract class PacketPlayOutPlayerInfo extends PacketAbstract<PacketPlayOutPlayerInfo> {
 
-    private PlayerInfoAction action;
-    private Player player;
+    private ObjectProperty<PlayerInfoAction> action;
+    private ObjectProperty<Player> player;
 
     public PacketPlayOutPlayerInfo(PlayerInfoAction action, Player player) {
 
-        this.action = action;
-        this.player = player;
+        this.action = new SimpleObjectProperty<>(action);
+        this.player = new SimpleObjectProperty<>(player);
     }
 
-    public PlayerInfoAction getAction() {
+    public ObjectProperty<PlayerInfoAction> getAction() {
 
         return action;
     }
 
-    public void setAction(PlayerInfoAction action) {
-
-        this.action = action;
-    }
-
-    public Player getPlayer() {
+    public ObjectProperty<Player> getPlayer() {
 
         return player;
-    }
-
-    public void setPlayer(Player player) {
-
-        this.player = player;
     }
 
     /**
@@ -44,9 +36,7 @@ public class PacketPlayOutPlayerInfo extends PacketAbstract<PacketPlayOutPlayerI
      * @param names 玩家名
      */
     @Override
-    public void send(String... names) {
-
-    }
+    public abstract void send(String... names);
 
     /**
      * 自动匹配此数据包对象

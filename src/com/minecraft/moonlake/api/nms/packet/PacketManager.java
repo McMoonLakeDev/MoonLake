@@ -1,6 +1,7 @@
 package com.minecraft.moonlake.api.nms.packet;
 
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -14,8 +15,11 @@ public final class PacketManager {
      *
      * @param names 玩家名
      * @return 玩家数组对象
+     * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
      */
     public static Player[] getPlayersfromNames(String... names) {
+
+        Validate.notNull(names, "The player names object is null.");
 
         Player[] players = new Player[names.length];
         int index = 0;
@@ -33,8 +37,11 @@ public final class PacketManager {
      *
      * @param players 玩家数组
      * @return 玩家名数组对象
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
      */
     public static String[] getNamesfromPlayers(Player... players) {
+
+        Validate.notNull(players, "The players object is null.");
 
         String[] names = new String[players.length];
         int index = 0;
@@ -52,8 +59,11 @@ public final class PacketManager {
      *
      * @param players 玩家数组
      * @return 玩家名数组对象
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
      */
     public static String[] getNamesfromPlayers(MoonLakePlayer... players) {
+
+        Validate.notNull(players, "The moonlake players object is null.");
 
         String[] names = new String[players.length];
         int index = 0;

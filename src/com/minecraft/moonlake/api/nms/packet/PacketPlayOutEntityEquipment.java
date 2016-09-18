@@ -1,6 +1,10 @@
 package com.minecraft.moonlake.api.nms.packet;
 
 
+import com.minecraft.moonlake.property.IntegerProperty;
+import com.minecraft.moonlake.property.ObjectProperty;
+import com.minecraft.moonlake.property.SimpleIntegerProperty;
+import com.minecraft.moonlake.property.SimpleObjectProperty;
 import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -15,15 +19,15 @@ import java.lang.reflect.Method;
  */
 public class PacketPlayOutEntityEquipment extends PacketAbstract<PacketPlayOutEntityEquipment> {
 
-    private int entityId;
-    private EquipmentSlot slot;
-    private ItemStack itemStack;
+    private IntegerProperty entityId;
+    private ObjectProperty<EquipmentSlot> slot;
+    private ObjectProperty<ItemStack> itemStack;
 
     public PacketPlayOutEntityEquipment(int entityId, EquipmentSlot slot, ItemStack itemStack) {
 
-        this.entityId = entityId;
-        this.slot = slot;
-        this.itemStack = itemStack;
+        this.entityId = new SimpleIntegerProperty(entityId);
+        this.slot = new SimpleObjectProperty<>(slot);
+        this.itemStack = new SimpleObjectProperty<>(itemStack);
     }
 
     public PacketPlayOutEntityEquipment(Entity entity, EquipmentSlot slot, ItemStack itemStack) {
@@ -31,34 +35,19 @@ public class PacketPlayOutEntityEquipment extends PacketAbstract<PacketPlayOutEn
         this(entity.getEntityId(), slot, itemStack);
     }
 
-    public int getEntityId() {
+    public IntegerProperty getEntityId() {
 
         return entityId;
     }
 
-    public void setEntityId(int entityId) {
-
-        this.entityId = entityId;
-    }
-
-    public EquipmentSlot getSlot() {
+    public ObjectProperty<EquipmentSlot> getSlot() {
 
         return slot;
     }
 
-    public void setSlot(EquipmentSlot slot) {
-
-        this.slot = slot;
-    }
-
-    public ItemStack getItemStack() {
+    public ObjectProperty<ItemStack> getItemStack() {
 
         return itemStack;
-    }
-
-    public void setItemStack(ItemStack itemStack) {
-
-        this.itemStack = itemStack;
     }
 
     /**
@@ -76,11 +65,11 @@ public class PacketPlayOutEntityEquipment extends PacketAbstract<PacketPlayOutEn
             Class<?> EnumItemSlot = Reflect.PackageType.MINECRAFT_SERVER.getClass("EnumItemSlot");
             Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
 
-            Object instanceSlot = Reflect.getMethod(EnumItemSlot, "valueOf", String.class).invoke(null, slot.name());
-            Object NMSItemStack = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class).invoke(null, itemStack);
+            Object instanceSlot = Reflect.getMethod(EnumItemSlot, "valueOf", String.class).invoke(null, slot.get().name());
+            Object NMSItemStack = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class).invoke(null, itemStack.get());
 
             Constructor<?> Constructor = Reflect.getConstructor(PacketPlayOutEntityEquipment, Integer.class, EnumItemSlot, ItemStack);
-            Object ppoee = Constructor.newInstance(entityId, instanceSlot, NMSItemStack);
+            Object ppoee = Constructor.newInstance(entityId.get(), instanceSlot, NMSItemStack);
 
             Class<?> Packet = Reflect.PackageType.MINECRAFT_SERVER.getClass("Packet");
             Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");

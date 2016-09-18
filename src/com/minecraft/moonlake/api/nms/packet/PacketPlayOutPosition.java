@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.api.nms.packet;
 
+import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -14,13 +15,13 @@ import java.util.Set;
  */
 public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition> {
 
-    private double x;
-    private double y;
-    private double z;
-    private float yaw;
-    private float pitch;
-    private Set<PlayerTeleportFlag> flags;
-    private int g;
+    private DoubleProperty x;
+    private DoubleProperty y;
+    private DoubleProperty z;
+    private FloatProperty yaw;
+    private FloatProperty pitch;
+    private ObjectProperty<Set<PlayerTeleportFlag>> flags;
+    private IntegerProperty g;
 
     public PacketPlayOutPosition(Location location) {
 
@@ -44,83 +45,48 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
 
     public PacketPlayOutPosition(double x, double y, double z, float yaw, float pitch, Set<PlayerTeleportFlag> flags, int g) {
 
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.flags = flags;
-        this.g = g;
+        this.x = new SimpleDoubleProperty(x);
+        this.y = new SimpleDoubleProperty(y);
+        this.z = new SimpleDoubleProperty(z);
+        this.yaw = new SimpleFloatProperty(yaw);
+        this.pitch = new SimpleFloatProperty(pitch);
+        this.flags = new SimpleObjectProperty<>(flags);
+        this.g = new SimpleIntegerProperty(g);
     }
 
-    public double getX() {
+    public DoubleProperty getX() {
 
         return x;
     }
 
-    public void setX(double x) {
-
-        this.x = x;
-    }
-
-    public double getY() {
+    public DoubleProperty getY() {
 
         return y;
     }
 
-    public void setY(double y) {
-
-        this.y = y;
-    }
-
-    public double getZ() {
+    public DoubleProperty getZ() {
 
         return z;
     }
 
-    public void setZ(double z) {
-
-        this.z = z;
-    }
-
-    public float getYaw() {
+    public FloatProperty getYaw() {
 
         return yaw;
     }
 
-    public void setYaw(float yaw) {
-
-        this.yaw = yaw;
-    }
-
-    public float getPitch() {
+    public FloatProperty getPitch() {
 
         return pitch;
     }
 
-    public void setPitch(float pitch) {
-
-        this.pitch = pitch;
-    }
-
-    public Set<PlayerTeleportFlag> getFlags() {
+    public ObjectProperty<Set<PlayerTeleportFlag>> getFlags() {
 
         return flags;
     }
 
-    public void setFlags(Set<PlayerTeleportFlag> flags) {
-
-        this.flags = flags;
-    }
-
-    public int getG() {
+    public IntegerProperty getG() {
 
         return g;
-    }
-
-    public void setG$(int g) {
-
-        this.g = g;
     }
 
     /**
@@ -142,12 +108,12 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
                 Class<?> EnumPlayerTeleportFlags = Reflect.PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPosition$EnumPlayerTeleportFlags");
                 Method valueOf = Reflect.getMethod(EnumPlayerTeleportFlags, "valueOf", String.class);
 
-                for(PlayerTeleportFlag flag : flags) {
+                for(PlayerTeleportFlag flag : flags.get()) {
 
                     instanceFlasg.add(valueOf.invoke(null, flag.name()));
                 }
             }
-            Object ppop = Reflect.instantiateObject(PacketPlayOutPosition, x, y, z, yaw, pitch, instanceFlasg, g);
+            Object ppop = Reflect.instantiateObject(PacketPlayOutPosition, x.get(), y.get(), z.get(), yaw.get(), pitch.get(), instanceFlasg, g.get());
 
             Class<?> Packet = Reflect.PackageType.MINECRAFT_SERVER.getClass("Packet");
             Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");

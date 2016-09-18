@@ -1,5 +1,7 @@
 package com.minecraft.moonlake.api.nms.packet;
 
+import com.minecraft.moonlake.property.ObjectProperty;
+import com.minecraft.moonlake.property.SimpleObjectProperty;
 import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.entity.Player;
 
@@ -11,21 +13,16 @@ import java.lang.reflect.Method;
  */
 public class PacketPlayOutNamedEntitySpawn extends PacketAbstract<PacketPlayOutNamedEntitySpawn> {
 
-    private Player entity;
+    private ObjectProperty<Player> entity;
 
     public PacketPlayOutNamedEntitySpawn(Player entity) {
 
-        this.entity = entity;
+        this.entity = new SimpleObjectProperty<>(entity);
     }
 
-    public Player getEntity() {
+    public ObjectProperty<Player> getEntity() {
 
         return entity;
-    }
-
-    public void setEntity(Player entity) {
-
-        this.entity = entity;
     }
 
     /**
@@ -49,7 +46,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketAbstract<PacketPlayOutN
 
             Method sendPacket = Reflect.getMethod(PlayerConnection, "sendPacket", Packet);
 
-            Object NMSEntity = getHandle.invoke(entity);
+            Object NMSEntity = getHandle.invoke(entity.get());
             Object ppones = Reflect.instantiateObject(PacketPlayOutNamedEntitySpawn, NMSEntity);
 
             for(Player player : players) {

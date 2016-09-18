@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.api.nms.packet;
 
+import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.entity.Player;
 
@@ -11,7 +12,7 @@ import java.lang.reflect.Method;
  */
 public class PacketPlayOutAbilities extends PacketAbstract<PacketPlayOutAbilities> {
 
-    private PlayerAbilities abilities;
+    private ReadOnlyObjectProperty<PlayerAbilities> abilities;
 
     public PacketPlayOutAbilities(Player player) {
 
@@ -34,7 +35,7 @@ public class PacketPlayOutAbilities extends PacketAbstract<PacketPlayOutAbilitie
                 field.setAccessible(true);
                 field.set(instancePlayerAbilities1, instancePlayerAbilities.getClass().getField(field.getName()).get(instancePlayerAbilities));
             }
-            this.abilities = instancePlayerAbilities1;
+            this.abilities = new SimpleObjectProperty<>(instancePlayerAbilities1);
         }
         catch (Exception e) {
 
@@ -44,12 +45,17 @@ public class PacketPlayOutAbilities extends PacketAbstract<PacketPlayOutAbilitie
 
     public PacketPlayOutAbilities(PlayerAbilities abilities) {
 
-        this.abilities = abilities;
+        this.abilities = new SimpleObjectProperty<>(abilities);
     }
 
     public PacketPlayOutAbilities(boolean isInvulnerable, boolean isFlying, boolean canFly, boolean canInstantlyBuild, boolean mayBuild, float flySpeed, float walkSpeed) {
 
-        this.abilities = new PlayerAbilities(isInvulnerable, isFlying, canFly, canInstantlyBuild, mayBuild, flySpeed, walkSpeed);
+        this.abilities = new SimpleObjectProperty<>(new PlayerAbilities(isInvulnerable, isFlying, canFly, canInstantlyBuild, mayBuild, flySpeed, walkSpeed));
+    }
+
+    public ReadOnlyObjectProperty<PlayerAbilities> getAbilities() {
+
+        return abilities;
     }
 
     /**
@@ -66,13 +72,13 @@ public class PacketPlayOutAbilities extends PacketAbstract<PacketPlayOutAbilitie
             Class<?> PlayerAbilities = Reflect.PackageType.MINECRAFT_SERVER.getClass("PlayerAbilities");
             Object instancePlayerAbilities = Reflect.instantiateObject(PlayerAbilities);
 
-            Reflect.setValue(instancePlayerAbilities, true, "isInvulnerable", abilities.isInvulnerable());
-            Reflect.setValue(instancePlayerAbilities, true, "isFlying", abilities.isFlying());
-            Reflect.setValue(instancePlayerAbilities, true, "canFly", abilities.isCanFly());
-            Reflect.setValue(instancePlayerAbilities, true, "canInstantlyBuild", abilities.isCanInstantlyBuild());
-            Reflect.setValue(instancePlayerAbilities, true, "mayBuild", abilities.isMayBuild());
-            Reflect.setValue(instancePlayerAbilities, true, "flySpeed", abilities.getFlySpeed());
-            Reflect.setValue(instancePlayerAbilities, true, "walkSpeed", abilities.getWalkSpeed());
+            Reflect.setValue(instancePlayerAbilities, true, "isInvulnerable", abilities.get().getIsInvulnerable().get());
+            Reflect.setValue(instancePlayerAbilities, true, "isFlying", abilities.get().getIsFlying().get());
+            Reflect.setValue(instancePlayerAbilities, true, "canFly", abilities.get().getCanFly().get());
+            Reflect.setValue(instancePlayerAbilities, true, "canInstantlyBuild", abilities.get().getCanInstantlyBuild().get());
+            Reflect.setValue(instancePlayerAbilities, true, "mayBuild", abilities.get().getMayBuild().get());
+            Reflect.setValue(instancePlayerAbilities, true, "flySpeed", abilities.get().getFlySpeed().get());
+            Reflect.setValue(instancePlayerAbilities, true, "walkSpeed", abilities.get().getWalkSpeed().get());
 
             Object ppoa = Reflect.instantiateObject(PacketPlayOutAbilities, instancePlayerAbilities);
 
@@ -102,98 +108,63 @@ public class PacketPlayOutAbilities extends PacketAbstract<PacketPlayOutAbilitie
 
     public static class PlayerAbilities {
 
-        private boolean isInvulnerable;
-        private boolean isFlying;
-        private boolean canFly;
-        private boolean canInstantlyBuild;
-        private boolean mayBuild = true;
-        private float flySpeed = 0.05F;
-        private float walkSpeed = 0.1F;
+        private BooleanProperty isInvulnerable;
+        private BooleanProperty isFlying;
+        private BooleanProperty canFly;
+        private BooleanProperty canInstantlyBuild;
+        private BooleanProperty mayBuild;
+        private FloatProperty flySpeed;
+        private FloatProperty walkSpeed;
 
         public PlayerAbilities() {
 
-
+            this(false, false, false, false, true, 0.05f, 0.1f);
         }
 
         public PlayerAbilities(boolean isInvulnerable, boolean isFlying, boolean canFly, boolean canInstantlyBuild, boolean mayBuild, float flySpeed, float walkSpeed) {
 
-            this.isInvulnerable = isInvulnerable;
-            this.isFlying = isFlying;
-            this.canFly = canFly;
-            this.canInstantlyBuild = canInstantlyBuild;
-            this.mayBuild = mayBuild;
-            this.flySpeed = flySpeed;
-            this.walkSpeed = walkSpeed;
+            this.isInvulnerable = new SimpleBooleanProperty(isInvulnerable);
+            this.isFlying = new SimpleBooleanProperty(isFlying);
+            this.canFly = new SimpleBooleanProperty(canFly);
+            this.canInstantlyBuild = new SimpleBooleanProperty(canInstantlyBuild);
+            this.mayBuild = new SimpleBooleanProperty(mayBuild);
+            this.flySpeed = new SimpleFloatProperty(flySpeed);
+            this.walkSpeed = new SimpleFloatProperty(walkSpeed);
         }
 
-        public boolean isInvulnerable() {
+        public BooleanProperty getIsInvulnerable() {
 
             return isInvulnerable;
         }
 
-        public void setInvulnerable(boolean invulnerable) {
-
-            isInvulnerable = invulnerable;
-        }
-
-        public boolean isFlying() {
+        public BooleanProperty getIsFlying() {
 
             return isFlying;
         }
 
-        public void setFlying(boolean flying) {
-
-            isFlying = flying;
-        }
-
-        public boolean isCanFly() {
+        public BooleanProperty getCanFly() {
 
             return canFly;
         }
 
-        public void setCanFly(boolean canFly) {
-
-            this.canFly = canFly;
-        }
-
-        public boolean isCanInstantlyBuild() {
+        public BooleanProperty getCanInstantlyBuild() {
 
             return canInstantlyBuild;
         }
 
-        public void setCanInstantlyBuild(boolean canInstantlyBuild) {
-
-            this.canInstantlyBuild = canInstantlyBuild;
-        }
-
-        public boolean isMayBuild() {
+        public BooleanProperty getMayBuild() {
 
             return mayBuild;
         }
 
-        public void setMayBuild(boolean mayBuild) {
-
-            this.mayBuild = mayBuild;
-        }
-
-        public float getFlySpeed() {
+        public FloatProperty getFlySpeed() {
 
             return flySpeed;
         }
 
-        public void setFlySpeed(float flySpeed) {
-
-            this.flySpeed = flySpeed;
-        }
-
-        public float getWalkSpeed() {
+        public FloatProperty getWalkSpeed() {
 
             return walkSpeed;
-        }
-
-        public void setWalkSpeed(float walkSpeed) {
-
-            this.walkSpeed = walkSpeed;
         }
     }
 }

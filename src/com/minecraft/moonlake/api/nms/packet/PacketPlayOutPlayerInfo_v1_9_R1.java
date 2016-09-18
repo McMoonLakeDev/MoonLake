@@ -33,7 +33,7 @@ public class PacketPlayOutPlayerInfo_v1_9_R1 extends PacketPlayOutPlayerInfo {
             Method getHandle = Reflect.getMethod(CraftPlayer, "getHandle");
             Method valueOf = Reflect.getMethod(EnumPlayerInfoAction, "valueOf", String.class);
 
-            Object EnumPlayerInfoAction0 = valueOf.invoke(null, getAction().name());
+            Object EnumPlayerInfoAction0 = valueOf.invoke(null, getAction().get().name());
             Object NMSPlayerSource = getHandle.invoke(getPlayer());
 
             Constructor<?> Constructor = Reflect.getConstructor(PacketPlayOutPlayerInfo, EnumPlayerInfoAction, net.minecraft.server.v1_9_R1.EntityPlayer[].class);
