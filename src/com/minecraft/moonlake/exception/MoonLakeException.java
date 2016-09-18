@@ -16,4 +16,9 @@ public class MoonLakeException extends RuntimeException {
 
         super(message);
     }
+
+    public MoonLakeException(String message, Throwable cause) {
+
+        super(message, cause);
+    }
 }

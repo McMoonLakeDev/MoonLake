@@ -20,6 +20,16 @@ import java.util.Set;
  *     <p>By Month_Light Ver: 1.7</p>
  *     <p>Website: <a href="http://www.mcyszh.com" target="_blank" style="text-decoration: none;">MoonLake Website</a></p>
  *     <p>QQ Group: 377607025 -> <a href="http://jq.qq.com/?_wv=1027&k=2IfPFrH" target="_blank">Jump</a></p>
+ *     <hr />
+ *     <div>
+ *         <h2>目前插件支持的服务端版本有:</h2>
+ *         <ul>
+ *             <li>Spigot [1.8.x - 1.10.x] <span style="color: rgb(85, 255, 85)">✔</span></li>
+ *         </ul>
+ *         <br />
+ *         <p>W: 为什么不支持 Bukkit 呢?</p>
+ *         <p>D: 因为部分支持库用到 Spigot 的实现，所以暂时不支持.</p>
+ *     </div>
  * </div>
  * <hr />
  * <div>
@@ -35,7 +45,7 @@ import java.util.Set;
  * </div>
  * <hr />
  * <div>
- *     <h1>此项目完全属于开源项目，如需修改和添加功能请到 <a href="http://github.com/u2g/MoonLake" target="_blank">GitHub</a> 进行 Fork 操作.</h1>
+ *     <h1>此项目完全属于开源项目，如需修改和添加功能请到 <a href="https://github.com/u2g/MoonLake" target="_blank">GitHub</a> 进行 Fork 操作.</h1>
  *     <h1>修改操作请您遵守 <a href="https://github.com/u2g/MoonLake/blob/master/LICENSE" target="_blank">GPLv3</a> 协议，您必须公开修改过的所有代码！</h1>
  * </div>
  *

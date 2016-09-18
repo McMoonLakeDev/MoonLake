@@ -334,6 +334,16 @@ class FancyMessageExpression implements FancyMessage {
         send(PlayerManager.fromName(player));
     }
 
+    @Override
+    public void sendAll() {
+
+        if(jsonString.get() == null) {
+
+            create();
+        }
+        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tellraw @a " + jsonString.get());    // @a = All Player
+    }
+
     protected FancyMessagePart getLaster() {
 
         return partList.get().get(partList.get().size() - 1);

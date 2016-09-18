@@ -9,8 +9,42 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Iterator;
 
 /**
- * Created by MoonLake on 2016/9/16.
+ * <hr />
+ * <div>
+ *     <h1>花式消息 FancyMessage <span style="background: black; color: black"><s>然而原形还是 tellraw</s></span></h1>
+ *     <p>其实就是把 Tellraw 给简单化了，可以实现出非常厉害的 Json 消息。</p>
+ *     <p>By Month_Light Ver: 1.0</p>
+ *     <hr />
+ *     <h2>获取实例对象:</h2>
+ *     <p>{@link FancyMessageFactory#message(String)}</p>
+ *     <p>{@link FancyMessageFactory#message(TextualComponent)}</p>
+ * </div>
+ * <hr />
+ * <div>
+ *     <h1>简单的例子:</h1>
+ *     <p>FancyMessage test1 = FancyMessageFactory.get()</p>
+ *     <p style="text-indent: 30px">.message("你可以用鼠标点击或移动到后面的文字:")</p>
+ *     <p style="text-indent: 50px">.color(ChatColor.YELLOW)</p>
+ *     <p style="text-indent: 50px">.style(FancyMessageStyle.BOLD)</p>
+ *     <p style="text-indent: 30px">.then(" <点我打开网页> ")</p>
+ *     <p style="text-indent: 50px">.color(ChatColor.AQUA)</p>
+ *     <p style="text-indent: 50px">.link("http://minecraft.net")</p>
+ *     <p style="text-indent: 30px">.then(" <点我执行命令> ")</p>
+ *     <p style="text-indent: 50px">.color(ChatColor.AQUA)</p>
+ *     <p style="text-indent: 50px">.command("/gamemode 1")</p>
+ *     <p style="text-indent: 30px">.then(" <放我这里查看文本> ")</p>
+ *     <p style="text-indent: 50px">.color(ChatColor.RED)</p>
+ *     <p style="text-indent: 50px">.tooltip("竟然发现了这个文本 (๑• . •๑)")</p>
+ *     <p style="text-indent: 30px">.create();</p>
+ *     <h2>最后发送给玩家可以使用:</h2>
+ *     <p>test1.sendAll(); // 发送给在线所有玩家</p>
+ *     <p>test1.send("Notch"); // 发送给单个玩家</p>
+ * </div>
+ * <hr />
  *
+ * @version 1.0
+ * @author Month_Light
+ * @see TextualComponent
  * @see FancyMessageFactory
  */
 public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable<FancyMessagePart> {
@@ -131,14 +165,16 @@ public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable
     FancyMessage tooltipAchievement(String name);
 
     /**
+     * 设置此花式消息的替换为玩家选择的语言的翻译器
      *
-     * @param replacements
+     * @param replacements 翻译器
      */
     FancyMessage translationReplacements(String... replacements);
 
     /**
+     * 设置此花式消息的替换为玩家选择的语言的翻译器
      *
-     * @param replacements
+     * @param replacements 翻译器
      */
     FancyMessage translationReplacements(FancyMessage... replacements);
 
@@ -198,4 +234,9 @@ public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable
      * @throws IllegalArgumentException 如果玩家名字对象为 {@code null} 则抛出异常
      */
     void send(String player);
+
+    /**
+     * 将此花式消息发送给在线所有玩家
+     */
+    void sendAll();
 }
