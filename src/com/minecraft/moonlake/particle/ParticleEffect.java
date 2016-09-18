@@ -36,6 +36,10 @@ import java.util.*;
  *         <li>效果数据播放: {@link #display(ParticleData, float, float, float, float, int, Location, double)}</li>
  *         <li>效果颜色播放: {@link #display(ParticleColor, Location, double)}</li>
  *     </ul>
+ *     <h2>调用例子:</h2>
+ *     <p>播放大型爆炸粒子效果: ParticleEffect.EXPLOSION_LARGE.display(0f, 0f, 0f, 0f, 1, player.getLocation(), 32d);</p>
+ *     <p>播放红色尘埃粒子效果: ParticleEffect.REDSTONE.display(new OrdiaryColor(Color.GREEN), 0f, 0f, 0f, 0f, 10, player.getLocation(), 32d);</p>
+ *     <p>播放方块破碎粒子效果: ParticleEffect.BLOCK_CRACK.display(new BlockData(Material.DIAMOND_BLOCK, 0), 0f, 0f, 0f, 0f, 1, player.getLocation(), 32d);</p>
  * </div>
  * <hr />
  * <div>
@@ -856,21 +860,18 @@ public enum ParticleEffect {
 
                 throw new ParticleException("粒子效果速度不能小于 0");
             }
-            else if(amount < 0) {
+            if(amount < 0) {
 
                 throw new ParticleException("粒子效果数量不能小于 0");
             }
-            else {
-
-                this.effect = effect;
-                this.offsetX = offsetX;
-                this.offsetY = offsetY;
-                this.offsetZ = offsetZ;
-                this.speed = speed;
-                this.amount = amount;
-                this.longDistance = longDistance;
-                this.data = data;
-            }
+            this.effect = effect;
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
+            this.offsetZ = offsetZ;
+            this.speed = speed;
+            this.amount = amount;
+            this.longDistance = longDistance;
+            this.data = data;
         }
 
         public ParticlePacket(ParticleEffect effect, Vector direction, float speed, boolean longDistance, ParticleData data) throws ParticleException {
@@ -881,17 +882,14 @@ public enum ParticleEffect {
 
                 throw new ParticleException("粒子效果速度不能小于 0");
             }
-            else {
-
-                this.effect = effect;
-                this.offsetX = (float)direction.getX();
-                this.offsetY = (float)direction.getY();
-                this.offsetZ = (float)direction.getZ();
-                this.speed = speed;
-                this.amount = 0;
-                this.longDistance = longDistance;
-                this.data = data;
-            }
+            this.effect = effect;
+            this.offsetX = (float)direction.getX();
+            this.offsetY = (float)direction.getY();
+            this.offsetZ = (float)direction.getZ();
+            this.speed = speed;
+            this.amount = 1;
+            this.longDistance = longDistance;
+            this.data = data;
         }
 
         public ParticlePacket(ParticleEffect effect, ParticleColor color, boolean longDistance) {
@@ -904,6 +902,11 @@ public enum ParticleEffect {
             }
         }
 
+        /**
+         * 初始化粒子效果数据包
+         *
+         * @throws ParticleException 如果初始化错误则抛出异常
+         */
         public static void initialize() throws ParticleException {
 
             if(!isInitialized()) {
@@ -930,21 +933,43 @@ public enum ParticleEffect {
             }
         }
 
+        /**
+         * 获取当前服务端的版本号
+         *
+         * @return 版本号
+         */
         public static int getVersion() {
 
             return version;
         }
 
+        /**
+         * 获取当前粒子效果数据包是否初始化完毕
+         *
+         * @return true 则初始化完毕
+         */
         public static boolean isInitialized() {
 
             return initialized;
         }
 
+        /**
+         * 将此粒子效果数据包发送到指定位置
+         *
+         * @param center 位置
+         * @param player 玩家
+         */
         public void sendTo(Location center, Player player) {
 
             sendToWithBukkit(center, player);
         }
 
+        /**
+         * 将此粒子效果数据包发送到指定位置
+         *
+         * @param center 位置
+         * @param player 玩家
+         */
         public void sendTo(Location center, List<Player> players) {
 
             if(players == null || players.isEmpty()) {
@@ -962,6 +987,12 @@ public enum ParticleEffect {
             }
         }
 
+        /**
+         * 将此粒子效果数据包发送到指定位置
+         *
+         * @param center 位置
+         * @param range 范围
+         */
         public void sendTo(Location center, double range) {
 
             if(range < 1.0d) {
