@@ -11,6 +11,7 @@ import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
 import com.minecraft.moonlake.property.SimpleBooleanProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
 import com.minecraft.moonlake.reflect.Reflect;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -28,6 +29,8 @@ class NMSPlayerExpression implements NMSPlayerLibrary {
 
     @Override
     public ReadOnlyIntegerProperty getPing(String player) {
+
+        Validate.notNull(player, "The player string object is null.");
 
         Player target = PlayerLibraryFactorys.player().fromName(player);
 
@@ -52,11 +55,18 @@ class NMSPlayerExpression implements NMSPlayerLibrary {
     @Override
     public void sendTitlePacket(String player, String title) {
 
+        Validate.notNull(player, "The player string object is null.");
+        Validate.notNull(title, "The title string object is null.");
+
         new PacketPlayOutTitle(title).send(player);
     }
 
     @Override
     public void sendTitlePacket(String player, String title, String subTitle) {
+
+        Validate.notNull(player, "The player string object is null.");
+        Validate.notNull(title, "The title string object is null.");
+        Validate.notNull(subTitle, "The sub title string object is null.");
 
         new PacketPlayOutTitle(title, subTitle).send(player);
     }
@@ -64,11 +74,18 @@ class NMSPlayerExpression implements NMSPlayerLibrary {
     @Override
     public void sendTitlePacket(String player, String title, int fadeIn, int stay, int fadeOut) {
 
+        Validate.notNull(player, "The player string object is null.");
+        Validate.notNull(title, "The title string object is null.");
+
         new PacketPlayOutTitle(title, fadeIn, stay, fadeOut).send(player);
     }
 
     @Override
     public void sendTitlePacket(String player, String title, String subTitle, int fadeIn, int stay, int fadeOut) {
+
+        Validate.notNull(player, "The player string object is null.");
+        Validate.notNull(title, "The title string object is null.");
+        Validate.notNull(subTitle, "The sub title string object is null.");
 
         new PacketPlayOutTitle(title, subTitle, fadeIn, stay, fadeOut).send(player);
     }
@@ -76,11 +93,17 @@ class NMSPlayerExpression implements NMSPlayerLibrary {
     @Override
     public void sendMainChatPacket(String player, String message) {
 
+        Validate.notNull(player, "The player string object is null.");
+        Validate.notNull(message, "The message string object is null.");
+
         new PacketPlayOutChat(message, PacketPlayOutChat.Mode.MAIN).send(player);
     }
 
     @Override
     public void sendTabListPacket(String player, String header) {
+
+        Validate.notNull(player, "The player string object is null.");
+        Validate.notNull(header, "The header string object is null.");
 
         new PacketPlayOutPlayerListHeaderFooter(header).send(player);
     }
@@ -88,11 +111,18 @@ class NMSPlayerExpression implements NMSPlayerLibrary {
     @Override
     public void sendTabListPacket(String player, String header, String footer) {
 
+        Validate.notNull(player, "The player string object is null.");
+        Validate.notNull(header, "The header string object is null.");
+        Validate.notNull(footer, "The footer string object is null.");
+
         new PacketPlayOutPlayerListHeaderFooter(header, footer).send(player);
     }
 
     @Override
     public void sendItemCooldownPacket(String player, Material material, int tick) {
+
+        Validate.notNull(player, "The player string object is null.");
+        Validate.notNull(material, "The material object is null.");
 
         Player target = PlayerLibraryFactorys.player().fromName(player);
 
@@ -129,6 +159,9 @@ class NMSPlayerExpression implements NMSPlayerLibrary {
 
     @Override
     public ReadOnlyBooleanProperty hasItemCooldown(String player, Material material) {
+
+        Validate.notNull(player, "The player string object is null.");
+        Validate.notNull(material, "The material object is null.");
 
         Player target = PlayerLibraryFactorys.player().fromName(player);
 

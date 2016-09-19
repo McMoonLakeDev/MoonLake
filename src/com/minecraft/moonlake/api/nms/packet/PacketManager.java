@@ -70,7 +70,7 @@ public final class PacketManager {
 
         for(MoonLakePlayer player : players) {
 
-            names[index] = player.getName();
+            names[index] = player.getName().get();
             index++;
         }
         return names;

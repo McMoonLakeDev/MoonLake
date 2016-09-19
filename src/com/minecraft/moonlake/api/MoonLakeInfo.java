@@ -5,7 +5,13 @@ import com.minecraft.moonlake.property.ReadOnlyStringProperty;
 import java.util.Set;
 
 /**
- * <h1>MoonLake Core API Plugin Info Interface</h1>
+ * <hr />
+ * <div>
+ *     <h1>MoonLake Core API Plugin Info Interface</h1>
+ *     <p>By Month_Light Ver: 1.0</p>
+ * </div>
+ * <hr />
+ *
  * @version 1.0
  * @author Month_Light
  */

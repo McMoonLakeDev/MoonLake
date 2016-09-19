@@ -1,6 +1,10 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.nms.packet.Packet;
+import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
+import com.minecraft.moonlake.exception.PlayerNotOnlineException;
+import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
+import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
 import org.bukkit.Material;
 
 /**
@@ -12,88 +16,111 @@ public interface NMSPlayer {
      * 获取此玩家的网络 Ping 值
      *
      * @return Ping 值
+     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
-    int getPing();
+    ReadOnlyIntegerProperty getPing();
 
     /**
-     * 给玩家发送数据包
-     *
+     * 给此玩家发送数据包
+     * 
      * @param packet 数据包
+     * @throws IllegalArgumentException 如果数据包对象为 {@code null} 则抛出异常
+     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
     void sendPacket(Packet<?> packet);
-
+    
     /**
-     * 给玩家发送标题数据包
+     * 给此玩家发送标题数据包
      *
-     * @param player 玩家名
-     * @param title 标题
+     * @param title 主标题
+     * @throws IllegalArgumentException 如果主标题对象为 {@code null} 则抛出异常
+     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
     void sendTitlePacket(String title);
 
     /**
-     * 给玩家发送标题数据包
+     * 给此玩家发送标题数据包
      *
-     * @param player 玩家名
-     * @param title 标题
+     * @param title 主标题
      * @param subTitle 子标题
+     * @throws IllegalArgumentException 如果主标题对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果子标题对象为 {@code null} 则抛出异常
+     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
     void sendTitlePacket(String title, String subTitle);
 
     /**
-     * 给玩家发送标题数据包
+     * 给此玩家发送标题数据包
      *
-     * @param player 玩家名
-     * @param title 标题
-     * @param drTime 淡入时间
-     * @param plTime 停留时间
-     * @param dcTime 淡出时间
+     * @param title 主标题
+     * @param fadeIn 淡入时间
+     * @param stay 停留时间
+     * @param fadeOut 淡出时间
+     * @throws IllegalArgumentException 如果主标题对象为 {@code null} 则抛出异常
+     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
-    void sendTitlePacket(String title, int drTime, int plTime, int dcTime);
+    void sendTitlePacket(String title, int fadeIn, int stay, int fadeOut);
 
     /**
-     * 给玩家发送标题数据包
+     * 给此玩家发送标题数据包
      *
-     * @param player 玩家名
-     * @param title 标题
+     * @param title 主标题
      * @param subTitle 子标题
-     * @param drTime 淡入时间
-     * @param plTime 停留时间
-     * @param dcTime 淡出时间
+     * @param fadeIn 淡入时间
+     * @param stay 停留时间
+     * @param fadeOut 淡出时间
+     * @throws IllegalArgumentException 如果主标题对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果子标题对象为 {@code null} 则抛出异常
+     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
-    void sendTitlePacket(String title, String subTitle, int drTime, int plTime, int dcTime);
+    void sendTitlePacket(String title, String subTitle, int fadeIn, int stay, int fadeOut);
 
     /**
-     * 给玩家发送中心聊天数据包
+     * 给此玩家发送主聊天消息 (经验条上面)
      *
-     * @param player 玩家名
      * @param message 消息
+     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
     void sendMainChatPacket(String message);
 
     /**
-     * 给玩家发送Tab列表数据包
+     * 给此玩家发送 TAB 列表数据包
      *
-     * @param player 玩家名
-     * @param header 头文本
-     * @param footer 脚文本
+     * @param header 头内容
+     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
+     */
+    void sendTabListPacket(String header);
+
+    /**
+     * 给此玩家发送 TAB 列表数据包
+     *
+     * @param header 头内容
+     * @param footer 脚内容
+     * @throws IllegalArgumentException 如果头内容对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果脚内容对象为 {@code null} 则抛出异常
+     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
     void sendTabListPacket(String header, String footer);
 
     /**
-     * 给玩家发送物品冷却时间数据包
+     * 给此玩家发送物品栈冷却时间数据包
      *
-     * @param player 玩家名
-     * @param type 物品类型
-     * @param tick 冷却的时间
+     * @param material 物品栈类型
+     * @param tick 时间 Tick (1s = 20tick)
+     * @throws IllegalArgumentException 如果物品栈类型对象为 {@code null} 则抛出异常
+     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
+     * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
      */
-    void sendItemCooldownPacket(Material type, int tick);
+    void sendItemCooldownPacket(Material material, int tick);
 
     /**
-     * 获取玩家某个物品是否还有冷却时间
+     * 获取此玩家物品栈类型是否拥有冷却时间
      *
-     * @param player 玩家名
-     * @param type 物品类型
-     * @return true 还有冷却时间 else 无冷却时间
+     * @param material 物品栈类型
+     * @return true 则物品栈类型拥有冷却时间
+     * @throws IllegalArgumentException 如果物品栈类型对象为 {@code null} 则抛出异常
+     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
+     * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
      */
-    boolean hasItemCooldown(Material type);
+    ReadOnlyBooleanProperty hasItemCooldown(Material material);
 }

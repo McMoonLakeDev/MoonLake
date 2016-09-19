@@ -79,7 +79,7 @@ public interface NMSPlayerLibrary {
      * 给指定玩家发送主聊天消息 (经验条上面)
      *
      * @param player 玩家名
-     * @param message 效果
+     * @param message 消息
      * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */

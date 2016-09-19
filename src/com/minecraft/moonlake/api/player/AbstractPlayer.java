@@ -1,14 +1,12 @@
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.api.nms.packet.Packet;
 import com.minecraft.moonlake.manager.PlayerManager;
-import com.minecraft.moonlake.property.ReadOnlyObjectProperty;
-import com.minecraft.moonlake.property.ReadOnlyStringProperty;
-import com.minecraft.moonlake.property.SimpleObjectProperty;
-import com.minecraft.moonlake.property.SimpleStringProperty;
+import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.util.StringUtil;
+import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
-import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -32,9 +30,18 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Created by MoonLake on 2016/7/16.
+ * <hr />
+ * <div>
+ *     <h1>Minecraft MoonLake Player Wrapped Abstract</h1>
+ *     <p>By Month_Light Ver: 1.7</p>
+ * </div>
+ * <hr />
+ *
+ * @version 1.7
+ * @author Month_Light
+ * @see MoonLakePlayer
  */
-public class AbstractPlayer implements MoonLakePlayer {
+public abstract class AbstractPlayer implements MoonLakePlayer {
 
     private final ReadOnlyStringProperty nameProperty;
     private final ReadOnlyObjectProperty<Player> playerProperty;
@@ -52,9 +59,9 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public String getName() {
+    public ReadOnlyStringProperty getName() {
 
-        return nameProperty.get();
+        return nameProperty;
     }
 
     @Override
@@ -70,9 +77,9 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public String getDisplayName() {
+    public ReadOnlyStringProperty getDisplayName() {
 
-        return getBukkitPlayer().getDisplayName();
+        return new SimpleStringProperty(getBukkitPlayer().getDisplayName());
     }
 
     @Override
@@ -82,9 +89,9 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public String getListName() {
+    public ReadOnlyStringProperty getListName() {
 
-        return getBukkitPlayer().getPlayerListName();
+        return new SimpleStringProperty(getBukkitPlayer().getPlayerListName());
     }
 
     @Override
@@ -94,79 +101,88 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void chat(String msg) {
+    public void chat(String message) {
 
-        getBukkitPlayer().chat(msg);
+        Validate.notNull(message, "The chat message object is null.");
+
+        getBukkitPlayer().chat(message);
     }
 
     @Override
-    public void send(String msg) {
+    public void send(String message) {
 
-        getBukkitPlayer().sendMessage(StringUtil.toColor(msg).get());
+        getBukkitPlayer().sendMessage(StringUtil.toColor(message).get());
     }
 
     @Override
-    public void send(String[] msg) {
+    public void send(String[] message) {
 
-        getBukkitPlayer().sendMessage(StringUtil.toColor(msg).get());
+        getBukkitPlayer().sendMessage(StringUtil.toColor(message).get());
     }
 
     @Override
-    public void send(BaseComponent bc) {
+    public void send(FancyMessage fancyMessage) {
 
-        getBukkitPlayer().spigot().sendMessage(bc);
+        Validate.notNull(fancyMessage, "The fancy message object is null.");
+
+        fancyMessage.send(getBukkitPlayer());
     }
 
     @Override
-    public void send(BaseComponent... bcs) {
+    public void send(FancyMessage... fancyMessages) {
 
-        getBukkitPlayer().spigot().sendMessage(bcs);
+        Validate.notNull(fancyMessages, "The fancy message object is null.");
+
+        for(FancyMessage fancyMessage : fancyMessages) {
+
+            send(fancyMessage);
+        }
     }
 
     @Override
-    public double getHealth() {
+    public ReadOnlyDoubleProperty getHealth() {
 
-        return getBukkitPlayer().getHealth();
+        return new SimpleDoubleProperty(getBukkitPlayer().getHealth());
     }
 
     @Override
-    public double getMaxHealth() {
+    public ReadOnlyDoubleProperty getMaxHealth() {
 
-        return getBukkitPlayer().getMaxHealth();
+        return new SimpleDoubleProperty(getBukkitPlayer().getMaxHealth());
     }
 
     @Override
     public void giveHealth(double amount) {
 
-        if(getHealth() + amount >= getMaxHealth()) {
+        if(getHealth().get() + amount >= getMaxHealth().get()) {
 
-            setHealth(getMaxHealth());
+            setHealth(getMaxHealth().get());
             return;
         }
-        setHealth(getHealth() + amount);
+        setHealth(getHealth().add(amount).get());
     }
 
     @Override
     public void takeHealth(double amount) {
 
-        if(getHealth() - amount <= 0d) {
+        if(getHealth().get() - amount <= 0d) {
 
             setHealth(0d);
             return;
         }
-        setHealth(getHealth() - amount);
+        setHealth(getHealth().subtract(amount).get());
     }
 
     @Override
-    public float getXp() {
+    public ReadOnlyFloatProperty getXp() {
 
-        return getBukkitPlayer().getExp();
+        return new SimpleFloatProperty(getBukkitPlayer().getExp());
     }
 
     @Override
-    public int getLevel() {
+    public ReadOnlyIntegerProperty getLevel() {
 
-        return getBukkitPlayer().getLevel();
+        return new SimpleIntegerProperty(getBukkitPlayer().getLevel());
     }
 
     @Override
@@ -184,7 +200,7 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void giveXp(float xp) {
 
-        setXp(getXp() + xp);
+        setXp(getXp().add(xp).get());
     }
 
     @Override
@@ -200,15 +216,15 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public float getFlySpeed() {
+    public ReadOnlyFloatProperty getFlySpeed() {
 
-        return getBukkitPlayer().getFlySpeed();
+        return new SimpleFloatProperty(getBukkitPlayer().getFlySpeed());
     }
 
     @Override
-    public int getFoodLevel() {
+    public ReadOnlyIntegerProperty getFoodLevel() {
 
-        return getBukkitPlayer().getFoodLevel();
+        return new SimpleIntegerProperty(getBukkitPlayer().getFoodLevel());
     }
 
     @Override
@@ -272,27 +288,27 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public boolean hasBeforePlayed() {
+    public ReadOnlyBooleanProperty hasBeforePlayed() {
 
-        return getBukkitPlayer().hasPlayedBefore();
+        return new SimpleBooleanProperty(getBukkitPlayer().hasPlayedBefore());
     }
 
     @Override
-    public boolean isOnGround() {
+    public ReadOnlyBooleanProperty isOnGround() {
 
-        return getBukkitPlayer().isOnGround();
+        return new SimpleBooleanProperty(getBukkitPlayer().isOnGround());
     }
 
     @Override
-    public boolean isFly() {
+    public ReadOnlyBooleanProperty isFly() {
 
-        return getBukkitPlayer().isFlying();
+        return new SimpleBooleanProperty(getBukkitPlayer().isFlying());
     }
 
     @Override
-    public boolean isAllowFly() {
+    public ReadOnlyBooleanProperty isAllowFly() {
 
-        return getBukkitPlayer().getAllowFlight();
+        return new SimpleBooleanProperty(getBukkitPlayer().getAllowFlight());
     }
 
     @Override
@@ -320,9 +336,9 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public float getWalkSpeed() {
+    public ReadOnlyFloatProperty getWalkSpeed() {
 
-        return getBukkitPlayer().getWalkSpeed();
+        return new SimpleFloatProperty(getBukkitPlayer().getWalkSpeed());
     }
 
     @Override
@@ -332,39 +348,39 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public int getX() {
+    public ReadOnlyIntegerProperty getX() {
 
-        return getLocation().getBlockX();
+        return new SimpleIntegerProperty(getLocation().getBlockX());
     }
 
     @Override
-    public int getY() {
+    public ReadOnlyIntegerProperty getY() {
 
-        return getLocation().getBlockY();
+        return new SimpleIntegerProperty(getLocation().getBlockY());
     }
 
     @Override
-    public int getZ() {
+    public ReadOnlyIntegerProperty getZ() {
 
-        return getLocation().getBlockZ();
+        return new SimpleIntegerProperty(getLocation().getBlockZ());
     }
 
     @Override
-    public double getDoubleX() {
+    public ReadOnlyDoubleProperty getDoubleX() {
 
-        return getLocation().getX();
+        return new SimpleDoubleProperty(getLocation().getX());
     }
 
     @Override
-    public double getDoubleY() {
+    public ReadOnlyDoubleProperty getDoubleY() {
 
-        return getLocation().getY();
+        return new SimpleDoubleProperty(getLocation().getY());
     }
 
     @Override
-    public double getDoubleZ() {
+    public ReadOnlyDoubleProperty getDoubleZ() {
 
-        return getLocation().getZ();
+        return new SimpleDoubleProperty(getLocation().getZ());
     }
 
     @Override
@@ -374,9 +390,35 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    public void teleport(MoonLakePlayer player) {
+
+        Validate.notNull(player, "The teleport player object is null.");
+
+        teleport(player.getLocation());
+    }
+
+    @Override
     public void teleport(Location location) {
 
         getBukkitPlayer().teleport(location);
+    }
+
+    @Override
+    public void teleport(World world) {
+
+        Validate.notNull(world, "The teleport world object is null.");
+
+        teleport(world.getSpawnLocation());
+    }
+
+    @Override
+    public void teleport(String world) {
+
+        Validate.notNull(world, "The teleport world string object is null.");
+
+        World target = Bukkit.getServer().getWorld(world);
+
+        teleport(target);
     }
 
     @Override
@@ -398,9 +440,25 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    public void teleport(String world, int x, int y, int z) {
+
+        teleport(world, (double)x, (double)y, (double)z);
+    }
+
+    @Override
     public void teleport(World world, double x, double y, double z) {
 
         getBukkitPlayer().teleport(new Location(world, x, y, z));
+    }
+
+    @Override
+    public void teleport(String world, double x, double y, double z) {
+
+        Validate.notNull(world, "The teleport world string object is null.");
+
+        World target = Bukkit.getServer().getWorld(world);
+
+        teleport(target, x, y, z);
     }
 
     @Override
@@ -412,11 +470,15 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void playSound(String sound, float volume, float pitch) {
 
+        Validate.notNull(sound, "The sound string object is null.");
+
         getBukkitPlayer().playSound(getLocation(), sound, volume, pitch);
     }
 
     @Override
     public void playSound(Sound sound, float volume, float pitch) {
+
+        Validate.notNull(sound, "The sound object is null.");
 
         getBukkitPlayer().playSound(getLocation(), sound, volume, pitch);
     }
@@ -424,11 +486,16 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void playNote(Instrument instrument, Note note) {
 
+        Validate.notNull(instrument, "The instrument object is null.");
+        Validate.notNull(note, "The note object is null.");
+
         getBukkitPlayer().playNote(getLocation(), instrument, note);
     }
 
     @Override
     public void stopSound(String sound) {
+
+        Validate.notNull(sound, "The sound string object is null.");
 
         getBukkitPlayer().stopSound(sound);
     }
@@ -436,13 +503,17 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void stopSound(Sound sound) {
 
+        Validate.notNull(sound, "The sound object is null.");
+
         getBukkitPlayer().stopSound(sound);
     }
 
     @Override
-    public double distance(Location target) {
+    public ReadOnlyDoubleProperty distance(Location target) {
 
-        return getLocation().distance(target);
+        Validate.notNull(target, "The distance target object is null.");
+
+        return new SimpleDoubleProperty(getLocation().distance(target));
     }
 
     @Override
@@ -490,11 +561,15 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void addPotionEffect(PotionEffectType type, int level, int time) {
 
+        Validate.notNull(type, "The potion effect type object is null.");
+
         getBukkitPlayer().addPotionEffect(new PotionEffect(type, time, level - 1));
     }
 
     @Override
     public void addPotionEffect(PotionEffectType type, int level, int time, boolean ambient) {
+
+        Validate.notNull(type, "The potion effect type object is null.");
 
         getBukkitPlayer().addPotionEffect(new PotionEffect(type, time, level - 1, ambient));
     }
@@ -502,23 +577,31 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void addPotionEffect(PotionEffectType type, int level, int time, boolean ambient, boolean particles) {
 
+        Validate.notNull(type, "The potion effect type object is null.");
+
         getBukkitPlayer().addPotionEffect(new PotionEffect(type, time, level - 1, ambient, particles));
     }
 
     @Override
     public void addPotionEffect(PotionEffectType type, int level, int time, boolean ambient, boolean particles, Color color) {
 
+        Validate.notNull(type, "The potion effect type object is null.");
+
         getBukkitPlayer().addPotionEffect(new PotionEffect(type, time, level - 1, ambient, particles, color));
     }
 
     @Override
-    public boolean hasPotionEffect(PotionEffectType type) {
+    public ReadOnlyBooleanProperty hasPotionEffect(PotionEffectType type) {
 
-        return getBukkitPlayer().hasPotionEffect(type);
+        Validate.notNull(type, "The potion effect type object is null.");
+
+        return new SimpleBooleanProperty(getBukkitPlayer().hasPotionEffect(type));
     }
 
     @Override
     public void removePotionEffect(PotionEffectType type) {
+
+        Validate.notNull(type, "The potion effect type object is null.");
 
         getBukkitPlayer().removePotionEffect(type);
     }
@@ -536,9 +619,11 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public boolean hasPermission(String permission) {
+    public ReadOnlyBooleanProperty hasPermission(String permission) {
 
-        return getBukkitPlayer().hasPermission(permission);
+        Validate.notNull(permission, "The permission string object is null.");
+
+        return new SimpleBooleanProperty(getBukkitPlayer().hasPermission(permission));
     }
 
     @Override
@@ -549,6 +634,8 @@ public class AbstractPlayer implements MoonLakePlayer {
 
     @Override
     public void onKick(String message) {
+
+        Validate.notNull(message, "The message string object is null.");
 
         getBukkitPlayer().kickPlayer("你被服务器踢出,原因: " + message);
     }
@@ -568,7 +655,7 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void onBanName(String cause, Date time) {
 
-        Bukkit.getServer().getBanList(BanList.Type.NAME).addBan(getName(), cause, time, null);
+        Bukkit.getServer().getBanList(BanList.Type.NAME).addBan(nameProperty.get(), cause, time, null);
     }
 
     @Override
@@ -586,7 +673,7 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void onBanIp(String cause, Date time) {
 
-        Bukkit.getServer().getBanList(BanList.Type.IP).addBan(getName(), cause, time, null);
+        Bukkit.getServer().getBanList(BanList.Type.IP).addBan(nameProperty.get(), cause, time, null);
     }
 
     @Override
@@ -594,33 +681,35 @@ public class AbstractPlayer implements MoonLakePlayer {
 
         for(BanList.Type type : BanList.Type.values()) {
 
-            if(Bukkit.getServer().getBanList(type).isBanned(getName())) {
+            if(Bukkit.getServer().getBanList(type).isBanned(nameProperty.get())) {
 
-                Bukkit.getServer().getBanList(type).pardon(getName());
+                Bukkit.getServer().getBanList(type).pardon(nameProperty.get());
             }
         }
     }
 
     @Override
-    public boolean isShift() {
+    public ReadOnlyBooleanProperty isShift() {
 
-        return getBukkitPlayer().isSneaking();
+        return new SimpleBooleanProperty(getBukkitPlayer().isSneaking());
     }
 
     @Override
-    public boolean isSprinting() {
+    public ReadOnlyBooleanProperty isSprinting() {
 
-        return getBukkitPlayer().isSprinting();
+        return new SimpleBooleanProperty(getBukkitPlayer().isSprinting());
     }
 
     @Override
-    public boolean isOp() {
+    public ReadOnlyBooleanProperty isOp() {
 
-        return getBukkitPlayer().isOp();
+        return new SimpleBooleanProperty(getBukkitPlayer().isOp());
     }
 
     @Override
     public void setVelocity(Vector vector) {
+
+        Validate.notNull(vector, "The vector object is null.");
 
         getBukkitPlayer().setVelocity(vector);
     }
@@ -652,43 +741,81 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void createExplosion(float power, boolean setFire, boolean breakBlock) {
 
-        getWorld().createExplosion(getX(), getY(), getZ(), power, setFire, breakBlock);
+        getWorld().createExplosion(getX().get(), getY().get(), getZ().get(), power, setFire, breakBlock);
     }
 
     @Override
-    public boolean performCommand(String command) {
+    public ReadOnlyBooleanProperty performCommand(String command) {
 
-        return getBukkitPlayer().performCommand(command);
+        Validate.notNull(command, "The preform command string object is null.");
+
+        return new SimpleBooleanProperty(getBukkitPlayer().performCommand(command));
+    }
+
+    @Override
+    public void onHide(Player target) {
+
+        Validate.notNull(target, "The hide player target object is null.");
+
+        getBukkitPlayer().hidePlayer(target);
+    }
+
+    @Override
+    public void onHide(MoonLakePlayer target) {
+
+        Validate.notNull(target, "The hide moonlake player target object is null.");
+
+        onHide(target.getBukkitPlayer());
     }
 
     @Override
     public void onHide(String target) {
 
-        Player targetPlayer = PlayerManager.fromName(target);
+        onHide(PlayerManager.fromName(target));
+    }
 
-        if(targetPlayer != null) {
+    @Override
+    public void onShow(Player target) {
 
-            getBukkitPlayer().hidePlayer(targetPlayer);
-        }
+        Validate.notNull(target, "The show moonlake player target object is null.");
+
+        target.showPlayer(target);
+    }
+
+    @Override
+    public void onShow(MoonLakePlayer target) {
+
+        Validate.notNull(target, "The show moonlake player target object is null.");
+
+        onShow(target.getBukkitPlayer());
     }
 
     @Override
     public void onShow(String target) {
 
-        Player targetPlayer = PlayerManager.fromName(target);
-
-        if(targetPlayer != null) {
-
-            getBukkitPlayer().showPlayer(targetPlayer);
-        }
+        onShow(PlayerManager.fromName(target));
     }
 
     @Override
-    public boolean canSee(String target) {
+    public ReadOnlyBooleanProperty canSee(Player target) {
 
-        Player targetPlayer = PlayerManager.fromName(target);
+        Validate.notNull(target, "The can see player target object is null.");
 
-        return targetPlayer != null && getBukkitPlayer().canSee(targetPlayer);
+        return new SimpleBooleanProperty(getBukkitPlayer().canSee(target));
+    }
+
+    @Override
+    public ReadOnlyBooleanProperty canSee(MoonLakePlayer target) {
+
+        Validate.notNull(target, "The can see moonlake player target object is null.");
+
+        return canSee(target.getBukkitPlayer());
+    }
+
+    @Override
+    public ReadOnlyBooleanProperty canSee(String target) {
+
+        return canSee(PlayerManager.fromName(target));
     }
 
     @Override
@@ -706,6 +833,8 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void setWeather(WeatherType weather) {
 
+        Validate.notNull(weather, "The weather type object is null.");
+
         getBukkitPlayer().setPlayerWeather(weather);
     }
 
@@ -716,9 +845,9 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public long getTime() {
+    public ReadOnlyLongProperty getTime() {
 
-        return getBukkitPlayer().getPlayerTime();
+        return new SimpleLongProperty(getBukkitPlayer().getPlayerTime());
     }
 
     @Override
@@ -753,6 +882,8 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void setGameMode(GameMode mode) {
 
+        Validate.notNull(mode, "The game mode type object is null.");
+
         getBukkitPlayer().setGameMode(mode);
     }
 
@@ -763,9 +894,9 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public boolean isGliding() {
+    public ReadOnlyBooleanProperty isGliding() {
 
-        return getBukkitPlayer().isGliding();
+        return new SimpleBooleanProperty(getBukkitPlayer().isGliding());
     }
 
     @Override
@@ -796,9 +927,9 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public float getFallDistance() {
+    public ReadOnlyFloatProperty getFallDistance() {
 
-        return getBukkitPlayer().getFallDistance();
+        return new SimpleFloatProperty(getBukkitPlayer().getFallDistance());
     }
 
     @Override
@@ -814,9 +945,9 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public double getLastDamage() {
+    public ReadOnlyDoubleProperty getLastDamage() {
 
-        return getBukkitPlayer().getLastDamage();
+        return new SimpleDoubleProperty(getBukkitPlayer().getLastDamage());
     }
 
     public EntityDamageEvent getLastDamageCause() {
@@ -826,6 +957,8 @@ public class AbstractPlayer implements MoonLakePlayer {
 
     @Override
     public Block getTargetBlock(Set<Material> transparent, int maxDistance) {
+
+        Validate.notNull(transparent, "The transparent collection object is null.");
 
         return getBukkitPlayer().getTargetBlock(transparent, maxDistance);
     }
@@ -837,9 +970,9 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public boolean isCanPickupItems() {
+    public ReadOnlyBooleanProperty isCanPickupItems() {
 
-        return getBukkitPlayer().getCanPickupItems();
+        return new SimpleBooleanProperty(getBukkitPlayer().getCanPickupItems());
     }
 
     @Override
@@ -849,9 +982,9 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public boolean isGlowing() {
+    public ReadOnlyBooleanProperty isGlowing() {
 
-        return getBukkitPlayer().isGlowing();
+        return new SimpleBooleanProperty(getBukkitPlayer().isGlowing());
     }
 
     @Override
@@ -861,15 +994,15 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public boolean isInvulnerable() {
+    public ReadOnlyBooleanProperty isInvulnerable() {
 
-        return getBukkitPlayer().isInvulnerable();
+        return new SimpleBooleanProperty(getBukkitPlayer().isInvulnerable());
     }
 
     @Override
-    public boolean isSilent() {
+    public ReadOnlyBooleanProperty isSilent() {
 
-        return getBukkitPlayer().isSilent();
+        return new SimpleBooleanProperty(getBukkitPlayer().isSilent());
     }
 
     @Override
@@ -879,9 +1012,9 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public boolean hasGravity() {
+    public ReadOnlyBooleanProperty hasGravity() {
 
-        return getBukkitPlayer().hasGravity();
+        return new SimpleBooleanProperty(getBukkitPlayer().hasGravity());
     }
 
     @Override
@@ -893,17 +1026,24 @@ public class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void setResourcePack(String url) {
 
+        Validate.notNull(url, "The resource pack url string object is null.");
+
         getBukkitPlayer().setResourcePack(url);
     }
 
     @Override
     public <T extends Projectile> T launcherProjectile(Class<? extends T> projectile) {
 
+        Validate.notNull(projectile, "The projectile class object is null.");
+
         return getBukkitPlayer().launchProjectile(projectile);
     }
 
     @Override
     public <T extends Projectile> T launcherProjectile(Class<? extends T> projectile, Vector vector) {
+
+        Validate.notNull(projectile, "The projectile class object is null.");
+        Validate.notNull(vector, "The projectile vector object is null.");
 
         return getBukkitPlayer().launchProjectile(projectile, vector);
     }
@@ -915,23 +1055,23 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public String getIp() {
+    public ReadOnlyStringProperty getIp() {
 
         InetAddress address = getAddress().getAddress();
 
-        return address != null ? address.getHostAddress() : "127.0.0.1";
+        return new SimpleStringProperty(address != null ? address.getHostAddress() : "127.0.0.1");
     }
 
     @Override
-    public int getPort() {
+    public ReadOnlyIntegerProperty getPort() {
 
-        return getAddress().getPort();
+        return new SimpleIntegerProperty(getAddress().getPort());
     }
 
     @Override
     public int compareTo(MoonLakePlayer target) {
 
-        return getName().compareTo(target.getName());
+        return nameProperty.get().compareTo(target == null ? null : target.getName().get());
     }
 
     @Override
@@ -950,65 +1090,70 @@ public class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public int getPing() {
+    public ReadOnlyIntegerProperty getPing() {
 
-        return PlayerLibraryFactorys.nmsPlayer().getPing(getName()).get();
+        return PlayerLibraryFactorys.nmsPlayer().getPing(nameProperty.get());
     }
 
     @Override
     public void sendPacket(Packet<?> packet) {
 
-        if(packet != null) {
+        Validate.notNull(packet, "The packet object is null.");
 
-            packet.send(getName());
-        }
+        packet.send(nameProperty.get());
     }
 
     @Override
     public void sendTitlePacket(String title) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(getName(), StringUtil.toColor(title).get());
+        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title).get());
     }
 
     @Override
     public void sendTitlePacket(String title, String subTitle) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(getName(), StringUtil.toColor(title).get(), StringUtil.toColor(subTitle).get());
+        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title).get(), StringUtil.toColor(subTitle).get());
     }
 
     @Override
     public void sendTitlePacket(String title, int fadeIn, int stay, int fadeOut) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(getName(), StringUtil.toColor(title).get(), fadeIn, stay, fadeOut);
+        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title).get(), fadeIn, stay, fadeOut);
     }
 
     @Override
     public void sendTitlePacket(String title, String subTitle, int fadeIn, int stay, int fadeOut) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(getName(), StringUtil.toColor(title).get(), StringUtil.toColor(subTitle).get(), fadeIn, stay, fadeOut);
+        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title).get(), StringUtil.toColor(subTitle).get(), fadeIn, stay, fadeOut);
     }
 
     @Override
     public void sendMainChatPacket(String message) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendMainChatPacket(getName(), StringUtil.toColor(message).get());
+        PlayerLibraryFactorys.nmsPlayer().sendMainChatPacket(nameProperty.get(), StringUtil.toColor(message).get());
+    }
+
+    @Override
+    public void sendTabListPacket(String header) {
+
+        PlayerLibraryFactorys.nmsPlayer().sendTabListPacket(nameProperty.get(), header);
     }
 
     @Override
     public void sendTabListPacket(String header, String footer) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTabListPacket(getName(), header, footer);
+        PlayerLibraryFactorys.nmsPlayer().sendTabListPacket(nameProperty.get(), header, footer);
     }
 
     @Override
     public void sendItemCooldownPacket(Material type, int tick) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendItemCooldownPacket(getName(), type, tick);
+        PlayerLibraryFactorys.nmsPlayer().sendItemCooldownPacket(nameProperty.get(), type, tick);
     }
 
     @Override
-    public boolean hasItemCooldown(Material type) {
+    public ReadOnlyBooleanProperty hasItemCooldown(Material type) {
 
-        return PlayerLibraryFactorys.nmsPlayer().hasItemCooldown(getName(), type).get();
+        return PlayerLibraryFactorys.nmsPlayer().hasItemCooldown(nameProperty.get(), type);
     }
 }

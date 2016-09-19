@@ -5,13 +5,11 @@ import com.minecraft.moonlake.property.*;
 /**
  * Created by MoonLake on 2016/7/17.
  */
-public abstract class ConversionDataWrapped implements ConversionData {
-
-    private final Object obj;
+public class ConversionDataWrapped extends ConversionDataExpression {
 
     public ConversionDataWrapped(Object obj) {
 
-        this.obj = obj;
+        super(obj);
     }
 
     /**
