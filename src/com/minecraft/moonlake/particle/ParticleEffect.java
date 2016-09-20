@@ -34,7 +34,7 @@ import java.util.*;
  *     <ul>
  *         <li>无属性播放: {@link #display(float, float, float, float, int, Location, double)}</li>
  *         <li>效果数据播放: {@link #display(ParticleData, float, float, float, float, int, Location, double)}</li>
- *         <li>效果颜色播放: {@link #display(ParticleColor, float, int, Location, double)}</li>
+ *         <li>效果颜色播放: {@link #display(ParticleColor, Location, double)}</li>
  *     </ul>
  *     <h2>调用例子:</h2>
  *     <p>播放大型爆炸粒子效果: ParticleEffect.EXPLOSION_LARGE.display(0f, 0f, 0f, 0f, 1, player.getLocation(), 32d);</p>
@@ -615,81 +615,6 @@ public enum ParticleEffect {
     /**
      * 将此粒子效果在指定位置播放
      *
-     * @param color 效果颜色
-     * @param speed 速度
-     * @param amount 数量
-     * @param center 位置
-     * @param range 范围
-     * @throws ParticleException 如果粒子效果不支持版本则抛出异常
-     * @throws ParticleException 如果粒子效果没有颜色属性则抛出异常
-     * @throws ParticleException 如果粒子效果的颜色属性不符合则抛出异常
-     */
-    public void display(ParticleColor color, float speed, int amount, Location center, double range) throws ParticleException {
-
-        if(!isSupported()) {
-
-            throw new ParticleException("这个粒子效果 " + this + " 不支持您的服务端版本.");
-        }
-        if(!hasProperty(ParticleProperty.COLORABLE)) {
-
-            throw new ParticleException("这个粒子效果没有效果颜色属性.");
-        }
-        if(!isColorCorrect(this, color)) {
-
-            throw new ParticleException("这个粒子效果和效果颜色对象不符合.");
-        }
-        new ParticlePacket(this, color, speed, amount, range > 256d).sendTo(center, range);
-    }
-
-    /**
-     * 将此粒子效果在指定位置播放
-     *
-     * @param color 效果颜色
-     * @param speed 速度
-     * @param amount 数量
-     * @param center 位置
-     * @param players 玩家
-     * @throws ParticleException 如果粒子效果不支持版本则抛出异常
-     * @throws ParticleException 如果粒子效果没有颜色属性则抛出异常
-     * @throws ParticleException 如果粒子效果的颜色属性不符合则抛出异常
-     */
-    public void display(ParticleColor color, float speed, int amount, Location center, List<Player> players) throws ParticleException {
-
-        if (!isSupported()) {
-
-            throw new ParticleException("这个粒子效果 " + this + " 不支持您的服务端版本.");
-        }
-        if (!hasProperty(ParticleProperty.COLORABLE)) {
-
-            throw new ParticleException("这个粒子效果没有效果颜色属性.");
-        }
-        if (!isColorCorrect(this, color)) {
-
-            throw new ParticleException("这个粒子效果和效果颜色对象不符合.");
-        }
-        new ParticlePacket(this, color, speed, amount, isLongDistance(center, players)).sendTo(center, players);
-    }
-
-    /**
-     * 将此粒子效果在指定位置播放
-     *
-     * @param color 效果颜色
-     * @param speed 速度
-     * @param amount 数量
-     * @param center 位置
-     * @param players 玩家
-     * @throws ParticleException 如果粒子效果不支持版本则抛出异常
-     * @throws ParticleException 如果粒子效果没有颜色属性则抛出异常
-     * @throws ParticleException 如果粒子效果的颜色属性不符合则抛出异常
-     */
-    public void display(ParticleColor color, float speed, int amount, Location center, Player... players) throws ParticleException {
-
-        display(color, speed, amount, center, Arrays.asList(players));
-    }
-
-    /**
-     * 将此粒子效果在指定位置播放
-     *
      * @param data 效果数据
      * @param offsetX X 偏移量
      * @param offsetY Y 偏移量
@@ -969,12 +894,7 @@ public enum ParticleEffect {
 
         public ParticlePacket(ParticleEffect effect, ParticleColor color, boolean longDistance) {
 
-            this(effect, color, 1f, 0, longDistance);
-        }
-
-        public ParticlePacket(ParticleEffect effect, ParticleColor color, float speed, int amount, boolean longDistance) {
-
-            this(effect, color.getValueX(), color.getValueY(), color.getValueZ(), speed, amount, longDistance, null);
+            this(effect, color.getValueX(), color.getValueY(), color.getValueZ(), 1f, 0, longDistance, null);
 
             if (effect == ParticleEffect.REDSTONE && color instanceof OrdinaryColor && ((OrdinaryColor) color).getRed() == 0) {
 
