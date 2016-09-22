@@ -38,7 +38,7 @@ import java.util.*;
  *     </ul>
  *     <h2>调用例子:</h2>
  *     <p>播放大型爆炸粒子效果: ParticleEffect.EXPLOSION_LARGE.display(0f, 0f, 0f, 0f, 1, player.getLocation(), 32d);</p>
- *     <p>播放红色尘埃粒子效果: ParticleEffect.REDSTONE.display(new OrdiaryColor(Color.GREEN), 0f, 10, player.getLocation(), 32d);</p>
+ *     <p>播放红色尘埃粒子效果: ParticleEffect.REDSTONE.display(new OrdiaryColor(Color.GREEN), player.getLocation(), 32d);</p>
  *     <p>播放方块破碎粒子效果: ParticleEffect.BLOCK_CRACK.display(new BlockData(Material.DIAMOND_BLOCK, 0), 0f, 0f, 0f, 0f, 1, player.getLocation(), 32d);</p>
  * </div>
  * <hr />
@@ -1100,7 +1100,7 @@ public enum ParticleEffect {
 
             this.material = material;
             this.data = data;
-            this.packetData = new int[] { data << 12 | material.getId() & 4095 };
+            this.packetData = new int[] { material.getId(), data };
         }
 
         public Material getMaterial() {
