@@ -2,7 +2,7 @@ package com.minecraft.moonlake.api.nbt;
 
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import com.minecraft.moonlake.nbt.exception.NBTInitializeException;
-import com.minecraft.moonlake.nbt.utils.NBTReflect;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -83,6 +83,9 @@ class NBTEntityExpression implements NBTEntity {
     @Override
     public void readEntity(Entity entity, Object nbtTagCompound) throws NBTException {
 
+        Validate.notNull(entity, "The entity object is null.");
+        Validate.notNull(nbtTagCompound, "The nbt tag object is null.");
+
         Object nmsEntity = getHandleEntity(entity);
 
         try {
@@ -105,6 +108,9 @@ class NBTEntityExpression implements NBTEntity {
     @Override
     public void writeEntity(Entity entity, Object nbtTagCompound) throws NBTException {
 
+        Validate.notNull(entity, "The entity object is null.");
+        Validate.notNull(nbtTagCompound, "The nbt tag object is null.");
+
         Object nmsEntity = getHandleEntity(entity);
 
         try {
@@ -126,6 +132,8 @@ class NBTEntityExpression implements NBTEntity {
 
     @Override
     public Entity spawnEntity(Object nbtTagCompound, World world) throws NBTException {
+
+        Validate.notNull(world, "The target world object is null.");
 
         try {
 

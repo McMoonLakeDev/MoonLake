@@ -1,6 +1,7 @@
 package com.minecraft.moonlake.api.nbt;
 
 import com.minecraft.moonlake.nbt.exception.NBTException;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
@@ -18,11 +19,13 @@ class NBTExpression implements NBTLibrary {
     public NBTCompound read(ItemStack itemStack) throws NBTException {
 
         Object tag = NBTFactory.item().getTag(itemStack);
-        return NBTCompound.fromNBTCopy(tag);
+        return NBTReflect.fromNBTCompoundCopy(tag);
     }
 
     @Override
     public void write(ItemStack itemStack, NBTCompound nbt) throws NBTException {
+
+        Validate.notNull(nbt, "The nbt tag object is null.");
 
         NBTFactory.item().setTag(itemStack, nbt.getHandleCopy());
     }
@@ -30,7 +33,7 @@ class NBTExpression implements NBTLibrary {
     @Override
     public NBTCompound read(Entity entity) throws NBTException {
 
-        NBTCompound nbtCompound = new NBTCompound();
+        NBTCompound nbtCompound = new NBTCompoundExpression();
         NBTFactory.entity().readEntity(entity, nbtCompound);
         return nbtCompound;
     }

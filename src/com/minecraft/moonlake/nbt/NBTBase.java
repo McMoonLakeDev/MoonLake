@@ -1,7 +1,7 @@
 package com.minecraft.moonlake.nbt;
 
 import com.minecraft.moonlake.nbt.exception.NBTException;
-import com.minecraft.moonlake.nbt.utils.NBTReflect;
+import com.minecraft.moonlake.api.nbt.NBTReflect;
 
 import java.io.*;
 import java.util.Arrays;

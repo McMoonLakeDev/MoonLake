@@ -1,694 +1,102 @@
 package com.minecraft.moonlake.api.nbt;
 
-import com.minecraft.moonlake.nbt.exception.NBTException;
-import com.minecraft.moonlake.nbt.utils.NBTReflect;
-
 import java.util.*;
 
 /**
  * Created by MoonLake on 2016/9/22.
  */
-public class NBTList implements List<Object> {
+public interface NBTList extends List<Object> {
 
-    private final List<Object> handleList;
-    private final Object handle;
+    List<Object> getHandleList();
 
-    public NBTList() {
+    Object getHandle();
 
-        this(NBTReflect.getHandle().createTagList());
-    }
+    Object getHandleCopy();
 
-    public NBTList(Object tag) {
+    byte getType();
 
-        assert NBTReflect.getHandle().getTagType(tag) == 9;
+    void setType(byte type);
 
-        this.handle = tag;
-        this.handleList = NBTReflect.getHandle().getHandleList(tag);
-    }
+    <T extends List<Object>> T toList(T list);
 
-    public NBTList(Collection collection) {
+    <T extends Collection<Object>> T toCollection(T collection);
 
-        this(NBTReflect.getHandle().createTagList());
+    ArrayList<Object> toArrayList();
 
-        Iterator iterator = collection.iterator();
-
-        while(iterator.hasNext()) {
-
-            Object obj = iterator.next();
-            add(obj);
-        }
-    }
-
-    public NBTList(Object[] array) {
-
-        this(NBTReflect.getHandle().createTagList());
-
-        for(int i = 0; i < array.length; i++) {
-
-            add(array[i]);
-        }
-    }
-
-    public static NBTList fromNBT(Object tag) {
-
-        return tag == null ? null : new NBTList(tag);
-    }
-
-    public static NBTList fromNBTCopy(Object tag) {
-
-        return tag == null ? null : new NBTList(NBTReflect.getHandle().cloneTag(tag));
-    }
-
-    public List<Object> getHandleList() {
-
-        return handleList;
-    }
-
-    public Object getHandle() {
-
-        return handle;
-    }
-
-    public Object getHandleCopy() {
-
-        return NBTReflect.getHandle().cloneTag(handle);
-    }
-
-    public byte getType() {
-
-        return size() == 0 ? 0 : NBTReflect.getHandle().getNBTTagListType(handleList);
-    }
-
-    public void setType(byte type) {
-
-        NBTReflect.getHandle().setNBTTagListType(handleList, type);
-    }
-
-    private Object convertToCurrentType(Object obj) {
-
-        byte type = getType();
-
-        if(type == 0) {
-
-            Object tag = NBTReflect.getHandle().createTag(obj);
-            type = NBTReflect.getHandle().getTagType(tag);
-            setType(type);
-            return tag;
-        }
-        else {
-
-            return NBTReflect.getHandle().createTag(obj, type);
-        }
-    }
-
-    public <T extends List<Object>> T toList(T list) {
-
-        return toCollection(list);
-    }
-
-    public <T extends Collection<Object>> T toCollection(T collection) {
-
-        collection.clear();
-
-        Iterator iterator = handleList.iterator();
-
-        while(iterator.hasNext()) {
-
-            Object nbtTag = iterator.next();
-            byte type = NBTReflect.getHandle().getTagType(nbtTag);
-
-            if(type == 9) {
-
-                collection.add(fromNBT(nbtTag).toList(new ArrayList<>()));
-            }
-            else if(type == 10) {
-
-                collection.add(NBTCompound.fromNBT(nbtTag).toMap(new HashMap<>()));
-            }
-            else {
-
-                collection.add(NBTReflect.getHandle().getValue(nbtTag));
-            }
-        }
-        return collection;
-    }
-
-    public ArrayList<Object> toArrayList() {
-
-        return toList(new ArrayList<>());
-    }
+    NBTList clone();
 
     @Override
-    public NBTList clone() {
-
-        return new NBTList(NBTReflect.getHandle().cloneTag(handle));
-    }
+    int size();
 
     @Override
-    public boolean equals(Object obj) {
-
-        return obj instanceof NBTList && handle.equals(((NBTList) obj).handle);
-    }
+    boolean isEmpty();
 
     @Override
-    public int size() {
-
-        return handleList.size();
-    }
+    boolean contains(Object o);
 
     @Override
-    public boolean isEmpty() {
-
-        return handleList.isEmpty();
-    }
+    Iterator<Object> iterator();
 
     @Override
-    public boolean contains(Object o) {
-
-        return handleList.contains(NBTReflect.getHandle().createTag(o));
-    }
+    Object[] toArray();
 
     @Override
-    public NBTList.NBTIterator iterator() {
-
-        return new NBTIterator(handleList.listIterator());
-    }
+    <T> T[] toArray(T[] a);
 
     @Override
-    public Object[] toArray() {
-
-        Object[] result = new Object[size()];
-        int index = 0; Object obj;
-
-        for(NBTList.NBTIterator itr = iterator(); itr.hasNext(); result[index++] = obj) {
-
-            obj = itr.next();
-        }
-        return result;
-    }
+    boolean add(Object o);
 
     @Override
-    public <T> T[] toArray(T[] a) {
-
-        int size = size();
-
-        if(size > a.length) {
-
-            size = a.length;
-        }
-        for(int i = 0; i < size; i++) {
-
-            a[i] = (T) get(i);
-        }
-        return a;
-    }
+    boolean remove(Object o);
 
     @Override
-    public boolean add(Object o) {
-
-        Object tag = convertToCurrentType(o);
-        return handleList.add(tag);
-    }
+    boolean containsAll(Collection<?> c);
 
     @Override
-    public boolean remove(Object o) {
-
-        return handleList.remove(NBTReflect.getHandle().createTag(o));
-    }
+    boolean addAll(Collection<?> c);
 
     @Override
-    public boolean containsAll(Collection<?> c) {
-
-        Iterator iterator = c.iterator();
-        Object value;
-
-        do {
-
-            if(!iterator.hasNext()) {
-
-                return true;
-            }
-            value = iterator.next();
-        }
-        while (handleList.contains(NBTReflect.getHandle().createTag(value)));
-
-        return false;
-    }
+    boolean addAll(int index, Collection<?> c);
 
     @Override
-    public boolean addAll(Collection<?> c) {
-
-        boolean modified = false;
-        Object tag;
-
-        for(Iterator iterator = c.iterator(); iterator.hasNext(); modified |= handleList.add(tag)) {
-
-            Object obj = iterator.next();
-            tag = convertToCurrentType(obj);
-        }
-        return modified;
-    }
+    boolean removeAll(Collection<?> c);
 
     @Override
-    public boolean addAll(int index, Collection<?> c) {
-
-        boolean modified = false;
-        Iterator iterator = c.iterator();
-
-        while (iterator.hasNext()) {
-
-            Object obj = iterator.next();
-
-            if(obj != null) {
-
-                Object tag = convertToCurrentType(obj);
-                modified = true;
-                handleList.add(index++, tag);
-            }
-        }
-        return modified;
-    }
+    boolean retainAll(Collection<?> c);
 
     @Override
-    public boolean removeAll(Collection<?> c) {
-
-        boolean modified = false;
-        Object obj;
-
-        for(Iterator iterator = c.iterator(); iterator.hasNext(); modified |= handleList.remove(NBTReflect.getHandle().createTag(obj))) {
-
-            obj = iterator.next();
-        }
-        return modified;
-    }
+    void clear();
 
     @Override
-    public boolean retainAll(Collection<?> c) {
-
-        boolean modified = false;
-        NBTList.NBTIterator itr = iterator();
-
-        while(itr.hasNext()) {
-
-            if(!c.contains(itr.next())) {
-
-                itr.remove();;
-                modified = true;
-            }
-        }
-        return modified;
-    }
+    boolean equals(Object o);
 
     @Override
-    public void clear() {
-
-        handleList.clear();
-    }
+    int hashCode();
 
     @Override
-    public Object get(int index) {
-
-        return NBTReflect.getHandle().getValue(handleList.get(index));
-    }
+    Object get(int index);
 
     @Override
-    public Object set(int index, Object element) {
-
-        if(element == null) {
-
-            return remove(index);
-        }
-        else {
-
-            Object tag = convertToCurrentType(element);
-            Object oldTag = handleList.set(index, tag);
-            return NBTReflect.getHandle().getValue(oldTag);
-        }
-    }
+    Object set(int index, Object element);
 
     @Override
-    public void add(int index, Object element) {
-
-        if(element != null) {
-
-            Object tag = convertToCurrentType(element);
-            handleList.add(index, tag);
-        }
-    }
+    void add(int index, Object element);
 
     @Override
-    public Object remove(int index) {
-
-        return NBTReflect.getHandle().getValue(handleList.remove(index));
-    }
+    Object remove(int index);
 
     @Override
-    public int indexOf(Object o) {
-
-        return handleList.indexOf(NBTReflect.getHandle().createTag(o));
-    }
+    int indexOf(Object o);
 
     @Override
-    public int lastIndexOf(Object o) {
-
-        return handleList.lastIndexOf(NBTReflect.getHandle().createTag(o));
-    }
+    int lastIndexOf(Object o);
 
     @Override
-    public NBTList.NBTIterator listIterator() {
-
-        return new NBTIterator(handleList.listIterator());
-    }
+    ListIterator<Object> listIterator();
 
     @Override
-    public NBTList.NBTIterator listIterator(int index) {
-
-        return new NBTIterator(handleList.listIterator(index));
-    }
+    ListIterator<Object> listIterator(int index);
 
     @Override
-    public NBTList.NBTSubList subList(int fromIndex, int toIndex) {
-
-        return new NBTSubList(this, fromIndex, toIndex);
-    }
-
-    @Override
-    public String toString() {
-
-        NBTList.NBTIterator itr = iterator();
-
-        if(!itr.hasNext()) {
-
-            return "[]";
-        }
-        else {
-
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append('[');
-
-            while(true) {
-
-                Object obj = itr.next();
-                stringBuilder.append(obj);
-
-                if(!itr.hasNext()) {
-
-                    return stringBuilder.append(']').toString();
-                }
-                stringBuilder.append(",").append(' ');
-            }
-        }
-    }
-
-    public class NBTSubList extends NBTList {
-
-        private final NBTList list;
-        private final int offset;
-        private int size;
-
-        private NBTSubList(NBTList list, int fromIndex, int toIndex) {
-
-            if(fromIndex < 0) {
-
-                throw new NBTException("The nbt list sub list from index not less than 0.");
-            }
-            else if(toIndex > list.size()) {
-
-                throw new NBTException("The nbt list sub list to index not greater than size.");
-            }
-            else if(fromIndex > toIndex) {
-
-                throw new NBTException("The nbt list sub list from index not less than to index.");
-            }
-            this.list = list;
-            this.offset = fromIndex;
-            this.size = toIndex - fromIndex;
-        }
-
-        @Override
-        public Object set(int index, Object element) {
-
-            if(element == null) {
-
-                return remove(index);
-            }
-            else {
-
-                rangeCheck(index);
-                return list.set(index + offset, element);
-            }
-        }
-
-        @Override
-        public Object get(int index) {
-
-            rangeCheck(index);
-            return list.get(index + offset);
-        }
-
-        @Override
-        public int size() {
-
-            return size;
-        }
-
-        @Override
-        public void add(int index, Object element) {
-
-            if(element != null) {
-
-                rangeCheckForAdd(index);
-                list.add(index + offset, element);
-                ++size;
-            }
-        }
-
-        @Override
-        public Object remove(int index) {
-
-            rangeCheck(index);
-            --size;
-            return list.remove(index + offset);
-        }
-
-        @Override
-        public boolean addAll(Collection<?> c) {
-
-            return addAll(size, c);
-        }
-
-        @Override
-        public boolean addAll(int index, Collection<?> c) {
-
-            ArrayList<Object> objectToAdd = new ArrayList<>();
-            Iterator iterator = c.iterator();
-
-            while(iterator.hasNext()) {
-
-                Object obj = iterator.next();
-
-                if(obj != null) {
-
-                    objectToAdd.add(obj);
-                }
-            }
-            rangeCheckForAdd(index);
-            int cSize = objectToAdd.size();
-
-            if(cSize == 0) {
-
-                return false;
-            }
-            else {
-
-                list.addAll(index + offset, objectToAdd);
-                size += cSize;
-                return true;
-            }
-        }
-
-        @Override
-        public NBTList.NBTIterator iterator() {
-
-            return listIterator();
-        }
-
-        @Override
-        public NBTIterator listIterator(int index) {
-
-            rangeCheckForAdd(index);
-
-            return new NBTList.NBTIterator(list.listIterator(index + offset)) {
-
-                @Override
-                public boolean hasNext() {
-
-                    return nextIndex() < size;
-                }
-
-                @Override
-                public Object next() {
-
-                    if(hasNext()) {
-
-                        return super.next();
-                    }
-                    else {
-
-                        throw new NoSuchElementException();
-                    }
-                }
-
-                @Override
-                public boolean hasPrevious() {
-
-                    return previousIndex() >= 0;
-                }
-
-                @Override
-                public Object previous() {
-
-                    if(hasPrevious()) {
-
-                        return super.previous();
-                    }
-                    else {
-
-                        throw new NoSuchElementException();
-                    }
-                }
-
-                @Override
-                public int nextIndex() {
-
-                    return super.nextIndex() - offset;
-                }
-
-                @Override
-                public int previousIndex() {
-
-                    return super.previousIndex() - offset;
-                }
-
-                @Override
-                public void remove() {
-
-                    super.remove();
-                    size--;
-                }
-
-                @Override
-                public void set(Object o) {
-
-                    if(o == null) {
-
-                        remove();
-                    }
-                    else {
-
-                        super.set(o);
-                    }
-                }
-
-                @Override
-                public void add(Object o) {
-
-                    if(o != null) {
-
-                        super.add(o);
-                        size++;
-                    }
-                }
-            };
-        }
-
-        private void rangeCheck(int index) {
-
-            if(index < 0 || index >= size) {
-
-                throw new IndexOutOfBoundsException("The index out of bounds, index: " + index + ", size: " + size);
-            }
-        }
-
-        private void rangeCheckForAdd(int index) {
-
-            if(index < 0 || index >= size) {
-
-                throw new IndexOutOfBoundsException("The index out of bounds, index: " + index + ", size: " + size);
-            }
-        }
-    }
-
-    public class NBTIterator implements ListIterator<Object> {
-
-        protected ListIterator<Object> iterator;
-
-        private NBTIterator(ListIterator<Object> iterator) {
-
-            this.iterator = iterator;
-        }
-
-        @Override
-        public boolean hasNext() {
-
-            return iterator.hasNext();
-        }
-
-        @Override
-        public Object next() {
-
-            return NBTReflect.getHandle().getValue(iterator.next());
-        }
-
-        @Override
-        public boolean hasPrevious() {
-
-            return iterator.hasPrevious();
-        }
-
-        @Override
-        public Object previous() {
-
-            return NBTReflect.getHandle().getValue(iterator.previous());
-        }
-
-        @Override
-        public int nextIndex() {
-
-            return iterator.nextIndex();
-        }
-
-        @Override
-        public int previousIndex() {
-
-            return iterator.previousIndex();
-        }
-
-        @Override
-        public void remove() {
-
-            iterator.remove();
-        }
-
-        @Override
-        public void set(Object o) {
-
-            if(o == null) {
-
-                remove();
-            }
-            else {
-
-                Object tag = NBTList.this.convertToCurrentType(o);
-                iterator.set(tag);
-            }
-        }
-
-        @Override
-        public void add(Object o) {
-
-            Object tag = NBTList.this.convertToCurrentType(o);
-            iterator.add(tag);
-        }
-    }
+    List<Object> subList(int fromIndex, int toIndex);
 }

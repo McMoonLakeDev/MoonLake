@@ -2,6 +2,7 @@ package com.minecraft.moonlake.api.nbt;
 
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import com.minecraft.moonlake.nbt.exception.NBTInitializeException;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -142,6 +143,9 @@ class NBTItemStackExpression implements NBTItemStack {
 
     public void setTag(ItemStack itemStack, Object nbtTagCompound) throws NBTException {
 
+        Validate.notNull(itemStack, "The itemstack object is null.");
+        Validate.notNull(nbtTagCompound, "The nbt tag object is null.");
+
         try {
 
             if(CLASS_CRAFTITEMSTACK.isInstance(itemStack)) {
@@ -160,6 +164,8 @@ class NBTItemStackExpression implements NBTItemStack {
     }
 
     public Object getTag(ItemStack itemStack) throws NBTException {
+
+        Validate.notNull(itemStack, "The itemstack object is null.");
 
         try {
 
