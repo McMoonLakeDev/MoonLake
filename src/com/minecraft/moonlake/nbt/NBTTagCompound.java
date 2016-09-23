@@ -1,7 +1,7 @@
 package com.minecraft.moonlake.nbt;
 
-import com.minecraft.moonlake.nbt.utils.NBTReflect;
-import com.minecraft.moonlake.nbt.utils.StringParser;
+import com.minecraft.moonlake.api.nbt.NBTReflect;
+import com.minecraft.moonlake.api.nbt.StringParser;
 
 import java.util.*;
 

@@ -1,7 +1,5 @@
-package com.minecraft.moonlake.nbt.utils;
+package com.minecraft.moonlake.api.nbt;
 
-import com.minecraft.moonlake.api.nbt.NBTCompound;
-import com.minecraft.moonlake.api.nbt.NBTList;
 import com.minecraft.moonlake.nbt.exception.NBTConvertException;
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import com.minecraft.moonlake.reflect.Reflect;
@@ -39,23 +37,43 @@ public abstract class NBTReflect {
         return handle;
     }
 
+    public static NBTCompound fromNBTCompound(Object tag) {
+
+        return tag == null ? null : new NBTCompoundExpression(tag);
+    }
+
+    public static NBTCompound fromNBTCompoundCopy(Object tag) {
+
+        return tag == null ? null : fromNBTCompound(NBTReflect.getHandle().cloneTag(tag));
+    }
+
+    public static NBTList fromNBTList(Object tag) {
+
+        return tag == null ? null : new NBTListExpression(tag);
+    }
+
+    public static NBTList fromNBTListCopy(Object tag) {
+
+        return tag == null ? null : new NBTListExpression(NBTReflect.getHandle().cloneTag(tag));
+    }
+
     public Object createTag(Object value) throws NBTConvertException {
 
         if(value == null) {
 
             return null;
         }
-        else if(value instanceof NBTCompound) {
+        else if(value instanceof NBTCompoundExpression) {
 
-            return cloneTag(((NBTCompound) value).getHandle());
+            return cloneTag(((NBTCompoundExpression) value).getHandle());
         }
-        else if(value instanceof NBTList) {
+        else if(value instanceof NBTListExpression) {
 
-            return cloneTag(((NBTList) value).getHandle());
+            return cloneTag(((NBTListExpression) value).getHandle());
         }
         else if(value instanceof Collection) {
 
-            return new NBTList(((Collection) value)).getHandle();
+            return new NBTListExpression(((Collection) value)).getHandle();
         }
         else if(value instanceof Boolean) {
 
@@ -103,7 +121,7 @@ public abstract class NBTReflect {
         }
         else if(value instanceof Object[]) {
 
-            return new NBTList(Arrays.asList((Object[]) value)).getHandle();
+            return new NBTListExpression(Arrays.asList((Object[]) value)).getHandle();
         }
         throw new NBTConvertException("The nbt convert exception: " + value.getClass().getSimpleName());
     }

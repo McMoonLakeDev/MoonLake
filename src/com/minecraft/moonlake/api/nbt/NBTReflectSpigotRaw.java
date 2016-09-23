@@ -1,7 +1,5 @@
-package com.minecraft.moonlake.nbt.utils;
+package com.minecraft.moonlake.api.nbt;
 
-import com.minecraft.moonlake.api.nbt.NBTCompound;
-import com.minecraft.moonlake.api.nbt.NBTList;
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import com.minecraft.moonlake.nbt.exception.NBTInitializeException;
 
@@ -227,9 +225,9 @@ final class NBTReflectSpigotRaw extends NBTReflect {
                 case 8:
                     return FIELD_NBTTAGSTRING_DATA.get(tag);
                 case 9:
-                    return NBTList.fromNBT(tag);
+                    return fromNBTList(tag);
                 case 10:
-                    return NBTCompound.fromNBT(tag);
+                    return fromNBTCompound(tag);
                 case 11:
                     return FIELD_NBTTAGINTARRAY_DATA.get(tag);
                 default:
@@ -270,12 +268,12 @@ final class NBTReflectSpigotRaw extends NBTReflect {
                 case 8:
                     FIELD_NBTTAGSTRING_DATA.set(tag, value); break;
                 case 9:
-                    NBTList list = NBTList.fromNBT(tag);
+                    NBTList list = fromNBTList(tag);
                     list.clear();
                     list.addAll((Collection) value);
                     break;
                 case 10:
-                    NBTCompound compound = NBTCompound.fromNBT(tag);
+                    NBTCompound compound = fromNBTCompound(tag);
                     compound.clear();
                     compound.putAll((Map) value);
                     break;

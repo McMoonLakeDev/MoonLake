@@ -1,4 +1,4 @@
-package com.minecraft.moonlake.nbt.utils;
+package com.minecraft.moonlake.api.nbt;
 
 import com.minecraft.moonlake.nbt.exception.NBTException;
 

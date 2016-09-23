@@ -1,6 +1,6 @@
 package com.minecraft.moonlake.nbt;
 
-import com.minecraft.moonlake.nbt.utils.NBTReflect;
+import com.minecraft.moonlake.api.nbt.NBTReflect;
 
 /**
  * Created by MoonLake on 2016/9/21.
