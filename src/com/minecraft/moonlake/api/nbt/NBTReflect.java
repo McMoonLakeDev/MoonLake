@@ -1,8 +1,11 @@
 package com.minecraft.moonlake.api.nbt;
 
+import com.minecraft.moonlake.nbt.NBTType;
 import com.minecraft.moonlake.nbt.exception.NBTConvertException;
 import com.minecraft.moonlake.nbt.exception.NBTException;
+import com.minecraft.moonlake.nbt.exception.NBTInitializeException;
 import com.minecraft.moonlake.reflect.Reflect;
+import com.minecraft.moonlake.validate.Validate;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -32,31 +35,76 @@ public abstract class NBTReflect {
         handle = raw ? new NBTReflectSpigotRaw() : null;
     }
 
-    public static NBTReflect getHandle() {
+    protected NBTReflect() {
 
+    }
+
+    /**
+     * 获取 NBT 反射源对象
+     *
+     * @return NBTReflect
+     * @throws NBTException 如果 NBT 反射源对象为 {@code null} 则抛出异常
+     */
+    public static NBTReflect getHandle() throws NBTException {
+
+        if(handle == null) {
+
+            throw new NBTInitializeException("The nbt tag options library reflect raw exception.");
+        }
         return handle;
     }
 
+    /**
+     * 将指定 NBT 对象转换到 NBTCompound 实例对象
+     *
+     * @param tag NBT 对象
+     * @return NBTCompound 如果 NBT 对象为 {@code null} 则返回 {@code null}
+     */
     public static NBTCompound fromNBTCompound(Object tag) {
 
         return tag == null ? null : new NBTCompoundExpression(tag);
     }
 
+    /**
+     * 将指定 NBT 对象克隆并转换到 NBTCompound 实例对象
+     *
+     * @param tag Tag 对象
+     * @return NBTCompound 如果 NBT 对象为 {@code null} 则返回 {@code null}
+     */
     public static NBTCompound fromNBTCompoundCopy(Object tag) {
 
-        return tag == null ? null : fromNBTCompound(NBTReflect.getHandle().cloneTag(tag));
+        return tag == null ? null : fromNBTCompound(getHandle().cloneTag(tag));
     }
 
+    /**
+     * 将指定 NBT 对象转换到 NBTList 实例对象
+     *
+     * @param tag NBT 对象
+     * @return NBTList 如果 NBT 对象为 {@code null} 则返回 {@code null}
+     */
     public static NBTList fromNBTList(Object tag) {
 
         return tag == null ? null : new NBTListExpression(tag);
     }
 
+    /**
+     * 将指定 NBT 对象克隆并转换到 NBTList 实例对象
+     *
+     * @param tag NBT 对象
+     * @return NBTList 如果 NBT 对象为 {@code null} 则返回 {@code null}
+     */
     public static NBTList fromNBTListCopy(Object tag) {
 
-        return tag == null ? null : new NBTListExpression(NBTReflect.getHandle().cloneTag(tag));
+        return tag == null ? null : new NBTListExpression(getHandle().cloneTag(tag));
     }
 
+    /**
+     * 创建 NBT 实例对象
+     *
+     * @param value 值
+     * @return NBT 实例对象
+     * @throws NBTConvertException 如果未知值类型则抛出异常
+     */
     public Object createTag(Object value) throws NBTConvertException {
 
         if(value == null) {
@@ -123,14 +171,46 @@ public abstract class NBTReflect {
 
             return new NBTListExpression(Arrays.asList((Object[]) value)).getHandle();
         }
-        throw new NBTConvertException("The nbt convert exception: " + value.getClass().getSimpleName());
+        throw new NBTConvertException("The nbt convert object exception: " + value.getClass().getSimpleName());
     }
 
+    /**
+     * 创建 NBT 实例对象
+     *
+     * @param value 值
+     * @param type NBT 类型
+     * @return NBT 实例对象
+     * @throws NBTConvertException 如果未知值类型则抛出异常
+     */
     public Object createTag(Object value, byte type) throws NBTConvertException {
 
         return createTag(convertValue(value, type));
     }
 
+    /**
+     * 创建 NBT 实例对象
+     *
+     * @param value 值
+     * @param type NBT 类型
+     * @return NBT 实例对象
+     * @throws NBTConvertException 如果未知值类型则抛出异常
+     * @throws IllegalArgumentException 如果 NBT 类型对象为 {@code null} 则抛出异常
+     */
+    public Object createTag(Object value, NBTType type) throws NBTConvertException {
+
+        Validate.notNull(type, "The nbt tag type object is null.");
+
+        return createTag(convertValue(value, type.getType()));
+    }
+
+    /**
+     * 将指定 NBT 对象转换到指定类型值
+     *
+     * @param value NBT 值
+     * @param type NBT 类型
+     * @return NBT 的数据值 如果 NBT 值为 {@code null} 则返回 {@code null}
+     * @throws NBTConvertException 如果未知 NBT 或值类型则抛出异常
+     */
     public Object convertValue(Object value, byte type) throws NBTConvertException {
 
         switch (type) {
@@ -220,7 +300,7 @@ public abstract class NBTReflect {
 
                         if(!(value0 instanceof Number)) {
 
-                            throw new NBTConvertException("The nbt convert exception: " + value0.getClass().getSimpleName());
+                            throw new NBTConvertException("The nbt convert object exception: " + value0.getClass().getSimpleName());
                         }
                         temp[index++] = ((Number) value0).byteValue();
                     }
@@ -288,36 +368,72 @@ public abstract class NBTReflect {
 
                         if(!(value0 instanceof Number)) {
 
-                            throw new NBTConvertException("The nbt convert exception: " + value0.getClass().getSimpleName());
+                            throw new NBTConvertException("The nbt convert object exception: " + value0.getClass().getSimpleName());
                         }
                         temp[index++] = ((Number) value0).intValue();
                     }
                     return temp;
                 }
             default:
-                throw new NBTConvertException("The nbt convert exception: " + value.getClass().getSimpleName());
+                throw new NBTConvertException("The nbt convert object exception: " + value.getClass().getSimpleName());
         }
     }
 
-    public void setValue(Object tag, Object value) {
+    /**
+     * 设置指定 NBT 对象的数据值
+     *
+     * @param tag NBT 对象
+     * @param value 数据值
+     * @throws NBTException 如果设置指定 NBT 对象数据值错误则抛出异常
+     * @throws IllegalArgumentException 如果 NBT 对象为 {@code null} 则抛出异常
+     */
+    public void setValue(Object tag, Object value) throws NBTException {
 
         setRawValue(tag, convertValue(value, getTagType(tag)));
     }
 
+    /**
+     * 将指定 NBT 对象写入到输出流
+     *
+     * @param output 输出流
+     * @param tag NBT 对象
+     * @throws IOException 如果 I/O 错误则抛出异常
+     * @throws IllegalArgumentException 如果输出流对象或 NBT 对象为 {@code null} 则抛出异常
+     */
     public void writeTagToOutput(DataOutput output, Object tag) throws IOException {
+
+        Validate.notNull(output, "The data output object is null.");
 
         output.writeByte(getTagType(tag));
         output.writeUTF(getTagName(tag));
         writeTagDataToOutput(output, tag);
     }
 
+    /**
+     * 从指定输入流读取 NBT 对象
+     *
+     * @param input 输入流
+     * @param type NBT 类型
+     * @return NBT 对象
+     * @throws IOException 如果 I/O 错误则抛出异常
+     * @throws IllegalArgumentException 如果输入流对象为 {@code null} 则抛出异常
+     */
     public Object readTagOfType(DataInput input, byte type) throws IOException {
+
+        Validate.notNull(input, "The data input object is null.");
 
         Object tag = createTagOfType(type);
         readInputToTag(input, type);
         return tag;
     }
 
+    /**
+     * 从指定输入流读取 NBT 对象
+     *
+     * @param input 输入流
+     * @return NBT 对象
+     * @throws IOException 如果 I/O 错误则抛出异常
+     */
     public Object readTag(DataInput input) throws IOException {
 
         byte type = input.readByte();
@@ -325,53 +441,241 @@ public abstract class NBTReflect {
         return readTagOfType(input, type);
     }
 
-    public abstract Object createTagByte(Byte handle);
+    /**
+     * 创建 NBTTagByte 实例对象
+     *
+     * @param value 值
+     * @return NBTTagByte 对象
+     * @throws NBTException 如果创建错误则抛出异常
+     */
+    public abstract Object createTagByte(Byte value) throws NBTException;
 
-    public abstract Object createTagShort(Short handle);
+    /**
+     * 创建 NBTTagShort 实例对象
+     *
+     * @param value 值
+     * @return NBTTagShort 对象
+     * @throws NBTException 如果创建错误则抛出异常
+     */
+    public abstract Object createTagShort(Short value) throws NBTException;
 
-    public abstract Object createTagInt(Integer handle);
+    /**
+     * 创建 NBTTagInt 实例对象
+     *
+     * @param value 值
+     * @return NBTTagInt 对象
+     * @throws NBTException 如果创建错误则抛出异常
+     */
+    public abstract Object createTagInt(Integer value) throws NBTException;
 
-    public abstract Object createTagLong(Long handle);
+    /**
+     * 创建 NBTTagLong 实例对象
+     *
+     * @param value 值
+     * @return NBTTagLong 对象
+     * @throws NBTException 如果创建错误则抛出异常
+     */
+    public abstract Object createTagLong(Long value) throws NBTException;
 
-    public abstract Object createTagFloat(Float handle);
+    /**
+     * 创建 NBTTagFloat 实例对象
+     *
+     * @param value 值
+     * @return NBTTagFloat 对象
+     * @throws NBTException 如果创建错误则抛出异常
+     */
+    public abstract Object createTagFloat(Float value) throws NBTException;
 
-    public abstract Object createTagDouble(Double handle);
+    /**
+     * 创建 NBTTagDouble 实例对象
+     *
+     * @param value 值
+     * @return NBTTagDouble 对象
+     * @throws NBTException 如果创建错误则抛出异常
+     */
+    public abstract Object createTagDouble(Double value) throws NBTException;
 
-    public abstract Object createTagString(String handle);
+    /**
+     * 创建 NBTTagString 实例对象
+     *
+     * @param value 值
+     * @return NBTTagString 对象
+     * @throws NBTException 如果创建错误则抛出异常
+     * @throws IllegalArgumentException 如果数据值对象为 {@code null} 则抛出异常
+     */
+    public abstract Object createTagString(String value) throws NBTException;
 
-    public abstract Object createTagByteArray(byte[] handle);
+    /**
+     * 创建 NBTTagByteArray 实例对象
+     *
+     * @param value 值
+     * @return NBTTagByteArray 对象
+     * @throws NBTException 如果创建错误则抛出异常
+     * @throws IllegalArgumentException 如果数据值对象为 {@code null} 则抛出异常
+     */
+    public abstract Object createTagByteArray(byte[] value) throws NBTException;
 
-    public abstract Object createTagIntArray(int[] handle);
+    /**
+     * 创建 NBTTagIntArray 实例对象
+     *
+     * @param value 值
+     * @return NBTTagIntArray 对象
+     * @throws NBTException 如果创建错误则抛出异常
+     * @throws IllegalArgumentException 如果数据值对象为 {@code null} 则抛出异常
+     */
+    public abstract Object createTagIntArray(int[] value) throws NBTException;
 
+    /**
+     * 获取指定 NBT 对象的数据值
+     *
+     * @param tag NBT 对象
+     * @return 数据值
+     * @throws NBTException 如果获取错误则抛出异常
+     */
     public abstract Object getValue(Object tag) throws NBTException;
 
+    /**
+     * 设置指定 NBT 对象的数据值
+     *
+     * @param tag NBT 对象
+     * @param value 数据值
+     * @throws NBTException 如果设置错误则抛出异常
+     * @throws IllegalArgumentException 如果 NBT 对象为 {@code null} 则抛出异常
+     */
     protected abstract void setRawValue(Object tag, Object value)  throws NBTException;
 
+    /**
+     * 获取指定 NBT 对象的 NBT 类型
+     *
+     * @param tag NBT 对象
+     * @return NBT 类型
+     * @throws NBTException 如果获取错误则抛出异常
+     * @throws IllegalArgumentException 如果 NBT 对象为 {@code null} 则抛出异常
+     */
     public abstract byte getTagType(Object tag)  throws NBTException;
 
+    /**
+     * 创建 NBT 实例对象从 NBT 类型
+     *
+     * @param type NBT 类型
+     * @return NBT 对象
+     * @throws NBTException 如果创建错误则抛出异常
+     */
     public abstract Object createTagOfType(byte type) throws NBTException;
 
+    /**
+     * 克隆指定 NBT 对象
+     *
+     * @param tag NBT 对象
+     * @return NBT 对象
+     * @throws NBTException 如果克隆错误则抛出异常
+     * @throws IllegalArgumentException 如果 NBT 对象为 {@code null} 则抛出异常
+     */
     public abstract Object cloneTag(Object tag) throws NBTException;
 
+    /**
+     * 创建 NBT 复合实例对象
+     *
+     * @return NBT 复合对象
+     * @throws NBTException 如果创建错误则抛出异常
+     */
     public abstract Object createTagCompound() throws NBTException;
 
+    /**
+     * 创建 NBT 列表实例对象
+     *
+     * @return NBT 列表对象
+     * @throws NBTException 如果创建错误则抛出异常
+     */
     public abstract Object createTagList() throws NBTException;
 
+    /**
+     * 获取指定 NBT 复合对象的 Map 数据值
+     *
+     * @param nbtTagCompound NBT 复合对象
+     * @return Map 数据值
+     * @throws NBTException 如果获取错误则抛出异常
+     * @throws IllegalArgumentException 如果 NBT 复合对象为 {@code null} 则抛出异常
+     */
     public abstract Map<String, Object> getHandleMap(Object nbtTagCompound) throws NBTException;
 
+    /**
+     * 获取指定 NBT 列表对象的 List 数据值
+     *
+     * @param nbtTagList NBT 列表对象
+     * @return List 数据值
+     * @throws NBTException 如果获取错误则抛出异常
+     * @throws IllegalArgumentException 如果 NBT 列表对象为 {@code null} 则抛出异常
+     */
     public abstract List<Object> getHandleList(Object nbtTagList) throws NBTException;
 
+    /**
+     * 获取指定 NBT 列表对象的 NBT 类型
+     *
+     * @param nbtTagList NBT 列表对象
+     * @return NBT 类型
+     * @throws NBTException 如果获取错误则抛出异常
+     * @throws IllegalArgumentException 如果 NBT 列表对象为 {@code null} 则抛出异常
+     */
     public abstract byte getNBTTagListType(Object nbtTagList) throws NBTException;
 
+    /**
+     * 设置指定 NBT 列表对象的 NBT 类型
+     *
+     * @param nbtTagList NBT 列表对象
+     * @param type NBT 类型
+     * @throws NBTException 如果设置错误则抛出异常
+     * @throws IllegalArgumentException 如果 NBT 列表对象为 {@code null} 则抛出异常
+     */
     public abstract void setNBTTagListType(Object nbtTagList, byte type) throws NBTException;
 
-    public abstract boolean isNBTTag(Object tag) throws NBTException;
+    /**
+     * 获取指定对象是否为 NBT 对象
+     *
+     * @param tag 对象
+     * @return true 则是 NBT 对象
+     */
+    public abstract boolean isNBTTag(Object tag);
 
+    /**
+     * 从指定输入流读取 NBT 对象
+     *
+     * @param input 输入流
+     * @param tag NBT 对象
+     * @throws IOException 如果 I/O 错误则抛出异常
+     * @throws IllegalArgumentException 如果输入流对象或 NBT 对象为 {@code null} 则抛出异常
+     */
     public abstract void readInputToTag(DataInput input, Object tag) throws IOException;
 
+    /**
+     * 将指定 NBT 对象写入到输出流
+     *
+     * @param output 输出流
+     * @param tag NBT 对象
+     * @throws IOException 如果 I/O 错误则抛出异常
+     * @throws IllegalArgumentException 如果输出流对象或 NBT 对象为 {@code null} 则抛出异常
+     */
     public abstract void writeTagDataToOutput(DataOutput output, Object tag) throws IOException;
 
-    public abstract void setTagName(Object tag, String name);
+    /**
+     * 设置指定 NBT 对象的名称
+     *
+     * @param tag NBT 对象
+     * @param name 名称
+     * @throws NBTException 如果设置错误则抛出异常
+     * @deprecated not has implement
+     */
+    @Deprecated
+    public abstract void setTagName(Object tag, String name) throws NBTException;
 
-    public abstract String getTagName(Object tag);
+    /**
+     * 获取指定 NBT 对象的名称
+     *
+     * @param tag NBT 对象
+     * @return NBT 名称
+     * @throws NBTException 如果获取错误则抛出异常
+     * @deprecated not has implement
+     */
+    @Deprecated
+    public abstract String getTagName(Object tag) throws NBTException;
 }

@@ -284,7 +284,7 @@ class FancyMessageExpression implements FancyMessage {
     }
 
     @Override
-    public FancyMessage create() {
+    public FancyMessage build() {
 
         toJsonString();
 
@@ -323,7 +323,7 @@ class FancyMessageExpression implements FancyMessage {
 
         if(jsonString.get() == null) {
 
-            create();
+            build();
         }
         Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tellraw " + player.getName() + " " + jsonString.get());
     }
@@ -339,7 +339,7 @@ class FancyMessageExpression implements FancyMessage {
 
         if(jsonString.get() == null) {
 
-            create();
+            build();
         }
         Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tellraw @a " + jsonString.get());    // @a = All Player
     }

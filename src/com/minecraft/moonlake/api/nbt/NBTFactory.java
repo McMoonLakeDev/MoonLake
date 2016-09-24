@@ -121,7 +121,7 @@ public class NBTFactory {
      *
      * @return NBTItemStack
      */
-    public static NBTItemStack item() {
+    public static NBTItemStack getItem() {
 
         if(NBTItemStackInstance == null) {
 
@@ -135,7 +135,7 @@ public class NBTFactory {
      *
      * @return NBTEntity
      */
-    public static NBTEntity entity() {
+    public static NBTEntity getEntity() {
 
         if(NBTEntityInstance == null) {
 

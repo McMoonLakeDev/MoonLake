@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.api.fancy;
 
+import com.minecraft.moonlake.builder.Builder;
 import com.minecraft.moonlake.json.JsonRepresentedObject;
 import com.minecraft.moonlake.property.ReadOnlyStringProperty;
 import org.bukkit.ChatColor;
@@ -35,7 +36,7 @@ import java.util.Iterator;
  *     <p style="text-indent: 30px">.then(" <放我这里查看文本> ")</p>
  *     <p style="text-indent: 50px">.color(ChatColor.RED)</p>
  *     <p style="text-indent: 50px">.tooltip("竟然发现了这个文本 (๑• . •๑)")</p>
- *     <p style="text-indent: 30px">.create();</p>
+ *     <p style="text-indent: 30px">.build();</p>
  *     <h2>最后发送给玩家可以使用:</h2>
  *     <p>test1.sendAll(); // 发送给在线所有玩家</p>
  *     <p>test1.send("Notch"); // 发送给单个玩家</p>
@@ -47,7 +48,7 @@ import java.util.Iterator;
  * @see TextualComponent
  * @see FancyMessageFactory
  */
-public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable<FancyMessagePart> {
+public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable<FancyMessagePart>, Builder<FancyMessage> {
 
     /**
      * Returns an iterator over elements of type {@code T}.
@@ -210,7 +211,8 @@ public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable
     /**
      * 创建花式消息对象
      */
-    FancyMessage create();
+    @Override
+    FancyMessage build();
 
     /**
      * 将花式消息对象转换到 Json 字符串

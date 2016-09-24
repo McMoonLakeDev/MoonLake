@@ -84,6 +84,8 @@ class NBTItemStackExpression implements NBTItemStack {
 
     public Object createNMSItemStack(ItemStack itemStack) throws NBTException {
 
+        Validate.notNull(itemStack, "The itemstack object is null.");
+
         try {
 
             if (METHOD_ASNMSCOPY != null) {
@@ -106,6 +108,8 @@ class NBTItemStackExpression implements NBTItemStack {
     }
 
     public ItemStack createCraftItemStack(Object nmsItemStack) throws NBTException {
+
+        Validate.notNull(nmsItemStack, "The nms itemstack object is null.");
 
         try {
 
@@ -144,7 +148,6 @@ class NBTItemStackExpression implements NBTItemStack {
     public void setTag(ItemStack itemStack, Object nbtTagCompound) throws NBTException {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
-        Validate.notNull(nbtTagCompound, "The nbt tag object is null.");
 
         try {
 
@@ -186,6 +189,8 @@ class NBTItemStackExpression implements NBTItemStack {
     }
 
     private void setTagCraftBukkit(ItemStack itemStack, Object nbtTagCompound) throws NBTException {
+
+        Validate.notNull(nbtTagCompound, "The nbt tag object is null.");
 
         try {
 

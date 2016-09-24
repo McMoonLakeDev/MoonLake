@@ -18,7 +18,7 @@ class NBTExpression implements NBTLibrary {
     @Override
     public NBTCompound read(ItemStack itemStack) throws NBTException {
 
-        Object tag = NBTFactory.item().getTag(itemStack);
+        Object tag = NBTFactory.getItem().getTag(itemStack);
         return NBTReflect.fromNBTCompoundCopy(tag);
     }
 
@@ -27,26 +27,28 @@ class NBTExpression implements NBTLibrary {
 
         Validate.notNull(nbt, "The nbt tag object is null.");
 
-        NBTFactory.item().setTag(itemStack, nbt.getHandleCopy());
+        NBTFactory.getItem().setTag(itemStack, nbt.getHandleCopy());
     }
 
     @Override
     public NBTCompound read(Entity entity) throws NBTException {
 
         NBTCompound nbtCompound = new NBTCompoundExpression();
-        NBTFactory.entity().readEntity(entity, nbtCompound);
+        NBTFactory.getEntity().readEntity(entity, nbtCompound);
         return nbtCompound;
     }
 
     @Override
     public void write(Entity entity, NBTCompound nbt) throws NBTException {
 
-        NBTFactory.entity().writeEntity(entity, nbt);
+        NBTFactory.getEntity().writeEntity(entity, nbt);
     }
 
     @Override
     public Entity spawnEntity(NBTCompound nbt, World world) throws NBTException {
 
-        return nbt == null ? null : NBTFactory.entity().spawnEntity(nbt.getHandle(), world);
+        Validate.notNull(nbt, "The nbt tag object is null.");
+
+        return NBTFactory.getEntity().spawnEntity(nbt.getHandle(), world);
     }
 }

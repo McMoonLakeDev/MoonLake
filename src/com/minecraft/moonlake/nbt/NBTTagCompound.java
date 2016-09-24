@@ -1,7 +1,6 @@
 package com.minecraft.moonlake.nbt;
 
 import com.minecraft.moonlake.api.nbt.NBTReflect;
-import com.minecraft.moonlake.api.nbt.StringParser;
 
 import java.util.*;
 
@@ -301,7 +300,17 @@ public class NBTTagCompound extends NBTBase implements Map<String, NBTBase> {
                 }
                 else if(value instanceof NBTTagString) {
 
-                    stringBuilder.append("\"").append(StringParser.wrap(((NBTTagString)value).get())).append("\"");
+                    String stringValue = ((NBTTagString)value).get();
+                    stringValue = stringValue.replace("\\", "\\\\");
+                    stringValue = stringValue.replace("\n", "\\n");
+                    stringValue = stringValue.replace("\b", "\\b");
+                    stringValue = stringValue.replace("\r", "\\r");
+                    stringValue = stringValue.replace("\t", "\\t");
+                    stringValue = stringValue.replace("\f", "\\f");
+                    stringValue = stringValue.replace("\"", "\\\"");
+                    stringValue = stringValue.replace("&", "\\&");
+                    stringValue = stringValue.replace(String.valueOf('§'), "&");
+                    stringBuilder.append("\"").append(stringValue).append("\"");
                 }
                 else {
 

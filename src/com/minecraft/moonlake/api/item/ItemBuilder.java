@@ -2,6 +2,7 @@ package com.minecraft.moonlake.api.item;
 
 import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.api.item.potion.PotionEffectType;
+import com.minecraft.moonlake.builder.Builder;
 import org.bukkit.Color;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -13,13 +14,14 @@ import java.util.Map;
 /**
  * Created by MoonLake on 2016/9/13.
  */
-public interface ItemBuilder {
+public interface ItemBuilder extends Builder<ItemStack> {
 
     /**
      * 构建并获取物品栈对象
      *
      * @return ItemStack
      */
+    @Override
     ItemStack build();
 
     /**

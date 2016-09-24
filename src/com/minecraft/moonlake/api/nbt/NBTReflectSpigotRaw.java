@@ -2,6 +2,7 @@ package com.minecraft.moonlake.api.nbt;
 
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import com.minecraft.moonlake.nbt.exception.NBTInitializeException;
+import com.minecraft.moonlake.validate.Validate;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -127,7 +128,7 @@ final class NBTReflectSpigotRaw extends NBTReflect {
         }
     }
 
-    private Object createTag0(Constructor<?> target, Object... args) {
+    private Object createTag0(Constructor<?> target, Object... args) throws NBTException {
 
         try {
 
@@ -140,57 +141,63 @@ final class NBTReflectSpigotRaw extends NBTReflect {
     }
 
     @Override
-    public Object createTagByte(Byte handle) {
+    public Object createTagByte(Byte value) throws NBTException {
 
-        return createTag0(CONSTRUCTOR_NBTTAGBYTE, handle);
+        return createTag0(CONSTRUCTOR_NBTTAGBYTE, (byte) (value == null ? 0 : value));
     }
 
     @Override
-    public Object createTagShort(Short handle) {
+    public Object createTagShort(Short value) throws NBTException {
 
-        return createTag0(CONSTRUCTOR_NBTTAGSHORT, handle);
+        return createTag0(CONSTRUCTOR_NBTTAGSHORT, (short) (value == null ? 0 : value));
     }
 
     @Override
-    public Object createTagInt(Integer handle) {
+    public Object createTagInt(Integer value) throws NBTException {
 
-        return createTag0(CONSTRUCTOR_NBTTAGINT, handle);
+        return createTag0(CONSTRUCTOR_NBTTAGINT, (int) (value == null ? 0 : value));
     }
 
     @Override
-    public Object createTagLong(Long handle) {
+    public Object createTagLong(Long value) throws NBTException {
 
-        return createTag0(CONSTRUCTOR_NBTTAGLONG, handle);
+        return createTag0(CONSTRUCTOR_NBTTAGLONG, (long) (value == null ? 0L : value));
     }
 
     @Override
-    public Object createTagFloat(Float handle) {
+    public Object createTagFloat(Float value) throws NBTException {
 
-        return createTag0(CONSTRUCTOR_NBTTAGFLOAT, handle);
+        return createTag0(CONSTRUCTOR_NBTTAGFLOAT, (float) (value == null ? 0f : value));
     }
 
     @Override
-    public Object createTagDouble(Double handle) {
+    public Object createTagDouble(Double value) throws NBTException {
 
-        return createTag0(CONSTRUCTOR_NBTTAGDOUBLE, handle);
+        return createTag0(CONSTRUCTOR_NBTTAGDOUBLE, (double) (value == null ? 0d : value));
     }
 
     @Override
-    public Object createTagString(String handle) {
+    public Object createTagString(String value) throws NBTException {
 
-        return createTag0(CONSTRUCTOR_NBTTAGSTRING, handle);
+        Validate.notNull(value, "The nbt tag string data value object is null.");
+
+        return createTag0(CONSTRUCTOR_NBTTAGSTRING, value);
     }
 
     @Override
-    public Object createTagByteArray(byte[] handle) {
+    public Object createTagByteArray(byte[] value) throws NBTException {
 
-        return createTag0(CONSTRUCTOR_NBTTAGBYTEARRAY, new Object[] { handle });
+        Validate.notNull(value, "The nbt tag byte[] data value object is null.");
+
+        return createTag0(CONSTRUCTOR_NBTTAGBYTEARRAY, new Object[] { value });
     }
 
     @Override
-    public Object createTagIntArray(int[] handle) {
+    public Object createTagIntArray(int[] value) throws NBTException {
 
-        return createTag0(CONSTRUCTOR_NBTTAGINTARRAY, new Object[] { handle });
+        Validate.notNull(value, "The nbt tag int[] data value object is null.");
+
+        return createTag0(CONSTRUCTOR_NBTTAGINTARRAY, new Object[] { value });
     }
 
     @Override
@@ -241,7 +248,9 @@ final class NBTReflectSpigotRaw extends NBTReflect {
     }
 
     @Override
-    protected void setRawValue(Object tag, Object value)  throws NBTException {
+    protected void setRawValue(Object tag, Object value) throws NBTException {
+
+        Validate.notNull(tag, "The nbt tag object is null.");
 
         if(!isNBTTag(tag)) {
 
@@ -292,6 +301,8 @@ final class NBTReflectSpigotRaw extends NBTReflect {
     @Override
     public byte getTagType(Object tag) throws NBTException {
 
+        Validate.notNull(tag, "The nbt tag object is null.");
+
         if(!isNBTTag(tag)) {
 
             throw new NBTException("The nbt tag object not is NBTBase instance.");
@@ -324,6 +335,8 @@ final class NBTReflectSpigotRaw extends NBTReflect {
 
     @Override
     public Object cloneTag(Object tag) throws NBTException {
+
+        Validate.notNull(tag, "The nbt tag object is null.");
 
         try {
 
@@ -364,6 +377,8 @@ final class NBTReflectSpigotRaw extends NBTReflect {
     @Override
     public Map<String, Object> getHandleMap(Object nbtTagCompound) throws NBTException {
 
+        Validate.notNull(nbtTagCompound, "The nbt tag compound object is null.");
+
         try {
 
             return (Map) FIELD_NBTTAGCOMPOUND_DATA.get(nbtTagCompound);
@@ -376,6 +391,8 @@ final class NBTReflectSpigotRaw extends NBTReflect {
 
     @Override
     public List<Object> getHandleList(Object nbtTagList) throws NBTException {
+
+        Validate.notNull(nbtTagList, "The nbt tag list object is null.");
 
         try {
 
@@ -390,6 +407,8 @@ final class NBTReflectSpigotRaw extends NBTReflect {
     @Override
     public byte getNBTTagListType(Object nbtTagList) throws NBTException {
 
+        Validate.notNull(nbtTagList, "The nbt tag list object is null.");
+
         try {
 
             return (byte) FIELD_NBTTAGLIST_TYPE.get(nbtTagList);
@@ -403,6 +422,8 @@ final class NBTReflectSpigotRaw extends NBTReflect {
     @Override
     public void setNBTTagListType(Object nbtTagList, byte type) throws NBTException {
 
+        Validate.notNull(nbtTagList, "The nbt tag list object is null.");
+
         try {
 
             FIELD_NBTTAGLIST_TYPE.set(nbtTagList, type);
@@ -414,13 +435,16 @@ final class NBTReflectSpigotRaw extends NBTReflect {
     }
 
     @Override
-    public boolean isNBTTag(Object tag) throws NBTException {
+    public boolean isNBTTag(Object tag) {
 
-        return CLASS_NBTBASE.isInstance(tag);
+        return tag != null && CLASS_NBTBASE.isInstance(tag);
     }
 
     @Override
     public void readInputToTag(DataInput input, Object tag) throws IOException {
+
+        Validate.notNull(input, "The data input object is null.");
+        Validate.notNull(tag, "The nbt tag object is null.");
 
         try {
 
@@ -436,6 +460,9 @@ final class NBTReflectSpigotRaw extends NBTReflect {
     @Override
     public void writeTagDataToOutput(DataOutput output, Object tag) throws IOException {
 
+        Validate.notNull(output, "The data output object is null.");
+        Validate.notNull(tag, "The nbt tag object is null.");
+
         try {
 
             METHOD_NBTBASE_WRITE.invoke(tag, output);
@@ -448,14 +475,15 @@ final class NBTReflectSpigotRaw extends NBTReflect {
 
     @Override
     @Deprecated
-    public void setTagName(Object tag, String name) {
+    public void setTagName(Object tag, String name) throws NBTException {
 
+        throw new UnsupportedOperationException("The nbt tag set name method unsupported.");
     }
 
     @Override
     @Deprecated
-    public String getTagName(Object tag) {
+    public String getTagName(Object tag) throws NBTException {
 
-        return "";
+        throw new UnsupportedOperationException("The nbt tag get name method unsupported.");
     }
 }

@@ -95,7 +95,7 @@ public interface NBTLibrary {
      * @param world 目标世界
      * @return Entity
      * @throws NBTException 如果生成实体时错误则抛出异常
-     * @throws IllegalArgumentException 如果目标世界对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果实体对象或目标世界对象为 {@code null} 则抛出异常
      */
     Entity spawnEntity(NBTCompound nbt, World world) throws NBTException;
 }

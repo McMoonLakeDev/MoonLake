@@ -43,7 +43,7 @@ class NBTEntityExpression implements NBTEntity {
             CLASS_CRAFTENTITY = PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftEntity");
 
             // NBT Tag Entity Method
-            METHOD_GETHANDLEENTITY = getMethod(CLASS_CRAFTENTITY, "setHandle", CLASS_ENTITY);
+            METHOD_GETHANDLEENTITY = getMethod(CLASS_CRAFTENTITY, "getHandle");
 
             Class<?> CLASS_CRAFTWORLD = PackageType.CRAFTBUKKIT.getClass("CraftWorld");
             Class<?> CLASS_WORLDSERVER = PackageType.MINECRAFT_SERVER.getClass("WorldServer");
@@ -69,6 +69,8 @@ class NBTEntityExpression implements NBTEntity {
 
     @Override
     public Object getHandleEntity(Entity entity) throws NBTException {
+
+        Validate.notNull(entity, "The entity object is null.");
 
         try {
 
@@ -133,6 +135,7 @@ class NBTEntityExpression implements NBTEntity {
     @Override
     public Entity spawnEntity(Object nbtTagCompound, World world) throws NBTException {
 
+        Validate.notNull(nbtTagCompound, "The nbt tag compound object is null.");
         Validate.notNull(world, "The target world object is null.");
 
         try {
