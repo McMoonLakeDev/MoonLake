@@ -1,11 +1,14 @@
 package com.minecraft.moonlake.manager;
 
+import com.minecraft.moonlake.MoonLakePlugin;
+import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -175,5 +178,79 @@ public class BlockManager extends MoonLakeManager {
             }
         }
         return blockList;
+    }
+
+    /**
+     * 交互指定位置的箱子方块
+     *
+     * @param location 箱子方块位置
+     * @param action 交互 true 则打开 else 关闭
+     * @throws IllegalArgumentException 如果箱子方块位置对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果箱子方块类型不为 {@code Material.CHEST} 或 {@code Material.ENDER_CHEST} 则抛出异常
+     */
+    public static void actionChest(Location location, boolean action) {
+
+        Validate.notNull(location, "The block location object is null.");
+
+        actionChest(location.getBlock(), action);
+    }
+
+    /**
+     * 交互指定位置的箱子方块
+     *
+     * @param block 箱子方块
+     * @param action 交互 true 则打开 else 关闭
+     * @throws IllegalArgumentException 如果箱子方块对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果箱子方块类型不为 {@code Material.CHEST} 或 {@code Material.ENDER_CHEST} 则抛出异常
+     */
+    public static void actionChest(Block block, boolean action) {
+
+        Validate.notNull(block, "The block object is null.");
+        Validate.isTrue(block.getType() == Material.CHEST || block.getType() == Material.ENDER_CHEST, "The block type not is chest or ender chest.");
+
+        Location location = block.getLocation();
+
+        try {
+
+            Class<?> WORLD = Reflect.PackageType.MINECRAFT_SERVER.getClass("World");
+            Class<?> CRAFT_WORLD = Reflect.PackageType.CRAFTBUKKIT.getClass("CraftWorld");
+            Class<?> BLOCK = Reflect.PackageType.MINECRAFT_SERVER.getClass("Block");
+            Class<?> BLOCK_POSITION = Reflect.PackageType.MINECRAFT_SERVER.getClass("BlockPosition");
+
+            Object nmsWorld = Reflect.getMethod(CRAFT_WORLD, "getHandle").invoke(block.getWorld());
+            Object nmsBlockPosition = Reflect.instantiateObject(BLOCK_POSITION, location.getX(), location.getY(), location.getZ());
+
+            String playBlockActionMethodName = "getBlock";
+            int version = getMain().getReleaseNumber().get();
+
+            if(version <= 8) {
+
+                playBlockActionMethodName = "w";
+            }
+            if(block.getType() == Material.CHEST) {
+
+                Class<?> TILE_ENTITY_CHEST = Reflect.PackageType.MINECRAFT_SERVER.getClass("TileEntityChest");
+
+                Method playBlockAction = Reflect.getMethod(WORLD, "playBlockAction", BLOCK_POSITION, BLOCK, int.class, int.class);
+                Object nmsTileEntityChest = Reflect.getMethod(WORLD, "getTileEntity", BLOCK_POSITION).invoke(nmsWorld, nmsBlockPosition);
+                Object nmsBlock = Reflect.getMethod(TILE_ENTITY_CHEST, playBlockActionMethodName).invoke(nmsTileEntityChest);
+
+                playBlockAction.invoke(nmsWorld, nmsBlockPosition, nmsBlock, 1, action ? 1 : 0);
+            }
+            else if(block.getType() == Material.ENDER_CHEST) {
+
+                Class<?> TILE_ENTITY_ENDER_CHEST = Reflect.PackageType.MINECRAFT_SERVER.getClass("TileEntityEnderChest");
+
+                Method playBlockAction = Reflect.getMethod(WORLD, "playBlockAction", BLOCK_POSITION, BLOCK, int.class, int.class);
+                Object nmsTileEntityChest = Reflect.getMethod(WORLD, "getTileEntity", BLOCK_POSITION).invoke(nmsWorld, nmsBlockPosition);
+                Object nmsBlock = Reflect.getMethod(TILE_ENTITY_ENDER_CHEST, playBlockActionMethodName).invoke(nmsTileEntityChest);
+
+                playBlockAction.invoke(nmsWorld, nmsBlockPosition, nmsBlock, 1, action ? 1 : 0);
+            }
+        }
+        catch (Exception e) {
+
+            MoonLakePlugin.getInstances().getMLogger().warn("交互位置为 '" + location + "' 的箱子方块时异常: " + e.getMessage());
+        }
     }
 }

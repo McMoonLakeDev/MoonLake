@@ -7,22 +7,71 @@ import java.util.*;
  */
 public interface NBTList extends List<Object> {
 
+    /**
+     * 获取此 NBT 列表的句柄数据对象
+     *
+     * @return NBT 句柄数据
+     */
     List<Object> getHandleList();
 
+    /**
+     * 获取此 NBT 列表的句柄对象
+     *
+     * @return NBT 句柄
+     */
     Object getHandle();
 
+    /**
+     * 获取此 NBT 列表的句柄对象的拷贝
+     *
+     * @return NBT 句柄
+     */
     Object getHandleCopy();
 
+    /**
+     * 获取此 NBT 列表的 NBT 类型
+     *
+     * @return NBT 类型
+     */
     byte getType();
 
+    /**
+     * 设置此 NBT 列表的 NBT 类型
+     *
+     * @param type NBT 类型
+     */
     void setType(byte type);
 
+    /**
+     * 将此 NBT 列表转换到 List 对象
+     *
+     * @param list List
+     * @param <T> List
+     * @return List
+     */
     <T extends List<Object>> T toList(T list);
 
+    /**
+     * 将此 NBT 列表转换到 Collection 对象
+     *
+     * @param collection Collection
+     * @param <T> Collection
+     * @return Collection
+     */
     <T extends Collection<Object>> T toCollection(T collection);
 
+    /**
+     * 将此 NBT 列表转换到 ArrayList 对象
+     *
+     * @return ArrayList
+     */
     ArrayList<Object> toArrayList();
 
+    /**
+     * 克隆此 NBT 列表对象
+     *
+     * @return NBTList
+     */
     NBTList clone();
 
     @Override

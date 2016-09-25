@@ -477,13 +477,13 @@ final class NBTReflectSpigotRaw extends NBTReflect {
     @Deprecated
     public void setTagName(Object tag, String name) throws NBTException {
 
-        throw new UnsupportedOperationException("The nbt tag set name method unsupported.");
+
     }
 
     @Override
     @Deprecated
     public String getTagName(Object tag) throws NBTException {
 
-        throw new UnsupportedOperationException("The nbt tag get name method unsupported.");
+        return "";
     }
 }

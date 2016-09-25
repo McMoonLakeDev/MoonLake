@@ -87,6 +87,12 @@ class NBTCompoundExpression implements NBTCompound {
 
     public boolean getBoolean(String key) {
 
+        return getBoolean(key, false);
+    }
+
+    @Override
+    public boolean getBoolean(String key, boolean def) {
+
         Object value = get(key);
 
         return    value instanceof Float ? (Float) value != 0f
@@ -96,10 +102,16 @@ class NBTCompoundExpression implements NBTCompound {
                 : value instanceof int[] ? ((int[]) value).length != 0
                 : value instanceof byte[] ? ((byte[]) value).length != 0
                 : value instanceof Collection ? !((Collection) value).isEmpty()
-                : value instanceof Map ? !((Map) value).isEmpty() : false;
+                : value instanceof Map ? !((Map) value).isEmpty() : def;
     }
 
     public byte getByte(String key) {
+
+        return getByte(key, (byte) 0);
+    }
+
+    @Override
+    public byte getByte(String key, byte def) {
 
         Object value = get(key);
 
@@ -126,11 +138,17 @@ class NBTCompoundExpression implements NBTCompound {
                     }
                 }
             }
-            return 0;
+            return def;
         }
     }
 
     public short getShort(String key) {
+
+        return getShort(key, (short) 0);
+    }
+
+    @Override
+    public short getShort(String key, short def) {
 
         Object value = get(key);
 
@@ -157,11 +175,17 @@ class NBTCompoundExpression implements NBTCompound {
                     }
                 }
             }
-            return 0;
+            return def;
         }
     }
 
     public int getInt(String key) {
+
+        return getInt(key, 0);
+    }
+
+    @Override
+    public int getInt(String key, int def) {
 
         Object value = get(key);
 
@@ -188,11 +212,17 @@ class NBTCompoundExpression implements NBTCompound {
                     }
                 }
             }
-            return 0;
+            return def;
         }
     }
 
     public long getLong(String key) {
+
+        return getLong(key, 0L);
+    }
+
+    @Override
+    public long getLong(String key, long def) {
 
         Object value = get(key);
 
@@ -219,11 +249,17 @@ class NBTCompoundExpression implements NBTCompound {
                     }
                 }
             }
-            return 0L;
+            return def;
         }
     }
 
     public float getFloat(String key) {
+
+        return getFloat(key, 0f);
+    }
+
+    @Override
+    public float getFloat(String key, float def) {
 
         Object value = get(key);
 
@@ -243,11 +279,17 @@ class NBTCompoundExpression implements NBTCompound {
 
                 }
             }
-            return 0f;
+            return def;
         }
     }
 
     public double getDouble(String key) {
+
+        return getDouble(key, 0d);
+    }
+
+    @Override
+    public double getDouble(String key, double def) {
 
         Object value = get(key);
 
@@ -267,17 +309,29 @@ class NBTCompoundExpression implements NBTCompound {
 
                 }
             }
-            return 0d;
+            return def;
         }
     }
 
     public String getString(String key) {
 
+        return getString(key, "");
+    }
+
+    @Override
+    public String getString(String key, String def) {
+
         Object value = get(key);
-        return value == null ? "" : value.toString();
+        return value == null ? def : value.toString();
     }
 
     public int[] getIntArray(String key) {
+
+        return getIntArray(key, new int[0]);
+    }
+
+    @Override
+    public int[] getIntArray(String key, int[] def) {
 
         Object value = get(key);
 
@@ -296,13 +350,16 @@ class NBTCompoundExpression implements NBTCompound {
             }
             return result;
         }
-        else {
-
-            return new int[0];
-        }
+        return def;
     }
 
     public byte[] getByteArray(String key) {
+
+        return getByteArray(key, new byte[0]);
+    }
+
+    @Override
+    public byte[] getByteArray(String key, byte[] def) {
 
         Object value = get(key);
 
@@ -321,22 +378,31 @@ class NBTCompoundExpression implements NBTCompound {
             }
             return result;
         }
-        else {
-
-            return new byte[0];
-        }
+        return def;
     }
 
     public NBTCompound getCompound(String key) {
 
-        Object value = get(key);
-        return value instanceof NBTCompoundExpression ? (NBTCompoundExpression) value : null;
+        return getCompound(key, null);
     }
 
-    public NBTListExpression getList(String key) {
+    @Override
+    public NBTCompound getCompound(String key, NBTCompound def) {
 
         Object value = get(key);
-        return value instanceof NBTListExpression ? (NBTListExpression) value : null;
+        return value != null && value instanceof NBTCompoundExpression ? (NBTCompoundExpression) value : def;
+    }
+
+    public NBTList getList(String key) {
+
+        return getList(key, null);
+    }
+
+    @Override
+    public NBTList getList(String key, NBTList def) {
+
+        Object value = get(key);
+        return value != null && value instanceof NBTListExpression ? (NBTListExpression) value : null;
     }
 
     public NBTCompound compound(String key) {
