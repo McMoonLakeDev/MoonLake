@@ -8,8 +8,8 @@ By Month_Light Ver: 1.7
 例如数据包封装、物品栈操作类、玩家操作类、NBT 操作类、消息源操作类等。
 
 ## 目前插件支持的服务端版本
-* `Bukkit [1.8.x - 1.10.x]` <span style="color: red">✔</span> 不完全支持
-* `Spigot [1.8.x - 1.10.x]` <span style="color: rgb(85, 255, 85)">✔</span> 完完全全支持
+* `Bukkit [1.8.x - 1.10.x]` <span style="color: red"><s>✔</s></span> 部分功能不支持
+* `Spigot [1.8.x - 1.10.x]` <span style="color: rgb(85, 255, 85)">✔</span> 完完全全支持全功能
 * `PaperSpigot [1.8.x - 1.10.x]` <span style="color: rgb(85, 255, 85)"><s>✔</s></span> 部分功能不支持
 * `Cauldron | KCauldron [模组服务端]` <span style="color: red">✘</span> 完全不支持
  
