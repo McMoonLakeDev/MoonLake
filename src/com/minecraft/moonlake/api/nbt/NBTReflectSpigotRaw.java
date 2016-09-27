@@ -112,15 +112,15 @@ final class NBTReflectSpigotRaw extends NBTReflect {
 
             // NBT Tag Method
             METHOD_NBTBASE_GETTYPEID = getMethod(CLASS_NBTBASE, "getTypeId");
-            METHOD_NBTBASE_CREATETAG = getMethod(CLASS_NBTBASE, "createTag", byte.class);
+            METHOD_NBTBASE_CREATETAG = getDeclaredMethod(CLASS_NBTBASE, "createTag", byte.class);
             METHOD_NBTBASE_CLONE = getMethod(CLASS_NBTBASE, "clone");
-            METHOD_NBTBASE_WRITE = getMethod(CLASS_NBTBASE, "write", DataOutput.class);
+            METHOD_NBTBASE_WRITE = getDeclaredMethod(CLASS_NBTBASE, "write", DataOutput.class);
 
             // NBT ReadLimiter Class
             Class<?> CLASS_NBTREADLIMITER = MINECRAFT_SERVER.getClass("NBTReadLimiter");
 
             CONSTRUCTOR_NBTREADLIMITER = getConstructor(CLASS_NBTREADLIMITER, long.class);
-            METHOD_NBTBASE_LOAD = getMethod(CLASS_NBTBASE, "load", DataInput.class, int.class, CLASS_NBTREADLIMITER);
+            METHOD_NBTBASE_LOAD = getDeclaredMethod(CLASS_NBTBASE, "load", DataInput.class, int.class, CLASS_NBTREADLIMITER);
         }
         catch (Exception e) {
 

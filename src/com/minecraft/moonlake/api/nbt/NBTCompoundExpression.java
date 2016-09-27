@@ -642,7 +642,7 @@ class NBTCompoundExpression implements NBTCompound {
                 NBTCompoundExpression.NBTEntrySet.NBTIterator.NBTEntry nbtEntry = iterator.next();
                 Object obj = nbtEntry.getValue();
 
-                stringBuilder.append(nbtEntry.getKey()).append('=');
+                stringBuilder.append(nbtEntry.getKey()).append(':');
 
                 if(obj instanceof byte[]) {
 
@@ -658,9 +658,9 @@ class NBTCompoundExpression implements NBTCompound {
                 }
                 if(!iterator.hasNext()) {
 
-                    stringBuilder.append('}').toString();
+                    return stringBuilder.append('}').toString();
                 }
-                stringBuilder.append(", ");
+                stringBuilder.append(",");
             }
         }
     }
@@ -692,7 +692,7 @@ class NBTCompoundExpression implements NBTCompound {
 
             private NBTIterator(Iterator<Entry<String, Object>> iterator) {
 
-                this.iterator = iterator();
+                this.iterator = iterator;
             }
 
             @Override

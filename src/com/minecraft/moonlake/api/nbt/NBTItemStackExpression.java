@@ -36,18 +36,19 @@ class NBTItemStackExpression implements NBTItemStack {
             // NBT ItemStack Class
             CLASS_CRAFTITEMSTACK = PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
             CLASS_ITEMSTACK = PackageType.MINECRAFT_SERVER.getClass("ItemStack");
-            CLASS_ITEMMETA = PackageType.CRAFTBUKKIT_INVENTORY.getClass("ItemMeta");
+            CLASS_ITEMMETA = Class.forName("org.bukkit.inventory.meta.ItemMeta");
             CLASS_ITEM = PackageType.MINECRAFT_SERVER.getClass("Item");
-
-            // NBT ItemStack Constructor
-            CONSTRUCTOR_CRAFTITEMSTACK = getConstructor(CLASS_CRAFTITEMSTACK, CLASS_ITEMSTACK);
-            CONSTRUCTOR_ITEMSTACK = getConstructor(CLASS_ITEMSTACK, CLASS_ITEM, int.class, int.class);
 
             // NBT ItemStack Method
             METHOD_ASNMSCOPY = getMethod(CLASS_CRAFTITEMSTACK, "asNMSCopy", ItemStack.class);
             METHOD_ASCRAFTMIRROR = getMethod(CLASS_CRAFTITEMSTACK, "asCraftMirror", CLASS_ITEMSTACK);
             METHOD_GETBYID = getMethod(CLASS_ITEM, "getById", int.class);
 
+            if(METHOD_ASNMSCOPY == null || METHOD_ASCRAFTMIRROR == null) {
+                // NBT ItemStack Constructor
+                CONSTRUCTOR_CRAFTITEMSTACK = getDeclaredConstructor(CLASS_CRAFTITEMSTACK, CLASS_ITEMSTACK);
+                CONSTRUCTOR_ITEMSTACK = getDeclaredConstructor(CLASS_ITEMSTACK, CLASS_ITEM, int.class, int.class);
+            }
             // NBT ItemStack Field
             FIELD_TAG = getField(CLASS_ITEMSTACK, true, "tag");
             FIELD_ITEMHANDLE = getField(CLASS_CRAFTITEMSTACK, true, "handle");

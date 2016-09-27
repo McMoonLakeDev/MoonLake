@@ -70,6 +70,28 @@ public class Reflect {
     /**
      * 获取指定类的构造函数对象
      *
+     * @param clazz 类
+     * @param argsType 类构造参数类型
+     * @return 构造函数对象
+     * @throws NoSuchMethodException 没有存在此参数类型构造则抛出异常
+     */
+    public static Constructor<?> getDeclaredConstructor(Class<?> clazz, Class... argsType) throws NoSuchMethodException {
+
+        Class<?>[] primitiveTypes = DataType.getPrimitive(argsType);
+
+        for(Constructor<?> constructor : clazz.getDeclaredConstructors()) {
+
+            if(DataType.compare(DataType.getPrimitive(constructor.getParameterTypes()), primitiveTypes)) {
+
+                return constructor;
+            }
+        }
+        throw new NoSuchMethodException("在这个类中没有指定的参数类型构造.");
+    }
+
+    /**
+     * 获取指定类的构造函数对象
+     *
      * @param className 类名
      * @param packageType 包类型
      * @param argsType 类构造参数类型
@@ -80,6 +102,21 @@ public class Reflect {
     public static Constructor<?> getConstructor(String className, PackageType packageType, Class<?>... argsType) throws NoSuchMethodException, ClassNotFoundException {
 
         return getConstructor(packageType.getClass(className), argsType);
+    }
+
+    /**
+     * 获取指定类的构造函数对象
+     *
+     * @param className 类名
+     * @param packageType 包类型
+     * @param argsType 类构造参数类型
+     * @return 构造函数对象
+     * @throws NoSuchMethodException 没有存在此参数类型构造则抛出异常
+     * @throws ClassNotFoundException 类没有存在则抛出异常
+     */
+    public static Constructor<?> getDeclaredConstructor(String className, PackageType packageType, Class<?>... argsType) throws NoSuchMethodException, ClassNotFoundException {
+
+        return getDeclaredConstructor(packageType.getClass(className), argsType);
     }
 
     /**
@@ -142,6 +179,29 @@ public class Reflect {
     /**
      * 获取指定类的函数对象
      *
+     * @param clazz 类
+     * @param methodName 函数名
+     * @param argsType 函数参数类型
+     * @return 类的指定函数对象
+     * @throws NoSuchMethodException 没有存在此参数类型函数则抛出异常
+     */
+    public static Method getDeclaredMethod(Class<?> clazz, String methodName, Class<?>... argsType) throws NoSuchMethodException {
+
+        Class<?>[] primitiveTypes = DataType.getPrimitive(argsType);
+
+        for(Method method : clazz.getDeclaredMethods()) {
+
+            if(method.getName().equals(methodName) && DataType.compare(DataType.getPrimitive(method.getParameterTypes()), primitiveTypes)) {
+
+                return method;
+            }
+        }
+        throw new NoSuchMethodException("在这个类中没有指定的参数类型函数.");
+    }
+
+    /**
+     * 获取指定类的函数对象
+     *
      * @param className 类名
      * @param packageType 包类型
      * @param methodName 函数名
@@ -153,6 +213,22 @@ public class Reflect {
     public static Method getMethod(String className, PackageType packageType, String methodName, Class<?>... argsType) throws ClassNotFoundException, NoSuchMethodException {
 
         return getMethod(packageType.getClass(className), methodName, argsType);
+    }
+
+    /**
+     * 获取指定类的函数对象
+     *
+     * @param className 类名
+     * @param packageType 包类型
+     * @param methodName 函数名
+     * @param argsType 函数参数类型
+     * @return 类的指定函数对象
+     * @throws ClassNotFoundException 类没有存在则抛出异常
+     * @throws NoSuchMethodException 没有存在此参数类型函数则抛出异常
+     */
+    public static Method getDeclaredMethod(String className, PackageType packageType, String methodName, Class<?>... argsType) throws ClassNotFoundException, NoSuchMethodException {
+
+        return getDeclaredMethod(packageType.getClass(className), methodName, argsType);
     }
 
     /**

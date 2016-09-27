@@ -65,12 +65,12 @@ class NBTListExpression implements NBTList {
 
     public byte getType() {
 
-        return size() == 0 ? 0 : NBTReflect.getHandle().getNBTTagListType(handleList);
+        return size() == 0 ? 0 : NBTReflect.getHandle().getNBTTagListType(handle);
     }
 
     public void setType(byte type) {
 
-        NBTReflect.getHandle().setNBTTagListType(handleList, type);
+        NBTReflect.getHandle().setNBTTagListType(handle, type);
     }
 
     private Object convertToCurrentType(Object obj) {
@@ -384,7 +384,7 @@ class NBTListExpression implements NBTList {
 
                     return stringBuilder.append(']').toString();
                 }
-                stringBuilder.append(",").append(' ');
+                stringBuilder.append(",");
             }
         }
     }
