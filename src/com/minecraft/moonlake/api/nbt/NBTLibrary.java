@@ -59,6 +59,16 @@ public interface NBTLibrary {
     NBTCompound read(ItemStack itemStack) throws NBTException;
 
     /**
+     * 安全读取指定物品栈的 NBT 数据
+     *
+     * @param itemStack 物品栈
+     * @return NBTCompound
+     * @throws NBTException 如果读取物品栈时错误则抛出异常
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     */
+    NBTCompound readSafe(ItemStack itemStack) throws NBTException;
+
+    /**
      * 将指定 NBT 数据写入到物品栈
      *
      * @param itemStack 物品栈
@@ -77,6 +87,16 @@ public interface NBTLibrary {
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     NBTCompound read(Entity entity) throws NBTException;
+
+    /**
+     * 安全读取指定实体的 NBT 数据
+     *
+     * @param entity 实体
+     * @return NBTCompound
+     * @throws NBTException 如果读取实体时错误则抛出异常
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    NBTCompound readSafe(Entity entity) throws NBTException;
 
     /**
      * 将指定 NBT 数据写入到实体

@@ -2,12 +2,14 @@ package com.minecraft.moonlake.api.item;
 
 import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.api.item.potion.PotionEffectType;
+import com.minecraft.moonlake.api.nbt.NBTCompound;
+import com.minecraft.moonlake.api.nbt.NBTFactory;
+import com.minecraft.moonlake.api.nbt.NBTList;
 import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
 import com.minecraft.moonlake.property.SimpleBooleanProperty;
 import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
@@ -25,13 +27,11 @@ class AttributeExpression implements AttributeLibrary {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        ItemMeta itemMeta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : null;
+        NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
+        nbtCompound.put("Unbreakable", unbreakable ? 1 : 0);
 
-        if(itemMeta != null) {
+        NBTFactory.get().write(itemStack, nbtCompound);
 
-            itemMeta.spigot().setUnbreakable(unbreakable);
-            itemStack.setItemMeta(itemMeta);
-        }
         return itemStack;
     }
 
@@ -40,13 +40,13 @@ class AttributeExpression implements AttributeLibrary {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        ItemMeta itemMeta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : null;
+        NBTCompound nbtCompound = NBTFactory.get().read(itemStack);
 
-        if(itemMeta == null) {
+        if(nbtCompound == null) {
 
             return new SimpleBooleanProperty(false);
         }
-        return new SimpleBooleanProperty(itemMeta.spigot().isUnbreakable());
+        return new SimpleBooleanProperty(nbtCompound.getByte("Unbreakable") == 1);
     }
 
     @Override
@@ -55,74 +55,62 @@ class AttributeExpression implements AttributeLibrary {
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(attribute, "The itemstack attribute object is null.");
 
-        try {
+        NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
+        NBTList attributeModifiers = nbtCompound.getList("AttributeModifiers");
 
-            Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
-            Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
-            Class<?> NBTTagCompound = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
-            Class<?> NBTTagList = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagList");
-            Class<?> NBTBase = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTBase");
+        if(attributeModifiers == null) {
 
-            Object NMSItemStack = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class).invoke(null, itemStack);
-            Object tag = Reflect.getMethod(ItemStack, "getTag").invoke(NMSItemStack);
+            attributeModifiers = NBTFactory.newList();
+        }
+        int attributeModifiersSize = attributeModifiers.size();
+        AttributeModify.Type attributeType = attribute.getAttributeType().getValue();
 
-            if(tag == null) {
+        if(attributeModifiersSize > 0) {
 
-                tag = Reflect.instantiateObject(NBTTagCompound);
-            }
-            Object attList = Reflect.getMethod(NBTTagCompound, "getList", String.class, Integer.class).invoke(tag, "AttributeModifiers", 10);
+            for(int i = 0; i < attributeModifiersSize; i++) {
 
-            if(attList == null) {
+                Object attributeObject = attributeModifiers.get(i);
 
-                attList = Reflect.instantiateObject(NBTTagList);
-            }
-            int attSize = (int) Reflect.getMethod(NBTTagList, "size").invoke(attList);
+                if(!(attributeObject instanceof NBTCompound)) {
 
-            if(attSize > 0) {
+                    continue;
+                }
+                NBTCompound attributeCompound = (NBTCompound) attributeObject;
+                String attributeName = attributeCompound.getString("AttributeName");
 
-                for(int i = 0; i < attSize; i++) {
+                if(attributeName != null && attributeName.equals(attributeType.getAttributeName())) {
 
-                    Object attributeCompound = Reflect.getMethod(NBTTagList, "get", Integer.class).invoke(attList, i);
-                    String attributeName = (String) Reflect.getMethod(NBTTagCompound, "getString", String.class).invoke(attributeCompound, "AttributeName");
-
-                    if(attributeName.equals(attribute.getAttributeType().getValue().getAttributeName())) {
-
-                        Reflect.getMethod(NBTTagList, "remove", Integer.class).invoke(attList, i);
-                        break;
-                    }
+                    attributeModifiers.remove(i);
+                    break;
                 }
             }
-            Object attributeNewCompound = Reflect.instantiateObject(NBTTagCompound);
-            int version = Reflect.getServerVersionNumber();
-
-            if(attribute.getAttributeSlot().getValue() != null && attribute.getAttributeSlot().getValue() != AttributeModify.Slot.ALL && version >= 9) {
-                // only support 1.9+ version
-                Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke(attributeNewCompound, "Slot", attribute.getAttributeSlot().getValue().getSlot());
-            }
-            Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke(attributeNewCompound, "Name", attribute.getAttributeType().getValue().getName());
-            Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke(attributeNewCompound, "AttributeName", attribute.getAttributeType().getValue().getAttributeName());
-            Reflect.getMethod(NBTTagCompound, "setDouble", String.class, Double.class).invoke(attributeNewCompound, "Amount", attribute.getAmount().get());
-            Reflect.getMethod(NBTTagCompound, "setInt", String.class, Integer.class).invoke(attributeNewCompound, "Operation", attribute.getOperation().getValue().getOperation());
-
-            UUID uuid = attribute.getUUIDProperty().getValue();
-
-            if(uuid == null) {
-
-                uuid = UUID.randomUUID();
-            }
-            Reflect.getMethod(NBTTagCompound, "setLong", String.class, Long.class).invoke(attributeNewCompound, "UUIDMost", uuid.getMostSignificantBits());
-            Reflect.getMethod(NBTTagCompound, "setLong", String.class, Long.class).invoke(attributeNewCompound, "UUIDLeast", uuid.getLeastSignificantBits());
-
-            Reflect.getMethod(NBTTagList, "add", NBTTagCompound).invoke(attList, attributeNewCompound);
-            Reflect.getMethod(NBTTagCompound, "set", String.class, NBTBase).invoke(tag, "AttributeModifiers", attList);
-            Reflect.getMethod(ItemStack, "setTag", NBTTagCompound).invoke(NMSItemStack, tag);
-
-            itemStack = (ItemStack) Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack).invoke(null, NMSItemStack);
         }
-        catch (Exception e) {
+        int version = Reflect.getServerVersionNumber();
+        NBTCompound attributeNewCompound = NBTFactory.newCompound();
+        AttributeModify.Slot attributeSlot = attribute.getAttributeSlot().getValue();
 
-            e.printStackTrace();
+        if(attributeSlot != null && attributeSlot != AttributeModify.Slot.ALL && version >= 9) {
+
+            attributeNewCompound.put("Slot", attributeSlot.getSlot());
         }
+        attributeNewCompound.put("Name", attributeType.getName());
+        attributeNewCompound.put("AttributeName", attributeType.getAttributeName());
+        attributeNewCompound.put("Amount", attribute.getAmount().get());
+        attributeNewCompound.put("Operation", attribute.getOperation().getValue().getOperation());
+
+        UUID uuid = attribute.getUUIDProperty().getValue();
+
+        if(uuid == null) {
+
+            uuid = UUID.randomUUID();
+        }
+        attributeNewCompound.put("UUIDMost", uuid.getMostSignificantBits());
+        attributeNewCompound.put("UUIDLeast", uuid.getLeastSignificantBits());
+        attributeModifiers.add(attributeNewCompound);
+        nbtCompound.put("AttributeModifiers", attributeModifiers);
+
+        NBTFactory.get().write(itemStack, nbtCompound);
+
         return itemStack;
     }
 
@@ -146,60 +134,52 @@ class AttributeExpression implements AttributeLibrary {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        try {
+        NBTCompound nbtCompound = NBTFactory.get().read(itemStack);
+        List<AttributeModify> attributeModifyList = new ArrayList<>();
 
-            Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
-            Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
-            Class<?> NBTTagCompound = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
-            Class<?> NBTTagList = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagList");
+        if(nbtCompound == null) {
 
-            Object NMSItemStack = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class).invoke(null, itemStack);
-            Object tag = Reflect.getMethod(ItemStack, "getTag").invoke(NMSItemStack);
+            return attributeModifyList;
+        }
+        NBTList attributeModifiers = nbtCompound.getList("AttributeModifiers");
 
-            if(tag == null) {
+        if(attributeModifiers == null) {
 
-                tag = Reflect.instantiateObject(NBTTagCompound);
-            }
-            Object attList = Reflect.getMethod(NBTTagCompound, "getList", String.class, Integer.class).invoke(tag, "AttributeModifiers", 10);
+            return attributeModifyList;
+        }
+        int attributeModifiersSize = attributeModifiers.size();
 
-            if(attList == null) {
+        if(attributeModifiersSize <= 0) {
 
-                attList = Reflect.instantiateObject(NBTTagList);
-            }
-            List<AttributeModify> attributeList = new ArrayList<>();
-            int size = (int) Reflect.getMethod(NBTTagList, "size").invoke(attList);
-            int version = Reflect.getServerVersionNumber();
+            return attributeModifyList;
+        }
+        int version = Reflect.getServerVersionNumber();
 
-            for(int i = 0; i < size; i++) {
+        for(int i = 0; i < attributeModifiersSize; i++) {
 
-                Object att = Reflect.getMethod(NBTTagList, "get", Integer.class).invoke(attList, i);
+            Object attributeObject = attributeModifiers.get(i);
 
-                if(att != null) {
+            if(attributeObject instanceof NBTCompound) {
 
-                    AttributeModify.Type attType = AttributeModify.Type.fromType((String) Reflect.getMethod(NBTTagCompound, "getString", String.class).invoke(att, "AttributeName"));
+                NBTCompound attributeCompound = (NBTCompound) attributeObject;
+                AttributeModify.Type attributeType = AttributeModify.Type.fromType(attributeCompound.getString("AttributeName"));
 
-                    if(attType != null) {
+                if(attributeType != null) {
 
-                        AttributeModify.Slot attSlot = null;
+                    AttributeModify.Slot attributeSlot = null;
 
-                        if(version >= 9) {
-                            // only support 1.9+ version
-                            attSlot = AttributeModify.Slot.fromType((String) Reflect.getMethod(NBTTagCompound, "getString", String.class).invoke(att, "Slot"));
-                        }
-                        AttributeModify.Operation attOperation = AttributeModify.Operation.fromValue((Integer) Reflect.getMethod(NBTTagCompound, "getInte", String.class).invoke(att, "Operation"));
-                        double amount = (Double) Reflect.getMethod(NBTTagCompound, "getDouble", String.class).invoke(att, "Amount");
+                    if(version >= 9) {
 
-                        attributeList.add(new AttributeModify(attType, attSlot == null ? AttributeModify.Slot.ALL : attSlot, attOperation, amount));
+                        attributeSlot = AttributeModify.Slot.fromType(attributeCompound.getString("Slot"));
                     }
+                    double amount = attributeCompound.getDouble("Amount");
+                    AttributeModify.Operation attributeOperation = AttributeModify.Operation.fromValue(attributeCompound.getInt("Operation"));
+
+                    attributeModifyList.add(new AttributeModify(attributeType, attributeSlot == null ? AttributeModify.Slot.ALL : attributeSlot, attributeOperation, amount));
                 }
             }
-            return attributeList;
         }
-        catch (Exception e) {
-
-            e.printStackTrace();
-        }
-        return null;
+        return attributeModifyList;
     }
 
     @Override
@@ -216,60 +196,41 @@ class AttributeExpression implements AttributeLibrary {
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.isTrue(ItemLibraryFactorys.item().isPotion(itemStack), "The itemstack material object not potion.");
 
-        try {
+        NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
+        NBTList customPotionEffects = nbtCompound.getList("CustomPotionEffects");
 
-            Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
-            Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
-            Class<?> NBTTagCompound = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
-            Class<?> NBTTagList = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagList");
+        if(customPotionEffects == null || customPotionEffects.size() <= 0) {
 
-            Object NMSItemStack = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class).invoke(null, itemStack);
-            Object tag = Reflect.getMethod(ItemStack, "getTag").invoke(NMSItemStack);
+            customPotionEffects = NBTFactory.newList();
 
-            if(tag == null) {
+            if(effects != null && !effects.isEmpty()) {
 
-                tag = Reflect.instantiateObject(NBTTagCompound);
-            }
-            Object customEffectList = Reflect.getMethod(NBTTagCompound, "getList", String.class, Integer.class).invoke(tag, "CustomPotionEffects", 10);
+                for(final PotionEffectCustom effect : effects) {
 
-            if(customEffectList == null || (int) Reflect.getMethod(NBTTagList, "size").invoke(customEffectList) <= 0) {
+                    PotionEffectType effectType = PotionEffectType.fromId(effect.getId().get());
 
-                customEffectList = Reflect.instantiateObject(NBTTagList);
+                    if(effectType != null) {
 
-                if(!effects.isEmpty()) {
-
-                    for(final PotionEffectCustom effect : effects) {
-
-                        PotionEffectType effectType = PotionEffectType.fromId(effect.getId().get());
-
-                        if(effectType != null) {
-
-                            Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke(tag, "Potion", "minecraft:" + effectType.getTagName());
-                            break;
-                        }
+                        nbtCompound.put("Potion", "minecraft:" + effectType.getTagName());
                     }
                 }
             }
-            for(final PotionEffectCustom effect : effects) {
-
-                Object effectTag = Reflect.instantiateObject(NBTTagCompound);
-                Reflect.getMethod(NBTTagCompound, "setByte", String.class, Byte.class).invoke(effectTag, "Id", effect.getId().get());
-                Reflect.getMethod(NBTTagCompound, "setByte", String.class, Byte.class).invoke(effectTag, "Amplifier", effect.getAmplifier().getValue());
-                Reflect.getMethod(NBTTagCompound, "setInt", String.class, Integer.class).invoke(effectTag, "Duration", effect.getDuration().getValue());
-                Reflect.getMethod(NBTTagCompound, "setByte", String.class, Byte.class).invoke(effectTag, "Ambient", (byte)(effect.getAmbient().getValue() ? 1 : 0));
-                Reflect.getMethod(NBTTagCompound, "setByte", String.class, Byte.class).invoke(effectTag, "ShowParticles", (byte)(effect.getShowParticles().getValue() ? 1 : 0));
-
-                Reflect.getMethod(NBTTagList, "add", NBTTagCompound).invoke(customEffectList, effectTag);
-            }
-            Reflect.getMethod(NBTTagCompound, "set", String.class, Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTBase")).invoke(tag, "CustomPotionEffects", customEffectList);
-            Reflect.getMethod(ItemStack, "setTag", NBTTagCompound).invoke(NMSItemStack, tag);
-
-            itemStack = (ItemStack) Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack).invoke(null, NMSItemStack);
         }
-        catch (Exception e) {
+        for(final PotionEffectCustom effect : effects) {
 
-            e.printStackTrace();
+            NBTCompound effectNewCompound = NBTFactory.newCompound();
+            effectNewCompound.put("Id", effect.getId().get());
+            effectNewCompound.put("Amplifier", effect.getAmplifier().getValue());
+            effectNewCompound.put("Duration", effect.getDuration().getValue());
+            effectNewCompound.put("Ambient", (byte) (effect.getAmbient().getValue() ? 1 : 0));
+            effectNewCompound.put("ShowParticles", (byte) (effect.getShowParticles().getValue() ? 1 : 0));
+
+            customPotionEffects.add(effectNewCompound);
         }
+        nbtCompound.put("CustomPotionEffects", customPotionEffects);
+
+        NBTFactory.get().write(itemStack, nbtCompound);
+
         return itemStack;
     }
 
