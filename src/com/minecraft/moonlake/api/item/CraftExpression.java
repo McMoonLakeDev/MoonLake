@@ -4,7 +4,8 @@ import com.minecraft.moonlake.api.item.potion.PotionBase;
 import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.api.item.potion.PotionEffectType;
 import com.minecraft.moonlake.api.item.potion.PotionType;
-import com.minecraft.moonlake.reflect.Reflect;
+import com.minecraft.moonlake.api.nbt.NBTCompound;
+import com.minecraft.moonlake.api.nbt.NBTFactory;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -164,29 +165,12 @@ class CraftExpression extends MetaExpression implements CraftLibrary {
 
         ItemStack itemStack = create(type.getMaterial(), 0, amount);
 
-        try {
+        NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
+        nbtCompound.put("Potion", base.getValue().get());
 
-            Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
-            Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
-            Class<?> NBTTagCompound = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
+        NBTFactory.get().write(itemStack, nbtCompound);
 
-            Object NMSItemStack = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class).invoke(null, itemStack);
-            Object tag = Reflect.getMethod(ItemStack, "getTag").invoke(NMSItemStack);
-
-            if(tag == null) {
-
-                tag = Reflect.instantiateObject(NBTTagCompound);
-            }
-            Reflect.getMethod(NBTTagCompound, "setString", String.class, String.class).invoke(tag, "Potion", base.getValue().get());
-            Reflect.getMethod(ItemStack, "setTag", NBTTagCompound).invoke(NMSItemStack, tag);
-
-            return (ItemStack) Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack).invoke(null, NMSItemStack);
-        }
-        catch (Exception e) {
-
-            e.printStackTrace();
-        }
-        return null;
+        return itemStack;
     }
 
     @Override

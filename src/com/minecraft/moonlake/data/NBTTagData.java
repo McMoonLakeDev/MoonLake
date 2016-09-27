@@ -1,5 +1,7 @@
 package com.minecraft.moonlake.data;
 
+import com.minecraft.moonlake.api.nbt.NBTCompound;
+import com.minecraft.moonlake.api.nbt.NBTList;
 import com.minecraft.moonlake.property.*;
 
 /**
@@ -69,4 +71,18 @@ public interface NBTTagData extends ConversionData {
      * @return 字节
      */
     ReadOnlyObjectProperty<Byte> asByte();
+
+    /**
+     * 将数据转换到复合对象
+     *
+     * @return 复合对象
+     */
+    NBTCompound asCompound();
+
+    /**
+     * 将数据转换到列表对象
+     *
+     * @return 列表对象
+     */
+    NBTList asList();
 }

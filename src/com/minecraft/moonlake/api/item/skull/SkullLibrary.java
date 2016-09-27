@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.api.item.skull;
 
+import com.minecraft.moonlake.exception.NotImplementedException;
 import com.minecraft.moonlake.property.ReadOnlyStringProperty;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,11 +21,20 @@ public interface SkullLibrary {
     /**
      * 创建头颅物品栈 ItemStack 对象
      *
+     * @param displayName 头颅显示名称
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果头颅显示名称对象为 {@code null} 则抛出异常
+     */
+    ItemStack createSkull(String displayName);
+
+    /**
+     * 创建头颅物品栈 ItemStack 对象
+     *
      * @param skullOwner 头颅拥有者
      * @return ItemStack
      * @throws IllegalArgumentException 如果头颅拥有者对象为 {@code null} 则抛出异常
      */
-    ItemStack createSkull(String skullOwner);
+    ItemStack createSkullWithOwner(String skullOwner);
 
     /**
      * 创建头颅物品栈 ItemStack 对象
@@ -35,33 +45,29 @@ public interface SkullLibrary {
      * @throws IllegalArgumentException 如果头颅拥有者对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果头颅显示名称对象为 {@code null} 则抛出异常
      */
-    ItemStack createSkull(String skullOwner, String displayName);
+    ItemStack createSkullWithOwner(String skullOwner, String displayName);
 
     /**
      * 创建头颅物品栈 ItemStack 对象
      *
-     * @param skullOwner 头颅拥有者
+     * @param skinURL 头颅材质信息 URL
      * @param displayName 头颅显示名称
-     * @param prefile 头颅材质信息 URL
      * @return ItemStack
-     * @throws IllegalArgumentException 如果头颅拥有者对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果头颅显示名称对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果头颅材质信息对象为 {@code null} 则抛出异常
-     */
-    ItemStack createSkull(String skullOwner, String displayName, String prefile);
-
-    /**
-     * 创建头颅物品栈 ItemStack 对象
-     *
-     * @param skullOwner 头颅拥有者
-     * @param displayName 头颅显示名称
-     * @param prefile 头颅材质信息 URL
-     * @return ItemStack
-     * @throws IllegalArgumentException 如果头颅拥有者对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果头颅显示名称对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果头颅材质信息对象为 {@code null} 则抛出异常
      */
-    ItemStack createSkull(String skullOwner, String displayName, URL prefile);
+    ItemStack createSkullWithSkin(String skinURL, String displayName);
+
+    /**
+     * 创建头颅物品栈 ItemStack 对象
+     *
+     * @param skinURL 头颅材质信息 URL
+     * @param displayName 头颅显示名称
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果头颅显示名称对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果头颅材质信息对象为 {@code null} 则抛出异常
+     */
+    ItemStack createSkullWithSkin(URL skinURL, String displayName);
 
     /**
      * 获取头颅物品栈 ItemStack 对象的拥有者
@@ -69,6 +75,18 @@ public interface SkullLibrary {
      * @param itemStack 头颅物品栈
      * @return 头颅拥有者 没有则返回 null
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.SKULL_ITEM} 则抛出异常
      */
     ReadOnlyStringProperty getSkullOwner(ItemStack itemStack);
+
+    /**
+     * 获取指定头颅物品栈的皮肤材质 URL
+     *
+     * @param itemStack 头颅物品栈
+     * @return 材质 URL
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.SKULL_ITEM} 则抛出异常
+     * @throws NotImplementedException 尚未实现
+     */
+    ReadOnlyStringProperty getSkullSkinURL(ItemStack itemStack);
 }

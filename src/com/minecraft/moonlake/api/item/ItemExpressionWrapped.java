@@ -44,27 +44,38 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public ItemStack createSkull(String skullOwner, String displayName) {
+    public ItemStack createSkullWithOwner(String skullOwner) {
 
-        return skullExpression.createSkull(skullOwner, displayName);
+        return skullExpression.createSkullWithOwner(skullOwner);
     }
 
     @Override
-    public ItemStack createSkull(String skullOwner, String displayName, String prefile) {
+    public ItemStack createSkullWithOwner(String skullOwner, String displayName) {
 
-        return skullExpression.createSkull(skullOwner, displayName, prefile);
+        return skullExpression.createSkullWithOwner(skullOwner, displayName);
     }
 
     @Override
-    public ItemStack createSkull(String skullOwner, String displayName, URL prefile) {
+    public ItemStack createSkullWithSkin(String skinURL, String displayName) {
 
-        return skullExpression.createSkull(skullOwner, displayName, prefile);
+        return skullExpression.createSkullWithSkin(skinURL, displayName);
+    }
+
+    @Override
+    public ItemStack createSkullWithSkin(URL skinURL, String displayName) {
+
+        return skullExpression.createSkullWithSkin(skinURL, displayName);
     }
 
     @Override
     public ReadOnlyStringProperty getSkullOwner(ItemStack itemStack) {
 
         return skullExpression.getSkullOwner(itemStack);
+    }
+
+    @Override
+    public ReadOnlyStringProperty getSkullSkinURL(ItemStack itemStack) {
+        return null;
     }
 
     @Override
