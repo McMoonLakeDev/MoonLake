@@ -1,6 +1,8 @@
 package com.minecraft.moonlake.manager;
 
 import com.google.common.collect.Sets;
+import com.minecraft.moonlake.api.nbt.NBTCompound;
+import com.minecraft.moonlake.api.nbt.NBTFactory;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
@@ -77,33 +79,17 @@ public class EntityManager extends MoonLakeManager {
      * @param key 键
      * @param value 值
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
      */
+    @Deprecated
     public static void setTagValue(Entity entity, String key, Object value) {
 
         Validate.notNull(entity, "The entity object is null.");
 
-        try {
+        NBTCompound nbtCompound = NBTFactory.get().readSafe(entity);
+        nbtCompound.put(key, value);
 
-            Object instance = Reflect.invokeMethod(entity, "CraftEntity", Reflect.PackageType.CRAFTBUKKIT_ENTITY, "getHandle");
-
-            Class<?> NBTBase = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTBase");
-            Class<?> NBTTagCompound = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
-            Object tag = Reflect.instantiateObject(NBTTagCompound);
-
-            Method c = Reflect.getMethod("Entity", Reflect.PackageType.MINECRAFT_SERVER, "c", NBTTagCompound);
-            c.invoke(instance, tag);
-
-            Method set = Reflect.getMethod(NBTTagCompound, "set", String.class, NBTBase);
-            Object baseInstance = Reflect.instantiateObject(NBTManager.fromValueObject(value), value);
-            set.invoke(tag, key, baseInstance);
-
-            Method f = Reflect.getMethod("Entity", Reflect.PackageType.MINECRAFT_SERVER, "f", NBTTagCompound);
-            f.invoke(instance, tag);
-        }
-        catch (Exception e) {
-
-            getMain().getMLogger().warn("设置实体 UUID 为 '" + entity.getUniqueId().toString() + "' 的 NBT 标签属性时异常: " + e.getMessage());
-        }
+        NBTFactory.get().write(entity, nbtCompound);
     }
 
     /**
@@ -117,7 +103,7 @@ public class EntityManager extends MoonLakeManager {
 
         try {
 
-            setTagValue(entity, "NoAI", Integer.valueOf(flag ? 1 : 0));
+            setTagValue(entity, "NoAI", (byte) (flag ? 1 : 0));
         }
         catch (Exception e) {
 
@@ -136,7 +122,7 @@ public class EntityManager extends MoonLakeManager {
 
         try {
 
-            setTagValue(entity, "Silent", Byte.valueOf((byte)(flag ? 1 : 0)));
+            setTagValue(entity, "Silent", (byte) (flag ? 1 : 0));
         }
         catch (Exception e) {
 
@@ -155,7 +141,7 @@ public class EntityManager extends MoonLakeManager {
 
         try {
 
-            setTagValue(entity, "Invulnerable", Byte.valueOf((byte)(flag ? 1 : 0)));
+            setTagValue(entity, "Invulnerable", (byte) (flag ? 1 : 0));
         }
         catch (Exception e) {
 

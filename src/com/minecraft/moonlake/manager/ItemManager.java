@@ -1,8 +1,14 @@
 package com.minecraft.moonlake.manager;
 
 import com.google.common.io.BaseEncoding;
+import com.minecraft.moonlake.api.nbt.NBTCompound;
+import com.minecraft.moonlake.api.nbt.NBTFactory;
 import com.minecraft.moonlake.data.NBTTagData;
 import com.minecraft.moonlake.data.NBTTagDataWrapped;
+import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
+import com.minecraft.moonlake.property.ReadOnlyStringProperty;
+import com.minecraft.moonlake.property.SimpleBooleanProperty;
+import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Material;
@@ -26,228 +32,122 @@ public class ItemManager extends MoonLakeManager {
     /**
      * 设置物品栈 NBT 标签指定键的值
      *
-     * @param item 物品栈
+     * @param itemStack 物品栈
      * @param key 键
      * @param value 值
      * @return 改变 NBT 标签属性后的物品栈对象 异常返回 源
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
      */
-    public static ItemStack setTagValue(ItemStack item, String key, Object value) {
+    @Deprecated
+    public static ItemStack setTagValue(ItemStack itemStack, String key, Object value) {
 
-        Validate.notNull(item, "The itemstack object is null.");
+        Validate.notNull(itemStack, "The itemstack object is null.");
 
-        try {
+        NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
+        nbtCompound.put(key, value);
 
-            Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
-            Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
-            Class<?> NBTBase = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTBase");
+        NBTFactory.get().write(itemStack, nbtCompound);
 
-            Method asNMSCopy = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class);
-            Object NMSItemStack = asNMSCopy.invoke(null, item);
-            Object baseInstance = Reflect.instantiateObject(NBTManager.fromValueObject(value), value);
-
-            Method a = Reflect.getMethod(ItemStack, "a", String.class, NBTBase);
-            a.invoke(NMSItemStack, key, baseInstance);
-
-            Method asBukkitCopy = Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack);
-
-            return (ItemStack)asBukkitCopy.invoke(null, NMSItemStack);
-        }
-        catch (Exception e) {
-
-            getMain().getMLogger().warn("设置物品栈的 NBT 标签属性时异常: " + e.getMessage());
-        }
-        return item;
+        return itemStack;
     }
 
     /**
      * 获取物品栈 NBT 标签指定键的值
      *
-     * @param item 物品栈
+     * @param itemStack 物品栈
      * @param key 键
      * @return 物品栈指定 NBT 标签属性的值 异常或没有返回 null
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
      */
-    public static NBTTagData getTagValue(ItemStack item, String key) {
+    @Deprecated
+    public static NBTTagData getTagValue(ItemStack itemStack, String key) {
 
-        Validate.notNull(item, "The itemstack object is null.");
+        Validate.notNull(itemStack, "The itemstack object is null.");
 
-        NBTTagData tagData = null;
+        NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
+        Object value = nbtCompound.get(key);
 
-        if(hasTag(item)) {
+        if(value == null) {
 
-            try {
-
-                Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
-                Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
-                Class<?> NBTTagCompound = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
-
-                Method asNMSCopy = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class);
-                Object NMSItemStack = asNMSCopy.invoke(null, item);
-
-                Method getTag = Reflect.getMethod(ItemStack, "getTag");
-                Object tag = getTag.invoke(NMSItemStack);
-
-                Method hasKey = Reflect.getMethod(NBTTagCompound, "hasKey", String.class);
-                boolean keyResult = (boolean)hasKey.invoke(tag, key);
-
-                if(keyResult) {
-                    // item stack have key
-                    Method get = Reflect.getMethod(NBTTagCompound, "get", String.class);
-                    Object baseObject = get.invoke(tag, key);
-
-                    Class<?> NBTTagString = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagString");
-
-                    if(NBTTagString.isInstance(baseObject)) {
-
-                        Method c_ = Reflect.getMethod(NBTTagString, "c_");
-                        String data = (String)c_.invoke(baseObject);
-
-                        tagData = new NBTTagDataWrapped(data);
-                    }
-                    else {
-
-                        tagData = NBTManager.conversionNBTData(baseObject.toString());
-                    }
-                }
-            }
-            catch (Exception e) {
-
-                getMain().getMLogger().warn("获取物品栈的 NBT 标签属性时异常: " + e.getMessage());
-            }
+            return null;
         }
-        return tagData;
+        return new NBTTagDataWrapped(value);
     }
 
     /**
      * 获取物品栈 NBT 标签指定键的字符串值
      *
-     * @param item 物品栈
+     * @param itemStack 物品栈
      * @param key 键
      * @return 物品栈指定 NBT 标签属性的字符串值 异常或没有返回 null
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
      */
-    public static String getTagStringValue(ItemStack item, String key) {
+    @Deprecated
+    public static ReadOnlyStringProperty getTagStringValue(ItemStack itemStack, String key) {
 
-        Validate.notNull(item, "The itemstack object is null.");
-
-        if(hasTag(item)) {
-
-            try {
-
-                Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
-                Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
-                Class<?> NBTTagCompound = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
-
-                Method asNMSCopy = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class);
-                Object NMSItemStack = asNMSCopy.invoke(null, item);
-
-                Method getTag = Reflect.getMethod(ItemStack, "getTag");
-                Object tag = getTag.invoke(NMSItemStack);
-
-                Method hasKey = Reflect.getMethod(NBTTagCompound, "hasKey", String.class);
-                boolean keyResult = (boolean)hasKey.invoke(tag, key);
-
-                if(keyResult) {
-
-                    Method getString = Reflect.getMethod(NBTTagCompound, "getString", String.class);
-                    return getString.invoke(tag, key).toString();
-                }
-            }
-            catch (Exception e) {
-
-                getMain().getMLogger().warn("获取物品栈的 NBT 标签属性时异常: " + e.getMessage());
-            }
-        }
-        return null;
+        NBTTagData nbtTagData = getTagValue(itemStack, key);
+        return nbtTagData == null ? null : nbtTagData.asString();
     }
 
     /**
      * 获取物品栈是否拥有 NBT 标签
      *
-     * @param item 物品栈
+     * @param itemStack 物品栈
      * @return true 拥有 NBT 标签属性 else 没有
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
      */
-    public static boolean hasTag(ItemStack item) {
+    @Deprecated
+    public static ReadOnlyBooleanProperty hasTag(ItemStack itemStack) {
 
-        Validate.notNull(item, "The itemstack object is null.");
+        Validate.notNull(itemStack, "The itemstack object is null.");
 
-        boolean result = false;
-
-        try {
-
-            Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
-            Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
-
-            Method asNMSCopy = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class);
-            Object NMSItemStack = asNMSCopy.invoke(null, item);
-
-            Method hasTag = Reflect.getMethod(ItemStack, "hasTag");
-
-            result = (boolean)hasTag.invoke(NMSItemStack);
-        }
-        catch (Exception e) {
-
-            getMain().getMLogger().warn("获取物品栈的 NBT 标签属性时异常: " + e.getMessage());
-        }
-        return result;
+        return new SimpleBooleanProperty(NBTFactory.get().read(itemStack) != null);
     }
 
     /**
      * 获取物品栈是否拥有 NBT 标签指定键
      *
-     * @param item 物品栈
+     * @param itemStack 物品栈
      * @param key 键
      * @return true 拥有 NBT 标签属性键 else 没有
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
      */
-    public static boolean hasTagKey(ItemStack item, String key) {
+    @Deprecated
+    public static ReadOnlyBooleanProperty hasTagKey(ItemStack itemStack, String key) {
 
-        return getTagValue(item, key) != null;
+        return new SimpleBooleanProperty(getTagValue(itemStack, key) != null);
     }
 
     /**
      * 获取物品栈 NBT 标签的字符串值
-     * @param item 物品栈
+     * @param itemStack 物品栈
      * @return 字符串 NBT 标签值 异常返回空
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    public static String getTagString(ItemStack item) {
+    public static ReadOnlyStringProperty getTagString(ItemStack itemStack) {
 
-        Validate.notNull(item, "The itemstack object is null.");
+        Validate.notNull(itemStack, "The itemstack object is null.");
 
-        try {
-
-            Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
-            Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
-
-            Method asNMSCopy = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class);
-            Object NMSItemStack = asNMSCopy.invoke(null, item);
-
-            Method getTag = Reflect.getMethod(ItemStack, "getTag");
-
-            return getTag.invoke(NMSItemStack).toString();
-        }
-        catch (Exception e) {
-
-            getMain().getMLogger().warn("获取物品栈的 NBT 标签属性时异常: " + e.getMessage());
-        }
-        return "";
+        return new SimpleStringProperty(NBTFactory.get().readSafe(itemStack).toString());
     }
 
     /**
      * 获取指定物品栈的显示名称
      *
-     * @param item 物品栈
+     * @param itemStack 物品栈
      * @return 物品栈的显示名 没有则返回 类型名
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    public static String getDisplayName(ItemStack item) {
+    public static ReadOnlyStringProperty getDisplayName(ItemStack itemStack) {
 
-        Validate.notNull(item, "The itemstack object is null.");
+        Validate.notNull(itemStack, "The itemstack object is null.");
 
-        return item.hasItemMeta() && item.getItemMeta().hasDisplayName() ? item.getItemMeta().getDisplayName() : item.getType().name();
+        return new SimpleStringProperty(itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName() ? itemStack.getItemMeta().getDisplayName() : itemStack.getType().name());
     }
 
     /**
@@ -257,9 +157,9 @@ public class ItemManager extends MoonLakeManager {
      * @param target 目标物品栈
      * @return true 则类型和数据都相同 else 不相同
      */
-    public static boolean compare(ItemStack source, ItemStack target) {
+    public static ReadOnlyBooleanProperty compare(ItemStack source, ItemStack target) {
 
-        return source != null && target != null && source.getType() == target.getType() && source.getData().getData() == target.getData().getData();
+        return new SimpleBooleanProperty(source != null && target != null && source.getType() == target.getType() && source.getData().getData() == target.getData().getData());
     }
 
     /**
@@ -268,9 +168,9 @@ public class ItemManager extends MoonLakeManager {
      * @param item 物品栈
      * @return true 是空气物品栈 else 不是
      */
-    public static boolean isAir(ItemStack item) {
+    public static ReadOnlyBooleanProperty isAir(ItemStack item) {
 
-        return item == null || item.getType() == Material.AIR;
+        return new SimpleBooleanProperty(item == null || item.getType() == Material.AIR);
     }
 
 
@@ -281,7 +181,7 @@ public class ItemManager extends MoonLakeManager {
      * @param target 目标物品栈类型
      * @return true 则类型和数据都相同 else 不相同
      */
-    public static boolean compare(ItemStack source, Material target) {
+    public static ReadOnlyBooleanProperty compare(ItemStack source, Material target) {
 
         return compare(source, new ItemStack(target, 1, (byte)0));
     }
@@ -294,7 +194,7 @@ public class ItemManager extends MoonLakeManager {
      * @param data 目标物品栈数据
      * @return true 则类型和数据都相同 else 不相同
      */
-    public static boolean compare(ItemStack source, Material target, int data) {
+    public static ReadOnlyBooleanProperty compare(ItemStack source, Material target, int data) {
 
         return compare(source, new ItemStack(target, 1, (byte)data));
     }
@@ -306,9 +206,9 @@ public class ItemManager extends MoonLakeManager {
      * @param target 目标物品栈
      * @return true 则两个物品栈符合数量 else 不符合
      */
-    public static boolean compareAmount(ItemStack source, ItemStack target) {
+    public static ReadOnlyBooleanProperty compareAmount(ItemStack source, ItemStack target) {
 
-        return source != null && target != null && source.getAmount() == target.getAmount();
+        return new SimpleBooleanProperty(source != null && target != null && source.getAmount() == target.getAmount());
     }
 
     /**
@@ -318,12 +218,12 @@ public class ItemManager extends MoonLakeManager {
      * @param target 目标物品栈
      * @return true 则两个物品栈符合显示名 else 不符合
      */
-    public static boolean compareDisplayName(ItemStack source, ItemStack target) {
+    public static ReadOnlyBooleanProperty compareDisplayName(ItemStack source, ItemStack target) {
 
-        String sourceName = getDisplayName(source);
-        String targetName = getDisplayName(target);
+        ReadOnlyStringProperty sourceName = getDisplayName(source);
+        ReadOnlyStringProperty targetName = getDisplayName(target);
 
-        return (sourceName == null && targetName == null) || (sourceName != null && targetName != null && sourceName.equals(targetName));
+        return new SimpleBooleanProperty((sourceName.get() == null && targetName.get() == null) || (sourceName.get() != null && targetName.get() != null && sourceName.get().equals(targetName.get())));
     }
 
     /**
@@ -333,9 +233,9 @@ public class ItemManager extends MoonLakeManager {
      * @param target 目标物品栈
      * @return true 则两个物品栈符合属性 else 不符合
      */
-    public static boolean compareMeta(ItemStack source, ItemStack target) {
+    public static ReadOnlyBooleanProperty compareMeta(ItemStack source, ItemStack target) {
 
-        return source != null && target != null && source.isSimilar(target);
+        return new SimpleBooleanProperty(source != null && target != null && source.isSimilar(target));
     }
 
     /**
@@ -345,25 +245,23 @@ public class ItemManager extends MoonLakeManager {
      * @param target 目标物品栈
      * @return true 则两个物品栈完全符合 else 不符合
      */
-    public static boolean compareAll(ItemStack source, ItemStack target) {
+    public static ReadOnlyBooleanProperty compareAll(ItemStack source, ItemStack target) {
 
-        return
-                compare(source, target) &&
-                compareMeta(source, target);
+        return new SimpleBooleanProperty(compare(source, target).get() && compareMeta(source, target).get());
     }
 
     /**
      * 将物品栈对象数据序列化为字符串数据
      *
-     * @param item 物品栈
+     * @param itemStack 物品栈
      * @return 物品栈字符串数据 异常返回 null
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    public static String serialize(ItemStack item) {
+    public static ReadOnlyStringProperty serialize(ItemStack itemStack) {
 
-        Validate.notNull(item, "The itemstack object is null.");
+        Validate.notNull(itemStack, "The itemstack object is null.");
 
-        if(!isAir(item)) {
+        if(!isAir(itemStack).get()) {
 
             ByteArrayOutputStream outputStream = null;
 
@@ -377,7 +275,7 @@ public class ItemManager extends MoonLakeManager {
                 Object NBTTag = Reflect.getConstructor(NBTTagCompound).newInstance();
 
                 Method asNMSCopy = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class);
-                Object NMSItemStack = asNMSCopy.invoke(null, item);
+                Object NMSItemStack = asNMSCopy.invoke(null, itemStack);
 
                 Reflect.getMethod(ItemStack, "save", NBTTagCompound).invoke(NMSItemStack, NBTTag);
                 outputStream = new ByteArrayOutputStream();
@@ -385,7 +283,7 @@ public class ItemManager extends MoonLakeManager {
                 Method a = Reflect.getMethod(NBTCompressedStreamTools, "a", NBTTagCompound, OutputStream.class);
                 a.invoke(null, NBTTag, outputStream);
 
-                return BaseEncoding.base64().encode(outputStream.toByteArray());
+                return new SimpleStringProperty(BaseEncoding.base64().encode(outputStream.toByteArray()));
             }
             catch (Exception e) {
 
