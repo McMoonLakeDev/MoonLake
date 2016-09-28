@@ -262,7 +262,7 @@ public class MySQLConnectionExpression implements MySQLConnection {
     }
 
     @Override
-    public Map<String, Object> findResult(String sql, Object... params) throws MySQLException {
+    public synchronized Map<String, Object> findResult(String sql, Object... params) throws MySQLException {
 
         Validate.notNull(sql, "The mysql sql object is null.");
         Validate.isTrue(!sql.isEmpty(), "The mysql sql object is empty.");
@@ -326,7 +326,7 @@ public class MySQLConnectionExpression implements MySQLConnection {
     }
 
     @Override
-    public Set<Map<String, Object>> findResults(String sql, Object... params) throws MySQLException {
+    public synchronized Set<Map<String, Object>> findResults(String sql, Object... params) throws MySQLException {
 
         Validate.notNull(sql, "The mysql sql object is null.");
         Validate.isTrue(!sql.isEmpty(), "The mysql sql object is empty.");
@@ -393,7 +393,7 @@ public class MySQLConnectionExpression implements MySQLConnection {
     }
 
     @Override
-    public <T> T findResult(Class<T> clazz, String sql, Object... params) throws MySQLException {
+    public synchronized <T> T findResult(Class<T> clazz, String sql, Object... params) throws MySQLException {
 
         Validate.notNull(clazz, "The entity class object is null.");
         Validate.notNull(sql, "The mysql sql object is null.");
@@ -436,10 +436,6 @@ public class MySQLConnectionExpression implements MySQLConnection {
                     String columnName = resultSetMetaData.getColumnName(i + 1);
                     Object columnValue = resultSet.getObject(columnName);
 
-                    if(columnValue == null) {
-
-                        columnValue = "";
-                    }
                     Field field = clazz.getDeclaredField(columnName);
                     field.setAccessible(true);
                     field.set(clazzInstance, columnValue);
@@ -462,7 +458,7 @@ public class MySQLConnectionExpression implements MySQLConnection {
     }
 
     @Override
-    public <T> Set<T> findResults(Class<T> clazz, String sql, Object... params) throws MySQLException {
+    public synchronized <T> Set<T> findResults(Class<T> clazz, String sql, Object... params) throws MySQLException {
 
         Validate.notNull(clazz, "The entity class object is null.");
         Validate.notNull(sql, "The mysql sql object is null.");
@@ -505,10 +501,6 @@ public class MySQLConnectionExpression implements MySQLConnection {
                     String columnName = resultSetMetaData.getColumnName(i + 1);
                     Object columnValue = resultSet.getObject(columnName);
 
-                    if(columnValue == null) {
-
-                        columnValue = "";
-                    }
                     Field field = clazz.getDeclaredField(columnName);
                     field.setAccessible(true);
                     field.set(clazzInstance, columnValue);
@@ -532,13 +524,14 @@ public class MySQLConnectionExpression implements MySQLConnection {
     }
 
     @Override
-    public void dispose() throws MySQLException {
+    public synchronized void dispose() throws MySQLException {
 
         if(connection != null) {
 
             try {
 
                 connection.close();
+                connection = null;
             }
             catch (Exception e) {
 
