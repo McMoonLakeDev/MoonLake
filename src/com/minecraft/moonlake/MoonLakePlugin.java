@@ -37,7 +37,7 @@ import java.util.Set;
  *     <ul>
  *          <li>玩家支持库 {@link com.minecraft.moonlake.api.player.PlayerLibrary}</li>
  *          <li>物品栈支持库 {@link com.minecraft.moonlake.api.item.ItemLibrary}</li>
- *          <li>数据库支持库 {@link com.minecraft.moonlake.api.mysql.MySQLConnection}</li>
+ *          <li>数据库支持库 {@link com.minecraft.moonlake.mysql.MySQLConnection}</li>
  *          <li>花式消息支持库 {@link com.minecraft.moonlake.api.fancy.FancyMessage}</li>
  *          <li>NMS 数据包发送 {@link com.minecraft.moonlake.api.nms.packet.Packet}</li>
  *          <li>NBT 操作支持库 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}</li>
