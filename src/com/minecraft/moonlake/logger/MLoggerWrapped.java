@@ -1,8 +1,6 @@
 package com.minecraft.moonlake.logger;
 
-import com.minecraft.moonlake.property.ReadOnlyObjectProperty;
 import com.minecraft.moonlake.property.ReadOnlyStringProperty;
-import com.minecraft.moonlake.property.SimpleObjectProperty;
 import com.minecraft.moonlake.property.SimpleStringProperty;
 
 import java.util.logging.Level;
@@ -14,7 +12,7 @@ import java.util.logging.Logger;
 public final class MLoggerWrapped implements MLogger {
 
     private final ReadOnlyStringProperty prefixProperty;
-    private final ReadOnlyObjectProperty<Logger> loggerProperty;
+    private final Logger logger;
 
     public MLoggerWrapped() {
 
@@ -24,17 +22,12 @@ public final class MLoggerWrapped implements MLogger {
     public MLoggerWrapped(String prefix) {
 
         this.prefixProperty = new SimpleStringProperty(String.format("[%1$s]", prefix));
-        this.loggerProperty = new SimpleObjectProperty<>(Logger.getLogger("Minecraft"));
+        this.logger = Logger.getLogger("Minecraft");
     }
 
-    public ReadOnlyStringProperty getPrefixProperty() {
+    public ReadOnlyStringProperty getPrefix() {
 
         return prefixProperty;
-    }
-
-    public ReadOnlyObjectProperty<Logger> getLoggerProperty() {
-
-        return loggerProperty;
     }
 
     @Override
@@ -63,6 +56,6 @@ public final class MLoggerWrapped implements MLogger {
 
     protected void log(Level level, String message) {
 
-        getLoggerProperty().get().log(level, String.format("%1$s %2$s", getPrefixProperty().get(), message));
+        logger.log(level, String.format("%1$s %2$s", getPrefix().get(), message));
     }
 }

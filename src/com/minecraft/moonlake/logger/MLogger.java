@@ -12,7 +12,7 @@ public interface MLogger {
      *
      * @return 前缀属性
      */
-    ReadOnlyStringProperty getPrefixProperty();
+    ReadOnlyStringProperty getPrefix();
 
     /**
      * 在控制台输出日志消息

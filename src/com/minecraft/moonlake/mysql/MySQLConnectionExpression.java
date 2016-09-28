@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * Created by MoonLake on 2016/9/28.
  */
-public class MySQLConnectionExpression implements MySQLConnection {
+class MySQLConnectionExpression implements MySQLConnection {
 
     /**
      * MySQL Connection Default Charset: UTF-8
@@ -153,18 +153,6 @@ public class MySQLConnectionExpression implements MySQLConnection {
     }
 
     @Override
-    public boolean isPromptlyClose() {
-
-        return promptlyClose;
-    }
-
-    @Override
-    public void setPromptlyClose(boolean flag) {
-
-        this.promptlyClose = flag;
-    }
-
-    @Override
     public void setDatabase(String database, boolean updateConnection) {
 
         Validate.notNull(database, "The mysql database object is null.");
@@ -175,6 +163,18 @@ public class MySQLConnectionExpression implements MySQLConnection {
 
             getConnection();
         }
+    }
+
+    @Override
+    public boolean isPromptlyClose() {
+
+        return promptlyClose;
+    }
+
+    @Override
+    public void setPromptlyClose(boolean flag) {
+
+        this.promptlyClose = flag;
     }
 
     @Override
