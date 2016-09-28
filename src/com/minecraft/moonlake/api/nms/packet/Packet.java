@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
  */
 public interface Packet<T extends Packet> {
 
+    // update nms packet
+
     /**
      * 将此数据包发送给指定玩家
      *
