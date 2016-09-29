@@ -1,6 +1,7 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.fancy.FancyMessage;
+import com.minecraft.moonlake.api.player.ability.AbilityPlayer;
 import com.minecraft.moonlake.property.*;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.*;
@@ -27,7 +28,7 @@ import java.util.UUID;
  * <hr />
  * <div>
  *     <h1>Minecraft MoonLake Player Interface</h1>
- *     <p>By Month_Light Ver: 1.7</p>
+ *     <p>By Month_Light Ver: 1.1</p>
  * </div>
  * <hr />
  * <div>
@@ -45,8 +46,11 @@ import java.util.UUID;
  * @see NMSPlayer
  * @see InternetPlayer
  * @see SkinmePlayer
+ * @see AbilityPlayer
+ * @version 1.1
+ * @author Month_Light
  */
-public interface MoonLakePlayer extends NMSPlayer, InternetPlayer, SkinmePlayer, InventoryHolder, Comparable<MoonLakePlayer> {
+public interface MoonLakePlayer extends NMSPlayer, InternetPlayer, SkinmePlayer, AbilityPlayer, InventoryHolder, Comparable<MoonLakePlayer> {
 
     /**
      * 获取此玩家的 Bukkit 玩家对象

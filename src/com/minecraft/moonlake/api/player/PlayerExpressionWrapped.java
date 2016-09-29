@@ -10,10 +10,12 @@ import org.bukkit.Material;
 class PlayerExpressionWrapped extends PlayerExpression {
 
     private final NMSPlayerExpression nmsPlayerExpression;
+    private final ItemCooldownExpression itemCooldownExpression;
 
     public PlayerExpressionWrapped() {
 
         this.nmsPlayerExpression = new NMSPlayerExpression();
+        this.itemCooldownExpression = new ItemCooldownExpression();
     }
 
     @Override
@@ -65,14 +67,14 @@ class PlayerExpressionWrapped extends PlayerExpression {
     }
 
     @Override
-    public void sendItemCooldownPacket(String player, Material material, int tick) {
+    public void setItemCooldown(String player, Material material, int tick) {
 
-        nmsPlayerExpression.sendItemCooldownPacket(player, material, tick);
+        itemCooldownExpression.setItemCooldown(player, material, tick);
     }
 
     @Override
     public ReadOnlyBooleanProperty hasItemCooldown(String player, Material material) {
 
-        return nmsPlayerExpression.hasItemCooldown(player, material);
+        return itemCooldownExpression.hasItemCooldown(player, material);
     }
 }
