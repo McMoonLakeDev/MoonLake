@@ -37,4 +37,14 @@ public class PlayerLibraryFactory {
 
         return new PlayerExpressionWrapped();
     }
+
+    /**
+     * 获取 NMSPlayerLibrary 实例对象
+     *
+     * @return NMSPlayerLibrary
+     */
+    public NMSPlayerLibrary nmsPlayer() {
+
+        return new NMSPlayerExpression();
+    }
 }

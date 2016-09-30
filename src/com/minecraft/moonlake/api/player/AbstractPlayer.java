@@ -64,7 +64,13 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public ReadOnlyStringProperty getName() {
+    public String getName() {
+
+        return nameProperty.get();
+    }
+
+    @Override
+    public ReadOnlyStringProperty getNames() {
 
         return nameProperty;
     }
@@ -540,21 +546,21 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void setItemInMainHand(ItemStack item) {
+    public void setItemInMainHand(ItemStack itemStack) {
 
-        getInventory().setItemInMainHand(item);
+        getInventory().setItemInMainHand(itemStack);
     }
 
     @Override
-    public void setItemInOffHand(ItemStack item) {
+    public void setItemInOffHand(ItemStack itemStack) {
 
-        getInventory().setItemInOffHand(item);
+        getInventory().setItemInOffHand(itemStack);
     }
 
     @Override
-    public void openInventory(Inventory inv) {
+    public void openInventory(Inventory inventory) {
 
-        getBukkitPlayer().openInventory(inv);
+        getBukkitPlayer().openInventory(inventory);
     }
 
     @Override
@@ -660,7 +666,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void onBanName(String cause, Date time) {
 
-        Bukkit.getServer().getBanList(BanList.Type.NAME).addBan(nameProperty.get(), cause, time, null);
+        Bukkit.getServer().getBanList(BanList.Type.NAME).addBan(getName(), cause, time, null);
     }
 
     @Override
@@ -678,7 +684,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void onBanIp(String cause, Date time) {
 
-        Bukkit.getServer().getBanList(BanList.Type.IP).addBan(nameProperty.get(), cause, time, null);
+        Bukkit.getServer().getBanList(BanList.Type.IP).addBan(getName(), cause, time, null);
     }
 
     @Override
@@ -686,9 +692,9 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         for(BanList.Type type : BanList.Type.values()) {
 
-            if(Bukkit.getServer().getBanList(type).isBanned(nameProperty.get())) {
+            if(Bukkit.getServer().getBanList(type).isBanned(getName())) {
 
-                Bukkit.getServer().getBanList(type).pardon(nameProperty.get());
+                Bukkit.getServer().getBanList(type).pardon(getName());
             }
         }
     }
@@ -1076,7 +1082,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public int compareTo(MoonLakePlayer target) {
 
-        return nameProperty.get().compareTo(target == null ? null : target.getName().get());
+        return getName().compareTo(target == null ? null : target.getName());
     }
 
     @Override
@@ -1097,7 +1103,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public ReadOnlyIntegerProperty getPing() {
 
-        return PlayerLibraryFactorys.nmsPlayer().getPing(nameProperty.get());
+        return PlayerLibraryFactorys.nmsPlayer().getPing(getName());
     }
 
     @Override
@@ -1111,54 +1117,54 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void sendTitlePacket(String title) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title).get());
+        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(getName(), StringUtil.toColor(title).get());
     }
 
     @Override
     public void sendTitlePacket(String title, String subTitle) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title).get(), StringUtil.toColor(subTitle).get());
+        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(getName(), StringUtil.toColor(title).get(), StringUtil.toColor(subTitle).get());
     }
 
     @Override
     public void sendTitlePacket(String title, int fadeIn, int stay, int fadeOut) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title).get(), fadeIn, stay, fadeOut);
+        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(getName(), StringUtil.toColor(title).get(), fadeIn, stay, fadeOut);
     }
 
     @Override
     public void sendTitlePacket(String title, String subTitle, int fadeIn, int stay, int fadeOut) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title).get(), StringUtil.toColor(subTitle).get(), fadeIn, stay, fadeOut);
+        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(getName(), StringUtil.toColor(title).get(), StringUtil.toColor(subTitle).get(), fadeIn, stay, fadeOut);
     }
 
     @Override
     public void sendMainChatPacket(String message) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendMainChatPacket(nameProperty.get(), StringUtil.toColor(message).get());
+        PlayerLibraryFactorys.nmsPlayer().sendMainChatPacket(getName(), StringUtil.toColor(message).get());
     }
 
     @Override
     public void sendTabListPacket(String header) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTabListPacket(nameProperty.get(), header);
+        PlayerLibraryFactorys.nmsPlayer().sendTabListPacket(getName(), header);
     }
 
     @Override
     public void sendTabListPacket(String header, String footer) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTabListPacket(nameProperty.get(), header, footer);
+        PlayerLibraryFactorys.nmsPlayer().sendTabListPacket(getName(), header, footer);
     }
 
     @Override
     public void setItemCooldown(Material type, int tick) {
 
-        PlayerLibraryFactorys.player().setItemCooldown(nameProperty.get(), type, tick);
+        PlayerLibraryFactorys.player().setItemCooldown(getName(), type, tick);
     }
 
     @Override
     public ReadOnlyBooleanProperty hasItemCooldown(Material type) {
 
-        return PlayerLibraryFactorys.player().hasItemCooldown(nameProperty.get(), type);
+        return PlayerLibraryFactorys.player().hasItemCooldown(getName(), type);
     }
 }
