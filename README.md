@@ -18,7 +18,7 @@ By Month_Light Ver: 1.7.1
 * 物品栈支持库 `{@link com.minecraft.moonlake.api.item.ItemLibrary}`
 * 数据库支持库 `{@link com.minecraft.moonlake.api.mysql.MySQLConnection}`
 * 花式消息支持库 `{@link com.minecraft.moonlake.api.fancy.FancyMessage}`
-* NMS 数据包发送 `{@link com.minecraft.moonlake.api.nms.packet.Packet}`
+* NMS 数据包发送 `{@link com.minecraft.moonlake.nms.packet.Packet}`
 * NBT 操作支持库 `{@link com.minecraft.moonlake.api.nbt.NBTLibrary}`
  
 更多功能开发中 _(:з」∠)_

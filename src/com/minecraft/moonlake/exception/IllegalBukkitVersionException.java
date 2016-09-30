@@ -14,4 +14,9 @@ public class IllegalBukkitVersionException extends MoonLakeException {
 
         super(message);
     }
+
+    public IllegalBukkitVersionException(String message, Throwable cause) {
+
+        super(message, cause);
+    }
 }

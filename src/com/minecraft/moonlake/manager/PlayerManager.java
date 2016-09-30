@@ -1,5 +1,7 @@
 package com.minecraft.moonlake.manager;
 
+import com.minecraft.moonlake.api.player.MoonLakePlayer;
+import com.minecraft.moonlake.api.player.SimpleMoonLakePlayer;
 import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
@@ -79,6 +81,69 @@ public class PlayerManager extends MoonLakeManager {
             }
         }
         return playerList.toArray(new Player[playerList.size()]);
+    }
+
+    /**
+     * 将字符串玩家对象转换到 Bukkit 玩家对象
+     *
+     * @param players 字符串 玩家
+     * @return Bukkit 玩家
+     * @throws IllegalArgumentException 如果字符串玩家对象为 {@code null} 则抛出异常
+     */
+    public static Player[] adapter(String... players) {
+
+        Validate.notNull(players, "The player object is null.");
+
+        int index = 0;
+        Player[] adapter = new Player[players.length];
+
+        for(final String player : players) {
+
+            adapter[index++] = fromName(player);
+        }
+        return adapter;
+    }
+
+    /**
+     * 将 Bukkit 玩家对象转换到 MoonLake 玩家对象
+     *
+     * @param players Bukkit 玩家
+     * @return MoonLake 玩家
+     * @throws IllegalArgumentException 如果 Bukkit 玩家对象为 {@code null} 则抛出异常
+     */
+    public static MoonLakePlayer[] adapter(Player... players) {
+
+        Validate.notNull(players, "The player object is null.");
+
+        int index = 0;
+        MoonLakePlayer[] adapter = new MoonLakePlayer[players.length];
+
+        for(final Player player : players) {
+
+            adapter[index++] = new SimpleMoonLakePlayer(player);
+        }
+        return adapter;
+    }
+
+    /**
+     * 将 MoonLake 玩家对象转换到 Bukkit 玩家对象
+     *
+     * @param players MoonLake 玩家
+     * @return Bukkit 玩家
+     * @throws IllegalArgumentException 如果 MoonLake 玩家对象为 {@code null} 则抛出异常
+     */
+    public static Player[] adapter(MoonLakePlayer... players) {
+
+        Validate.notNull(players, "The player object is null.");
+
+        int index = 0;
+        Player[] adapter = new Player[players.length];
+
+        for(final MoonLakePlayer player : players) {
+
+            adapter[index++] = player.getBukkitPlayer();
+        }
+        return adapter;
     }
 
     /**

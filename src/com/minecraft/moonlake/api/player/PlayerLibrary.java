@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.player.ability.AbilityLibrary;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -7,7 +8,7 @@ import java.util.UUID;
 /**
  * Created by MoonLake on 2016/9/14.
  */
-public interface PlayerLibrary extends NMSPlayerLibrary {
+public interface PlayerLibrary extends NMSPlayerLibrary, AbilityLibrary {
 
     /**
      * 获取 Player 对象从名称

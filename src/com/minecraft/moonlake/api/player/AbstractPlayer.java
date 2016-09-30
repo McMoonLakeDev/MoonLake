@@ -1,7 +1,7 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.fancy.FancyMessage;
-import com.minecraft.moonlake.api.nms.packet.Packet;
+import com.minecraft.moonlake.nms.packet.Packet;
 import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.util.StringUtil;
@@ -48,8 +48,13 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
     public AbstractPlayer(String name) {
 
-        this.nameProperty = new SimpleStringProperty(name);
-        this.playerProperty = new SimpleObjectProperty<>(Bukkit.getPlayer(name));
+        this(Bukkit.getPlayer(name));
+    }
+
+    public AbstractPlayer(Player player) {
+
+        this.nameProperty = new SimpleStringProperty(player.getName());
+        this.playerProperty = new SimpleObjectProperty<>(player);
     }
 
     @Override
@@ -1100,7 +1105,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         Validate.notNull(packet, "The packet object is null.");
 
-        packet.send(nameProperty.get());
+        packet.send(getBukkitPlayer());
     }
 
     @Override
@@ -1146,14 +1151,14 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void sendItemCooldownPacket(Material type, int tick) {
+    public void setItemCooldown(Material type, int tick) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendItemCooldownPacket(nameProperty.get(), type, tick);
+        PlayerLibraryFactorys.player().setItemCooldown(nameProperty.get(), type, tick);
     }
 
     @Override
     public ReadOnlyBooleanProperty hasItemCooldown(Material type) {
 
-        return PlayerLibraryFactorys.nmsPlayer().hasItemCooldown(nameProperty.get(), type);
+        return PlayerLibraryFactorys.player().hasItemCooldown(nameProperty.get(), type);
     }
 }

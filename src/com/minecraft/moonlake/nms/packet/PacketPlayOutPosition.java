@@ -1,27 +1,53 @@
-package com.minecraft.moonlake.api.nms.packet;
+package com.minecraft.moonlake.nms.packet;
 
+import com.minecraft.moonlake.nms.packet.exception.PacketException;
+import com.minecraft.moonlake.nms.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.*;
-import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.minecraft.moonlake.reflect.Reflect.*;
+
 /**
- * Created by MoonLake on 2016/7/21.
+ * Created by MoonLake on 2016/9/29.
  */
 public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition> {
+
+    private final static Class<?> CLASS_PACKETPLAYOUTPOSITION;
+    private final static Class<?> CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS;
+    private final static Method METHOD_VALUEOF;
+
+    static {
+
+        try {
+
+            CLASS_PACKETPLAYOUTPOSITION = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPosition");
+            CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPosition$EnumPlayerTeleportFlags");
+            METHOD_VALUEOF = getMethod(CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS, "valueOf", String.class);
+        }
+        catch (Exception e) {
+
+            throw new PacketInitializeException("The nms packet play out position reflect raw initialize exception.");
+        }
+    }
 
     private DoubleProperty x;
     private DoubleProperty y;
     private DoubleProperty z;
     private FloatProperty yaw;
     private FloatProperty pitch;
-    private ObjectProperty<Set<PlayerTeleportFlag>> flags;
+    private Set<PlayerTeleportFlag> flags;
     private IntegerProperty g;
+
+    @Deprecated
+    public PacketPlayOutPosition() {
+
+        this(0d, 0d, 0d);
+    }
 
     public PacketPlayOutPosition(Location location) {
 
@@ -43,6 +69,11 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
         this(x, y, z, yaw, pitch, null, 0);
     }
 
+    public PacketPlayOutPosition(double x, double y, double z, float yaw, float pitch, Set<PlayerTeleportFlag> flags) {
+
+        this(x, y, z, yaw, pitch, flags, 0);
+    }
+
     public PacketPlayOutPosition(double x, double y, double z, float yaw, float pitch, Set<PlayerTeleportFlag> flags, int g) {
 
         this.x = new SimpleDoubleProperty(x);
@@ -50,7 +81,7 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
         this.z = new SimpleDoubleProperty(z);
         this.yaw = new SimpleFloatProperty(yaw);
         this.pitch = new SimpleFloatProperty(pitch);
-        this.flags = new SimpleObjectProperty<>(flags);
+        this.flags = flags;
         this.g = new SimpleIntegerProperty(g);
     }
 
@@ -79,7 +110,7 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
         return pitch;
     }
 
-    public ObjectProperty<Set<PlayerTeleportFlag>> getFlags() {
+    public Set<PlayerTeleportFlag> getFlags() {
 
         return flags;
     }
@@ -89,53 +120,27 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
         return g;
     }
 
-    /**
-     * 将此数据包发送给指定玩家
-     *
-     * @param names 玩家名
-     */
     @Override
-    public void send(String... names) {
+    public void send(Player... players) throws PacketException {
 
         try {
 
-            Class<?> PacketPlayOutPosition = Reflect.PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPosition");
-
-            Set<Object> instanceFlasg = new HashSet<>();
+            Set<Object> nmsFlags = new HashSet<>();
 
             if(flags != null) {
 
-                Class<?> EnumPlayerTeleportFlags = Reflect.PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPosition$EnumPlayerTeleportFlags");
-                Method valueOf = Reflect.getMethod(EnumPlayerTeleportFlags, "valueOf", String.class);
+                for(final PlayerTeleportFlag flag : flags) {
 
-                for(PlayerTeleportFlag flag : flags.get()) {
-
-                    instanceFlasg.add(valueOf.invoke(null, flag.name()));
+                    nmsFlags.add(METHOD_VALUEOF.invoke(null, flag.name()));
                 }
             }
-            Object ppop = Reflect.instantiateObject(PacketPlayOutPosition, x.get(), y.get(), z.get(), yaw.get(), pitch.get(), instanceFlasg, g.get());
+            Object packet = instantiateObject(CLASS_PACKETPLAYOUTPOSITION, x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlags, g.get());
 
-            Class<?> Packet = Reflect.PackageType.MINECRAFT_SERVER.getClass("Packet");
-            Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
-            Class<?> EntityPlayer = Reflect.PackageType.MINECRAFT_SERVER.getClass("EntityPlayer");
-            Class<?> PlayerConnection = Reflect.PackageType.MINECRAFT_SERVER.getClass("PlayerConnection");
-
-            Method getHandle = Reflect.getMethod(CraftPlayer, "getHandle");
-            Player[] players = PacketManager.getPlayersfromNames(names);
-
-            Method sendPacket = Reflect.getMethod(PlayerConnection, "sendPacket", Packet);
-
-            for(Player player : players) {
-
-                Object NMSPlayer = getHandle.invoke(player);
-                Field playerConnection = Reflect.getField(EntityPlayer, true, "playerConnection");
-
-                sendPacket.invoke(playerConnection.get(NMSPlayer), ppop);
-            }
+            PacketReflect.get().send(players, packet);
         }
         catch (Exception e) {
 
-            e.printStackTrace();
+            throw new PacketException("The nms packet play out position send exception.", e);
         }
     }
 
