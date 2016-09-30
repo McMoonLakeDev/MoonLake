@@ -10,9 +10,7 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.minecraft.moonlake.reflect.Reflect.PackageType;
-import static com.minecraft.moonlake.reflect.Reflect.getMethod;
-import static com.minecraft.moonlake.reflect.Reflect.instantiateObject;
+import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * Created by MoonLake on 2016/9/29.
@@ -33,7 +31,7 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
         }
         catch (Exception e) {
 
-            throw new PacketInitializeException();
+            throw new PacketInitializeException("The nms packet play out position reflect raw initialize exception.");
         }
     }
 
