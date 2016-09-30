@@ -20,8 +20,8 @@ public class PacketPlayOutCrashClient extends PacketAbstract<PacketPlayOutCrashC
 
         for(final Player player : players) {
 
-            PacketPlayOutExplosion packetPlayOutExplosion = new PacketPlayOutExplosion(player.getLocation(), 0f, new ArrayList<>(), new Vector(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE));
-            packetPlayOutExplosion.send(players);
+            PacketPlayOutExplosion packetPlayOutExplosion = new PacketPlayOutExplosion(player.getLocation(), Float.MAX_VALUE, new ArrayList<>(), new Vector(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE));
+            packetPlayOutExplosion.send(player);
         }
     }
 }
