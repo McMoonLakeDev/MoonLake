@@ -116,13 +116,13 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void send(String message) {
 
-        getBukkitPlayer().sendMessage(StringUtil.toColor(message).get());
+        getBukkitPlayer().sendMessage(StringUtil.toColor(message));
     }
 
     @Override
     public void send(String[] message) {
 
-        getBukkitPlayer().sendMessage(StringUtil.toColor(message).get());
+        getBukkitPlayer().sendMessage(StringUtil.toColor(message));
     }
 
     @Override
@@ -1111,31 +1111,31 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void sendTitlePacket(String title) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title).get());
+        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title));
     }
 
     @Override
     public void sendTitlePacket(String title, String subTitle) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title).get(), StringUtil.toColor(subTitle).get());
+        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title), StringUtil.toColor(subTitle));
     }
 
     @Override
     public void sendTitlePacket(String title, int fadeIn, int stay, int fadeOut) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title).get(), fadeIn, stay, fadeOut);
+        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title), fadeIn, stay, fadeOut);
     }
 
     @Override
     public void sendTitlePacket(String title, String subTitle, int fadeIn, int stay, int fadeOut) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title).get(), StringUtil.toColor(subTitle).get(), fadeIn, stay, fadeOut);
+        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(nameProperty.get(), StringUtil.toColor(title), StringUtil.toColor(subTitle), fadeIn, stay, fadeOut);
     }
 
     @Override
     public void sendMainChatPacket(String message) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendMainChatPacket(nameProperty.get(), StringUtil.toColor(message).get());
+        PlayerLibraryFactorys.nmsPlayer().sendMainChatPacket(nameProperty.get(), StringUtil.toColor(message));
     }
 
     @Override

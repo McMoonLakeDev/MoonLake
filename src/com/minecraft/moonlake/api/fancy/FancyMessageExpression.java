@@ -204,7 +204,7 @@ class FancyMessageExpression implements FancyMessage {
 
         Validate.notNull(itemStack, "The tooltip itemstack object is null.");
 
-        String tag = ItemManager.getTagString(itemStack).get();
+        String tag = ItemManager.getTagString(itemStack);
 
         onHover("show_item", new FancyJsonString(
 
