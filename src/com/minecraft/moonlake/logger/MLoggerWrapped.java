@@ -25,9 +25,9 @@ public final class MLoggerWrapped implements MLogger {
         this.logger = Logger.getLogger("Minecraft");
     }
 
-    public ReadOnlyStringProperty getPrefix() {
+    public String getPrefix() {
 
-        return prefixProperty;
+        return prefixProperty.get();
     }
 
     @Override
@@ -56,6 +56,6 @@ public final class MLoggerWrapped implements MLogger {
 
     protected void log(Level level, String message) {
 
-        logger.log(level, String.format("%1$s %2$s", getPrefix().get(), message));
+        logger.log(level, String.format("%1$s %2$s", getPrefix(), message));
     }
 }

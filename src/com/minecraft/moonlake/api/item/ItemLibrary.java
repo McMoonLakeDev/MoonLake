@@ -6,7 +6,6 @@ import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.api.item.potion.PotionLibrary;
 import com.minecraft.moonlake.api.item.potion.PotionType;
 import com.minecraft.moonlake.api.item.skull.SkullLibrary;
-import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -79,7 +78,7 @@ public interface ItemLibrary extends CraftLibrary, MetaLibrary, AttributeLibrary
      * @return true 则物品栈类型为工具
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty isTool(ItemStack itemStack);
+    boolean isTool(ItemStack itemStack);
 
     /**
      * 获取指定物品栈类型是否为武器
@@ -88,7 +87,7 @@ public interface ItemLibrary extends CraftLibrary, MetaLibrary, AttributeLibrary
      * @return true 则物品栈类型为武器
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty isWeapon(ItemStack itemStack);
+    boolean isWeapon(ItemStack itemStack);
 
     /**
      * 获取指定物品栈类型是否为护甲
@@ -97,7 +96,7 @@ public interface ItemLibrary extends CraftLibrary, MetaLibrary, AttributeLibrary
      * @return true 则物品栈类型为护甲
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty isArmor(ItemStack itemStack);
+    boolean isArmor(ItemStack itemStack);
 
     /**
      * 获取指定物品栈类型是否为皮革护甲
@@ -106,7 +105,7 @@ public interface ItemLibrary extends CraftLibrary, MetaLibrary, AttributeLibrary
      * @return true 则物品栈类型为皮革护甲
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty isLeatherArmor(ItemStack itemStack);
+    boolean isLeatherArmor(ItemStack itemStack);
 
     /**
      * 获取指定物品栈类型是否为药水
@@ -115,7 +114,7 @@ public interface ItemLibrary extends CraftLibrary, MetaLibrary, AttributeLibrary
      * @return true 则物品栈类型为药水
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty isPotion(ItemStack itemStack);
+    boolean isPotion(ItemStack itemStack);
 
     /**
      * 获取指定物品栈类型是否为书
@@ -124,5 +123,5 @@ public interface ItemLibrary extends CraftLibrary, MetaLibrary, AttributeLibrary
      * @return true 则物品栈类型为书
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty isWrittenBook(ItemStack itemStack);
+    boolean isWrittenBook(ItemStack itemStack);
 }

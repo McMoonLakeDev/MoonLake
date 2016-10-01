@@ -5,10 +5,6 @@ import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.api.nbt.NBTFactory;
 import com.minecraft.moonlake.data.NBTTagData;
 import com.minecraft.moonlake.data.NBTTagDataWrapped;
-import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
-import com.minecraft.moonlake.property.ReadOnlyStringProperty;
-import com.minecraft.moonlake.property.SimpleBooleanProperty;
-import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Material;
@@ -86,7 +82,7 @@ public class ItemManager extends MoonLakeManager {
      * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
      */
     @Deprecated
-    public static ReadOnlyStringProperty getTagStringValue(ItemStack itemStack, String key) {
+    public static String getTagStringValue(ItemStack itemStack, String key) {
 
         NBTTagData nbtTagData = getTagValue(itemStack, key);
         return nbtTagData == null ? null : nbtTagData.asString();
@@ -101,11 +97,11 @@ public class ItemManager extends MoonLakeManager {
      * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
      */
     @Deprecated
-    public static ReadOnlyBooleanProperty hasTag(ItemStack itemStack) {
+    public static boolean hasTag(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        return new SimpleBooleanProperty(NBTFactory.get().read(itemStack) != null);
+        return NBTFactory.get().read(itemStack) != null;
     }
 
     /**
@@ -118,9 +114,9 @@ public class ItemManager extends MoonLakeManager {
      * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
      */
     @Deprecated
-    public static ReadOnlyBooleanProperty hasTagKey(ItemStack itemStack, String key) {
+    public static boolean hasTagKey(ItemStack itemStack, String key) {
 
-        return new SimpleBooleanProperty(getTagValue(itemStack, key) != null);
+        return getTagValue(itemStack, key) != null;
     }
 
     /**
@@ -129,11 +125,11 @@ public class ItemManager extends MoonLakeManager {
      * @return 字符串 NBT 标签值 异常返回空
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyStringProperty getTagString(ItemStack itemStack) {
+    public static String getTagString(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        return new SimpleStringProperty(NBTFactory.get().readSafe(itemStack).toString());
+        return NBTFactory.get().readSafe(itemStack).toString();
     }
 
     /**
@@ -143,11 +139,11 @@ public class ItemManager extends MoonLakeManager {
      * @return 物品栈的显示名 没有则返回 类型名
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyStringProperty getDisplayName(ItemStack itemStack) {
+    public static String getDisplayName(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        return new SimpleStringProperty(itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName() ? itemStack.getItemMeta().getDisplayName() : itemStack.getType().name());
+        return itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName() ? itemStack.getItemMeta().getDisplayName() : itemStack.getType().name();
     }
 
     /**
@@ -157,9 +153,9 @@ public class ItemManager extends MoonLakeManager {
      * @param target 目标物品栈
      * @return true 则类型和数据都相同 else 不相同
      */
-    public static ReadOnlyBooleanProperty compare(ItemStack source, ItemStack target) {
+    public static boolean compare(ItemStack source, ItemStack target) {
 
-        return new SimpleBooleanProperty(source != null && target != null && source.getType() == target.getType() && source.getData().getData() == target.getData().getData());
+        return source != null && target != null && source.getType() == target.getType() && source.getData().getData() == target.getData().getData();
     }
 
     /**
@@ -168,9 +164,9 @@ public class ItemManager extends MoonLakeManager {
      * @param item 物品栈
      * @return true 是空气物品栈 else 不是
      */
-    public static ReadOnlyBooleanProperty isAir(ItemStack item) {
+    public static boolean isAir(ItemStack item) {
 
-        return new SimpleBooleanProperty(item == null || item.getType() == Material.AIR);
+        return item == null || item.getType() == Material.AIR;
     }
 
 
@@ -181,7 +177,7 @@ public class ItemManager extends MoonLakeManager {
      * @param target 目标物品栈类型
      * @return true 则类型和数据都相同 else 不相同
      */
-    public static ReadOnlyBooleanProperty compare(ItemStack source, Material target) {
+    public static boolean compare(ItemStack source, Material target) {
 
         return compare(source, new ItemStack(target, 1, (byte)0));
     }
@@ -194,7 +190,7 @@ public class ItemManager extends MoonLakeManager {
      * @param data 目标物品栈数据
      * @return true 则类型和数据都相同 else 不相同
      */
-    public static ReadOnlyBooleanProperty compare(ItemStack source, Material target, int data) {
+    public static boolean compare(ItemStack source, Material target, int data) {
 
         return compare(source, new ItemStack(target, 1, (byte)data));
     }
@@ -206,9 +202,9 @@ public class ItemManager extends MoonLakeManager {
      * @param target 目标物品栈
      * @return true 则两个物品栈符合数量 else 不符合
      */
-    public static ReadOnlyBooleanProperty compareAmount(ItemStack source, ItemStack target) {
+    public static boolean compareAmount(ItemStack source, ItemStack target) {
 
-        return new SimpleBooleanProperty(source != null && target != null && source.getAmount() == target.getAmount());
+        return source != null && target != null && source.getAmount() == target.getAmount();
     }
 
     /**
@@ -218,12 +214,12 @@ public class ItemManager extends MoonLakeManager {
      * @param target 目标物品栈
      * @return true 则两个物品栈符合显示名 else 不符合
      */
-    public static ReadOnlyBooleanProperty compareDisplayName(ItemStack source, ItemStack target) {
+    public static boolean compareDisplayName(ItemStack source, ItemStack target) {
 
-        ReadOnlyStringProperty sourceName = getDisplayName(source);
-        ReadOnlyStringProperty targetName = getDisplayName(target);
+        String sourceName = getDisplayName(source);
+        String targetName = getDisplayName(target);
 
-        return new SimpleBooleanProperty((sourceName.get() == null && targetName.get() == null) || (sourceName.get() != null && targetName.get() != null && sourceName.get().equals(targetName.get())));
+        return (sourceName == null && targetName == null) || (sourceName != null && targetName != null && sourceName.equals(targetName));
     }
 
     /**
@@ -233,9 +229,9 @@ public class ItemManager extends MoonLakeManager {
      * @param target 目标物品栈
      * @return true 则两个物品栈符合属性 else 不符合
      */
-    public static ReadOnlyBooleanProperty compareMeta(ItemStack source, ItemStack target) {
+    public static boolean compareMeta(ItemStack source, ItemStack target) {
 
-        return new SimpleBooleanProperty(source != null && target != null && source.isSimilar(target));
+        return source != null && target != null && source.isSimilar(target);
     }
 
     /**
@@ -245,9 +241,9 @@ public class ItemManager extends MoonLakeManager {
      * @param target 目标物品栈
      * @return true 则两个物品栈完全符合 else 不符合
      */
-    public static ReadOnlyBooleanProperty compareAll(ItemStack source, ItemStack target) {
+    public static boolean compareAll(ItemStack source, ItemStack target) {
 
-        return new SimpleBooleanProperty(compare(source, target).get() && compareMeta(source, target).get());
+        return compare(source, target) && compareMeta(source, target);
     }
 
     /**
@@ -257,11 +253,11 @@ public class ItemManager extends MoonLakeManager {
      * @return 物品栈字符串数据 异常返回 null
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyStringProperty serialize(ItemStack itemStack) {
+    public static String serialize(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        if(!isAir(itemStack).get()) {
+        if(!isAir(itemStack)) {
 
             ByteArrayOutputStream outputStream = null;
 
@@ -283,7 +279,7 @@ public class ItemManager extends MoonLakeManager {
                 Method a = Reflect.getMethod(NBTCompressedStreamTools, "a", NBTTagCompound, OutputStream.class);
                 a.invoke(null, NBTTag, outputStream);
 
-                return new SimpleStringProperty(BaseEncoding.base64().encode(outputStream.toByteArray()));
+                return BaseEncoding.base64().encode(outputStream.toByteArray());
             }
             catch (Exception e) {
 

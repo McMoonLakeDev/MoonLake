@@ -85,7 +85,7 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public ReadOnlyBooleanProperty isUnreakable(ItemStack itemStack) {
+    public boolean isUnreakable(ItemStack itemStack) {
 
         return skullExpression.isUnreakable(itemStack);
     }
@@ -481,31 +481,31 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public ReadOnlyBooleanProperty hasLore(ItemStack itemStack) {
+    public boolean hasLore(ItemStack itemStack) {
 
         return skullExpression.hasLore(itemStack);
     }
 
     @Override
-    public ReadOnlyBooleanProperty containLore(ItemStack itemStack, String... lore) {
+    public boolean containLore(ItemStack itemStack, String... lore) {
 
         return skullExpression.containLore(itemStack, lore);
     }
 
     @Override
-    public ReadOnlyBooleanProperty containLore(ItemStack itemStack, Collection<? extends String> lore) {
+    public boolean containLore(ItemStack itemStack, Collection<? extends String> lore) {
 
         return skullExpression.containLore(itemStack, lore);
     }
 
     @Override
-    public ReadOnlyBooleanProperty containLoreIgnoreColor(ItemStack itemStack, String... lore) {
+    public boolean containLoreIgnoreColor(ItemStack itemStack, String... lore) {
 
         return skullExpression.containLoreIgnoreColor(itemStack, lore);
     }
 
     @Override
-    public ReadOnlyBooleanProperty containLoreIgnoreColor(ItemStack itemStack, Collection<? extends String> lore) {
+    public boolean containLoreIgnoreColor(ItemStack itemStack, Collection<? extends String> lore) {
 
         return skullExpression.containLoreIgnoreColor(itemStack, lore);
     }

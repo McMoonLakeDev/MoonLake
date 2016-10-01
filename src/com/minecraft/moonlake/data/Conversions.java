@@ -1,6 +1,5 @@
 package com.minecraft.moonlake.data;
 
-import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
 
 /**
@@ -19,26 +18,26 @@ public final class Conversions {
      * @return 整数型对象
      * @throws IllegalArgumentException 如果转换的对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyIntegerProperty toInt(Object object) {
+    public static int toInt(Object object) {
 
         Validate.notNull(object, "The object is null.");
 
         if(object instanceof Number) {
 
-            return new SimpleIntegerProperty(((Number)object).intValue());
+            return ((Number)object).intValue();
         }
         else {
 
             try {
 
-                return new SimpleIntegerProperty(Integer.parseInt(object.toString()));
+                return Integer.parseInt(object.toString());
             }
             catch (Exception e) {
 
 
             }
         }
-        return null;
+        return 0;
     }
 
     /**
@@ -48,26 +47,26 @@ public final class Conversions {
      * @return 单精度浮点数型对象
      * @throws IllegalArgumentException 如果转换的对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyFloatProperty toFloat(Object object) {
+    public static float toFloat(Object object) {
 
         Validate.notNull(object, "The object is null.");
 
         if(object instanceof Number) {
 
-            return new SimpleFloatProperty(((Number)object).floatValue());
+            return ((Number)object).floatValue();
         }
         else {
 
             try {
 
-                return new SimpleFloatProperty(Float.parseFloat(object.toString()));
+                return Float.parseFloat(object.toString());
             }
             catch (Exception e) {
 
 
             }
         }
-        return null;
+        return 0f;
     }
 
     /**
@@ -77,26 +76,26 @@ public final class Conversions {
      * @return 双精度浮点数型对象
      * @throws IllegalArgumentException 如果转换的对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyDoubleProperty toDouble(Object object) {
+    public static double toDouble(Object object) {
 
         Validate.notNull(object, "The object is null.");
 
         if(object instanceof Number) {
 
-            return new SimpleDoubleProperty(((Number)object).doubleValue());
+            return ((Number)object).doubleValue();
         }
         else {
 
             try {
 
-                return new SimpleDoubleProperty(Double.parseDouble(object.toString()));
+                return Double.parseDouble(object.toString());
             }
             catch (Exception e) {
 
 
             }
         }
-        return null;
+        return 0d;
     }
 
     /**
@@ -106,26 +105,26 @@ public final class Conversions {
      * @return 长整数型对象
      * @throws IllegalArgumentException 如果转换的对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyLongProperty toLong(Object object) {
+    public static long toLong(Object object) {
 
         Validate.notNull(object, "The object is null.");
 
         if(object instanceof Number) {
 
-            return new SimpleLongProperty(((Number)object).longValue());
+            return ((Number)object).longValue();
         }
         else {
 
             try {
 
-                return new SimpleLongProperty(Long.parseLong(object.toString()));
+                return Long.parseLong(object.toString());
             }
             catch (Exception e) {
 
 
             }
         }
-        return null;
+        return 0L;
     }
 
     /**
@@ -135,24 +134,24 @@ public final class Conversions {
      * @return 短整数型对象
      * @throws IllegalArgumentException 如果转换的对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyObjectProperty<Short> toShort(Object object) {
+    public static short toShort(Object object) {
 
         if(object instanceof Number) {
 
-            return new SimpleObjectProperty<>(((Number)object).shortValue());
+            return ((Number)object).shortValue();
         }
         else {
 
             try {
 
-                return new SimpleObjectProperty<>(Short.parseShort(object.toString()));
+                return Short.parseShort(object.toString());
             }
             catch (Exception e) {
 
 
             }
         }
-        return null;
+        return 0;
     }
 
     /**
@@ -162,23 +161,23 @@ public final class Conversions {
      * @return 字节型对象
      * @throws IllegalArgumentException 如果转换的对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyObjectProperty<Byte> toByte(Object object) {
+    public static byte toByte(Object object) {
 
         if(object instanceof Number) {
 
-            return new SimpleObjectProperty<>(((Number)object).byteValue());
+            return ((Number)object).byteValue();
         }
         else {
 
             try {
 
-                return new SimpleObjectProperty<>(Byte.parseByte(object.toString()));
+                return Byte.parseByte(object.toString());
             }
             catch (Exception e) {
 
 
             }
         }
-        return null;
+        return 0;
     }
 }

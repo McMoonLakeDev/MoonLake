@@ -1,7 +1,5 @@
 package com.minecraft.moonlake.api.item;
 
-import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
-import com.minecraft.moonlake.property.SimpleBooleanProperty;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -16,7 +14,7 @@ abstract class ItemExpression implements ItemLibrary {
     }
 
     @Override
-    public ReadOnlyBooleanProperty isTool(ItemStack itemStack) {
+    public boolean isTool(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
@@ -24,9 +22,9 @@ abstract class ItemExpression implements ItemLibrary {
 
         if(type == null || type == Material.AIR) {
 
-            return new SimpleBooleanProperty(false);
+            return false;
         }
-        boolean result =
+        return
                 /// wood tool
                 type == Material.WOOD_SWORD ||
                 type == Material.WOOD_PICKAXE ||
@@ -57,12 +55,10 @@ abstract class ItemExpression implements ItemLibrary {
                 type == Material.DIAMOND_SPADE ||
                 type == Material.DIAMOND_AXE ||
                 type == Material.DIAMOND_HOE;
-
-        return new SimpleBooleanProperty(result);
     }
 
     @Override
-    public ReadOnlyBooleanProperty isWeapon(ItemStack itemStack) {
+    public boolean isWeapon(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
@@ -70,21 +66,19 @@ abstract class ItemExpression implements ItemLibrary {
 
         if(type == null || type == Material.AIR) {
 
-            return new SimpleBooleanProperty(false);
+            return false;
         }
-        boolean result =
+        return
                 // sword weapon
                 type == Material.WOOD_SWORD ||
                 type == Material.STONE_SWORD ||
                 type == Material.IRON_SWORD ||
                 type == Material.GOLD_SWORD ||
                 type == Material.DIAMOND_SWORD;
-
-        return new SimpleBooleanProperty(result);
     }
 
     @Override
-    public ReadOnlyBooleanProperty isArmor(ItemStack itemStack) {
+    public boolean isArmor(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
@@ -92,9 +86,9 @@ abstract class ItemExpression implements ItemLibrary {
 
         if(type == null || type == Material.AIR) {
 
-            return new SimpleBooleanProperty(false);
+            return false;
         }
-        boolean result =
+        return
                 // leather armor
                 type == Material.LEATHER_HELMET ||
                 type == Material.LEATHER_CHESTPLATE ||
@@ -120,12 +114,10 @@ abstract class ItemExpression implements ItemLibrary {
                 type == Material.GOLD_CHESTPLATE ||
                 type == Material.GOLD_LEGGINGS ||
                 type == Material.GOLD_BOOTS;
-
-        return new SimpleBooleanProperty(result);
     }
 
     @Override
-    public ReadOnlyBooleanProperty isLeatherArmor(ItemStack itemStack) {
+    public boolean isLeatherArmor(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
@@ -133,20 +125,18 @@ abstract class ItemExpression implements ItemLibrary {
 
         if(type == null || type == Material.AIR) {
 
-            return new SimpleBooleanProperty(false);
+            return false;
         }
-        boolean result =
+        return
                 // leather armor
                 type == Material.LEATHER_HELMET ||
                 type == Material.LEATHER_CHESTPLATE ||
                 type == Material.LEATHER_LEGGINGS ||
                 type == Material.LEATHER_BOOTS;
-
-        return new SimpleBooleanProperty(result);
     }
 
     @Override
-    public ReadOnlyBooleanProperty isPotion(ItemStack itemStack) {
+    public boolean isPotion(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
@@ -154,19 +144,17 @@ abstract class ItemExpression implements ItemLibrary {
 
         if(type == null || type == Material.AIR) {
 
-            return new SimpleBooleanProperty(false);
+            return false;
         }
-        boolean result =
+        return
                 // potion
                 type == Material.POTION ||
                 type == Material.SPLASH_POTION ||
                 type == Material.LINGERING_POTION;
-
-        return new SimpleBooleanProperty(result);
     }
 
     @Override
-    public ReadOnlyBooleanProperty isWrittenBook(ItemStack itemStack) {
+    public boolean isWrittenBook(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
@@ -174,9 +162,9 @@ abstract class ItemExpression implements ItemLibrary {
 
         if(type == null || type == Material.AIR) {
 
-            return new SimpleBooleanProperty(false);
+            return false;
         }
-        return new SimpleBooleanProperty(type == Material.WRITTEN_BOOK);
+        return type == Material.WRITTEN_BOOK;
     }
 
     /**

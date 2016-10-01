@@ -72,7 +72,7 @@ class FancyMessagePart implements JsonRepresentedObject, Cloneable {
 
                 jsonWriter.name("insertion").value(insertion.get());
             }
-            if (translationReplacements.get().size() > 0 && text.get() != null && TextualComponent.isTranslatableText(text.get()).get()) {
+            if (translationReplacements.get().size() > 0 && text.get() != null && TextualComponent.isTranslatableText(text.get())) {
 
                 jsonWriter.name("with").beginArray();
 
@@ -90,8 +90,8 @@ class FancyMessagePart implements JsonRepresentedObject, Cloneable {
         }
     }
 
-    ReadOnlyBooleanProperty hasText() {
+    boolean hasText() {
 
-        return new SimpleBooleanProperty(text.get() != null);
+        return text.get() != null;
     }
 }

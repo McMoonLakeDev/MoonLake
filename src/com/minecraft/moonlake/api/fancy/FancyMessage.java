@@ -2,7 +2,6 @@ package com.minecraft.moonlake.api.fancy;
 
 import com.minecraft.moonlake.builder.Builder;
 import com.minecraft.moonlake.json.JsonRepresentedObject;
-import com.minecraft.moonlake.property.ReadOnlyStringProperty;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -219,7 +218,7 @@ public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable
      *
      * @return Json 字符串
      */
-    ReadOnlyStringProperty toJsonString();
+    String toJsonString();
 
     /**
      * 将此花式消息发送给指定玩家
