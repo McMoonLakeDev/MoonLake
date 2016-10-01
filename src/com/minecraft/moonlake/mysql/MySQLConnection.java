@@ -186,6 +186,20 @@ public interface MySQLConnection {
     <T> Set<T> findResults(Class<T> clazz, String sql, Object... params) throws MySQLException;
 
     /**
+     * 查询 MySQL 单结果集
+     *
+     * @param columnName 列名字
+     * @param sql 语句
+     * @param params 参数
+     * @return 单结果
+     * @throws IllegalArgumentException 如果列名字对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果语句对象为 {@code null} 则抛出异常
+     * @throws MySQLException 如果 MySQL 连接对象为 {@code null} 则抛出异常
+     * @throws MySQLException 如果查询结果时错误则抛出异常
+     */
+    Object findSimpleResult(String columnName, String sql, Object... params) throws MySQLException;
+
+    /**
      * 释放 MySQL 连接对象
      *
      * @throws MySQLException 如果释放时错误则抛出异常

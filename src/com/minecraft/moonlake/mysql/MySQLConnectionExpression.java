@@ -524,6 +524,16 @@ class MySQLConnectionExpression implements MySQLConnection {
     }
 
     @Override
+    public Object findSimpleResult(String columnName, String sql, Object... params) throws MySQLException {
+
+        Validate.notNull(columnName, "The column name object is null.");
+
+        Map<String, Object> result = findResult(sql, params);
+
+        return result != null ? result.get(columnName) : null;
+    }
+
+    @Override
     public synchronized void dispose() throws MySQLException {
 
         if(connection != null) {
