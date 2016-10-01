@@ -1,7 +1,5 @@
 package com.minecraft.moonlake.logger;
 
-import com.minecraft.moonlake.property.ReadOnlyStringProperty;
-
 /**
  * Created by MoonLake on 2016/8/1.
  */
@@ -12,7 +10,7 @@ public interface MLogger {
      *
      * @return 前缀属性
      */
-    ReadOnlyStringProperty getPrefix();
+    String getPrefix();
 
     /**
      * 在控制台输出日志消息

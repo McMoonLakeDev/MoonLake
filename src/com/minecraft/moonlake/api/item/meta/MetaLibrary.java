@@ -150,7 +150,7 @@ public interface MetaLibrary {
      * @return true 则拥有标签信息
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty hasLore(ItemStack itemStack);
+    boolean hasLore(ItemStack itemStack);
 
     /**
      * 获取物品栈是否包含指定标签信息
@@ -161,7 +161,7 @@ public interface MetaLibrary {
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果标签信息对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty containLore(ItemStack itemStack, String... lore);
+    boolean containLore(ItemStack itemStack, String... lore);
 
     /**
      * 获取物品栈是否包含指定标签信息
@@ -172,7 +172,7 @@ public interface MetaLibrary {
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果标签信息对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty containLore(ItemStack itemStack, Collection<? extends String> lore);
+    boolean containLore(ItemStack itemStack, Collection<? extends String> lore);
 
     /**
      * 获取物品栈是否包含指定标签信息 (忽略颜色)
@@ -183,7 +183,7 @@ public interface MetaLibrary {
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果标签信息对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty containLoreIgnoreColor(ItemStack itemStack, String... lore);
+    boolean containLoreIgnoreColor(ItemStack itemStack, String... lore);
 
     /**
      * 获取物品栈是否包含指定标签信息 (忽略颜色)
@@ -194,7 +194,7 @@ public interface MetaLibrary {
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果标签信息对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty containLoreIgnoreColor(ItemStack itemStack, Collection<? extends String> lore);
+    boolean containLoreIgnoreColor(ItemStack itemStack, Collection<? extends String> lore);
 
     /**
      * 获取物品栈的附魔效果

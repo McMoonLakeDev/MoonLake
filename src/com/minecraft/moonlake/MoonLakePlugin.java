@@ -71,7 +71,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
 
         MAIN = this;
 
-        this.getMLogger().log("月色之湖核心 API 插件 v" + getPluginVersion().get() + " 成功加载.");
+        this.getMLogger().log("月色之湖核心 API 插件 v" + getPluginVersion() + " 成功加载.");
     }
 
     public MoonLake getInstance() {
@@ -92,39 +92,39 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     }
 
     @Override
-    public ReadOnlyStringProperty getPluginPrefix() {
+    public String getPluginPrefix() {
 
-        return new SimpleStringProperty(description.getPrefix());
+        return description.getPrefix();
     }
 
     @Override
-    public ReadOnlyStringProperty getPluginName() {
+    public String getPluginName() {
 
-        return new SimpleStringProperty(description.getName());
+        return description.getName();
     }
 
     @Override
-    public ReadOnlyStringProperty getPluginMain() {
+    public String getPluginMain() {
 
-        return new SimpleStringProperty(description.getMain());
+        return description.getMain();
     }
 
     @Override
-    public ReadOnlyStringProperty getPluginVersion() {
+    public String getPluginVersion() {
 
-        return new SimpleStringProperty(description.getVersion());
+        return description.getVersion();
     }
 
     @Override
-    public ReadOnlyStringProperty getPluginWebsite() {
+    public String getPluginWebsite() {
 
-        return new SimpleStringProperty(description.getWebsite());
+        return description.getWebsite();
     }
 
     @Override
-    public ReadOnlyStringProperty getPluginDescription() {
+    public String getPluginDescription() {
 
-        return new SimpleStringProperty(description.getDescription());
+        return description.getDescription();
     }
 
     @Override

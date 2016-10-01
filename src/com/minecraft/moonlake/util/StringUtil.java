@@ -1,11 +1,9 @@
 package com.minecraft.moonlake.util;
 
-import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.ChatColor;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -32,7 +30,7 @@ public class StringUtil {
      * @return 颜色字符串
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyStringProperty toColor(String source) {
+    public static String toColor(String source) {
 
         return toColor('&', source);
     }
@@ -45,11 +43,11 @@ public class StringUtil {
      * @return 颜色字符串
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyStringProperty toColor(char altColorChar, String source) {
+    public static String toColor(char altColorChar, String source) {
 
         Validate.notNull(source, "The string source object is null.");
 
-        return new SimpleStringProperty(ChatColor.translateAlternateColorCodes(altColorChar, source));
+        return ChatColor.translateAlternateColorCodes(altColorChar, source);
     }
 
     /**
@@ -61,7 +59,7 @@ public class StringUtil {
      * @return 颜色字符串
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyObjectProperty<String[]> toColor(String... source) {
+    public static String[] toColor(String... source) {
 
         return toColor('&', source);
     }
@@ -74,7 +72,7 @@ public class StringUtil {
      * @return 颜色字符串
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyObjectProperty<String[]> toColor(char altColorChar, String... source) {
+    public static String[] toColor(char altColorChar, String... source) {
 
         Validate.notNull(source, "The string source object is null.");
 
@@ -85,7 +83,7 @@ public class StringUtil {
 
             strColorArray[index++] = ChatColor.translateAlternateColorCodes(altColorChar, str);
         }
-        return new SimpleObjectProperty<>(strColorArray);
+        return strColorArray;
     }
 
     /**
@@ -97,7 +95,7 @@ public class StringUtil {
      * @return 颜色字符串
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyObjectProperty<List<String>> toColor(Collection<? extends String> source) {
+    public static List<String> toColor(Collection<? extends String> source) {
 
         return toColor('&', source);
     }
@@ -110,13 +108,13 @@ public class StringUtil {
      * @return 颜色字符串
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyObjectProperty<List<String>> toColor(char altColorChar, Collection<? extends String> source) {
+    public static List<String> toColor(char altColorChar, Collection<? extends String> source) {
 
         Validate.notNull(source, "The string source object is null.");
 
         List<String> strColorList = source.stream().map(str -> ChatColor.translateAlternateColorCodes(altColorChar, str)).collect(Collectors.toList());
 
-        return new SimpleObjectProperty<>(strColorList);
+        return strColorList;
     }
 
     /**
@@ -126,11 +124,11 @@ public class StringUtil {
      * @return 无颜色字符字符串
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyStringProperty stripColor(String source) {
+    public static String stripColor(String source) {
 
         Validate.notNull(source, "The string source object is null.");
 
-        return new SimpleStringProperty(ChatColor.stripColor(source));
+        return ChatColor.stripColor(source);
     }
 
     /**
@@ -140,7 +138,7 @@ public class StringUtil {
      * @return 无颜色字符字符串
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyObjectProperty<String[]> stripColor(String... source) {
+    public static String[] stripColor(String... source) {
 
         Validate.notNull(source, "The string source object is null.");
 
@@ -151,7 +149,7 @@ public class StringUtil {
 
             strColorArray[index++] = ChatColor.stripColor(str);
         }
-        return new SimpleObjectProperty<>(strColorArray);
+        return strColorArray;
     }
 
     /**
@@ -161,13 +159,13 @@ public class StringUtil {
      * @return 无颜色字符字符串
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyObjectProperty<List<String>> stripColor(Collection<? extends String> source) {
+    public static List<String> stripColor(Collection<? extends String> source) {
 
         Validate.notNull(source, "The string source object is null.");
 
         List<String> strColorList = source.stream().map((Function<String, String>) ChatColor::stripColor).collect(Collectors.toList());
 
-        return new SimpleObjectProperty<>(strColorList);
+        return strColorList;
     }
 
     /**
@@ -178,11 +176,11 @@ public class StringUtil {
      * @return 格式化后的字符串
      * @throws IllegalArgumentException 如果格式化字符串对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyStringProperty format(String format, Object... args) {
+    public static String format(String format, Object... args) {
 
         Validate.notNull(format, "The string format object is null.");
 
-        return new SimpleStringProperty(String.format(format, args));
+        return String.format(format, args);
     }
 
     /**
@@ -193,11 +191,11 @@ public class StringUtil {
      * @return 格式化后的字符串
      * @throws IllegalArgumentException 如果格式化字符串对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyStringProperty messageFormat(String format, Object... args) {
+    public static String messageFormat(String format, Object... args) {
 
         Validate.notNull(format, "The string format object is null.");
 
-        return new SimpleStringProperty(MessageFormat.format(format, args));
+        return MessageFormat.format(format, args);
     }
 
     /**
@@ -206,7 +204,7 @@ public class StringUtil {
      * @see StringUtil#getSystemTime(String)
      * @return 系统时间
      */
-    public static ReadOnlyStringProperty getSystemTime() {
+    public static String getSystemTime() {
 
         return getSystemTime("yyyy-MM-dd HH:mm:ss");
     }
@@ -218,13 +216,11 @@ public class StringUtil {
      * @return 系统时间
      * @throws IllegalArgumentException 如果格式字符串对象为 {@code null} 则抛出异常
      */
-    public static ReadOnlyStringProperty getSystemTime(String format) {
+    public static String getSystemTime(String format) {
 
         Validate.notNull(format, "The string format object is null.");
 
-        DateFormat dateFormat = new SimpleDateFormat(format);
-
-        return new SimpleStringProperty(dateFormat.format(new Date()));
+        return new SimpleDateFormat(format).format(new Date());
     }
 
     /**
@@ -233,7 +229,7 @@ public class StringUtil {
      * @param value 值
      * @return 最终值
      */
-    public static ReadOnlyDoubleProperty rounding(double value) {
+    public static double rounding(double value) {
 
         return rounding(value, 2);
     }
@@ -245,10 +241,8 @@ public class StringUtil {
      * @param bit 保留位数
      * @return 最终值
      */
-    public static ReadOnlyDoubleProperty rounding(double value, int bit) {
+    public static double rounding(double value, int bit) {
 
-        value = new BigDecimal(value).setScale(bit, BigDecimal.ROUND_HALF_UP).doubleValue();
-
-        return new SimpleDoubleProperty(value);
+        return new BigDecimal(value).setScale(bit, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 }

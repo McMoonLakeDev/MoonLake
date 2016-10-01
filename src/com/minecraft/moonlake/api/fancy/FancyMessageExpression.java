@@ -212,8 +212,7 @@ class FancyMessageExpression implements FancyMessage {
                                   itemStack.getType().name().toLowerCase(),
                                   itemStack.getDurability(),
                                   itemStack.getAmount(),
-                                  tag == null ? "{}" : tag)
-                        .get()));
+                                  tag == null ? "{}" : tag)));
         return this;
     }
 
@@ -292,11 +291,11 @@ class FancyMessageExpression implements FancyMessage {
     }
 
     @Override
-    public ReadOnlyStringProperty toJsonString() {
+    public String toJsonString() {
 
         if (!dirty.get() && jsonString.get() != null) {
 
-            return jsonString;
+            return jsonString.get();
         }
         StringWriter string = new StringWriter();
         JsonWriter json = new JsonWriter(string);
@@ -313,7 +312,7 @@ class FancyMessageExpression implements FancyMessage {
         jsonString.set(string.toString());
         dirty.set(false);
 
-        return jsonString;
+        return jsonString.get();
     }
 
     @Override

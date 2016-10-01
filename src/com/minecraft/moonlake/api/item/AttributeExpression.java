@@ -5,8 +5,6 @@ import com.minecraft.moonlake.api.item.potion.PotionEffectType;
 import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.api.nbt.NBTFactory;
 import com.minecraft.moonlake.api.nbt.NBTList;
-import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
-import com.minecraft.moonlake.property.SimpleBooleanProperty;
 import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.inventory.ItemStack;
@@ -36,7 +34,7 @@ class AttributeExpression implements AttributeLibrary {
     }
 
     @Override
-    public ReadOnlyBooleanProperty isUnreakable(ItemStack itemStack) {
+    public boolean isUnreakable(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
@@ -44,9 +42,9 @@ class AttributeExpression implements AttributeLibrary {
 
         if(nbtCompound == null) {
 
-            return new SimpleBooleanProperty(false);
+            return false;
         }
-        return new SimpleBooleanProperty(nbtCompound.getByte("Unbreakable") == 1);
+        return nbtCompound.getByte("Unbreakable") == 1;
     }
 
     @Override

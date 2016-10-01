@@ -90,8 +90,8 @@ class FancyMessagePart implements JsonRepresentedObject, Cloneable {
         }
     }
 
-    ReadOnlyBooleanProperty hasText() {
+    boolean hasText() {
 
-        return new SimpleBooleanProperty(text.get() != null);
+        return text.get() != null;
     }
 }

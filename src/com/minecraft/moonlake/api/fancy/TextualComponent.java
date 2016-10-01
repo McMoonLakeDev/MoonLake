@@ -14,25 +14,21 @@ public abstract class TextualComponent implements Cloneable {
 
     public abstract ReadOnlyStringProperty getKey();
 
-    public abstract ReadOnlyStringProperty getReadableString();
+    public abstract String getReadableString();
 
     @Override
     public abstract TextualComponent clone() throws CloneNotSupportedException;
 
     public abstract void writeJson(JsonWriter jsonWriter) throws IOException;
 
-    static ReadOnlyBooleanProperty isTextKey(String key) {
+    static boolean isTextKey(String key) {
 
-        boolean result = key.equals("translate") || key.equals("text") || key.equals("score") || key.equals("selector");
-
-        return new SimpleBooleanProperty(result);
+        return key.equals("translate") || key.equals("text") || key.equals("score") || key.equals("selector");
     }
 
-    static ReadOnlyBooleanProperty isTranslatableText(TextualComponent component) {
+    static boolean isTranslatableText(TextualComponent component) {
 
-        boolean result = component instanceof ComplexTextTypeComponent && ((ComplexTextTypeComponent) component).getKey().equals("translate");
-
-        return new SimpleBooleanProperty(result);
+        return component instanceof ComplexTextTypeComponent && ((ComplexTextTypeComponent) component).getKey().equals("translate");
     }
 
     public static TextualComponent rawText(String text) {
@@ -86,9 +82,9 @@ public abstract class TextualComponent implements Cloneable {
         }
 
         @Override
-        public ReadOnlyStringProperty getReadableString() {
+        public String getReadableString() {
 
-            return getValue();
+            return getValue().get();
         }
 
         @Override
@@ -127,9 +123,9 @@ public abstract class TextualComponent implements Cloneable {
         }
 
         @Override
-        public ReadOnlyStringProperty getReadableString() {
+        public String getReadableString() {
 
-            return getKey();
+            return getKey().get();
         }
 
         @Override

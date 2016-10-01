@@ -36,7 +36,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         if(itemMeta != null) {
 
-            itemMeta.setDisplayName(StringUtil.toColor(displayName).get());
+            itemMeta.setDisplayName(StringUtil.toColor(displayName));
             itemStack.setItemMeta(itemMeta);
         }
         return itemStack;
@@ -117,7 +117,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
             return new HashSet<>(itemMeta.getLore());
         }
-        return new HashSet<>(StringUtil.stripColor(itemMeta.getLore()).get());
+        return new HashSet<>(StringUtil.stripColor(itemMeta.getLore()));
     }
 
     @Override
@@ -136,7 +136,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         if(itemMeta != null) {
 
-            List<String> loreList = lore.stream().map(str -> StringUtil.toColor(str).get()).collect(Collectors.toList());
+            List<String> loreList = lore.stream().map(str -> StringUtil.toColor(str)).collect(Collectors.toList());
 
             if(loreList != null) {
 
@@ -198,17 +198,17 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
     }
 
     @Override
-    public ReadOnlyBooleanProperty hasLore(ItemStack itemStack) {
+    public boolean hasLore(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
         Set<String> lore = getLores(itemStack);
 
-        return new SimpleBooleanProperty(lore != null && lore.size() > 0);
+        return lore != null && lore.size() > 0;
     }
 
     @Override
-    public ReadOnlyBooleanProperty containLore(ItemStack itemStack, String... lore) {
+    public boolean containLore(ItemStack itemStack, String... lore) {
 
         Validate.notNull(lore, "The itemstack lore object is null.");
 
@@ -216,7 +216,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
     }
 
     @Override
-    public ReadOnlyBooleanProperty containLore(ItemStack itemStack, Collection<? extends String> lore) {
+    public boolean containLore(ItemStack itemStack, Collection<? extends String> lore) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(lore, "The itemstack lore object is null.");
@@ -225,7 +225,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         if(sourceLore == null) {
 
-            return new SimpleBooleanProperty(false);
+            return false;
         }
         boolean state = false;
 
@@ -238,11 +238,11 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
                 break;
             }
         }
-        return new SimpleBooleanProperty(state);
+        return state;
     }
 
     @Override
-    public ReadOnlyBooleanProperty containLoreIgnoreColor(ItemStack itemStack, String... lore) {
+    public boolean containLoreIgnoreColor(ItemStack itemStack, String... lore) {
 
         Validate.notNull(lore, "The itemstack lore object is null.");
 
@@ -250,7 +250,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
     }
 
     @Override
-    public ReadOnlyBooleanProperty containLoreIgnoreColor(ItemStack itemStack, Collection<? extends String> lore) {
+    public boolean containLoreIgnoreColor(ItemStack itemStack, Collection<? extends String> lore) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(lore, "The itemstack lore object is null.");
@@ -259,7 +259,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         if(sourceLore == null) {
 
-            return new SimpleBooleanProperty(false);
+            return false;
         }
         boolean state = false;
 
@@ -272,7 +272,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
                 break;
             }
         }
-        return new SimpleBooleanProperty(state);
+        return state;
     }
 
     @Override

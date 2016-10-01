@@ -2,7 +2,6 @@ package com.minecraft.moonlake.api.item;
 
 import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.api.item.potion.PotionEffectType;
-import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
@@ -29,7 +28,7 @@ public interface AttributeLibrary {
      * @return true 则物品栈无法破坏
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty isUnreakable(ItemStack itemStack);
+    boolean isUnreakable(ItemStack itemStack);
 
     /**
      * 设置物品栈的特殊属性项

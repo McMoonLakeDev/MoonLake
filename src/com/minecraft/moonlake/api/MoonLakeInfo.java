@@ -1,7 +1,5 @@
 package com.minecraft.moonlake.api;
 
-import com.minecraft.moonlake.property.ReadOnlyStringProperty;
-
 import java.util.Set;
 
 /**
@@ -22,42 +20,42 @@ public interface MoonLakeInfo {
      *
      * @return Prefix
      */
-    ReadOnlyStringProperty getPluginPrefix();
+    String getPluginPrefix();
 
     /**
      * 获取插件的名字
      *
      * @return Name
      */
-    ReadOnlyStringProperty getPluginName();
+    String getPluginName();
 
     /**
      * 获取插件的主类
      *
      * @return MainClass
      */
-    ReadOnlyStringProperty getPluginMain();
+    String getPluginMain();
 
     /**
      * 获取插件的版本
      *
      * @return Version
      */
-    ReadOnlyStringProperty getPluginVersion();
+    String getPluginVersion();
 
     /**
      * 获取插件的网站
      *
      * @return Website
      */
-    ReadOnlyStringProperty getPluginWebsite();
+    String getPluginWebsite();
 
     /**
      * 获取插件的简介
      *
      * @return Description
      */
-    ReadOnlyStringProperty getPluginDescription();
+    String getPluginDescription();
 
     /**
      * 获取插件的作者
