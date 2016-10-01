@@ -1,7 +1,6 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.fancy.FancyMessage;
-import com.minecraft.moonlake.property.*;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -43,7 +42,7 @@ public interface BasePlayer {
      *
      * @return 显示名称
      */
-    ReadOnlyStringProperty getDisplayName();
+    String getDisplayName();
 
     /**
      * 设置此玩家的显示名称
@@ -57,7 +56,7 @@ public interface BasePlayer {
      *
      * @return 列表名称
      */
-    ReadOnlyStringProperty getListName();
+    String getListName();
 
     /**
      * 设置此玩家的 TAB 列表名称
@@ -80,7 +79,7 @@ public interface BasePlayer {
      *
      * @return true 之前玩过 else 第一次玩服务器
      */
-    ReadOnlyBooleanProperty hasBeforePlayed();
+    boolean hasBeforePlayed();
 
     /**
      * 获取此玩家的所在世界对象
@@ -94,42 +93,42 @@ public interface BasePlayer {
      *
      * @return X 坐标
      */
-    ReadOnlyIntegerProperty getX();
+    int getX();
 
     /**
      * 获取此玩家的当前位置 Y 坐标
      *
      * @return Y 坐标
      */
-    ReadOnlyIntegerProperty getY();
+    int getY();
 
     /**
      * 获取此玩家的当前位置 Z 坐标
      *
      * @return Z 坐标
      */
-    ReadOnlyIntegerProperty getZ();
+    int getZ();
 
     /**
      * 获取此玩家的当前位置 X 坐标
      *
      * @return X 坐标
      */
-    ReadOnlyDoubleProperty getDoubleX();
+    double getDoubleX();
 
     /**
      * 获取此玩家的当前位置 Y 坐标
      *
      * @return Y 坐标
      */
-    ReadOnlyDoubleProperty getDoubleY();
+    double getDoubleY();
 
     /**
      * 获取此玩家的当前位置 Z 坐标
      *
      * @return Z 坐标
      */
-    ReadOnlyDoubleProperty getDoubleZ();
+    double getDoubleZ();
 
     /**
      * 获取此玩家准星的目标方块
@@ -192,7 +191,7 @@ public interface BasePlayer {
      * @return 距离
      * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
      */
-    ReadOnlyDoubleProperty distance(Location target);
+    double distance(Location target);
 
     /**
      * 清除此玩家的所有药水效果
@@ -278,7 +277,7 @@ public interface BasePlayer {
      *
      * @return 时间
      */
-    ReadOnlyLongProperty getTime();
+    long getTime();
 
     /**
      * 重置此玩家的客户端天气
@@ -309,7 +308,7 @@ public interface BasePlayer {
      *
      * @return 受伤伤害
      */
-    ReadOnlyDoubleProperty getLastDamage();
+    double getLastDamage();
 
     /**
      * 获取此玩家的最后受伤原因
@@ -472,7 +471,7 @@ public interface BasePlayer {
      * @return true 则可以看到 else 看不到
      * @throws IllegalArgumentException 如果目标玩家对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty canSee(Player target);
+    boolean canSee(Player target);
 
     /**
      * 获取此玩家是否能看到指定目标玩家
@@ -481,7 +480,7 @@ public interface BasePlayer {
      * @return true 则可以看到 else 看不到
      * @throws IllegalArgumentException 如果目标玩家对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty canSee(MoonLakePlayer target);
+    boolean canSee(MoonLakePlayer target);
 
     /**
      * 获取此玩家是否能看到指定目标玩家
@@ -490,5 +489,5 @@ public interface BasePlayer {
      * @return true 则可以看到 else 看不到
      * @throws IllegalArgumentException 如果目标玩家名对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty canSee(String target);
+    boolean canSee(String target);
 }

@@ -5,8 +5,6 @@ import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.nms.packet.PacketPlayOutChat;
 import com.minecraft.moonlake.nms.packet.PacketPlayOutPlayerListHeaderFooter;
 import com.minecraft.moonlake.nms.packet.PacketPlayOutTitle;
-import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
-import com.minecraft.moonlake.property.SimpleIntegerProperty;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
@@ -41,7 +39,7 @@ class NMSPlayerExpression implements NMSPlayerLibrary {
     }
 
     @Override
-    public ReadOnlyIntegerProperty getPing(String player) {
+    public int getPing(String player) {
 
         Validate.notNull(player, "The player string object is null.");
 
@@ -53,13 +51,13 @@ class NMSPlayerExpression implements NMSPlayerLibrary {
         }
         try {
 
-            return new SimpleIntegerProperty((Integer) FIELD_PING.get(METHOD_GETHANDLE.invoke(target)));
+            return (Integer) FIELD_PING.get(METHOD_GETHANDLE.invoke(target));
         }
         catch (Exception e) {
 
             e.printStackTrace();
         }
-        return null;
+        return 0;
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.player.ability.AbilityPlayer;
 import com.minecraft.moonlake.api.player.inventory.InventoryPlayer;
-import com.minecraft.moonlake.property.ReadOnlyStringProperty;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -49,13 +48,6 @@ public interface MoonLakePlayer extends AbilityPlayer, InventoryPlayer, NMSPlaye
      * @return 名称
      */
     String getName();
-
-    /**
-     * 获取此玩家的名称
-     *
-     * @return 名称
-     */
-    ReadOnlyStringProperty getNames();
 
     /**
      * 获取此玩家的 UUID

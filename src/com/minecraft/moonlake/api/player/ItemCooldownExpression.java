@@ -4,8 +4,6 @@ import com.minecraft.moonlake.api.player.ability.ItemCooldown;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
-import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
-import com.minecraft.moonlake.property.SimpleBooleanProperty;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -86,7 +84,7 @@ class ItemCooldownExpression implements ItemCooldown {
     }
 
     @Override
-    public ReadOnlyBooleanProperty hasItemCooldown(String player, Material material) {
+    public boolean hasItemCooldown(String player, Material material) {
 
         Validate.notNull(player, "The player string object is null.");
         Validate.notNull(material, "The material object is null.");
@@ -108,8 +106,7 @@ class ItemCooldownExpression implements ItemCooldown {
             Object nmsPlayer = METHOD_GETHANDLE.invoke(target);
             Object nmsItemCooldown = METHOD_TARGET.invoke(nmsPlayer);
 
-            boolean result = (boolean) METHOD_A1.invoke(nmsItemCooldown, METHOD_GETITEM.invoke(null, material));
-            return new SimpleBooleanProperty(result);
+            return (boolean) METHOD_A1.invoke(nmsItemCooldown, METHOD_GETITEM.invoke(null, material));
         }
         catch (Exception e) {
 

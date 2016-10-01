@@ -2,10 +2,6 @@ package com.minecraft.moonlake.api.player.ability;
 
 import com.minecraft.moonlake.api.player.BasePlayer;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
-import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
-import com.minecraft.moonlake.property.ReadOnlyDoubleProperty;
-import com.minecraft.moonlake.property.ReadOnlyFloatProperty;
-import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.AnimalTamer;
@@ -43,14 +39,14 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      *
      * @return 血量
      */
-    ReadOnlyDoubleProperty getHealth();
+    double getHealth();
 
     /**
      * 获取此玩家的最大生命
      *
      * @return 最大血量
      */
-    ReadOnlyDoubleProperty getMaxHealth();
+    double getMaxHealth();
 
     /**
      * 给予此玩家指定数量的血量
@@ -76,14 +72,14 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      *
      * @return 经验
      */
-    ReadOnlyFloatProperty getXp();
+    float getXp();
 
     /**
      * 获取此玩家的当前等级
      *
      * @return 等级
      */
-    ReadOnlyIntegerProperty getLevel();
+    int getLevel();
 
     /**
      * 设置此玩家的当前血量
@@ -126,14 +122,14 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      *
      * @return 飞行速度
      */
-    ReadOnlyFloatProperty getFlySpeed();
+    float getFlySpeed();
 
     /**
      * 获取此玩家的饱食度
      *
      * @return 饱食度
      */
-    ReadOnlyIntegerProperty getFoodLevel();
+    int getFoodLevel();
 
     /**
      * 设置此玩家的飞行速度
@@ -155,14 +151,14 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      *
      * @return true 则为飞行模式 else 没有
      */
-    ReadOnlyBooleanProperty isFly();
+    boolean isFly();
 
     /**
      * 获取此玩家是否允许飞行
      *
      * @return true 则允许飞行 else 不允许
      */
-    ReadOnlyBooleanProperty isAllowFly();
+    boolean isAllowFly();
 
     /**
      * 设置此玩家是否允许飞行
@@ -176,7 +172,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      *
      * @return 行走速度
      */
-    ReadOnlyFloatProperty getWalkSpeed();
+    float getWalkSpeed();
 
     /**
      * 设置此玩家的行走速度
@@ -307,7 +303,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      *
      * @return 是否滑翔
      */
-    ReadOnlyBooleanProperty isGliding();
+    boolean isGliding();
 
     /**
      * 设置此玩家是否滑翔状态
@@ -328,7 +324,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      *
      * @return 是否发光
      */
-    ReadOnlyBooleanProperty isGlowing();
+    boolean isGlowing();
 
     /**
      * 设置此玩家是否坚不可摧 (无敌)
@@ -342,14 +338,14 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      *
      * @return 是否坚不可摧
      */
-    ReadOnlyBooleanProperty isInvulnerable();
+    boolean isInvulnerable();
 
     /**
      * 获取此玩家是否沉默
      *
      * @return 是否沉默
      */
-    ReadOnlyBooleanProperty isSilent();
+    boolean isSilent();
 
     /**
      * 设置此玩家是否沉默
@@ -363,7 +359,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      *
      * @return 是否拥有重力
      */
-    ReadOnlyBooleanProperty hasGravity();
+    boolean hasGravity();
 
     /**
      * 设置此玩家是否拥有重力
@@ -384,14 +380,14 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      *
      * @return 是否可以拾取
      */
-    ReadOnlyBooleanProperty isCanPickupItems();
+    boolean isCanPickupItems();
 
     /**
      * 获取此玩家的摔落距离
      *
      * @return 摔落距离
      */
-    ReadOnlyFloatProperty getFallDistance();
+    float getFallDistance();
 
     /**
      * 设置此玩家的摔落距离
@@ -429,28 +425,28 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * @return true 拥有此权限 else 没有
      * @throws IllegalArgumentException 如果权限对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty hasPermission(String permission);
+    boolean hasPermission(String permission);
 
     /**
      * 获取此玩家是否潜行中
      *
      * @return true 则潜行 else 没有
      */
-    ReadOnlyBooleanProperty isShift();
+    boolean isShift();
 
     /**
      * 获取此玩家是否冲刺中
      *
      * @return true 则冲刺中 else 没有
      */
-    ReadOnlyBooleanProperty isSprinting();
+    boolean isSprinting();
 
     /**
      * 获取此玩家是否是管理员
      *
      * @return true 则是管理员 else 不是
      */
-    ReadOnlyBooleanProperty isOp();
+    boolean isOp();
 
     /**
      * 将此玩家添加药水效果
@@ -505,7 +501,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * @return true 则拥有此效果类型 else 没有
      * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty hasPotionEffect(PotionEffectType type);
+    boolean hasPotionEffect(PotionEffectType type);
 
     /**
      * 清除此玩家的指定药水效果
@@ -520,7 +516,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      *
      * @return 是否在地面
      */
-    ReadOnlyBooleanProperty isOnGround();
+    boolean isOnGround();
 
     /**
      * 获取此玩家在观察者模式的追踪目标实体
@@ -599,5 +595,5 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * @return true 则执行成功 else 没有
      * @throws IllegalArgumentException 如果命令对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty performCommand(String command);
+    boolean performCommand(String command);
 }

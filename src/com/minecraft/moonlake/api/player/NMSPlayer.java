@@ -3,8 +3,6 @@ package com.minecraft.moonlake.api.player;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.nms.packet.Packet;
-import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
-import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
 import org.bukkit.Material;
 
 /**
@@ -18,7 +16,7 @@ public interface NMSPlayer {
      * @return Ping 值
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
-    ReadOnlyIntegerProperty getPing();
+    int getPing();
 
     /**
      * 给此玩家发送数据包
@@ -122,5 +120,5 @@ public interface NMSPlayer {
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
      */
-    ReadOnlyBooleanProperty hasItemCooldown(Material material);
+    boolean hasItemCooldown(Material material);
 }
