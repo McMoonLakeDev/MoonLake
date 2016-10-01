@@ -1,7 +1,6 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
-import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
 
 /**
  * Created by MoonLake on 2016/9/14.
@@ -16,7 +15,7 @@ public interface NMSPlayerLibrary {
      * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
-    ReadOnlyIntegerProperty getPing(String player);
+    int getPing(String player);
 
     /**
      * 给指定玩家发送标题数据包

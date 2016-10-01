@@ -1,8 +1,6 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
-import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
-import com.minecraft.moonlake.property.ReadOnlyStringProperty;
 
 import java.net.InetSocketAddress;
 
@@ -17,7 +15,7 @@ public interface InternetPlayer {
      * @return Ping 值
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
-    ReadOnlyIntegerProperty getPing();
+    int getPing();
 
     /**
      * 获取此玩家的网络套接字地址
@@ -31,12 +29,12 @@ public interface InternetPlayer {
      *
      * @return 网络套接字地址 IP 如果未解析则返回 127.0.0.1
      */
-    ReadOnlyStringProperty getIp();
+    String getIp();
 
     /**
      * 获取此玩家的网络套接字地址端口号
      *
      * @return 网络套接字地址端口号
      */
-    ReadOnlyIntegerProperty getPort();
+    int getPort();
 }

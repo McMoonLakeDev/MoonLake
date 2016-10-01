@@ -1,7 +1,5 @@
 package com.minecraft.moonlake.api.player;
 
-import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
-import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
 import org.bukkit.Material;
 
 /**
@@ -19,7 +17,7 @@ class PlayerExpressionWrapped extends PlayerExpression {
     }
 
     @Override
-    public ReadOnlyIntegerProperty getPing(String player) {
+    public int getPing(String player) {
 
         return nmsPlayerExpression.getPing(player);
     }
@@ -73,7 +71,7 @@ class PlayerExpressionWrapped extends PlayerExpression {
     }
 
     @Override
-    public ReadOnlyBooleanProperty hasItemCooldown(String player, Material material) {
+    public boolean hasItemCooldown(String player, Material material) {
 
         return itemCooldownExpression.hasItemCooldown(player, material);
     }

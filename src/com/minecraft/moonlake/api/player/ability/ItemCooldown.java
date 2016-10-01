@@ -2,7 +2,6 @@ package com.minecraft.moonlake.api.player.ability;
 
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
-import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
 import org.bukkit.Material;
 
 /**
@@ -34,5 +33,5 @@ public interface ItemCooldown {
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
      */
-    ReadOnlyBooleanProperty hasItemCooldown(String player, Material material);
+    boolean hasItemCooldown(String player, Material material);
 }

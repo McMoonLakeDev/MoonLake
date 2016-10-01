@@ -1,9 +1,11 @@
 package com.minecraft.moonlake.nms.packet;
 
+import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
 import com.minecraft.moonlake.reflect.Reflect;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
 /**
@@ -68,9 +70,13 @@ public abstract class PacketPlayOutPlayerInfo<T extends PacketPlayOutPlayerInfo>
      * @param action 交互
      * @param player 玩家
      * @return PacketPlayOutPlayerInfo
+     * @throws IllegalArgumentException 如果交互对象或玩家对象为 {@code null} 则抛出异常
      * @throws PacketException 如果不存在或获取错误则抛出异常
      */
     public static <T extends PacketPlayOutPlayerInfo> T get(Action action, Player player) throws PacketException {
+
+        Validate.notNull(action, "The player info action object is null.");
+        Validate.notNull(player, "The target player object is null.");
 
         String version = Reflect.getServerVersion();
 
@@ -85,5 +91,21 @@ public abstract class PacketPlayOutPlayerInfo<T extends PacketPlayOutPlayerInfo>
 
             throw new PacketException("The nms packet play out play player info get exception.", e);
         }
+    }
+
+    /**
+     * 获取对应版本的 PacketPlayOutPlayerInfo 实例对象
+     *
+     * @param action 交互
+     * @param player 玩家
+     * @return PacketPlayOutPlayerInfo
+     * @throws IllegalArgumentException 如果交互对象或玩家对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果不存在或获取错误则抛出异常
+     */
+    public static <T extends PacketPlayOutPlayerInfo> T get(Action action, MoonLakePlayer player) throws PacketException {
+
+        Validate.notNull(player, "The player object is null.");
+
+        return get(action, player.getBukkitPlayer());
     }
 }
