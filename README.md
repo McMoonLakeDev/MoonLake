@@ -1,7 +1,7 @@
-# MoonLake [![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=1.7.2&x2=0)](https://github.com/u2g/MoonLake) [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://github.com/u2g/MoonLake) [![Open Source Love](https://badges.frapsoft.com/os/gpl/gpl.svg?v=102)](https://github.com/u2g/MoonLake)
+# MoonLake [![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=1.8-a1&x2=0)](https://github.com/u2g/MoonLake) [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://github.com/u2g/MoonLake) [![Open Source Love](https://badges.frapsoft.com/os/gpl/gpl.svg?v=102)](https://github.com/u2g/MoonLake)
 
 Minecraft MoonLake Core API Plugin
-By Month_Light Ver: 1.7.2
+By Month_Light Ver: 1.8-a1
 
 ## 简介
 这个插件提供了大量的 API 功能，实现了一些 Bukkit 无法做到的 NMS 功能<br />
