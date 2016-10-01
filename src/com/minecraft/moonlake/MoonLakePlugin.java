@@ -3,10 +3,6 @@ package com.minecraft.moonlake;
 import com.minecraft.moonlake.api.MoonLake;
 import com.minecraft.moonlake.logger.MLogger;
 import com.minecraft.moonlake.logger.MLoggerWrapped;
-import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
-import com.minecraft.moonlake.property.ReadOnlyStringProperty;
-import com.minecraft.moonlake.property.SimpleIntegerProperty;
-import com.minecraft.moonlake.property.SimpleStringProperty;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -146,19 +142,19 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     }
 
     @Override
-    public ReadOnlyStringProperty getBukkitVersion() {
+    public String getBukkitVersion() {
 
         String packageName = getServer().getClass().getPackage().getName();
         String[] packageSplit = packageName.split("\\.");
-        return new SimpleStringProperty(packageSplit[packageSplit.length - 1]);
+        return packageSplit[packageSplit.length - 1];
     }
 
     @Override
-    public ReadOnlyIntegerProperty getReleaseNumber() {
+    public int getReleaseNumber() {
 
-        String version = getBukkitVersion().get();
+        String version = getBukkitVersion();
         String[] versionSplit = version.split("_");
         String releaseVersion = versionSplit[1];
-        return new SimpleIntegerProperty(Integer.parseInt(releaseVersion));
+        return Integer.parseInt(releaseVersion);
     }
 }

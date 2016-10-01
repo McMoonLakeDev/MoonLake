@@ -15,6 +15,7 @@ hs_err_pid*
 # ignore intellij idea setting folder
 /.idea/
 /.metadata/
+/doc/
 
 # add plugin download folder
 !/download/jar/MoonLake*.jar

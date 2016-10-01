@@ -221,7 +221,7 @@ public class BlockManager extends MoonLakeManager {
             Object nmsBlockPosition = Reflect.instantiateObject(BLOCK_POSITION, location.getX(), location.getY(), location.getZ());
 
             String playBlockActionMethodName = "getBlock";
-            int version = getMain().getReleaseNumber().get();
+            int version = getMain().getReleaseNumber();
 
             if(version <= 8) {
 
