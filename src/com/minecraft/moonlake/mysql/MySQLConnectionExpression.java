@@ -207,7 +207,8 @@ class MySQLConnectionExpression implements MySQLConnection {
         try {
 
             statement = connection.createStatement();
-            statement.executeUpdate(sql);
+
+            return statement.executeUpdate(sql) > 0;
         }
         catch (Exception e) {
 
@@ -220,7 +221,6 @@ class MySQLConnectionExpression implements MySQLConnection {
                 close(statement);
             }
         }
-        return false;
     }
 
     @Override
@@ -258,6 +258,92 @@ class MySQLConnectionExpression implements MySQLConnection {
 
                 close(preparedStatement);
             }
+        }
+    }
+
+    @Override
+    public boolean findTable(String tableName) throws MySQLException {
+
+        Validate.notNull(tableName, "The mysql table name object is null.");
+
+        checkConnection();
+
+        ResultSet resultSet = null;
+        Statement statement = null;
+
+        try {
+
+            statement = connection.createStatement();
+
+            resultSet = statement.executeQuery("show tables like '" + tableName + "';");
+
+            return resultSet != null && resultSet.next();
+        }
+        catch (Exception e) {
+
+            throw new MySQLException("The mysql find table exception.", e);
+        }
+        finally {
+
+            if(isPromptlyClose()) {
+
+                close(resultSet);
+                close(statement);
+            }
+        }
+    }
+
+    @Override
+    public boolean findTables(String[] tableNames) throws MySQLException {
+
+        Validate.notNull(tableNames, "The mysql table names object is null.");
+
+        checkConnection();
+
+        ResultSet resultSet = null;
+        Statement statement = null;
+
+        try {
+
+            statement = connection.createStatement();
+
+            resultSet = statement.executeQuery("show tables;");
+
+            List<String> existTables = new ArrayList<>();
+
+            while (resultSet.next()) {
+
+                String existTable = resultSet.getString("Tables_in_" + getDatabase());
+
+                if(existTable != null) {
+
+                    existTables.add(existTable);
+                }
+            }
+            boolean result = false;
+
+            if(existTables.size() > 0) {
+
+                for(String targetTable : tableNames) {
+
+                    result = existTables.contains(targetTable);
+
+                    if(!result) {
+
+                        break;
+                    }
+                }
+            }
+            return result;
+        }
+        catch (Exception e) {
+
+            throw new MySQLException("The mysql find table exception.", e);
+        }
+        finally {
+
+            close(resultSet);
+            close(statement);
         }
     }
 

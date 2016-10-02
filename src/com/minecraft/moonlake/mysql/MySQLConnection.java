@@ -132,6 +132,26 @@ public interface MySQLConnection {
     boolean dispatchPreparedStatement(String sql, Object... params) throws MySQLException;
 
     /**
+     * 查找指定数据表是否存在
+     *
+     * @param tableName 表名
+     * @return 存在则返回 true
+     * @throws IllegalArgumentException 如果表名对象为 {@code null} 则抛出异常
+     * @throws MySQLException 如果查询数据表时错误则抛出异常
+     */
+    boolean findTable(String tableName) throws MySQLException;
+
+    /**
+     * 查找指定数据表是否存在
+     *
+     * @param tableNames 表名
+     * @return 存在则返回 true
+     * @throws IllegalArgumentException 如果表名对象为 {@code null} 则抛出异常
+     * @throws MySQLException 如果查询数据表时错误则抛出异常
+     */
+    boolean findTables(String[] tableNames) throws MySQLException;
+
+    /**
      * 查找 MySQL 结果集
      *
      * @param sql 语句
