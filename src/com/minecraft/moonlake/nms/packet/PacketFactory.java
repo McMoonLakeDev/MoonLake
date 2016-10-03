@@ -2,6 +2,7 @@ package com.minecraft.moonlake.nms.packet;
 
 import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import com.minecraft.moonlake.reflect.Reflect;
+import org.bukkit.entity.Player;
 
 /**
  * Created by MoonLake on 2016/10/1.
@@ -29,6 +30,20 @@ public class PacketFactory {
             packetFactoryInstance = new PacketFactory();
         }
         return packetFactoryInstance;
+    }
+
+    /**
+     * 将指定数据包对象发送到指定玩家
+     *
+     * @param players 玩家
+     * @param packet 数据包
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果数据包对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果发送数据包错误则抛出异常
+     */
+    public void sendPacket(Player[] players, Object packet) throws PacketException {
+
+        PacketReflect.get().send(players, packet);
     }
 
     /**

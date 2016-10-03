@@ -23,6 +23,16 @@ public class NBTFactory {
      */
     private static NBTEntity NBTEntityInstance;
 
+    /**
+     * NBT Block Static Instance
+     */
+    private static NBTBlock NBTBlockInstance;
+
+    /**
+     * NBT Chunk Static Instance
+     */
+    private static NBTChunk NBTChunkInstance;
+
     private NBTFactory() {
 
     }
@@ -142,5 +152,33 @@ public class NBTFactory {
             NBTEntityInstance = new NBTEntityExpression();
         }
         return NBTEntityInstance;
+    }
+
+    /**
+     * 获取 NBTBlock 对象
+     *
+     * @return NBTBlock
+     */
+    public static NBTBlock getBlock() {
+
+        if(NBTBlockInstance == null) {
+
+            NBTBlockInstance = new NBTBlockExpression();
+        }
+        return NBTBlockInstance;
+    }
+
+    /**
+     * 获取 NBTChunk 对象
+     *
+     * @return NBTChunk
+     */
+    public static NBTChunk getChunk() {
+
+        if(NBTChunkInstance == null) {
+
+            NBTChunkInstance = new NBTChunkExpression();
+        }
+        return NBTChunkInstance;
     }
 }

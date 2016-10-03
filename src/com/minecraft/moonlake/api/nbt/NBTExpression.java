@@ -2,7 +2,9 @@ package com.minecraft.moonlake.api.nbt;
 
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import com.minecraft.moonlake.validate.Validate;
+import org.bukkit.Chunk;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
@@ -66,6 +68,58 @@ class NBTExpression implements NBTLibrary {
     public void write(Entity entity, NBTCompound nbt) throws NBTException {
 
         NBTFactory.getEntity().writeEntity(entity, nbt);
+    }
+
+    @Override
+    public NBTCompound read(Block block) throws NBTException {
+
+        NBTCompound nbtCompound = new NBTCompoundExpression();
+        NBTFactory.getBlock().readBlock(block, nbtCompound);
+        return nbtCompound;
+    }
+
+    @Override
+    public NBTCompound readSafe(Block block) throws NBTException {
+
+        NBTCompound temp = read(block);
+
+        if(temp == null) {
+
+            temp = NBTFactory.newCompound();
+        }
+        return temp;
+    }
+
+    @Override
+    public void write(Block block, NBTCompound nbt) throws NBTException {
+
+        NBTFactory.getBlock().writeBlock(block, nbt);
+    }
+
+    @Override
+    public NBTCompound read(Chunk chunk) throws NBTException {
+
+        NBTCompound nbtCompound = new NBTCompoundExpression();
+        NBTFactory.getChunk().readChunk(chunk, nbtCompound);
+        return nbtCompound;
+    }
+
+    @Override
+    public NBTCompound readSafe(Chunk chunk) throws NBTException {
+
+        NBTCompound temp = read(chunk);
+
+        if(temp == null) {
+
+            temp = NBTFactory.newCompound();
+        }
+        return temp;
+    }
+
+    @Override
+    public void write(Chunk chunk, NBTCompound nbt) throws NBTException {
+
+        NBTFactory.getChunk().writeChunk(chunk, nbt);
     }
 
     @Override
