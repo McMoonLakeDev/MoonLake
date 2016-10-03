@@ -28,7 +28,7 @@ class PacketPlayOutPlayerInfo_v1_10_R1 extends PacketPlayOutPlayerInfo<PacketPla
         }
         catch (Exception e) {
 
-            throw new PacketInitializeException("The nms packet play out player info reflect raw initialize exception.");
+            throw new PacketInitializeException("The nms packet play out player info reflect raw initialize exception.", e);
         }
     }
 

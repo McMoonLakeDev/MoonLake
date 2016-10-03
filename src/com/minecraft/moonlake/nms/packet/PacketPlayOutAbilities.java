@@ -43,7 +43,7 @@ public class PacketPlayOutAbilities extends PacketAbstract<PacketPlayOutAbilitie
         }
         catch (Exception e) {
 
-            throw new PacketInitializeException("The nms packet play out abilities reflect raw initialize exception.");
+            throw new PacketInitializeException("The nms packet play out abilities reflect raw initialize exception.", e);
         }
     }
 

@@ -24,7 +24,7 @@ public class PacketPlayOutEntityDestroy extends PacketAbstract<PacketPlayOutEnti
         }
         catch (Exception e) {
 
-            throw new PacketInitializeException("The nms packet play out entity destroy reflect raw initialize exception.");
+            throw new PacketInitializeException("The nms packet play out entity destroy reflect raw initialize exception.", e);
         }
     }
 

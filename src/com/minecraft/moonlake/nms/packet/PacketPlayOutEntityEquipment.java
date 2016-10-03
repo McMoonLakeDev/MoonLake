@@ -40,7 +40,7 @@ public class PacketPlayOutEntityEquipment extends PacketAbstract<PacketPlayOutEn
         }
         catch (Exception e) {
 
-            throw new PacketInitializeException("The nms packet play out entity equipment reflect raw initialize exception.");
+            throw new PacketInitializeException("The nms packet play out entity equipment reflect raw initialize exception.", e);
         }
     }
 

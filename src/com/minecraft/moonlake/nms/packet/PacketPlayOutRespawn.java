@@ -49,7 +49,7 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
         }
         catch (Exception e) {
 
-            throw new PacketInitializeException("The nms packet play out respawn reflect raw initialize exception.");
+            throw new PacketInitializeException("The nms packet play out respawn reflect raw initialize exception.", e);
         }
     }
 

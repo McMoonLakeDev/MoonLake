@@ -1,11 +1,11 @@
 package com.minecraft.moonlake.nms.packet.exception;
 
-import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.nms.exception.NMSException;
 
 /**
  * Created by MoonLake on 2016/9/29.
  */
-public class PacketException extends MoonLakeException {
+public class PacketException extends NMSException {
 
     public PacketException() {
 

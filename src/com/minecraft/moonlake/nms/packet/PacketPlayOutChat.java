@@ -31,7 +31,7 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
         }
         catch (Exception e) {
 
-            throw new PacketInitializeException("The nms packet play out chat reflect raw initialize exception.");
+            throw new PacketInitializeException("The nms packet play out chat reflect raw initialize exception.", e);
         }
     }
 

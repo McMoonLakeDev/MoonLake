@@ -31,7 +31,7 @@ public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosio
         }
         catch (Exception e) {
 
-            throw new PacketInitializeException("The nms packet play out explosion reflect raw initialize exception.");
+            throw new PacketInitializeException("The nms packet play out explosion reflect raw initialize exception.", e);
         }
     }
 

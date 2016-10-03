@@ -31,7 +31,7 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
         }
         catch (Exception e) {
 
-            throw new PacketInitializeException("The nms packet play out position reflect raw initialize exception.");
+            throw new PacketInitializeException("The nms packet play out position reflect raw initialize exception.", e);
         }
     }
 
