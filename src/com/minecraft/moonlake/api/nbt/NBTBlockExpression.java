@@ -27,8 +27,8 @@ class NBTBlockExpression implements NBTBlock {
     private Method METHOD_GETHANDLE;
     private Method METHOD_GETTILEENTITY;
     private Method METHOD_GETUPDATEPACKET;
-    private Method METHOD_A;
-    private Method METHOD_SAVE;
+    private Method METHOD_READ;
+    private Method METHOD_WRITE;
 
     public NBTBlockExpression() throws NBTInitializeException {
 
@@ -43,8 +43,8 @@ class NBTBlockExpression implements NBTBlock {
             METHOD_GETHANDLE = getMethod(CLASS_CRAFTWORLD, "getHandle");
             METHOD_GETTILEENTITY = getMethod(CLASS_WORLD, "getTileEntity", CLASS_BLOCKPOSITION);
             METHOD_GETUPDATEPACKET = getMethod(CLASS_TILEENTITY, "getUpdatePacket");
-            METHOD_A = getMethod(CLASS_TILEENTITY, "a", CLASS_NBTTAGCOMPOUND);
-            METHOD_SAVE = getMethod(CLASS_TILEENTITY, getServerVersionNumber() <= 8 ? "b" : "save", CLASS_NBTTAGCOMPOUND);
+            METHOD_READ = getMethod(CLASS_TILEENTITY, getServerVersionNumber() <= 8 ? "b" : "save", CLASS_NBTTAGCOMPOUND);
+            METHOD_WRITE = getMethod(CLASS_TILEENTITY, "a", CLASS_NBTTAGCOMPOUND);
         }
         catch (Exception e) {
 
@@ -64,7 +64,7 @@ class NBTBlockExpression implements NBTBlock {
 
             if(tileEntity != null) {
 
-                METHOD_A.invoke(tileEntity, nbtTagCompound);
+                METHOD_READ.invoke(tileEntity, nbtTagCompound);
             }
         }
         catch (Exception e) {
@@ -85,7 +85,7 @@ class NBTBlockExpression implements NBTBlock {
 
             if(tileEntity != null) {
 
-                METHOD_SAVE.invoke(tileEntity, nbtTagCompound);
+                METHOD_WRITE.invoke(tileEntity, nbtTagCompound);
             }
         }
         catch (Exception e) {
