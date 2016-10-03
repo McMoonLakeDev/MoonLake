@@ -48,7 +48,7 @@ class NBTExpression implements NBTLibrary {
     public NBTCompound read(Entity entity) throws NBTException {
 
         NBTCompound nbtCompound = new NBTCompoundExpression();
-        NBTFactory.getEntity().readEntity(entity, nbtCompound);
+        NBTFactory.getEntity().readEntity(entity, nbtCompound.getHandle());
         return nbtCompound;
     }
 
@@ -67,14 +67,14 @@ class NBTExpression implements NBTLibrary {
     @Override
     public void write(Entity entity, NBTCompound nbt) throws NBTException {
 
-        NBTFactory.getEntity().writeEntity(entity, nbt);
+        NBTFactory.getEntity().writeEntity(entity, nbt.getHandleCopy());
     }
 
     @Override
     public NBTCompound read(Block block) throws NBTException {
 
         NBTCompound nbtCompound = new NBTCompoundExpression();
-        NBTFactory.getBlock().readBlock(block, nbtCompound);
+        NBTFactory.getBlock().readBlock(block, nbtCompound.getHandle());
         return nbtCompound;
     }
 
@@ -93,14 +93,15 @@ class NBTExpression implements NBTLibrary {
     @Override
     public void write(Block block, NBTCompound nbt) throws NBTException {
 
-        NBTFactory.getBlock().writeBlock(block, nbt);
+        NBTFactory.getBlock().writeBlock(block, nbt.getHandleCopy());
+        NBTFactory.getBlock().update(block);
     }
 
     @Override
     public NBTCompound read(Chunk chunk) throws NBTException {
 
         NBTCompound nbtCompound = new NBTCompoundExpression();
-        NBTFactory.getChunk().readChunk(chunk, nbtCompound);
+        NBTFactory.getChunk().readChunk(chunk, nbtCompound.getHandle());
         return nbtCompound;
     }
 
@@ -119,7 +120,7 @@ class NBTExpression implements NBTLibrary {
     @Override
     public void write(Chunk chunk, NBTCompound nbt) throws NBTException {
 
-        NBTFactory.getChunk().writeChunk(chunk, nbt);
+        NBTFactory.getChunk().writeChunk(chunk, nbt.getHandleCopy());
     }
 
     @Override
