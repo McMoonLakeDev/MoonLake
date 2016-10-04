@@ -30,4 +30,19 @@ public enum AnvilWindowSlot {
 
         return slot;
     }
+
+    public static AnvilWindowSlot fromRawSlot(int rawSlot) {
+
+        switch (rawSlot) {
+
+            case 0:
+                return INPUT_LEFT;
+            case 1:
+                return INPUT_RIGHT;
+            case 2:
+                return OUTPUT;
+            default:
+                return null;
+        }
+    }
 }

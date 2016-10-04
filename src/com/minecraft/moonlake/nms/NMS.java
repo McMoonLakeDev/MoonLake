@@ -1,5 +1,8 @@
 package com.minecraft.moonlake.nms;
 
+import com.minecraft.moonlake.nms.anvil.*;
+import org.bukkit.inventory.ItemStack;
+
 /**
  * Created by MoonLake on 2016/6/23.
  */
@@ -7,8 +10,10 @@ public class NMS {
 
     private NMS() {
 
-        /*
-        AnvilWindow anvilWindow = new AnvilWindow();
+        // Anvil Window Test Code
+        AnvilWindow anvilWindow = new AnvilWindow(null /*Plugin Main*/);
+
+        anvilWindow.setAllowMove(false);
         anvilWindow.onClick(new AnvilWindowEventHandle<AnvilWindowClickEvent>() {
             @Override
             public void onExecute(AnvilWindowClickEvent event) {
@@ -30,6 +35,5 @@ public class NMS {
                 event.getAnvilWindow().dispose();
             }
         });
-        */
     }
 }
