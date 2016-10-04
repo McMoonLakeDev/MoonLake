@@ -34,7 +34,7 @@ class AttributeExpression implements AttributeLibrary {
     }
 
     @Override
-    public boolean isUnreakable(ItemStack itemStack) {
+    public boolean isUnbreakable(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 

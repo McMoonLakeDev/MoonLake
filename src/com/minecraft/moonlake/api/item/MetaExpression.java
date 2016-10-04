@@ -1,10 +1,7 @@
 package com.minecraft.moonlake.api.item;
 
 import com.minecraft.moonlake.api.item.meta.MetaLibrary;
-import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
-import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
-import com.minecraft.moonlake.property.SimpleBooleanProperty;
-import com.minecraft.moonlake.property.SimpleIntegerProperty;
+import com.minecraft.moonlake.manager.RandomManager;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Color;
@@ -63,11 +60,11 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
     }
 
     @Override
-    public ReadOnlyIntegerProperty getDurability(ItemStack itemStack) {
+    public int getDurability(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        return new SimpleIntegerProperty(itemStack.getDurability());
+        return itemStack.getDurability();
     }
 
     @Override
@@ -317,8 +314,9 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(enchantment, "The itemstack enchantment object is null.");
         Validate.isTrue(level >= enchantment.getStartLevel() && level <= enchantment.getMaxLevel(), "The itemstack enchantment level not safe.");
+        Validate.isTrue(enchantment.canEnchantItem(itemStack), "The itemstack not ench this enchantment: " + enchantment.getName());
 
-        itemStack.addEnchantment(enchantment, level);
+        itemStack.addUnsafeEnchantment(enchantment, level);
 
         return itemStack;
     }
@@ -382,12 +380,12 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
     }
 
     @Override
-    public ReadOnlyBooleanProperty hasEnchantment(ItemStack itemStack, Enchantment enchantment) {
+    public boolean hasEnchantment(ItemStack itemStack, Enchantment enchantment) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(enchantment, "The itemstack enchantment object is null.");
 
-        return new SimpleBooleanProperty(itemStack.hasItemMeta() && itemStack.getItemMeta().hasEnchant(enchantment));
+        return itemStack.hasItemMeta() && itemStack.getItemMeta().hasEnchant(enchantment);
     }
 
     @Override
@@ -477,15 +475,15 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
     }
 
     @Override
-    public ReadOnlyBooleanProperty hasFlags(ItemStack itemStack, ItemFlag... flags) {
+    public boolean hasFlags(ItemStack itemStack, ItemFlag... flags) {
 
         Validate.notNull(flags, "The itemstack flag object is null.");
 
         Set<ItemFlag> flagSet = getFlags(itemStack);
 
-        if(flagSet == null) {
+        if(flagSet == null && flags.length > 0) {
 
-            return new SimpleBooleanProperty(false);
+            return false;
         }
         boolean state = false;
 
@@ -501,7 +499,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
                 }
             }
         }
-        return new SimpleBooleanProperty(state);
+        return state;
     }
 
     @Override
@@ -538,5 +536,11 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
     public ItemStack setLeatherColor(ItemStack itemStack, int red, int green, int blue) {
 
         return setLeatherColor(itemStack, Color.fromRGB(red, green, blue));
+    }
+
+    @Override
+    public ItemStack setLeatherColorFromRandom(ItemStack itemStack) {
+
+        return setLeatherColor(itemStack, RandomManager.getRandomColor());
     }
 }

@@ -4,9 +4,6 @@ import com.minecraft.moonlake.api.item.potion.PotionBase;
 import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.api.item.potion.PotionEffectType;
 import com.minecraft.moonlake.api.item.potion.PotionType;
-import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
-import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
-import com.minecraft.moonlake.property.ReadOnlyStringProperty;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -68,14 +65,15 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public ReadOnlyStringProperty getSkullOwner(ItemStack itemStack) {
+    public String getSkullOwner(ItemStack itemStack) {
 
         return skullExpression.getSkullOwner(itemStack);
     }
 
     @Override
-    public ReadOnlyStringProperty getSkullSkinURL(ItemStack itemStack) {
-        return null;
+    public String getSkullSkinURL(ItemStack itemStack) {
+
+        return skullExpression.getSkullSkinURL(itemStack);
     }
 
     @Override
@@ -85,9 +83,9 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public boolean isUnreakable(ItemStack itemStack) {
+    public boolean isUnbreakable(ItemStack itemStack) {
 
-        return skullExpression.isUnreakable(itemStack);
+        return skullExpression.isUnbreakable(itemStack);
     }
 
     @Override
@@ -415,7 +413,7 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public ReadOnlyIntegerProperty getDurability(ItemStack itemStack) {
+    public int getDurability(ItemStack itemStack) {
 
         return skullExpression.getDurability(itemStack);
     }
@@ -559,7 +557,7 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public ReadOnlyBooleanProperty hasEnchantment(ItemStack itemStack, Enchantment enchantment) {
+    public boolean hasEnchantment(ItemStack itemStack, Enchantment enchantment) {
 
         return skullExpression.hasEnchantment(itemStack, enchantment);
     }
@@ -595,7 +593,7 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public ReadOnlyBooleanProperty hasFlags(ItemStack itemStack, ItemFlag... flags) {
+    public boolean hasFlags(ItemStack itemStack, ItemFlag... flags) {
 
         return skullExpression.hasFlags(itemStack, flags);
     }
@@ -616,5 +614,11 @@ class ItemExpressionWrapped extends ItemExpression {
     public ItemStack setLeatherColor(ItemStack itemStack, int red, int green, int blue) {
 
         return skullExpression.setLeatherColor(itemStack, red, green, blue);
+    }
+
+    @Override
+    public ItemStack setLeatherColorFromRandom(ItemStack itemStack) {
+
+        return skullExpression.setLeatherColorFromRandom(itemStack);
     }
 }

@@ -225,6 +225,13 @@ public interface ItemBuilder extends Builder<ItemStack> {
     ItemBuilder setLeatherColor(int red, int green, int blue);
 
     /**
+     * 设置皮革物品栈的颜色值从随机 (0 - 255)
+     *
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.Leather*} 则抛出异常
+     */
+    ItemBuilder setLeatherColorFromRandom();
+
+    /**
      * 设置物品栈是否无法破坏
      *
      * @param unbreakable 是否无法破坏

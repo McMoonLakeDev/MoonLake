@@ -1,7 +1,5 @@
 package com.minecraft.moonlake.api.item.meta;
 
-import com.minecraft.moonlake.property.ReadOnlyBooleanProperty;
-import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
 import org.bukkit.Color;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -50,7 +48,7 @@ public interface MetaLibrary {
      * @param itemStack 物品栈
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    ReadOnlyIntegerProperty getDurability(ItemStack itemStack);
+    int getDurability(ItemStack itemStack);
 
     /**
      * 重置物品栈的耐久度
@@ -235,6 +233,7 @@ public interface MetaLibrary {
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果附魔类型对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果附魔的等级小于附魔类型的开始等级或大于最大等级则抛出异常
+     * @throws IllegalArgumentException 如果附魔效果不能附魔到指定物品栈对象则抛出异常
      */
     ItemStack addSafeEnchantment(ItemStack itemStack, Enchantment enchantment, int level);
 
@@ -246,6 +245,7 @@ public interface MetaLibrary {
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果附魔效果对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果附魔的等级小于附魔类型的开始等级或大于最大等级则抛出异常
+     * @throws IllegalArgumentException 如果附魔效果不能附魔到指定物品栈对象则抛出异常
      */
     ItemStack addSafeEnchantment(ItemStack itemStack, Map<Enchantment, Integer> enchantmentMap);
 
@@ -286,7 +286,7 @@ public interface MetaLibrary {
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果附魔类型对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty hasEnchantment(ItemStack itemStack, Enchantment enchantment);
+    boolean hasEnchantment(ItemStack itemStack, Enchantment enchantment);
 
     /**
      * 获取物品栈的标示
@@ -346,7 +346,7 @@ public interface MetaLibrary {
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果物品标示对象为 {@code null} 则抛出异常
      */
-    ReadOnlyBooleanProperty hasFlags(ItemStack itemStack, ItemFlag... flags);
+    boolean hasFlags(ItemStack itemStack, ItemFlag... flags);
 
     /**
      * 将物品栈的标示清除
@@ -379,4 +379,13 @@ public interface MetaLibrary {
      * @throws IllegalArgumentException 如果颜色 RGB 不符合值范围则抛出异常 (0 - 255)
      */
     ItemStack setLeatherColor(ItemStack itemStack, int red, int green, int blue);
+
+    /**
+     * 设置皮革物品栈的颜色值从随机 (0 - 255)
+     *
+     * @param itemStack 皮革物品栈
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.Leather*} 则抛出异常
+     */
+    ItemStack setLeatherColorFromRandom(ItemStack itemStack);
 }

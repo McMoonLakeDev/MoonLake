@@ -1,5 +1,7 @@
 package com.minecraft.moonlake.manager;
 
+import org.bukkit.Color;
+
 import java.util.Random;
 import java.util.UUID;
 
@@ -85,5 +87,19 @@ public class RandomManager extends MoonLakeManager {
             valueChar[i] = randomChar[RandomManager.getRandom().nextInt(randomChar.length)];
         }
         return new String(valueChar);
+    }
+
+    /**
+     * 获取随机的 RGB 颜色 (0 - 255)
+     *
+     * @return 随机颜色
+     */
+    public static Color getRandomColor() {
+
+        int red = getRandom().nextInt(256);
+        int green = getRandom().nextInt(256);
+        int blue = getRandom().nextInt(256);
+
+        return Color.fromRGB(red, green, blue);
     }
 }

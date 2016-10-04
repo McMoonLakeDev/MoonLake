@@ -1,10 +1,8 @@
 package com.minecraft.moonlake.api.item;
 
-import com.minecraft.moonlake.MoonLakePlugin;
 import com.minecraft.moonlake.api.item.skull.SkullLibrary;
+import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.exception.NotImplementedException;
-import com.minecraft.moonlake.property.ReadOnlyStringProperty;
-import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
@@ -66,7 +64,7 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
     }
 
     @Override
-    public ItemStack createSkullWithSkin(String skinURL, String displayName) {
+    public ItemStack createSkullWithSkin(String skinURL, String displayName) throws MoonLakeException {
 
         Validate.notNull(skinURL, "The itemstack skull skin url object is null.");
         Validate.notNull(displayName, "The itemstack skull displayName object is null.");
@@ -88,7 +86,7 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
         }
         catch (Exception e) {
 
-            MoonLakePlugin.getInstances().getMLogger().error("设置头颅物品栈具有皮肤材质时异常: " + e.getMessage());
+            throw new MoonLakeException("The set itemstack skull skin textures exception.", e);
         }
         return itemStack;
     }
@@ -102,7 +100,7 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
     }
 
     @Override
-    public ReadOnlyStringProperty getSkullOwner(ItemStack itemStack) {
+    public String getSkullOwner(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack skull object is null.");
         Validate.isTrue(itemStack.getType() == Material.SKULL_ITEM, "The itemstack type not is skull.");
@@ -113,11 +111,11 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
 
             return null;
         }
-        return new SimpleStringProperty(skullMeta.getOwner());
+        return skullMeta.getOwner();
     }
 
     @Override
-    public ReadOnlyStringProperty getSkullSkinURL(ItemStack itemStack) {
+    public String getSkullSkinURL(ItemStack itemStack) {
 
         throw new NotImplementedException();
     }

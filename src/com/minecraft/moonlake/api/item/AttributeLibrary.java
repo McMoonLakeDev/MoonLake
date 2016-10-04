@@ -28,7 +28,7 @@ public interface AttributeLibrary {
      * @return true 则物品栈无法破坏
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    boolean isUnreakable(ItemStack itemStack);
+    boolean isUnbreakable(ItemStack itemStack);
 
     /**
      * 设置物品栈的特殊属性项

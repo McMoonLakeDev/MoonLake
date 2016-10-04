@@ -295,6 +295,14 @@ class ItemBuilderWrapped implements ItemBuilder {
     }
 
     @Override
+    public ItemBuilder setLeatherColorFromRandom() {
+
+        update(library().setLeatherColorFromRandom(get()));
+
+        return this;
+    }
+
+    @Override
     public ItemBuilder setUnbreakable(boolean unbreakable) {
 
         update(library().setUnbreakable(get(), unbreakable));
