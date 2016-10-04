@@ -14,12 +14,12 @@ public class NBTChunkExpression implements NBTChunk {
     }
 
     @Override
-    public void readTag(Chunk chunk, Object nbtTagCompound) throws NBTException {
+    public void readChunk(Chunk chunk, Object nbtTagCompound) throws NBTException {
 
     }
 
     @Override
-    public void writeTag(Chunk chunk, Object nbtTagCompound) throws NBTException {
+    public void writeChunk(Chunk chunk, Object nbtTagCompound) throws NBTException {
 
     }
 }

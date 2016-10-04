@@ -91,8 +91,8 @@ class AnvilWindowReflect {
             if(anvilWindow.anvilInventory == null) {
 
                 Object nmsAnvil = instantiateObject(CLASS_ANVILWINDOW, nmsPlayer);
-                Object nmsView = METHOD_GETBUKKITVIEW.invoke(nmsAnvil);
-                anvilWindow.anvilInventory = (Inventory) METHOD_GETTOPINVENTORY.invoke(nmsView);
+                Object cbBukkitView = METHOD_GETBUKKITVIEW.invoke(nmsAnvil);
+                anvilWindow.anvilInventory = (Inventory) METHOD_GETTOPINVENTORY.invoke(cbBukkitView);
                 anvilWindow.anvilInventoryHandle = nmsAnvil;
             }
             Object nmsAnvil = anvilWindow.anvilInventoryHandle;

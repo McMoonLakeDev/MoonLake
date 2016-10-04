@@ -93,7 +93,7 @@ public final class AnvilWindow {
         }
     }
 
-    public  void onClick(AnvilWindowEventHandle<AnvilWindowClickEvent> clickEvent) {
+    public void onClick(AnvilWindowEventHandle<AnvilWindowClickEvent> clickEvent) {
         // set anvil click event handle
         if(clickEvent == null) {
             // unregister listener click
@@ -126,7 +126,7 @@ public final class AnvilWindow {
         }
     }
 
-    public  void onClose(AnvilWindowEventHandle<AnvilWindowCloseEvent> closeEvent) {
+    public void onClose(AnvilWindowEventHandle<AnvilWindowCloseEvent> closeEvent) {
         // set anvil close event handle
         if(closeEvent == null) {
             // unregister listener close
