@@ -541,6 +541,6 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
     @Override
     public ItemStack setLeatherColorFromRandom(ItemStack itemStack) {
 
-        return setLeatherColor(itemStack, RandomManager.getRandomColor());
+        return setLeatherColor(itemStack, RandomManager.nextColor());
     }
 }
