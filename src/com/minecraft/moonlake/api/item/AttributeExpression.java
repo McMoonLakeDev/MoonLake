@@ -61,7 +61,7 @@ class AttributeExpression implements AttributeLibrary {
             attributeModifiers = NBTFactory.newList();
         }
         int attributeModifiersSize = attributeModifiers.size();
-        AttributeModify.Type attributeType = attribute.getAttributeType().getValue();
+        AttributeModify.Type attributeType = attribute.getType().get();
 
         if(attributeModifiersSize > 0) {
 
@@ -85,7 +85,7 @@ class AttributeExpression implements AttributeLibrary {
         }
         int version = Reflect.getServerVersionNumber();
         NBTCompound attributeNewCompound = NBTFactory.newCompound();
-        AttributeModify.Slot attributeSlot = attribute.getAttributeSlot().getValue();
+        AttributeModify.Slot attributeSlot = attribute.getSlot().get();
 
         if(attributeSlot != null && attributeSlot != AttributeModify.Slot.ALL && version >= 9) {
 
@@ -94,9 +94,9 @@ class AttributeExpression implements AttributeLibrary {
         attributeNewCompound.put("Name", attributeType.getName());
         attributeNewCompound.put("AttributeName", attributeType.getAttributeName());
         attributeNewCompound.put("Amount", attribute.getAmount().get());
-        attributeNewCompound.put("Operation", attribute.getOperation().getValue().getOperation());
+        attributeNewCompound.put("Operation", attribute.getOperation().get().getOperation());
 
-        UUID uuid = attribute.getUUIDProperty().getValue();
+        UUID uuid = attribute.getUUID().getValue();
 
         if(uuid == null) {
 
@@ -195,6 +195,10 @@ class AttributeExpression implements AttributeLibrary {
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.isTrue(ItemLibraryFactorys.item().isPotion(itemStack), "The itemstack material object not potion.");
 
+        if(effects == null) {
+
+            return itemStack;
+        }
         NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
         NBTList customPotionEffects = nbtCompound.getList("CustomPotionEffects");
 
@@ -202,7 +206,7 @@ class AttributeExpression implements AttributeLibrary {
 
             customPotionEffects = NBTFactory.newList();
 
-            if(effects != null && !effects.isEmpty()) {
+            if(!effects.isEmpty()) {
 
                 for(final PotionEffectCustom effect : effects) {
 
@@ -211,6 +215,7 @@ class AttributeExpression implements AttributeLibrary {
                     if(effectType != null) {
 
                         nbtCompound.put("Potion", "minecraft:" + effectType.getTagName());
+                        break;
                     }
                 }
             }
@@ -219,10 +224,10 @@ class AttributeExpression implements AttributeLibrary {
 
             NBTCompound effectNewCompound = NBTFactory.newCompound();
             effectNewCompound.put("Id", effect.getId().get());
-            effectNewCompound.put("Amplifier", effect.getAmplifier().getValue());
-            effectNewCompound.put("Duration", effect.getDuration().getValue());
-            effectNewCompound.put("Ambient", (byte) (effect.getAmbient().getValue() ? 1 : 0));
-            effectNewCompound.put("ShowParticles", (byte) (effect.getShowParticles().getValue() ? 1 : 0));
+            effectNewCompound.put("Amplifier", effect.getAmplifier().get());
+            effectNewCompound.put("Duration", effect.getDuration().get());
+            effectNewCompound.put("Ambient", (byte) (effect.getAmbient().get() ? 1 : 0));
+            effectNewCompound.put("ShowParticles", (byte) (effect.getShowParticles().get() ? 1 : 0));
 
             customPotionEffects.add(effectNewCompound);
         }

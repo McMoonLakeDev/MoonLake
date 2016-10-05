@@ -176,7 +176,7 @@ class CraftExpression extends MetaExpression implements CraftLibrary {
         ItemStack itemStack = create(type.getMaterial(), 0, amount);
 
         NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
-        nbtCompound.put("Potion", base.getValue().get());
+        nbtCompound.put("Potion", base.getValue());
 
         NBTFactory.get().write(itemStack, nbtCompound);
 

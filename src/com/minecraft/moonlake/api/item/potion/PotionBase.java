@@ -1,8 +1,5 @@
 package com.minecraft.moonlake.api.item.potion;
 
-import com.minecraft.moonlake.property.ReadOnlyStringProperty;
-import com.minecraft.moonlake.property.SimpleStringProperty;
-
 /**
  * Created by MoonLake on 2016/9/15.
  */
@@ -149,11 +146,11 @@ public abstract class PotionBase {
      */
     public final static PotionBase WEAKNESS = new PotionBaseWrapped("long_weakness");
 
-    private ReadOnlyStringProperty value;
+    private String value;
 
     public PotionBase(String value) {
 
-        this.value = new SimpleStringProperty(value);
+        this.value = value;
     }
 
     /**
@@ -161,7 +158,7 @@ public abstract class PotionBase {
      * 
      * @return 基础属性值
      */
-    public ReadOnlyStringProperty getValue() {
+    public String getValue() {
 
         return value;
     }

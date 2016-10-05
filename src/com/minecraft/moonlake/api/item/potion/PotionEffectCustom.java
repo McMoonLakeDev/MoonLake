@@ -1,8 +1,6 @@
 package com.minecraft.moonlake.api.item.potion;
 
-import com.minecraft.moonlake.property.Property;
-import com.minecraft.moonlake.property.ReadOnlyObjectProperty;
-import com.minecraft.moonlake.property.SimpleObjectProperty;
+import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
 
 /**
@@ -10,11 +8,11 @@ import com.minecraft.moonlake.validate.Validate;
  */
 public class PotionEffectCustom {
 
-    private ReadOnlyObjectProperty<Byte> idProperty;
-    private Property<Byte> amplifierProperty;
-    private Property<Integer> durationProperty;
-    private Property<Boolean> ambientProperty;
-    private Property<Boolean> showParticlesProperty;
+    private ReadOnlyObjectProperty<Byte> id;
+    private ObjectProperty<Byte> amplifier;
+    private IntegerProperty duration;
+    private BooleanProperty ambient;
+    private BooleanProperty showParticles;
 
     @Deprecated
     public PotionEffectCustom(int id, int amplifier, int duration) {
@@ -48,36 +46,36 @@ public class PotionEffectCustom {
 
         Validate.notNull(type, "The potion effect type object is null.");
 
-        this.idProperty = new SimpleObjectProperty<>((byte) type.getId());
-        this.amplifierProperty = new SimpleObjectProperty<>((byte) amplifier);
-        this.durationProperty = new SimpleObjectProperty<>(duration);
-        this.ambientProperty = new SimpleObjectProperty<>(ambient);
-        this.showParticlesProperty = new SimpleObjectProperty<>(showParticles);
+        this.id = new SimpleObjectProperty<>((byte) type.getId());
+        this.amplifier = new SimpleObjectProperty<>((byte) amplifier);
+        this.duration = new SimpleIntegerProperty(duration);
+        this.ambient = new SimpleBooleanProperty(ambient);
+        this.showParticles = new SimpleBooleanProperty(showParticles);
     }
 
     public ReadOnlyObjectProperty<Byte> getId() {
 
-        return idProperty;
+        return id;
     }
 
-    public Property<Byte> getAmplifier() {
+    public ObjectProperty<Byte> getAmplifier() {
 
-        return amplifierProperty;
+        return amplifier;
     }
 
-    public Property<Integer> getDuration() {
+    public IntegerProperty getDuration() {
 
-        return durationProperty;
+        return duration;
     }
 
-    public Property<Boolean> getAmbient() {
+    public BooleanProperty getAmbient() {
 
-        return ambientProperty;
+        return ambient;
     }
 
-    public Property<Boolean> getShowParticles() {
+    public BooleanProperty getShowParticles() {
 
-        return showParticlesProperty;
+        return showParticles;
     }
 }
 

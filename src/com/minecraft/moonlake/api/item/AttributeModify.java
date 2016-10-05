@@ -12,11 +12,11 @@ import java.util.UUID;
  */
 public final class AttributeModify {
 
-    private ReadOnlyProperty<Type> attributeType;
-    private ReadOnlyProperty<Slot> attributeSlot;
-    private Property<Operation> operationProperty;
-    private DoubleProperty amountProperty;
-    private Property<UUID> uuidProperty;
+    private ObjectProperty<Type> attributeType;
+    private ObjectProperty<Slot> attributeSlot;
+    private ObjectProperty<Operation> operation;
+    private ObjectProperty<UUID> uuid;
+    private DoubleProperty amount;
 
     @Deprecated
     public AttributeModify(Type type, int operation, int amount) {
@@ -61,55 +61,34 @@ public final class AttributeModify {
 
         this.attributeType = new SimpleObjectProperty<>(type);
         this.attributeSlot = new SimpleObjectProperty<>(slot);
-        this.amountProperty = new SimpleDoubleProperty(amount);
-        this.operationProperty = new SimpleObjectProperty<>(operation);
-        this.uuidProperty = new SimpleObjectProperty<>(uuid);
+        this.amount = new SimpleDoubleProperty(amount);
+        this.operation = new SimpleObjectProperty<>(operation);
+        this.uuid = new SimpleObjectProperty<>(uuid);
     }
 
-    public ReadOnlyProperty<Slot> getAttributeSlot() {
+    public ObjectProperty<Slot> getSlot() {
 
         return attributeSlot;
     }
 
-    public ReadOnlyProperty<Type> getAttributeType() {
+    public ObjectProperty<Type> getType() {
 
         return attributeType;
     }
 
-    public ReadOnlyProperty<Operation> getOperation() {
+    public ObjectProperty<Operation> getOperation() {
 
-        return operationProperty;
+        return operation;
+    }
+
+    public ObjectProperty<UUID> getUUID() {
+
+        return uuid;
     }
 
     public DoubleProperty getAmount() {
 
-        return amountProperty;
-    }
-
-    public Property<UUID> getUUIDProperty() {
-
-        return uuidProperty;
-    }
-
-    @Deprecated
-    public void setOperation(int operation) {
-
-        setOperation(Operation.fromValue(operation));
-    }
-
-    public void setOperation(Operation operation) {
-
-        this.operationProperty.setValue(operation);
-    }
-
-    public void setAmount(double amount) {
-
-        this.amountProperty.set(amount);
-    }
-
-    public void setUUID(UUID uuid) {
-
-        this.uuidProperty.setValue(uuid);
+        return amount;
     }
 
     /**

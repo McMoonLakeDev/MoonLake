@@ -11,7 +11,7 @@ public enum PotionEffectType {
     /**
      * 药水效果类型: 速度
      */
-    SPEED("Speed", 1, "spped"),
+    SPEED("Speed", 1, "speed"),
     /**
      * 药水效果类型: 缓慢
      */
