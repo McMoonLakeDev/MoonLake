@@ -64,18 +64,17 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
     }
 
     @Override
-    public ItemStack createSkullWithSkin(String skinURL, String displayName) throws MoonLakeException {
+    public ItemStack createSkullWithSkin(String skinURL) throws MoonLakeException {
 
         Validate.notNull(skinURL, "The itemstack skull skin url object is null.");
-        Validate.notNull(displayName, "The itemstack skull displayName object is null.");
 
         if(skinURL.isEmpty()) {
 
-            return createSkull(displayName);
+            return createSkull();
         }
         String targetURL = "{\"textures\":{\"SKIN\":{\"url\":\"" + skinURL + "\"}}}";
 
-        ItemStack itemStack = createSkull(displayName);
+        ItemStack itemStack = createSkull();
         SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
         GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
         gameProfile.getProperties().put("textures", new Property("textures", Base64.getEncoder().encodeToString(targetURL.getBytes())));
@@ -88,6 +87,29 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
 
             throw new MoonLakeException("The set itemstack skull skin textures exception.", e);
         }
+        return itemStack;
+    }
+
+    @Override
+    public ItemStack createSkullWithSkin(URL skinURL) throws MoonLakeException {
+
+        Validate.notNull(skinURL, "The itemstack skull skin url object is null.");
+
+        return createSkullWithSkin(skinURL.toString());
+    }
+
+    @Override
+    public ItemStack createSkullWithSkin(String skinURL, String displayName) throws MoonLakeException {
+
+        Validate.notNull(skinURL, "The itemstack skull skin url object is null.");
+        Validate.notNull(displayName, "The itemstack skull displayName object is null.");
+
+        if(skinURL.isEmpty()) {
+
+            return createSkull(displayName);
+        }
+        ItemStack itemStack = createSkullWithSkin(skinURL);
+        itemStack = setDisplayName(itemStack, displayName);
         return itemStack;
     }
 

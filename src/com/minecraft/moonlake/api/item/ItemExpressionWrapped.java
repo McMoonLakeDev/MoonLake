@@ -4,6 +4,7 @@ import com.minecraft.moonlake.api.item.potion.PotionBase;
 import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.api.item.potion.PotionEffectType;
 import com.minecraft.moonlake.api.item.potion.PotionType;
+import com.minecraft.moonlake.exception.MoonLakeException;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -50,6 +51,18 @@ class ItemExpressionWrapped extends ItemExpression {
     public ItemStack createSkullWithOwner(String skullOwner, String displayName) {
 
         return skullExpression.createSkullWithOwner(skullOwner, displayName);
+    }
+
+    @Override
+    public ItemStack createSkullWithSkin(String skinURL) throws MoonLakeException {
+
+        return skullExpression.createSkullWithSkin(skinURL);
+    }
+
+    @Override
+    public ItemStack createSkullWithSkin(URL skinURL) throws MoonLakeException {
+
+        return skullExpression.createSkullWithSkin(skinURL);
     }
 
     @Override

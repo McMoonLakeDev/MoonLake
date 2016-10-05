@@ -51,6 +51,26 @@ public interface SkullLibrary {
      * 创建头颅物品栈 ItemStack 对象
      *
      * @param skinURL 头颅材质信息 URL
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果头颅材质信息对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果设置头颅材质时错误则抛出异常
+     */
+    ItemStack createSkullWithSkin(String skinURL) throws MoonLakeException;
+
+    /**
+     * 创建头颅物品栈 ItemStack 对象
+     *
+     * @param skinURL 头颅材质信息 URL
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果头颅材质信息对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果设置头颅材质时错误则抛出异常
+     */
+    ItemStack createSkullWithSkin(URL skinURL) throws MoonLakeException;
+
+    /**
+     * 创建头颅物品栈 ItemStack 对象
+     *
+     * @param skinURL 头颅材质信息 URL
      * @param displayName 头颅显示名称
      * @return ItemStack
      * @throws IllegalArgumentException 如果头颅显示名称对象为 {@code null} 则抛出异常
