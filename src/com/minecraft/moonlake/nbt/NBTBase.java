@@ -67,12 +67,15 @@ public abstract class NBTBase {
         return handle;
     }
 
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public String getName() {
 
         return NBTReflect.getHandle().getTagName(handle);
     }
 
     @Deprecated
+    @SuppressWarnings("deprecation")
     public void setName(String name) {
 
         NBTReflect.getHandle().setTagName(handle, name);

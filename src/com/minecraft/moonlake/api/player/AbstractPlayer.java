@@ -299,6 +299,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isOnGround() {
 
         return getBukkitPlayer().isOnGround();
@@ -612,12 +613,14 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public Map<Integer, ItemStack> addItemStack(ItemStack... itemStacks) {
 
         return getInventory().addItem(itemStacks);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public Map<Integer, ItemStack> removeItemStack(ItemStack... itemStacks) {
 
         return getInventory().removeItem(itemStacks);
@@ -874,6 +877,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void setGameMode(int mode) {
 
         GameMode gameMode = GameMode.getByValue(mode);

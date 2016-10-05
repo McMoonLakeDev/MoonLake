@@ -525,6 +525,7 @@ class NBTCompoundExpression implements NBTCompound {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private Object put0(String key, Object tag) {
 
         NBTReflect.getHandle().setTagName(tag, key);

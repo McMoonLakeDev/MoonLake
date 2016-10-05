@@ -83,6 +83,8 @@ class NBTItemStackExpression implements NBTItemStack {
         }
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public Object createNMSItemStack(ItemStack itemStack) throws NBTException {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
@@ -108,6 +110,7 @@ class NBTItemStackExpression implements NBTItemStack {
         }
     }
 
+    @Override
     public ItemStack createCraftItemStack(Object nmsItemStack) throws NBTException {
 
         Validate.notNull(nmsItemStack, "The nms itemstack object is null.");
@@ -141,11 +144,13 @@ class NBTItemStackExpression implements NBTItemStack {
         }
     }
 
+    @Override
     public ItemStack createCraftItemStack(ItemStack itemStack) throws NBTException {
 
         return createCraftItemStack(createNMSItemStack(itemStack));
     }
 
+    @Override
     public void setTag(ItemStack itemStack, Object nbtTagCompound) throws NBTException {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
@@ -167,6 +172,7 @@ class NBTItemStackExpression implements NBTItemStack {
         }
     }
 
+    @Override
     public Object getTag(ItemStack itemStack) throws NBTException {
 
         Validate.notNull(itemStack, "The itemstack object is null.");

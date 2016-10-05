@@ -33,6 +33,7 @@ abstract class PlayerExpression implements PlayerLibrary {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public Player fromUUID(String uuid) {
 
         Validate.notNull(uuid, "The player uuid object is null.");
@@ -65,6 +66,7 @@ abstract class PlayerExpression implements PlayerLibrary {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public MoonLakePlayer fromUUIDs(String uuid) {
 
         Validate.notNull(uuid, "The player uuid object is null.");

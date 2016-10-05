@@ -98,6 +98,7 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void send(Player... players) throws PacketException {
 
         try {

@@ -14,6 +14,7 @@ import java.util.*;
 /**
  * Created by MoonLake on 2016/7/17.
  */
+@SuppressWarnings("deprecation")
 public class BlockManager extends MoonLakeManager {
 
     /**

@@ -23,6 +23,7 @@ class CraftExpression extends MetaExpression implements CraftLibrary {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(int id) {
 
         Material material = Material.getMaterial(id);
@@ -30,6 +31,7 @@ class CraftExpression extends MetaExpression implements CraftLibrary {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(int id, int data) {
 
         Material material = Material.getMaterial(id);
@@ -37,6 +39,7 @@ class CraftExpression extends MetaExpression implements CraftLibrary {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(int id, int data, int amount) {
 
         Material material = Material.getMaterial(id);
@@ -44,6 +47,7 @@ class CraftExpression extends MetaExpression implements CraftLibrary {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(int id, int data, int amount, String displayName) {
 
         Material material = Material.getMaterial(id);
@@ -51,6 +55,7 @@ class CraftExpression extends MetaExpression implements CraftLibrary {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(int id, int data, int amount, String displayName, String... lore) {
 
         Material material = Material.getMaterial(id);
@@ -58,6 +63,7 @@ class CraftExpression extends MetaExpression implements CraftLibrary {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(String type) {
 
         Validate.notNull(type, "The itemstack type object is null.");
@@ -67,6 +73,7 @@ class CraftExpression extends MetaExpression implements CraftLibrary {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(String type, int data) {
 
         Validate.notNull(type, "The itemstack type object is null.");
@@ -76,6 +83,7 @@ class CraftExpression extends MetaExpression implements CraftLibrary {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(String type, int data, int amount) {
 
         Validate.notNull(type, "The itemstack type object is null.");
@@ -85,6 +93,7 @@ class CraftExpression extends MetaExpression implements CraftLibrary {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(String type, int data, int amount, String displayName) {
 
         Validate.notNull(type, "The itemstack type object is null.");
@@ -94,6 +103,7 @@ class CraftExpression extends MetaExpression implements CraftLibrary {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(String type, int data, int amount, String displayName, String... lore) {
 
         Validate.notNull(type, "The itemstack type object is null.");

@@ -156,60 +156,70 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(int id) {
 
         return skullExpression.create(id);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(int id, int data) {
 
         return skullExpression.create(id, data);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(int id, int data, int amount) {
 
         return skullExpression.create(id, data, amount);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(int id, int data, int amount, String displayName) {
 
         return skullExpression.create(id, data, amount, displayName);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(int id, int data, int amount, String displayName, String... lore) {
 
         return skullExpression.create(id, data, amount, displayName, lore);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(String type) {
 
         return skullExpression.create(type);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(String type, int data) {
 
         return skullExpression.create(type, data);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(String type, int data, int amount) {
 
         return skullExpression.create(type, data);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(String type, int data, int amount, String displayName) {
 
         return skullExpression.create(type, data, amount, displayName);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack create(String type, int data, int amount, String displayName, String... lore) {
 
         return skullExpression.create(type, data, amount, displayName, lore);

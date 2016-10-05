@@ -117,6 +117,7 @@ public class NBTTagCompound extends NBTBase implements Map<String, NBTBase> {
         return getHandleMap().containsKey(key);
     }
 
+    @SuppressWarnings("deprecation")
     public NBTTagCompound nextCompound(String key) {
 
         NBTBase base = get(key);
@@ -135,6 +136,7 @@ public class NBTTagCompound extends NBTBase implements Map<String, NBTBase> {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public NBTTagList nextList(String key) {
 
         NBTBase base = get(key);
@@ -201,6 +203,7 @@ public class NBTTagCompound extends NBTBase implements Map<String, NBTBase> {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public NBTBase put(String key, NBTBase value) {
 
         NBTBase base = NBTBase.wrap(getHandleMap().get(key));
@@ -215,6 +218,7 @@ public class NBTTagCompound extends NBTBase implements Map<String, NBTBase> {
         return put(key, NBTBase.getByValue(value));
     }
 
+    @SuppressWarnings("deprecation")
     public void putToHandle(String key, NBTBase value) {
 
         Object tag = value.clone().handle;

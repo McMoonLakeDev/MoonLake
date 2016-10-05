@@ -255,6 +255,7 @@ class FancyMessageExpression implements FancyMessage {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public FancyMessage then() {
 
         Validate.isTrue(getLaster().hasText(), "The fancy message part laster not has text.");

@@ -1,7 +1,7 @@
 package com.minecraft.moonlake.binding;
 
-import com.minecraft.moonlake.MoonLakePlugin;
 import com.minecraft.moonlake.collections.ObservableList;
+import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.value.*;
 
 import java.lang.ref.WeakReference;
@@ -34,8 +34,7 @@ public class Bindings {
                 }
                 catch (Exception e) {
 
-                    MoonLakePlugin.getInstances().getMLogger().warn("Exception while evaluating binding: " + e.getMessage());
-                    return false;
+                    throw new MoonLakeException("Exception while evaluating binding: " + e.getMessage());
                 }
             }
 
@@ -76,8 +75,7 @@ public class Bindings {
                 }
                 catch (Exception e) {
 
-                    MoonLakePlugin.getInstances().getMLogger().warn("Exception while evaluating binding: " + e.getMessage());
-                    return 0.0d;
+                    throw new MoonLakeException("Exception while evaluating binding: " + e.getMessage());
                 }
             }
 
@@ -112,8 +110,7 @@ public class Bindings {
                 }
                 catch (Exception e) {
 
-                    MoonLakePlugin.getInstances().getMLogger().warn("Exception while evaluating binding: " + e.getMessage());
-                    return 0f;
+                    throw new MoonLakeException("Exception while evaluating binding: " + e.getMessage());
                 }
             }
 
@@ -148,8 +145,7 @@ public class Bindings {
                 }
                 catch (Exception e) {
 
-                    MoonLakePlugin.getInstances().getMLogger().warn("Exception while evaluating binding: " + e.getMessage());
-                    return 0;
+                    throw new MoonLakeException("Exception while evaluating binding: " + e.getMessage());
                 }
             }
 
@@ -184,8 +180,7 @@ public class Bindings {
                 }
                 catch (Exception e) {
 
-                    MoonLakePlugin.getInstances().getMLogger().warn("Exception while evaluating binding: " + e.getMessage());
-                    return 0L;
+                    throw new MoonLakeException("Exception while evaluating binding: " + e.getMessage());
                 }
             }
 
@@ -220,8 +215,7 @@ public class Bindings {
                 }
                 catch (Exception e) {
 
-                    MoonLakePlugin.getInstances().getMLogger().warn("Exception while evaluating binding: " + e.getMessage());
-                    return null;
+                    throw new MoonLakeException("Exception while evaluating binding: " + e.getMessage());
                 }
             }
 
@@ -256,8 +250,7 @@ public class Bindings {
                 }
                 catch (Exception e) {
 
-                    MoonLakePlugin.getInstances().getMLogger().warn("Exception while evaluating binding: " + e.getMessage());
-                    return "";
+                    throw new MoonLakeException("Exception while evaluating binding: " + e.getMessage());
                 }
             }
 

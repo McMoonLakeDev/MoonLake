@@ -153,6 +153,7 @@ public class ItemManager extends MoonLakeManager {
      * @param target 目标物品栈
      * @return true 则类型和数据都相同 else 不相同
      */
+    @SuppressWarnings("deprecation")
     public static boolean compare(ItemStack source, ItemStack target) {
 
         return source != null && target != null && source.getType() == target.getType() && source.getData().getData() == target.getData().getData();

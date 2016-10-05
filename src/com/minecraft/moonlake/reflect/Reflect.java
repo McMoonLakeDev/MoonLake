@@ -12,6 +12,7 @@ import java.util.Map;
 /**
  * Created by MoonLake on 2016/6/7.
  */
+@SuppressWarnings("deprecation")
 public class Reflect {
 
     private final static String SERVER_VERSION;

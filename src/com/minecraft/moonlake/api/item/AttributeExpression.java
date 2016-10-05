@@ -189,6 +189,7 @@ class AttributeExpression implements AttributeLibrary {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack setCustomPotion(ItemStack itemStack, Collection<? extends PotionEffectCustom> effects) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");

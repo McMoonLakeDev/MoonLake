@@ -335,6 +335,7 @@ public class EntityManager extends MoonLakeManager {
      * @throws IllegalArgumentException 如果源实体对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果攻击者实体对象为 {@code null} 则抛出异常
      */
+    @SuppressWarnings("deprecation")
     public static void realDamage(LivingEntity source, LivingEntity damager, double damage) {
 
         Validate.notNull(source, "The entity source object is null.");
