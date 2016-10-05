@@ -84,12 +84,11 @@ public final class AnvilWindow {
                     player.updateInventory();
                 }
             };
-            Bukkit.getServer().getPluginManager().registerEvents(listenerMove, plugin);
+            registerListener(listenerMove);
         }
         else if(!flag && listenerMove != null) {
             // unregister anvil move listener
-            HandlerList.unregisterAll(listenerMove);
-            listenerMove = null;
+            disposeMove();
         }
     }
 
@@ -97,9 +96,7 @@ public final class AnvilWindow {
         // set anvil click event handle
         if(clickEvent == null) {
             // unregister listener click
-            HandlerList.unregisterAll(listenerClick);
-            listenerClick = null;
-            clickEventHandle = null;
+            disposeClick();
         }
         else {
             // register listener click
@@ -122,7 +119,7 @@ public final class AnvilWindow {
                     clickEventHandle.onExecute(awce);
                 }
             };
-            Bukkit.getServer().getPluginManager().registerEvents(listenerClick, plugin);
+            registerListener(listenerClick);
         }
     }
 
@@ -130,9 +127,7 @@ public final class AnvilWindow {
         // set anvil close event handle
         if(closeEvent == null) {
             // unregister listener close
-            HandlerList.unregisterAll(listenerClose);
-            listenerClose = null;
-            closeEventHandle = null;
+            disposeClose();
         }
         else {
             // register listener close
@@ -152,7 +147,7 @@ public final class AnvilWindow {
                     closeEventHandle.onExecute(awce);
                 }
             };
-            Bukkit.getServer().getPluginManager().registerEvents(listenerClose, plugin);
+            registerListener(listenerClose);
         }
     }
 
@@ -178,21 +173,45 @@ public final class AnvilWindow {
         return anvilInventory.getItem(slot.getSlot());
     }
 
+    private void registerListener(Listener listener) {
+
+        if(listener != null) {
+
+            Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
+        }
+    }
+
     public void dispose() {
         // dispose close anvil window
-        if(listenerMove != null) {
-            HandlerList.unregisterAll(listenerMove);
-            listenerMove = null;
-        }
-        if(listenerClick != null) {
-            HandlerList.unregisterAll(listenerClick);
-            listenerClick = null;
-            clickEventHandle = null;
-        }
-        if(listenerClose != null) {
-            HandlerList.unregisterAll(listenerClose);
-            listenerClose = null;
-            closeEventHandle = null;
+        disposeMove();
+        disposeClick();
+        disposeClose();
+    }
+
+    private void disposeMove() {
+
+        disposeListener(listenerMove);
+        listenerMove = null;
+    }
+
+    private void disposeClick() {
+
+        disposeListener(listenerClick);
+        listenerClick = null;
+        clickEventHandle = null;
+    }
+
+    private void disposeClose() {
+
+        disposeListener(listenerClose);
+        listenerClose = null;
+        closeEventHandle = null;
+    }
+
+    private void disposeListener(Listener listener) {
+
+        if(listener != null) {
+            HandlerList.unregisterAll(listener);
         }
     }
 }

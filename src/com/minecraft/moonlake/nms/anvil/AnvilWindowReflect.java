@@ -5,6 +5,7 @@ import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -26,6 +27,7 @@ class AnvilWindowReflect {
     private Class<?> CLASS_PACKETPLAYOUTOPENWINDOW;
     private Class<?> CLASS_CONTAINER;
     private Class<?> CLASS_ICRAFTING;
+    private Constructor<?> CONSTRUCTOR_ANVILWINDOW;
     private Method METHOD_GETHANDLE;
     private Method METHOD_GETBUKKITVIEW;
     private Method METHOD_GETTOPINVENTORY;
@@ -53,6 +55,8 @@ class AnvilWindowReflect {
             CLASS_PACKETPLAYOUTOPENWINDOW = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutOpenWindow");
             CLASS_CONTAINER = PackageType.MINECRAFT_SERVER.getClass("Container");
             CLASS_ICRAFTING = PackageType.MINECRAFT_SERVER.getClass("ICrafting");
+
+            CONSTRUCTOR_ANVILWINDOW = CLASS_ANVILWINDOW.getConstructor(CLASS_ENTITYHUMAN);
 
             METHOD_GETHANDLE = getMethod(CLASS_CRAFTPLAYER, "getHandle");
             METHOD_GETBUKKITVIEW = getMethod(CLASS_ANVILWINDOW, "getBukkitView");
@@ -83,6 +87,7 @@ class AnvilWindowReflect {
     public void openAnvil(Player player, AnvilWindow anvilWindow) throws NMSException {
 
         Validate.notNull(player, "The player object is null.");
+        Validate.notNull(anvilWindow, "The anvil window object is null.");
 
         try {
 
@@ -90,7 +95,7 @@ class AnvilWindowReflect {
 
             if(anvilWindow.anvilInventory == null) {
 
-                Object nmsAnvil = instantiateObject(CLASS_ANVILWINDOW, nmsPlayer);
+                Object nmsAnvil = CONSTRUCTOR_ANVILWINDOW.newInstance(nmsPlayer);
                 Object cbBukkitView = METHOD_GETBUKKITVIEW.invoke(nmsAnvil);
                 anvilWindow.anvilInventory = (Inventory) METHOD_GETTOPINVENTORY.invoke(cbBukkitView);
                 anvilWindow.anvilInventoryHandle = nmsAnvil;
