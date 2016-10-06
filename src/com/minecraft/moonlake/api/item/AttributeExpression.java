@@ -128,34 +128,21 @@ class AttributeExpression implements AttributeLibrary {
     }
 
     @Override
-    public List<AttributeModify> getAttributes(ItemStack itemStack) {
+    public Set<AttributeModify> getAttributes(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        NBTCompound nbtCompound = NBTFactory.get().read(itemStack);
-        List<AttributeModify> attributeModifyList = new ArrayList<>();
-
-        if(nbtCompound == null) {
-
-            return attributeModifyList;
-        }
+        Set<AttributeModify> attributeModifyList = new HashSet<>();
+        NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
         NBTList attributeModifiers = nbtCompound.getList("AttributeModifiers");
 
-        if(attributeModifiers == null) {
-
-            return attributeModifyList;
-        }
-        int attributeModifiersSize = attributeModifiers.size();
-
-        if(attributeModifiersSize <= 0) {
+        if(attributeModifiers == null || attributeModifiers.isEmpty()) {
 
             return attributeModifyList;
         }
         int version = Reflect.getServerVersionNumber();
 
-        for(int i = 0; i < attributeModifiersSize; i++) {
-
-            Object attributeObject = attributeModifiers.get(i);
+        for(final Object attributeObject : attributeModifiers) {
 
             if(attributeObject instanceof NBTCompound) {
 
@@ -178,6 +165,31 @@ class AttributeExpression implements AttributeLibrary {
             }
         }
         return attributeModifyList;
+    }
+
+    @Override
+    public boolean hasAttribute(ItemStack itemStack, AttributeModify.Type type) {
+
+        Validate.notNull(type, "The itemstack attribute type object is null.");
+
+        Set<AttributeModify> attributeModifies = getAttributes(itemStack);
+
+        if(attributeModifies == null || attributeModifies.isEmpty()) {
+
+            return false;
+        }
+        boolean result = false;
+
+        for(final AttributeModify attribute : attributeModifies) {
+
+            result = attribute.getType().get() == type;
+
+            if(result) {
+
+                break;
+            }
+        }
+        return result;
     }
 
     @Override
@@ -210,7 +222,7 @@ class AttributeExpression implements AttributeLibrary {
 
                 for(final PotionEffectCustom effect : effects) {
 
-                    PotionEffectType effectType = PotionEffectType.fromId(effect.getId().get());
+                    PotionEffectType effectType = effect.getType();
 
                     if(effectType != null) {
 
@@ -254,5 +266,66 @@ class AttributeExpression implements AttributeLibrary {
     public ItemStack setCustomPotion(ItemStack itemStack, PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
 
         return setCustomPotion(itemStack, new PotionEffectCustom(effectType, amplifier, duration, ambient, showParticles));
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public Set<PotionEffectCustom> getCustomPotion(ItemStack itemStack) {
+
+        Validate.notNull(itemStack, "The itemstack object is null.");
+        Validate.isTrue(ItemLibraryFactorys.item().isPotion(itemStack), "The itemstack material object not potion.");
+
+        Set<PotionEffectCustom> effects = new HashSet<>();
+        NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
+        NBTList customPotionEffects = nbtCompound.getList("CustomPotionEffects");
+
+        if(customPotionEffects == null || customPotionEffects.isEmpty()) {
+
+            return effects;
+        }
+        for(final Object effectObject : customPotionEffects) {
+
+            if(effectObject instanceof NBTCompound) {
+
+                NBTCompound effectCompound = (NBTCompound) effectObject;
+                PotionEffectType effectType = PotionEffectType.fromId(effectCompound.getInt("Id"));
+
+                if(effectType != null) {
+
+                    int amplifier = effectCompound.getByte("Amplifier");
+                    int duration = effectCompound.getInt("Duration");
+                    boolean ambient = effectCompound.getBoolean("Ambient");
+                    boolean showParticles = effectCompound.getBoolean("ShowParticles");
+                    effects.add(new PotionEffectCustom(effectType, amplifier, duration, ambient, showParticles));
+                }
+            }
+        }
+        return effects;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean hasCustomPotion(ItemStack itemStack, PotionEffectType effectType) {
+
+        Validate.notNull(effectType, "The itemstack potion effect object is null.");
+
+        Set<PotionEffectCustom> effects = getCustomPotion(itemStack);
+
+        if(effects == null || effects.isEmpty()) {
+
+            return false;
+        }
+        boolean result = false;
+
+        for(final PotionEffectCustom effect : effects) {
+
+            result = effect.getType() == effectType;
+
+            if(result) {
+
+                break;
+            }
+        }
+        return result;
     }
 }

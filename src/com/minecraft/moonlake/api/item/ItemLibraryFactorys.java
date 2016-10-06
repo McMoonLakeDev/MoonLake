@@ -80,7 +80,7 @@ public class ItemLibraryFactorys {
      *
      * @return PotionLibrary
      */
-    public PotionLibrary potion() {
+    public static PotionLibrary potion() {
 
         return item();
     }

@@ -77,5 +77,12 @@ public class PotionEffectCustom {
 
         return showParticles;
     }
+
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public PotionEffectType getType() {
+
+        return PotionEffectType.fromId(id.get());
+    }
 }
 

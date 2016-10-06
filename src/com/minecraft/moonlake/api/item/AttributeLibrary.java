@@ -5,7 +5,7 @@ import com.minecraft.moonlake.api.item.potion.PotionEffectType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by MoonLake on 2016/9/13.
@@ -75,11 +75,23 @@ public interface AttributeLibrary {
      * @return 特殊属性
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
-    List<AttributeModify> getAttributes(ItemStack itemStack);
+    Set<AttributeModify> getAttributes(ItemStack itemStack);
 
     /**
-     * 创建自定义效果药水物品栈 ItemStack 对象
+     * 获取物品栈是否拥有特殊属性
      *
+     * @param itemStack 物品栈
+     * @param type 特殊属性类型
+     * @return 是否拥有特殊属性
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果特殊属性类型对象为 {@code null} 则抛出异常
+     */
+    boolean hasAttribute(ItemStack itemStack, AttributeModify.Type type);
+
+    /**
+     * 设置药水物品栈的自定义药水效果
+     *
+     * @param itemStack 药水物品栈
      * @param effects 药水自定义效果
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果药水自定义效果对象为 {@code null} 则抛出异常
@@ -88,8 +100,9 @@ public interface AttributeLibrary {
     ItemStack setCustomPotion(ItemStack itemStack, PotionEffectCustom... effects);
 
     /**
-     * 创建自定义效果药水物品栈 ItemStack 对象
+     * 设置药水物品栈的自定义药水效果
      *
+     * @param itemStack 药水物品栈
      * @param effects 药水自定义效果
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果药水自定义效果对象为 {@code null} 则抛出异常
@@ -100,6 +113,7 @@ public interface AttributeLibrary {
     /**
      * 设置药水物品栈的自定义药水效果
      *
+     * @param itemStack 药水物品栈
      * @param effectType 药水效果类型
      * @param amplifier 药水效果等级
      * @param duration 药水效果时间
@@ -112,6 +126,7 @@ public interface AttributeLibrary {
     /**
      * 设置药水物品栈的自定义药水效果
      *
+     * @param itemStack 药水物品栈
      * @param effectType 药水效果类型
      * @param amplifier 药水效果等级
      * @param duration 药水效果时间
@@ -125,6 +140,7 @@ public interface AttributeLibrary {
     /**
      * 设置药水物品栈的自定义药水效果
      *
+     * @param itemStack 药水物品栈
      * @param effectType 药水效果类型
      * @param amplifier 药水效果等级
      * @param duration 药水效果时间
@@ -135,4 +151,26 @@ public interface AttributeLibrary {
      * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.*Potion} 则抛出异常
      */
     ItemStack setCustomPotion(ItemStack itemStack, PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles);
+
+    /**
+     * 获取药水物品栈的自定义药水效果
+     *
+     * @param itemStack 药水物品栈
+     * @return 自定义药水效果
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.*Potion} 则抛出异常
+     */
+    Set<PotionEffectCustom> getCustomPotion(ItemStack itemStack);
+
+    /**
+     * 获取药水物品栈是否拥有指定药水效果
+     *
+     * @param itemStack 药水物品栈
+     * @param effectType 药水效果类型
+     * @return 是否拥有药水效果
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.*Potion} 则抛出异常
+     */
+    boolean hasCustomPotion(ItemStack itemStack, PotionEffectType effectType);
 }

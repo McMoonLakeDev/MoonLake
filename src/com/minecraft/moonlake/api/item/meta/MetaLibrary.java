@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.api.item.meta;
 
+import com.minecraft.moonlake.api.item.AttributeLibrary;
 import org.bukkit.Color;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -12,7 +13,7 @@ import java.util.Set;
 /**
  * Created by MoonLake on 2016/9/12.
  */
-public interface MetaLibrary {
+public interface MetaLibrary extends AttributeLibrary {
 
     /**
      * 设置物品栈的显示名称
