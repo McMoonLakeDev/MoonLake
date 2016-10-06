@@ -25,8 +25,8 @@ public final class AnvilWindow {
     private Listener listenerMove;
     private boolean allowMove;
     private boolean isInitialized;
-    private AnvilWindowEventHandle<AnvilWindowClickEvent> clickEventHandle;
-    private AnvilWindowEventHandle<AnvilWindowCloseEvent> closeEventHandle;
+    private AnvilWindowEventHandler<AnvilWindowClickEvent> clickEventHandle;
+    private AnvilWindowEventHandler<AnvilWindowCloseEvent> closeEventHandle;
     protected Inventory anvilInventory;
     protected Object anvilInventoryHandle;
 
@@ -92,7 +92,7 @@ public final class AnvilWindow {
         }
     }
 
-    public void onClick(AnvilWindowEventHandle<AnvilWindowClickEvent> clickEvent) {
+    public void onClick(AnvilWindowEventHandler<AnvilWindowClickEvent> clickEvent) {
         // set anvil click event handle
         if(clickEvent == null) {
             // unregister listener click
@@ -123,7 +123,7 @@ public final class AnvilWindow {
         }
     }
 
-    public void onClose(AnvilWindowEventHandle<AnvilWindowCloseEvent> closeEvent) {
+    public void onClose(AnvilWindowEventHandler<AnvilWindowCloseEvent> closeEvent) {
         // set anvil close event handle
         if(closeEvent == null) {
             // unregister listener close

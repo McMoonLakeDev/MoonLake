@@ -14,7 +14,7 @@ public class NMS {
         AnvilWindow anvilWindow = new AnvilWindow(null /*Plugin Main*/);
 
         anvilWindow.setAllowMove(false);
-        anvilWindow.onClick(new AnvilWindowEventHandle<AnvilWindowClickEvent>() {
+        anvilWindow.onClick(new AnvilWindowEventHandler<AnvilWindowClickEvent>() {
             @Override
             public void onExecute(AnvilWindowClickEvent event) {
                 // 监听铁砧窗口点击事件
@@ -27,7 +27,7 @@ public class NMS {
                 }
             }
         });
-        anvilWindow.onClose(new AnvilWindowEventHandle<AnvilWindowCloseEvent>() {
+        anvilWindow.onClose(new AnvilWindowEventHandler<AnvilWindowCloseEvent>() {
             @Override
             public void onExecute(AnvilWindowCloseEvent event) {
                 // 监听铁砧窗口关闭事件
