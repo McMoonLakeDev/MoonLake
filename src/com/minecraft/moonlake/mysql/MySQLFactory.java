@@ -9,27 +9,8 @@ import java.nio.charset.Charset;
  */
 public class MySQLFactory {
 
-    /**
-     * MySQLFactory Static Instance
-     */
-    private static MySQLFactory mySQLFactoryInstance;
-
     private MySQLFactory() {
 
-    }
-
-    /**
-     * 获取 MySQLFactory 对象
-     *
-     * @return MySQLFactory
-     */
-    public static MySQLFactory get() {
-
-        if(mySQLFactoryInstance == null) {
-
-            mySQLFactoryInstance = new MySQLFactory();
-        }
-        return mySQLFactoryInstance;
     }
 
     /**
@@ -40,7 +21,7 @@ public class MySQLFactory {
      * @return MySQLConnection
      * @throws MySQLInitializeException 如果 MySQL 初始化错误则抛出异常
      */
-    public MySQLConnection connection(String username, String password) throws MySQLInitializeException {
+    public static MySQLConnection connection(String username, String password) throws MySQLInitializeException {
 
         return new MySQLConnectionExpression(username, password);
     }
@@ -54,7 +35,7 @@ public class MySQLFactory {
      * @return MySQLConnection
      * @throws MySQLInitializeException 如果 MySQL 初始化错误则抛出异常
      */
-    public MySQLConnection connection(String username, String password, String charset) throws MySQLInitializeException {
+    public static MySQLConnection connection(String username, String password, String charset) throws MySQLInitializeException {
 
         return new MySQLConnectionExpression(username, password, charset);
     }
@@ -68,7 +49,7 @@ public class MySQLFactory {
      * @return MySQLConnection
      * @throws MySQLInitializeException 如果 MySQL 初始化错误则抛出异常
      */
-    public MySQLConnection connection(String username, String password, Charset charset) throws MySQLInitializeException {
+    public static MySQLConnection connection(String username, String password, Charset charset) throws MySQLInitializeException {
 
         return new MySQLConnectionExpression(username, password, charset);
     }
@@ -83,7 +64,7 @@ public class MySQLFactory {
      * @return MySQLConnection
      * @throws MySQLInitializeException 如果 MySQL 初始化错误则抛出异常
      */
-    public MySQLConnection connection(String host, int port, String username, String password) throws MySQLInitializeException {
+    public static MySQLConnection connection(String host, int port, String username, String password) throws MySQLInitializeException {
 
         return new MySQLConnectionExpression(host, port, username, password);
     }
@@ -99,7 +80,7 @@ public class MySQLFactory {
      * @return MySQLConnection
      * @throws MySQLInitializeException 如果 MySQL 初始化错误则抛出异常
      */
-    public MySQLConnection connection(String host, int port, String username, String password, String charset) throws MySQLInitializeException {
+    public static MySQLConnection connection(String host, int port, String username, String password, String charset) throws MySQLInitializeException {
 
         return new MySQLConnectionExpression(host, port, username, password, charset);
     }
@@ -115,7 +96,7 @@ public class MySQLFactory {
      * @return MySQLConnection
      * @throws MySQLInitializeException 如果 MySQL 初始化错误则抛出异常
      */
-    public MySQLConnection connection(String host, int port, String username, String password, Charset charset) throws MySQLInitializeException {
+    public static MySQLConnection connection(String host, int port, String username, String password, Charset charset) throws MySQLInitializeException {
 
         return new MySQLConnectionExpression(host, port, username, password, charset);
     }

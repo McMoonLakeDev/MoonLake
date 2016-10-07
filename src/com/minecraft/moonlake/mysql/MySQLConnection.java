@@ -7,7 +7,27 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by MoonLake on 2016/9/28.
+ * <hr />
+ * <div>
+ *     <h1>MoonLake MySQL Library</h1>
+ *     <p>By Month_Light Ver: 1.0</p>
+ * </div>
+ * <hr />
+ * <div>
+ *     <h1>简单的小 demo 使用</h1>
+ *     <p>MySQLConnection mysql = MySQLFactory.connection("localhost", 3306, "root", "password", "utf-8");</p>
+ *     <p>mysql.setDatabase("myDatabase");</p>
+ *     <p>mysql.getConnection();</p>
+ *     <p>Map&lt;String, Object&gt; result = mysql.findResult("select id,name,money from myTable where binary `name`=?;", "myName");</p>
+ *     <p>System.out.println("id: " + result.get("id"));</p>
+ *     <p>System.out.println("name: " + result.get("name"));</p>
+ *     <p>System.out.println("money: " + result.get("money"));</p>
+ *     <p>mysql.dispose();</p>
+ * </div>
+ * <hr />
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface MySQLConnection {
 
@@ -108,6 +128,36 @@ public interface MySQLConnection {
      * @throws MySQLException 如果数据库对象为 {@code null} 或 {@code empty} 则抛出异常
      */
     void getConnection() throws MySQLException;
+
+    /**
+     * 创建 MySQL 数据库
+     *
+     * @return 是否执行成功
+     * @throws IllegalArgumentException 如果数据库对象为 {@code null} 则抛出异常
+     * @throws MySQLException 如果创建数据库错误则抛出异常
+     */
+    boolean createDatabase() throws MySQLException;
+
+    /**
+     * 创建 MySQL 数据库
+     *
+     * @param database 数据库名
+     * @return 是否执行成功
+     * @throws IllegalArgumentException 如果数据库对象为 {@code null} 则抛出异常
+     * @throws MySQLException 如果创建数据库错误则抛出异常
+     */
+    boolean createDatabase(String database) throws MySQLException;
+
+    /**
+     * 创建 MySQL 数据库
+     *
+     * @param database 数据库名
+     * @param isNotExists 释放不存在则创建
+     * @return 是否执行成功
+     * @throws IllegalArgumentException 如果数据库对象为 {@code null} 则抛出异常
+     * @throws MySQLException 如果创建数据库错误则抛出异常
+     */
+    boolean createDatabase(String database, boolean isNotExists) throws MySQLException;
 
     /**
      * 处理 MySQL 语句声明

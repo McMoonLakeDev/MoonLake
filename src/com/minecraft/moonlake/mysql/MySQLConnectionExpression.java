@@ -195,6 +195,28 @@ class MySQLConnectionExpression implements MySQLConnection {
     }
 
     @Override
+    public synchronized boolean createDatabase() throws MySQLException {
+
+        return createDatabase(database);
+    }
+
+    @Override
+    public synchronized boolean createDatabase(String database) throws MySQLException {
+
+        return createDatabase(database, false);
+    }
+
+    @Override
+    public synchronized boolean createDatabase(String database, boolean isNotExists) throws MySQLException {
+
+        Validate.notNull(database, "The mysql database object is null.");
+
+        String sql = "create database" + (isNotExists ? " if not exists " : " ") + database;
+
+        return dispatchStatement(sql);
+    }
+
+    @Override
     public synchronized boolean dispatchStatement(String sql) throws MySQLException {
 
         Validate.notNull(sql, "The mysql sql object is null.");
@@ -262,7 +284,7 @@ class MySQLConnectionExpression implements MySQLConnection {
     }
 
     @Override
-    public boolean findTable(String tableName) throws MySQLException {
+    public synchronized boolean findTable(String tableName) throws MySQLException {
 
         Validate.notNull(tableName, "The mysql table name object is null.");
 
@@ -294,7 +316,7 @@ class MySQLConnectionExpression implements MySQLConnection {
     }
 
     @Override
-    public boolean findTables(String[] tableNames) throws MySQLException {
+    public synchronized boolean findTables(String[] tableNames) throws MySQLException {
 
         Validate.notNull(tableNames, "The mysql table names object is null.");
 
@@ -610,7 +632,7 @@ class MySQLConnectionExpression implements MySQLConnection {
     }
 
     @Override
-    public Object findSimpleResult(String columnName, String sql, Object... params) throws MySQLException {
+    public synchronized Object findSimpleResult(String columnName, String sql, Object... params) throws MySQLException {
 
         Validate.notNull(columnName, "The column name object is null.");
 
@@ -626,7 +648,9 @@ class MySQLConnectionExpression implements MySQLConnection {
 
             try {
 
-                connection.close();
+                if(!connection.isClosed()) {
+                    connection.close();
+                }
                 connection = null;
             }
             catch (Exception e) {
@@ -659,7 +683,9 @@ class MySQLConnectionExpression implements MySQLConnection {
 
             try {
 
-                statement.close();
+                if(!statement.isClosed()) {
+                    statement.close();
+                }
             }
             catch (Exception e) {
 
@@ -674,7 +700,9 @@ class MySQLConnectionExpression implements MySQLConnection {
 
             try {
 
-                resultSet.close();
+                if(!resultSet.isClosed()) {
+                    resultSet.close();
+                }
             }
             catch (Exception e) {
 
