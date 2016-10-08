@@ -124,7 +124,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     }
 
     @Override
-    public Set<String> getPluginAuthers() {
+    public Set<String> getPluginAuthors() {
 
         return new HashSet<>(description.getAuthors());
     }

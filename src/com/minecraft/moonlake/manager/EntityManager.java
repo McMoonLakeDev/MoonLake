@@ -4,6 +4,8 @@ import com.google.common.collect.Sets;
 import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.api.nbt.NBTFactory;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
+import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
+import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
@@ -22,10 +24,55 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.minecraft.moonlake.reflect.Reflect.*;
+
 /**
  * Created by MoonLake on 2016/7/17.
  */
 public class EntityManager extends MoonLakeManager {
+
+    private final static Class<?> CLASS_CRAFTENTITY;
+    private final static Class<?> CLASS_ENTITYINSENTIENT;
+    private final static Class<?> CLASS_PATHFINDERGOALSELECTOR;
+    private final static Class<?> CLASS_UNSAFELIST;
+    private final static Class<?> CLASS_IATTRIBUTE;
+    private final static Class<?> CLASS_ENTITYLIVING;
+    private final static Class<?> CLASS_ATTRIBUTEINSTANCE;
+    private final static Class<?> CLASS_GENERICATTRIBUTES;
+    private final static Method METHOD_GETHANDLE;
+    private final static Method METHOD_GETATTRIBUTEINSTANCE;
+    private final static Method METHOD_GETVALUE;
+    private final static Method METHOD_SETVALUE;
+    private final static Field FIELD_GOALSELECTOR;
+    private final static Field FIELD_TARGETSELECTOR;
+    private final static Field FIELD_PATHFINDERGOALSELECTOR_B;
+    private final static Field FIELD_PATHFINDERGOALSELECTOR_C;
+    static {
+
+        try {
+
+            CLASS_CRAFTENTITY = PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftEntity");
+            CLASS_ENTITYINSENTIENT = PackageType.MINECRAFT_SERVER.getClass("EntityInsentient");
+            CLASS_PATHFINDERGOALSELECTOR = PackageType.MINECRAFT_SERVER.getClass("PathfinderGoalSelector");
+            CLASS_UNSAFELIST = PackageType.CRAFTBUKKIT_UTIL.getClass("UnsafeList");
+            CLASS_IATTRIBUTE = PackageType.MINECRAFT_SERVER.getClass("IAttribute");
+            CLASS_ENTITYLIVING = PackageType.MINECRAFT_SERVER.getClass("EntityLiving");
+            CLASS_ATTRIBUTEINSTANCE = PackageType.MINECRAFT_SERVER.getClass("AttributeInstance");
+            CLASS_GENERICATTRIBUTES = PackageType.MINECRAFT_SERVER.getClass("GenericAttributes");
+            METHOD_GETHANDLE = getMethod(CLASS_CRAFTENTITY, "getHandle");
+            METHOD_GETATTRIBUTEINSTANCE = getMethod(CLASS_ENTITYLIVING, "getAttributeInstance", CLASS_IATTRIBUTE);
+            METHOD_GETVALUE = getMethod(CLASS_ATTRIBUTEINSTANCE, "getValue");
+            METHOD_SETVALUE = getMethod(CLASS_ATTRIBUTEINSTANCE, "setValue", double.class);
+            FIELD_GOALSELECTOR = getField(CLASS_ENTITYINSENTIENT, true, "goalSelector");
+            FIELD_TARGETSELECTOR = getField(CLASS_ENTITYINSENTIENT, true, "targetSelector");
+            FIELD_PATHFINDERGOALSELECTOR_B = getField(CLASS_PATHFINDERGOALSELECTOR, true, "b");
+            FIELD_PATHFINDERGOALSELECTOR_C = getField(CLASS_PATHFINDERGOALSELECTOR, true, "c");
+        }
+        catch (Exception e) {
+
+            throw new IllegalBukkitVersionException("The entity manager reflect raw exception.", e);
+        }
+    }
 
     private EntityManager() {
 
@@ -43,32 +90,32 @@ public class EntityManager extends MoonLakeManager {
 
         try {
 
-            Class<?> CraftEntity = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftEntity");
-            Class<?> EntityInsentient = Reflect.PackageType.MINECRAFT_SERVER.getClass("EntityInsentient");
+            Object nmsEntity = METHOD_GETHANDLE.invoke(entity);
 
-            Method getHandle = Reflect.getMethod(CraftEntity, "getHandle");
-            Object NMSEntity = getHandle.invoke(entity);
+            if(CLASS_ENTITYINSENTIENT.isInstance(nmsEntity)) {
 
-            if(EntityInsentient.isInstance(NMSEntity)) {
+                Object nmsGoalSelector = FIELD_GOALSELECTOR.get(nmsEntity);
+                Object nmsTargetSelector = FIELD_TARGETSELECTOR.get(nmsEntity);
 
-                Class<?> PathfinderGoalSelector = Reflect.PackageType.MINECRAFT_SERVER.getClass("PathfinderGoalSelector");
+                if(getServerVersionNumber() <= 8) {
 
-                Field goalSelector = Reflect.getField(EntityInsentient, true, "goalSelector");
-                Field goalSelectorB = Reflect.getField(PathfinderGoalSelector, true, "b");
-                Field goalSelectorC = Reflect.getField(PathfinderGoalSelector, true, "c");
-                goalSelectorB.set(goalSelector.get(NMSEntity), Sets.newLinkedHashSet());
-                goalSelectorC.set(goalSelector.get(NMSEntity), Sets.newLinkedHashSet());
+                    FIELD_PATHFINDERGOALSELECTOR_B.set(nmsGoalSelector, instantiateObject(CLASS_UNSAFELIST));
+                    FIELD_PATHFINDERGOALSELECTOR_C.set(nmsGoalSelector, instantiateObject(CLASS_UNSAFELIST));
+                    FIELD_PATHFINDERGOALSELECTOR_B.set(nmsTargetSelector, instantiateObject(CLASS_UNSAFELIST));
+                    FIELD_PATHFINDERGOALSELECTOR_C.set(nmsTargetSelector, instantiateObject(CLASS_UNSAFELIST));
+                }
+                else {
 
-                Field targetSelector = Reflect.getField(EntityInsentient, true, "targetSelector");
-                Field targetSelectorB = Reflect.getField(PathfinderGoalSelector, true, "b");
-                Field targetSelectorC = Reflect.getField(PathfinderGoalSelector, true, "c");
-                targetSelectorB.set(targetSelector.get(NMSEntity), Sets.newLinkedHashSet());
-                targetSelectorC.set(targetSelector.get(NMSEntity), Sets.newLinkedHashSet());
+                    FIELD_PATHFINDERGOALSELECTOR_B.set(nmsGoalSelector, Sets.newLinkedHashSet());
+                    FIELD_PATHFINDERGOALSELECTOR_C.set(nmsGoalSelector, Sets.newLinkedHashSet());
+                    FIELD_PATHFINDERGOALSELECTOR_B.set(nmsTargetSelector, Sets.newLinkedHashSet());
+                    FIELD_PATHFINDERGOALSELECTOR_C.set(nmsTargetSelector, Sets.newLinkedHashSet());
+                }
             }
         }
         catch (Exception e) {
 
-            getMain().getMLogger().warn("清除实体 UUID 为 '" + entity.getUniqueId().toString() + "' 的路径发现者 AI 时异常: " + e.getMessage());
+            throw new MoonLakeException("The remove entity path finders ai exception.", e);
         }
     }
 
@@ -107,7 +154,7 @@ public class EntityManager extends MoonLakeManager {
         }
         catch (Exception e) {
 
-            getMain().getMLogger().warn("设置实体 UUID 为 '" + entity.getUniqueId().toString() + "' 的 NoAI 属性时异常: " + e.getMessage());
+            throw new MoonLakeException("The set entity no ai exception.", e);
         }
     }
 
@@ -126,7 +173,7 @@ public class EntityManager extends MoonLakeManager {
         }
         catch (Exception e) {
 
-            getMain().getMLogger().warn("设置实体 UUID 为 '" + entity.getUniqueId().toString() + " ' 的 Silent 属性时异常: " + e.getMessage());
+            throw new MoonLakeException("The set entity silent exception.", e);
         }
     }
 
@@ -145,7 +192,7 @@ public class EntityManager extends MoonLakeManager {
         }
         catch (Exception e) {
 
-            getMain().getMLogger().warn("设置实体 UUID 为 '" + entity.getUniqueId().toString() + " ' 的 Invulnerable 属性时异常: " + e.getMessage());
+            throw new MoonLakeException("The set entity invulnerable exception.", e);
         }
     }
 
@@ -507,24 +554,15 @@ public class EntityManager extends MoonLakeManager {
 
         try {
 
-            Class<?> IAttribute = Reflect.PackageType.MINECRAFT_SERVER.getClass("IAttribute");
-            Class<?> EntityLiving = Reflect.PackageType.MINECRAFT_SERVER.getClass("EntityLiving");
-            Class<?> AttributeInstance = Reflect.PackageType.MINECRAFT_SERVER.getClass("AttributeInstance");
-            Class<?> GenericAttributes = Reflect.PackageType.MINECRAFT_SERVER.getClass("GenericAttributes");
-            Class<?> CraftLivingEntity = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftLivingEntity");
+            Object nmsEntity = METHOD_GETHANDLE.invoke(entity);
 
-            Method getHandle = Reflect.getMethod(CraftLivingEntity, "getHandle");
-            Object NMSEntity = getHandle.invoke(entity);
+            Field FIELD = Reflect.getField(CLASS_GENERICATTRIBUTES, true, type.getField());
 
-            Method getAttributeInstance = Reflect.getMethod(EntityLiving, "getAttributeInstance", IAttribute);
-            Field FIELD = Reflect.getField(GenericAttributes, true, type.getField());
-
-            Method setValue = Reflect.getMethod(AttributeInstance, "setValue", Double.class);
-            setValue.invoke(getAttributeInstance.invoke(NMSEntity, FIELD.get(null)), valueCheck(type, value));
+            METHOD_SETVALUE.invoke(METHOD_GETATTRIBUTEINSTANCE.invoke(nmsEntity, FIELD.get(null)), valueCheck(type, value));
         }
         catch (Exception e) {
 
-            getMain().getMLogger().warn("设置实体 UUID 为 '" + entity.getUniqueId().toString() + "' 的 " + type.getType() + " 时异常: " + e.getMessage());
+            throw new MoonLakeException("The set entity attribute exception.", e);
         }
     }
 
@@ -544,26 +582,16 @@ public class EntityManager extends MoonLakeManager {
 
         try {
 
-            Class<?> IAttribute = Reflect.PackageType.MINECRAFT_SERVER.getClass("IAttribute");
-            Class<?> EntityLiving = Reflect.PackageType.MINECRAFT_SERVER.getClass("EntityLiving");
-            Class<?> AttributeInstance = Reflect.PackageType.MINECRAFT_SERVER.getClass("AttributeInstance");
-            Class<?> GenericAttributes = Reflect.PackageType.MINECRAFT_SERVER.getClass("GenericAttributes");
-            Class<?> CraftLivingEntity = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftLivingEntity");
+            Object nmsEntity = METHOD_GETHANDLE.invoke(entity);
 
-            Method getHandle = Reflect.getMethod(CraftLivingEntity, "getHandle");
-            Object NMSEntity = getHandle.invoke(entity);
+            Field FIELD = Reflect.getField(CLASS_GENERICATTRIBUTES, true, type.getField());
 
-            Method getAttributeInstance = Reflect.getMethod(EntityLiving, "getAttributeInstance", IAttribute);
-            Field FIELD = Reflect.getField(GenericAttributes, true, type.getField());
-
-            Method getValue = Reflect.getMethod(AttributeInstance, "getValue");
-            return (Double) getValue.invoke(getAttributeInstance.invoke(NMSEntity, FIELD.get(null)));
+            return (Double) METHOD_GETVALUE.invoke(METHOD_GETATTRIBUTEINSTANCE.invoke(nmsEntity, FIELD.get(null)));
         }
         catch (Exception e) {
 
-            getMain().getMLogger().warn("获取实体 UUID 为 '" + entity.getUniqueId().toString() + "' 的 " + type.getType() + " 时异常: " + e.getMessage());
+            throw new MoonLakeException("The get entity attribute exception.", e);
         }
-        return -1d;
     }
 
     /**

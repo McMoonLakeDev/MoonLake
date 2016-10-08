@@ -213,8 +213,7 @@ public class NBTTagList extends NBTBase implements List<NBTBase> {
 
                 setSubTypeId(base.getTypeId());
             }
-            boolean r = getHandleList().add(base.getHandle());
-            return true;
+            return getHandleList().add(base.getHandle());
         }
     }
 

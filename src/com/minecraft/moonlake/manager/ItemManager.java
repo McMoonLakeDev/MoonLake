@@ -1,11 +1,10 @@
 package com.minecraft.moonlake.manager;
 
-import com.google.common.io.BaseEncoding;
 import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.api.nbt.NBTFactory;
 import com.minecraft.moonlake.data.NBTTagData;
 import com.minecraft.moonlake.data.NBTTagDataWrapped;
-import com.minecraft.moonlake.reflect.Reflect;
+import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -14,12 +13,50 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.Base64;
+
+import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * Created by MoonLake on 2016/7/17.
  */
 public class ItemManager extends MoonLakeManager {
+
+    private final static Class<?> CLASS_ITEMSTACK;
+    private final static Class<?> CLASS_NBTTAGCOMPOUND;
+    private final static Class<?> CLASS_CRAFTITEMSTACK;
+    private final static Class<?> CLASS_NBTCOMPRESSEDSTREAMTOOLS;
+    private final static Constructor<?> CONSTRUCTOR_NBTTAGCOMPOUND;
+    private final static Method METHOD_ASNMSCOPY;
+    private final static Method METHOD_SAVE;
+    private final static Method METHOD_A0;
+    private final static Method METHOD_A1;
+    private final static Method METHOD_CREATESTACK;
+    private final static Method METHOD_ASBUKKITCOPY;
+
+    static {
+
+        try {
+
+            CLASS_ITEMSTACK = PackageType.MINECRAFT_SERVER.getClass("ItemStack");
+            CLASS_NBTTAGCOMPOUND = PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
+            CLASS_CRAFTITEMSTACK = PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
+            CLASS_NBTCOMPRESSEDSTREAMTOOLS = PackageType.MINECRAFT_SERVER.getClass("NBTCompressedStreamTools");
+            CONSTRUCTOR_NBTTAGCOMPOUND = getConstructor(CLASS_NBTTAGCOMPOUND);
+            METHOD_ASNMSCOPY = getMethod(CLASS_CRAFTITEMSTACK, "asNMSCopy", CLASS_ITEMSTACK);
+            METHOD_SAVE = getMethod(CLASS_ITEMSTACK, "save", CLASS_NBTTAGCOMPOUND);
+            METHOD_A0 = getMethod(CLASS_NBTCOMPRESSEDSTREAMTOOLS, "a", InputStream.class);
+            METHOD_A1 = getMethod(CLASS_NBTCOMPRESSEDSTREAMTOOLS, "a", CLASS_NBTTAGCOMPOUND, OutputStream.class);
+            METHOD_CREATESTACK = getMethod(CLASS_ITEMSTACK, "createStack", CLASS_NBTTAGCOMPOUND);
+            METHOD_ASBUKKITCOPY = getMethod(CLASS_CRAFTITEMSTACK, "asBukkitCopy", CLASS_ITEMSTACK);
+        }
+        catch (Exception e) {
+
+            throw new MoonLakeException("The item manager reflect raw exception.", e);
+        }
+    }
 
     private ItemManager() {
 
@@ -264,27 +301,19 @@ public class ItemManager extends MoonLakeManager {
 
             try {
 
-                Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
-                Class<?> NBTTagCompound = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
-                Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
-                Class<?> NBTCompressedStreamTools = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTCompressedStreamTools");
-
-                Object NBTTag = Reflect.getConstructor(NBTTagCompound).newInstance();
-
-                Method asNMSCopy = Reflect.getMethod(CraftItemStack, "asNMSCopy", ItemStack.class);
-                Object NMSItemStack = asNMSCopy.invoke(null, itemStack);
-
-                Reflect.getMethod(ItemStack, "save", NBTTagCompound).invoke(NMSItemStack, NBTTag);
                 outputStream = new ByteArrayOutputStream();
 
-                Method a = Reflect.getMethod(NBTCompressedStreamTools, "a", NBTTagCompound, OutputStream.class);
-                a.invoke(null, NBTTag, outputStream);
+                Object NBTTag = CONSTRUCTOR_NBTTAGCOMPOUND.newInstance();
+                Object nmsItemStack = METHOD_ASNMSCOPY.invoke(null, itemStack);
 
-                return BaseEncoding.base64().encode(outputStream.toByteArray());
+                METHOD_SAVE.invoke(nmsItemStack, NBTTag);
+                METHOD_A1.invoke(null, NBTTag, outputStream);
+
+                return Base64.getEncoder().encodeToString(outputStream.toByteArray());
             }
             catch (Exception e) {
 
-                getMain().getMLogger().warn("序列化物品栈时异常: " + e.getMessage());
+                throw new MoonLakeException("The itemstack serialize exception.", e);
             }
             finally {
 
@@ -296,7 +325,6 @@ public class ItemManager extends MoonLakeManager {
                     }
                     catch (Exception e) {
 
-                        e.printStackTrace();
                     }
                 }
             }
@@ -321,25 +349,16 @@ public class ItemManager extends MoonLakeManager {
 
             try {
 
-                Class<?> ItemStack = Reflect.PackageType.MINECRAFT_SERVER.getClass("ItemStack");
-                Class<?> NBTTagCompound = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
-                Class<?> CraftItemStack = Reflect.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
-                Class<?> NBTCompressedStreamTools = Reflect.PackageType.MINECRAFT_SERVER.getClass("NBTCompressedStreamTools");
+                inputStream = new ByteArrayInputStream(Base64.getDecoder().decode(data));
 
-                inputStream = new ByteArrayInputStream(BaseEncoding.base64().decode(data));
+                Object NBTTag = METHOD_A0.invoke(null, inputStream);
+                Object nmsItemStack = METHOD_CREATESTACK.invoke(null, NBTTag);
 
-                Method a = Reflect.getMethod(NBTCompressedStreamTools, "a", InputStream.class);
-                Object NBTTag = a.invoke(null, inputStream);
-
-                Method createStack = Reflect.getMethod(ItemStack, "createStack", NBTTagCompound);
-                Object NMSItemStack = createStack.invoke(null, NBTTag);
-
-                Method asBukkitCopy = Reflect.getMethod(CraftItemStack, "asBukkitCopy", ItemStack);
-                return (ItemStack)asBukkitCopy.invoke(null, NMSItemStack);
+                return (ItemStack) METHOD_ASBUKKITCOPY.invoke(null, nmsItemStack);
             }
             catch (Exception e) {
 
-                getMain().getMLogger().warn("反序列化字符串数据时异常: " + e.getMessage());
+                throw new MoonLakeException("The itemstack deserialize exception.", e);
             }
             finally {
 
@@ -351,7 +370,6 @@ public class ItemManager extends MoonLakeManager {
                     }
                     catch (Exception e) {
 
-                        e.printStackTrace();
                     }
                 }
             }

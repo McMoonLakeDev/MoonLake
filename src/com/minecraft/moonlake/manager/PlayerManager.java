@@ -2,7 +2,7 @@ package com.minecraft.moonlake.manager;
 
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.api.player.SimpleMoonLakePlayer;
-import com.minecraft.moonlake.reflect.Reflect;
+import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
@@ -14,10 +14,32 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import static com.minecraft.moonlake.reflect.Reflect.*;
+
 /**
  * Created by MoonLake on 2016/7/17.
  */
 public class PlayerManager extends MoonLakeManager {
+
+    private final static Class<?> CLASS_CRAFTPLAYER;
+    private final static Class<?> CLASS_ENTITYHUMAN;
+    private final static Method METHOD_GETHANDLE;
+    private final static Method METHOD_GETPROFILE;
+
+    static {
+
+        try {
+
+            CLASS_CRAFTPLAYER = PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
+            CLASS_ENTITYHUMAN = PackageType.MINECRAFT_SERVER.getClass("EntityHuman");
+            METHOD_GETHANDLE = getMethod(CLASS_CRAFTPLAYER, "getHandle");
+            METHOD_GETPROFILE = getMethod(CLASS_ENTITYHUMAN, "getProfile");
+        }
+        catch (Exception e) {
+
+            throw new MoonLakeException("The player manager reflect raw exception.", e);
+        }
+    }
 
     private PlayerManager() {
 
@@ -157,23 +179,15 @@ public class PlayerManager extends MoonLakeManager {
 
         Validate.notNull(player, "The player object is null.");
 
-        GameProfile profile = null;
-
         try {
 
-            Class<?> CraftPlayer = Reflect.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
-            Class<?> EntityHuman = Reflect.PackageType.MINECRAFT_SERVER.getClass("EntityHuman");
+            Object nmsPlayer = METHOD_GETHANDLE.invoke(player);
 
-            Method getHandle = Reflect.getMethod(CraftPlayer, "getHandle");
-            Object NMSPlayer = getHandle.invoke(player);
-
-            Method getProfile = Reflect.getMethod(EntityHuman, "getProfile");
-            return (GameProfile) getProfile.invoke(NMSPlayer);
+            return (GameProfile) METHOD_GETPROFILE.invoke(nmsPlayer);
         }
         catch (Exception e) {
 
-            e.printStackTrace();
+            throw new MoonLakeException("The get player profile exception.", e);
         }
-        return profile;
     }
 }

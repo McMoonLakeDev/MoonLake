@@ -60,9 +60,9 @@ public interface MoonLakeInfo {
     /**
      * 获取插件的作者
      *
-     * @return Auther
+     * @return Author
      */
-    Set<String> getPluginAuthers();
+    Set<String> getPluginAuthors();
 
     /**
      * 获取插件的依赖
