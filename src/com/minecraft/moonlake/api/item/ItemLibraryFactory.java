@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.api.item;
 
+import com.minecraft.moonlake.api.item.firework.FireworkBuilder;
 import com.minecraft.moonlake.api.item.meta.MetaLibrary;
 import com.minecraft.moonlake.api.item.potion.PotionLibrary;
 import com.minecraft.moonlake.api.item.potion.PotionType;
@@ -251,5 +252,15 @@ public class ItemLibraryFactory {
     public ItemBuilder itemBuilder(PotionType potion, int data, int amount, String displayName, String... lore) {
 
         return new ItemBuilderWrapped(potion, data, amount, displayName, lore);
+    }
+
+    /**
+     * 获取 FireworkBuilder 实例对象
+     *
+     * @return FireworkBuilder
+     */
+    public FireworkBuilder fireworkBuilder() {
+
+        return new FireworkBuilderWrapped();
     }
 }
