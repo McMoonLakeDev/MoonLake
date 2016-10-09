@@ -62,7 +62,7 @@ class FireworkBuilderWrapped implements FireworkBuilder {
     @Override
     public FireworkBuilder withPower(int power) {
 
-        Validate.isTrue(power > 0 && power < 128, "The firework power value is illegal. (must: 0 - 128)");
+        Validate.isTrue(power > 0 && power < 128, "The firework power value is illegal. (must: 1 - 128)");
 
         this.power = power;
 
