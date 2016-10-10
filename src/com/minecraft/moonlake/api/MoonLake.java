@@ -13,7 +13,7 @@ import com.minecraft.moonlake.logger.MLogger;
  * @version 1.0
  * @author Month_Light
  */
-public interface MoonLake extends MoonLakeInfo, BukkitInfo {
+public interface MoonLake extends MoonLakeCore, MoonLakeInfo, BukkitInfo {
 
     /**
      * 获取控制台日志对象

@@ -45,7 +45,7 @@ public class ItemManager extends MoonLakeManager {
             CLASS_CRAFTITEMSTACK = PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
             CLASS_NBTCOMPRESSEDSTREAMTOOLS = PackageType.MINECRAFT_SERVER.getClass("NBTCompressedStreamTools");
             CONSTRUCTOR_NBTTAGCOMPOUND = getConstructor(CLASS_NBTTAGCOMPOUND);
-            METHOD_ASNMSCOPY = getMethod(CLASS_CRAFTITEMSTACK, "asNMSCopy", CLASS_ITEMSTACK);
+            METHOD_ASNMSCOPY = getMethod(CLASS_CRAFTITEMSTACK, "asNMSCopy", ItemStack.class);
             METHOD_SAVE = getMethod(CLASS_ITEMSTACK, "save", CLASS_NBTTAGCOMPOUND);
             METHOD_A0 = getMethod(CLASS_NBTCOMPRESSEDSTREAMTOOLS, "a", InputStream.class);
             METHOD_A1 = getMethod(CLASS_NBTCOMPRESSEDSTREAMTOOLS, "a", CLASS_NBTTAGCOMPOUND, OutputStream.class);
@@ -60,6 +60,48 @@ public class ItemManager extends MoonLakeManager {
 
     private ItemManager() {
 
+    }
+
+    /**
+     * 将 Bukkit 物品栈对象转换到 NMS 物品栈对象
+     *
+     * @param itemStack Bukkit 物品栈
+     * @return NMS 物品栈
+     * @throws IllegalArgumentException 如果 Bukkit 物品栈对象为 {@code null} 则抛出异常
+     */
+    public static Object asNMSCopy(ItemStack itemStack) {
+
+        Validate.notNull(itemStack, "The itemstack object is null.");
+
+        try {
+
+            return METHOD_ASNMSCOPY.invoke(null, itemStack);
+        }
+        catch (Exception e) {
+
+            throw new MoonLakeException("The as nms copy itemstack exception.", e);
+        }
+    }
+
+    /**
+     * 将 NMS 物品栈对象转换到 Bukkit 物品栈对象
+     *
+     * @param nmsItemStack NMS 物品栈
+     * @return Bukkit 物品栈
+     * @throws IllegalArgumentException 如果 NMS 物品栈对象为 {@code null} 则抛出异常
+     */
+    public static ItemStack asBukkitCopy(Object nmsItemStack) {
+
+        Validate.notNull(nmsItemStack, "The nms itemstack object is null.");
+
+        try {
+
+            return (ItemStack) METHOD_ASBUKKITCOPY.invoke(null, nmsItemStack);
+        }
+        catch (Exception e) {
+
+            throw new MoonLakeException("The as bukkit copy itemstack exception.", e);
+        }
     }
 
     /**
@@ -193,7 +235,7 @@ public class ItemManager extends MoonLakeManager {
     @SuppressWarnings("deprecation")
     public static boolean compare(ItemStack source, ItemStack target) {
 
-        return source != null && target != null && source.getType() == target.getType() && source.getData().getData() == target.getData().getData();
+        return compareNull(source, target) || (source != null && target != null && source.getType() == target.getType() && source.getData().getData() == target.getData().getData());
     }
 
     /**
@@ -207,7 +249,6 @@ public class ItemManager extends MoonLakeManager {
         return item == null || item.getType() == Material.AIR;
     }
 
-
     /**
      * 比较指定物品栈是否符合目标物品栈类型
      *
@@ -217,7 +258,7 @@ public class ItemManager extends MoonLakeManager {
      */
     public static boolean compare(ItemStack source, Material target) {
 
-        return compare(source, new ItemStack(target, 1, (byte)0));
+        return compare(source, target, 0);
     }
 
     /**
@@ -242,7 +283,7 @@ public class ItemManager extends MoonLakeManager {
      */
     public static boolean compareAmount(ItemStack source, ItemStack target) {
 
-        return source != null && target != null && source.getAmount() == target.getAmount();
+        return compareNull(source, target) || (source != null && target != null && source.getAmount() == target.getAmount());
     }
 
     /**
@@ -257,7 +298,7 @@ public class ItemManager extends MoonLakeManager {
         String sourceName = getDisplayName(source);
         String targetName = getDisplayName(target);
 
-        return (sourceName == null && targetName == null) || (sourceName != null && targetName != null && sourceName.equals(targetName));
+        return compareNull(source, target) || (sourceName != null && targetName != null && sourceName.equals(targetName));
     }
 
     /**
@@ -269,7 +310,7 @@ public class ItemManager extends MoonLakeManager {
      */
     public static boolean compareMeta(ItemStack source, ItemStack target) {
 
-        return source != null && target != null && source.isSimilar(target);
+        return compareNull(source, target) || (source != null && target != null && source.isSimilar(target));
     }
 
     /**
@@ -281,7 +322,19 @@ public class ItemManager extends MoonLakeManager {
      */
     public static boolean compareAll(ItemStack source, ItemStack target) {
 
-        return compare(source, target) && compareMeta(source, target);
+        return compareNull(source, target) || (compare(source, target) && compareMeta(source, target));
+    }
+
+    /**
+     * 比较指定物品栈是否完全和目标物品栈对象均为 {@code null}
+     *
+     * @param source 源物品栈
+     * @param target 目标物品栈
+     * @return true 则两个物品栈均为 {@code null}
+     */
+    public static boolean compareNull(ItemStack source, ItemStack target) {
+
+        return source == null && target == null;
     }
 
     /**
@@ -304,7 +357,7 @@ public class ItemManager extends MoonLakeManager {
                 outputStream = new ByteArrayOutputStream();
 
                 Object NBTTag = CONSTRUCTOR_NBTTAGCOMPOUND.newInstance();
-                Object nmsItemStack = METHOD_ASNMSCOPY.invoke(null, itemStack);
+                Object nmsItemStack = asNMSCopy(itemStack);
 
                 METHOD_SAVE.invoke(nmsItemStack, NBTTag);
                 METHOD_A1.invoke(null, NBTTag, outputStream);
@@ -354,7 +407,7 @@ public class ItemManager extends MoonLakeManager {
                 Object NBTTag = METHOD_A0.invoke(null, inputStream);
                 Object nmsItemStack = METHOD_CREATESTACK.invoke(null, NBTTag);
 
-                return (ItemStack) METHOD_ASBUKKITCOPY.invoke(null, nmsItemStack);
+                return asBukkitCopy(nmsItemStack);
             }
             catch (Exception e) {
 

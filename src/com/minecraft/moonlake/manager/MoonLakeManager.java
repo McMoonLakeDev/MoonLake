@@ -21,8 +21,29 @@ public abstract class MoonLakeManager implements MoonLakeCore {
      * 获取月色之湖核心API插件实例对象
      *
      * @return 实例对象
+     * @deprecated 已过时, 将于 v2.0 去除. 请使用 {@link #getMoonLakes()}
      */
+    @Override
+    @Deprecated
     public MoonLake getInstance() {
+
+        return MAIN;
+    }
+
+    @Override
+    public MoonLake getMoonLake() {
+
+        return MAIN;
+    }
+
+    /**
+     * 获取月色之湖核心API插件实例对象
+     *
+     * @return 实例对象
+     * @deprecated 已过时, 将于 v2.0 去除. 请使用 {@link #getMoonLakes()}
+     */
+    @Deprecated
+    protected static MoonLake getMain() {
 
         return MAIN;
     }
@@ -32,7 +53,7 @@ public abstract class MoonLakeManager implements MoonLakeCore {
      *
      * @return 实例对象
      */
-    protected static MoonLake getMain() {
+    protected static MoonLake getMoonLakes() {
 
         return MAIN;
     }
