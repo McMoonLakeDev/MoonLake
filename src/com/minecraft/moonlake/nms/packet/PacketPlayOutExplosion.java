@@ -13,7 +13,11 @@ import java.util.List;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>PacketPlayOutExplosion</h1>
+ * 数据包输出爆炸（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosion> {
 

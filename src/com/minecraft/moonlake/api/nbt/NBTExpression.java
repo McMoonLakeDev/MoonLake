@@ -9,7 +9,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Created by MoonLake on 2016/9/23.
+ * <h1>NBTExpression</h1>
+ * NBT 支持库接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class NBTExpression implements NBTLibrary {
 

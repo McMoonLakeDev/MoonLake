@@ -10,7 +10,11 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 /**
- * Created by MoonLake on 2016/10/7.
+ * <h1>TaskHelper</h1>
+ * 任务帮助器（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class TaskHelper {
 

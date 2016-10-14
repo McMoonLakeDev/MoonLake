@@ -6,7 +6,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by MoonLake on 2016/9/21.
+ * <h1>NBTCompound</h1>
+ * NBT 复合接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface NBTCompound extends Map<String, Object> {
 

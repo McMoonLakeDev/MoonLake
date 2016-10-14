@@ -16,7 +16,12 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>AbilityPlayer</h1>
+ * 玩家能力接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see BasePlayer
  */
 public interface AbilityPlayer extends BasePlayer, AnimalTamer {
 

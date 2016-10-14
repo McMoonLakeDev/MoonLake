@@ -10,7 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by MoonLake on 2016/7/17.
+ * <h1>IoManager</h1>
+ * 输入输出流管理实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class IoManager extends MoonLakeManager {
 

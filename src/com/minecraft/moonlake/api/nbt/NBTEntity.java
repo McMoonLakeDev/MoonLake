@@ -5,7 +5,11 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 
 /**
- * Created by MoonLake on 2016/9/23.
+ * <h1>NBTEntity</h1>
+ * NBT 实体支持库（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface NBTEntity {
 

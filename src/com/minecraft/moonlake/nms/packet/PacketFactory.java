@@ -5,7 +5,11 @@ import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.entity.Player;
 
 /**
- * Created by MoonLake on 2016/10/1.
+ * <h1>PacketFactory</h1>
+ * 数据包工厂类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PacketFactory {
 

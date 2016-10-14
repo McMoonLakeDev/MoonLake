@@ -4,7 +4,11 @@ import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
 
 /**
- * Created by MoonLake on 2016/9/15.
+ * <h1>PotionEffectCustom</h1>
+ * 药水效果自定义包装类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PotionEffectCustom {
 

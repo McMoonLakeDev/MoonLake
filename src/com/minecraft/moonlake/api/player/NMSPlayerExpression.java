@@ -14,7 +14,11 @@ import java.lang.reflect.Method;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/14.
+ * <h1>NMSPlayerExpression</h1>
+ * 玩家 NMS 接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class NMSPlayerExpression implements NMSPlayerLibrary {
 

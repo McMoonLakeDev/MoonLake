@@ -22,7 +22,11 @@ import java.util.List;
 import static com.minecraft.moonlake.api.fancy.TextualComponent.rawText;
 
 /**
- * Created by MoonLake on 2016/9/16.
+ * <h1>FancyMessage Implement Class</h1>
+ * 花式消息接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class FancyMessageExpression implements FancyMessage {
 

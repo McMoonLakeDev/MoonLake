@@ -11,7 +11,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by MoonLake on 2016/9/12.
+ * <h1>ItemStack MetaLibrary</h1>
+ * 物品栈元属性支持库（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface MetaLibrary extends AttributeLibrary {
 

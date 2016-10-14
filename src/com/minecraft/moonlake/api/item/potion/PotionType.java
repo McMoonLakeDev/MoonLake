@@ -5,7 +5,11 @@ import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.Material;
 
 /**
- * Created by MoonLake on 2016/9/15.
+ * <h1>PotionType</h1>
+ * 药水类型
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public enum PotionType {
 

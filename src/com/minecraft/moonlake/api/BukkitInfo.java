@@ -1,7 +1,9 @@
 package com.minecraft.moonlake.api;
 
 /**
- * Created by MoonLake on 2016/5/2.
+ * <h1>BukkitInfo</h1>
+ * Bukkit 服务端信息接口
+ *
  * @version 1.0
  * @author Month_Light
  */

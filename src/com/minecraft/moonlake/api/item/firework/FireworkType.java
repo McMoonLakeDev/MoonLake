@@ -1,7 +1,11 @@
 package com.minecraft.moonlake.api.item.firework;
 
 /**
- * Created by MoonLake on 2016/10/9.
+ * <h1>FireworkType</h1>
+ * 烟花形状类型
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public enum FireworkType {
 

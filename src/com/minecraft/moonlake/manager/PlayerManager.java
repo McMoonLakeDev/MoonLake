@@ -17,7 +17,11 @@ import java.util.UUID;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/7/17.
+ * <h1>PlayerManager</h1>
+ * 玩家管理实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PlayerManager extends MoonLakeManager {
 

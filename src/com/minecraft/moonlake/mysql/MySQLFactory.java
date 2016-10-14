@@ -5,7 +5,11 @@ import com.minecraft.moonlake.mysql.exception.MySQLInitializeException;
 import java.nio.charset.Charset;
 
 /**
- * Created by MoonLake on 2016/9/28.
+ * <h1>MySQLFactory</h1>
+ * 数据库工厂类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class MySQLFactory {
 

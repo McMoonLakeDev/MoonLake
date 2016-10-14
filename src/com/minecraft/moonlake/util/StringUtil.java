@@ -13,7 +13,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Created by MoonLake on 2016/9/13.
+ * <h1>StringUtil</h1>
+ * 字符串实现类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class StringUtil {
 

@@ -6,7 +6,11 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 /**
- * Created by MoonLake on 2016/7/17.
+ * <h1>LocationManager</h1>
+ * 位置管理实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class LocationManager extends MoonLakeManager {
 

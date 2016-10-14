@@ -8,7 +8,11 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Created by MoonLake on 2016/9/14.
+ * <h1>ItemStack AttributeModify</h1>
+ * 物品栈属性修改封装类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public final class AttributeModify {
 

@@ -13,7 +13,11 @@ import java.lang.reflect.Field;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>PacketPlayOutAbilities</h1>
+ * 数据包输出玩家能力（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PacketPlayOutAbilities extends PacketAbstract<PacketPlayOutAbilities> {
 

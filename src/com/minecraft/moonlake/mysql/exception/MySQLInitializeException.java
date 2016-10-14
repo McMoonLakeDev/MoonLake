@@ -1,7 +1,11 @@
 package com.minecraft.moonlake.mysql.exception;
 
 /**
- * Created by MoonLake on 2016/9/28.
+ * <h1>MySQLInitializeException</h1>
+ * 数据库初始化异常（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class MySQLInitializeException extends MySQLException {
 

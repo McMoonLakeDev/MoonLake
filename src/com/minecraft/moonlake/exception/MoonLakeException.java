@@ -1,7 +1,9 @@
 package com.minecraft.moonlake.exception;
 
 /**
- * Created by MoonLake on 2016/5/2.
+ * <h1>MoonLakeException</h1>
+ * 月色之湖异常类
+ *
  * @version 1.0
  * @author Month_Light
  */

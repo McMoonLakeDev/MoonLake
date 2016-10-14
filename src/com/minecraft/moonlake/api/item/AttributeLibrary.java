@@ -8,7 +8,11 @@ import java.util.Collection;
 import java.util.Set;
 
 /**
- * Created by MoonLake on 2016/9/13.
+ * <h1>ItemStack AttributeLibrary</h1>
+ * 物品栈属性支持库（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface AttributeLibrary {
 

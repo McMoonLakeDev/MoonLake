@@ -9,7 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by MoonLake on 2016/9/16.
+ * <h1>FancyMessagePart</h1>
+ * 花式消息部分实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class FancyMessagePart implements JsonRepresentedObject, Cloneable {
 

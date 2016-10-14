@@ -4,7 +4,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Created by MoonLake on 2016/10/3.
+ * <h1>AnvilWindowClickEvent</h1>
+ * 铁砧窗口点击事件类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class AnvilWindowClickEvent extends AnvilWindowAbstractEvent {
 

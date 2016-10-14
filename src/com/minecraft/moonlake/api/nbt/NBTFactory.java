@@ -4,7 +4,11 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Created by MoonLake on 2016/9/23.
+ * <h1>NBTFactory</h1>
+ * NBT 工厂类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class NBTFactory {
 

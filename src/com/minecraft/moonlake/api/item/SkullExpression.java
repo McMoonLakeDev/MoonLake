@@ -16,7 +16,11 @@ import java.util.Base64;
 import java.util.UUID;
 
 /**
- * Created by MoonLake on 2016/9/13.
+ * <h1>SkullExpression</h1>
+ * 头颅物品栈接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class SkullExpression extends CraftExpression implements SkullLibrary {
 

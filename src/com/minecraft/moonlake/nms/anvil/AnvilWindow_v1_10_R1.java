@@ -5,7 +5,11 @@ import net.minecraft.server.v1_10_R1.ContainerAnvil;
 import net.minecraft.server.v1_10_R1.EntityHuman;
 
 /**
- * Created by MoonLake on 2016/10/4.
+ * <h1>AnvilWindow_v1_10_R1</h1>
+ * 铁砧窗口 v1.10-R1 版容器类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class AnvilWindow_v1_10_R1 extends ContainerAnvil {
 

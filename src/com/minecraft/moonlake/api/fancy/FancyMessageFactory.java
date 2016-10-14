@@ -1,7 +1,11 @@
 package com.minecraft.moonlake.api.fancy;
 
 /**
- * Created by MoonLake on 2016/9/16.
+ * <h1>FancyMessageFactory</h1>
+ * 花式消息工厂类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class FancyMessageFactory {
 

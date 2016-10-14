@@ -15,7 +15,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 /**
- * Created by MoonLake on 2016/10/3.
+ * <h1>AnvilWindow</h1>
+ * 铁砧窗口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public final class AnvilWindow {
 

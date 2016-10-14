@@ -4,7 +4,11 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 /**
- * Created by MoonLake on 2016/7/17.
+ * <h1>VectorManager</h1>
+ * 矢量管理实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class VectorManager extends MoonLakeManager {
 

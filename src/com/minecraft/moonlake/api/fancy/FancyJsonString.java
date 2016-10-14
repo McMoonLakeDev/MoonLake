@@ -8,7 +8,11 @@ import com.minecraft.moonlake.property.StringProperty;
 import java.io.IOException;
 
 /**
- * Created by MoonLake on 2016/9/16.
+ * <h1>JsonRepresentedObject Implement Class</h1>
+ * Json 实现对象接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class FancyJsonString implements JsonRepresentedObject {
 

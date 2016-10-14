@@ -17,7 +17,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by MoonLake on 2016/9/13.
+ * <h1>ItemExpressionWrapped</h1>
+ * 物品栈接口单实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class ItemExpressionWrapped extends ItemExpression {
     

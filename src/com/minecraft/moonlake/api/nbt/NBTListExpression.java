@@ -5,7 +5,11 @@ import com.minecraft.moonlake.nbt.exception.NBTException;
 import java.util.*;
 
 /**
- * Created by MoonLake on 2016/9/22.
+ * <h1>NBTListExpression</h1>
+ * NBT 列表接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class NBTListExpression implements NBTList {
 

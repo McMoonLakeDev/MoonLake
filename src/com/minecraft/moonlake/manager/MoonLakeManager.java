@@ -5,7 +5,11 @@ import com.minecraft.moonlake.api.MoonLake;
 import com.minecraft.moonlake.api.MoonLakeCore;
 
 /**
- * Created by MoonLake on 2016/7/17.
+ * <h1>MoonLakeManager</h1>
+ * 月色之湖管理抽象类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 @SuppressWarnings("deprecation")
 public abstract class MoonLakeManager implements MoonLakeCore {

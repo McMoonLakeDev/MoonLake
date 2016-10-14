@@ -10,7 +10,11 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * Created by MoonLake on 2016/9/28.
+ * <h1>MySQLConnectionExpression</h1>
+ * 数据库连接接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class MySQLConnectionExpression implements MySQLConnection {
 

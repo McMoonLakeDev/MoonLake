@@ -6,7 +6,20 @@ import com.minecraft.moonlake.validate.Validate;
 import org.spigotmc.SpigotConfig;
 
 /**
- * Created by MoonLake on 2016/10/10.
+ * <hr />
+ * <div>
+ *     <h1>Minecraft Entity Attribute Type</h1>
+ *     <p>By Month_Light Ver: 1.0</p>
+ * </div>
+ * <hr />
+ * <div>
+ *     <h1>Minecraft 实体属性枚举类型</h1>
+ *     <p>详情可以去中文wiki查看更详细的内容:<a href="http://minecraft-zh.gamepedia.com/%E5%B1%9E%E6%80%A7" target="_blank">查看</a></p>
+ * </div>
+ * <hr />
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public enum AttributeType {
 

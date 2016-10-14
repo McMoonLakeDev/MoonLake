@@ -10,7 +10,11 @@ import org.bukkit.entity.Player;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>PacketPlayOutEntityDestroy</h1>
+ * 数据包输出实体破坏（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PacketPlayOutEntityDestroy extends PacketAbstract<PacketPlayOutEntityDestroy> {
 

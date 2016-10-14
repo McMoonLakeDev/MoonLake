@@ -6,7 +6,11 @@ import com.minecraft.moonlake.nms.packet.Packet;
 import org.bukkit.Material;
 
 /**
- * Created by MoonLake on 2016/7/17.
+ * <h1>NMSPlayer</h1>
+ * 玩家 NMS 接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface NMSPlayer {
 

@@ -3,7 +3,11 @@ package com.minecraft.moonlake.nms.exception;
 import com.minecraft.moonlake.exception.MoonLakeException;
 
 /**
- * Created by MoonLake on 2016/10/3.
+ * <h1>NMSException</h1>
+ * NMS 异常类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class NMSException extends MoonLakeException {
 

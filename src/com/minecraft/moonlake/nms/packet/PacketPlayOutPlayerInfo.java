@@ -9,7 +9,11 @@ import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>PacketPlayOutPlayerInfo</h1>
+ * 数据包输出玩家信息抽象类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public abstract class PacketPlayOutPlayerInfo<T extends PacketPlayOutPlayerInfo> extends PacketAbstract<T> {
 

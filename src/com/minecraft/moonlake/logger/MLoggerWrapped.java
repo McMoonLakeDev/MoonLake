@@ -7,7 +7,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by MoonLake on 2016/9/12.
+ * <h1>MLoggerWrapped</h1>
+ * 日志接口包装类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public final class MLoggerWrapped implements MLogger {
 

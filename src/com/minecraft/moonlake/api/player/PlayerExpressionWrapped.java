@@ -3,7 +3,8 @@ package com.minecraft.moonlake.api.player;
 import org.bukkit.Material;
 
 /**
- * Created by MoonLake on 2016/9/14.
+ * <h1>PlayerExpressionWrapped</h1>
+ * 玩家支持库实现包装类
  */
 class PlayerExpressionWrapped extends PlayerExpression {
 

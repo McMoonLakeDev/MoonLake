@@ -1,7 +1,11 @@
 package com.minecraft.moonlake.exception;
 
 /**
- * Created by MoonLake on 2016/7/26.
+ * <h1>IllegalBukkitVersionException</h1>
+ * 非法 Bukkit 版本异常（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class IllegalBukkitVersionException extends MoonLakeException {
 

@@ -1,7 +1,11 @@
 package com.minecraft.moonlake.api.item.potion;
 
 /**
- * Created by MoonLake on 2016/9/15.
+ * <h1>PotionBase</h1>
+ * 基础药水效果
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public abstract class PotionBase {
 

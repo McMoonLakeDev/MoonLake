@@ -10,7 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by MoonLake on 2016/6/1.
+ * <h1>TargetHelper</h1>
+ * 目标帮助器（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public final class TargetHelper {
 

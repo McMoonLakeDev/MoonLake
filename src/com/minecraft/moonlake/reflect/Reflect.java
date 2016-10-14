@@ -10,7 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by MoonLake on 2016/6/7.
+ * <h1>Reflect</h1>
+ * Java Reflect Class
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 @SuppressWarnings("deprecation")
 public class Reflect {

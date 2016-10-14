@@ -16,7 +16,11 @@ import java.lang.reflect.Method;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>PacketPlayOutEntityEquipment</h1>
+ * 数据包输出实体装备（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PacketPlayOutEntityEquipment extends PacketAbstract<PacketPlayOutEntityEquipment> {
 

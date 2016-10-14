@@ -5,7 +5,11 @@ import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import java.net.InetSocketAddress;
 
 /**
- * Created by MoonLake on 2016/7/17.
+ * <h1>InternetPlayer</h1>
+ * 玩家网络接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface InternetPlayer {
 

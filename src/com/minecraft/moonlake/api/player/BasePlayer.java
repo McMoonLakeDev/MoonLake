@@ -12,7 +12,11 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * Created by MoonLake on 2016/10/1.
+ * <h1>BasePlayer</h1>
+ * 玩家基础接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface BasePlayer {
 

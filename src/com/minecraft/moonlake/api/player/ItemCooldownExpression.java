@@ -13,7 +13,11 @@ import java.lang.reflect.Method;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>ItemCooldownExpression</h1>
+ * 玩家物品栈冷却能力接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class ItemCooldownExpression implements ItemCooldown {
 

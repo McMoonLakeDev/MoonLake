@@ -15,7 +15,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Created by MoonLake on 2016/9/12.
+ * <h1>MetaExpression</h1>
+ * 物品栈元属性接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class MetaExpression extends AttributeExpression implements MetaLibrary {
 

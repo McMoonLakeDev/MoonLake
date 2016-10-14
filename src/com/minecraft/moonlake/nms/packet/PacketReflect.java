@@ -11,7 +11,11 @@ import java.lang.reflect.Method;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>PacketReflect</h1>
+ * 数据包反射实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class PacketReflect {
 
