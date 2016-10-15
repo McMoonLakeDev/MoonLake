@@ -14,12 +14,12 @@ By Month_Light Ver: 1.8-r1
 * `Cauldron | KCauldron [模组服务端]` <span style="color: red">✘</span> 完全不支持
  
 ## 目前已经实现的功能
-* 玩家支持库 `{@link com.minecraft.moonlake.api.player.PlayerLibrary}`
-* 物品栈支持库 `{@link com.minecraft.moonlake.api.item.ItemLibrary}`
-* 数据库支持库 `{@link com.minecraft.moonlake.api.mysql.MySQLConnection}`
-* 花式消息支持库 `{@link com.minecraft.moonlake.api.fancy.FancyMessage}`
-* NMS 数据包发送 `{@link com.minecraft.moonlake.nms.packet.Packet}`
-* NBT 操作支持库 `{@link com.minecraft.moonlake.api.nbt.NBTLibrary}`
+* 玩家支持库: [点我](https://github.com/McMoonLakeDev/MoonLake/tree/override/src/com/minecraft/moonlake/api/player "Player Library")
+* 物品栈支持库: [点我](https://github.com/McMoonLakeDev/MoonLake/tree/override/src/com/minecraft/moonlake/api/item "Item Library")
+* 数据库支持库: [点我](https://github.com/McMoonLakeDev/MoonLake/tree/override/src/com/minecraft/moonlake/mysql "MySQL Library")
+* 花式消息支持库: [点我](https://github.com/McMoonLakeDev/MoonLake/tree/override/src/com/minecraft/moonlake/api/fancy "FancyMessage")
+* NMS 数据包发送: [点我](https://github.com/McMoonLakeDev/MoonLake/tree/override/src/com/minecraft/moonlake/nms/packet "NMS Packet")
+* NBT 操作支持库: [点我](https://github.com/McMoonLakeDev/MoonLake/tree/override/src/com/minecraft/moonlake/api/nbt "NBT Library")
  
 更多功能开发中 _(:з」∠)_
 
@@ -31,7 +31,7 @@ private MoonLake moonlake;
 private boolean setupMoonLake() {
   
   Plugin plugin = this.getServer().getPluginManager().getPlugin("MoonLake");
-  return plugin != null && plugin instanceof MoonLakePlugin && (this.moonLake = ((MoonLakePlugin)plugin).getInstance()) != null;
+  return plugin != null && plugin instanceof MoonLakePlugin && (this.moonLake = ((MoonLakePlugin)plugin).getMoonLake()) != null;
 }
 ```
 调用的话就在主类的 `onEnable` 函数里面
@@ -48,8 +48,8 @@ public void onEnable() {
 ```
 
 ## 项目协议
-此项目完全属于开源项目，如需修改和添加功能请到 <a href="https://github.com/u2g/MoonLake" target="_blank">GitHub</a> 进行 Fork 操作.<br/>
-修改操作请您遵守 <a href="https://github.com/u2g/MoonLake/blob/master/LICENSE" target="_blank">GPLv3</a> 协议，您必须公开修改过的所有代码！
+此项目完全属于开源项目，如需修改和添加功能请到 [GitHub](https://github.com/u2g/MoonLake "GitHub") 进行 Fork 操作.<br/>
+修改操作请您遵守 [GPLv3](https://github.com/u2g/MoonLake/blob/master/LICENSE "GPLv3") 协议，您必须公开修改过的所有代码！
 
 ## 其他插件
 * `MoonLakeKitPvP` 职业战争插件 :point_right:[GO](http://github.com/u2g/MoonLakeKitPvP "MoonLake KitPvP Plugin")
