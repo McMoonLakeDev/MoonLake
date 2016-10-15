@@ -7,7 +7,7 @@ import org.bukkit.Chunk;
 /**
  * Created by MoonLake on 2016/10/2.
  */
-public class NBTChunkExpression implements NBTChunk {
+class NBTChunkExpression implements NBTChunk {
 
     public NBTChunkExpression() throws NBTInitializeException {
 
