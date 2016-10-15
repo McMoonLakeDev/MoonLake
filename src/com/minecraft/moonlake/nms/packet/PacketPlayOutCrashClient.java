@@ -15,6 +15,9 @@ import java.util.ArrayList;
  */
 public class PacketPlayOutCrashClient extends PacketAbstract<PacketPlayOutCrashClient> {
 
+    /**
+     * 数据包输出崩溃客户端类构造函数
+     */
     public PacketPlayOutCrashClient() {
 
     }

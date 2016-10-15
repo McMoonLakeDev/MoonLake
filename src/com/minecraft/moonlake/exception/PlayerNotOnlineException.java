@@ -9,11 +9,19 @@ package com.minecraft.moonlake.exception;
  */
 public class PlayerNotOnlineException extends MoonLakeException {
 
+    /**
+     * 玩家未在线异常类构造函数
+     */
     public PlayerNotOnlineException() {
 
         super("The player not online exception.");
     }
 
+    /**
+     * 玩家未在线异常类构造函数
+     *
+     * @param player 玩家名
+     */
     public PlayerNotOnlineException(String player) {
 
         super("The player not online exception: " + player);

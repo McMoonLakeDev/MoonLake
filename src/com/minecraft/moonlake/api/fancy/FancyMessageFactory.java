@@ -10,10 +10,13 @@ package com.minecraft.moonlake.api.fancy;
 public class FancyMessageFactory {
 
     /**
-     * Static Fancy Message Instance
+     * 花式消息工厂静态对象
      */
     private static FancyMessageFactory fancyMessageInstance;
 
+    /**
+     * 花式消息工厂类构造函数
+     */
     private FancyMessageFactory() {
 
     }

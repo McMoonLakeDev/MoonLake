@@ -33,12 +33,23 @@ public class PacketPlayOutHeldItemSlot extends PacketAbstract<PacketPlayOutHeldI
 
     private IntegerProperty heldItemSlot;
 
+    /**
+     * 数据包输出手持物品索引构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutHeldItemSlot(int)}
+     * @see #PacketPlayOutHeldItemSlot(int)
+     */
     @Deprecated
     public PacketPlayOutHeldItemSlot() {
 
         this(0);
     }
 
+    /**
+     * 数据包输出手持物品索引构造函数
+     *
+     * @param heldItemSlot 物品栏索引
+     */
     public PacketPlayOutHeldItemSlot(int heldItemSlot) {
 
         this.heldItemSlot = new SimpleIntegerProperty(heldItemSlot);

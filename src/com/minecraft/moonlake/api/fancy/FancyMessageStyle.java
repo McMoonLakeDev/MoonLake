@@ -33,6 +33,11 @@ public enum FancyMessageStyle {
 
     private final String type;
 
+    /**
+     * 花式消息样式构造函数
+     *
+     * @param type 类型名
+     */
     FancyMessageStyle(String type) {
 
         this.type = type;

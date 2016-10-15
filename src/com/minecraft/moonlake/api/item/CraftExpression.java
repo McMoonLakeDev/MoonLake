@@ -22,6 +22,9 @@ import java.util.Collection;
  */
 class CraftExpression extends MetaExpression implements CraftLibrary {
 
+    /**
+     * 物品栈创建接口实现类构造函数
+     */
     public CraftExpression() {
 
     }

@@ -13,11 +13,21 @@ import org.bukkit.entity.Player;
  */
 public class SimpleMoonLakePlayer extends AbstractPlayer {
 
+    /**
+     * 月色之湖玩家接口单包装类构造函数
+     *
+     * @param name 玩家名
+     */
     public SimpleMoonLakePlayer(String name) {
 
         super(name);
     }
 
+    /**
+     * 月色之湖玩家接口单包装类构造函数
+     *
+     * @param player 玩家对象
+     */
     public SimpleMoonLakePlayer(Player player) {
 
         super(player);

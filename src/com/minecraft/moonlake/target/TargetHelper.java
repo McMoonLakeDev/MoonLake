@@ -18,6 +18,10 @@ import java.util.List;
  */
 public final class TargetHelper {
 
+
+    /**
+     * 目标帮助器类构造函数
+     */
     private TargetHelper() {
 
     }

@@ -21,6 +21,9 @@ import java.util.stream.Collectors;
  */
 public class StringUtil {
 
+    /**
+     * 字符串实现类构造函数
+     */
     public StringUtil() {
 
     }

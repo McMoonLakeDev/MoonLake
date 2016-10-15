@@ -23,6 +23,9 @@ import java.util.stream.Collectors;
  */
 class MetaExpression extends AttributeExpression implements MetaLibrary {
 
+    /**
+     * 物品栈元属性接口实现类构造函数
+     */
     public MetaExpression() {
 
     }

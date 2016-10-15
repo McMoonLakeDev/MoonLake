@@ -46,11 +46,21 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     private final ReadOnlyStringProperty nameProperty;
     private final ReadOnlyObjectProperty<Player> playerProperty;
 
+    /**
+     * 月色之湖玩家抽象类构造函数
+     *
+     * @param name 玩家名
+     */
     public AbstractPlayer(String name) {
 
         this(Bukkit.getPlayer(name));
     }
 
+    /**
+     * 月色之湖玩家抽象类构造函数
+     *
+     * @param player 玩家对象
+     */
     public AbstractPlayer(Player player) {
 
         this.nameProperty = new SimpleStringProperty(player.getName());

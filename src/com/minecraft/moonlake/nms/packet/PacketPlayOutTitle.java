@@ -49,27 +49,60 @@ public class PacketPlayOutTitle extends PacketAbstract<PacketPlayOutTitle> {
     private IntegerProperty stay;
     private IntegerProperty fadeOut;
 
+    /**
+     * 数据包输出标题类构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutTitle(String)}
+     */
     @Deprecated
     public PacketPlayOutTitle() {
 
         this("");
     }
 
+    /**
+     * 数据包输出标题类构造函数
+     *
+     * @param title 标题
+     */
     public PacketPlayOutTitle(String title) {
 
         this(title, null);
     }
 
+    /**
+     * 数据包输出标题类构造函数
+     *
+     * @param title 标题
+     * @param subTitle 子标题
+     */
     public PacketPlayOutTitle(String title, String subTitle) {
 
         this(title, subTitle, -1, -1, -1);
     }
 
+    /**
+     * 数据包输出标题类构造函数
+     *
+     * @param title 标题
+     * @param fadeIn 淡入时间
+     * @param stay 停留时间
+     * @param fadeOut 淡出时间
+     */
     public PacketPlayOutTitle(String title, int fadeIn, int stay, int fadeOut) {
 
         this(title, null, fadeIn, stay, fadeOut);
     }
 
+    /**
+     * 数据包输出标题类构造函数
+     *
+     * @param title 标题
+     * @param subTitle 子标题
+     * @param fadeIn 淡入时间
+     * @param stay 停留时间
+     * @param fadeOut 淡出时间
+     */
     public PacketPlayOutTitle(String title, String subTitle, int fadeIn, int stay, int fadeOut) {
 
         this.title = new SimpleStringProperty(title);

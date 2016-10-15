@@ -22,6 +22,9 @@ public class ItemLibraryFactorys {
      */
     private static ItemLibrary itemLibraryInstance;
 
+    /**
+     * 物品栈支持库静态工厂类构造函数
+     */
     private ItemLibraryFactorys() {
 
     }

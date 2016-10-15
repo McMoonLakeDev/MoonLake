@@ -36,12 +36,24 @@ class PacketPlayOutPlayerInfo_v1_9_R1 extends PacketPlayOutPlayerInfo<PacketPlay
         }
     }
 
+    /**
+     * 数据包输出玩家信息 v1.9-R1 实现类
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutPlayerInfo_v1_9_R1(Action, Player)}
+     * @see #PacketPlayOutPlayerInfo_v1_9_R1(Action, Player)
+     */
     @Deprecated
     public PacketPlayOutPlayerInfo_v1_9_R1() {
 
         super(null, null);
     }
 
+    /**
+     * 数据包输出玩家信息 v1.9-R1 实现类
+     *
+     * @param action 交互类型
+     * @param player 玩家
+     */
     public PacketPlayOutPlayerInfo_v1_9_R1(Action action, Player player) {
 
         super(action, player);

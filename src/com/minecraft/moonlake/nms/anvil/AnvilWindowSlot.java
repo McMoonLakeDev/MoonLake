@@ -25,6 +25,11 @@ public enum AnvilWindowSlot {
 
     private int slot;
 
+    /**
+     * 铁砧创建槽位类型构造函数
+     *
+     * @param slot 槽位索引
+     */
     AnvilWindowSlot(int slot) {
 
         this.slot = slot;

@@ -18,6 +18,9 @@ import java.util.Map;
  */
 public class IoManager extends MoonLakeManager {
 
+    /**
+     * 输入输出流管理实现类构造函数
+     */
     private IoManager() {
 
     }

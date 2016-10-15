@@ -29,6 +29,9 @@ public class RandomManager extends MoonLakeManager {
         };
     }
 
+    /**
+     * 随机管理实现类构造函数
+     */
     private RandomManager() {
 
     }

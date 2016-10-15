@@ -11,6 +11,9 @@ class PlayerExpressionWrapped extends PlayerExpression {
     private final NMSPlayerExpression nmsPlayerExpression;
     private final ItemCooldownExpression itemCooldownExpression;
 
+    /**
+     * 玩家支持库实现包装类构造函数
+     */
     public PlayerExpressionWrapped() {
 
         this.nmsPlayerExpression = new NMSPlayerExpression();

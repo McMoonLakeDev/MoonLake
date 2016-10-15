@@ -37,6 +37,11 @@ class NBTEntityExpression implements NBTEntity {
     private Method METHOD_GETBUKKITENTITY;
     private Method METHOD_ADDENTITYTOWORLD;
 
+    /**
+     * NBT 实体接口实现类构造函数
+     *
+     * @throws NBTInitializeException 如果初始化错误则抛出异常
+     */
     public NBTEntityExpression() throws NBTInitializeException {
 
         try {

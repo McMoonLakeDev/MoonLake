@@ -11,6 +11,12 @@ import org.bukkit.entity.Player;
  */
 public class AnvilWindowCloseEvent extends AnvilWindowAbstractEvent {
 
+    /**
+     * 铁砧窗口关闭事件类构造函数
+     *
+     * @param player 玩家
+     * @param anvilWindow 铁砧窗口对象
+     */
     public AnvilWindowCloseEvent(Player player, AnvilWindow anvilWindow) {
 
         super(player, anvilWindow);

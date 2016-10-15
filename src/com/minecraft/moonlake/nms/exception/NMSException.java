@@ -11,16 +11,30 @@ import com.minecraft.moonlake.exception.MoonLakeException;
  */
 public class NMSException extends MoonLakeException {
 
+    /**
+     * NMS 异常类构造函数
+     */
     public NMSException() {
 
         this("The nms exception");
     }
 
+    /**
+     * NMS 异常类构造函数
+     *
+     * @param message 异常消息
+     */
     public NMSException(String message) {
 
         super(message);
     }
 
+    /**
+     * NMS 异常类构造函数
+     *
+     * @param message 异常消息
+     * @param cause 异常原因
+     */
     public NMSException(String message, Throwable cause) {
 
         super(message, cause);

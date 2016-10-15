@@ -27,6 +27,9 @@ class ItemExpressionWrapped extends ItemExpression {
     
     private final SkullExpression base;
 
+    /**
+     * 物品栈接口单实现类构造函数
+     */
     public ItemExpressionWrapped() {
         
         this.base = new SkullExpression();

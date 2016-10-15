@@ -22,6 +22,9 @@ public class ItemLibraryFactory {
      */
     private static ItemLibraryFactory instance;
 
+    /**
+     * 物品栈支持库工厂类构造函数
+     */
     private ItemLibraryFactory() {
 
     }

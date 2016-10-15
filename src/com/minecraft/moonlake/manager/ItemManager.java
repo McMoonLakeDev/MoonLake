@@ -62,6 +62,9 @@ public class ItemManager extends MoonLakeManager {
         }
     }
 
+    /**
+     * 物品栈管理实现类构造函数
+     */
     private ItemManager() {
 
     }

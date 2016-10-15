@@ -14,6 +14,9 @@ public class PlayerLibraryFactory {
      */
     private static PlayerLibraryFactory instance;
 
+    /**
+     * 玩家支持库工厂类构造函数
+     */
     private PlayerLibraryFactory() {
 
     }

@@ -18,6 +18,11 @@ public class FancyJsonString implements JsonRepresentedObject {
 
     private StringProperty value;
 
+    /**
+     * 花式消息 Json 字符串构造函数
+     *
+     * @param value 字符串值
+     */
     public FancyJsonString(String value) {
 
         this.value = new SimpleStringProperty(value);

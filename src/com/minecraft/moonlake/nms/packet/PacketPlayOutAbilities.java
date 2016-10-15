@@ -53,12 +53,23 @@ public class PacketPlayOutAbilities extends PacketAbstract<PacketPlayOutAbilitie
 
     private PlayerAbilities abilities;
 
+    /**
+     * 数据包输出玩家能力类构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutAbilities(PlayerAbilities)}
+     * @see #PacketPlayOutAbilities(PlayerAbilities)
+     */
     @Deprecated
     public PacketPlayOutAbilities() {
 
         this(new PlayerAbilities());
     }
 
+    /**
+     * 数据包输出玩家能力类构造函数
+     *
+     * @param abilities 玩家能力对象
+     */
     public PacketPlayOutAbilities(PlayerAbilities abilities) {
 
         this.abilities = abilities;
@@ -103,6 +114,13 @@ public class PacketPlayOutAbilities extends PacketAbstract<PacketPlayOutAbilitie
         }
     }
 
+    /**
+     * <h1>PlayerAbilities</h1>
+     * 玩家能力封装类（详细doc待补充...）
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     public static class PlayerAbilities {
 
         private BooleanProperty isInvulnerable;
@@ -113,11 +131,25 @@ public class PacketPlayOutAbilities extends PacketAbstract<PacketPlayOutAbilitie
         private FloatProperty flySpeed;
         private FloatProperty walkSpeed;
 
+        /**
+         * 玩家能力封装类构造函数
+         */
         public PlayerAbilities() {
 
             this(false, false, false, false, true, 0.05f, 0.1f);
         }
 
+        /**
+         * 玩家能力封装类构造函数
+         *
+         * @param isInvulnerable 是否坚不可摧
+         * @param isFlying 是否飞行中
+         * @param canFly 是否可以飞行
+         * @param canInstantlyBuild 是否可以瞬间建造
+         * @param mayBuild 是否可以建造
+         * @param flySpeed 飞行速度
+         * @param walkSpeed 移动速度
+         */
         public PlayerAbilities(boolean isInvulnerable, boolean isFlying, boolean canFly, boolean canInstantlyBuild, boolean mayBuild, float flySpeed, float walkSpeed) {
 
             this.isInvulnerable = new SimpleBooleanProperty(isInvulnerable);

@@ -77,11 +77,30 @@ public enum AttributeType {
     private double min;
     private double max;
 
+    /**
+     * 实体属性类型构造函数
+     *
+     * @param type 类型名
+     * @param field NMS 字段名
+     * @param def 默认值
+     * @param min 最小值
+     * @param max 最大值
+     */
     AttributeType(String type, String field, double def, double min, double max) {
 
         this(type, field, -1, def, min, max);
     }
 
+    /**
+     * 实体属性类型构造函数
+     *
+     * @param type 类型名
+     * @param field NMS 字段名
+     * @param minimumVersion 最低服务端版本
+     * @param def 默认值
+     * @param min 最小值
+     * @param max 最大值
+     */
     AttributeType(String type, String field, int minimumVersion, double def, double min, double max) {
 
         this.type = type;

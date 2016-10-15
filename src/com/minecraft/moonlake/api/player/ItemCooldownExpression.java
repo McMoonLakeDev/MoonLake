@@ -33,6 +33,11 @@ class ItemCooldownExpression implements ItemCooldown {
     private Method METHOD_A0;
     private Method METHOD_A1;
 
+    /**
+     * 玩家物品栈冷却能力接口实现类构造函数
+     *
+     * @throws IllegalBukkitVersionException 如果服务端版本不支持则抛出异常
+     */
     public ItemCooldownExpression() throws IllegalBukkitVersionException {
 
         try {

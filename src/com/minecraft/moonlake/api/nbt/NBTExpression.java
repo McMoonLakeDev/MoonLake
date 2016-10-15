@@ -17,6 +17,9 @@ import org.bukkit.inventory.ItemStack;
  */
 class NBTExpression implements NBTLibrary {
 
+    /**
+     * NBT 支持库接口实现类构造函数
+     */
     public NBTExpression() {
 
     }

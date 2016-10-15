@@ -14,6 +14,12 @@ public abstract class AnvilWindowAbstractEvent implements AnvilWindowEvent {
     private final Player player;
     private final AnvilWindow anvilWindow;
 
+    /**
+     * 铁砧窗口抽象事件类构造函数
+     *
+     * @param player 玩家
+     * @param anvilWindow 铁砧窗口对象
+     */
     public AnvilWindowAbstractEvent(Player player, AnvilWindow anvilWindow) {
 
         this.player = player;

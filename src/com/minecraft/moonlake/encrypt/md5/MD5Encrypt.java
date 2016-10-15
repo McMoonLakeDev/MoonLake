@@ -9,7 +9,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Created by MoonLake on 2016/6/4.
+ * <h1>MD5Encrypt</h1>
+ * MD5 数据加密实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class MD5Encrypt implements Encrypt {
 

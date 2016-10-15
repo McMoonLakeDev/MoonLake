@@ -22,6 +22,9 @@ class FireworkBuilderWrapped implements FireworkBuilder {
     private final FireworkEffect.Builder builder;
     private int power;
 
+    /**
+     * 烟花建造接口实现类构造函数
+     */
     public FireworkBuilderWrapped() {
 
         this.power = 1;

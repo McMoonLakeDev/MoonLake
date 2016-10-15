@@ -52,17 +52,37 @@ public class PacketPlayOutEntityEquipment extends PacketAbstract<PacketPlayOutEn
     private ObjectProperty<EquipmentSlot> equipmentSolt;
     private ObjectProperty<ItemStack> itemStack;
 
+    /**
+     * 数据包输出实体装备类构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutEntityEquipment(Entity, EquipmentSlot, ItemStack)}
+     * @see #PacketPlayOutEntityEquipment(Entity, EquipmentSlot, ItemStack)
+     */
     @Deprecated
     public PacketPlayOutEntityEquipment() {
 
         this(0, EquipmentSlot.MAINHAND, null);
     }
 
+    /**
+     * 数据包输出实体装备类构造函数
+     *
+     * @param entity 实体
+     * @param equipmentSlot 装备槽位
+     * @param itemStack 物品栈
+     */
     public PacketPlayOutEntityEquipment(Entity entity, EquipmentSlot equipmentSlot, ItemStack itemStack) {
 
         this(entity.getEntityId(), equipmentSlot, itemStack);
     }
 
+    /**
+     * 数据包输出实体装备类构造函数
+     *
+     * @param entityId 实体 Id
+     * @param equipmentSlot 装备槽位
+     * @param itemStack 物品栈
+     */
     public PacketPlayOutEntityEquipment(int entityId, EquipmentSlot equipmentSlot, ItemStack itemStack) {
 
         this.entityId = new SimpleIntegerProperty(entityId);
@@ -104,13 +124,39 @@ public class PacketPlayOutEntityEquipment extends PacketAbstract<PacketPlayOutEn
         }
     }
 
+    /**
+     * <h1>EquipmentSlot</h1>
+     * 装备槽位类型
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     public enum EquipmentSlot {
 
+        /**
+         * 装备槽位类型: 主手
+         */
         MAINHAND,
+        /**
+         * 装备槽位类型: 副手
+         */
         OFFHAND,
+        /**
+         * 装备槽位类型: 脚
+         */
         FEET,
+        /**
+         * 装备槽位类型: 腿
+         */
         LEGS,
+        /**
+         * 装备槽位类型: 胸
+         */
         CHEST,
-        HEAD,;
+        /**
+         * 装备槽位类型: 头
+         */
+        HEAD,
+        ;
     }
 }

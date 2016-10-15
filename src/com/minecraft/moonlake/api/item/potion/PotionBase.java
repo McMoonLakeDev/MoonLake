@@ -152,6 +152,11 @@ public abstract class PotionBase {
 
     private String value;
 
+    /**
+     * 基础药水效果类构造函数
+     *
+     * @param value 值
+     */
     public PotionBase(String value) {
 
         this.value = value;

@@ -20,6 +20,9 @@ import java.util.*;
  */
 class AttributeExpression implements AttributeLibrary {
 
+    /**
+     * 物品栈属性支持库接口实现类构造函数
+     */
     public AttributeExpression() {
 
     }

@@ -62,17 +62,40 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
     private ObjectProperty<GameMode> worldGameMode;
     private ObjectProperty<WorldType> worldType;
 
+    /**
+     * 数据包输出重生类构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutRespawn(WorldDimension, WorldDifficulty, GameMode, WorldType)}
+     * @see #PacketPlayOutRespawn(WorldDimension, WorldDifficulty, GameMode, WorldType)
+     */
     @Deprecated
     public PacketPlayOutRespawn() {
 
         this(WorldDimension.OVERWORLD, WorldDifficulty.PEACEFUL, GameMode.SURVIVAL, WorldType.NORMAL);
     }
 
+    /**
+     * 数据包输出重生类构造函数
+     *
+     * @param worldDimension 世界维度
+     * @param worldDifficulty 世界难度
+     * @param worldGameMode 世界游戏模式
+     * @param worldType 世界类型
+     */
     public PacketPlayOutRespawn(WorldDimension worldDimension, WorldDifficulty worldDifficulty, GameMode worldGameMode, WorldType worldType) {
 
         this(worldDimension.getId(), worldDifficulty, worldGameMode, worldType);
     }
 
+    /**
+     * 数据包输出重生类构造函数
+     *
+     * @param worldDimensionId 世界维度 Id
+     * @param worldDifficulty 世界难度
+     * @param worldGameMode 世界游戏模式
+     * @param worldType 世界类型
+     */
+    @Deprecated
     public PacketPlayOutRespawn(int worldDimensionId, WorldDifficulty worldDifficulty, GameMode worldGameMode, WorldType worldType) {
 
         this.worldDimensionId = new SimpleIntegerProperty(worldDimensionId);
@@ -124,7 +147,11 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
     }
 
     /**
+     * <h1>WorldDimension</h1>
      * 世界维度类型
+     *
+     * @version 1.0
+     * @author Month_Light
      */
     public enum WorldDimension {
 
@@ -143,6 +170,11 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
 
         private final int id;
 
+        /**
+         * 世界维度类型类构造函数
+         *
+         * @param id Id
+         */
         WorldDimension(int id) {
 
             this.id = id;
@@ -155,7 +187,11 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
     }
 
     /**
+     * <h1>WorldDifficulty</h1>
      * 世界难度类型
+     *
+     * @version 1.0
+     * @author Month_Light
      */
     public enum WorldDifficulty {
 
@@ -190,7 +226,11 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
     }
 
     /**
+     * <h1>WorldType</h1>
      * 世界类型
+     *
+     * @version 1.0
+     * @author Month_Light
      */
     public enum WorldType {
 

@@ -13,6 +13,11 @@ import net.minecraft.server.v1_9_R1.EntityHuman;
  */
 class AnvilWindow_v1_9_R1 extends ContainerAnvil {
 
+    /**
+     * 铁砧窗口 v1.9-R1 版容器类构造函数
+     *
+     * @param entityHuman EntityHuman
+     */
     public AnvilWindow_v1_9_R1(EntityHuman entityHuman) {
 
         super(entityHuman.inventory, entityHuman.world, BlockPosition.ZERO, entityHuman);

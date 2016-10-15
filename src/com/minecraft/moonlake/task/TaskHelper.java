@@ -25,6 +25,9 @@ public class TaskHelper {
         BUKKIT_SCHEDULER = Bukkit.getScheduler();
     }
 
+    /**
+     * 任务帮助器类构造函数
+     */
     private TaskHelper() {
 
     }

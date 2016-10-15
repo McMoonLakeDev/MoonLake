@@ -91,6 +91,9 @@ public class BlockManager extends MoonLakeManager {
         }
     }
 
+    /**
+     * 方块管理实现类构造函数
+     */
     private BlockManager() {
 
     }

@@ -9,6 +9,9 @@ package com.minecraft.moonlake.nms;
  */
 public class NMS {
 
+    /**
+     * NMS 类构造函数
+     */
     private NMS() {
     }
 }

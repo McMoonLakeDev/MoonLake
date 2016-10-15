@@ -67,6 +67,11 @@ final class NBTReflectSpigotRaw extends NBTReflect {
     private Method METHOD_NBTBASE_WRITE;
     private Method METHOD_NBTBASE_LOAD;
 
+    /**
+     * NBT Spigot 反射源实现类构造函数
+     *
+     * @throws NBTInitializeException 如果初始化错误则抛出异常
+     */
     public NBTReflectSpigotRaw() throws NBTInitializeException {
 
         try {

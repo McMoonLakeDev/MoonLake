@@ -16,6 +16,9 @@ import java.util.UUID;
  */
 abstract class PlayerExpression implements PlayerLibrary {
 
+    /**
+     * 玩家支持库抽象实现类构造函数
+     */
     public PlayerExpression() {
 
     }

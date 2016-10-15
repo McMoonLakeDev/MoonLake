@@ -13,17 +13,29 @@ import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 
 /**
- * Created by MoonLake on 2016/6/28.
+ * <h1>MD5FileEncrypt</h1>
+ * MD5 文件加密实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class MD5FileEncrypt implements Encrypt {
 
     private ObjectProperty<File> file;
 
+    /**
+     * MD5 文件加密实现类构造函数
+     */
     public MD5FileEncrypt() {
 
         this(null);
     }
 
+    /**
+     * MD5 文件加密实现类构造函数
+     *
+     * @param file 目标文件
+     */
     public MD5FileEncrypt(File file) {
 
         this.file = new SimpleObjectProperty<>(file);

@@ -33,12 +33,23 @@ public class PacketPlayOutNamedEntitySpawn extends PacketAbstract<PacketPlayOutN
 
     private ObjectProperty<Player> entity;
 
+    /**
+     * 数据包输出名称实体生成类构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutNamedEntitySpawn(Player)}
+     * @see #PacketPlayOutNamedEntitySpawn(Player)
+     */
     @Deprecated
     public PacketPlayOutNamedEntitySpawn() {
 
         this(null);
     }
 
+    /**
+     * 数据包输出名称实体生成类构造函数
+     *
+     * @param entity 玩家
+     */
     public PacketPlayOutNamedEntitySpawn(Player entity) {
 
         this.entity = new SimpleObjectProperty<>(entity);

@@ -5,12 +5,21 @@ import com.minecraft.moonlake.property.ReadOnlyStringProperty;
 import com.minecraft.moonlake.property.SimpleStringProperty;
 
 /**
- * Created by MoonLake on 2016/6/28.
+ * <h1>MD5</h1>
+ * MD5 加密数据类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class MD5 implements EncryptData {
 
     private ReadOnlyStringProperty md5;
 
+    /**
+     * MD5 加密数据类构造函数
+     *
+     * @param md5 MD5 值
+     */
     public MD5(String md5) {
 
         this.md5 = new SimpleStringProperty(md5);

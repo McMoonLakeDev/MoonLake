@@ -34,6 +34,11 @@ public final class AnvilWindow {
     protected Inventory anvilInventory;
     protected Object anvilInventoryHandle;
 
+    /**
+     * 铁砧窗口类构造函数
+     *
+     * @param plugin JavaPlugin
+     */
     public AnvilWindow(Plugin plugin) {
 
         this.plugin = plugin;

@@ -27,6 +27,11 @@ class NMSPlayerExpression implements NMSPlayerLibrary {
     private Method METHOD_GETHANDLE;
     private Field FIELD_PING;
 
+    /**
+     * 玩家 NMS 接口实现类构造函数
+     *
+     * @throws IllegalBukkitVersionException 如果服务端版本不支持则抛出异常
+     */
     public NMSPlayerExpression() throws IllegalBukkitVersionException {
 
         try {

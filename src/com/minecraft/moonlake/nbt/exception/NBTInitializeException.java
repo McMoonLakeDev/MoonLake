@@ -9,16 +9,30 @@ package com.minecraft.moonlake.nbt.exception;
  */
 public class NBTInitializeException extends NBTException {
 
+    /**
+     * NBT 初始化异常类构造函数
+     */
     public NBTInitializeException() {
 
         this("The nbt initialize exception");
     }
 
+    /**
+     * NBT 初始化异常类构造函数
+     *
+     * @param message 异常消息
+     */
     public NBTInitializeException(String message) {
 
         super(message);
     }
 
+    /**
+     * NBT 初始化异常类构造函数
+     *
+     * @param message 异常消息
+     * @param cause 异常原因
+     */
     public NBTInitializeException(String message, Throwable cause) {
 
         super(message, cause);

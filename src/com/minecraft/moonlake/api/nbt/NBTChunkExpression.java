@@ -13,6 +13,11 @@ import org.bukkit.Chunk;
  */
 class NBTChunkExpression implements NBTChunk {
 
+    /**
+     * NBT 区块接口实现类构造函数
+     *
+     * @throws NBTInitializeException 如果初始化错误则抛出异常
+     */
     public NBTChunkExpression() throws NBTInitializeException {
 
     }

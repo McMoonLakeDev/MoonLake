@@ -20,12 +20,24 @@ public abstract class PacketPlayOutPlayerInfo<T extends PacketPlayOutPlayerInfo>
     private ObjectProperty<Action> action;
     private ObjectProperty<Player> player;
 
+    /**
+     * 数据包输出玩家信息抽象类构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutPlayerInfo(Action, Player)}
+     * @see #PacketPlayOutPlayerInfo(Action, Player)
+     */
     @Deprecated
     public PacketPlayOutPlayerInfo() {
 
         this(null, null);
     }
 
+    /**
+     * 数据包输出玩家信息抽象类构造函数
+     *
+     * @param action 交互类型
+     * @param player 玩家
+     */
     public PacketPlayOutPlayerInfo(Action action, Player player) {
 
         this.action = new SimpleObjectProperty<>(action);
@@ -44,6 +56,13 @@ public abstract class PacketPlayOutPlayerInfo<T extends PacketPlayOutPlayerInfo>
 
     public abstract void send(Player... player) throws PacketException;
 
+    /**
+     * <h1>Action</h1>
+     * 数据包输出玩家信息交互类型
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     public enum Action {
 
         /**

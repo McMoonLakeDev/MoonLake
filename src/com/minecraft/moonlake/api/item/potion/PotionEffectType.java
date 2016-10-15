@@ -140,6 +140,13 @@ public enum PotionEffectType {
         }
     }
 
+    /**
+     * 药水效果类型构造函数
+     *
+     * @param type 类型名
+     * @param id 药水效果 Id
+     * @param tagName 药水 NBT 名称
+     */
     PotionEffectType(String type, int id, String tagName) {
 
         this.type = type;

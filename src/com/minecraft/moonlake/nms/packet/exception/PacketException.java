@@ -11,16 +11,30 @@ import com.minecraft.moonlake.nms.exception.NMSException;
  */
 public class PacketException extends NMSException {
 
+    /**
+     * 数据包异常类构造函数
+     */
     public PacketException() {
 
         this("The nms packet exception");
     }
 
+    /**
+     * 数据包异常类构造函数
+     *
+     * @param message 异常消息
+     */
     public PacketException(String message) {
 
         super(message);
     }
 
+    /**
+     * 数据包异常类构造函数
+     *
+     * @param message 异常消息
+     * @param cause 异常原因
+     */
     public PacketException(String message, Throwable cause) {
 
         super(message, cause);

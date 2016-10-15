@@ -15,6 +15,9 @@ import org.bukkit.entity.Player;
  */
 public abstract class PacketAbstract<T extends Packet> implements Packet<T> {
 
+    /**
+     * 数据包抽象类构造函数
+     */
     public PacketAbstract() {
 
     }

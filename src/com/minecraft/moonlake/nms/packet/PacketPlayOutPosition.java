@@ -47,37 +47,92 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
     private Set<PlayerTeleportFlag> flags;
     private IntegerProperty g;
 
+    /**
+     * 数据包输出位置类构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutPosition(Location, Set, int)}
+     * @see #PacketPlayOutPosition(Location, Set, int)
+     */
     @Deprecated
     public PacketPlayOutPosition() {
 
         this(0d, 0d, 0d);
     }
 
+    /**
+     * 数据包输出位置类构造函数
+     *
+     * @param location 位置
+     */
     public PacketPlayOutPosition(Location location) {
 
         this(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch(), null, 0);
     }
 
+    /**
+     * 数据包输出位置类构造函数
+     *
+     * @param location 位置
+     * @param flags 玩家传送标示
+     * @param g g
+     */
     public PacketPlayOutPosition(Location location, Set<PlayerTeleportFlag> flags, int g) {
 
         this(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch(), flags, g);
     }
 
+    /**
+     * 数据包输出位置类构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     */
     public PacketPlayOutPosition(double x, double y, double z) {
 
         this(x, y, z, 0f, 0f);
     }
 
+    /**
+     * 数据包输出位置类构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     * @param yaw Yaw 偏航角
+     * @param pitch Pitch 俯仰角
+     */
     public PacketPlayOutPosition(double x, double y, double z, float yaw, float pitch) {
 
         this(x, y, z, yaw, pitch, null, 0);
     }
 
+    /**
+     * 数据包输出位置类构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     * @param yaw Yaw 偏航角
+     * @param pitch Pitch 俯仰角
+     * @param flags 玩家传送标示
+     */
     public PacketPlayOutPosition(double x, double y, double z, float yaw, float pitch, Set<PlayerTeleportFlag> flags) {
 
         this(x, y, z, yaw, pitch, flags, 0);
     }
 
+    /**
+     * 数据包输出位置类构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     * @param yaw Yaw 偏航角
+     * @param pitch Pitch 俯仰角
+     * @param flags 玩家传送标示
+     * @param g g
+     */
     public PacketPlayOutPosition(double x, double y, double z, float yaw, float pitch, Set<PlayerTeleportFlag> flags, int g) {
 
         this.x = new SimpleDoubleProperty(x);
@@ -148,13 +203,36 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
         }
     }
 
+    /**
+     * <h1>PlayerTeleportFlag</h1>
+     * 玩家传送标示类型
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     public enum PlayerTeleportFlag {
 
+        /**
+         * 玩家传送标示类型: X 坐标
+         */
         X(0),
+        /**
+         * 玩家传送标示类型: Y 坐标
+         */
         Y(1),
+        /**
+         * 玩家传送标示类型: Z 坐标
+         */
         Z(2),
+        /**
+         * 玩家传送标示类型: Y 坐标旋转
+         */
         Y_ROT(3),
-        X_ROT(4),;
+        /**
+         * 玩家传送标示类型: X 坐标旋转
+         */
+        X_ROT(4),
+        ;
 
         private final int id;
 

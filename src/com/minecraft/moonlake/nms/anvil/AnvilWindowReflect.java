@@ -44,6 +44,11 @@ class AnvilWindowReflect {
 
     private static AnvilWindowReflect anvilWindowReflectInstance;
 
+    /**
+     * 铁砧窗口反射实现类构造函数
+     *
+     * @throws NMSException 如果初始化错误则抛出异常
+     */
     private AnvilWindowReflect() throws NMSException {
 
         try {

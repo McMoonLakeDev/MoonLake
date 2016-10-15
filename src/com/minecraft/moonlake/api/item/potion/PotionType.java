@@ -44,6 +44,12 @@ public enum PotionType {
         }
     }
 
+    /**
+     * 药水类型构造函数
+     *
+     * @param type 类型名
+     * @param id 药水 Id
+     */
     PotionType(String type, int id) {
 
         this.type = type;

@@ -101,6 +101,9 @@ public class EntityManager extends MoonLakeManager {
         }
     }
 
+    /**
+     * 实体管理实现类构造函数
+     */
     private EntityManager() {
 
     }

@@ -45,6 +45,9 @@ public class PlayerManager extends MoonLakeManager {
         }
     }
 
+    /**
+     * 玩家管理实现类构造函数
+     */
     private PlayerManager() {
 
     }

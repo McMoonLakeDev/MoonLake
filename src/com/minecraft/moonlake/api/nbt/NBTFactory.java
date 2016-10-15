@@ -37,6 +37,9 @@ public class NBTFactory {
      */
     private static NBTChunk NBTChunkInstance;
 
+    /**
+     * NBT 工厂类构造函数
+     */
     private NBTFactory() {
 
     }

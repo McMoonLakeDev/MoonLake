@@ -14,6 +14,9 @@ import org.bukkit.inventory.ItemStack;
  */
 abstract class ItemExpression implements ItemLibrary {
 
+    /**
+     * 物品栈接口抽象实现类构造函数
+     */
     public ItemExpression() {
 
     }

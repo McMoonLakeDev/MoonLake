@@ -24,6 +24,9 @@ import java.util.UUID;
  */
 class SkullExpression extends CraftExpression implements SkullLibrary {
 
+    /**
+     * 头颅物品栈接口实现类构造函数
+     */
     public SkullExpression() {
 
     }

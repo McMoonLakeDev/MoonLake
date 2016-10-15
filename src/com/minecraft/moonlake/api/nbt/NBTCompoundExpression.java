@@ -14,11 +14,19 @@ class NBTCompoundExpression implements NBTCompound {
     private final Map<String, Object> handleMap;
     private final Object handle;
 
+    /**
+     * NBT 复合接口实现类构造函数
+     */
     public NBTCompoundExpression() {
 
         this(NBTReflect.getHandle().createTagCompound());
     }
 
+    /**
+     * NBT 复合接口实现类构造函数
+     *
+     * @param tag NBT Tag 对象
+     */
     public NBTCompoundExpression(Object tag) {
 
         assert NBTReflect.getHandle().getTagType(tag) == 10;
@@ -27,6 +35,11 @@ class NBTCompoundExpression implements NBTCompound {
         this.handleMap = NBTReflect.getHandle().getHandleMap(tag);
     }
 
+    /**
+     * NBT 复合接口实现类构造函数
+     *
+     * @param map Map 对象
+     */
     public NBTCompoundExpression(Map map) {
 
         this(NBTReflect.getHandle().createTagCompound());

@@ -39,6 +39,9 @@ public abstract class NBTReflect {
         handle = raw ? new NBTReflectSpigotRaw() : null;
     }
 
+    /**
+     * NBT 抽象反射实现类构造函数
+     */
     protected NBTReflect() {
 
     }

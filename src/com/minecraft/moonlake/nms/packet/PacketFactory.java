@@ -18,6 +18,9 @@ public class PacketFactory {
      */
     private static PacketFactory packetFactoryInstance;
 
+    /**
+     * 数据包工厂类构造函数
+     */
     private PacketFactory() {
 
     }
@@ -75,6 +78,7 @@ public class PacketFactory {
      * @return Packet 实例对象
      * @throws PacketException 如果获取错误则抛出异常
      */
+    @SuppressWarnings("unchecked")
     public <T extends Packet> T instance(Class<T> clazz, Object... args) throws PacketException {
 
         try {
