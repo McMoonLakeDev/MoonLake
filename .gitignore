@@ -16,6 +16,7 @@ hs_err_pid*
 /.idea/
 /.metadata/
 /doc/
+/META-INF/
 
 # add plugin download folder
 !/download/jar/MoonLake*.jar
