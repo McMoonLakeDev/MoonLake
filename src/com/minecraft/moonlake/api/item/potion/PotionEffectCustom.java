@@ -12,8 +12,8 @@ import com.minecraft.moonlake.validate.Validate;
  */
 public class PotionEffectCustom {
 
-    private ReadOnlyObjectProperty<Byte> id;
-    private ObjectProperty<Byte> amplifier;
+    private byte id;
+    private byte amplifier;
     private IntegerProperty duration;
     private BooleanProperty ambient;
     private BooleanProperty showParticles;
@@ -50,19 +50,19 @@ public class PotionEffectCustom {
 
         Validate.notNull(type, "The potion effect type object is null.");
 
-        this.id = new SimpleObjectProperty<>((byte) type.getId());
-        this.amplifier = new SimpleObjectProperty<>((byte) amplifier);
+        this.id = (byte) type.getId();
+        this.amplifier = (byte) amplifier;
         this.duration = new SimpleIntegerProperty(duration);
         this.ambient = new SimpleBooleanProperty(ambient);
         this.showParticles = new SimpleBooleanProperty(showParticles);
     }
 
-    public ReadOnlyObjectProperty<Byte> getId() {
+    public byte getId() {
 
         return id;
     }
 
-    public ObjectProperty<Byte> getAmplifier() {
+    public byte getAmplifier() {
 
         return amplifier;
     }
@@ -86,7 +86,7 @@ public class PotionEffectCustom {
     @SuppressWarnings("deprecation")
     public PotionEffectType getType() {
 
-        return PotionEffectType.fromId(id.get());
+        return PotionEffectType.fromId(id);
     }
 }
 

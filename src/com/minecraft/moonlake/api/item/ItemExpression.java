@@ -1,5 +1,6 @@
 package com.minecraft.moonlake.api.item;
 
+import com.minecraft.moonlake.api.item.potion.PotionType;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -58,7 +59,13 @@ abstract class ItemExpression implements ItemLibrary {
                 type == Material.DIAMOND_PICKAXE ||
                 type == Material.DIAMOND_SPADE ||
                 type == Material.DIAMOND_AXE ||
-                type == Material.DIAMOND_HOE;
+                type == Material.DIAMOND_HOE ||
+                // other tool
+                type == Material.FLINT_AND_STEEL ||
+                type == Material.FISHING_ROD ||
+                type == Material.SHEARS ||
+                type == Material.LEASH
+        ;
     }
 
     @Override
@@ -78,7 +85,10 @@ abstract class ItemExpression implements ItemLibrary {
                 type == Material.STONE_SWORD ||
                 type == Material.IRON_SWORD ||
                 type == Material.GOLD_SWORD ||
-                type == Material.DIAMOND_SWORD;
+                type == Material.DIAMOND_SWORD ||
+                // other weapon
+                type == Material.BOW
+        ;
     }
 
     @Override
@@ -150,11 +160,7 @@ abstract class ItemExpression implements ItemLibrary {
 
             return false;
         }
-        return
-                // potion
-                type == Material.POTION ||
-                type == Material.SPLASH_POTION ||
-                type == Material.LINGERING_POTION;
+        return PotionType.fromItemStack(itemStack) != null;
     }
 
     @Override

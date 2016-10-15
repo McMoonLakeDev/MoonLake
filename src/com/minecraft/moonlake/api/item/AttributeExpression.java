@@ -239,8 +239,8 @@ class AttributeExpression implements AttributeLibrary {
         for(final PotionEffectCustom effect : effects) {
 
             NBTCompound effectNewCompound = NBTFactory.newCompound();
-            effectNewCompound.put("Id", effect.getId().get());
-            effectNewCompound.put("Amplifier", effect.getAmplifier().get());
+            effectNewCompound.put("Id", effect.getId());
+            effectNewCompound.put("Amplifier", effect.getAmplifier());
             effectNewCompound.put("Duration", effect.getDuration().get());
             effectNewCompound.put("Ambient", (byte) (effect.getAmbient().get() ? 1 : 0));
             effectNewCompound.put("ShowParticles", (byte) (effect.getShowParticles().get() ? 1 : 0));

@@ -2,7 +2,12 @@ package com.minecraft.moonlake.api.item.potion;
 
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.reflect.Reflect;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <h1>PotionType</h1>
@@ -29,6 +34,15 @@ public enum PotionType {
 
     private final String type;
     private final int id;
+    private final static Map<Integer, PotionType> ID_MAP;
+
+    static {
+        ID_MAP = new HashMap<>();
+
+        for(PotionType type : values()) {
+            ID_MAP.put(type.getId(), type);
+        }
+    }
 
     PotionType(String type, int id) {
 
@@ -44,6 +58,22 @@ public enum PotionType {
     public String getType() {
 
         return type;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    @Deprecated
+    public static PotionType fromId(int id) {
+        return ID_MAP.get(id);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static PotionType fromItemStack(ItemStack itemStack) {
+        Validate.notNull(itemStack, "The itemstack object is null.");
+
+        return fromId(itemStack.getTypeId());
     }
 
     /**

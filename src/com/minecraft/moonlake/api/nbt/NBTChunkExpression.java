@@ -11,7 +11,7 @@ import org.bukkit.Chunk;
  * @version 1.0
  * @author Month_Light
  */
-public class NBTChunkExpression implements NBTChunk {
+class NBTChunkExpression implements NBTChunk {
 
     public NBTChunkExpression() throws NBTInitializeException {
 
