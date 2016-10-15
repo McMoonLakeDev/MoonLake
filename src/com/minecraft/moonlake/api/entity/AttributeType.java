@@ -6,7 +6,20 @@ import com.minecraft.moonlake.validate.Validate;
 import org.spigotmc.SpigotConfig;
 
 /**
- * Created by MoonLake on 2016/10/10.
+ * <hr />
+ * <div>
+ *     <h1>Minecraft Entity Attribute Type</h1>
+ *     <p>By Month_Light Ver: 1.0</p>
+ * </div>
+ * <hr />
+ * <div>
+ *     <h1>Minecraft 实体属性枚举类型</h1>
+ *     <p>详情可以去中文wiki查看更详细的内容:<a href="http://minecraft-zh.gamepedia.com/%E5%B1%9E%E6%80%A7" target="_blank">查看</a></p>
+ * </div>
+ * <hr />
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public enum AttributeType {
 
@@ -64,11 +77,30 @@ public enum AttributeType {
     private double min;
     private double max;
 
+    /**
+     * 实体属性类型构造函数
+     *
+     * @param type 类型名
+     * @param field NMS 字段名
+     * @param def 默认值
+     * @param min 最小值
+     * @param max 最大值
+     */
     AttributeType(String type, String field, double def, double min, double max) {
 
         this(type, field, -1, def, min, max);
     }
 
+    /**
+     * 实体属性类型构造函数
+     *
+     * @param type 类型名
+     * @param field NMS 字段名
+     * @param minimumVersion 最低服务端版本
+     * @param def 默认值
+     * @param min 最小值
+     * @param max 最大值
+     */
     AttributeType(String type, String field, int minimumVersion, double def, double min, double max) {
 
         this.type = type;

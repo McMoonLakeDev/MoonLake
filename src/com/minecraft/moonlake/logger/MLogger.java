@@ -1,7 +1,11 @@
 package com.minecraft.moonlake.logger;
 
 /**
- * Created by MoonLake on 2016/8/1.
+ * <h1>MLogger</h1>
+ * 日志接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface MLogger {
 

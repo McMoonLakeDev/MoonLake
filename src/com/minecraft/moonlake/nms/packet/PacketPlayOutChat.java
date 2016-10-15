@@ -13,7 +13,11 @@ import java.lang.reflect.Method;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>PacketPlayOutChat</h1>
+ * 数据包输出聊天消息（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
 
@@ -38,17 +42,34 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
     private StringProperty message;
     private ObjectProperty<Mode> mode;
 
+    /**
+     * 数据包输出聊天消息类构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutChat(String)}
+     * @see #PacketPlayOutChat(String)
+     */
     @Deprecated
     public PacketPlayOutChat() {
 
         this("");
     }
 
+    /**
+     * 数据包输出聊天消息类构造函数
+     *
+     * @param message 消息
+     */
     public PacketPlayOutChat(String message) {
 
         this(message, Mode.DEFAULT);
     }
 
+    /**
+     * 数据包输出聊天消息类构造函数
+     *
+     * @param message 消息
+     * @param mode 消息模式
+     */
     public PacketPlayOutChat(String message, Mode mode) {
 
         this.message = new SimpleStringProperty(message);

@@ -4,7 +4,11 @@ import com.minecraft.moonlake.nbt.exception.NBTException;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Created by MoonLake on 2016/9/23.
+ * <h1>NBTItemStack</h1>
+ * NBT 物品栈支持库（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface NBTItemStack {
 

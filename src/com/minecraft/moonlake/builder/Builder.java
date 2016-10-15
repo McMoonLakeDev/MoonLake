@@ -1,7 +1,11 @@
 package com.minecraft.moonlake.builder;
 
 /**
- * Created by MoonLake on 2016/9/24.
+ * <h1>Builder</h1>
+ * 建造接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface Builder<R> {
 

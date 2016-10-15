@@ -8,7 +8,11 @@ import org.bukkit.inventory.PlayerInventory;
 import java.util.Map;
 
 /**
- * Created by MoonLake on 2016/10/1.
+ * <h1>InventoryPlayer</h1>
+ * 玩家物品栏接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface InventoryPlayer extends InventoryHolder {
 

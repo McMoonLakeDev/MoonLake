@@ -3,7 +3,11 @@ package com.minecraft.moonlake.api.nbt;
 import java.util.*;
 
 /**
- * Created by MoonLake on 2016/9/22.
+ * <h1>NBTList</h1>
+ * NBT 列表接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface NBTList extends List<Object> {
 

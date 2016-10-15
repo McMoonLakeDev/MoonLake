@@ -8,10 +8,17 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 /**
- * Created by MoonLake on 2016/9/14.
+ * <h1>PlayerExpression</h1>
+ * 玩家支持库抽象实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 abstract class PlayerExpression implements PlayerLibrary {
 
+    /**
+     * 玩家支持库抽象实现类构造函数
+     */
     public PlayerExpression() {
 
     }

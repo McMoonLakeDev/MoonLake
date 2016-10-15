@@ -5,10 +5,17 @@ import com.google.gson.Gson;
 import java.lang.reflect.Type;
 
 /**
- * Created by MoonLake on 2016/10/9.
+ * <h1>JsonHelper</h1>
+ * Json 帮助器（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class JsonHelper {
 
+    /**
+     * Json 帮助器类构造函数
+     */
     private JsonHelper() {
 
     }

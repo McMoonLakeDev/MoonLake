@@ -6,10 +6,17 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Created by MoonLake on 2016/9/12.
+ * <h1>ItemExpression</h1>
+ * 物品栈接口抽象实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 abstract class ItemExpression implements ItemLibrary {
 
+    /**
+     * 物品栈接口抽象实现类构造函数
+     */
     public ItemExpression() {
 
     }

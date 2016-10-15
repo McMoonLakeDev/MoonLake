@@ -13,7 +13,11 @@ import java.lang.reflect.Method;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>ItemCooldownExpression</h1>
+ * 玩家物品栈冷却能力接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class ItemCooldownExpression implements ItemCooldown {
 
@@ -29,6 +33,11 @@ class ItemCooldownExpression implements ItemCooldown {
     private Method METHOD_A0;
     private Method METHOD_A1;
 
+    /**
+     * 玩家物品栈冷却能力接口实现类构造函数
+     *
+     * @throws IllegalBukkitVersionException 如果服务端版本不支持则抛出异常
+     */
     public ItemCooldownExpression() throws IllegalBukkitVersionException {
 
         try {

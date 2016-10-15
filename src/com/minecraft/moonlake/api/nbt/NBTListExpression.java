@@ -5,18 +5,30 @@ import com.minecraft.moonlake.nbt.exception.NBTException;
 import java.util.*;
 
 /**
- * Created by MoonLake on 2016/9/22.
+ * <h1>NBTListExpression</h1>
+ * NBT 列表接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class NBTListExpression implements NBTList {
 
     private final List<Object> handleList;
     private final Object handle;
 
+    /**
+     * NBT 列表接口实现类构造函数
+     */
     public NBTListExpression() {
 
         this(NBTReflect.getHandle().createTagList());
     }
 
+    /**
+     * NBT 列表接口实现类构造函数
+     *
+     * @param tag NBT Tag 对象
+     */
     public NBTListExpression(Object tag) {
 
         assert NBTReflect.getHandle().getTagType(tag) == 9;
@@ -25,6 +37,11 @@ class NBTListExpression implements NBTList {
         this.handleList = NBTReflect.getHandle().getHandleList(tag);
     }
 
+    /**
+     * NBT 列表接口实现类构造函数
+     *
+     * @param collection Collection 对象
+     */
     public NBTListExpression(Collection collection) {
 
         this(NBTReflect.getHandle().createTagList());
@@ -38,6 +55,11 @@ class NBTListExpression implements NBTList {
         }
     }
 
+    /**
+     * NBT 列表接口实现类构造函数
+     *
+     * @param array Object[] 对象
+     */
     public NBTListExpression(Object[] array) {
 
         this(NBTReflect.getHandle().createTagList());

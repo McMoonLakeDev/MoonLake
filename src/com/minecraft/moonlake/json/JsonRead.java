@@ -5,7 +5,11 @@ import com.google.gson.stream.JsonReader;
 import java.io.Reader;
 
 /**
- * Created by MoonLake on 2016/10/10.
+ * <h1>JsonRead</h1>
+ * Json Read Class
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class JsonRead extends JsonReader {
 

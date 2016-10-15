@@ -6,10 +6,17 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 /**
- * Created by MoonLake on 2016/7/17.
+ * <h1>LocationManager</h1>
+ * 位置管理实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class LocationManager extends MoonLakeManager {
 
+    /**
+     * 位置管理实现类构造函数
+     */
     private LocationManager() {
 
     }
@@ -20,6 +27,7 @@ public class LocationManager extends MoonLakeManager {
      * @param data 字符串数据
      * @return 位置对象 异常则返回 null
      */
+    @Deprecated
     public static Location fromData(String data) {
 
         if(data != null && data.contains(",")) {
@@ -61,6 +69,7 @@ public class LocationManager extends MoonLakeManager {
      * @param location 位置对象
      * @return 字符串数据 异常或没有则返回 "none,0,0,0,0,0"
      */
+    @Deprecated
     public static String toData(Location location) {
 
         return toDataBit(location, 3);
@@ -73,6 +82,7 @@ public class LocationManager extends MoonLakeManager {
      * @param bit 保留的位数
      * @return 字符串数据 异常或没有则返回 "none,0,0,0,0,0"
      */
+    @Deprecated
     public static String toDataBit(Location location, int bit) {
 
         return toDataBit(location, bit, true);
@@ -86,6 +96,7 @@ public class LocationManager extends MoonLakeManager {
      * @param angle 是否保留角度
      * @return 字符串数据 异常或没有则返回 "none,0,0,0,0,0"
      */
+    @Deprecated
     public static String toDataBit(Location location, int bit, boolean angle) {
 
         if(location != null) {

@@ -267,6 +267,14 @@ public enum ParticleEffect {
         }
     }
 
+    /**
+     * 粒子效果实现类构造函数
+     *
+     * @param name 粒子效果名称
+     * @param id 粒子效果 Id
+     * @param requiredVersion 需求版本
+     * @param properties 粒子效果属性
+     */
     ParticleEffect(String name, int id, int requiredVersion, ParticleProperty... properties) {
 
         this.name = name;
@@ -833,6 +841,13 @@ public enum ParticleEffect {
         }
     }
 
+    /**
+     * <h1>ParticlePacket</h1>
+     * 粒子效果数据包实现类
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     public final static class ParticlePacket {
 
         private static int version;
@@ -852,6 +867,19 @@ public enum ParticleEffect {
         private final ParticleData data;
         private Object packet;
 
+        /**
+         * 粒子效果数据包实现类
+         *
+         * @param effect 粒子效果
+         * @param offsetX X 偏移量
+         * @param offsetY Y 偏移量
+         * @param offsetZ Z 偏移量
+         * @param speed 速度
+         * @param amount 数量
+         * @param longDistance 长距离
+         * @param data 粒子效果数据
+         * @throws ParticleException 如果初始化错误则抛出异常
+         */
         public ParticlePacket(ParticleEffect effect, float offsetX, float offsetY, float offsetZ, float speed, int amount, boolean longDistance, ParticleData data) throws ParticleException {
 
             initialize();
@@ -874,6 +902,16 @@ public enum ParticleEffect {
             this.data = data;
         }
 
+        /**
+         * 粒子效果数据包实现类
+         *
+         * @param effect 粒子效果
+         * @param direction 矢量方向
+         * @param speed 速度
+         * @param longDistance 长距离
+         * @param data 粒子效果数据
+         * @throws ParticleException 如果初始化错误则抛出异常
+         */
         public ParticlePacket(ParticleEffect effect, Vector direction, float speed, boolean longDistance, ParticleData data) throws ParticleException {
 
             initialize();
@@ -892,6 +930,13 @@ public enum ParticleEffect {
             this.data = data;
         }
 
+        /**
+         * 粒子效果数据包实现类
+         *
+         * @param effect 粒子效果
+         * @param color 颜色
+         * @param longDistance 长距离
+         */
         public ParticlePacket(ParticleEffect effect, ParticleColor color, boolean longDistance) {
 
             this(effect, color.getValueX(), color.getValueY(), color.getValueZ(), 1f, 0, longDistance, null);

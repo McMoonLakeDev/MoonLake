@@ -1,7 +1,11 @@
 package com.minecraft.moonlake.api;
 
 /**
- * Created by MoonLake on 2016/7/17.
+ * <h1>MoonLakeCore</h1>
+ * 月色之湖核心接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface MoonLakeCore {
 

@@ -7,7 +7,13 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 /**
- * Created by MoonLake on 2016/9/14.
+ * <h1>PlayerLibrary</h1>
+ * 玩家支持库接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see AbilityLibrary
+ * @see NMSPlayerLibrary
  */
 public interface PlayerLibrary extends NMSPlayerLibrary, AbilityLibrary {
 

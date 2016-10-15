@@ -1,7 +1,11 @@
 package com.minecraft.moonlake.nms.anvil;
 
 /**
- * Created by MoonLake on 2016/10/3.
+ * <h1>AnvilWindowSlot</h1>
+ * 铁砧窗口槽位类型
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public enum AnvilWindowSlot {
 
@@ -21,6 +25,11 @@ public enum AnvilWindowSlot {
 
     private int slot;
 
+    /**
+     * 铁砧创建槽位类型构造函数
+     *
+     * @param slot 槽位索引
+     */
     AnvilWindowSlot(int slot) {
 
         this.slot = slot;

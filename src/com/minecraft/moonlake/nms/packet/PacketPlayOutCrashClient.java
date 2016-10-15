@@ -7,10 +7,17 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 
 /**
- * Created by MoonLake on 2016/9/30.
+ * <h1>PacketPlayOutCrashClient</h1>
+ * 数据包输出崩溃客户端（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PacketPlayOutCrashClient extends PacketAbstract<PacketPlayOutCrashClient> {
 
+    /**
+     * 数据包输出崩溃客户端类构造函数
+     */
     public PacketPlayOutCrashClient() {
 
     }

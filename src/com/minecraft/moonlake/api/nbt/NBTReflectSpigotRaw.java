@@ -17,7 +17,11 @@ import java.util.Map;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/22.
+ * <h1>NBTReflectSpigotRaw</h1>
+ * NBT Spigot 反射源实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 final class NBTReflectSpigotRaw extends NBTReflect {
 
@@ -63,6 +67,11 @@ final class NBTReflectSpigotRaw extends NBTReflect {
     private Method METHOD_NBTBASE_WRITE;
     private Method METHOD_NBTBASE_LOAD;
 
+    /**
+     * NBT Spigot 反射源实现类构造函数
+     *
+     * @throws NBTInitializeException 如果初始化错误则抛出异常
+     */
     public NBTReflectSpigotRaw() throws NBTInitializeException {
 
         try {

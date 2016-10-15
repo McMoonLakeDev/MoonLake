@@ -8,7 +8,11 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Created by MoonLake on 2016/9/14.
+ * <h1>ItemStack AttributeModify</h1>
+ * 物品栈属性修改封装类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public final class AttributeModify {
 
@@ -18,45 +22,117 @@ public final class AttributeModify {
     private ObjectProperty<UUID> uuid;
     private DoubleProperty amount;
 
+    /**
+     * 物品栈属性修改封装类构造函数
+     *
+     * @param type 属性类型
+     * @param operation 属性运算方式
+     * @param amount 数量值
+     * @deprecated 已过时，请使用 {@link #AttributeModify(Type, Operation, double)}
+     * @see #AttributeModify(Type, Operation, double)
+     */
     @Deprecated
     public AttributeModify(Type type, int operation, int amount) {
 
         this(type, Slot.ALL, amount, operation);
     }
 
+    /**
+     * 物品栈属性修改封装类构造函数
+     *
+     * @param type 属性类型
+     * @param operation 属性运算方式
+     * @param amount 数量值
+     * @param uuid 属性 UUID
+     * @deprecated 已过时，请使用 {@link #AttributeModify(Type, Operation, double, UUID)}
+     * @see #AttributeModify(Type, Operation, double, UUID)
+     */
     @Deprecated
     public AttributeModify(Type type, int operation, int amount, UUID uuid) {
 
         this(type, Slot.ALL, amount, operation, uuid);
     }
 
+    /**
+     * 物品栈属性修改封装类构造函数
+     *
+     * @param type 属性类型
+     * @param slot 属性生效槽位
+     * @param operation 属性运算方式
+     * @param amount 数量值
+     * @deprecated 已过时，请使用 {@link #AttributeModify(Type, Slot, Operation, double)}
+     * @see #AttributeModify(Type, Slot, Operation, double)
+     */
     @Deprecated
     public AttributeModify(Type type, Slot slot, int operation, int amount) {
 
         this(type, slot, Operation.fromValue(operation), amount);
     }
 
+    /**
+     * 物品栈属性修改封装类构造函数
+     *
+     * @param type 属性类型
+     * @param slot 属性生效槽位
+     * @param operation 属性运算方式
+     * @param amount 数量值
+     * @param uuid 属性 UUID
+     * @deprecated 已过时，请使用 {@link #AttributeModify(Type, Slot, Operation, double, UUID)}
+     * @see #AttributeModify(Type, Slot, Operation, double, UUID)
+     */
     @Deprecated
     public AttributeModify(Type type, Slot slot, int operation, int amount, UUID uuid) {
 
         this(type, slot, Operation.fromValue(operation), amount, uuid);
     }
 
+    /**
+     * 物品栈属性修改封装类构造函数
+     *
+     * @param type 属性类型
+     * @param operation 属性运算方式
+     * @param amount 数量值
+     */
     public AttributeModify(Type type, Operation operation, double amount) {
 
         this(type, Slot.ALL, operation, amount);
     }
 
+    /**
+     * 物品栈属性修改封装类构造函数
+     *
+     * @param type 属性类型
+     * @param operation 属性运算方式
+     * @param amount 数量值
+     * @param uuid 属性 UUID
+     */
     public AttributeModify(Type type, Operation operation, double amount, UUID uuid) {
 
         this(type, Slot.ALL, operation, amount, uuid);
     }
 
+    /**
+     * 物品栈属性修改封装类构造函数
+     *
+     * @param type 属性类型
+     * @param slot 属性生效槽位
+     * @param operation 属性运算方式
+     * @param amount 数量值
+     */
     public AttributeModify(Type type, Slot slot, Operation operation, double amount) {
 
         this(type, slot, operation, amount, null);
     }
 
+    /**
+     * 物品栈属性修改封装类构造函数
+     *
+     * @param type 属性类型
+     * @param slot 属性生效槽位
+     * @param operation 属性运算方式
+     * @param amount 数量值
+     * @param uuid 属性 UUID
+     */
     public AttributeModify(Type type, Slot slot, Operation operation, double amount, UUID uuid) {
 
         this.attributeType = new SimpleObjectProperty<>(type);
@@ -153,6 +229,13 @@ public final class AttributeModify {
             }
         }
 
+        /**
+         * 属性类型构造函数
+         *
+         * @param type 类型名
+         * @param name 名称
+         * @param attributeName 属性名
+         */
         Type(String type, String name, String attributeName) {
 
             this.type = type;
@@ -249,6 +332,12 @@ public final class AttributeModify {
             }
         }
 
+        /**
+         * 属性槽位类型构造函数
+         *
+         * @param type 类型名
+         * @param slot 槽位名
+         */
         Slot(String type, String slot) {
 
             this.type = type;
@@ -308,6 +397,12 @@ public final class AttributeModify {
             }
         }
 
+        /**
+         * 属性运算方式构造函数
+         *
+         * @param type 类型名
+         * @param operation 运算方式
+         */
         Operation(String type, int operation) {
 
             this.type = type;

@@ -5,10 +5,19 @@ import com.minecraft.moonlake.nbt.exception.NBTInitializeException;
 import org.bukkit.Chunk;
 
 /**
- * Created by MoonLake on 2016/10/2.
+ * <h1>NBTChunkExpression</h1>
+ * NBT 区块接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class NBTChunkExpression implements NBTChunk {
 
+    /**
+     * NBT 区块接口实现类构造函数
+     *
+     * @throws NBTInitializeException 如果初始化错误则抛出异常
+     */
     public NBTChunkExpression() throws NBTInitializeException {
 
     }

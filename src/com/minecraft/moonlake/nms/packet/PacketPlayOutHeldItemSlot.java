@@ -9,7 +9,11 @@ import org.bukkit.entity.Player;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>PacketPlayOutHeldItemSlot</h1>
+ * 数据包输出手持物品索引（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PacketPlayOutHeldItemSlot extends PacketAbstract<PacketPlayOutHeldItemSlot> {
 
@@ -29,12 +33,23 @@ public class PacketPlayOutHeldItemSlot extends PacketAbstract<PacketPlayOutHeldI
 
     private IntegerProperty heldItemSlot;
 
+    /**
+     * 数据包输出手持物品索引构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutHeldItemSlot(int)}
+     * @see #PacketPlayOutHeldItemSlot(int)
+     */
     @Deprecated
     public PacketPlayOutHeldItemSlot() {
 
         this(0);
     }
 
+    /**
+     * 数据包输出手持物品索引构造函数
+     *
+     * @param heldItemSlot 物品栏索引
+     */
     public PacketPlayOutHeldItemSlot(int heldItemSlot) {
 
         this.heldItemSlot = new SimpleIntegerProperty(heldItemSlot);

@@ -1,7 +1,11 @@
 package com.minecraft.moonlake.api.player;
 
 /**
- * Created by MoonLake on 2016/9/14.
+ * <h1>PlayerLibraryFactory</h1>
+ * 玩家支持库工厂类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PlayerLibraryFactory {
 
@@ -10,6 +14,9 @@ public class PlayerLibraryFactory {
      */
     private static PlayerLibraryFactory instance;
 
+    /**
+     * 玩家支持库工厂类构造函数
+     */
     private PlayerLibraryFactory() {
 
     }

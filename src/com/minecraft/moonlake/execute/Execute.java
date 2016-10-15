@@ -1,7 +1,11 @@
 package com.minecraft.moonlake.execute;
 
 /**
- * Created by MoonLake on 2016/10/4.
+ * <h1>Execute</h1>
+ * 执行接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface Execute<T> {
 

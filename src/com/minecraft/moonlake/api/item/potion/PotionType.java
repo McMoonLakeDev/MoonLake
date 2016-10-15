@@ -10,7 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by MoonLake on 2016/9/15.
+ * <h1>PotionType</h1>
+ * 药水类型
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public enum PotionType {
 
@@ -40,6 +44,12 @@ public enum PotionType {
         }
     }
 
+    /**
+     * 药水类型构造函数
+     *
+     * @param type 类型名
+     * @param id 药水 Id
+     */
     PotionType(String type, int id) {
 
         this.type = type;
@@ -56,15 +66,35 @@ public enum PotionType {
         return type;
     }
 
+    /**
+     * 获取此药水的 Id
+     *
+     * @return Id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * 获取药水类型对象从 Id
+     *
+     * @param id Id
+     * @return 药水类型对象
+     * @deprecated 已过时，请使用 {@link #fromItemStack(ItemStack)}
+     * @see #fromItemStack(ItemStack)
+     */
     @Deprecated
     public static PotionType fromId(int id) {
         return ID_MAP.get(id);
     }
 
+    /**
+     * 获取药水类型对象从物品栈
+     *
+     * @param itemStack 物品栈
+     * @return 药水类型对象
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     */
     @SuppressWarnings("deprecation")
     public static PotionType fromItemStack(ItemStack itemStack) {
         Validate.notNull(itemStack, "The itemstack object is null.");

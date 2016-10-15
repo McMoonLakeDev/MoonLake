@@ -6,7 +6,11 @@ import java.io.BufferedWriter;
 import java.io.Writer;
 
 /**
- * Created by MoonLake on 2016/10/10.
+ * <h1>JsonWrite</h1>
+ * Json Write Class
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class JsonWrite extends JsonWriter {
 

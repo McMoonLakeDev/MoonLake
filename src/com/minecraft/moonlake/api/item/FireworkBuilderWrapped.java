@@ -11,13 +11,20 @@ import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 /**
- * Created by MoonLake on 2016/10/9.
+ * <h1>FireworkBuilderWrapped</h1>
+ * 烟花建造接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class FireworkBuilderWrapped implements FireworkBuilder {
 
     private final FireworkEffect.Builder builder;
     private int power;
 
+    /**
+     * 烟花建造接口实现类构造函数
+     */
     public FireworkBuilderWrapped() {
 
         this.power = 1;

@@ -13,7 +13,11 @@ import java.lang.reflect.Method;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/23.
+ * <h1>NBTItemStackExpression</h1>
+ * NBT 物品栈接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class NBTItemStackExpression implements NBTItemStack {
 
@@ -29,6 +33,11 @@ class NBTItemStackExpression implements NBTItemStack {
     private Field FIELD_ITEMHANDLE;
     private Field FIELD_TAG;
 
+    /**
+     * NBT 物品栈接口实现类构造函数
+     *
+     * @throws NBTInitializeException 如果初始化错误则抛出异常
+     */
     public NBTItemStackExpression() throws NBTInitializeException {
 
         try {

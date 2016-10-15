@@ -4,10 +4,17 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 /**
- * Created by MoonLake on 2016/7/17.
+ * <h1>VectorManager</h1>
+ * 矢量管理实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class VectorManager extends MoonLakeManager {
 
+    /**
+     * 矢量管理实现类构造函数
+     */
     private VectorManager() {
 
     }
@@ -19,6 +26,7 @@ public class VectorManager extends MoonLakeManager {
      * @param isDouble 是否 Double 坐标
      * @return 坐标数据 ("0,0,0")
      */
+    @Deprecated
     public static String toXYZ(Vector obuVector, boolean isDouble) {
 
         String data = "";
@@ -40,6 +48,7 @@ public class VectorManager extends MoonLakeManager {
      * @param data 字符串数据
      * @return Vector 对象 序列化失败则返回 null
      */
+    @Deprecated
     public static Vector getBVfromXYZ(String data) {
 
         if(!data.contains(",")) return null;

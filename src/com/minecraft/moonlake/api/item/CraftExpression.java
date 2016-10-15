@@ -14,10 +14,17 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Created by MoonLake on 2016/9/12.
+ * <h1>CraftExpression</h1>
+ * 物品栈创建接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class CraftExpression extends MetaExpression implements CraftLibrary {
 
+    /**
+     * 物品栈创建接口实现类构造函数
+     */
     public CraftExpression() {
 
     }

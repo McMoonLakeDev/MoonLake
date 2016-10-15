@@ -16,7 +16,11 @@ import java.util.Map;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/23.
+ * <h1>NBTEntityExpression</h1>
+ * NBT 实体接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class NBTEntityExpression implements NBTEntity {
 
@@ -33,6 +37,11 @@ class NBTEntityExpression implements NBTEntity {
     private Method METHOD_GETBUKKITENTITY;
     private Method METHOD_ADDENTITYTOWORLD;
 
+    /**
+     * NBT 实体接口实现类构造函数
+     *
+     * @throws NBTInitializeException 如果初始化错误则抛出异常
+     */
     public NBTEntityExpression() throws NBTInitializeException {
 
         try {

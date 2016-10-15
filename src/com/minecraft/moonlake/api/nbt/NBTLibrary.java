@@ -18,6 +18,8 @@ import org.bukkit.inventory.ItemStack;
  *     <h1>目标支持的 NBT 操作功能:</h1>
  *     <ul>
  *         <li>读写实体 {@link NBTEntity}</li>
+ *         <li>读写方块 {@link NBTBlock}</li>
+ *         <li>读写区块 {@link NBTChunk}</li>
  *         <li>读写物品栈 {@link NBTItemStack}</li>
  *     </ul>
  *     <p>还有更多正在开发中...</p>
@@ -43,6 +45,8 @@ import org.bukkit.inventory.ItemStack;
  * @version 1.0
  * @author Month_Light
  * @see NBTEntity
+ * @see NBTBlock
+ * @see NBTChunk
  * @see NBTItemStack
  * @see NBTCompound
  * @see NBTList

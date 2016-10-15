@@ -14,7 +14,11 @@ import java.lang.reflect.Method;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/14.
+ * <h1>NMSPlayerExpression</h1>
+ * 玩家 NMS 接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class NMSPlayerExpression implements NMSPlayerLibrary {
 
@@ -23,6 +27,11 @@ class NMSPlayerExpression implements NMSPlayerLibrary {
     private Method METHOD_GETHANDLE;
     private Field FIELD_PING;
 
+    /**
+     * 玩家 NMS 接口实现类构造函数
+     *
+     * @throws IllegalBukkitVersionException 如果服务端版本不支持则抛出异常
+     */
     public NMSPlayerExpression() throws IllegalBukkitVersionException {
 
         try {

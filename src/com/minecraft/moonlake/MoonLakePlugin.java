@@ -56,6 +56,9 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
 
     private static MoonLake MAIN;
 
+    /**
+     * 月色之湖插件类构造函数
+     */
     public MoonLakePlugin() {
 
         this.description = getDescription();

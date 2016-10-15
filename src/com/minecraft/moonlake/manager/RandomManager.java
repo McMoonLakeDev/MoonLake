@@ -7,7 +7,11 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Created by MoonLake on 2016/7/17.
+ * <h1>RandomManager</h1>
+ * 随机管理实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class RandomManager extends MoonLakeManager {
 
@@ -25,6 +29,9 @@ public class RandomManager extends MoonLakeManager {
         };
     }
 
+    /**
+     * 随机管理实现类构造函数
+     */
     private RandomManager() {
 
     }

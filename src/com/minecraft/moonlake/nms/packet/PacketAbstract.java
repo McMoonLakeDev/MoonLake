@@ -7,10 +7,17 @@ import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>PacketAbstract</h1>
+ * 数据包抽象类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public abstract class PacketAbstract<T extends Packet> implements Packet<T> {
 
+    /**
+     * 数据包抽象类构造函数
+     */
     public PacketAbstract() {
 
     }

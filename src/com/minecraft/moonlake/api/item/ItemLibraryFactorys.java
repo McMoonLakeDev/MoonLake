@@ -9,7 +9,11 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Created by MoonLake on 2016/9/13.
+ * <h1>ItemLibraryFactorys</h1>
+ * 物品栈支持库工厂（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class ItemLibraryFactorys {
 
@@ -18,6 +22,9 @@ public class ItemLibraryFactorys {
      */
     private static ItemLibrary itemLibraryInstance;
 
+    /**
+     * 物品栈支持库静态工厂类构造函数
+     */
     private ItemLibraryFactorys() {
 
     }

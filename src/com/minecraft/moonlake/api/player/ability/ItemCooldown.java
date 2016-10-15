@@ -5,12 +5,16 @@ import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import org.bukkit.Material;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>ItemCooldown</h1>
+ * 玩家物品栈冷却能力接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface ItemCooldown {
 
     /**
-     * 给此玩家设置物品栈冷却时间
+     * 给指定玩家设置物品栈冷却时间
      *
      * @param player 玩家名
      * @param material 物品栈类型
@@ -23,7 +27,7 @@ public interface ItemCooldown {
     void setItemCooldown(String player, Material material, int tick);
 
     /**
-     * 获取此玩家物品栈类型是否拥有冷却时间
+     * 获取指定玩家物品栈类型是否拥有冷却时间
      *
      * @param player 玩家名
      * @param material 物品栈类型

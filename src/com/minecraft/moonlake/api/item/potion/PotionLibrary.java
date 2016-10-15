@@ -5,7 +5,11 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Collection;
 
 /**
- * Created by MoonLake on 2016/9/12.
+ * <h1>ItemStack PotionLibrary</h1>
+ * 药水物品栈支持库（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface PotionLibrary {
 

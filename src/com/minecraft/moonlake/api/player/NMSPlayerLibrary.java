@@ -3,7 +3,11 @@ package com.minecraft.moonlake.api.player;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 
 /**
- * Created by MoonLake on 2016/9/14.
+ * <h1>NMSPlayerLibrary</h1>
+ * 玩家 NMS 支持库接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface NMSPlayerLibrary {
 

@@ -3,7 +3,11 @@ package com.minecraft.moonlake.encrypt;
 import com.minecraft.moonlake.validate.Validate;
 
 /**
- * Created by MoonLake on 2016/9/17.
+ * <h1>EncryptFactory</h1>
+ * 加密工厂类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class EncryptFactory {
 
@@ -12,6 +16,9 @@ public class EncryptFactory {
      */
     private static EncryptFactory encryptFactoryInstance;
 
+    /**
+     * 加密工厂类构造函数
+     */
     private EncryptFactory() {
 
     }

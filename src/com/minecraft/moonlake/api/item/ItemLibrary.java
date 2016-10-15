@@ -55,7 +55,7 @@ import org.bukkit.inventory.ItemStack;
  * </div>
  * <hr />
  * <div>
- *     <h1>您不仅可以通过这个支持库来创建和操作物品栈，还可以通过物品栈构建来操作！</h1>
+ *     <h1>您不仅可以通过这个支持库来创建和操作物品栈，还可以通过物品栈建造来操作！</h1>
  *     <p>详情查看: {@link ItemBuilder}</p>
  * </div>
  * <hr />

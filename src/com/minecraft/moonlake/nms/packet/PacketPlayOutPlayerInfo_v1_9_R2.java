@@ -10,7 +10,11 @@ import java.lang.reflect.Method;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>PacketPlayOutPlayerInfo_v1_9_R2</h1>
+ * 数据包输出玩家信息 v1.9-R2 实现类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class PacketPlayOutPlayerInfo_v1_9_R2 extends PacketPlayOutPlayerInfo<PacketPlayOutPlayerInfo_v1_9_R2> {
 
@@ -32,12 +36,24 @@ class PacketPlayOutPlayerInfo_v1_9_R2 extends PacketPlayOutPlayerInfo<PacketPlay
         }
     }
 
+    /**
+     * 数据包输出玩家信息 v1.9-R2 实现类
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutPlayerInfo_v1_9_R2(Action, Player)}
+     * @see #PacketPlayOutPlayerInfo_v1_9_R2(Action, Player)
+     */
     @Deprecated
     public PacketPlayOutPlayerInfo_v1_9_R2() {
 
         super(null, null);
     }
 
+    /**
+     * 数据包输出玩家信息 v1.9-R2 实现类
+     *
+     * @param action 交互类型
+     * @param player 玩家
+     */
     public PacketPlayOutPlayerInfo_v1_9_R2(Action action, Player player) {
 
         super(action, player);

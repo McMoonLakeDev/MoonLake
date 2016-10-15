@@ -9,7 +9,11 @@ import org.bukkit.entity.Player;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>PacketPlayOutNamedEntitySpawn</h1>
+ * 数据包输出名称实体生成（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PacketPlayOutNamedEntitySpawn extends PacketAbstract<PacketPlayOutNamedEntitySpawn> {
 
@@ -29,12 +33,23 @@ public class PacketPlayOutNamedEntitySpawn extends PacketAbstract<PacketPlayOutN
 
     private ObjectProperty<Player> entity;
 
+    /**
+     * 数据包输出名称实体生成类构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutNamedEntitySpawn(Player)}
+     * @see #PacketPlayOutNamedEntitySpawn(Player)
+     */
     @Deprecated
     public PacketPlayOutNamedEntitySpawn() {
 
         this(null);
     }
 
+    /**
+     * 数据包输出名称实体生成类构造函数
+     *
+     * @param entity 玩家
+     */
     public PacketPlayOutNamedEntitySpawn(Player entity) {
 
         this.entity = new SimpleObjectProperty<>(entity);

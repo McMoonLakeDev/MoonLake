@@ -14,7 +14,11 @@ import java.nio.charset.Charset;
 import java.util.*;
 
 /**
- * Created by MoonLake on 2016/9/22.
+ * <h1>NBTReflect</h1>
+ * NBT 抽象反射实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public abstract class NBTReflect {
 
@@ -35,6 +39,9 @@ public abstract class NBTReflect {
         handle = raw ? new NBTReflectSpigotRaw() : null;
     }
 
+    /**
+     * NBT 抽象反射实现类构造函数
+     */
     protected NBTReflect() {
 
     }

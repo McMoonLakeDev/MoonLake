@@ -7,18 +7,30 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by MoonLake on 2016/9/12.
+ * <h1>MLoggerWrapped</h1>
+ * 日志接口包装类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public final class MLoggerWrapped implements MLogger {
 
     private final ReadOnlyStringProperty prefixProperty;
     private final Logger logger;
 
+    /**
+     * 日志接口包装类构造函数
+     */
     public MLoggerWrapped() {
 
         this("MoonLake");
     }
 
+    /**
+     * 日志接口包装类构造函数
+     *
+     * @param prefix 消息前缀
+     */
     public MLoggerWrapped(String prefix) {
 
         this.prefixProperty = new SimpleStringProperty(String.format("[%1$s]", prefix));

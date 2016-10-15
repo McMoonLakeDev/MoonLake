@@ -14,7 +14,11 @@ import java.util.*;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/7/17.
+ * <h1>BlockManager</h1>
+ * 方块管理实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 @SuppressWarnings("deprecation")
 public class BlockManager extends MoonLakeManager {
@@ -87,6 +91,9 @@ public class BlockManager extends MoonLakeManager {
         }
     }
 
+    /**
+     * 方块管理实现类构造函数
+     */
     private BlockManager() {
 
     }

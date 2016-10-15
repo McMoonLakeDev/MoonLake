@@ -5,10 +5,19 @@ import net.minecraft.server.v1_9_R2.ContainerAnvil;
 import net.minecraft.server.v1_9_R2.EntityHuman;
 
 /**
- * Created by MoonLake on 2016/10/4.
+ * <h1>AnvilWindow_v1_9_R2</h1>
+ * 铁砧窗口 v1.9-R2 版容器类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class AnvilWindow_v1_9_R2 extends ContainerAnvil {
 
+    /**
+     * 铁砧窗口 v1.9-R2 版容器类构造函数
+     *
+     * @param entityHuman EntityHuman
+     */
     public AnvilWindow_v1_9_R2(EntityHuman entityHuman) {
 
         super(entityHuman.inventory, entityHuman.world, BlockPosition.ZERO, entityHuman);

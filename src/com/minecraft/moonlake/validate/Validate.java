@@ -25,6 +25,9 @@ import java.util.Map;
  */
 public class Validate {
 
+    /**
+     * 数据对象验证类构造函数
+     */
     private Validate() {
 
     }

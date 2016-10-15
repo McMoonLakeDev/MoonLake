@@ -4,7 +4,11 @@ import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
 
 /**
- * Created by MoonLake on 2016/9/15.
+ * <h1>PotionEffectCustom</h1>
+ * 药水效果自定义包装类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PotionEffectCustom {
 
@@ -14,34 +18,88 @@ public class PotionEffectCustom {
     private BooleanProperty ambient;
     private BooleanProperty showParticles;
 
+    /**
+     * 药水效果自定义包装类构造函数
+     *
+     * @param id 药水 Id
+     * @param amplifier 药水等级
+     * @param duration 药水时间
+     * @deprecated 已过时，请使用 {@link #PotionEffectCustom(PotionEffectType, int, int)}
+     * @see #PotionEffectCustom(PotionEffectType, int, int)
+     */
     @Deprecated
     public PotionEffectCustom(int id, int amplifier, int duration) {
 
         this(id, amplifier, duration, false);
     }
 
+    /**
+     * 药水效果自定义包装类构造函数
+     *
+     * @param id 药水 Id
+     * @param amplifier 药水等级
+     * @param duration 药水时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @deprecated 已过时，请使用 {@link #PotionEffectCustom(PotionEffectType, int, int, boolean)}
+     * @see #PotionEffectCustom(PotionEffectType, int, int, boolean)
+     */
     @Deprecated
     public PotionEffectCustom(int id, int amplifier, int duration, boolean ambient) {
 
         this(id, amplifier, duration, ambient, false);
     }
 
+    /**
+     * 药水效果自定义包装类构造函数
+     *
+     * @param id 药水 Id
+     * @param amplifier 药水等级
+     * @param duration 药水时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @deprecated 已过时，请使用 {@link #PotionEffectCustom(PotionEffectType, int, int, boolean, boolean)}
+     * @see #PotionEffectCustom(PotionEffectType, int, int, boolean, boolean)
+     */
     @Deprecated
     public PotionEffectCustom(int id, int amplifier, int duration, boolean ambient, boolean showParticles) {
 
         this(PotionEffectType.fromId(id), amplifier, duration, ambient, showParticles);
     }
 
+    /**
+     * 药水效果自定义包装类构造函数
+     *
+     * @param type 药水效果类型
+     * @param amplifier 药水等级
+     * @param duration 药水时间
+     */
     public PotionEffectCustom(PotionEffectType type, int amplifier, int duration) {
 
         this(type, amplifier, duration, false);
     }
 
+    /**
+     * 药水效果自定义包装类构造函数
+     *
+     * @param type 药水效果类型
+     * @param amplifier 药水等级
+     * @param duration 药水时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     */
     public PotionEffectCustom(PotionEffectType type, int amplifier, int duration, boolean ambient) {
 
         this(type, amplifier, duration, ambient, false);
     }
 
+    /**
+     * 药水效果自定义包装类构造函数
+     *
+     * @param type 药水效果类型
+     * @param amplifier 药水等级
+     * @param duration 药水时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     */
     public PotionEffectCustom(PotionEffectType type, int amplifier, int duration, boolean ambient, boolean showParticles) {
 
         Validate.notNull(type, "The potion effect type object is null.");

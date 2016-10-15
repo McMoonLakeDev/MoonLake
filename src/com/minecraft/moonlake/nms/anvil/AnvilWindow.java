@@ -15,7 +15,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 /**
- * Created by MoonLake on 2016/10/3.
+ * <h1>AnvilWindow</h1>
+ * 铁砧窗口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public final class AnvilWindow {
 
@@ -30,6 +34,11 @@ public final class AnvilWindow {
     protected Inventory anvilInventory;
     protected Object anvilInventoryHandle;
 
+    /**
+     * 铁砧窗口类构造函数
+     *
+     * @param plugin JavaPlugin
+     */
     public AnvilWindow(Plugin plugin) {
 
         this.plugin = plugin;

@@ -15,7 +15,11 @@ import java.util.List;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/10/2.
+ * <h1>NBTBlockExpression</h1>
+ * NBT 方块接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class NBTBlockExpression implements NBTBlock {
 
@@ -30,6 +34,11 @@ class NBTBlockExpression implements NBTBlock {
     private Method METHOD_READ;
     private Method METHOD_WRITE;
 
+    /**
+     * NBT 方块接口实现类构造函数
+     *
+     * @throws NBTInitializeException 如果初始化错误则抛出异常
+     */
     public NBTBlockExpression() throws NBTInitializeException {
 
         try {

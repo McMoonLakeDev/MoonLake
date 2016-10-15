@@ -12,7 +12,11 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Created by MoonLake on 2016/9/13.
+ * <h1>ItemStack Builder</h1>
+ * 物品栈建造（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface ItemBuilder extends Builder<ItemStack> {
 

@@ -4,7 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by MoonLake on 2016/9/15.
+ * <h1>PotionEffectType</h1>
+ * 药水效果类型
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public enum PotionEffectType {
 
@@ -136,6 +140,13 @@ public enum PotionEffectType {
         }
     }
 
+    /**
+     * 药水效果类型构造函数
+     *
+     * @param type 类型名
+     * @param id 药水效果 Id
+     * @param tagName 药水 NBT 名称
+     */
     PotionEffectType(String type, int id, String tagName) {
 
         this.type = type;

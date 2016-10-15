@@ -5,7 +5,11 @@ import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.entity.Player;
 
 /**
- * Created by MoonLake on 2016/10/1.
+ * <h1>PacketFactory</h1>
+ * 数据包工厂类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PacketFactory {
 
@@ -14,6 +18,9 @@ public class PacketFactory {
      */
     private static PacketFactory packetFactoryInstance;
 
+    /**
+     * 数据包工厂类构造函数
+     */
     private PacketFactory() {
 
     }
@@ -71,6 +78,7 @@ public class PacketFactory {
      * @return Packet 实例对象
      * @throws PacketException 如果获取错误则抛出异常
      */
+    @SuppressWarnings("unchecked")
     public <T extends Packet> T instance(Class<T> clazz, Object... args) throws PacketException {
 
         try {

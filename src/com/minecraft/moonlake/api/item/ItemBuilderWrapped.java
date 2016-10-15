@@ -3,6 +3,7 @@ package com.minecraft.moonlake.api.item;
 import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.api.item.potion.PotionEffectType;
 import com.minecraft.moonlake.api.item.potion.PotionType;
+import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -14,13 +15,23 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Created by MoonLake on 2016/9/13.
+ * <h1>ItemBuilderWrapped</h1>
+ * 物品栈建造接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class ItemBuilderWrapped implements ItemBuilder {
 
     private final ItemLibrary itemLibrary;
     private ItemStack itemStack;
 
+    /**
+     * 物品栈建造接口实现类构造函数
+     *
+     * @param itemStack 物品栈对象
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     */
     public ItemBuilderWrapped(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
@@ -29,51 +40,126 @@ class ItemBuilderWrapped implements ItemBuilder {
         this.itemLibrary = ItemLibraryFactory.get().item();
     }
 
+    /**
+     * 物品栈建造接口实现类构造函数
+     *
+     * @param material 物品栈类型
+     */
     public ItemBuilderWrapped(Material material) {
 
         this(ItemLibraryFactorys.craft().create(material));
     }
 
+    /**
+     * 物品栈建造接口实现类构造函数
+     *
+     * @param material 物品栈类型
+     * @param data 物品栈数据
+     */
     public ItemBuilderWrapped(Material material, int data) {
 
         this(ItemLibraryFactorys.craft().create(material, data));
     }
 
+    /**
+     * 物品栈建造接口实现类构造函数
+     *
+     * @param material 物品栈类型
+     * @param data 物品栈数据
+     * @param amount 物品栈数量
+     */
     public ItemBuilderWrapped(Material material, int data, int amount) {
 
         this(ItemLibraryFactorys.craft().create(material, data, amount));
     }
 
+    /**
+     * 物品栈建造接口实现类构造函数
+     *
+     * @param material 物品栈类型
+     * @param data 物品栈数据
+     * @param amount 物品栈数量
+     * @param displayName 物品栈显示名称
+     */
     public ItemBuilderWrapped(Material material, int data, int amount, String displayName) {
 
         this(ItemLibraryFactorys.craft().create(material, data, amount, displayName));
     }
 
+    /**
+     * 物品栈建造接口实现类构造函数
+     *
+     * @param material 物品栈类型
+     * @param data 物品栈数据
+     * @param amount 物品栈数量
+     * @param displayName 物品栈显示名称
+     * @param lore 物品栈标签
+     */
     public ItemBuilderWrapped(Material material, int data, int amount, String displayName, String... lore) {
 
         this(ItemLibraryFactorys.craft().create(material, data, amount, displayName, lore));
     }
 
+    /**
+     * 物品栈建造接口实现类构造函数
+     *
+     * @param potion 药水类型
+     * @throws IllegalBukkitVersionException 如果服务端不支持药水类型则抛出异常
+     */
     public ItemBuilderWrapped(PotionType potion) {
 
         this(potion.getMaterial());
     }
 
+    /**
+     * 物品栈建造接口实现类构造函数
+     *
+     * @param potion 药水类型
+     * @param data 物品栈数据
+     * @throws IllegalBukkitVersionException 如果服务端不支持药水类型则抛出异常
+     */
     public ItemBuilderWrapped(PotionType potion, int data) {
 
         this(potion.getMaterial(), data);
     }
 
+    /**
+     * 物品栈建造接口实现类构造函数
+     *
+     * @param potion 药水类型
+     * @param data 物品栈数据
+     * @param amount 物品栈数量
+     * @throws IllegalBukkitVersionException 如果服务端不支持药水类型则抛出异常
+     */
     public ItemBuilderWrapped(PotionType potion, int data, int amount) {
 
         this(potion.getMaterial(), data, amount);
     }
 
+    /**
+     * 物品栈建造接口实现类构造函数
+     *
+     * @param potion 药水类型
+     * @param data 物品栈数据
+     * @param amount 物品栈数量
+     * @param displayName 物品栈显示名称
+     * @throws IllegalBukkitVersionException 如果服务端不支持药水类型则抛出异常
+     */
     public ItemBuilderWrapped(PotionType potion, int data, int amount, String displayName) {
 
         this(potion.getMaterial(), data, amount, displayName);
     }
 
+    /**
+     * 物品栈建造接口实现类构造函数
+     *
+     * @param potion 药水类型
+     * @param data 物品栈数据
+     * @param amount 物品栈数量
+     * @param displayName 物品栈显示名称
+     * @param lore 物品栈标签
+     * @throws IllegalBukkitVersionException 如果服务端不支持药水类型则抛出异常
+     */
     public ItemBuilderWrapped(PotionType potion, int data, int amount, String displayName, String... lore) {
 
         this(potion.getMaterial(), data, amount, displayName, lore);

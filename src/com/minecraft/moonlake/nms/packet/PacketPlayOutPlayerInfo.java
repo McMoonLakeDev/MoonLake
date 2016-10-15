@@ -9,19 +9,35 @@ import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>PacketPlayOutPlayerInfo</h1>
+ * 数据包输出玩家信息抽象类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public abstract class PacketPlayOutPlayerInfo<T extends PacketPlayOutPlayerInfo> extends PacketAbstract<T> {
 
     private ObjectProperty<Action> action;
     private ObjectProperty<Player> player;
 
+    /**
+     * 数据包输出玩家信息抽象类构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutPlayerInfo(Action, Player)}
+     * @see #PacketPlayOutPlayerInfo(Action, Player)
+     */
     @Deprecated
     public PacketPlayOutPlayerInfo() {
 
         this(null, null);
     }
 
+    /**
+     * 数据包输出玩家信息抽象类构造函数
+     *
+     * @param action 交互类型
+     * @param player 玩家
+     */
     public PacketPlayOutPlayerInfo(Action action, Player player) {
 
         this.action = new SimpleObjectProperty<>(action);
@@ -40,6 +56,13 @@ public abstract class PacketPlayOutPlayerInfo<T extends PacketPlayOutPlayerInfo>
 
     public abstract void send(Player... player) throws PacketException;
 
+    /**
+     * <h1>Action</h1>
+     * 数据包输出玩家信息交互类型
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     public enum Action {
 
         /**

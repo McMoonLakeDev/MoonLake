@@ -22,7 +22,11 @@ import java.util.List;
 import static com.minecraft.moonlake.api.fancy.TextualComponent.rawText;
 
 /**
- * Created by MoonLake on 2016/9/16.
+ * <h1>FancyMessage Implement Class</h1>
+ * 花式消息接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class FancyMessageExpression implements FancyMessage {
 
@@ -30,17 +34,34 @@ class FancyMessageExpression implements FancyMessage {
     private StringProperty jsonString;
     private ObjectProperty<List<FancyMessagePart>> partList;
 
+    /**
+     * 花式消息实现类构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #FancyMessageExpression(String)} 或 {@link #FancyMessageExpression(TextualComponent)}
+     * @see #FancyMessageExpression(String)
+     * @see #FancyMessageExpression(TextualComponent)
+     */
     @Deprecated
     public FancyMessageExpression() {
 
         this((TextualComponent) null);
     }
 
+    /**
+     * 花式消息实现类构造函数
+     *
+     * @param text 内容
+     */
     public FancyMessageExpression(String text) {
 
         this(rawText(text));
     }
 
+    /**
+     * 花式消息实现类构造函数
+     *
+     * @param text 文本组件
+     */
     public FancyMessageExpression(TextualComponent text) {
 
         this.partList = new SimpleObjectProperty<>(new ArrayList<>());

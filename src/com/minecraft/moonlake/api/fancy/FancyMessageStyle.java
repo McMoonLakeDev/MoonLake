@@ -1,7 +1,11 @@
 package com.minecraft.moonlake.api.fancy;
 
 /**
- * Created by MoonLake on 2016/9/16.
+ * <h1>FancyMessageStyle</h1>
+ * 花式消息样式
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public enum FancyMessageStyle {
 
@@ -29,6 +33,11 @@ public enum FancyMessageStyle {
 
     private final String type;
 
+    /**
+     * 花式消息样式构造函数
+     *
+     * @param type 类型名
+     */
     FancyMessageStyle(String type) {
 
         this.type = type;

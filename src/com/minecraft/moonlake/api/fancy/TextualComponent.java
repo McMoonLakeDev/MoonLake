@@ -8,7 +8,11 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Created by MoonLake on 2016/9/16.
+ * <h1>TextualComponent</h1>
+ * 花式消息文本组件
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public abstract class TextualComponent implements Cloneable {
 

@@ -12,7 +12,11 @@ import java.lang.reflect.Method;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>PacketPlayOutPlayerListHeaderFooter</h1>
+ * 数据包输出玩家列表头脚文本（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PacketPlayOutPlayerListHeaderFooter extends PacketAbstract<PacketPlayOutPlayerListHeaderFooter> {
 
@@ -39,17 +43,34 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketAbstract<PacketPl
     private StringProperty header;
     private StringProperty footer;
 
+    /**
+     * 数据包输出玩家列表头脚文本类构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutPlayerListHeaderFooter(String)}
+     * @see #PacketPlayOutPlayerListHeaderFooter(String)
+     */
     @Deprecated
     public PacketPlayOutPlayerListHeaderFooter() {
 
         this("");
     }
 
+    /**
+     * 数据包输出玩家列表头脚文本类构造函数
+     *
+     * @param header 头文本
+     */
     public PacketPlayOutPlayerListHeaderFooter(String header) {
 
         this(header, null);
     }
 
+    /**
+     * 数据包输出玩家列表头脚文本类构造函数
+     *
+     * @param header 头文本
+     * @param footer 脚文本
+     */
     public PacketPlayOutPlayerListHeaderFooter(String header, String footer) {
 
         this.header = new SimpleStringProperty(header);

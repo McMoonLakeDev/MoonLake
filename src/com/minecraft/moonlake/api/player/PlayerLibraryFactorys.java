@@ -1,12 +1,19 @@
 package com.minecraft.moonlake.api.player;
 
 /**
- * Created by MoonLake on 2016/9/14.
+ * <h1>PlayerLibraryFactorys</h1>
+ * 玩家支持库静态工厂类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PlayerLibraryFactorys {
 
     private static PlayerLibrary playerLibraryInstance;
 
+    /**
+     * 玩家支持库静态工厂类构造函数
+     */
     private PlayerLibraryFactorys() {
 
     }

@@ -4,7 +4,11 @@ import com.minecraft.moonlake.nbt.exception.NBTException;
 import org.bukkit.block.Block;
 
 /**
- * Created by MoonLake on 2016/10/2.
+ * <h1>NBTBlock</h1>
+ * NBT 方块支持库（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface NBTBlock {
 

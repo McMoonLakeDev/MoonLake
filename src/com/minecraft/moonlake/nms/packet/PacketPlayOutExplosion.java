@@ -13,7 +13,11 @@ import java.util.List;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>PacketPlayOutExplosion</h1>
+ * 数据包输出爆炸（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosion> {
 
@@ -42,32 +46,77 @@ public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosio
     private List<BlockPosition> records;
     private Vector vector;
 
+    /**
+     * 数据包输出爆炸类构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutExplosion(Location, float, List, Vector)}
+     * @see #PacketPlayOutExplosion(Location, float, List, Vector)
+     */
     @Deprecated
     public PacketPlayOutExplosion() {
 
         this(0d, 0d, 0d);
     }
 
+    /**
+     * 数据包输出爆炸类构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     */
     public PacketPlayOutExplosion(double x, double y, double z) {
 
         this(x, y, z, 0f, null, null);
     }
 
+    /**
+     * 数据包输出爆炸类构造函数
+     *
+     * @param location 位置对象
+     * @param radius 半径
+     */
     public PacketPlayOutExplosion(Location location, float radius) {
 
         this(location.getX(), location.getY(), location.getZ(), radius, null, null);
     }
 
+    /**
+     * 数据包输出爆炸类构造函数
+     *
+     * @param location 位置对象
+     * @param radius 半径
+     * @param records 方块记录
+     * @param vector 矢量
+     */
     public PacketPlayOutExplosion(Location location, float radius, List<BlockPosition> records, Vector vector) {
 
         this(location.getX(), location.getY(), location.getZ(), radius, records, vector);
     }
 
+    /**
+     * 数据包输出爆炸类构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     * @param radius 半径
+     */
     public PacketPlayOutExplosion(double x, double y, double z, float radius) {
 
         this(x, y, z, radius, null, null);
     }
 
+    /**
+     * 数据包输出爆炸类构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     * @param radius 半径
+     * @param records 方块记录
+     * @param vector 矢量
+     */
     public PacketPlayOutExplosion(double x, double y, double z, float radius, List<BlockPosition> records, Vector vector) {
 
         this.x = new SimpleDoubleProperty(x);
@@ -145,22 +194,46 @@ public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosio
         }
     }
 
+    /**
+     * <h1>BlockPosition</h1>
+     * 方块位置封装类（详细doc待补充...）
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     public static class BlockPosition {
 
         private final ReadOnlyIntegerProperty x;
         private final ReadOnlyIntegerProperty y;
         private final ReadOnlyIntegerProperty z;
 
+        /**
+         * 方块位置封装类构造函数
+         */
         public BlockPosition() {
 
             this(0, 0, 0);
         }
 
+        /**
+         * 方块位置封装类构造函数
+         *
+         * @param x X 坐标
+         * @param y Y 坐标
+         * @param z Z 坐标
+         */
         public BlockPosition(double x, double y, double z) {
 
             this((int) x, (int) y, (int) z);
         }
 
+        /**
+         * 方块位置封装类构造函数
+         *
+         * @param x X 坐标
+         * @param y Y 坐标
+         * @param z Z 坐标
+         */
         public BlockPosition(int x, int y, int z) {
 
             this.x = new SimpleIntegerProperty(x);

@@ -12,7 +12,11 @@ import java.lang.reflect.Method;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/10/3.
+ * <h1>AnvilWindowReflect</h1>
+ * 铁砧窗口反射实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 class AnvilWindowReflect {
 
@@ -40,6 +44,11 @@ class AnvilWindowReflect {
 
     private static AnvilWindowReflect anvilWindowReflectInstance;
 
+    /**
+     * 铁砧窗口反射实现类构造函数
+     *
+     * @throws NMSException 如果初始化错误则抛出异常
+     */
     private AnvilWindowReflect() throws NMSException {
 
         try {

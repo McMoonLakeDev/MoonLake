@@ -20,7 +20,11 @@ import java.util.Base64;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/7/17.
+ * <h1>ItemManager</h1>
+ * 物品栈管理实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class ItemManager extends MoonLakeManager {
 
@@ -58,6 +62,9 @@ public class ItemManager extends MoonLakeManager {
         }
     }
 
+    /**
+     * 物品栈管理实现类构造函数
+     */
     private ItemManager() {
 
     }

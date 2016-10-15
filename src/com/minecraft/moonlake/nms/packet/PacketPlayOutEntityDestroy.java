@@ -10,7 +10,11 @@ import org.bukkit.entity.Player;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * Created by MoonLake on 2016/9/29.
+ * <h1>PacketPlayOutEntityDestroy</h1>
+ * 数据包输出实体破坏（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class PacketPlayOutEntityDestroy extends PacketAbstract<PacketPlayOutEntityDestroy> {
 
@@ -30,12 +34,23 @@ public class PacketPlayOutEntityDestroy extends PacketAbstract<PacketPlayOutEnti
 
     private ObjectProperty<int[]> entityIds;
 
+    /**
+     * 数据包输出实体破坏类构造函数
+     *
+     * @deprecated 已过时，请使用 {@link #PacketPlayOutEntityDestroy(Entity...)}
+     * @see #PacketPlayOutEntityDestroy(Entity...)
+     */
     @Deprecated
     public PacketPlayOutEntityDestroy() {
 
         this(0);
     }
 
+    /**
+     * 数据包输出实体破坏类构造函数
+     *
+     * @param entities 实体
+     */
     public PacketPlayOutEntityDestroy(Entity... entities) {
 
         int index = 0;
@@ -48,6 +63,11 @@ public class PacketPlayOutEntityDestroy extends PacketAbstract<PacketPlayOutEnti
         this.entityIds = new SimpleObjectProperty<>(entityIds);
     }
 
+    /**
+     * 数据包输出实体破坏类构造函数
+     *
+     * @param entityIds 实体 Id
+     */
     public PacketPlayOutEntityDestroy(int... entityIds) {
 
         this.entityIds = new SimpleObjectProperty<>(entityIds);
