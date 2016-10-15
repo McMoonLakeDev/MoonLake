@@ -60,15 +60,35 @@ public enum PotionType {
         return type;
     }
 
+    /**
+     * 获取此药水的 Id
+     *
+     * @return Id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * 获取药水类型对象从 Id
+     *
+     * @param id Id
+     * @return 药水类型对象
+     * @deprecated 已过时，请使用 {@link #fromItemStack(ItemStack)}
+     * @see #fromItemStack(ItemStack)
+     */
     @Deprecated
     public static PotionType fromId(int id) {
         return ID_MAP.get(id);
     }
 
+    /**
+     * 获取药水类型对象从物品栈
+     *
+     * @param itemStack 物品栈
+     * @return 药水类型对象
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     */
     @SuppressWarnings("deprecation")
     public static PotionType fromItemStack(ItemStack itemStack) {
         Validate.notNull(itemStack, "The itemstack object is null.");
