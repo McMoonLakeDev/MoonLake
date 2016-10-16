@@ -6,11 +6,10 @@ import org.bukkit.ChatColor;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * <h1>StringUtil</h1>
@@ -119,8 +118,12 @@ public class StringUtil {
 
         Validate.notNull(source, "The string source object is null.");
 
-        List<String> strColorList = source.stream().map(str -> ChatColor.translateAlternateColorCodes(altColorChar, str)).collect(Collectors.toList());
+        List<String> strColorList = new ArrayList<>();
 
+        for(final String str : source) {
+
+            strColorList.add(ChatColor.translateAlternateColorCodes(altColorChar, str));
+        }
         return strColorList;
     }
 
@@ -170,8 +173,12 @@ public class StringUtil {
 
         Validate.notNull(source, "The string source object is null.");
 
-        List<String> strColorList = source.stream().map((Function<String, String>) ChatColor::stripColor).collect(Collectors.toList());
+        List<String> strColorList = new ArrayList<>();
 
+        for(final String str : source) {
+
+            strColorList.add(ChatColor.translateAlternateColorCodes('&', str));
+        }
         return strColorList;
     }
 

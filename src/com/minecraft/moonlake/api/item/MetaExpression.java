@@ -12,7 +12,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * <h1>MetaExpression</h1>
@@ -140,13 +139,8 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         if(itemMeta != null) {
 
-            List<String> loreList = lore.stream().map(str -> StringUtil.toColor(str)).collect(Collectors.toList());
-
-            if(loreList != null) {
-
-                itemMeta.setLore(loreList);
-                itemStack.setItemMeta(itemMeta);
-            }
+            itemMeta.setLore(new ArrayList<>(lore));
+            itemStack.setItemMeta(itemMeta);
         }
         return itemStack;
     }

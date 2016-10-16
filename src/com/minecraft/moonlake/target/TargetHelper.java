@@ -89,20 +89,23 @@ public final class TargetHelper {
         Vector facing = source.getLocation().getDirection();
         double fLengthSq = facing.lengthSquared();
 
-        entityList.stream().filter(entity -> isInFront(source, entity) && entity instanceof LivingEntity).forEach(entity -> {
+        for(final Entity entity : entityList) {
 
-            Vector relative = entity.getLocation().subtract(source.getLocation()).toVector();
-            double dot = relative.dot(facing);
-            double rLengthSq = relative.lengthSquared();
-            double cosSquared = dot * dot / (rLengthSq * fLengthSq);
-            double sinSquared = 1.0D - cosSquared;
-            double dSquared = rLengthSq * sinSquared;
+            if(isInFront(source, entity) && entity instanceof LivingEntity) {
 
-            if (dSquared < tolerance) {
+                Vector relative = entity.getLocation().subtract(source.getLocation()).toVector();
+                double dot = relative.dot(facing);
+                double rLengthSq = relative.lengthSquared();
+                double cosSquared = dot * dot / (rLengthSq * fLengthSq);
+                double sinSquared = 1.0D - cosSquared;
+                double dSquared = rLengthSq * sinSquared;
 
-                targets.add((LivingEntity) entity);
+                if (dSquared < tolerance) {
+
+                    targets.add((LivingEntity) entity);
+                }
             }
-        });
+        }
         return targets;
     }
 
