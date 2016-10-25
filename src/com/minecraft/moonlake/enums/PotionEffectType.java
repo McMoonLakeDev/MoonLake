@@ -18,6 +18,7 @@
 
 package com.minecraft.moonlake.enums;
 
+import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.reflect.Reflect;
 
@@ -228,5 +229,55 @@ public abstract class PotionEffectType {
         }
         //return org.bukkit.potion.PotionEffectType.getById(id);
         return org.bukkit.potion.PotionEffectType.getByName(name);
+    }
+
+    /**
+     * 转换到 API 的 PotionEffectType 枚举对象
+     *
+     * @return PotionEffectType
+     */
+    @SuppressWarnings("deprecation")
+    public com.minecraft.moonlake.api.item.potion.PotionEffectType to() {
+
+        return com.minecraft.moonlake.api.item.potion.PotionEffectType.fromId(id);
+    }
+
+    /**
+     * 将此药水效果创建为自定义药水效果对象
+     *
+     * @param amplifier 药水等级
+     * @param duration 药水时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return PotionEffectCustom
+     */
+    public PotionEffectCustom createCustom(int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        return new PotionEffectCustom(to(), amplifier, duration, ambient, showParticles);
+    }
+
+    /**
+     * 将此药水效果创建为自定义药水效果对象
+     *
+     * @param amplifier 药水等级
+     * @param duration 药水时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @return PotionEffectCustom
+     */
+    public PotionEffectCustom createCustom(int amplifier, int duration, boolean ambient) {
+
+        return createCustom(amplifier, duration, ambient, false);
+    }
+
+    /**
+     * 将此药水效果创建为自定义药水效果对象
+     *
+     * @param amplifier 药水等级
+     * @param duration 药水时间
+     * @return PotionEffectCustom
+     */
+    public PotionEffectCustom createCustom(int amplifier, int duration) {
+
+        return createCustom(amplifier, duration, false);
     }
 }

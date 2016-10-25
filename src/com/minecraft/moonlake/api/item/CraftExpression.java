@@ -382,4 +382,62 @@ class CraftExpression extends MetaExpression implements CraftLibrary {
 
         return createCustomPotion(type, amount, displayName, new PotionEffectCustom(effectType, amplifier, duration, ambient, showParticles));
     }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration) {
+
+        return createCustomPotion(type, effectType, amplifier, duration, false);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, int amount, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration) {
+
+        return createCustomPotion(type, amount, effectType, amplifier, duration, false);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, int amount, String displayName, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration) {
+
+        return createCustomPotion(type, amount, displayName, effectType, amplifier, duration, false);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient) {
+
+        return createCustomPotion(type, effectType, amplifier, duration, ambient, false);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, int amount, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient) {
+
+        return createCustomPotion(type, amount, effectType, amplifier, duration, ambient, false);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, int amount, String displayName, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient) {
+
+        return createCustomPotion(type, amount, displayName, effectType, amplifier, duration, ambient, false);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        return createCustomPotion(type, 1, effectType, amplifier, duration, ambient, showParticles);
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, int amount, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        Validate.notNull(effectType, "The itemstack potion effect type object is null.");
+
+        return createCustomPotion(type, amount, effectType.createCustom(amplifier, duration, ambient, showParticles));
+    }
+
+    @Override
+    public ItemStack createCustomPotion(PotionType type, int amount, String displayName, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        Validate.notNull(effectType, "The itemstack potion effect type object is null.");
+
+        return createCustomPotion(type, amount, displayName, effectType.createCustom(amplifier, duration, ambient, showParticles));
+    }
 }

@@ -372,4 +372,142 @@ public interface PotionLibrary {
      * @throws IllegalArgumentException 如果显示名称对象为 {@code null} 则抛出异常
      */
     ItemStack createCustomPotion(PotionType type, int amount, String displayName, PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles);
+
+    /**
+     * 创建自定义效果药水物品栈 ItemStack 对象
+     *
+     * @param type 药水类型
+     * @param effectType 药水效果类型
+     * @param amplifier 药水效果等级
+     * @param duration 药水效果时间
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     */
+    ItemStack createCustomPotion(PotionType type, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration);
+
+    /**
+     * 创建自定义效果药水物品栈 ItemStack 对象
+     *
+     * @param type 药水类型
+     * @param amount 物品栈数量
+     * @param effectType 药水效果类型
+     * @param amplifier 药水效果等级
+     * @param duration 药水效果时间
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     */
+    ItemStack createCustomPotion(PotionType type, int amount, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration);
+
+    /**
+     * 创建自定义效果药水物品栈 ItemStack 对象
+     *
+     * @param type 药水类型
+     * @param amount 物品栈数量
+     * @param displayName 物品栈显示名称
+     * @param effectType 药水效果类型
+     * @param amplifier 药水效果等级
+     * @param duration 药水效果时间
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果显示名称对象为 {@code null} 则抛出异常
+     */
+    ItemStack createCustomPotion(PotionType type, int amount, String displayName, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration);
+
+    /**
+     * 创建自定义效果药水物品栈 ItemStack 对象
+     *
+     * @param type 药水类型
+     * @param effectType 药水效果类型
+     * @param amplifier 药水效果等级
+     * @param duration 药水效果时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     */
+    ItemStack createCustomPotion(PotionType type, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient);
+
+    /**
+     * 创建自定义效果药水物品栈 ItemStack 对象
+     *
+     * @param type 药水类型
+     * @param amount 物品栈数量
+     * @param effectType 药水效果类型
+     * @param amplifier 药水效果等级
+     * @param duration 药水效果时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     */
+    ItemStack createCustomPotion(PotionType type, int amount, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient);
+
+    /**
+     * 创建自定义效果药水物品栈 ItemStack 对象
+     *
+     * @param type 药水类型
+     * @param amount 物品栈数量
+     * @param displayName 物品栈显示名称
+     * @param effectType 药水效果类型
+     * @param amplifier 药水效果等级
+     * @param duration 药水效果时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果显示名称对象为 {@code null} 则抛出异常
+     */
+    ItemStack createCustomPotion(PotionType type, int amount, String displayName, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient);
+
+    /**
+     * 创建自定义效果药水物品栈 ItemStack 对象
+     *
+     * @param type 药水类型
+     * @param effectType 药水效果类型
+     * @param amplifier 药水效果等级
+     * @param duration 药水效果时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     */
+    ItemStack createCustomPotion(PotionType type, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles);
+
+    /**
+     * 创建自定义效果药水物品栈 ItemStack 对象
+     *
+     * @param type 药水类型
+     * @param amount 物品栈数量
+     * @param effectType 药水效果类型
+     * @param amplifier 药水效果等级
+     * @param duration 药水效果时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     */
+    ItemStack createCustomPotion(PotionType type, int amount, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles);
+
+    /**
+     * 创建自定义效果药水物品栈 ItemStack 对象
+     *
+     * @param type 药水类型
+     * @param amount 物品栈数量
+     * @param displayName 物品栈显示名称
+     * @param effectType 药水效果类型
+     * @param amplifier 药水效果等级
+     * @param duration 药水效果时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果药水类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果显示名称对象为 {@code null} 则抛出异常
+     */
+    ItemStack createCustomPotion(PotionType type, int amount, String displayName, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles);
 }

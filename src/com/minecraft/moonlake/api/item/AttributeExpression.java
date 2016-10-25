@@ -294,6 +294,26 @@ class AttributeExpression implements AttributeLibrary {
     }
 
     @Override
+    public ItemStack setCustomPotion(ItemStack itemStack, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration) {
+
+        return setCustomPotion(itemStack, effectType, amplifier, duration, false);
+    }
+
+    @Override
+    public ItemStack setCustomPotion(ItemStack itemStack, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient) {
+
+        return setCustomPotion(itemStack, effectType, amplifier, duration, ambient, false);
+    }
+
+    @Override
+    public ItemStack setCustomPotion(ItemStack itemStack, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        Validate.notNull(effectType, "The itemstack potion effect object is null.");
+
+        return setCustomPotion(itemStack, effectType.to(), amplifier, duration, ambient, showParticles);
+    }
+
+    @Override
     @SuppressWarnings("deprecation")
     public Set<PotionEffectCustom> getCustomPotion(ItemStack itemStack) {
 
@@ -352,5 +372,13 @@ class AttributeExpression implements AttributeLibrary {
             }
         }
         return result;
+    }
+
+    @Override
+    public boolean hasCustomPotion(ItemStack itemStack, com.minecraft.moonlake.enums.PotionEffectType effectType) {
+
+        Validate.notNull(effectType, "The itemstack potion effect object is null.");
+
+        return hasCustomPotion(itemStack, effectType.to());
     }
 }

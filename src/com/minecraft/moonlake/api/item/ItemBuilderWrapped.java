@@ -479,6 +479,26 @@ class ItemBuilderWrapped implements ItemBuilder {
     }
 
     @Override
+    public ItemBuilder setCustomPotion(com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration) {
+
+        return setCustomPotion(effectType, amplifier, duration, false);
+    }
+
+    @Override
+    public ItemBuilder setCustomPotion(com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient) {
+
+        return setCustomPotion(effectType, amplifier, duration, ambient, false);
+    }
+
+    @Override
+    public ItemBuilder setCustomPotion(com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        Validate.notNull(effectType, "The itemstack potion effect object is null.");
+
+        return setCustomPotion(effectType.createCustom(amplifier, duration, ambient, showParticles));
+    }
+
+    @Override
     public ItemStack build() {
 
         return build(true);
