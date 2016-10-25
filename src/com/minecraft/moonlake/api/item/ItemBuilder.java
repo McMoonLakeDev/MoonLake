@@ -190,6 +190,33 @@ public interface ItemBuilder extends Builder<ItemStack> {
     ItemBuilder clearEnchantment();
 
     /**
+     * 将物品栈添加指定附魔效果
+     *
+     * @param enchantment 附魔类型
+     * @param level 附魔等级
+     * @throws IllegalArgumentException 如果附魔类型对象为 {@code null} 则抛出异常
+     */
+    ItemBuilder addEnchantment(com.minecraft.moonlake.enums.Enchantment enchantment, int level);
+
+    /**
+     * 将物品栈添加安全的指定附魔效果
+     *
+     * @param enchantment 附魔类型
+     * @param level 附魔等级
+     * @throws IllegalArgumentException 如果附魔类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果附魔的等级小于附魔类型的开始等级或大于最大等级则抛出异常
+     */
+    ItemBuilder addSafeEnchantment(com.minecraft.moonlake.enums.Enchantment enchantment, int level);
+
+    /**
+     * 将物品栈删除指定附魔效果
+     *
+     * @param enchantment 附魔类型
+     * @throws IllegalArgumentException 如果附魔类型对象为 {@code null} 则抛出异常
+     */
+    ItemBuilder removeEnchantment(com.minecraft.moonlake.enums.Enchantment enchantment);
+
+    /**
      * 将物品栈添加指定标示
      *
      * @param flags 标示

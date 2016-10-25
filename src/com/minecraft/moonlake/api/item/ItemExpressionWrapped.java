@@ -706,6 +706,30 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
+    public ItemStack addEnchantment(ItemStack itemStack, com.minecraft.moonlake.enums.Enchantment enchantment, int level) {
+
+        return base.addEnchantment(itemStack, enchantment, level);
+    }
+
+    @Override
+    public ItemStack addSafeEnchantment(ItemStack itemStack, com.minecraft.moonlake.enums.Enchantment enchantment, int level) {
+
+        return base.addSafeEnchantment(itemStack, enchantment, level);
+    }
+
+    @Override
+    public ItemStack removeEnchantment(ItemStack itemStack, com.minecraft.moonlake.enums.Enchantment enchantment) {
+
+        return base.removeEnchantment(itemStack, enchantment);
+    }
+
+    @Override
+    public boolean hasEnchantment(ItemStack itemStack, com.minecraft.moonlake.enums.Enchantment enchantment) {
+
+        return base.hasEnchantment(itemStack, enchantment);
+    }
+
+    @Override
     public Set<ItemFlag> getFlags(ItemStack itemStack) {
 
         return base.getFlags(itemStack);

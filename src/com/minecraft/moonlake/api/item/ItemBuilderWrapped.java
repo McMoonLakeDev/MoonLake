@@ -343,6 +343,30 @@ class ItemBuilderWrapped implements ItemBuilder {
     }
 
     @Override
+    public ItemBuilder addEnchantment(com.minecraft.moonlake.enums.Enchantment enchantment, int level) {
+
+        Validate.notNull(enchantment, "The itemstack enchantment object is null.");
+
+        return addEnchantment(enchantment.as(), level);
+    }
+
+    @Override
+    public ItemBuilder addSafeEnchantment(com.minecraft.moonlake.enums.Enchantment enchantment, int level) {
+
+        Validate.notNull(enchantment, "The itemstack enchantment object is null.");
+
+        return addSafeEnchantment(enchantment.as(), level);
+    }
+
+    @Override
+    public ItemBuilder removeEnchantment(com.minecraft.moonlake.enums.Enchantment enchantment) {
+
+        Validate.notNull(enchantment, "The itemstack enchantment object is null.");
+
+        return removeEnchantment(enchantment.as());
+    }
+
+    @Override
     public ItemBuilder addFlags(ItemFlag... flags) {
 
         update(library().addFlags(get(), flags));
