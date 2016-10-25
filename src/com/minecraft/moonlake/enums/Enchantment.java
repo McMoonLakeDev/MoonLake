@@ -158,6 +158,7 @@ public abstract class Enchantment {
      * 附魔类型类构造函数
      *
      * @param id 附魔 ID
+     * @param name 附魔名称
      */
     public Enchantment(int id, String name) {
 
@@ -168,6 +169,7 @@ public abstract class Enchantment {
      * 附魔类型类构造函数
      *
      * @param id 附魔 ID
+     * @param name 附魔名称
      * @param requiredVersion 需求版本
      */
     public Enchantment(int id, String name, int requiredVersion) {
