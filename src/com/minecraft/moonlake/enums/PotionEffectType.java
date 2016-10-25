@@ -128,7 +128,7 @@ public abstract class PotionEffectType {
     public final static PotionEffectType 饱和 = new PotionEffectType(23, "SATURATION") {};
 
 
-    // 1.9 增加的新附魔（不兼容 1.8 以下
+    // 1.9 增加的新药水效果（不兼容 1.8 以下
     /**
      * 药水效果类型: 发光
      */
