@@ -157,7 +157,7 @@ public abstract class PotionEffectType {
      * @param id 药水效果 Id
      * @param name 药水效果名称
      */
-    public PotionEffectType(int id, String name) {
+    private PotionEffectType(int id, String name) {
 
         this(id, name, -1);
     }
@@ -169,7 +169,7 @@ public abstract class PotionEffectType {
      * @param name 药水效果名称
      * @param requiredVersion 需求版本
      */
-    public PotionEffectType(int id, String name, int requiredVersion) {
+    private PotionEffectType(int id, String name, int requiredVersion) {
 
         this.id = id;
         this.name = name;

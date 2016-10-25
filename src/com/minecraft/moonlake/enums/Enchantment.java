@@ -160,7 +160,7 @@ public abstract class Enchantment {
      * @param id 附魔 ID
      * @param name 附魔名称
      */
-    public Enchantment(int id, String name) {
+    private Enchantment(int id, String name) {
 
         this(id, name, -1);
     }
@@ -172,7 +172,7 @@ public abstract class Enchantment {
      * @param name 附魔名称
      * @param requiredVersion 需求版本
      */
-    public Enchantment(int id, String name, int requiredVersion) {
+    private Enchantment(int id, String name, int requiredVersion) {
 
         this.id = id;
         this.name = name;
