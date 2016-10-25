@@ -572,10 +572,10 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
         Validate.isTrue(ItemLibraryFactorys.item().isLeatherArmor(itemStack), "The itemstack type not leather.");
         Validate.notNull(color, "The itemstack leather color object is null.");
 
-        if(!itemStack.hasItemMeta()) {
+        /*if(!itemStack.hasItemMeta()) {
 
             return itemStack;
-        }
+        }*/
         LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
         leatherArmorMeta.setColor(color);
         itemStack.setItemMeta(leatherArmorMeta);

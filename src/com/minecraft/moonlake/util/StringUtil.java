@@ -195,7 +195,7 @@ public class StringUtil {
 
         for(final String str : source) {
 
-            strColorList.add(ChatColor.translateAlternateColorCodes('&', str));
+            strColorList.add(stripColor(str));
         }
         return strColorList;
     }
