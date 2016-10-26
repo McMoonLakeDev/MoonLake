@@ -72,7 +72,7 @@ public abstract class PacketPlayOutPlayerInfo<T extends PacketPlayOutPlayerInfo>
         return player;
     }
 
-    public abstract void send(Player... player) throws PacketException;
+    public abstract void send(Player... players) throws PacketException;
 
     /**
      * <h1>Action</h1>

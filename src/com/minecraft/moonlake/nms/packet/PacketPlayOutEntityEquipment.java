@@ -126,6 +126,8 @@ public class PacketPlayOutEntityEquipment extends PacketAbstract<PacketPlayOutEn
     @Override
     public void send(Player... players) throws PacketException {
 
+        if(super.fireEvent(this, players)) return;
+
         try {
 
             Object enumItemSolt = METHOD_VALUEOF.invoke(null, equipmentSolt.get().name());

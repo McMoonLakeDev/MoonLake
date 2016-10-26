@@ -146,6 +146,8 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
     @SuppressWarnings("deprecation")
     public void send(Player... players) throws PacketException {
 
+        if(super.fireEvent(this, players)) return;
+
         try {
 
             Field FIELD_WORLDTYPE_TARGET = getField(CLASS_WORLDTYPE, true, worldType.get().name().toUpperCase());

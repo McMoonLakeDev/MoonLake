@@ -188,6 +188,8 @@ public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosio
     @Override
     public void send(Player... players) throws PacketException {
 
+        if(super.fireEvent(this, players)) return;
+
         try {
 
             List<Object> nmsBlockPosition = new ArrayList<>();
