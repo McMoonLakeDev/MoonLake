@@ -24,33 +24,69 @@ import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
+/**
+ * <h1>MoonLakePlayerEvent</h1>
+ * 月色之湖玩家事件类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see MoonLakeEvent
+ */
 public abstract class MoonLakePlayerEvent extends MoonLakeEvent {
 
     private final MoonLakePlayer moonLakePlayer;
 
+    /**
+     * 月色之湖玩家事件类构造函数
+     *
+     * @param player Bukkit 玩家
+     * @deprecated 已过时, 将于 v2.0 去除. 请使用 {@link #MoonLakePlayerEvent(MoonLakePlayer)}
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     */
     @Deprecated
-    public MoonLakePlayerEvent(Player player) {
+    public MoonLakePlayerEvent(Player player) throws IllegalArgumentException {
 
         this(PlayerManager.adapter(player));
     }
 
-    public MoonLakePlayerEvent(MoonLakePlayer moonLakePlayer) {
+    /**
+     * 月色之湖玩家事件类构造函数
+     *
+     * @param moonLakePlayer MoonLake 玩家
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     */
+    public MoonLakePlayerEvent(MoonLakePlayer moonLakePlayer) throws IllegalArgumentException {
 
         Validate.notNull(moonLakePlayer, "The moonlake player object is null.");
 
         this.moonLakePlayer = moonLakePlayer;
     }
 
+    /**
+     * 获取此玩家事件的 MoonLake 玩家对象
+     *
+     * @return MoonLakePlayer
+     */
     public final MoonLakePlayer getPlayer() {
 
         return moonLakePlayer;
     }
 
+    /**
+     * 获取此玩家事件的 Bukkit 玩家对象
+     *
+     * @return BukkitPlayer
+     */
     public final Player getBukkitPlayer() {
 
         return moonLakePlayer.getBukkitPlayer();
     }
 
+    /**
+     * 获取此玩家事件的玩家名
+     *
+     * @return 玩家名
+     */
     public final String getName() {
 
         return moonLakePlayer.getName();

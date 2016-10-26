@@ -22,17 +22,38 @@ import com.minecraft.moonlake.api.event.MoonLakeEvent;
 import com.minecraft.moonlake.nms.packet.Packet;
 import com.minecraft.moonlake.validate.Validate;
 
+/**
+ * <h1>MoonLakePacketEvent</h1>
+ * 月色之湖数据包事件类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see MoonLakeEvent
+ * @see Packet
+ */
 public abstract class MoonLakePacketEvent extends MoonLakeEvent {
 
     private final Packet<?> packet;
 
-    public MoonLakePacketEvent(Packet<?> packet) {
+    /**
+     * 月色之湖数据包事件类构造函数
+     *
+     * @param packet 数据包对象
+     * @throws IllegalArgumentException 如果数据包对象为 {@code null} 则抛出异常
+     */
+    public MoonLakePacketEvent(Packet<?> packet) throws IllegalArgumentException {
 
         Validate.notNull(packet, "The moonlake packet object is null.");
 
         this.packet = packet;
     }
 
+    /**
+     * 获取此数据包事件的数据包对象
+     *
+     * @return Packet
+     * @see Packet
+     */
     public final Packet<?> getPacket() {
 
         return packet;

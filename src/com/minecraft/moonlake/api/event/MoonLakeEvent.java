@@ -20,13 +20,29 @@ package com.minecraft.moonlake.api.event;
 
 import org.bukkit.event.Event;
 
+/**
+ * <h1>MoonLakeEvent</h1>
+ * 月色之湖事件类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see Event
+ */
 public abstract class MoonLakeEvent extends Event {
 
+    /**
+     * 月色之湖事件类构造函数
+     */
     public MoonLakeEvent() {
 
         super();
     }
 
+    /**
+     * 月色之湖事件类构造函数
+     *
+     * @param async 是否异步
+     */
     public MoonLakeEvent(boolean async) {
 
         super(async);
