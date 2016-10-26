@@ -99,6 +99,8 @@ public class PacketPlayOutEntityDestroy extends PacketAbstract<PacketPlayOutEnti
     @Override
     public void send(Player... players) throws PacketException {
 
+        if(super.fireEvent(this, players)) return;
+
         try {
 
             Object packet = instantiateObject(CLASS_PACKETPLAYOUTENTITYDESTROY, new Object[] { entityIds.get() });

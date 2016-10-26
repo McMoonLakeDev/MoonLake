@@ -81,6 +81,8 @@ public class PacketPlayOutHeldItemSlot extends PacketAbstract<PacketPlayOutHeldI
     @Override
     public void send(Player... players) throws PacketException {
 
+        if(super.fireEvent(this, players)) return;
+
         try {
 
             Object packet = instantiateObject(CLASS_PACKETPLAYOUTHELDITEMSLOT, heldItemSlot.get());

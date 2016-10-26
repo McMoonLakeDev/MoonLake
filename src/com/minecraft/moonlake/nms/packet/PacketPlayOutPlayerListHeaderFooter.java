@@ -108,6 +108,8 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketAbstract<PacketPl
     @Override
     public void send(Player... players) throws PacketException {
 
+        if(super.fireEvent(this, players)) return;
+
         try {
 
             Object nmsHeader = METHOD_CHARSERIALIZER_A.invoke(null, "{\"text\":\"" + header.get() + "\"}");

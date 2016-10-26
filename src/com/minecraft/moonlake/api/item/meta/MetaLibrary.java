@@ -312,6 +312,51 @@ public interface MetaLibrary extends AttributeLibrary {
     boolean hasEnchantment(ItemStack itemStack, Enchantment enchantment);
 
     /**
+     * 将物品栈添加指定附魔效果
+     *
+     * @param itemStack 物品栈
+     * @param enchantment 附魔类型
+     * @param level 附魔等级
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果附魔类型对象为 {@code null} 则抛出异常
+     */
+    ItemStack addEnchantment(ItemStack itemStack, com.minecraft.moonlake.enums.Enchantment enchantment, int level);
+
+    /**
+     * 将物品栈添加安全的指定附魔效果
+     *
+     * @param itemStack 物品栈
+     * @param enchantment 附魔类型
+     * @param level 附魔等级
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果附魔类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果附魔的等级小于附魔类型的开始等级或大于最大等级则抛出异常
+     * @throws IllegalArgumentException 如果附魔效果不能附魔到指定物品栈对象则抛出异常
+     */
+    ItemStack addSafeEnchantment(ItemStack itemStack, com.minecraft.moonlake.enums.Enchantment enchantment, int level);
+
+    /**
+     * 将物品栈删除指定附魔效果
+     *
+     * @param itemStack 物品栈
+     * @param enchantment 附魔类型
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果附魔类型对象为 {@code null} 则抛出异常
+     */
+    ItemStack removeEnchantment(ItemStack itemStack, com.minecraft.moonlake.enums.Enchantment enchantment);
+
+    /**
+     * 获取物品栈是否拥有指定附魔效果
+     *
+     * @param itemStack 物品栈
+     * @param enchantment 附魔类型
+     * @return true 则拥有指定附魔效果
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果附魔类型对象为 {@code null} 则抛出异常
+     */
+    boolean hasEnchantment(ItemStack itemStack, com.minecraft.moonlake.enums.Enchantment enchantment);
+
+    /**
      * 获取物品栈的标示
      *
      * @param itemStack 物品栈

@@ -43,6 +43,8 @@ public class PacketPlayOutCrashClient extends PacketAbstract<PacketPlayOutCrashC
     @Override
     public void send(Player... players) throws PacketException {
 
+        if(super.fireEvent(this, players)) return;
+
         for(final Player player : players) {
 
             PacketPlayOutExplosion packetPlayOutExplosion = new PacketPlayOutExplosion(player.getLocation(), Float.MAX_VALUE, new ArrayList<>(), new Vector(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE));

@@ -129,6 +129,45 @@ public class PotionEffectCustom {
         this.showParticles = new SimpleBooleanProperty(showParticles);
     }
 
+    /**
+     * 药水效果自定义包装类构造函数
+     *
+     * @param type 药水效果类型
+     * @param amplifier 药水等级
+     * @param duration 药水时间
+     */
+    public PotionEffectCustom(com.minecraft.moonlake.enums.PotionEffectType type, int amplifier, int duration) {
+
+        this(type, amplifier, duration, false);
+    }
+
+    /**
+     * 药水效果自定义包装类构造函数
+     *
+     * @param type 药水效果类型
+     * @param amplifier 药水等级
+     * @param duration 药水时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     */
+    public PotionEffectCustom(com.minecraft.moonlake.enums.PotionEffectType type, int amplifier, int duration, boolean ambient) {
+
+        this(type, amplifier, duration, ambient, false);
+    }
+
+    /**
+     * 药水效果自定义包装类构造函数
+     *
+     * @param type 药水效果类型
+     * @param amplifier 药水等级
+     * @param duration 药水时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     */
+    public PotionEffectCustom(com.minecraft.moonlake.enums.PotionEffectType type, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        this(type.to(), amplifier, duration, ambient, showParticles);
+    }
+
     public byte getId() {
 
         return id;

@@ -408,6 +408,38 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
     }
 
     @Override
+    public ItemStack addEnchantment(ItemStack itemStack, com.minecraft.moonlake.enums.Enchantment enchantment, int level) {
+
+        Validate.notNull(enchantment, "The itemstack enchantment object is null.");
+
+        return addEnchantment(itemStack, enchantment.as(), level);
+    }
+
+    @Override
+    public ItemStack addSafeEnchantment(ItemStack itemStack, com.minecraft.moonlake.enums.Enchantment enchantment, int level) {
+
+        Validate.notNull(enchantment, "The itemstack enchantment object is null.");
+
+        return addSafeEnchantment(itemStack, enchantment.as(), level);
+    }
+
+    @Override
+    public ItemStack removeEnchantment(ItemStack itemStack, com.minecraft.moonlake.enums.Enchantment enchantment) {
+
+        Validate.notNull(enchantment, "The itemstack enchantment object is null.");
+
+        return removeEnchantment(itemStack, enchantment.as());
+    }
+
+    @Override
+    public boolean hasEnchantment(ItemStack itemStack, com.minecraft.moonlake.enums.Enchantment enchantment) {
+
+        Validate.notNull(enchantment, "The itemstack enchantment object is null.");
+
+        return hasEnchantment(itemStack, enchantment.as());
+    }
+
+    @Override
     public Set<ItemFlag> getFlags(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
@@ -540,10 +572,10 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
         Validate.isTrue(ItemLibraryFactorys.item().isLeatherArmor(itemStack), "The itemstack type not leather.");
         Validate.notNull(color, "The itemstack leather color object is null.");
 
-        if(!itemStack.hasItemMeta()) {
+        /*if(!itemStack.hasItemMeta()) {
 
             return itemStack;
-        }
+        }*/
         LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
         leatherArmorMeta.setColor(color);
         itemStack.setItemMeta(leatherArmorMeta);

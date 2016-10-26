@@ -158,6 +158,8 @@ public class PacketPlayOutTitle extends PacketAbstract<PacketPlayOutTitle> {
     @Override
     public void send(Player... players) throws PacketException {
 
+        if(super.fireEvent(this, players)) return;
+
         try {
 
             Object nmsTitle = METHOD_CHARSERIALIZER_A.invoke(null, "{\"text\":\"" + title.get() + "\"}");

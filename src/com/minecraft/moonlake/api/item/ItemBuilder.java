@@ -190,6 +190,33 @@ public interface ItemBuilder extends Builder<ItemStack> {
     ItemBuilder clearEnchantment();
 
     /**
+     * 将物品栈添加指定附魔效果
+     *
+     * @param enchantment 附魔类型
+     * @param level 附魔等级
+     * @throws IllegalArgumentException 如果附魔类型对象为 {@code null} 则抛出异常
+     */
+    ItemBuilder addEnchantment(com.minecraft.moonlake.enums.Enchantment enchantment, int level);
+
+    /**
+     * 将物品栈添加安全的指定附魔效果
+     *
+     * @param enchantment 附魔类型
+     * @param level 附魔等级
+     * @throws IllegalArgumentException 如果附魔类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果附魔的等级小于附魔类型的开始等级或大于最大等级则抛出异常
+     */
+    ItemBuilder addSafeEnchantment(com.minecraft.moonlake.enums.Enchantment enchantment, int level);
+
+    /**
+     * 将物品栈删除指定附魔效果
+     *
+     * @param enchantment 附魔类型
+     * @throws IllegalArgumentException 如果附魔类型对象为 {@code null} 则抛出异常
+     */
+    ItemBuilder removeEnchantment(com.minecraft.moonlake.enums.Enchantment enchantment);
+
+    /**
      * 将物品栈添加指定标示
      *
      * @param flags 标示
@@ -347,4 +374,40 @@ public interface ItemBuilder extends Builder<ItemStack> {
      * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.*Potion} 则抛出异常
      */
     ItemBuilder setCustomPotion(PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles);
+
+    /**
+     * 设置药水物品栈的自定义药水效果
+     *
+     * @param effectType 药水效果类型
+     * @param amplifier 药水效果等级
+     * @param duration 药水效果时间
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.*Potion} 则抛出异常
+     */
+    ItemBuilder setCustomPotion(com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration);
+
+    /**
+     * 设置药水物品栈的自定义药水效果
+     *
+     * @param effectType 药水效果类型
+     * @param amplifier 药水效果等级
+     * @param duration 药水效果时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.*Potion} 则抛出异常
+     */
+    ItemBuilder setCustomPotion(com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient);
+
+    /**
+     * 设置药水物品栈的自定义药水效果
+     *
+     * @param effectType 药水效果类型
+     * @param amplifier 药水效果等级
+     * @param duration 药水效果时间
+     * @param ambient 是否减少玩家被药水效果影响的周围出现粒子效果的透明度
+     * @param showParticles 是否在玩家被药水效果影响的周围出现粒子效果
+     * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.*Potion} 则抛出异常
+     */
+    ItemBuilder setCustomPotion(com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles);
 }

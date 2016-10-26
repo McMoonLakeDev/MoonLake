@@ -200,6 +200,8 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
     @Override
     public void send(Player... players) throws PacketException {
 
+        if(super.fireEvent(this, players)) return;
+
         try {
 
             Set<Object> nmsFlags = new HashSet<>();

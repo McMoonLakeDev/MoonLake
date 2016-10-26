@@ -107,6 +107,8 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
     @Override
     public void send(Player... players) throws PacketException {
 
+        if(super.fireEvent(this, players)) return;
+
         try {
 
             Object nmsChat = METHOD_CHARSERIALIZER_A.invoke(null, "{\"text\":\"" + message.get() + "\"}");

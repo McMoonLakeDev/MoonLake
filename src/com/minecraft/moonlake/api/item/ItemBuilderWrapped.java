@@ -343,6 +343,30 @@ class ItemBuilderWrapped implements ItemBuilder {
     }
 
     @Override
+    public ItemBuilder addEnchantment(com.minecraft.moonlake.enums.Enchantment enchantment, int level) {
+
+        Validate.notNull(enchantment, "The itemstack enchantment object is null.");
+
+        return addEnchantment(enchantment.as(), level);
+    }
+
+    @Override
+    public ItemBuilder addSafeEnchantment(com.minecraft.moonlake.enums.Enchantment enchantment, int level) {
+
+        Validate.notNull(enchantment, "The itemstack enchantment object is null.");
+
+        return addSafeEnchantment(enchantment.as(), level);
+    }
+
+    @Override
+    public ItemBuilder removeEnchantment(com.minecraft.moonlake.enums.Enchantment enchantment) {
+
+        Validate.notNull(enchantment, "The itemstack enchantment object is null.");
+
+        return removeEnchantment(enchantment.as());
+    }
+
+    @Override
     public ItemBuilder addFlags(ItemFlag... flags) {
 
         update(library().addFlags(get(), flags));
@@ -476,6 +500,26 @@ class ItemBuilderWrapped implements ItemBuilder {
         update(library().setCustomPotion(get(), effectType, amplifier, duration, ambient, showParticles));
 
         return this;
+    }
+
+    @Override
+    public ItemBuilder setCustomPotion(com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration) {
+
+        return setCustomPotion(effectType, amplifier, duration, false);
+    }
+
+    @Override
+    public ItemBuilder setCustomPotion(com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient) {
+
+        return setCustomPotion(effectType, amplifier, duration, ambient, false);
+    }
+
+    @Override
+    public ItemBuilder setCustomPotion(com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        Validate.notNull(effectType, "The itemstack potion effect object is null.");
+
+        return setCustomPotion(effectType.createCustom(amplifier, duration, ambient, showParticles));
     }
 
     @Override
