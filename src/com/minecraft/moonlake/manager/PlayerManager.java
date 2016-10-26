@@ -152,6 +152,20 @@ public class PlayerManager extends MoonLakeManager {
     }
 
     /**
+     * 将字符串玩家对象转换到 Bukkit 玩家对象
+     *
+     * @param players 字符串 玩家
+     * @return Bukkit 玩家
+     * @throws IllegalArgumentException 如果字符串玩家对象为 {@code null} 则抛出异常
+     */
+    public static Player adapter(String player) {
+
+        Validate.notNull(player, "The player object is null.");
+
+        return fromName(player);
+    }
+
+    /**
      * 将 Bukkit 玩家对象转换到 MoonLake 玩家对象
      *
      * @param players Bukkit 玩家
@@ -173,6 +187,20 @@ public class PlayerManager extends MoonLakeManager {
     }
 
     /**
+     * 将 Bukkit 玩家对象转换到 MoonLake 玩家对象
+     *
+     * @param players Bukkit 玩家
+     * @return MoonLake 玩家
+     * @throws IllegalArgumentException 如果 Bukkit 玩家对象为 {@code null} 则抛出异常
+     */
+    public static MoonLakePlayer adapter(Player player) {
+
+        Validate.notNull(player, "The player object is null.");
+
+        return adapter(new Player[] { player })[0];
+    }
+
+    /**
      * 将 MoonLake 玩家对象转换到 Bukkit 玩家对象
      *
      * @param players MoonLake 玩家
@@ -191,6 +219,20 @@ public class PlayerManager extends MoonLakeManager {
             adapter[index++] = player.getBukkitPlayer();
         }
         return adapter;
+    }
+
+    /**
+     * 将 MoonLake 玩家对象转换到 Bukkit 玩家对象
+     *
+     * @param players MoonLake 玩家
+     * @return Bukkit 玩家
+     * @throws IllegalArgumentException 如果 MoonLake 玩家对象为 {@code null} 则抛出异常
+     */
+    public static Player adapter(MoonLakePlayer player) {
+
+        Validate.notNull(player, "The player object is null.");
+
+        return adapter(new MoonLakePlayer[] { player })[0];
     }
 
     /**

@@ -81,6 +81,8 @@ public class PacketPlayOutNamedEntitySpawn extends PacketAbstract<PacketPlayOutN
     @Override
     public void send(Player... players) throws PacketException {
 
+        if(super.fireEvent(this, players)) return;
+
         try {
 
             Object nmsEntity = PacketReflect.get().getNMSPlayer(entity.get());

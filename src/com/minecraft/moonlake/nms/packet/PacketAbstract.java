@@ -18,10 +18,12 @@
  
 package com.minecraft.moonlake.nms.packet;
 
-import com.minecraft.moonlake.nms.packet.exception.PacketException;
+import com.minecraft.moonlake.api.event.core.MoonLakePacketDispatchEvent;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.manager.PlayerManager;
+import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import com.minecraft.moonlake.validate.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -42,6 +44,26 @@ public abstract class PacketAbstract<T extends Packet> implements Packet<T> {
 
     @Override
     public abstract void send(Player... players) throws PacketException;
+
+    /**
+     * 触发数据包派遣事件
+     *
+     * @param packet 数据包对象
+     * @param players 目标玩家
+     * @return 是否阻止
+     * @throws IllegalArgumentException 如果数据包对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     */
+    protected boolean fireEvent(Packet<?> packet, Player... players) throws IllegalArgumentException {
+
+        Validate.notNull(packet, "The moonlake packet object is null.");
+        Validate.notNull(players, "The player object is null.");
+
+        MoonLakePacketDispatchEvent mpde = new MoonLakePacketDispatchEvent(packet, players);
+        Bukkit.getServer().getPluginManager().callEvent(mpde);
+
+        return mpde.isCancelled();
+    }
 
     @Override
     public void send(String... players) throws PacketException {

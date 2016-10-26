@@ -78,7 +78,9 @@ class PacketPlayOutPlayerInfo_v1_8_R1 extends PacketPlayOutPlayerInfo<PacketPlay
     }
 
     @Override
-    public void send(Player... player) throws PacketException {
+    public void send(Player... players) throws PacketException {
+
+        if(super.fireEvent(this, players)) return;
 
         try {
 
@@ -88,7 +90,7 @@ class PacketPlayOutPlayerInfo_v1_8_R1 extends PacketPlayOutPlayerInfo<PacketPlay
             Constructor<?> packetConstructor = getConstructor(CLASS_PACKETPLAYOUTPLAYERINFO, CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION, net.minecraft.server.v1_8_R1.EntityPlayer[].class);
             Object packet = packetConstructor.newInstance(enumPlayerInfoAction, new net.minecraft.server.v1_8_R1.EntityPlayer[] { (net.minecraft.server.v1_8_R1.EntityPlayer) nmsPlayer });
 
-            PacketReflect.get().send(player, packet);
+            PacketReflect.get().send(players, packet);
         }
         catch (Exception e) {
 

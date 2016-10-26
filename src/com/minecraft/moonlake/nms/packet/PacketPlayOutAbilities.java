@@ -106,6 +106,8 @@ public class PacketPlayOutAbilities extends PacketAbstract<PacketPlayOutAbilitie
     @Override
     public void send(Player... players) throws PacketException {
 
+        if(super.fireEvent(this, players)) return;
+
         try {
 
             if(abilities == null) {
