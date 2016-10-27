@@ -20,7 +20,11 @@ package com.minecraft.moonlake.nms.packet;
 
 import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import com.minecraft.moonlake.nms.packet.exception.PacketInitializeException;
-import com.minecraft.moonlake.property.*;
+import com.minecraft.moonlake.nms.packet.wrapped.BlockPosition;
+import com.minecraft.moonlake.property.DoubleProperty;
+import com.minecraft.moonlake.property.FloatProperty;
+import com.minecraft.moonlake.property.SimpleDoubleProperty;
+import com.minecraft.moonlake.property.SimpleFloatProperty;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -28,7 +32,8 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.minecraft.moonlake.reflect.Reflect.*;
+import static com.minecraft.moonlake.reflect.Reflect.PackageType;
+import static com.minecraft.moonlake.reflect.Reflect.instantiateObject;
 
 /**
  * <h1>PacketPlayOutExplosion</h1>
@@ -40,7 +45,6 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosion> {
 
     private final static Class<?> CLASS_PACKETPLAYOUTEXPLOSION;
-    private final static Class<?> CLASS_BLOCKPOSITION;
     private final static Class<?> CLASS_VEC3D;
 
     static {
@@ -48,7 +52,6 @@ public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosio
         try {
 
             CLASS_PACKETPLAYOUTEXPLOSION = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutExplosion");
-            CLASS_BLOCKPOSITION = PackageType.MINECRAFT_SERVER.getClass("BlockPosition");
             CLASS_VEC3D = PackageType.MINECRAFT_SERVER.getClass("Vec3D");
         }
         catch (Exception e) {
@@ -198,9 +201,7 @@ public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosio
 
                 for(final BlockPosition blockPosition : records) {
 
-                    Object object = instantiateObject(CLASS_BLOCKPOSITION, blockPosition.x.get(), blockPosition.y.get(), blockPosition.z.get());
-
-                    nmsBlockPosition.add(object);
+                    nmsBlockPosition.add(blockPosition.asNMS());
                 }
             }
             Object nmsVec3D = instantiateObject(CLASS_VEC3D, vector.getX(), vector.getY(), vector.getZ());
@@ -211,69 +212,6 @@ public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosio
         catch (Exception e) {
 
             throw new PacketException("The nms packet play out explosion send exception.", e);
-        }
-    }
-
-    /**
-     * <h1>BlockPosition</h1>
-     * 方块位置封装类（详细doc待补充...）
-     *
-     * @version 1.0
-     * @author Month_Light
-     */
-    public static class BlockPosition {
-
-        private final ReadOnlyIntegerProperty x;
-        private final ReadOnlyIntegerProperty y;
-        private final ReadOnlyIntegerProperty z;
-
-        /**
-         * 方块位置封装类构造函数
-         */
-        public BlockPosition() {
-
-            this(0, 0, 0);
-        }
-
-        /**
-         * 方块位置封装类构造函数
-         *
-         * @param x X 坐标
-         * @param y Y 坐标
-         * @param z Z 坐标
-         */
-        public BlockPosition(double x, double y, double z) {
-
-            this((int) x, (int) y, (int) z);
-        }
-
-        /**
-         * 方块位置封装类构造函数
-         *
-         * @param x X 坐标
-         * @param y Y 坐标
-         * @param z Z 坐标
-         */
-        public BlockPosition(int x, int y, int z) {
-
-            this.x = new SimpleIntegerProperty(x);
-            this.y = new SimpleIntegerProperty(y);
-            this.z = new SimpleIntegerProperty(z);
-        }
-
-        public ReadOnlyIntegerProperty getX() {
-
-            return x;
-        }
-
-        public ReadOnlyIntegerProperty getY() {
-
-            return y;
-        }
-
-        public ReadOnlyIntegerProperty getZ() {
-
-            return z;
         }
     }
 }
