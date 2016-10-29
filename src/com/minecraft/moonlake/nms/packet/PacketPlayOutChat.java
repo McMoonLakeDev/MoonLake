@@ -79,7 +79,7 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
      */
     public PacketPlayOutChat(String message) {
 
-        this(message, Mode.DEFAULT);
+        this(message, Mode.CHAT);
     }
 
     /**
@@ -135,12 +135,31 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
     public enum Mode {
 
         /**
-         * 默认的聊天消息显示位置
+         * 聊天: 聊天栏位置
          */
+        CHAT((byte)0),
+        /**
+         * 系统消息: 聊天栏位置
+         */
+        SYSTEM((byte)1),
+        /**
+         * 快捷栏: 快捷栏上面位置
+         */
+        HOTBAR((byte)2),
+
+        /**
+         * 默认的聊天消息显示位置
+         *
+         * @deprecated 已过时, 将于 v2.0 去除. 请使用 {@link #CHAT}
+         */
+        @Deprecated
         DEFAULT((byte)1),
         /**
-         * 在玩家经验条上方显示位置
+         * 在玩家快捷栏上方显示位置
+         *
+         * @deprecated 已过时, 将于 v2.0 去除. 请使用 {@link #HOTBAR}
          */
+        @Deprecated
         MAIN((byte)2),;
 
         private byte mode;
