@@ -18,9 +18,12 @@
  
 package com.minecraft.moonlake.api.fancy;
 
-import com.google.gson.stream.JsonWriter;
 import com.minecraft.moonlake.json.JsonRepresentedObject;
-import com.minecraft.moonlake.property.*;
+import com.minecraft.moonlake.json.JsonWrite;
+import com.minecraft.moonlake.property.ObjectProperty;
+import com.minecraft.moonlake.property.SimpleObjectProperty;
+import com.minecraft.moonlake.property.SimpleStringProperty;
+import com.minecraft.moonlake.property.StringProperty;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -69,21 +72,21 @@ class FancyMessagePart implements JsonRepresentedObject, Cloneable {
     }
 
     @Override
-    public void writeJson(JsonWriter jsonWriter) {
+    public void writeJson(JsonWrite jsonWrite) {
 
         try {
 
-            jsonWriter.beginObject();
-            text.get().writeJson(jsonWriter);
-            jsonWriter.name("color").value(color.get().name().toLowerCase());
+            jsonWrite.beginObject();
+            text.get().writeJson(jsonWrite);
+            jsonWrite.name("color").value(color.get().name().toLowerCase());
 
             for (final FancyMessageStyle style : styles.get()) {
 
-                jsonWriter.name(style.getType().toLowerCase()).value(true);
+                jsonWrite.name(style.getType().toLowerCase()).value(true);
             }
             if (clickAction.get() != null && clickActionValue.get() != null) {
 
-                jsonWriter.name("clickEvent")
+                jsonWrite.name("clickEvent")
                         .beginObject()
                         .name("action").value(clickAction.get())
                         .name("value").value(clickActionValue.get())
@@ -91,28 +94,28 @@ class FancyMessagePart implements JsonRepresentedObject, Cloneable {
             }
             if (hoverAction.get() != null && hoverAction.get() != null) {
 
-                jsonWriter.name("hoverEvent")
+                jsonWrite.name("hoverEvent")
                         .beginObject()
                         .name("action").value(hoverAction.get())
                         .name("value");
-                hoverActionValue.get().writeJson(jsonWriter);
-                jsonWriter.endObject();
+                hoverActionValue.get().writeJson(jsonWrite);
+                jsonWrite.endObject();
             }
             if (insertion.get() != null) {
 
-                jsonWriter.name("insertion").value(insertion.get());
+                jsonWrite.name("insertion").value(insertion.get());
             }
             if (translationReplacements.get().size() > 0 && text.get() != null && TextualComponent.isTranslatableText(text.get())) {
 
-                jsonWriter.name("with").beginArray();
+                jsonWrite.name("with").beginArray();
 
                 for (JsonRepresentedObject obj : translationReplacements.get()) {
 
-                    obj.writeJson(jsonWriter);
+                    obj.writeJson(jsonWrite);
                 }
-                jsonWriter.endArray();
+                jsonWrite.endArray();
             }
-            jsonWriter.endObject();
+            jsonWrite.endObject();
         }
         catch (Exception e) {
 

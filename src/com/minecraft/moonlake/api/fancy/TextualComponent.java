@@ -19,7 +19,7 @@
 package com.minecraft.moonlake.api.fancy;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.stream.JsonWriter;
+import com.minecraft.moonlake.json.JsonWrite;
 import com.minecraft.moonlake.property.*;
 
 import java.io.IOException;
@@ -54,10 +54,10 @@ public abstract class TextualComponent implements Cloneable {
     /**
      * 将此花式消息文本组件写出 Json 内容
      *
-     * @param jsonWriter Json 写对象
+     * @param jsonWrite Json 写对象
      * @throws IOException 如果写出 IO 错误则抛出异常
      */
-    public abstract void writeJson(JsonWriter jsonWriter) throws IOException;
+    public abstract void writeJson(JsonWrite jsonWrite) throws IOException;
 
     /**
      * 获取此花式消息文本组件是否正确的键
@@ -193,9 +193,9 @@ public abstract class TextualComponent implements Cloneable {
         }
 
         @Override
-        public void writeJson(JsonWriter jsonWriter) throws IOException {
+        public void writeJson(JsonWrite jsonWrite) throws IOException {
 
-            jsonWriter.name(getKey().get()).value(getValue().get());
+            jsonWrite.name(getKey().get()).value(getValue().get());
         }
     }
 
@@ -252,16 +252,16 @@ public abstract class TextualComponent implements Cloneable {
         }
 
         @Override
-        public void writeJson(JsonWriter jsonWriter) throws IOException {
+        public void writeJson(JsonWrite jsonWrite) throws IOException {
 
-            jsonWriter.name(getKey().get());
-            jsonWriter.beginObject();
+            jsonWrite.name(getKey().get());
+            jsonWrite.beginObject();
 
             for(Map.Entry<String, String> entry : getValues().get().entrySet()) {
 
-                jsonWriter.name(entry.getKey()).value(entry.getValue());
+                jsonWrite.name(entry.getKey()).value(entry.getValue());
             }
-            jsonWriter.endObject();
+            jsonWrite.endObject();
         }
     }
 }

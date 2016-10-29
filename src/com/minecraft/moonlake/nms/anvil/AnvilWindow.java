@@ -146,7 +146,7 @@ public final class AnvilWindow {
      *
      * @param clickEvent 点击事件
      */
-    public void onClick(AnvilWindowEventHandler<AnvilWindowClickEvent> clickEvent) {
+    public void setClick(AnvilWindowEventHandler<AnvilWindowClickEvent> clickEvent) {
 
         if(clickEvent == null) {
 
@@ -182,7 +182,7 @@ public final class AnvilWindow {
      *
      * @param closeEvent 关闭事件
      */
-    public void onClose(AnvilWindowEventHandler<AnvilWindowCloseEvent> closeEvent) {
+    public void setClose(AnvilWindowEventHandler<AnvilWindowCloseEvent> closeEvent) {
 
         if(closeEvent == null) {
 
@@ -229,10 +229,11 @@ public final class AnvilWindow {
      * @param itemStack 物品栈
      * @throws NMSException 如果没有初始化则抛出异常
      */
-    public void setItem(AnvilWindowSlot slot, ItemStack itemStack) {
+    public void setItem(AnvilWindowSlot slot, ItemStack itemStack) throws NMSException {
 
         if(!isInitialized) {
 
+            throw new NMSException("The anvil window not initialize.");
         }
         anvilInventory.setItem(slot.getSlot(), itemStack);
     }
@@ -248,6 +249,7 @@ public final class AnvilWindow {
 
         if(!isInitialized) {
 
+            throw new NMSException("The anvil window not initialize.");
         }
         return anvilInventory.getItem(slot.getSlot());
     }

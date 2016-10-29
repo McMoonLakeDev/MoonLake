@@ -18,8 +18,6 @@
  
 package com.minecraft.moonlake.json;
 
-import com.google.gson.stream.JsonWriter;
-
 import java.io.IOException;
 
 /**
@@ -32,10 +30,10 @@ import java.io.IOException;
 public interface JsonRepresentedObject {
 
     /**
-     * 将指定内容写入 JsonWriter
+     * 将指定内容写入 JsonWrite
      *
-     * @param jsonWriter Json 写
+     * @param jsonWrite Json 写
      * @throws IOException 如果写出 IO 错误则抛出异常
      */
-    void writeJson(JsonWriter jsonWriter) throws IOException;
+    void writeJson(JsonWrite jsonWrite) throws IOException;
 }

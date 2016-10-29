@@ -21,10 +21,7 @@ package com.minecraft.moonlake.nms.packet;
 import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import com.minecraft.moonlake.nms.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.nms.packet.wrapped.BlockPosition;
-import com.minecraft.moonlake.property.DoubleProperty;
-import com.minecraft.moonlake.property.FloatProperty;
-import com.minecraft.moonlake.property.SimpleDoubleProperty;
-import com.minecraft.moonlake.property.SimpleFloatProperty;
+import com.minecraft.moonlake.property.*;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -65,7 +62,7 @@ public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosio
     private DoubleProperty z;
     private FloatProperty radius;
     private List<BlockPosition> records;
-    private Vector vector;
+    private ObjectProperty<Vector> vector;
 
     /**
      * 数据包输出爆炸类构造函数
@@ -145,7 +142,7 @@ public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosio
         this.z = new SimpleDoubleProperty(z);
         this.radius = new SimpleFloatProperty(radius);
         this.records = records == null ? new ArrayList<>() : records;
-        this.vector = vector == null ? new Vector() : vector;
+        this.vector = new SimpleObjectProperty<>(vector);
     }
 
     /**
@@ -203,7 +200,7 @@ public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosio
      *
      * @return 矢量
      */
-    public Vector getVector() {
+    public ObjectProperty<Vector> getVector() {
 
         return vector;
     }
@@ -211,11 +208,6 @@ public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosio
     public void setRecords(List<BlockPosition> records) {
 
         this.records = records == null ? new ArrayList<>() : records;
-    }
-
-    public void setVector(Vector vector) {
-
-        this.vector = vector == null ? new Vector() : vector;
     }
 
     @Override
@@ -234,7 +226,7 @@ public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosio
                     nmsBlockPosition.add(blockPosition.asNMS());
                 }
             }
-            Object nmsVec3D = instantiateObject(CLASS_VEC3D, vector.getX(), vector.getY(), vector.getZ());
+            Object nmsVec3D = instantiateObject(CLASS_VEC3D, vector.get().getX(), vector.get().getY(), vector.get().getZ());
             Object packet = instantiateObject(CLASS_PACKETPLAYOUTEXPLOSION, x.get(), y.get(), z.get(), radius.get(), nmsBlockPosition, nmsVec3D);
 
             PacketReflect.get().send(players, packet);

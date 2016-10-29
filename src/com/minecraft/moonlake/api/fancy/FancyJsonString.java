@@ -18,8 +18,8 @@
  
 package com.minecraft.moonlake.api.fancy;
 
-import com.google.gson.stream.JsonWriter;
 import com.minecraft.moonlake.json.JsonRepresentedObject;
+import com.minecraft.moonlake.json.JsonWrite;
 import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.property.StringProperty;
 
@@ -57,9 +57,9 @@ public class FancyJsonString implements JsonRepresentedObject {
     }
 
     @Override
-    public void writeJson(JsonWriter jsonWriter) throws IOException {
+    public void writeJson(JsonWrite jsonWrite) throws IOException {
 
-        jsonWriter.value(getValue().get());
+        jsonWrite.value(getValue().get());
     }
 
     @Override
