@@ -142,7 +142,7 @@ public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosio
         this.z = new SimpleDoubleProperty(z);
         this.radius = new SimpleFloatProperty(radius);
         this.records = records == null ? new ArrayList<>() : records;
-        this.vector = new SimpleObjectProperty<>(vector);
+        this.vector = new SimpleObjectProperty<>(vector == null ? new Vector() : vector);
     }
 
     /**
