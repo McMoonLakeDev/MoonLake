@@ -110,16 +110,31 @@ public class PacketPlayOutBlockBreakAnimation extends PacketAbstract<PacketPlayO
         this(player.getEntityId(), blockPosition, value);
     }
 
+    /**
+     * 获取此数据包输出方块破坏动画的实体 Id
+     *
+     * @return 实体 Id
+     */
     public IntegerProperty getEntityId() {
 
         return entityId;
     }
 
+    /**
+     * 获取此数据包输出方块破坏动画的方块位置
+     *
+     * @return 方块位置
+     */
     public ObjectProperty<BlockPosition> getBlockPosition() {
 
         return blockPosition;
     }
 
+    /**
+     * 获取此数据包输出方块破坏动画的破坏程度值
+     *
+     * @return 破坏程度值 (0 - 9)
+     */
     public IntegerProperty getValue() {
 
         return value;

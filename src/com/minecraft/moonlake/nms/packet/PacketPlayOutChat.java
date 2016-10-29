@@ -132,6 +132,13 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
         }
     }
 
+    /**
+     * <h1>Mode</h1>
+     * 聊天模式（详细doc待补充...）
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     public enum Mode {
 
         /**
@@ -164,11 +171,21 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
 
         private byte mode;
 
+        /**
+         * 聊天模式类构造函数
+         *
+         * @param mode 模式
+         */
         Mode(byte mode) {
 
             this.mode = mode;
         }
 
+        /**
+         * 获取聊天模式的模式值
+         *
+         * @return 模式值
+         */
         public byte getMode() {
 
             return mode;

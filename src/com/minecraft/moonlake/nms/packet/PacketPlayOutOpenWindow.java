@@ -101,26 +101,51 @@ public class PacketPlayOutOpenWindow extends PacketAbstract<PacketPlayOutOpenWin
         this.entityHorseId.set(entityHorseId);
     }
 
+    /**
+     * 获取此数据包输出打开窗口的窗口 Id
+     *
+     * @return 窗口 Id
+     */
     public IntegerProperty getWindowId() {
 
         return windowId;
     }
 
+    /**
+     * 获取此数据包输出打开窗口的窗口类型
+     *
+     * @return 窗口类型
+     */
     public ObjectProperty<WindowType> getWindowType() {
 
         return windowType;
     }
 
+    /**
+     * 获取此数据包输出打开窗口的窗口标题
+     *
+     * @return 窗口标题
+     */
     public StringProperty getWindowTitle() {
 
         return windowTitle;
     }
 
+    /**
+     * 获取此数据包输出打开窗口的槽数量
+     *
+     * @return 槽数量
+     */
     public IntegerProperty getSlotCount() {
 
         return slotCount;
     }
 
+    /**
+     * 获取此数据包输出打开窗口的实体马 Id
+     *
+     * @return 实体马 Id
+     */
     public IntegerProperty getEntityHorseId() {
 
         return entityHorseId;
@@ -219,6 +244,9 @@ public class PacketPlayOutOpenWindow extends PacketAbstract<PacketPlayOutOpenWin
         ENTITY_HORSE,
         ;
 
+        /**
+         * 窗口类型类构造函数
+         */
         WindowType() {
         }
 

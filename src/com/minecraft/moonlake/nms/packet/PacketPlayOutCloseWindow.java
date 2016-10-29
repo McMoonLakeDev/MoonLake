@@ -61,6 +61,11 @@ public class PacketPlayOutCloseWindow extends PacketAbstract<PacketPlayOutCloseW
         this.windowId = new SimpleIntegerProperty(windowId);
     }
 
+    /**
+     * 获取数据包输出关闭窗口的窗口 Id
+     *
+     * @return 窗口 Id
+     */
     public IntegerProperty getWindowId() {
 
         return windowId;
