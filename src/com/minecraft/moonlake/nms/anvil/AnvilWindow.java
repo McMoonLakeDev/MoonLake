@@ -62,12 +62,12 @@ public final class AnvilWindow {
     }
 
     public Plugin getPlugin() {
-        // get plugin
+
         return plugin;
     }
 
     private void initialize() {
-        // the initialize anvil inventory
+
         if(!isInitialized) {
 
             isInitialized = true;
@@ -75,12 +75,12 @@ public final class AnvilWindow {
     }
 
     public boolean isAllowMove() {
-        // get anvil window item stack weather allow move
+
         return allowMove;
     }
 
     public void setAllowMove(boolean allowMove) {
-        // set anvil window item stack weather allow move
+
         this.allowMove = allowMove;
         this.setAllowMove0(allowMove);
     }
@@ -88,7 +88,7 @@ public final class AnvilWindow {
     private void setAllowMove0(boolean flag) {
 
         if(flag && listenerMove == null) {
-            // register anvil move listener
+
             listenerMove = new MoonLakeListener() {
 
                 @EventHandler
@@ -113,19 +113,19 @@ public final class AnvilWindow {
             registerListener(listenerMove);
         }
         else if(!flag && listenerMove != null) {
-            // unregister anvil move listener
+
             disposeMove();
         }
     }
 
     public void onClick(AnvilWindowEventHandler<AnvilWindowClickEvent> clickEvent) {
-        // set anvil click event handle
+
         if(clickEvent == null) {
-            // unregister listener click
+
             disposeClick();
         }
         else {
-            // register listener click
+
             clickEventHandle = clickEvent;
             listenerClick = new MoonLakeListener() {
 
@@ -150,13 +150,13 @@ public final class AnvilWindow {
     }
 
     public void onClose(AnvilWindowEventHandler<AnvilWindowCloseEvent> closeEvent) {
-        // set anvil close event handle
+
         if(closeEvent == null) {
-            // unregister listener close
+
             disposeClose();
         }
         else {
-            // register listener close
+
             closeEventHandle = closeEvent;
             listenerClose = new MoonLakeListener() {
 
@@ -178,23 +178,23 @@ public final class AnvilWindow {
     }
 
     public void openAnvil(Player player) throws NMSException {
-        // open anvil window to player
+
         AnvilWindowReflect.get().openAnvil(player, this);
         initialize();
     }
 
     public void setItem(AnvilWindowSlot slot, ItemStack itemStack) {
-        // set itemStack to anvil inventory
+
         if(!isInitialized) {
-            // not open anvil
+
         }
         anvilInventory.setItem(slot.getSlot(), itemStack);
     }
 
     public ItemStack getItem(AnvilWindowSlot slot) {
-        // get itemStack from anvil inventory;
+
         if(!isInitialized) {
-            // not open anvil
+
         }
         return anvilInventory.getItem(slot.getSlot());
     }
@@ -208,7 +208,7 @@ public final class AnvilWindow {
     }
 
     public void dispose() {
-        // dispose close anvil window
+
         disposeMove();
         disposeClick();
         disposeClose();
