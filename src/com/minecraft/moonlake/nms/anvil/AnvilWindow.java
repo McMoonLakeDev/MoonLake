@@ -18,13 +18,12 @@
  
 package com.minecraft.moonlake.nms.anvil;
 
+import com.minecraft.moonlake.api.event.MoonLakeListener;
+import com.minecraft.moonlake.event.EventHelper;
 import com.minecraft.moonlake.nms.exception.NMSException;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -42,9 +41,9 @@ import org.bukkit.plugin.Plugin;
 public final class AnvilWindow {
 
     private final Plugin plugin;
-    private Listener listenerClick;
-    private Listener listenerClose;
-    private Listener listenerMove;
+    private MoonLakeListener listenerClick;
+    private MoonLakeListener listenerClose;
+    private MoonLakeListener listenerMove;
     private boolean allowMove;
     private boolean isInitialized;
     private AnvilWindowEventHandler<AnvilWindowClickEvent> clickEventHandle;
@@ -90,7 +89,7 @@ public final class AnvilWindow {
 
         if(flag && listenerMove == null) {
             // register anvil move listener
-            listenerMove = new Listener() {
+            listenerMove = new MoonLakeListener() {
 
                 @EventHandler
                 public void onAnvilMove(InventoryClickEvent event) {
@@ -128,7 +127,7 @@ public final class AnvilWindow {
         else {
             // register listener click
             clickEventHandle = clickEvent;
-            listenerClick = new Listener() {
+            listenerClick = new MoonLakeListener() {
 
                 @EventHandler
                 public void onAnvilClick(InventoryClickEvent event) {
@@ -159,7 +158,7 @@ public final class AnvilWindow {
         else {
             // register listener close
             closeEventHandle = closeEvent;
-            listenerClose = new Listener() {
+            listenerClose = new MoonLakeListener() {
 
                 @EventHandler
                 public void onAnvilClose(InventoryCloseEvent event) {
@@ -200,11 +199,11 @@ public final class AnvilWindow {
         return anvilInventory.getItem(slot.getSlot());
     }
 
-    private void registerListener(Listener listener) {
+    private void registerListener(MoonLakeListener listener) {
 
         if(listener != null) {
 
-            Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
+            EventHelper.registerEvent(listener, plugin);
         }
     }
 
@@ -235,10 +234,10 @@ public final class AnvilWindow {
         closeEventHandle = null;
     }
 
-    private void disposeListener(Listener listener) {
+    private void disposeListener(MoonLakeListener listener) {
 
         if(listener != null) {
-            HandlerList.unregisterAll(listener);
+            EventHelper.unregisterAll(listener);
         }
     }
 }
