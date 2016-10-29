@@ -46,6 +46,11 @@ public class FancyJsonString implements JsonRepresentedObject {
         this.value = new SimpleStringProperty(value);
     }
 
+    /**
+     * 获取花式消息的字符串值
+     *
+     * @return 值
+     */
     public StringProperty getValue() {
 
         return value;

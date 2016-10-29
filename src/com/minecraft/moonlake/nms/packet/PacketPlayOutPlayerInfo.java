@@ -62,11 +62,21 @@ public abstract class PacketPlayOutPlayerInfo<T extends PacketPlayOutPlayerInfo>
         this.player = new SimpleObjectProperty<>(player);
     }
 
+    /**
+     * 获取此数据包输出玩家信息的交互类型
+     *
+     * @return 交互类型
+     */
     public ObjectProperty<Action> getAction() {
 
         return action;
     }
 
+    /**
+     * 获取此数据包输出玩家信息的玩家
+     *
+     * @return 玩家
+     */
     public ObjectProperty<Player> getPlayer() {
 
         return player;

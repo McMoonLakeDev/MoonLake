@@ -54,18 +54,26 @@ public final class AnvilWindow {
     /**
      * 铁砧窗口类构造函数
      *
-     * @param plugin JavaPlugin
+     * @param plugin 插件
      */
     public AnvilWindow(Plugin plugin) {
 
         this.plugin = plugin;
     }
 
+    /**
+     * 获取此铁砧窗口的插件对象
+     *
+     * @return Plugin
+     */
     public Plugin getPlugin() {
 
         return plugin;
     }
 
+    /**
+     * 初始化此铁砧窗口
+     */
     private void initialize() {
 
         if(!isInitialized) {
@@ -74,17 +82,32 @@ public final class AnvilWindow {
         }
     }
 
+    /**
+     * 获取此铁砧窗口是否允许移动物品
+     *
+     * @return 是否允许移动物品
+     */
     public boolean isAllowMove() {
 
         return allowMove;
     }
 
+    /**
+     * 设置此铁砧窗口是否允许移动物品
+     *
+     * @param allowMove 是否允许移动物品
+     */
     public void setAllowMove(boolean allowMove) {
 
         this.allowMove = allowMove;
         this.setAllowMove0(allowMove);
     }
 
+    /**
+     * 设置此铁砧窗口是否允许移动物品
+     *
+     * @param flag 是否允许移动物品
+     */
     private void setAllowMove0(boolean flag) {
 
         if(flag && listenerMove == null) {
@@ -118,6 +141,11 @@ public final class AnvilWindow {
         }
     }
 
+    /**
+     * 设置此铁砧窗口的点击事件监听器
+     *
+     * @param clickEvent 点击事件
+     */
     public void onClick(AnvilWindowEventHandler<AnvilWindowClickEvent> clickEvent) {
 
         if(clickEvent == null) {
@@ -149,6 +177,11 @@ public final class AnvilWindow {
         }
     }
 
+    /**
+     * 设置此铁砧窗口的关闭事件监听器
+     *
+     * @param closeEvent 关闭事件
+     */
     public void onClose(AnvilWindowEventHandler<AnvilWindowCloseEvent> closeEvent) {
 
         if(closeEvent == null) {
@@ -177,12 +210,25 @@ public final class AnvilWindow {
         }
     }
 
+    /**
+     * 将此铁砧窗口打开给指定玩家
+     *
+     * @param player 玩家
+     * @throws NMSException 如果打开错误则抛出异常
+     */
     public void openAnvil(Player player) throws NMSException {
 
         AnvilWindowReflect.get().openAnvil(player, this);
         initialize();
     }
 
+    /**
+     * 设置此铁砧窗口指定槽位的物品栈
+     *
+     * @param slot 槽位
+     * @param itemStack 物品栈
+     * @throws NMSException 如果没有初始化则抛出异常
+     */
     public void setItem(AnvilWindowSlot slot, ItemStack itemStack) {
 
         if(!isInitialized) {
@@ -191,6 +237,13 @@ public final class AnvilWindow {
         anvilInventory.setItem(slot.getSlot(), itemStack);
     }
 
+    /**
+     * 获取此铁砧窗口指定槽位的物品栈
+     *
+     * @param slot 槽位
+     * @return 物品栈
+     * @throws NMSException 如果没有初始化则抛出异常
+     */
     public ItemStack getItem(AnvilWindowSlot slot) {
 
         if(!isInitialized) {
@@ -199,6 +252,11 @@ public final class AnvilWindow {
         return anvilInventory.getItem(slot.getSlot());
     }
 
+    /**
+     * 注册此铁砧窗口的事件监听器
+     *
+     * @param listener 监听器
+     */
     private void registerListener(MoonLakeListener listener) {
 
         if(listener != null) {
@@ -207,6 +265,9 @@ public final class AnvilWindow {
         }
     }
 
+    /**
+     * 释放此铁砧窗口对象
+     */
     public void dispose() {
 
         disposeMove();
@@ -214,12 +275,18 @@ public final class AnvilWindow {
         disposeClose();
     }
 
+    /**
+     * 释放此铁砧窗口的移动事件监听器
+     */
     private void disposeMove() {
 
         disposeListener(listenerMove);
         listenerMove = null;
     }
 
+    /**
+     * 释放此铁砧窗口的点击事件监听器
+     */
     private void disposeClick() {
 
         disposeListener(listenerClick);
@@ -227,6 +294,9 @@ public final class AnvilWindow {
         clickEventHandle = null;
     }
 
+    /**
+     * 释放此铁砧窗口的关闭事件监听器
+     */
     private void disposeClose() {
 
         disposeListener(listenerClose);
@@ -234,6 +304,11 @@ public final class AnvilWindow {
         closeEventHandle = null;
     }
 
+    /**
+     * 释放此铁砧窗口指定事件监听器
+     *
+     * @param listener 监听器
+     */
     private void disposeListener(MoonLakeListener listener) {
 
         if(listener != null) {

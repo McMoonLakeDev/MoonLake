@@ -50,76 +50,197 @@ public final class TaskHelper {
 
     }
 
+    /**
+     * 调用任务帮助器运行任务
+     *
+     * @param plugin 插件
+     * @param task 任务
+     * @return BukkitTask
+     */
     public static BukkitTask runTask(Plugin plugin, Runnable task) {
 
         return BUKKIT_SCHEDULER.runTask(plugin, task);
     }
 
+    /**
+     * 调用任务帮助器运行延迟任务
+     *
+     * @param plugin 插件
+     * @param task 任务
+     * @param delay 延迟
+     * @return BukkitTask
+     */
     public static BukkitTask runTaskLater(Plugin plugin, Runnable task, long delay) {
 
         return BUKKIT_SCHEDULER.runTaskLater(plugin, task, delay);
     }
 
+    /**
+     * 调用任务帮助器运行定时器任务
+     *
+     * @param plugin 插件
+     * @param task 任务
+     * @param delay 延迟
+     * @param period 周期
+     * @return BukkitTask
+     */
     public static BukkitTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period) {
 
         return BUKKIT_SCHEDULER.runTaskTimer(plugin, task, delay, period);
     }
 
+    /**
+     * 调用任务帮助器运行异步任务
+     *
+     * @param plugin 插件
+     * @param task 任务
+     * @return BukkitTask
+     */
     public static BukkitTask runTaskAsync(Plugin plugin, Runnable task) {
 
         return BUKKIT_SCHEDULER.runTaskAsynchronously(plugin, task);
     }
 
+    /**
+     * 调用任务帮助器运行异步延迟任务
+     *
+     * @param plugin 插件
+     * @param task 任务
+     * @param delay 延迟
+     * @return BukkitTask
+     */
     public static BukkitTask runTaskLaterAsync(Plugin plugin, Runnable task, long delay) {
 
         return BUKKIT_SCHEDULER.runTaskLaterAsynchronously(plugin, task, delay);
     }
 
+    /**
+     * 调用任务帮助器运行异步定时器任务
+     *
+     * @param plugin 插件
+     * @param task 任务
+     * @param delay 延迟
+     * @param period 周期
+     * @return BukkitTask
+     */
     public static BukkitTask runTaskTimerAsync(Plugin plugin, Runnable task, long delay, long period) {
 
         return BUKKIT_SCHEDULER.runTaskTimerAsynchronously(plugin, task, delay, period);
     }
 
+    /**
+     * 调用任务帮助器运行任务
+     *
+     * @param plugin 插件
+     * @param task 任务
+     * @return BukkitTask
+     */
     public static BukkitTask runTask(Plugin plugin, MoonLakeRunnable task) {
 
         return runTask(plugin, (Runnable) task);
     }
 
+    /**
+     * 调用任务帮助器运行延迟任务
+     *
+     * @param plugin 插件
+     * @param task 任务
+     * @param delay 延迟
+     * @return BukkitTask
+     */
     public static BukkitTask runTaskLater(Plugin plugin, MoonLakeRunnable task, long delay) {
 
         return runTaskLater(plugin, (Runnable) task, delay);
     }
 
+    /**
+     * 调用任务帮助器运行定时器任务
+     *
+     * @param plugin 插件
+     * @param task 任务
+     * @param delay 延迟
+     * @param period 周期
+     * @return BukkitTask
+     */
     public static BukkitTask runTaskTimer(Plugin plugin, MoonLakeRunnable task, long delay, long period) {
 
         return runTaskTimer(plugin, (Runnable) task, delay, period);
     }
 
+    /**
+     * 调用任务帮助器运行异步任务
+     *
+     * @param plugin 插件
+     * @param task 任务
+     * @return BukkitTask
+     */
     public static BukkitTask runTaskAsync(Plugin plugin, MoonLakeRunnable task) {
 
         return runTaskAsync(plugin, (Runnable) task);
     }
 
+    /**
+     * 调用任务帮助器运行异步延迟任务
+     *
+     * @param plugin 插件
+     * @param task 任务
+     * @param delay 延迟
+     * @return BukkitTask
+     */
     public static BukkitTask runTaskLaterAsync(Plugin plugin, MoonLakeRunnable task, long delay) {
 
         return runTaskLaterAsync(plugin, (Runnable) task, delay);
     }
 
+    /**
+     * 调用任务帮助器运行异步定时器任务
+     *
+     * @param plugin 插件
+     * @param task 任务
+     * @param delay 延迟
+     * @param period 周期
+     * @return BukkitTask
+     */
     public static BukkitTask runTaskTimerAsync(Plugin plugin, MoonLakeRunnable task, long delay, long period) {
 
         return runTaskTimerAsync(plugin, (Runnable) task, delay, period);
     }
 
+    /**
+     * 调用任务帮助器触发异步函数
+     *
+     * @param plugin 插件
+     * @param task 任务
+     * @param <T> 类型
+     * @return Future
+     */
     public static <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task) {
 
         return BUKKIT_SCHEDULER.callSyncMethod(plugin, task);
     }
 
+    /**
+     * 调用任务帮助器触发 Future
+     *
+     * @param plugin 插件
+     * @param task 任务
+     * @param <T> 类型
+     * @return 类型值
+     * @throws MoonLakeException 如果触发错误则抛出异常
+     */
     public static <T> T callFuture(Plugin plugin, Callable<T> task) throws MoonLakeException {
 
         return callFuture(callSyncMethod(plugin, task));
     }
 
+    /**
+     * 调用任务帮助器触发 Future
+     *
+     * @param future Future
+     * @param <T> 类型
+     * @return 类型值
+     * @throws MoonLakeException 如果触发错误则抛出异常
+     */
     public static <T> T callFuture(Future<T> future) throws MoonLakeException {
 
         try {
@@ -132,22 +253,40 @@ public final class TaskHelper {
         }
     }
 
+    /**
+     * 调用任务帮助器关闭指定任务
+     *
+     * @param task 任务
+     */
     public static void cancelTask(BukkitTask task) {
 
         if(task != null)
             task.cancel();
     }
 
+    /**
+     * 调用任务帮助器关闭指定任务
+     *
+     * @param taskId 任务 Id
+     */
     public static void cancelTask(int taskId) {
 
         BUKKIT_SCHEDULER.cancelTask(taskId);
     }
 
+    /**
+     * 调用任务帮助器关闭指定插件的所有任务
+     *
+     * @param plugin 插件
+     */
     public static void cancelTasks(Plugin plugin) {
 
         BUKKIT_SCHEDULER.cancelTasks(plugin);
     }
 
+    /**
+     * 调用任务帮助器关闭所有任务
+     */
     public static void cancelAllTasks() {
 
         BUKKIT_SCHEDULER.cancelAllTasks();

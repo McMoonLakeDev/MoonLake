@@ -19,7 +19,11 @@
 package com.minecraft.moonlake.data;
 
 /**
- * Created by MoonLake on 2016/6/12.
+ * <h1>ConversionData</h1>
+ * 数据转换接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface ConversionData {
 

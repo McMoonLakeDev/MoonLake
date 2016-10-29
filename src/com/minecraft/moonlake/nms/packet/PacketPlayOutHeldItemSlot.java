@@ -28,7 +28,7 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutHeldItemSlot</h1>
- * 数据包输出手持物品索引（详细doc待补充...）
+ * 数据包输出手持物品槽位（详细doc待补充...）
  *
  * @version 1.0
  * @author Month_Light
@@ -52,7 +52,7 @@ public class PacketPlayOutHeldItemSlot extends PacketAbstract<PacketPlayOutHeldI
     private IntegerProperty heldItemSlot;
 
     /**
-     * 数据包输出手持物品索引构造函数
+     * 数据包输出手持物品槽位构造函数
      *
      * @deprecated 已过时，请使用 {@link #PacketPlayOutHeldItemSlot(int)}
      * @see #PacketPlayOutHeldItemSlot(int)
@@ -64,15 +64,20 @@ public class PacketPlayOutHeldItemSlot extends PacketAbstract<PacketPlayOutHeldI
     }
 
     /**
-     * 数据包输出手持物品索引构造函数
+     * 数据包输出手持物品槽位构造函数
      *
-     * @param heldItemSlot 物品栏索引
+     * @param heldItemSlot 物品栏槽位
      */
     public PacketPlayOutHeldItemSlot(int heldItemSlot) {
 
         this.heldItemSlot = new SimpleIntegerProperty(heldItemSlot);
     }
 
+    /**
+     * 获取此数据包输出手持物品槽位的槽位
+     *
+     * @return 槽位
+     */
     public IntegerProperty getHeldItemSlot() {
 
         return heldItemSlot;

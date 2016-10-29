@@ -162,36 +162,71 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
         this.g = new SimpleIntegerProperty(g);
     }
 
+    /**
+     * 获取此数据包输出位置的 X 坐标
+     *
+     * @return X 坐标
+     */
     public DoubleProperty getX() {
 
         return x;
     }
 
+    /**
+     * 获取此数据包输出位置的 Y 坐标
+     *
+     * @return Y 坐标
+     */
     public DoubleProperty getY() {
 
         return y;
     }
 
+    /**
+     * 获取此数据包输出位置的 Z 坐标
+     *
+     * @return Z 坐标
+     */
     public DoubleProperty getZ() {
 
         return z;
     }
 
+    /**
+     * 获取此数据包输出位置的 Yaw 偏航角
+     *
+     * @return Yaw 偏航角
+     */
     public FloatProperty getYaw() {
 
         return yaw;
     }
 
+    /**
+     * 获取此数据包输出位置的 Pitch 俯仰角
+     *
+     * @return Pitch 俯仰角
+     */
     public FloatProperty getPitch() {
 
         return pitch;
     }
 
+    /**
+     * 获取此数据包输出位置的玩家传送标示
+     *
+     * @return 玩家传送标示
+     */
     public Set<PlayerTeleportFlag> getFlags() {
 
         return flags;
     }
 
+    /**
+     * 玩家此数据包输出位置的 G
+     *
+     * @return G
+     */
     public IntegerProperty getG() {
 
         return g;
@@ -256,11 +291,21 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
 
         private final int id;
 
+        /**
+         * 玩家传送标示类型构造函数
+         *
+         * @param id Id
+         */
         PlayerTeleportFlag(int id) {
 
             this.id = id;
         }
 
+        /**
+         * 获取玩家传送标示类型的 Id
+         *
+         * @return Id
+         */
         public int getId() {
 
             return id;

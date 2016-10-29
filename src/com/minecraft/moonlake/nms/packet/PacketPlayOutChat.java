@@ -94,11 +94,21 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
         this.mode = new SimpleObjectProperty<>(mode);
     }
 
+    /**
+     * 获取此数据包输出聊天的消息
+     *
+     * @return 消息
+     */
     public StringProperty getMessage() {
 
         return message;
     }
 
+    /**
+     * 获取此数据包输出聊天的模式
+     *
+     * @return 模式
+     */
     public ObjectProperty<Mode> getMode() {
 
         return mode;

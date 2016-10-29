@@ -23,9 +23,19 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 
 /**
- * Created by MoonLake on 2016/9/16.
+ * <h1>JsonRepresentedObject</h1>
+ * Json 写实现接口类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface JsonRepresentedObject {
 
+    /**
+     * 将指定内容写入 JsonWriter
+     *
+     * @param jsonWriter Json 写
+     * @throws IOException 如果写出 IO 错误则抛出异常
+     */
     void writeJson(JsonWriter jsonWriter) throws IOException;
 }

@@ -95,11 +95,21 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketAbstract<PacketPl
         this.footer = new SimpleStringProperty(footer);
     }
 
+    /**
+     * 获取此数据包输出玩家列表头脚文本的头文本
+     *
+     * @return 头文本
+     */
     public StringProperty getHeader() {
 
         return header;
     }
 
+    /**
+     * 获取此数据包输出玩家列表头脚文本的脚文本
+     *
+     * @return 脚文本
+     */
     public StringProperty getFooter() {
 
         return footer;

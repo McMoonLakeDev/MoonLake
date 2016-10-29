@@ -108,16 +108,31 @@ public class PacketPlayOutEntityEquipment extends PacketAbstract<PacketPlayOutEn
         this.itemStack = new SimpleObjectProperty<>(itemStack);
     }
 
+    /**
+     * 获取此数据包输出实体装备的实体 Id
+     *
+     * @return 实体 Id
+     */
     public IntegerProperty getEntityId() {
 
         return entityId;
     }
 
-    public ObjectProperty<EquipmentSlot> getEquipmentSolt() {
+    /**
+     * 获取此数据包输出实体装备的装备槽位
+     *
+     * @return 装备槽位
+     */
+    public ObjectProperty<EquipmentSlot> getEquipmentSlot() {
 
         return equipmentSolt;
     }
 
+    /**
+     * 获取此数据包输出实体装备的物品栈
+     *
+     * @return 物品栈
+     */
     public ObjectProperty<ItemStack> getItemStack() {
 
         return itemStack;

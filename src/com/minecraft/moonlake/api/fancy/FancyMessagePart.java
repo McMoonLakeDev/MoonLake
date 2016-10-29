@@ -120,6 +120,11 @@ class FancyMessagePart implements JsonRepresentedObject, Cloneable {
         }
     }
 
+    /**
+     * 获取花式消息部分是否拥有文本
+     *
+     * @return 是否拥有文本
+     */
     boolean hasText() {
 
         return text.get() != null;

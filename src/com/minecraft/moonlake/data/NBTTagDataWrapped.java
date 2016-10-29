@@ -22,10 +22,20 @@ import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.api.nbt.NBTList;
 
 /**
- * Created by MoonLake on 2016/7/17.
+ * <h1>NBTTagDataWrapped</h1>
+ * NBT 数据接口包装类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
+@Deprecated
 public class NBTTagDataWrapped extends ConversionDataWrapped implements NBTTagData {
 
+    /**
+     * NBT 数据接口包装类构造函数
+     *
+     * @param obj 对象
+     */
     public NBTTagDataWrapped(Object obj) {
 
         super(obj);

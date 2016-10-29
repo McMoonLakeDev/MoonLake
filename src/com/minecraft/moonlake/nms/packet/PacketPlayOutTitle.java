@@ -130,26 +130,51 @@ public class PacketPlayOutTitle extends PacketAbstract<PacketPlayOutTitle> {
         this.fadeOut = new SimpleIntegerProperty(fadeOut);
     }
 
+    /**
+     * 获取数据包输出标题的主标题
+     *
+     * @return 主标题
+     */
     public StringProperty getTitle() {
 
         return title;
     }
 
+    /**
+     * 获取数据包输出标题的子标题
+     *
+     * @return 子标题
+     */
     public StringProperty getSubTitle() {
 
         return subTitle;
     }
 
+    /**
+     * 获取数据包输出标题的淡入时间
+     *
+     * @return 淡入时间
+     */
     public IntegerProperty getFadeIn() {
 
         return fadeIn;
     }
 
+    /**
+     * 获取数据包输出标题的停留时间
+     *
+     * @return 停留时间
+     */
     public IntegerProperty getStay() {
 
         return stay;
     }
 
+    /**
+     * 获取数据包输出标题的淡出时间
+     *
+     * @return 淡出时间
+     */
     public IntegerProperty getFadeOut() {
 
         return fadeOut;

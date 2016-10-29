@@ -34,40 +34,93 @@ import java.util.Map;
  */
 public abstract class TextualComponent implements Cloneable {
 
+    /**
+     * 获取花式消息文本组件的键
+     *
+     * @return 键
+     */
     public abstract ReadOnlyStringProperty getKey();
 
+    /**
+     * 获取花式消息文本组件的只读字符串
+     *
+     * @return 只读字符串
+     */
     public abstract String getReadableString();
 
     @Override
     public abstract TextualComponent clone() throws CloneNotSupportedException;
 
+    /**
+     * 将此花式消息文本组件写出 Json 内容
+     *
+     * @param jsonWriter Json 写对象
+     * @throws IOException 如果写出 IO 错误则抛出异常
+     */
     public abstract void writeJson(JsonWriter jsonWriter) throws IOException;
 
+    /**
+     * 获取此花式消息文本组件是否正确的键
+     *
+     * @param key 键
+     * @return 是否正确
+     */
     static boolean isTextKey(String key) {
 
         return key.equals("translate") || key.equals("text") || key.equals("score") || key.equals("selector");
     }
 
+    /**
+     * 获取此花式消息文本组件是否为翻译文本
+     *
+     * @param component 花式文本组件对象
+     * @return 是否为翻译文本
+     */
     static boolean isTranslatableText(TextualComponent component) {
 
         return component instanceof ComplexTextTypeComponent && ((ComplexTextTypeComponent) component).getKey().equals("translate");
     }
 
+    /**
+     * 将指定字符串文本转换为源花式文本组件对象
+     *
+     * @param text 字符串文本
+     * @return 花式文本组件
+     */
     public static TextualComponent rawText(String text) {
 
         return new ArbitraryTextTypeComponent("text", text);
     }
 
+    /**
+     * 将指定字符串文本转换为翻译花式文本组件对象
+     *
+     * @param translateKey 翻译键
+     * @return 花式文本组件
+     */
     public static TextualComponent localizedText(String translateKey) {
 
         return new ArbitraryTextTypeComponent("translate", translateKey);
     }
 
+    /**
+     * 将指定字符串文本转换为计分板分数花式文本组件对象
+     *
+     * @param scoreboardObjective 计分板对象内容
+     * @return 花式文本组件
+     */
     public static TextualComponent objectiveScore(String scoreboardObjective) {
 
         return objectiveScore("*", scoreboardObjective);
     }
 
+    /**
+     * 将指定字符串文本转换为计分板分数花式文本组件对象
+     *
+     * @param playerName 玩家名
+     * @param scoreboardObjective 计分板内容
+     * @return 花式文本组件
+     */
     public static TextualComponent objectiveScore(String playerName, String scoreboardObjective) {
 
         return new ComplexTextTypeComponent("score", ImmutableMap.<String, String>builder()
@@ -76,16 +129,35 @@ public abstract class TextualComponent implements Cloneable {
                 .build());
     }
 
+    /**
+     * 将指定字符串文本转换为选择器花式文本组件对象
+     *
+     * @param selector 选择器内容
+     * @return 花式文本组件
+     */
     public static TextualComponent selector(String selector) {
 
         return new ArbitraryTextTypeComponent("selector", selector);
     }
 
+    /**
+     * <h1>ArbitraryTextTypeComponent</h1>
+     * 任意文本类型组件类（详细doc待补充...）
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     private final static class ArbitraryTextTypeComponent extends TextualComponent {
 
         private StringProperty key;
         private StringProperty value;
 
+        /**
+         * 任意文本类型组件类构造函数
+         *
+         * @param key 键
+         * @param value 值
+         */
         public ArbitraryTextTypeComponent(String key, String value) {
 
             this.key = new SimpleStringProperty(key);
@@ -98,6 +170,11 @@ public abstract class TextualComponent implements Cloneable {
             return key;
         }
 
+        /**
+         * 获取花式消息文本组件的值
+         *
+         * @return 值
+         */
         public StringProperty getValue() {
 
             return value;
@@ -122,11 +199,24 @@ public abstract class TextualComponent implements Cloneable {
         }
     }
 
+    /**
+     * <h1>ComplexTextTypeComponent</h1>
+     * 复杂文本类型组件类（详细doc待补充...）
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     private final static class ComplexTextTypeComponent extends TextualComponent {
 
         private StringProperty key;
         private ObjectProperty<Map<String, String>> values;
 
+        /**
+         * 复杂文本类型组件类构造函数
+         *
+         * @param key 键
+         * @param values 值
+         */
         public ComplexTextTypeComponent(String key, Map<String, String> values) {
 
             this.key = new SimpleStringProperty(key);
@@ -139,6 +229,11 @@ public abstract class TextualComponent implements Cloneable {
             return key;
         }
 
+        /**
+         * 获取花式消息文本组件的值
+         *
+         * @return 值
+         */
         public ObjectProperty<Map<String, String>> getValues() {
 
             return values;

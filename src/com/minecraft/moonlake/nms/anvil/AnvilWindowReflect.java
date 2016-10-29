@@ -102,6 +102,11 @@ class AnvilWindowReflect {
         }
     }
 
+    /**
+     * 获取 AnvilWindowReflect 对象
+     *
+     * @return AnvilWindowReflect
+     */
     public static AnvilWindowReflect get() {
 
         if(anvilWindowReflectInstance == null) {
@@ -111,6 +116,15 @@ class AnvilWindowReflect {
         return anvilWindowReflectInstance;
     }
 
+    /**
+     * 将指定铁砧窗口打开给指定玩家
+     *
+     * @param player 玩家
+     * @param anvilWindow 铁砧窗口
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果铁砧窗口对象为 {@code null} 则抛出异常
+     * @throws NMSException 如果打开错误则抛出异常
+     */
     public void openAnvil(Player player, AnvilWindow anvilWindow) throws NMSException {
 
         Validate.notNull(player, "The player object is null.");

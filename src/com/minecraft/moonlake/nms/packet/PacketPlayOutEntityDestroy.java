@@ -91,6 +91,11 @@ public class PacketPlayOutEntityDestroy extends PacketAbstract<PacketPlayOutEnti
         this.entityIds = new SimpleObjectProperty<>(entityIds);
     }
 
+    /**
+     * 获取此数据包输出实体破坏的实体 Id
+     *
+     * @return 实体 Id
+     */
     public ObjectProperty<int[]> getEntityIds() {
 
         return entityIds;

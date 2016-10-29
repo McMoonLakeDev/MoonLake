@@ -43,61 +43,139 @@ public final class EventHelper {
     private EventHelper() {
     }
 
+    /**
+     * 调用事件帮助器触发指定事件
+     *
+     * @param event 事件
+     */
     public static void callEvent(Event event) {
 
         Bukkit.getServer().getPluginManager().callEvent(event);
     }
 
+    /**
+     * 调用事件帮助器触发指定事件
+     *
+     * @param event 事件
+     */
     public static void callEvent(MoonLakeEvent event) {
 
         Bukkit.getServer().getPluginManager().callEvent(event);
     }
 
+    /**
+     * 调用事件帮助器注册事件监听器
+     *
+     * @param listener 监听器
+     * @param plugin 插件
+     */
     public static void registerEvent(Listener listener, Plugin plugin) {
 
         Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
     }
 
+    /**
+     * 调用事件帮助器注册事件监听器
+     *
+     * @param listener 监听器
+     * @param plugin 插件
+     */
     public static void registerEvent(MoonLakeListener listener, Plugin plugin) {
 
         Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
     }
 
+    /**
+     * 调用事件帮助器注册事件监听器
+     *
+     * @param event 事件类
+     * @param listener 监听器
+     * @param priority 事件优先度
+     * @param executor 事件执行器
+     * @param plugin 插件
+     */
     public static void registerEvent(Class<? extends Event> event, Listener listener, EventPriority priority, EventExecutor executor, Plugin plugin) {
 
         Bukkit.getServer().getPluginManager().registerEvent(event, listener, priority, executor, plugin);
     }
 
+    /**
+     * 调用事件帮助器注册事件监听器
+     *
+     * @param event 事件类
+     * @param listener 监听器
+     * @param priority 事件优先度
+     * @param executor 事件执行器
+     * @param plugin 插件
+     * @param ignoreCancelled 是否忽略阻止
+     */
     public static void registerEvent(Class<? extends Event> event, Listener listener, EventPriority priority, EventExecutor executor, Plugin plugin, boolean ignoreCancelled) {
 
         Bukkit.getServer().getPluginManager().registerEvent(event, listener, priority, executor, plugin, ignoreCancelled);
     }
 
+    /**
+     * 调用事件帮助器注册事件监听器
+     *
+     * @param event 事件类
+     * @param listener 监听器
+     * @param priority 事件优先度
+     * @param executor 事件执行器
+     * @param plugin 插件
+     */
     public static void registerEvent(Class<? extends MoonLakeEvent> event, MoonLakeListener listener, EventPriority priority, EventExecutor executor, Plugin plugin) {
 
         Bukkit.getServer().getPluginManager().registerEvent(event, listener, priority, executor, plugin);
     }
 
+    /**
+     * 调用事件帮助器注册事件监听器
+     *
+     * @param event 事件类
+     * @param listener 监听器
+     * @param priority 事件优先度
+     * @param executor 事件执行器
+     * @param plugin 插件
+     * @param ignoreCancelled 是否忽略阻止
+     */
     public static void registerEvent(Class<? extends MoonLakeEvent> event, MoonLakeListener listener, EventPriority priority, EventExecutor executor, Plugin plugin, boolean ignoreCancelled) {
 
         Bukkit.getServer().getPluginManager().registerEvent(event, listener, priority, executor, plugin, ignoreCancelled);
     }
 
+    /**
+     * 调用事件帮助器卸载全部事件监听器
+     */
     public static void unregisterAll() {
 
         HandlerList.unregisterAll();
     }
 
+    /**
+     * 调用事件帮助器卸载指定插件的全部事件监听器
+     *
+     * @param plugin 插件
+     */
     public static void unregisterAll(Plugin plugin) {
 
         HandlerList.unregisterAll(plugin);
     }
 
+    /**
+     * 调用事件帮助器卸载指定事件监听器
+     *
+     * @param listener 监听器
+     */
     public static void unregisterAll(Listener listener) {
 
         HandlerList.unregisterAll(listener);
     }
 
+    /**
+     * 调用事件帮助器卸载指定事件监听器
+     *
+     * @param listener 监听器
+     */
     public static void unregisterAll(MoonLakeListener listener) {
 
         HandlerList.unregisterAll(listener);

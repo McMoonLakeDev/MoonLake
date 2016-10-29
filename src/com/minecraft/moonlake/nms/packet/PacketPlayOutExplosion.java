@@ -145,31 +145,61 @@ public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosio
         this.vector = vector == null ? new Vector() : vector;
     }
 
+    /**
+     * 获取此数据包输出爆炸的 X 坐标
+     *
+     * @return X 坐标
+     */
     public DoubleProperty getX() {
 
         return x;
     }
 
+    /**
+     * 获取此数据包输出爆炸的 Y 坐标
+     *
+     * @return Y 坐标
+     */
     public DoubleProperty getY() {
 
         return y;
     }
 
+    /**
+     * 获取此数据包输出爆炸的 Z 坐标
+     *
+     * @return Z 坐标
+     */
     public DoubleProperty getZ() {
 
         return z;
     }
 
+    /**
+     * 获取此数据包输出爆炸的半径
+     *
+     * @return 半径
+     */
     public FloatProperty getRadius() {
 
         return radius;
     }
 
+    /**
+     * 获取此数据包输出爆炸的方块位置记录
+     *
+     * @return 方块位置记录
+     */
     public List<BlockPosition> getRecords() {
 
         return records;
     }
 
+    /**
+     * 获取此数据包输出爆炸的矢量
+     *
+     * @return 矢量
+     */
     public Vector getVector() {
 
         return vector;

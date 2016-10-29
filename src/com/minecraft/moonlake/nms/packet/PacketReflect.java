@@ -70,6 +70,12 @@ class PacketReflect {
         }
     }
 
+    /**
+     * 获取 PacketReflect 对象
+     *
+     * @return PacketReflect
+     * @throws PacketException 如果获取错误则抛出异常
+     */
     public static PacketReflect get() throws PacketException {
 
         if(packetReflectInstance == null) {
@@ -79,6 +85,14 @@ class PacketReflect {
         return packetReflectInstance;
     }
 
+    /**
+     * 获取指定玩家的 NMS 玩家对象
+     *
+     * @param player 玩家
+     * @return NMSPlayer
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果获取错误则抛出异常
+     */
     public Object getNMSPlayer(Player player) throws PacketException {
 
         Validate.notNull(player, "The player object is null.");
@@ -93,6 +107,13 @@ class PacketReflect {
         }
     }
 
+    /**
+     * 将指定数据包对象发送到给玩家
+     *
+     * @param players 玩家
+     * @param packet 数据包
+     * @throws PacketException 如果发送错误则抛出异常
+     */
     public void send(Player[] players, Object packet) throws PacketException {
 
         Validate.notNull(players, "The player object is null.");

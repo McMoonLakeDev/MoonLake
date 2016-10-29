@@ -19,7 +19,11 @@
 package com.minecraft.moonlake.encrypt;
 
 /**
- * Created by MoonLake on 2016/6/4.
+ * <h1>Encrypt</h1>
+ * 加密接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public interface Encrypt {
 
