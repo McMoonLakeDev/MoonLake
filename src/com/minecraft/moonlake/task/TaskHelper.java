@@ -34,7 +34,7 @@ import java.util.concurrent.Future;
  * @version 1.0
  * @author Month_Light
  */
-public class TaskHelper {
+public final class TaskHelper {
 
     private final static BukkitScheduler BUKKIT_SCHEDULER;
 
