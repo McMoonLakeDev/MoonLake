@@ -117,6 +117,12 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     }
 
     @Override
+    public MoonLakePlugin getPlugin() {
+
+        return this;
+    }
+
+    @Override
     public String getPluginPrefix() {
 
         return description.getPrefix();

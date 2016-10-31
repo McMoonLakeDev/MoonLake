@@ -14,37 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
- 
-package com.minecraft.moonlake.api;
 
-import com.minecraft.moonlake.MoonLakePlugin;
-import com.minecraft.moonlake.logger.MLogger;
 
-/**
- * <hr />
- * <div>
- *     <h1>主实例对象API接口提供 (子API、特殊函数等等)</h1>
- *     <p>By Month_Light Ver: 1.0</p>
- * </div>
- * <hr />
- *
- * @version 1.0
- * @author Month_Light
- */
-public interface MoonLake extends MoonLakeCore, MoonLakeInfo, BukkitInfo {
+package com.minecraft.moonlake.api.packet.listener;
 
-    /**
-     * 获取控制台日志对象
-     *
-     * @return 日志对象
-     */
-    MLogger getMLogger();
+import com.minecraft.moonlake.api.packet.listener.channel.PacketChannelWrapped;
 
-    /**
-     * 获取月色之湖插件对象
-     *
-     * @return 插件对象
-     */
-    MoonLakePlugin getPlugin();
+import java.net.SocketAddress;
+
+class PacketChannelWrappedExpression<T> implements PacketChannelWrapped<T> {
+
+    private T channel;
+
+    public PacketChannelWrappedExpression(T channel) {
+
+        this.channel = channel;
+    }
+
+    public T channel() {
+
+        return channel;
+    }
+
+    @Override
+    public SocketAddress getRemoteAddress() {
+
+        return null;
+    }
+
+    @Override
+    public SocketAddress getLocalAddress() {
+
+        return null;
+    }
 }
