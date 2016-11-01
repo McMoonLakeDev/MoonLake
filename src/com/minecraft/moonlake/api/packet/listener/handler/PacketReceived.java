@@ -18,5 +18,13 @@
 
 package com.minecraft.moonlake.api.packet.listener.handler;
 
+/**
+ * <h1>PacketReceived</h1>
+ * 数据包接收接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see PacketHandlerAbstract
+ */
 public interface PacketReceived extends PacketHandlerAbstract {
 }

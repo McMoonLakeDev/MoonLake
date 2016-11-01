@@ -18,9 +18,32 @@
 
 package com.minecraft.moonlake.api.packet.listener;
 
+/**
+ * <h1>PacketListener</h1>
+ * 数据包监听器接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface PacketListener {
 
+    /**
+     * 处理此数据包通道的数据包发送
+     *
+     * @param receiver 接收者
+     * @param packet 数据包
+     * @param cancellable 阻止器
+     * @return 数据包
+     */
     Object onPacketSend(Object receiver, Object packet, Cancellable cancellable);
 
+    /**
+     * 处理此数据包通道的数据包接收
+     *
+     * @param sender 发送者
+     * @param packet 数据包
+     * @param cancellable 阻止器
+     * @return 数据包
+     */
     Object onPacketReceive(Object sender, Object packet, Cancellable cancellable);
 }

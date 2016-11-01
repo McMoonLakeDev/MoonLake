@@ -18,12 +18,20 @@
 
 package com.minecraft.moonlake.api.packet.listener;
 
-import com.minecraft.moonlake.api.packet.listener.Cancellable;
 import com.minecraft.moonlake.api.packet.listener.channel.PacketChannelWrapped;
 import com.minecraft.moonlake.api.packet.listener.handler.PacketHandlerAbstract;
 import com.minecraft.moonlake.api.packet.listener.handler.PacketSent;
+import com.minecraft.moonlake.nms.exception.NMSException;
+import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.entity.Player;
 
+/**
+ * <h1>PacketHandlerAbstractExpression</h1>
+ * 数据包处理器抽象接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 abstract class PacketHandlerAbstractExpression implements PacketHandlerAbstract {
 
     private Player player;
@@ -32,6 +40,13 @@ abstract class PacketHandlerAbstractExpression implements PacketHandlerAbstract 
     private PacketChannelWrapped channelWrapped;
     private Class<?> packetClass;
 
+    /**
+     * 数据包处理器抽象接口实现类构造函数
+     *
+     * @param packet 数据包
+     * @param cancellable 阻止器
+     * @param player 玩家
+     */
     public PacketHandlerAbstractExpression(Object packet, Cancellable cancellable, Player player) {
 
         this.packet = packet;
@@ -40,6 +55,13 @@ abstract class PacketHandlerAbstractExpression implements PacketHandlerAbstract 
         this.packetClass = packet.getClass();
     }
 
+    /**
+     * 数据包处理器抽象接口实现类构造函数
+     *
+     * @param packet 数据包
+     * @param cancellable 阻止器
+     * @param channelWrapped 通道包装
+     */
     public PacketHandlerAbstractExpression(Object packet, Cancellable cancellable, PacketChannelWrapped channelWrapped) {
 
         this.packet = packet;
@@ -106,6 +128,32 @@ abstract class PacketHandlerAbstractExpression implements PacketHandlerAbstract 
     public String getPacketName() {
 
         return packetClass.getSimpleName();
+    }
+
+    @Override
+    public void setPacketValue(String field, Object value) throws NMSException {
+
+        try {
+
+            Reflect.getField(packetClass, true, field).set(packet, value);
+        }
+        catch (Exception e) {
+
+            throw new NMSException("The set packet field '" + field + "' value exception.", e);
+        }
+    }
+
+    @Override
+    public Object getPacketValue(String field) throws NMSException {
+
+        try {
+
+            return Reflect.getField(packetClass, true, field).get(packet);
+        }
+        catch (Exception e) {
+
+            throw new NMSException("The get packet field '" + field + "' value exception.", e);
+        }
     }
 
     @Override

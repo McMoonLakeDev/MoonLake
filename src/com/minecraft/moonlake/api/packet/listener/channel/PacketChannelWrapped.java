@@ -20,11 +20,33 @@ package com.minecraft.moonlake.api.packet.listener.channel;
 
 import java.net.SocketAddress;
 
+/**
+ * <h1>PacketChannelWrapped</h1>
+ * 数据包通道包装类接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface PacketChannelWrapped<T> {
 
+    /**
+     * 获取数据包的通道
+     *
+     * @return 通道
+     */
     T channel();
 
+    /**
+     * 获取数据包通道的远程地址
+     *
+     * @return 数据包通道远程地址
+     */
     SocketAddress getRemoteAddress();
 
+    /**
+     * 获取数据包通道的本地地址
+     *
+     * @return 数据包通道本地地址
+     */
     SocketAddress getLocalAddress();
 }

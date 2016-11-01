@@ -34,6 +34,13 @@ import java.util.concurrent.Executors;
 
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
+/**
+ * <h1>PacketChannelAbstract</h1>
+ * 数据包通道接口抽象类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 abstract class PacketChannelAbstract implements PacketChannel {
 
     final static String KEY_HANDLER;
@@ -87,6 +94,11 @@ abstract class PacketChannelAbstract implements PacketChannel {
     private final Executor removeChannelExecutor;
     private PacketListener packetListener;
 
+    /**
+     * 数据包通道接口抽象类构造函数
+     *
+     * @param packetListener 数据包监听器
+     */
     public PacketChannelAbstract(PacketListener packetListener) {
 
         this.packetListener = packetListener;
@@ -133,21 +145,47 @@ abstract class PacketChannelAbstract implements PacketChannel {
         }
     }
 
+    /**
+     * 获取此数据包通道的添加通道执行器
+     *
+     * @return 添加通道执行器
+     */
     protected final Executor getAddChannelExecutor() {
 
         return addChannelExecutor;
     }
 
+    /**
+     * 获取此数据包通道的删除通道执行器
+     *
+     * @return 删除通道执行器
+     */
     protected final Executor getRemoveChannelExecutor() {
 
         return removeChannelExecutor;
     }
 
+    /**
+     * 处理此数据包通道的数据包发送
+     *
+     * @param receiver 接收者
+     * @param packet 数据包
+     * @param cancellable 阻止器
+     * @return 数据包
+     */
     protected final Object onPacketSend(Object receiver, Object packet, Cancellable cancellable) {
 
         return packetListener.onPacketSend(receiver, packet, cancellable);
     }
 
+    /**
+     * 处理此数据包通道的数据包接收
+     *
+     * @param sender 发送者
+     * @param packet 数据包
+     * @param cancellable 阻止器
+     * @return 数据包
+     */
     protected final Object onPacketReceive(Object sender, Object packet, Cancellable cancellable) {
 
         return packetListener.onPacketReceive(sender, packet, cancellable);

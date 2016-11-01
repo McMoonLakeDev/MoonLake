@@ -33,6 +33,13 @@ import java.util.ArrayList;
 
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
+/**
+ * <h1>PacketINCChannel</h1>
+ * 数据包 INC 通道实现类 ({@code io.netty.channel})
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 class PacketINCChannel extends PacketChannelAbstract {
 
     private final static Field FIELD_CHANNEL;
@@ -49,6 +56,11 @@ class PacketINCChannel extends PacketChannelAbstract {
         }
     }
 
+    /**
+     * 数据包 INC 通道实现类构造函数
+     *
+     * @param packetListener 数据包监听器
+     */
     public PacketINCChannel(PacketListener packetListener) {
 
         super(packetListener);
@@ -125,6 +137,14 @@ class PacketINCChannel extends PacketChannelAbstract {
         return new ListenerList();
     }
 
+    /**
+     * 获取指定玩家的 INC 通道对象
+     *
+     * @param player 玩家
+     * @return Channel
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     * @throws NMSException 如果获取错误则抛出异常
+     */
     private Channel getChannel(Player player) throws NMSException {
 
         Validate.notNull(player, "The player object is null.");
@@ -142,8 +162,18 @@ class PacketINCChannel extends PacketChannelAbstract {
         }
     }
 
+    /**
+     * <h1>ListenerList</h1>
+     * 数据包监听器列表接口 INC 实现类
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     private class ListenerList<E> extends ArrayList<E> implements PacketListenerList<E> {
 
+        /**
+         * 数据包监听器列表接口 INC 实现类构造函数
+         */
         ListenerList() {
         }
 
@@ -215,15 +245,32 @@ class PacketINCChannel extends PacketChannelAbstract {
         }
     }
 
+    /**
+     * <h1>ChannelHandler</h1>
+     * 数据包通道处理接口 INC 实现类
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     private class ChannelHandler extends ChannelDuplexHandler implements PacketChannelHandler {
 
         private Object owner;
 
+        /**
+         * 数据包通道处理接口 INC 实现类构造函数
+         *
+         * @param player 玩家
+         */
         public ChannelHandler(Player player) {
 
             this.owner = player;
         }
 
+        /**
+         * 数据包通道处理接口 INC 实现类构造函数
+         *
+         * @param channelWrapper 通道包装
+         */
         public ChannelHandler(ChannelWrapper channelWrapper) {
 
             this.owner = channelWrapper;
@@ -270,8 +317,20 @@ class PacketINCChannel extends PacketChannelAbstract {
         }
     }
 
+    /**
+     * <h1>ChannelWrapper</h1>
+     * 数据包通道包装接口 INC 实现类
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     private class ChannelWrapper extends PacketChannelWrappedExpression<Channel> implements PacketChannelWrapper {
 
+        /**
+         * 数据包通道包装接口 INC 实现类构造函数
+         *
+         * @param channel 通道
+         */
         public ChannelWrapper(Channel channel) {
 
             super(channel);

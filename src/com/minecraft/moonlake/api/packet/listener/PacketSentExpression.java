@@ -22,13 +22,34 @@ import com.minecraft.moonlake.api.packet.listener.channel.PacketChannelWrapped;
 import com.minecraft.moonlake.api.packet.listener.handler.PacketSent;
 import org.bukkit.entity.Player;
 
+/**
+ * <h1>PacketSentExpression</h1>
+ * 数据包发送接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 class PacketSentExpression extends PacketHandlerAbstractExpression implements PacketSent {
 
+    /**
+     * 数据包发送接口实现类构造函数
+     *
+     * @param packet 数据包
+     * @param cancellable 阻止器
+     * @param player 玩家
+     */
     public PacketSentExpression(Object packet, Cancellable cancellable, Player player) {
 
         super(packet, cancellable, player);
     }
 
+    /**
+     * 数据包发送接口实现类构造函数
+     *
+     * @param packet 数据包
+     * @param cancellable 阻止器
+     * @param channelWrapped 通道包装
+     */
     public PacketSentExpression(Object packet, Cancellable cancellable, PacketChannelWrapped channelWrapped) {
 
         super(packet, cancellable, channelWrapped);

@@ -22,10 +22,22 @@ import com.minecraft.moonlake.api.packet.listener.channel.PacketChannelWrapped;
 
 import java.net.SocketAddress;
 
+/**
+ * <h1>PacketChannelWrappedExpression</h1>
+ * 数据包通道包装类接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 class PacketChannelWrappedExpression<T> implements PacketChannelWrapped<T> {
 
     private T channel;
 
+    /**
+     * 数据包通道包装类接口实现类构造函数
+     *
+     * @param channel 通道
+     */
     public PacketChannelWrappedExpression(T channel) {
 
         this.channel = channel;

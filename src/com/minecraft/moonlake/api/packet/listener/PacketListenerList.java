@@ -20,5 +20,12 @@ package com.minecraft.moonlake.api.packet.listener;
 
 import java.util.List;
 
+/**
+ * <h1>PacketListenerList</h1>
+ * 数据包监听器列表接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface PacketListenerList<E> extends List<E> {
 }

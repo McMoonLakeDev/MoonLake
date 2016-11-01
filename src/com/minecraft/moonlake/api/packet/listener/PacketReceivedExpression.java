@@ -22,13 +22,34 @@ import com.minecraft.moonlake.api.packet.listener.channel.PacketChannelWrapped;
 import com.minecraft.moonlake.api.packet.listener.handler.PacketReceived;
 import org.bukkit.entity.Player;
 
+/**
+ * <h1>PacketReceivedExpression</h1>
+ * 数据包接收接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 class PacketReceivedExpression extends PacketHandlerAbstractExpression implements PacketReceived {
 
+    /**
+     * 数据包接收接口实现类构造函数
+     *
+     * @param packet 数据包
+     * @param cancellable 阻止器
+     * @param player 玩家
+     */
     public PacketReceivedExpression(Object packet, Cancellable cancellable, Player player) {
 
         super(packet, cancellable, player);
     }
 
+    /**
+     * 数据包接收接口实现类构造函数
+     *
+     * @param packet 数据包
+     * @param cancellable 阻止器
+     * @param channelWrapped 通道包装
+     */
     public PacketReceivedExpression(Object packet, Cancellable cancellable, PacketChannelWrapped channelWrapped) {
 
         super(packet, cancellable, channelWrapped);

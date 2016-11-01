@@ -19,6 +19,8 @@
 package com.minecraft.moonlake;
 
 import com.minecraft.moonlake.api.MoonLake;
+import com.minecraft.moonlake.api.packet.listener.PacketListenerFactory;
+import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.logger.MLogger;
 import com.minecraft.moonlake.logger.MLoggerWrapped;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -88,7 +90,17 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
 
         MAIN = this;
 
-        this.getMLogger().log("月色之湖核心 API 插件 v" + getPluginVersion() + " 成功加载.");
+        try {
+
+            Class.forName(PacketListenerFactory.class.getName());
+
+            this.getMLogger().info("月色之湖数据包通道监听器(PCL)成功加载.");
+        }
+        catch (Exception e) {
+
+            throw new MoonLakeException("The initialize packet channel listener exception.", e);
+        }
+        this.getMLogger().info("月色之湖核心 API 插件 v" + getPluginVersion() + " 成功加载.");
     }
 
     @Deprecated

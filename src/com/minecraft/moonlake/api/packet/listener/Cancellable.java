@@ -18,19 +18,39 @@
 
 package com.minecraft.moonlake.api.packet.listener;
 
+/**
+ * <h1>Cancellable</h1>
+ * 阻止器类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public final class Cancellable implements org.bukkit.event.Cancellable {
 
     private boolean cancel;
 
+    /**
+     * 阻止器类构造函数
+     */
     public Cancellable() {
     }
 
+    /**
+     * 设置此阻止器是否阻止
+     *
+     * @param cancel 是否阻止
+     */
     @Override
     public void setCancelled(boolean cancel) {
 
         this.cancel = cancel;
     }
 
+    /**
+     * 获取此阻止器是否阻止
+     *
+     * @return 是否阻止
+     */
     @Override
     public boolean isCancelled() {
 

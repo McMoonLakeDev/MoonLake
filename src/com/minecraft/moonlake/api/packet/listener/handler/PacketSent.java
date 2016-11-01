@@ -18,5 +18,13 @@
 
 package com.minecraft.moonlake.api.packet.listener.handler;
 
+/**
+ * <h1>PacketSent</h1>
+ * 数据包发送接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see PacketHandlerAbstract
+ */
 public interface PacketSent extends PacketHandlerAbstract {
 }

@@ -23,21 +23,80 @@ import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import org.bukkit.entity.Player;
 
+/**
+ * <h1>PacketChannel</h1>
+ * 数据包通道接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface PacketChannel {
 
+    /**
+     * 给指定玩家添加数据包通道
+     *
+     * @param player 玩家
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果添加错误则抛出异常
+     */
     void addChannel(Player player) throws PacketException;
 
+    /**
+     * 给指定玩家删除数据包通道
+     *
+     * @param player 玩家
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果删除错误则抛出异常
+     */
     void removeChannel(Player player) throws PacketException;
 
+    /**
+     * 给指定玩家添加数据包通道
+     *
+     * @param moonLakePlayer 玩家
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果添加错误则抛出异常
+     */
     void addChannel(MoonLakePlayer moonLakePlayer) throws PacketException;
 
+    /**
+     * 给指定玩家删除数据包通道
+     *
+     * @param moonLakePlayer 玩家
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果删除错误则抛出异常
+     */
     void removeChannel(MoonLakePlayer moonLakePlayer) throws PacketException;
 
+    /**
+     * 给服务器添加数据包通道
+     *
+     * @throws PacketException 如果添加错误则抛出异常
+     */
     void addServerChannel() throws PacketException;
 
+    /**
+     * 获取数据包通道监听器列表
+     *
+     * @return 数据包通道监听器列表
+     */
     PacketListenerList newListenerList();
 
+    /**
+     * <h1>PacketChannelWrapper</h1>
+     * 数据包通道包装接口（详细doc待补充...）
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     interface PacketChannelWrapper {}
 
+    /**
+     * <h1>PacketChannelHandler</h1>
+     * 数据包通道处理接口（详细doc待补充...）
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     interface PacketChannelHandler {}
 }
