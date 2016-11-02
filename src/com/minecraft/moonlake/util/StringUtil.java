@@ -38,6 +38,8 @@ import java.util.List;
  */
 public class StringUtil {
 
+    public final static char COLOR_CHAR = '\u0026';
+
     /**
      * 字符串实现类构造函数
      */
@@ -56,7 +58,7 @@ public class StringUtil {
      */
     public static String toColor(String source) {
 
-        return toColor('&', source);
+        return toColor(COLOR_CHAR, source);
     }
 
     /**
@@ -85,7 +87,7 @@ public class StringUtil {
      */
     public static String[] toColor(String... source) {
 
-        return toColor('&', source);
+        return toColor(COLOR_CHAR, source);
     }
 
     /**
@@ -121,7 +123,7 @@ public class StringUtil {
      */
     public static List<String> toColor(Collection<? extends String> source) {
 
-        return toColor('&', source);
+        return toColor(COLOR_CHAR, source);
     }
 
     /**
