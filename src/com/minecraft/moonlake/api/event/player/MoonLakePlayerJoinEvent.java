@@ -18,7 +18,6 @@
 
 package com.minecraft.moonlake.api.event.player;
 
-import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
@@ -45,11 +44,8 @@ public class MoonLakePlayerJoinEvent extends MoonLakePlayerEvent {
      * @param player Bukkit 玩家
      * @param joinMessage 加入消息
      * @param protocolVersion 客户端版本
-     * @deprecated 已过时, 将于 v2.0 去除. 请使用 {@link #MoonLakePlayerJoinEvent(MoonLakePlayer, String, ProtocolVersion)}
      * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
      */
-    @SuppressWarnings("deprecation")
-    @Deprecated
     public MoonLakePlayerJoinEvent(Player player, String joinMessage, ProtocolVersion protocolVersion) throws IllegalArgumentException {
 
         super(player);
@@ -58,7 +54,7 @@ public class MoonLakePlayerJoinEvent extends MoonLakePlayerEvent {
         this.protocolVersion = protocolVersion;
     }
 
-    /**
+    /*/**
      * 月色之湖玩家加入事件类构造函数
      *
      * @param moonLakePlayer MoonLake 玩家
@@ -66,13 +62,13 @@ public class MoonLakePlayerJoinEvent extends MoonLakePlayerEvent {
      * @param protocolVersion 客户端版本
      * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
      */
-    public MoonLakePlayerJoinEvent(MoonLakePlayer moonLakePlayer, String joinMessage, ProtocolVersion protocolVersion) throws IllegalArgumentException {
+    /*public MoonLakePlayerJoinEvent(MoonLakePlayer moonLakePlayer, String joinMessage, ProtocolVersion protocolVersion) throws IllegalArgumentException {
 
         super(moonLakePlayer);
 
         this.joinMessage = joinMessage;
         this.protocolVersion = protocolVersion;
-    }
+    }*/
 
     @Override
     public HandlerList getHandlers() {

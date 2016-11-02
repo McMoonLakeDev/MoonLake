@@ -19,8 +19,6 @@
 package com.minecraft.moonlake.api.event.player;
 
 import com.minecraft.moonlake.api.event.MoonLakeEvent;
-import com.minecraft.moonlake.api.player.MoonLakePlayer;
-import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
@@ -34,28 +32,28 @@ import org.bukkit.entity.Player;
  */
 public abstract class MoonLakePlayerEvent extends MoonLakeEvent {
 
-    private final MoonLakePlayer moonLakePlayer;
+    private final Player player;
 
     /**
      * 月色之湖玩家事件类构造函数
      *
      * @param player Bukkit 玩家
-     * @deprecated 已过时, 将于 v2.0 去除. 请使用 {@link #MoonLakePlayerEvent(MoonLakePlayer)}
      * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
      */
-    @Deprecated
     public MoonLakePlayerEvent(Player player) throws IllegalArgumentException {
 
-        this(PlayerManager.adapter(player));
+        Validate.notNull(player, "The player object is null.");
+
+        this.player = player;
     }
 
-    /**
+    /*/**
      * 月色之湖玩家事件类构造函数
      *
      * @param moonLakePlayer MoonLake 玩家
      * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
      */
-    public MoonLakePlayerEvent(MoonLakePlayer moonLakePlayer) throws IllegalArgumentException {
+    /*public MoonLakePlayerEvent(MoonLakePlayer moonLakePlayer) throws IllegalArgumentException {
 
         Validate.notNull(moonLakePlayer, "The moonlake player object is null.");
 
@@ -67,10 +65,10 @@ public abstract class MoonLakePlayerEvent extends MoonLakeEvent {
      *
      * @return MoonLakePlayer
      */
-    public final MoonLakePlayer getPlayer() {
+    /*public final MoonLakePlayer getPlayer() {
 
         return moonLakePlayer;
-    }
+    }*/
 
     /**
      * 获取此玩家事件的 Bukkit 玩家对象
@@ -79,7 +77,7 @@ public abstract class MoonLakePlayerEvent extends MoonLakeEvent {
      */
     public final Player getBukkitPlayer() {
 
-        return moonLakePlayer.getBukkitPlayer();
+        return player;
     }
 
     /**
@@ -89,6 +87,6 @@ public abstract class MoonLakePlayerEvent extends MoonLakeEvent {
      */
     public final String getName() {
 
-        return moonLakePlayer.getName();
+        return player.getName();
     }
 }
