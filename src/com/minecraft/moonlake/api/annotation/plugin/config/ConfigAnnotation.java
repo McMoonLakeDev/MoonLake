@@ -32,4 +32,12 @@ public interface ConfigAnnotation extends PluginAnnotation {
     void load(Plugin plugin, File file, Object obj) throws MoonLakeException;
 
     void load(Plugin plugin, FileConfiguration config, Object obj) throws MoonLakeException;
+
+    void save(Plugin plugin, Object obj) throws MoonLakeException;
+
+    void save(Plugin plugin, String file, Object obj) throws MoonLakeException;
+
+    void save(Plugin plugin, File file, Object obj) throws MoonLakeException;
+
+    void save(Plugin plugin, FileConfiguration config, Object obj) throws MoonLakeException;
 }

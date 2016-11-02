@@ -121,4 +121,44 @@ class ConfigAnnotationExpression extends PluginAnnotationAbstract implements Con
             }
         }
     }
+
+    @Override
+    public void save(Plugin plugin, Object obj) throws MoonLakeException {
+
+        Validate.notNull(plugin, "The plugin object is null.");
+
+        save(plugin, plugin.getConfig(), obj);
+    }
+
+    @Override
+    public void save(Plugin plugin, String file, Object obj) throws MoonLakeException {
+
+        Validate.notNull(file, "The file object is null.");
+
+        File file0 = new File(file);
+
+        if(!file0.isAbsolute()) {
+
+            file0 = new File(plugin.getDataFolder(), file);
+        }
+        save(plugin, file0, obj);
+    }
+
+    @Override
+    public void save(Plugin plugin, File file, Object obj) throws MoonLakeException {
+
+        Validate.notNull(file, "The file object is null.");
+
+        save(plugin, YamlConfiguration.loadConfiguration(file), obj);
+    }
+
+    @Override
+    public void save(Plugin plugin, FileConfiguration config, Object obj) throws MoonLakeException {
+
+        Validate.notNull(plugin, "The plugin object is null.");
+        Validate.notNull(config, "The configuration object is null.");
+        Validate.notNull(obj, "The obj object is null.");
+
+        // implement ...
+    }
 }
