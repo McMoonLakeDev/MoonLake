@@ -23,9 +23,21 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * <h1>CommandArgument</h1>
+ * 命令参数注解类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CommandArgument {
 
+    /**
+     * 获取此参数的名称
+     *
+     * @return 名称
+     */
     String arg() default " ";
 }

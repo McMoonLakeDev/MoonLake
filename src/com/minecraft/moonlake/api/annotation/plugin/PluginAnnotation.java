@@ -21,7 +21,23 @@ package com.minecraft.moonlake.api.annotation.plugin;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * <h1>PluginAnnotation</h1>
+ * 插件注解类接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface PluginAnnotation {
 
+    /**
+     * 将指定插件的指定对象加载数据
+     *
+     * @param plugin 插件
+     * @param obj 对象
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果指定加载对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果加载错误则抛出异常
+     */
     void load(Plugin plugin, Object obj) throws MoonLakeException;
 }

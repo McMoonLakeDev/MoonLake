@@ -18,8 +18,18 @@
 
 package com.minecraft.moonlake.api.annotation.plugin.command.exception;
 
+/**
+ * <h1>CommandIllegalSenderException</h1>
+ * 命令非法执行者异常类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class CommandIllegalSenderException extends CommandException {
 
+    /**
+     * 命令非法执行者异常类构造函数
+     */
     public CommandIllegalSenderException() {
 
         super("The moonlake command illegal sender object exception.");

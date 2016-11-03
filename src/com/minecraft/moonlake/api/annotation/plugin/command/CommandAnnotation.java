@@ -24,7 +24,25 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Set;
 
+/**
+ * <h1>CommandAnnotation</h1>
+ * 命令注解接口类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see PluginAnnotation
+ */
 public interface CommandAnnotation extends PluginAnnotation {
 
+    /**
+     * 将指定插件的指定对象注册命令
+     *
+     * @param plugin 插件
+     * @param obj 对象
+     * @return 命令
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果指定加载对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果注册错误则抛出异常
+     */
     Set<CommandAnnotated> registerCommand(Plugin plugin, Object obj) throws MoonLakeException;
 }

@@ -18,6 +18,13 @@
 
 package com.minecraft.moonlake.api.annotation.plugin.command;
 
+/**
+ * <h1>CommandErrorVoidHandler</h1>
+ * 命令错误空处理器
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class CommandErrorVoidHandler extends CommandErrorHandler {
 
     public CommandErrorVoidHandler() {

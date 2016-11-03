@@ -27,8 +27,19 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * <h1>CommandAnnotationExpression</h1>
+ * 命令注解接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see CommandAnnotation
+ */
 class CommandAnnotationExpression extends PluginAnnotationAbstract implements CommandAnnotation {
 
+    /**
+     * 命令注解接口实现类构造函数
+     */
     public CommandAnnotationExpression() {
     }
 

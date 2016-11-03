@@ -18,17 +18,54 @@
 
 package com.minecraft.moonlake.api.annotation.plugin.command;
 
+/**
+ * <h1>CommandAnnotated</h1>
+ * 注解命令类接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface CommandAnnotated {
 
+    /**
+     * 获取此命令的名称
+     *
+     * @return 名称
+     */
     String getName();
 
+    /**
+     * 获取此命令的别称
+     *
+     * @return 别称
+     */
     String[] getAliases();
 
+    /**
+     * 获取此命令的用法
+     *
+     * @return 用法
+     */
     String getUsage();
 
+    /**
+     * 获取此命令的注解
+     *
+     * @return 注解
+     */
     String getDescription();
 
+    /**
+     * 获取此命令的权限
+     *
+     * @return 权限
+     */
     String getPermission();
 
+    /**
+     * 获取此命令的权限消息
+     *
+     * @return 权限消息
+     */
     String getPermissionMessage();
 }

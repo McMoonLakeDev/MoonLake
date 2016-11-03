@@ -22,8 +22,18 @@ import com.minecraft.moonlake.api.annotation.plugin.command.exception.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+/**
+ * <h1>CommandErrorFeedbackHandler</h1>
+ * 命令错误反馈处理器类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class CommandErrorFeedbackHandler extends CommandErrorHandler {
 
+    /**
+     * 命令错误反馈处理器类构造函数
+     */
     public CommandErrorFeedbackHandler() {
     }
 

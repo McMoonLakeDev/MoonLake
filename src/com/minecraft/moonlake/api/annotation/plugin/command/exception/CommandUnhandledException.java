@@ -18,17 +18,39 @@
 
 package com.minecraft.moonlake.api.annotation.plugin.command.exception;
 
+/**
+ * <h1>CommandUnhandledException</h1>
+ * 命令未处理异常类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class CommandUnhandledException extends CommandException {
 
+    /**
+     * 命令未处理异常类构造函数
+     */
     public CommandUnhandledException() {
 
         this("The moonlake command unhandled exception");
     }
 
+    /**
+     * 命令未处理异常类构造函数
+     *
+     * @param message 异常消息
+     */
     public CommandUnhandledException(String message) {
 
         super(message);
     }
+
+    /**
+     * 命令未处理异常类构造函数
+     *
+     * @param message 异常消息
+     * @param cause 异常原因
+     */
     public CommandUnhandledException(String message, Throwable cause) {
 
         super(message, cause);

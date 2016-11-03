@@ -38,6 +38,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * <h1>CommandAnnotatedExpression</h1>
+ * 注解命令类接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 class CommandAnnotatedExpression implements CommandAnnotated {
 
     private final Object commandClass;
@@ -57,6 +64,16 @@ class CommandAnnotatedExpression implements CommandAnnotated {
     private CommandBukkit commandObject;
     private CommandMap commandMap;
 
+    /**
+     * 注解命令类接口实现类构造函数
+     *
+     * @param commandClass 预注册对象
+     * @param commandMethod 命令函数
+     * @param commandAnnotation 命令函数注解
+     * @param commandPermissionAnnotation 命令权限注解
+     * @param commandCompletionMethod 命令 TAB 补全函数
+     * @param commandCompletionAnnotation 命令 TAB 补全注解
+     */
     public CommandAnnotatedExpression(Object commandClass, Method commandMethod, Command commandAnnotation, CommandPermission commandPermissionAnnotation, Method commandCompletionMethod, CommandCompletion commandCompletionAnnotation) {
 
         this.commandClass = commandClass;
@@ -135,6 +152,11 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         return permissionMessage;
     }
 
+    /**
+     * 注册此注解命令
+     *
+     * @return 注解命令
+     */
     protected CommandAnnotated register() {
 
         CommandBukkit commandBukkit = new CommandBukkit(name);
@@ -165,6 +187,15 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         return commandBukkit.executor = this;
     }
 
+    /**
+     * 处理此注解命令的执行函数
+     *
+     * @param sender 命令执行者
+     * @param command 命令
+     * @param label 命令标签
+     * @param args 命令参数
+     * @return 是否执行成功
+     */
     protected boolean onCommand(CommandSender sender, CommandBukkit command, String label, String[] args) {
 
         try {
@@ -327,6 +358,15 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         }
     }
 
+    /**
+     * 处理此注解命令的 TAB 补全
+     *
+     * @param sender 命令执行者
+     * @param command 命令
+     * @param alias 命令别称
+     * @param args 命令参数
+     * @return 补全集合
+     */
     protected List<String> onTabComplete(CommandSender sender, CommandBukkit command, String alias, String[] args) {
 
         if(commandCompletionAnnotation == null || commandCompletionMethod == null) {
@@ -414,11 +454,26 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         }
     }
 
+    /**
+     * 获取指定命令执行者是否拥有权限
+     *
+     * @param sender 命令执行者
+     * @return 是否拥有权限
+     */
     protected boolean hasPermission(CommandSender sender) {
 
         return commandPermissionAnnotation == null || sender.hasPermission(permission);
     }
 
+    /**
+     * 获取指定函数的指定参数索引的注解
+     *
+     * @param method 函数
+     * @param index 索引
+     * @param clazz 注解类
+     * @param <A> 注解类
+     * @return 注解
+     */
     @SuppressWarnings("unchecked")
     protected <A extends Annotation> A getMethodParameterAnnotation(Method method, int index, Class<A> clazz) {
 
@@ -437,6 +492,14 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         return null;
     }
 
+    /**
+     * 获取指定函数的指定参数的注解
+     *
+     * @param method 函数
+     * @param clazz 注解类
+     * @param <A> 注解类
+     * @return 注解
+     */
     @SuppressWarnings("unchecked")
     protected <A extends Annotation> A getMethodParameterAnnotation(Method method, Class<A> clazz) {
 
@@ -458,6 +521,14 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         return null;
     }
 
+    /**
+     * 处理此命令参数的补全
+     *
+     * @param args 命令参数
+     * @param start 开始索引
+     * @param arg 命令参数
+     * @return 命令补全
+     */
     protected String commandArguments(String[] args, int start, String arg) {
 
         Validate.notNull(start <= args.length, "The start index > args length exception.");
@@ -475,6 +546,13 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         return argsBuilder.toString();
     }
 
+    /**
+     * 获取命令参数从指定索引剩余的参数
+     *
+     * @param args 命令参数
+     * @param start 开始索引
+     * @return 命令参数
+     */
     protected String[] getLeftoverArguments(String[] args, int start) {
 
         String[] newArray = new String[args.length - start];
@@ -486,6 +564,12 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         return newArray;
     }
 
+    /**
+     * 获取 Bukkit 的命令 Map 对象
+     *
+     * @return CommandMap
+     * @throws NMSException 如果获取错误则抛出异常
+     */
     protected CommandMap getCommandMap() throws NMSException {
 
         if(commandMap == null) {
@@ -505,6 +589,13 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         return commandMap;
     }
 
+    /**
+     * 解析命令参数
+     *
+     * @param parameterType 参数类型
+     * @param argument 参数
+     * @return 参数实例
+     */
     protected Object parseArgument(Class<?> parameterType, String argument) {
 
         try {
@@ -548,6 +639,13 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         }
     }
 
+    /**
+     * 将给予的参数处理可能的 TAB 补全
+     *
+     * @param args 命令参数
+     * @param possibilities 可能的集合
+     * @return 可能补全的集合
+     */
     protected List<String> getPossibleCompletionsForGivenArgs(String[] args, List<String> possibilities) {
 
         final String argumentToFindCompletionFor = args[args.length - 1];
@@ -572,10 +670,22 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         return listOfPossibleCompletions;
     }
 
+    /**
+     * <h1>CommandBukkit</h1>
+     * Bukkit 命令包装类
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     protected class CommandBukkit extends org.bukkit.command.Command {
 
         private CommandAnnotatedExpression executor;
 
+        /**
+         * Bukkit 命令包装类构造函数
+         *
+         * @param name 名称
+         */
         protected CommandBukkit(String name) {
 
             super(name);

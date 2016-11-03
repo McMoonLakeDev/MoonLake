@@ -18,10 +18,23 @@
 
 package com.minecraft.moonlake.api.annotation.plugin.command.exception;
 
+/**
+ * <h1>CommandInvalidLengthException</h1>
+ * 命令错误参数长度异常类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class CommandInvalidLengthException extends CommandException {
 
     private int expected, given;
 
+    /**
+     * 命令错误参数长度异常类构造函数
+     *
+     * @param expected 预期的长度
+     * @param given 给予的长度
+     */
     public CommandInvalidLengthException(int expected, int given) {
 
         super("The " + (given < expected ? "missing" : "too many") + " arguments. (" + given + (given < expected ? " < " : " > ") + expected + ")");
@@ -30,11 +43,21 @@ public class CommandInvalidLengthException extends CommandException {
         this.given = given;
     }
 
+    /**
+     * 获取此命令预期的参数长度
+     *
+     * @return 预期的参数长度
+     */
     public int getExpected() {
 
         return expected;
     }
 
+    /**
+     * 获取此命令给予的参数长度
+     *
+     * @return 给予的参数长度
+     */
     public int getGiven() {
 
         return given;
