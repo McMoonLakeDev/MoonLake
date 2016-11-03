@@ -18,10 +18,22 @@
 
 package com.minecraft.moonlake.api.annotation.plugin.command.exception;
 
+/**
+ * <h1>CommandPermissionException</h1>
+ * 命令权限错误异常类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class CommandPermissionException extends CommandException {
 
     private String permission;
 
+    /**
+     * 命令权限错误异常类构造函数
+     *
+     * @param permission 权限
+     */
     public CommandPermissionException(String permission) {
 
         super("The moonlake command sender not has permission exception.");
@@ -29,6 +41,11 @@ public class CommandPermissionException extends CommandException {
         this.permission = permission;
     }
 
+    /**
+     * 获取此命令的权限值
+     *
+     * @return 权限
+     */
     public String getPermission() {
 
         return permission;

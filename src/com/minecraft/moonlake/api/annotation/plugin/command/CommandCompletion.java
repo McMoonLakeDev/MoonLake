@@ -23,9 +23,21 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * <h1>CommandCompletion</h1>
+ * 命令 TAB 补全注解类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CommandCompletion {
 
+    /**
+     * 获取此命令 TAB 补全的名称
+     *
+     * @return 名称
+     */
     String name() default "";
 }

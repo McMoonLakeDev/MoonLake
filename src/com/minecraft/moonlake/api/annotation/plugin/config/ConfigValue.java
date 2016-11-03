@@ -23,11 +23,28 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * <h1>ConfigValue</h1>
+ * 配置文件值注解类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ConfigValue {
 
+    /**
+     * 配置文件路径
+     *
+     * @return 路径
+     */
     String path();
 
+    /**
+     * 配置文件字符串值的颜色字符
+     *
+     * @return 颜色字符
+     */
     char colorChar() default ' ';
 }

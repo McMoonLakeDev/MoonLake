@@ -26,8 +26,18 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+/**
+ * <h1>CommandErrorMoonLakeHandler</h1>
+ * 命令错误月色之湖处理器类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class CommandErrorMoonLakeHandler extends CommandErrorFeedbackHandler {
 
+    /**
+     * 命令错误月色之湖处理器类构造函数
+     */
     public CommandErrorMoonLakeHandler() {
     }
 

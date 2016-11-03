@@ -18,8 +18,19 @@
 
 package com.minecraft.moonlake.api.annotation.plugin;
 
+/**
+ * <h1>PluginAnnotationAbstract</h1>
+ * 插件注解抽象实现类
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see PluginAnnotation
+ */
 abstract class PluginAnnotationAbstract implements PluginAnnotation {
 
+    /**
+     * 插件注解抽象实现类构造函数
+     */
     PluginAnnotationAbstract() {
     }
 }

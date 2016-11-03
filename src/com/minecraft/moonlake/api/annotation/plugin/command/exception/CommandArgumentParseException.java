@@ -18,26 +18,54 @@
 
 package com.minecraft.moonlake.api.annotation.plugin.command.exception;
 
+/**
+ * <h1>CommandArgumentParseException</h1>
+ * 命令参数解析异常类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class CommandArgumentParseException extends CommandException {
 
     private String argument;
     private Class<?> type;
 
+    /**
+     * 命令参数解析异常类构造函数
+     */
     public CommandArgumentParseException() {
 
         this("The command argument parse exception.");
     }
 
+    /**
+     * 命令参数解析异常类构造函数
+     *
+     * @param message 异常消息
+     */
     public CommandArgumentParseException(String message) {
 
         super(message);
     }
 
+    /**
+     * 命令参数解析异常类构造函数
+     *
+     * @param message 异常消息
+     * @param cause 异常原因
+     */
     public CommandArgumentParseException(String message, Throwable cause) {
 
         super(message, cause);
     }
 
+    /**
+     * 命令参数解析异常类构造函数
+     *
+     * @param message 异常消息
+     * @param argument 参数
+     * @param type 参数类型
+     */
     public CommandArgumentParseException(String message, String argument, Class<?> type) {
 
         super(message);
@@ -46,6 +74,14 @@ public class CommandArgumentParseException extends CommandException {
         this.type = type;
     }
 
+    /**
+     * 命令参数解析异常类构造函数
+     *
+     * @param message 异常消息
+     * @param cause 异常原因
+     * @param argument 参数
+     * @param type 参数类型
+     */
     public CommandArgumentParseException(String message, Throwable cause, String argument, Class<?> type) {
 
         super(message, cause);
@@ -54,11 +90,21 @@ public class CommandArgumentParseException extends CommandException {
         this.type = type;
     }
 
+    /**
+     * 获取此命令解析错误的参数
+     *
+     * @return 参数
+     */
     public String getArgument() {
 
         return argument;
     }
 
+    /**
+     * 获取此命令解析错误的参数类型
+     *
+     * @return 参数类型
+     */
     public Class<?> getType() {
 
         return type;

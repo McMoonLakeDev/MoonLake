@@ -32,8 +32,19 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.ListIterator;
 
+/**
+ * <h1>ConfigAnnotationExpression</h1>
+ * 配置文件注解接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see ConfigAnnotation
+ */
 class ConfigAnnotationExpression extends PluginAnnotationAbstract implements ConfigAnnotation {
 
+    /**
+     * 配置文件注解接口实现类构造函数
+     */
     public ConfigAnnotationExpression() {
     }
 

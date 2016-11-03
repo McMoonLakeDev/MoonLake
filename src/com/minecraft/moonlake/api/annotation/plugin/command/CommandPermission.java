@@ -23,11 +23,28 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * <h1>CommandPermission</h1>
+ * 命令权限注解类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CommandPermission {
 
+    /**
+     * 获取此命令权限的权限值
+     *
+     * @return 权限
+     */
     String value();
 
+    /**
+     * 获取此命令权限的消息
+     *
+     * @return 消息
+     */
     String message() default "";
 }

@@ -21,13 +21,28 @@ package com.minecraft.moonlake.api.annotation.plugin;
 import com.minecraft.moonlake.api.annotation.plugin.command.CommandAnnotation;
 import com.minecraft.moonlake.api.annotation.plugin.config.ConfigAnnotation;
 
+/**
+ * <h1>PluginAnnotationFactory</h1>
+ * 插件注解工厂类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class PluginAnnotationFactory {
 
     private static PluginAnnotationFactory pluginAnnotationFactoryInstance;
 
+    /**
+     * 插件注解工厂类构造函数
+     */
     private PluginAnnotationFactory() {
     }
 
+    /**
+     * 获取 PluginAnnotationFactory 对象
+     *
+     * @return PluginAnnotationFactory
+     */
     public static PluginAnnotationFactory get() {
 
         if(pluginAnnotationFactoryInstance == null) {
@@ -37,11 +52,21 @@ public class PluginAnnotationFactory {
         return pluginAnnotationFactoryInstance;
     }
 
+    /**
+     * 获取配置文件注解 ConfigAnnotation 实例对象
+     *
+     * @return ConfigAnnotation
+     */
     public ConfigAnnotation config() {
 
         return new ConfigAnnotationExpression();
     }
 
+    /**
+     * 获取命令注解 CommandAnnotation 实例对象
+     *
+     * @return CommandAnnotation
+     */
     public CommandAnnotation command() {
 
         return new CommandAnnotationExpression();

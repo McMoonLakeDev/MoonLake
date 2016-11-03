@@ -20,17 +20,39 @@ package com.minecraft.moonlake.api.annotation.plugin.command.exception;
 
 import com.minecraft.moonlake.exception.MoonLakeException;
 
+/**
+ * <h1>CommandException</h1>
+ * 命令异常类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class CommandException extends MoonLakeException {
 
+    /**
+     * 命令异常类构造函数
+     */
     public CommandException() {
 
         this("The moonlake command exception");
     }
 
+    /**
+     * 命令异常类构造函数
+     *
+     * @param message 异常消息
+     */
     public CommandException(String message) {
 
         super(message);
     }
+
+    /**
+     * 命令异常类构造函数
+     *
+     * @param message 异常消息
+     * @param cause 异常原因
+     */
     public CommandException(String message, Throwable cause) {
 
         super(message, cause);
