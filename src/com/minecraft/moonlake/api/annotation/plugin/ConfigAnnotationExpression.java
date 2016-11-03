@@ -35,8 +35,6 @@ import java.util.ListIterator;
 class ConfigAnnotationExpression extends PluginAnnotationAbstract implements ConfigAnnotation {
 
     public ConfigAnnotationExpression() {
-
-        super();
     }
 
     @Override
@@ -127,7 +125,7 @@ class ConfigAnnotationExpression extends PluginAnnotationAbstract implements Con
 
         Validate.notNull(plugin, "The plugin object is null.");
 
-        save(plugin, plugin.getConfig(), obj);
+        save(plugin, "config.yml", obj);
     }
 
     @Override
@@ -147,18 +145,60 @@ class ConfigAnnotationExpression extends PluginAnnotationAbstract implements Con
     @Override
     public void save(Plugin plugin, File file, Object obj) throws MoonLakeException {
 
-        Validate.notNull(file, "The file object is null.");
-
-        save(plugin, YamlConfiguration.loadConfiguration(file), obj);
-    }
-
-    @Override
-    public void save(Plugin plugin, FileConfiguration config, Object obj) throws MoonLakeException {
-
         Validate.notNull(plugin, "The plugin object is null.");
-        Validate.notNull(config, "The configuration object is null.");
+        Validate.notNull(file, "The file object is null.");
         Validate.notNull(obj, "The obj object is null.");
 
-        // implement ...
+        Class<?> clazz = obj.getClass();
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+
+        for(final Field field : clazz.getDeclaredFields()) {
+
+            try {
+
+                ConfigValue configValue = field.getAnnotation(ConfigValue.class);
+
+                if(configValue != null) {
+
+                    field.setAccessible(true);
+
+                    Object value = field.get(obj);
+
+                    if(configValue.colorChar() != ' ') {
+
+                        if(value instanceof String) {
+
+                            value = StringUtil.toColor(configValue.colorChar(), (String) value);
+                        }
+                        else if(value instanceof List) {
+
+                            for(final ListIterator listIterator = ((List) value).listIterator(); listIterator.hasNext();) {
+
+                                Object listObj = listIterator.next();
+
+                                if(listObj instanceof String) {
+
+                                    listIterator.set(StringUtil.toColor(configValue.colorChar(), (String) listObj));
+                                }
+                            }
+                        }
+                    }
+                    config.set(configValue.path(), value);
+
+                    try {
+
+                        config.save(file);
+                    }
+                    catch (Exception e) {
+
+                        throw new MoonLakeException("The save config file '" + file.getName() + "' data exception.", e);
+                    }
+                }
+            }
+            catch (Exception e) {
+
+                throw new MoonLakeException("The failed to set config value for field '" + field.getName() + "' in " + clazz, e);
+            }
+        }
     }
 }
