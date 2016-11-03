@@ -41,5 +41,5 @@ public @interface Command {
 
     String fallBackPrefix() default "";
 
-    Class<? extends CommandErrorHandler> errorHandler() default CommandErrorFeedbackHandler.class;
+    Class<? extends CommandErrorHandler> errorHandler() default CommandErrorMoonLakeHandler.class;
 }
