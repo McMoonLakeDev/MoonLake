@@ -122,21 +122,41 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
         this.worldType = new SimpleObjectProperty<>(worldType);
     }
 
+    /**
+     * 获取此数据包输出重生的世界维度 Id
+     *
+     * @return 世界维度 Id
+     */
     public IntegerProperty getWorldDimensionId() {
 
         return worldDimensionId;
     }
 
+    /**
+     * 获取此数据包输出重生的世界难度类型
+     *
+     * @return 世界难度类型
+     */
     public ObjectProperty<WorldDifficulty> getWorldDifficulty() {
 
         return worldDifficulty;
     }
 
+    /**
+     * 获取此数据包输出重生的世界游戏模式类型
+     *
+     * @return 世界游戏模式类型
+     */
     public ObjectProperty<GameMode> getWorldGameMode() {
 
         return worldGameMode;
     }
 
+    /**
+     * 获取此数据包输出重生的世界类型
+     *
+     * @return 世界类型
+     */
     public ObjectProperty<WorldType> getWorldType() {
 
         return worldType;
@@ -200,6 +220,11 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
             this.id = id;
         }
 
+        /**
+         * 获取世界维度类型的 Id
+         *
+         * @return Id
+         */
         public int getId() {
 
             return id;
@@ -234,11 +259,21 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
 
         private final int id;
 
+        /**
+         * 世界难度类型类构造函数
+         *
+         * @param id Id
+         */
         WorldDifficulty(int id) {
 
             this.id = id;
         }
 
+        /**
+         * 获取世界难度类型的 Id
+         *
+         * @return Id
+         */
         public int getId() {
 
             return id;

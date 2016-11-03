@@ -352,22 +352,47 @@ public enum ParticleEffect {
         return requiredVersion == -1 || ParticlePacket.version >= requiredVersion;
     }
 
+    /**
+     * 将指定粒子效果名称转换到粒子效果
+     *
+     * @param name 粒子效果名称
+     * @return ParticleEffect
+     */
     public static ParticleEffect fromName(String name) {
 
         return NAME_MAP.containsKey(name) ? NAME_MAP.get(name) : null;
     }
 
+    /**
+     * 将指定粒子效果 Id 转换到粒子效果
+     *
+     * @param id 粒子效果 Id
+     * @return ParticleEffect
+     */
     public static ParticleEffect fromId(int id) {
 
         return ID_MAP.containsKey(id) ? ID_MAP.get(id) : null;
     }
 
+    /**
+     * 获取指定位置是否为水方块
+     *
+     * @param location 位置
+     * @return 是否为水方块
+     */
     private static boolean isWater(Location location) {
 
         Material marterial = location.getBlock().getType();
         return marterial == Material.WATER || marterial == Material.STATIONARY_WATER;
     }
 
+    /**
+     * 获取指定位置距离玩家是否为长距离
+     *
+     * @param location 位置
+     * @param players 玩家
+     * @return 是否为长距离
+     */
     private static boolean isLongDistance(Location location, List<Player> players) {
 
         for(Player player : players) {
@@ -1080,6 +1105,12 @@ public enum ParticleEffect {
             }
         }
 
+        /**
+         * 将此粒子效果发送到 Bukkit 服务端
+         *
+         * @param center 位置
+         * @param player 玩家
+         */
         private void sendToWithBukkit(Location center, Player player) {
 
             if(packet == null) {
@@ -1153,12 +1184,25 @@ public enum ParticleEffect {
         ;
     }
 
+    /**
+     * <h1>ParticleData</h1>
+     * 粒子效果数据类（详细doc待补充...）
+     *
+     * @version 1.1
+     * @author Month_Light
+     */
     public static abstract class ParticleData {
 
         private final Material material;
         private final byte data;
         private final int[] packetData;
 
+        /**
+         * 粒子效果数据类构造函数
+         *
+         * @param material 物品栈类型
+         * @param data 物品栈数据
+         */
         @SuppressWarnings("deprecation")
         public ParticleData(Material material, byte data) {
 
@@ -1167,29 +1211,63 @@ public enum ParticleEffect {
             this.packetData = new int[] { material.getId(), data };
         }
 
+        /**
+         * 获取此粒子效果数据的物品栈类型
+         *
+         * @return 物品栈类型
+         */
         public Material getMaterial() {
 
             return material;
         }
 
+        /**
+         * 获取此粒子效果数据的物品栈数据
+         *
+         * @return 物品栈数据
+         */
         public byte getData() {
 
             return data;
         }
 
+        /**
+         * 获取此粒子效果数据的数据包数据
+         *
+         * @return 数据包数据
+         */
         public int[] getPacketData() {
 
             return packetData;
         }
 
+        /**
+         * 获取此粒子效果数据的数据包字符串数据
+         *
+         * @return 数据包字符串数据
+         */
         public String getPacketDataString() {
 
             return ("_" + packetData[0] + "_" + packetData[1]);
         }
     }
 
+    /**
+     * <h1>BlockData</h1>
+     * 粒子效果方块数据类（详细doc待补充...）
+     *
+     * @version 1.1
+     * @author Month_Light
+     */
     public final static class BlockData extends ParticleData {
 
+        /**
+         * 粒子效果方块数据类构造函数
+         *
+         * @param material 物品栈类型
+         * @param data 物品栈数据
+         * @throws IllegalArgumentException 如果物品栈类型不为方块类型 {@link Material#isBlock()} 则抛出异常
+         */
         public BlockData(Material material, byte data) throws IllegalArgumentException {
 
             super(material, data);
@@ -1201,34 +1279,89 @@ public enum ParticleEffect {
         }
     }
 
+    /**
+     * <h1>ItemData</h1>
+     * 粒子效果物品数据类（详细doc待补充...）
+     *
+     * @version 1.1
+     * @author Month_Light
+     */
     public final static class ItemData extends ParticleData {
 
+        /**
+         * 粒子效果物品数据类构造函数
+         *
+         * @param material 物品栈类型
+         * @param data 物品栈数据
+         */
         public ItemData(Material material, byte data) {
 
             super(material, data);
         }
     }
 
+    /**
+     * <h1>ParticleColor</h1>
+     * 粒子效果颜色抽象类（详细doc待补充...）
+     *
+     * @version 1.1
+     * @author Month_Light
+     */
     public static abstract class ParticleColor {
 
+        /**
+         * 获取此粒子效果的 X 颜色值
+         *
+         * @return X 颜色值
+         */
         public abstract float getValueX();
 
+        /**
+         * 获取此粒子效果的 Y 颜色值
+         *
+         * @return Y 颜色值
+         */
         public abstract float getValueY();
 
+        /**
+         * 获取此粒子效果的 Z 颜色值
+         *
+         * @return Z 颜色值
+         */
         public abstract float getValueZ();
     }
 
+    /**
+     * <h1>OrdinaryColor</h1>
+     * 粒子效果普通颜色类（详细doc待补充...）
+     *
+     * @version 1.1
+     * @author Month_Light
+     */
     public final static class OrdinaryColor extends ParticleColor {
 
         private final int red;
         private final int green;
         private final int blue;
 
+        /**
+         * 粒子效果普通颜色类构造函数
+         *
+         * @param color 颜色
+         */
         public OrdinaryColor(Color color) {
 
             this(color.getRed(), color.getGreen(), color.getBlue());
         }
 
+        /**
+         * 粒子效果普通颜色类构造函数
+         *
+         * @param red 红色值
+         * @param green 绿色值
+         * @param blue 蓝色值
+         * @throws IllegalArgumentException 如果颜色值小于 0 或大于 255 则抛出异常
+         */
         public OrdinaryColor(int red, int green, int blue) {
 
             Color.fromBGR(red, green, blue);
@@ -1238,16 +1371,31 @@ public enum ParticleEffect {
             this.blue = blue;
         }
 
+        /**
+         * 获取此粒子效果普通颜色的红色值
+         *
+         * @return 红色值
+         */
         public int getRed() {
 
             return red;
         }
 
+        /**
+         * 获取此粒子效果普通颜色的绿色值
+         *
+         * @return 绿色值
+         */
         public int getGreen() {
 
             return green;
         }
 
+        /**
+         * 获取此粒子效果普通颜色的蓝色值
+         *
+         * @return 蓝色值
+         */
         public int getBlue() {
 
             return blue;
@@ -1272,10 +1420,23 @@ public enum ParticleEffect {
         }
     }
 
+    /**
+     * <h1>NoteColor</h1>
+     * 粒子效果音符颜色类（详细doc待补充...）
+     *
+     * @version 1.1
+     * @author Month_Light
+     */
     public final static class NoteColor extends ParticleColor {
 
         private final int note;
 
+        /**
+         * 粒子效果音符颜色类构造函数
+         *
+         * @param note 音符值
+         * @throws IllegalArgumentException 如果音符值小于 0 或大于 24 则抛出异常
+         */
         public NoteColor(int note) {
 
             if (note < 0) {

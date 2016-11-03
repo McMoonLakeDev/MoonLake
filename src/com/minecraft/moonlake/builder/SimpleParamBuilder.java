@@ -27,5 +27,11 @@ package com.minecraft.moonlake.builder;
  */
 public interface SimpleParamBuilder<R, P> {
 
+    /**
+     * 单参数建造接口函数
+     *
+     * @param param 参数
+     * @return 结果
+     */
     R build(P param);
 }

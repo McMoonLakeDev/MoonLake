@@ -27,5 +27,10 @@ package com.minecraft.moonlake.builder;
  */
 public interface Builder<R> {
 
+    /**
+     * 建造接口函数
+     *
+     * @return 结果
+     */
     R build();
 }

@@ -18,8 +18,8 @@
  
 package com.minecraft.moonlake.api.fancy;
 
-import com.google.gson.stream.JsonWriter;
 import com.minecraft.moonlake.json.JsonRepresentedObject;
+import com.minecraft.moonlake.json.JsonWrite;
 import com.minecraft.moonlake.manager.ItemManager;
 import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.property.*;
@@ -89,21 +89,21 @@ class FancyMessageExpression implements FancyMessage {
     }
 
     @Override
-    public void writeJson(JsonWriter jsonWriter) throws IOException {
+    public void writeJson(JsonWrite jsonWrite) throws IOException {
 
         if (partList.get().size() == 1) {
 
-            getLaster().writeJson(jsonWriter);
+            getLaster().writeJson(jsonWrite);
         }
         else {
 
-            jsonWriter.beginObject().name("text").value("").name("extra").beginArray();
+            jsonWrite.beginObject().name("text").value("").name("extra").beginArray();
 
             for (final FancyMessagePart part : this) {
 
-                part.writeJson(jsonWriter);
+                part.writeJson(jsonWrite);
             }
-            jsonWriter.endArray().endObject();
+            jsonWrite.endArray().endObject();
         }
     }
 
@@ -338,7 +338,7 @@ class FancyMessageExpression implements FancyMessage {
             return jsonString.get();
         }
         StringWriter string = new StringWriter();
-        JsonWriter json = new JsonWriter(string);
+        JsonWrite json = new JsonWrite(string);
 
         try {
 

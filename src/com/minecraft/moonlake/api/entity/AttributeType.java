@@ -129,31 +129,63 @@ public enum AttributeType {
         this.max = max;
     }
 
+    /**
+     * 获取实体属性类型名
+     *
+     * @return 类型名
+     */
     public String getType() {
 
         return type;
     }
 
+    /**
+     * 获取实体属性类型在 NMS 中的字段名
+     *
+     * @return 字段名
+     */
     public String getField() {
 
         return field;
     }
 
+    /**
+     * 获取实体属性的默认值
+     *
+     * @return 默认值
+     */
     public double getDef() {
 
         return def;
     }
 
+    /**
+     * 获取实体属性的最小值
+     *
+     * @return 最小值
+     */
     public double getMin() {
 
         return min;
     }
 
+    /**
+     * 获取实体属性的最大值
+     *
+     * @return 最大值
+     */
     public double getMax() {
 
         return max;
     }
 
+    /**
+     * 获取实体属性的安全值
+     *
+     * @param value 值
+     * @return 安全值
+     * @throws IllegalArgumentException 如果值小于最小值或大于最大值则抛出异常
+     */
     public double getSafeValue(double value) {
 
         Validate.isTrue(value >= min, "The attribute type target value less than min.");
@@ -162,6 +194,12 @@ public enum AttributeType {
         return value;
     }
 
+    /**
+     * 获取实体属性是否支持 Bukkit 版本
+     *
+     * @return 是否支持
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本不支持则抛出异常
+     */
     public boolean isSupported() {
 
         boolean support = minimumVersion == -1 || Reflect.getServerVersionNumber() >= minimumVersion;

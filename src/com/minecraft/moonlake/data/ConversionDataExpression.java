@@ -19,12 +19,21 @@
 package com.minecraft.moonlake.data;
 
 /**
- * Created by MoonLake on 2016/9/19.
+ * <h1>ConversionDataExpression</h1>
+ * 数据转换接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public abstract class ConversionDataExpression implements ConversionData {
 
     protected final Object obj;
 
+    /**
+     * 数据转换接口实现类构造函数
+     *
+     * @param obj 对象
+     */
     public ConversionDataExpression(Object obj) {
 
         this.obj = obj;

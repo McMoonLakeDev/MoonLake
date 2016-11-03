@@ -29,7 +29,17 @@ import org.bukkit.entity.Player;
  */
 public interface AnvilWindowEvent {
 
+    /**
+     * 获取此铁砧窗口事件的玩家
+     *
+     * @return 玩家
+     */
     Player getPlayer();
 
+    /**
+     * 获取此铁砧窗口事件的对象
+     *
+     * @return AnvilWindow
+     */
     AnvilWindow getAnvilWindow();
 }

@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api.event;
 
 import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 /**
  * <h1>MoonLakeEvent</h1>
@@ -47,4 +48,13 @@ public abstract class MoonLakeEvent extends Event {
 
         super(async);
     }
+
+    @Override
+    public String getEventName() {
+
+        return super.getEventName();
+    }
+
+    @Override
+    public abstract HandlerList getHandlers();
 }

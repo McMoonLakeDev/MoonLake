@@ -18,13 +18,12 @@
  
 package com.minecraft.moonlake.nms.anvil;
 
+import com.minecraft.moonlake.api.event.MoonLakeListener;
+import com.minecraft.moonlake.event.EventHelper;
 import com.minecraft.moonlake.nms.exception.NMSException;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -42,9 +41,9 @@ import org.bukkit.plugin.Plugin;
 public final class AnvilWindow {
 
     private final Plugin plugin;
-    private Listener listenerClick;
-    private Listener listenerClose;
-    private Listener listenerMove;
+    private MoonLakeListener listenerClick;
+    private MoonLakeListener listenerClose;
+    private MoonLakeListener listenerMove;
     private boolean allowMove;
     private boolean isInitialized;
     private AnvilWindowEventHandler<AnvilWindowClickEvent> clickEventHandle;
@@ -55,42 +54,65 @@ public final class AnvilWindow {
     /**
      * 铁砧窗口类构造函数
      *
-     * @param plugin JavaPlugin
+     * @param plugin 插件
      */
     public AnvilWindow(Plugin plugin) {
 
         this.plugin = plugin;
     }
 
+    /**
+     * 获取此铁砧窗口的插件对象
+     *
+     * @return Plugin
+     */
     public Plugin getPlugin() {
-        // get plugin
+
         return plugin;
     }
 
+    /**
+     * 初始化此铁砧窗口
+     */
     private void initialize() {
-        // the initialize anvil inventory
+
         if(!isInitialized) {
 
             isInitialized = true;
         }
     }
 
+    /**
+     * 获取此铁砧窗口是否允许移动物品
+     *
+     * @return 是否允许移动物品
+     */
     public boolean isAllowMove() {
-        // get anvil window item stack weather allow move
+
         return allowMove;
     }
 
+    /**
+     * 设置此铁砧窗口是否允许移动物品
+     *
+     * @param allowMove 是否允许移动物品
+     */
     public void setAllowMove(boolean allowMove) {
-        // set anvil window item stack weather allow move
+
         this.allowMove = allowMove;
         this.setAllowMove0(allowMove);
     }
 
+    /**
+     * 设置此铁砧窗口是否允许移动物品
+     *
+     * @param flag 是否允许移动物品
+     */
     private void setAllowMove0(boolean flag) {
 
         if(flag && listenerMove == null) {
-            // register anvil move listener
-            listenerMove = new Listener() {
+
+            listenerMove = new MoonLakeListener() {
 
                 @EventHandler
                 public void onAnvilMove(InventoryClickEvent event) {
@@ -114,21 +136,26 @@ public final class AnvilWindow {
             registerListener(listenerMove);
         }
         else if(!flag && listenerMove != null) {
-            // unregister anvil move listener
+
             disposeMove();
         }
     }
 
-    public void onClick(AnvilWindowEventHandler<AnvilWindowClickEvent> clickEvent) {
-        // set anvil click event handle
+    /**
+     * 设置此铁砧窗口的点击事件监听器
+     *
+     * @param clickEvent 点击事件
+     */
+    public void setClick(AnvilWindowEventHandler<AnvilWindowClickEvent> clickEvent) {
+
         if(clickEvent == null) {
-            // unregister listener click
+
             disposeClick();
         }
         else {
-            // register listener click
+
             clickEventHandle = clickEvent;
-            listenerClick = new Listener() {
+            listenerClick = new MoonLakeListener() {
 
                 @EventHandler
                 public void onAnvilClick(InventoryClickEvent event) {
@@ -150,16 +177,21 @@ public final class AnvilWindow {
         }
     }
 
-    public void onClose(AnvilWindowEventHandler<AnvilWindowCloseEvent> closeEvent) {
-        // set anvil close event handle
+    /**
+     * 设置此铁砧窗口的关闭事件监听器
+     *
+     * @param closeEvent 关闭事件
+     */
+    public void setClose(AnvilWindowEventHandler<AnvilWindowCloseEvent> closeEvent) {
+
         if(closeEvent == null) {
-            // unregister listener close
+
             disposeClose();
         }
         else {
-            // register listener close
+
             closeEventHandle = closeEvent;
-            listenerClose = new Listener() {
+            listenerClose = new MoonLakeListener() {
 
                 @EventHandler
                 public void onAnvilClose(InventoryCloseEvent event) {
@@ -178,49 +210,85 @@ public final class AnvilWindow {
         }
     }
 
+    /**
+     * 将此铁砧窗口打开给指定玩家
+     *
+     * @param player 玩家
+     * @throws NMSException 如果打开错误则抛出异常
+     */
     public void openAnvil(Player player) throws NMSException {
-        // open anvil window to player
+
         AnvilWindowReflect.get().openAnvil(player, this);
         initialize();
     }
 
-    public void setItem(AnvilWindowSlot slot, ItemStack itemStack) {
-        // set itemStack to anvil inventory
+    /**
+     * 设置此铁砧窗口指定槽位的物品栈
+     *
+     * @param slot 槽位
+     * @param itemStack 物品栈
+     * @throws NMSException 如果没有初始化则抛出异常
+     */
+    public void setItem(AnvilWindowSlot slot, ItemStack itemStack) throws NMSException {
+
         if(!isInitialized) {
-            // not open anvil
+
+            throw new NMSException("The anvil window not initialize.");
         }
         anvilInventory.setItem(slot.getSlot(), itemStack);
     }
 
+    /**
+     * 获取此铁砧窗口指定槽位的物品栈
+     *
+     * @param slot 槽位
+     * @return 物品栈
+     * @throws NMSException 如果没有初始化则抛出异常
+     */
     public ItemStack getItem(AnvilWindowSlot slot) {
-        // get itemStack from anvil inventory;
+
         if(!isInitialized) {
-            // not open anvil
+
+            throw new NMSException("The anvil window not initialize.");
         }
         return anvilInventory.getItem(slot.getSlot());
     }
 
-    private void registerListener(Listener listener) {
+    /**
+     * 注册此铁砧窗口的事件监听器
+     *
+     * @param listener 监听器
+     */
+    private void registerListener(MoonLakeListener listener) {
 
         if(listener != null) {
 
-            Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
+            EventHelper.registerEvent(listener, plugin);
         }
     }
 
+    /**
+     * 释放此铁砧窗口对象
+     */
     public void dispose() {
-        // dispose close anvil window
+
         disposeMove();
         disposeClick();
         disposeClose();
     }
 
+    /**
+     * 释放此铁砧窗口的移动事件监听器
+     */
     private void disposeMove() {
 
         disposeListener(listenerMove);
         listenerMove = null;
     }
 
+    /**
+     * 释放此铁砧窗口的点击事件监听器
+     */
     private void disposeClick() {
 
         disposeListener(listenerClick);
@@ -228,6 +296,9 @@ public final class AnvilWindow {
         clickEventHandle = null;
     }
 
+    /**
+     * 释放此铁砧窗口的关闭事件监听器
+     */
     private void disposeClose() {
 
         disposeListener(listenerClose);
@@ -235,10 +306,15 @@ public final class AnvilWindow {
         closeEventHandle = null;
     }
 
-    private void disposeListener(Listener listener) {
+    /**
+     * 释放此铁砧窗口指定事件监听器
+     *
+     * @param listener 监听器
+     */
+    private void disposeListener(MoonLakeListener listener) {
 
         if(listener != null) {
-            HandlerList.unregisterAll(listener);
+            EventHelper.unregisterAll(listener);
         }
     }
 }

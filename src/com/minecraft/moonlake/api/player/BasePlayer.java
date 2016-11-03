@@ -362,7 +362,7 @@ public interface BasePlayer {
      * @param messages 消息
      * @throws IllegalArgumentException 如果发送的消息对象为 {@code null} 则抛出异常
      */
-    void send(String[] messages);
+    void send(String... messages);
 
     /**
      * 给此玩家发送花式消息

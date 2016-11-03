@@ -44,7 +44,7 @@ public enum AnvilWindowSlot {
     private int slot;
 
     /**
-     * 铁砧创建槽位类型构造函数
+     * 铁砧窗口槽位类型构造函数
      *
      * @param slot 槽位索引
      */
@@ -53,11 +53,22 @@ public enum AnvilWindowSlot {
         this.slot = slot;
     }
 
+    /**
+     * 获取此铁砧窗口槽位的值
+     *
+     * @return 值
+     */
     public int getSlot() {
 
         return slot;
     }
 
+    /**
+     * 将指定槽位的值转换为铁砧窗口槽位类型对象
+     *
+     * @param rawSlot 槽位值
+     * @return AnvilWindowSlot
+     */
     public static AnvilWindowSlot fromRawSlot(int rawSlot) {
 
         switch (rawSlot) {

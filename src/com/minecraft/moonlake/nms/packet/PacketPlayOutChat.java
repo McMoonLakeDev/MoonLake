@@ -79,7 +79,7 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
      */
     public PacketPlayOutChat(String message) {
 
-        this(message, Mode.DEFAULT);
+        this(message, Mode.CHAT);
     }
 
     /**
@@ -94,11 +94,21 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
         this.mode = new SimpleObjectProperty<>(mode);
     }
 
+    /**
+     * 获取此数据包输出聊天的消息
+     *
+     * @return 消息
+     */
     public StringProperty getMessage() {
 
         return message;
     }
 
+    /**
+     * 获取此数据包输出聊天的模式
+     *
+     * @return 模式
+     */
     public ObjectProperty<Mode> getMode() {
 
         return mode;
@@ -122,24 +132,60 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
         }
     }
 
+    /**
+     * <h1>Mode</h1>
+     * 聊天模式（详细doc待补充...）
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     public enum Mode {
 
         /**
-         * 默认的聊天消息显示位置
+         * 聊天: 聊天栏位置
          */
+        CHAT((byte)0),
+        /**
+         * 系统消息: 聊天栏位置
+         */
+        SYSTEM((byte)1),
+        /**
+         * 快捷栏: 快捷栏上面位置
+         */
+        HOTBAR((byte)2),
+
+        /**
+         * 默认的聊天消息显示位置
+         *
+         * @deprecated 已过时, 将于 v2.0 去除. 请使用 {@link #CHAT}
+         */
+        @Deprecated
         DEFAULT((byte)1),
         /**
-         * 在玩家经验条上方显示位置
+         * 在玩家快捷栏上方显示位置
+         *
+         * @deprecated 已过时, 将于 v2.0 去除. 请使用 {@link #HOTBAR}
          */
+        @Deprecated
         MAIN((byte)2),;
 
         private byte mode;
 
+        /**
+         * 聊天模式类构造函数
+         *
+         * @param mode 模式
+         */
         Mode(byte mode) {
 
             this.mode = mode;
         }
 
+        /**
+         * 获取聊天模式的模式值
+         *
+         * @return 模式值
+         */
         public byte getMode() {
 
             return mode;

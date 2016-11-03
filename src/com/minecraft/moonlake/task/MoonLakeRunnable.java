@@ -29,5 +29,8 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public abstract class MoonLakeRunnable extends BukkitRunnable {
 
+    /**
+     * 月色之湖运行函数
+     */
     public abstract void run();
 }
