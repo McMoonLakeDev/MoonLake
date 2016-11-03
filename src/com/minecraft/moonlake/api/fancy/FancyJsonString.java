@@ -18,8 +18,8 @@
  
 package com.minecraft.moonlake.api.fancy;
 
-import com.google.gson.stream.JsonWriter;
 import com.minecraft.moonlake.json.JsonRepresentedObject;
+import com.minecraft.moonlake.json.JsonWrite;
 import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.property.StringProperty;
 
@@ -46,15 +46,20 @@ public class FancyJsonString implements JsonRepresentedObject {
         this.value = new SimpleStringProperty(value);
     }
 
+    /**
+     * 获取花式消息的字符串值
+     *
+     * @return 值
+     */
     public StringProperty getValue() {
 
         return value;
     }
 
     @Override
-    public void writeJson(JsonWriter jsonWriter) throws IOException {
+    public void writeJson(JsonWrite jsonWrite) throws IOException {
 
-        jsonWriter.value(getValue().get());
+        jsonWrite.value(getValue().get());
     }
 
     @Override

@@ -148,7 +148,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void send(String[] message) {
+    public void send(String... message) {
 
         getBukkitPlayer().sendMessage(StringUtil.toColor(message));
     }
@@ -673,7 +673,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         Validate.notNull(message, "The message string object is null.");
 
-        getBukkitPlayer().kickPlayer("你被服务器踢出,原因: " + message);
+        getBukkitPlayer().kickPlayer(message);
     }
 
     @Override

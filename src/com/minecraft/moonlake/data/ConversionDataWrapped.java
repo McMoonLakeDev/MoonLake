@@ -19,10 +19,19 @@
 package com.minecraft.moonlake.data;
 
 /**
- * Created by MoonLake on 2016/7/17.
+ * <h1>ConversionDataWrapped</h1>
+ * 数据转换包装类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class ConversionDataWrapped extends ConversionDataExpression {
 
+    /**
+     * 数据转换包装类构造函数
+     *
+     * @param obj 对象
+     */
     public ConversionDataWrapped(Object obj) {
 
         super(obj);

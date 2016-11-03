@@ -27,5 +27,11 @@ package com.minecraft.moonlake.builder;
  */
 public interface UncertainParamBuilder<R, P> {
 
+    /**
+     * 不定长度参数建造接口函数
+     *
+     * @param params 参数
+     * @return 结果
+     */
     R build(P... params);
 }

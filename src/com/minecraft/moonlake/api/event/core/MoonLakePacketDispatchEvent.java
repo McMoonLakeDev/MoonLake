@@ -18,8 +18,6 @@
 
 package com.minecraft.moonlake.api.event.core;
 
-import com.minecraft.moonlake.api.player.MoonLakePlayer;
-import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.nms.packet.Packet;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
@@ -67,15 +65,15 @@ public class MoonLakePacketDispatchEvent extends MoonLakePacketEvent implements 
         return players;
     }
 
-    /**
+    /*/**
      * 获取此数据包派遣事件的 MoonLake 玩家对象
      *
      * @return MoonLakePlayer
      */
-    public MoonLakePlayer[] getPlayers() {
+    /*public MoonLakePlayer[] getPlayers() {
 
         return PlayerManager.adapter(players);
-    }
+    }*/
 
     /**
      * 获取此数据包派遣事件是否只有一个目标
@@ -97,15 +95,15 @@ public class MoonLakePacketDispatchEvent extends MoonLakePacketEvent implements 
         return players[0];
     }
 
-    /**
+    /*/**
      * 获取此数据包派遣事件的第一个 MoonLake 玩家对象
      *
      * @return MoonLakePlayer
      */
-    public MoonLakePlayer getFirstTarget() {
+    /*public MoonLakePlayer getFirstTarget() {
 
         return PlayerManager.adapter(players[0]);
-    }
+    }*/
 
     @Override
     public HandlerList getHandlers() {

@@ -29,5 +29,10 @@ import com.minecraft.moonlake.execute.Execute;
  */
 public interface AnvilWindowEventHandler<T extends AnvilWindowEvent> extends Execute<T> {
 
+    /**
+     * 铁砧窗口事件处理接口执行器
+     *
+     * @param event 事件
+     */
     void onExecute(T event);
 }

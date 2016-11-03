@@ -73,6 +73,11 @@ public class PacketPlayOutNamedEntitySpawn extends PacketAbstract<PacketPlayOutN
         this.entity = new SimpleObjectProperty<>(entity);
     }
 
+    /**
+     * 获取此数据包输出名称实体生成的实体玩家
+     *
+     * @return 实体玩家
+     */
     public ObjectProperty<Player> getEntity() {
 
         return entity;

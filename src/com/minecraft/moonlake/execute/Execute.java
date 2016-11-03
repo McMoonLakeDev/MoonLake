@@ -27,5 +27,10 @@ package com.minecraft.moonlake.execute;
  */
 public interface Execute<T> {
 
+    /**
+     * 执行接口函数
+     *
+     * @param param 参数
+     */
     void onExecute(T param);
 }

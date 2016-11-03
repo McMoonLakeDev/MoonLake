@@ -32,7 +32,7 @@ public class NotImplementedException extends MoonLakeException {
      */
     public NotImplementedException() {
 
-        super("The method not implementsed exception.");
+        super("The not implemented exception.");
     }
 
     /**

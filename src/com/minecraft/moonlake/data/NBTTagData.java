@@ -22,8 +22,13 @@ import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.api.nbt.NBTList;
 
 /**
- * Created by MoonLake on 2016/6/14.
+ * <h1>NBTTagData</h1>
+ * NBT 数据接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
  */
+@Deprecated
 public interface NBTTagData extends ConversionData {
 
     /**

@@ -49,11 +49,21 @@ public class AnvilWindowClickEvent extends AnvilWindowAbstractEvent {
         this.clickItemStack = clickItemStack;
     }
 
+    /**
+     * 获取此铁砧窗口点击的槽位
+     *
+     * @return 槽位
+     */
     public AnvilWindowSlot getSlot() {
 
         return clickSlot;
     }
 
+    /**
+     * 获取此铁砧窗口点击的物品栈
+     *
+     * @return 物品栈
+     */
     public ItemStack getItemStack() {
 
         return clickItemStack;
