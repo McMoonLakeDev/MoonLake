@@ -1,7 +1,7 @@
-# MoonLake [![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=1.8-b2&x2=0)](https://github.com/u2g/MoonLake) [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://github.com/u2g/MoonLake) [![Open Source Love](https://badges.frapsoft.com/os/gpl/gpl.svg?v=102)](https://github.com/u2g/MoonLake)
+# MoonLake [![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=1.8-r2&x2=0)](https://github.com/u2g/MoonLake) [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://github.com/u2g/MoonLake) [![Open Source Love](https://badges.frapsoft.com/os/gpl/gpl.svg?v=102)](https://github.com/u2g/MoonLake)
 
 Minecraft MoonLake Core API Plugin
-By Month_Light Ver: 1.8-b2
+By Month_Light Ver: 1.8-r2
 
 ## 简介
 这个插件提供了大量的 API 功能，实现了一些 Bukkit 无法做到的 NMS 功能<br />
@@ -20,18 +20,18 @@ By Month_Light Ver: 1.8-b2
 * 花式消息支持库: [点我](https://github.com/McMoonLakeDev/MoonLake/tree/override/src/com/minecraft/moonlake/api/fancy "FancyMessage")
 * NMS 数据包发送: [点我](https://github.com/McMoonLakeDev/MoonLake/tree/override/src/com/minecraft/moonlake/nms/packet "NMS Packet")
 * NBT 操作支持库: [点我](https://github.com/McMoonLakeDev/MoonLake/tree/override/src/com/minecraft/moonlake/api/nbt "NBT Library")
+* 插件注解支持库: [点我](https://github.com/McMoonLakeDev/MoonLake/tree/override/src/com/minecraft/moonlake/api/annotation/plugin "Plugin Annotation")
+* 数据包通道监听器: [点我](https://github.com/McMoonLakeDev/MoonLake/tree/override/src/com/minecraft/moonlake/api/packet/listener "Packet Channel Listener")
  
 更多功能开发中 _(:з」∠)_
 
 ## 使用方法
 注意将您的插件内 `plugin.yml` 添加 `depend: [MoonLake]` 前置支持
 ```java
-private MoonLake moonlake;
-
 private boolean setupMoonLake() {
   
   Plugin plugin = this.getServer().getPluginManager().getPlugin("MoonLake");
-  return plugin != null && plugin instanceof MoonLakePlugin && (this.moonLake = ((MoonLakePlugin)plugin).getMoonLake()) != null;
+  return plugin != null && plugin instanceof MoonLakePlugin;
 }
 ```
 调用的话就在主类的 `onEnable` 函数里面
