@@ -16,7 +16,7 @@
  */
  
  
-package com.minecraft.moonlake.nms.anvil;
+package com.minecraft.moonlake.api.anvil;
 
 import com.minecraft.moonlake.nms.exception.NMSException;
 import com.minecraft.moonlake.validate.Validate;
@@ -71,7 +71,7 @@ class AnvilWindowReflect {
 
         try {
 
-            CLASS_ANVILWINDOW = Class.forName(AnvilWindow.class.getName() + "_" + getServerVersion());
+            CLASS_ANVILWINDOW = Class.forName(AnvilWindowExpression.class.getName() + "_" + getServerVersion());
             CLASS_CRAFTPLAYER = PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
             CLASS_ENTITYPLAYER = PackageType.MINECRAFT_SERVER.getClass("EntityPlayer");
             CLASS_ENTITYHUMAN = PackageType.MINECRAFT_SERVER.getClass("EntityHuman");
@@ -125,7 +125,7 @@ class AnvilWindowReflect {
      * @throws IllegalArgumentException 如果铁砧窗口对象为 {@code null} 则抛出异常
      * @throws NMSException 如果打开错误则抛出异常
      */
-    public void openAnvil(Player player, AnvilWindow anvilWindow) throws NMSException {
+    public void openAnvil(Player player, AnvilWindowExpression anvilWindow) throws NMSException {
 
         Validate.notNull(player, "The player object is null.");
         Validate.notNull(anvilWindow, "The anvil window object is null.");

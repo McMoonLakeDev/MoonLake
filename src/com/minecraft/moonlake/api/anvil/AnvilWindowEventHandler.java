@@ -16,34 +16,23 @@
  */
  
  
-package com.minecraft.moonlake.nms.anvil;
+package com.minecraft.moonlake.api.anvil;
 
-import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.ContainerAnvil;
-import net.minecraft.server.v1_8_R3.EntityHuman;
+import com.minecraft.moonlake.execute.Execute;
 
 /**
- * <h1>AnvilWindow_v1_8_R3</h1>
- * 铁砧窗口 v1.8-R3 版容器类
+ * <h1>AnvilWindowEventHandler</h1>
+ * 铁砧窗口事件处理接口（详细doc待补充...）
  *
  * @version 1.0
  * @author Month_Light
  */
-class AnvilWindow_v1_8_R3 extends ContainerAnvil {
+public interface AnvilWindowEventHandler<T extends AnvilWindowEvent> extends Execute<T> {
 
     /**
-     * 铁砧窗口 v1.8-R3 版容器类构造函数
+     * 铁砧窗口事件处理接口执行器
      *
-     * @param entityHuman EntityHuman
+     * @param event 事件
      */
-    public AnvilWindow_v1_8_R3(EntityHuman entityHuman) {
-
-        super(entityHuman.inventory, entityHuman.world, BlockPosition.ZERO, entityHuman);
-    }
-
-    @Override
-    public boolean a(EntityHuman entityhuman) {
-
-        return true;
-    }
+    void onExecute(T event);
 }

@@ -16,34 +16,41 @@
  */
  
  
-package com.minecraft.moonlake.nms.anvil;
+package com.minecraft.moonlake.api.anvil;
 
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.ContainerAnvil;
-import net.minecraft.server.v1_10_R1.EntityHuman;
+import org.bukkit.entity.Player;
 
 /**
- * <h1>AnvilWindow_v1_10_R1</h1>
- * 铁砧窗口 v1.10-R1 版容器类
+ * <h1>AnvilWindowAbstractEvent</h1>
+ * 铁砧窗口抽象事件类
  *
  * @version 1.0
  * @author Month_Light
  */
-class AnvilWindow_v1_10_R1 extends ContainerAnvil {
+public abstract class AnvilWindowAbstractEvent implements AnvilWindowEvent {
+
+    private final Player player;
+    private final AnvilWindow anvilWindow;
 
     /**
-     * 铁砧窗口 v1.10-R1 版容器类构造函数
+     * 铁砧窗口抽象事件类构造函数
      *
-     * @param entityHuman EntityHuman
+     * @param player 玩家
+     * @param anvilWindow 铁砧窗口对象
      */
-    public AnvilWindow_v1_10_R1(EntityHuman entityHuman) {
+    public AnvilWindowAbstractEvent(Player player, AnvilWindow anvilWindow) {
 
-        super(entityHuman.inventory, entityHuman.world, BlockPosition.ZERO, entityHuman);
+        this.player = player;
+        this.anvilWindow = anvilWindow;
     }
 
-    @Override
-    public boolean a(EntityHuman entityhuman) {
+    public Player getPlayer() {
 
-        return true;
+        return player;
+    }
+
+    public AnvilWindow getAnvilWindow() {
+
+        return anvilWindow;
     }
 }

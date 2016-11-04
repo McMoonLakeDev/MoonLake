@@ -16,7 +16,7 @@
  */
  
  
-package com.minecraft.moonlake.nms.anvil;
+package com.minecraft.moonlake.api.anvil;
 
 /**
  * <h1>AnvilWindowSlot</h1>
