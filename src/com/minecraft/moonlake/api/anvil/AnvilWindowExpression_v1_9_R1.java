@@ -16,27 +16,34 @@
  */
  
  
-package com.minecraft.moonlake.nms.anvil;
+package com.minecraft.moonlake.api.anvil;
 
-import org.bukkit.entity.Player;
+import net.minecraft.server.v1_9_R1.BlockPosition;
+import net.minecraft.server.v1_9_R1.ContainerAnvil;
+import net.minecraft.server.v1_9_R1.EntityHuman;
 
 /**
- * <h1>AnvilWindowCloseEvent</h1>
- * 铁砧窗口关闭事件类
+ * <h1>AnvilWindowExpression_v1_9_R1</h1>
+ * 铁砧窗口 v1.9-R1 版容器类
  *
  * @version 1.0
  * @author Month_Light
  */
-public class AnvilWindowCloseEvent extends AnvilWindowAbstractEvent {
+class AnvilWindowExpression_v1_9_R1 extends ContainerAnvil {
 
     /**
-     * 铁砧窗口关闭事件类构造函数
+     * 铁砧窗口 v1.9-R1 版容器类构造函数
      *
-     * @param player 玩家
-     * @param anvilWindow 铁砧窗口对象
+     * @param entityHuman EntityHuman
      */
-    public AnvilWindowCloseEvent(Player player, AnvilWindow anvilWindow) {
+    public AnvilWindowExpression_v1_9_R1(EntityHuman entityHuman) {
 
-        super(player, anvilWindow);
+        super(entityHuman.inventory, entityHuman.world, BlockPosition.ZERO, entityHuman);
+    }
+
+    @Override
+    public boolean a(EntityHuman entityhuman) {
+
+        return true;
     }
 }

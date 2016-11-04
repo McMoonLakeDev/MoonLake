@@ -16,11 +16,12 @@
  */
  
  
-package com.minecraft.moonlake.nms.anvil;
+package com.minecraft.moonlake.api.anvil;
 
 import com.minecraft.moonlake.api.event.MoonLakeListener;
 import com.minecraft.moonlake.event.EventHelper;
 import com.minecraft.moonlake.nms.exception.NMSException;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -32,13 +33,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 /**
- * <h1>AnvilWindow</h1>
- * 铁砧窗口（详细doc待补充...）
+ * <h1>AnvilWindowExpression</h1>
+ * 铁砧窗口接口实现类
  *
  * @version 1.0
  * @author Month_Light
  */
-public final class AnvilWindow {
+class AnvilWindowExpression implements AnvilWindow {
 
     private final Plugin plugin;
     private MoonLakeListener listenerClick;
@@ -48,24 +49,22 @@ public final class AnvilWindow {
     private boolean isInitialized;
     private AnvilWindowEventHandler<AnvilWindowClickEvent> clickEventHandle;
     private AnvilWindowEventHandler<AnvilWindowCloseEvent> closeEventHandle;
-    protected Inventory anvilInventory;
-    protected Object anvilInventoryHandle;
+    Inventory anvilInventory;
+    Object anvilInventoryHandle;
 
     /**
      * 铁砧窗口类构造函数
      *
      * @param plugin 插件
      */
-    public AnvilWindow(Plugin plugin) {
+    public AnvilWindowExpression(Plugin plugin) {
 
         this.plugin = plugin;
+        this.allowMove = true;
     }
 
-    /**
-     * 获取此铁砧窗口的插件对象
-     *
-     * @return Plugin
-     */
+
+    @Override
     public Plugin getPlugin() {
 
         return plugin;
@@ -82,21 +81,19 @@ public final class AnvilWindow {
         }
     }
 
-    /**
-     * 获取此铁砧窗口是否允许移动物品
-     *
-     * @return 是否允许移动物品
-     */
+    @Override
+    public boolean isInitialized() {
+
+        return isInitialized;
+    }
+
+    @Override
     public boolean isAllowMove() {
 
         return allowMove;
     }
 
-    /**
-     * 设置此铁砧窗口是否允许移动物品
-     *
-     * @param allowMove 是否允许移动物品
-     */
+    @Override
     public void setAllowMove(boolean allowMove) {
 
         this.allowMove = allowMove;
@@ -141,11 +138,7 @@ public final class AnvilWindow {
         }
     }
 
-    /**
-     * 设置此铁砧窗口的点击事件监听器
-     *
-     * @param clickEvent 点击事件
-     */
+    @Override
     public void setClick(AnvilWindowEventHandler<AnvilWindowClickEvent> clickEvent) {
 
         if(clickEvent == null) {
@@ -169,19 +162,21 @@ public final class AnvilWindow {
                     AnvilWindowSlot clickSlot = AnvilWindowSlot.fromRawSlot(event.getRawSlot());
 
                     if(clickSlot == null) return;
-                    AnvilWindowClickEvent awce = new AnvilWindowClickEvent(player, AnvilWindow.this, clickSlot, clickItemStack);
+                    AnvilWindowClickEvent awce = new AnvilWindowClickEvent(player, AnvilWindowExpression.this, clickSlot, clickItemStack);
                     clickEventHandle.onExecute(awce);
+
+                    if(awce.isCancelled()) {
+
+                        event.setCancelled(true);
+                        player.updateInventory();
+                    }
                 }
             };
             registerListener(listenerClick);
         }
     }
 
-    /**
-     * 设置此铁砧窗口的关闭事件监听器
-     *
-     * @param closeEvent 关闭事件
-     */
+    @Override
     public void setClose(AnvilWindowEventHandler<AnvilWindowCloseEvent> closeEvent) {
 
         if(closeEvent == null) {
@@ -202,7 +197,7 @@ public final class AnvilWindow {
 
                     Player player = (Player) event.getPlayer();
 
-                    AnvilWindowCloseEvent awce = new AnvilWindowCloseEvent(player, AnvilWindow.this);
+                    AnvilWindowCloseEvent awce = new AnvilWindowCloseEvent(player, AnvilWindowExpression.this);
                     closeEventHandle.onExecute(awce);
                 }
             };
@@ -210,26 +205,20 @@ public final class AnvilWindow {
         }
     }
 
-    /**
-     * 将此铁砧窗口打开给指定玩家
-     *
-     * @param player 玩家
-     * @throws NMSException 如果打开错误则抛出异常
-     */
+    @Override
     public void openAnvil(Player player) throws NMSException {
+
+        Validate.notNull(player, "The player object is null.");
 
         AnvilWindowReflect.get().openAnvil(player, this);
         initialize();
     }
 
-    /**
-     * 设置此铁砧窗口指定槽位的物品栈
-     *
-     * @param slot 槽位
-     * @param itemStack 物品栈
-     * @throws NMSException 如果没有初始化则抛出异常
-     */
+    @Override
     public void setItem(AnvilWindowSlot slot, ItemStack itemStack) throws NMSException {
+
+        Validate.notNull(slot, "The anvil window slot object is null.");
+        Validate.notNull(itemStack, "The itemstack object is null.");
 
         if(!isInitialized) {
 
@@ -238,14 +227,10 @@ public final class AnvilWindow {
         anvilInventory.setItem(slot.getSlot(), itemStack);
     }
 
-    /**
-     * 获取此铁砧窗口指定槽位的物品栈
-     *
-     * @param slot 槽位
-     * @return 物品栈
-     * @throws NMSException 如果没有初始化则抛出异常
-     */
+    @Override
     public ItemStack getItem(AnvilWindowSlot slot) {
+
+        Validate.notNull(slot, "The anvil window slot object is null.");
 
         if(!isInitialized) {
 
@@ -267,9 +252,7 @@ public final class AnvilWindow {
         }
     }
 
-    /**
-     * 释放此铁砧窗口对象
-     */
+    @Override
     public void dispose() {
 
         disposeMove();
