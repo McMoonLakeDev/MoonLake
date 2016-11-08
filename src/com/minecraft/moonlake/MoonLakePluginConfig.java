@@ -24,6 +24,13 @@ import com.minecraft.moonlake.exception.MoonLakeException;
 
 import java.io.File;
 
+/**
+ * <h1>MoonLakePluginConfig</h1>
+ * 月色之湖插件配置类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class MoonLakePluginConfig {
 
     @ConfigValue(path = "version")
@@ -34,16 +41,31 @@ public class MoonLakePluginConfig {
 
     private MoonLakePlugin main;
 
+    /**
+     * 月色之湖插件配置类构造函数
+     *
+     * @param main 月色之湖插件
+     */
     MoonLakePluginConfig(MoonLakePlugin main) {
 
         this.main = main;
     }
 
+    /**
+     * 获取月色之湖插件对象
+     *
+     * @return 插件对象
+     */
     public MoonLakePlugin getMain() {
 
         return main;
     }
 
+    /**
+     * 重新加载配置文件并载入到此对象
+     *
+     * @return 是否成功
+     */
     public boolean reload() {
 
         if(!getMain().getDataFolder().exists()) {
@@ -72,11 +94,21 @@ public class MoonLakePluginConfig {
         }
     }
 
+    /**
+     * 获取月色之湖插件的版本号
+     *
+     * @return 版本号
+     */
     public String getVersion() {
 
         return version;
     }
 
+    /**
+     * 获取加载的国际化语言配置
+     *
+     * @return 国际化语言配置
+     */
     public String getLanguage() {
 
         return language;

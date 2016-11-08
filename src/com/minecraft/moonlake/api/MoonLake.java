@@ -49,5 +49,10 @@ public interface MoonLake extends MoonLakeCore, MoonLakeInfo, BukkitInfo {
      */
     MoonLakePlugin getPlugin();
 
+    /**
+     * 获取月色之湖插件配置对象
+     *
+     * @return 插件配置对象
+     */
     MoonLakePluginConfig getConfiguration();
 }

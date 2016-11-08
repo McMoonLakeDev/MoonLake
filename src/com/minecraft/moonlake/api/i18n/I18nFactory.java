@@ -22,11 +22,30 @@ import com.minecraft.moonlake.validate.Validate;
 
 import java.io.File;
 
+/**
+ * <h1>I18nFactory</h1>
+ * 国际化语言工厂类
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see I18n
+ */
 public class I18nFactory {
 
+    /**
+     * 国际化语言工厂类构造函数
+     */
     private I18nFactory() {
     }
 
+    /**
+     * 获取国际化语言 I18n 实例对象
+     *
+     * @param file 语言文件
+     * @return I18n
+     * @throws IllegalArgumentException 如果语言文件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果语言文件不存在则抛出异常
+     */
     public static I18n newInstance(File file) {
 
         Validate.notNull(file, "The file object is null.");
@@ -35,6 +54,14 @@ public class I18nFactory {
         return new I18nExpression(file);
     }
 
+    /**
+     * 获取国际化语言 I18n 实例对象
+     *
+     * @param file 语言文件
+     * @return I18n
+     * @throws IllegalArgumentException 如果语言文件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果语言文件不存在则抛出异常
+     */
     public static I18n newInstance(String file) {
 
         Validate.notNull(file, "The file object is null.");
@@ -42,6 +69,16 @@ public class I18nFactory {
         return newInstance(new File(file));
     }
 
+    /**
+     * 获取国际化语言 I18n 实例对象
+     *
+     * @param file 语言文件
+     * @param prefix 前缀
+     * @return I18n
+     * @throws IllegalArgumentException 如果语言文件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果语言文件不存在则抛出异常
+     * @throws IllegalArgumentException 如果前缀对象为 {@code null} 则抛出异常
+     */
     public static I18n newInstance(File file, String prefix) {
 
         Validate.notNull(prefix, "The prefix object is null.");
@@ -55,6 +92,16 @@ public class I18nFactory {
         return i18n;
     }
 
+    /**
+     * 获取国际化语言 I18n 实例对象
+     *
+     * @param file 语言文件
+     * @param prefix 前缀
+     * @return I18n
+     * @throws IllegalArgumentException 如果语言文件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果语言文件不存在则抛出异常
+     * @throws IllegalArgumentException 如果前缀对象为 {@code null} 则抛出异常
+     */
     public static I18n newInstance(String file, String prefix) {
 
         Validate.notNull(file, "The file object is null.");

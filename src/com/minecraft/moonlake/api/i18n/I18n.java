@@ -20,17 +20,56 @@ package com.minecraft.moonlake.api.i18n;
 
 import java.io.File;
 
+/**
+ * <h1>I18n</h1>
+ * 国际化语言接口类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface I18n {
 
+    /**
+     * 获取加载的语言文件
+     *
+     * @return 语言文件
+     */
     File getFile();
 
+    /**
+     * 重新加载语言文件
+     */
     void reload();
 
+    /**
+     * 重新加载语言文件
+     *
+     * @param prefix 前缀
+     */
     void reload(String prefix);
 
+    /**
+     * 获取语言文件指定键的值
+     *
+     * @param key 键
+     * @return 值
+     */
     String t(String key);
 
+    /**
+     * 获取语言文件指定键的值
+     *
+     * @param key 键
+     * @param args 格式化参数
+     * @return 值
+     */
     String t(String key, Object... args);
 
+    /**
+     * 获取语言文件是否有指定键
+     *
+     * @param key 键
+     * @return 是否有指定键
+     */
     boolean has(String key);
 }

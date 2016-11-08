@@ -26,11 +26,26 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * <h1>I18nExpression</h1>
+ * 国际化语言接口实现类
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see I18n
+ */
 class I18nExpression implements I18n {
 
     private final File langFile;
     private final Map<String, String> langCacheMap;
 
+    /**
+     * 国际化语言接口实现类构造函数
+     *
+     * @param lang 语言文件
+     * @throws IllegalArgumentException 如果语言文件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果语言文件不存在则抛出异常
+     */
     public I18nExpression(File lang) throws IllegalArgumentException {
 
         Validate.notNull(lang, "The lang object is null.");
@@ -85,6 +100,12 @@ class I18nExpression implements I18n {
         return langCacheMap.containsKey(key);
     }
 
+    /**
+     * 获取语言文件缓存 Map 指定键的值
+     *
+     * @param key 键
+     * @return 值
+     */
     protected String handlerGetValue(String key) {
 
         return has(key) ? langCacheMap.get(key) : null;

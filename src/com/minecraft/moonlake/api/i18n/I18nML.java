@@ -26,9 +26,19 @@ import org.bukkit.ChatColor;
 import java.io.File;
 import java.io.InputStream;
 
+/**
+ * <h1>I18nML</h1>
+ * 国际化语言月色之湖类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 @SuppressWarnings("deprecation")
 public final class I18nML {
 
+    /**
+     * 月色之湖国际化语言的前缀
+     */
     public final static String PREFIX;
     private final static MoonLakePlugin MAIN;
     private final static I18n I18N_ML;
@@ -80,14 +90,30 @@ public final class I18nML {
         I18N_ML.reload(PREFIX);
     }
 
+    /**
+     * 国际化语言月色之湖类构造函数
+     */
     private I18nML() {
     }
 
+    /**
+     * 获取语言文件指定键的值
+     *
+     * @param key 键
+     * @return 值
+     */
     public static String t(String key) {
 
         return I18N_ML.t(key);
     }
 
+    /**
+     * 获取语言文件指定键的值
+     *
+     * @param key 键
+     * @param args 格式化参数
+     * @return 值
+     */
     public static String t(String key, Object... args) {
 
         return I18N_ML.t(key, args);
