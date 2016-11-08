@@ -21,8 +21,11 @@ package com.minecraft.moonlake;
 import com.minecraft.moonlake.api.annotation.plugin.PluginAnnotationFactory;
 import com.minecraft.moonlake.api.annotation.plugin.config.ConfigValue;
 import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.manager.IoManager;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.FileInputStream;
 
 /**
  * <h1>MoonLakePluginConfig</h1>
@@ -79,7 +82,21 @@ public class MoonLakePluginConfig {
 
         if(config.exists()) {
 
-            // 配置文件已经存在则验证版本号
+            YamlConfiguration configuration = YamlConfiguration.loadConfiguration(config);
+
+            if(!configuration.contains("version") || !configuration.getString("version").equals(getMain().getPluginVersion())) {
+
+                try {
+
+                    FileInputStream fis = new FileInputStream(config);
+                    IoManager.outInputStream(new File(getMain().getDataFolder(), "config.old.yml"), fis);
+                }
+                catch (Exception e) {
+
+                    throw new MoonLakeException("The copy config old file exception.", e);
+                }
+                getMain().saveResource(config.getName(), true);
+            }
         }
         else {
 
