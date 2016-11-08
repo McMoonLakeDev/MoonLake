@@ -27,6 +27,7 @@ import com.minecraft.moonlake.api.packet.listener.handler.PacketHandler;
 import com.minecraft.moonlake.api.packet.listener.handler.PacketReceived;
 import com.minecraft.moonlake.api.packet.listener.handler.PacketSent;
 import com.minecraft.moonlake.event.EventHelper;
+import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import com.minecraft.moonlake.task.TaskHelper;
 import com.minecraft.moonlake.validate.Validate;
@@ -63,6 +64,10 @@ public final class PacketListenerFactory {
 
     static {
 
+        if(!MoonLakePlugin.getInstances().getConfiguration().isPacketChannelListener()) {
+
+            throw new MoonLakeException("The config.yml 'PacketChannelListener' value not is 'true', this api unavailable.");
+        }
         PACKET_HANDLERS = new ArrayList<>();
         PROTOCOL_VERSION_MAP_TIMEOUT = 60L;
         PROTOCOL_VERSION_MAP = new HashMap<>();

@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api;
 
 import com.minecraft.moonlake.MoonLakePlugin;
+import com.minecraft.moonlake.MoonLakePluginConfig;
 import com.minecraft.moonlake.logger.MLogger;
 
 /**
@@ -47,4 +48,11 @@ public interface MoonLake extends MoonLakeCore, MoonLakeInfo, BukkitInfo {
      * @return 插件对象
      */
     MoonLakePlugin getPlugin();
+
+    /**
+     * 获取月色之湖插件配置对象
+     *
+     * @return 插件配置对象
+     */
+    MoonLakePluginConfig getConfiguration();
 }
