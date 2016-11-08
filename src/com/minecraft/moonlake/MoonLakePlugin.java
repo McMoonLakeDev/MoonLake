@@ -96,15 +96,18 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         this.configuration = new MoonLakePluginConfig(this);
         this.configuration.reload();
 
-        try {
+        if(configuration.isPacketChannelListener()) {
 
-            Class.forName(PacketListenerFactory.class.getName());
+            try {
 
-            this.getMLogger().info("月色之湖数据包通道监听器(PCL)成功加载.");
-        }
-        catch (Exception e) {
+                Class.forName(PacketListenerFactory.class.getName());
 
-            throw new MoonLakeException("The initialize packet channel listener exception.", e);
+                this.getMLogger().info("月色之湖数据包通道监听器(PCL)成功加载.");
+            }
+            catch (Exception e) {
+
+                throw new MoonLakeException("The initialize packet channel listener exception.", e);
+            }
         }
         this.getMLogger().info("月色之湖核心 API 插件 v" + getPluginVersion() + " 成功加载.");
     }

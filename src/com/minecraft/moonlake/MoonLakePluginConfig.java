@@ -39,6 +39,9 @@ public class MoonLakePluginConfig {
     @ConfigValue(path = "Language")
     private String language;
 
+    @ConfigValue(path = "PacketChannelListener")
+    private boolean packetChannelListener;
+
     private MoonLakePlugin main;
 
     /**
@@ -112,5 +115,15 @@ public class MoonLakePluginConfig {
     public String getLanguage() {
 
         return language;
+    }
+
+    /**
+     * 获取是否开启数据包通道监听器功能
+     *
+     * @return 是否开启
+     */
+    public boolean isPacketChannelListener() {
+
+        return packetChannelListener;
     }
 }
