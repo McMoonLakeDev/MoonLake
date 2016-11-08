@@ -219,11 +219,11 @@ public class IoManager extends MoonLakeManager {
 
                     if (value.charAt(0) != '#') {
 
-                        temp.put(key, StringUtil.toColor(prefix + value));
+                        temp.put(key, value.contains("" + StringUtil.COLOR_CHAR) ? StringUtil.toColor(prefix + value) : prefix + value);
                     }
                     else {
 
-                        temp.put(key, StringUtil.toColor(value.substring(1)));
+                        temp.put(key, value.contains("" + StringUtil.COLOR_CHAR) ? StringUtil.toColor(value.substring(1)) : value.substring(1));
                     }
                 }
             }

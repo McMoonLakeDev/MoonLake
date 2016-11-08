@@ -75,6 +75,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
 
     private final MLogger mLogger;
     private final PluginDescriptionFile description;
+    private MoonLakePluginConfig configuration;
 
     private static MoonLake MAIN;
 
@@ -91,6 +92,9 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     public void onEnable() {
 
         MAIN = this;
+
+        this.configuration = new MoonLakePluginConfig(this);
+        this.configuration.reload();
 
         try {
 
@@ -134,6 +138,12 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     public MoonLakePlugin getPlugin() {
 
         return this;
+    }
+
+    @Override
+    public MoonLakePluginConfig getConfiguration() {
+
+        return configuration;
     }
 
     @Override
