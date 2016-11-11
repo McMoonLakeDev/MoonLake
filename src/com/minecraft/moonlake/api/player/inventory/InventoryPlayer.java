@@ -18,6 +18,7 @@
  
 package com.minecraft.moonlake.api.player.inventory;
 
+import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -55,6 +56,7 @@ public interface InventoryPlayer extends InventoryHolder {
      * 获取此玩家的主手中物品
      *
      * @return 主手中物品
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.9 则抛出异常
      */
     ItemStack getItemInMainHand();
 
@@ -62,6 +64,7 @@ public interface InventoryPlayer extends InventoryHolder {
      * 获取此玩家的副手中物品
      *
      * @return 副手中物品
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.9 则抛出异常
      */
     ItemStack getItemInOffHand();
 
@@ -76,6 +79,7 @@ public interface InventoryPlayer extends InventoryHolder {
      * 设置此玩家的主手中物品
      *
      * @param itemStack 物品栈
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.9 则抛出异常
      */
     void setItemInMainHand(ItemStack itemStack);
 
@@ -83,6 +87,7 @@ public interface InventoryPlayer extends InventoryHolder {
      * 设置此玩家的副手中物品
      *
      * @param itemStack 物品栈
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.9 则抛出异常
      */
     void setItemInOffHand(ItemStack itemStack);
 

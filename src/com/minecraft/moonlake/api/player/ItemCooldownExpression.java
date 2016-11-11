@@ -60,6 +60,10 @@ class ItemCooldownExpression implements ItemCooldown {
 
         try {
 
+            if(getServerVersionNumber() <= 8) {
+
+                throw new IllegalBukkitVersionException("The player item cooldown not support 1.8 and old version bukkit.");
+            }
             CLASS_ITEM = PackageType.MINECRAFT_SERVER.getClass("Item");
             CLASS_ENTITYHUMAN = PackageType.MINECRAFT_SERVER.getClass("EntityHuman");
             CLASS_CRAFTPLAYER = PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");

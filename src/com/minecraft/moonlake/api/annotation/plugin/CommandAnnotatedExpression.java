@@ -20,7 +20,9 @@ package com.minecraft.moonlake.api.annotation.plugin;
 
 import com.minecraft.moonlake.api.annotation.plugin.command.*;
 import com.minecraft.moonlake.api.annotation.plugin.command.exception.*;
+import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.nms.exception.NMSException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
@@ -224,7 +226,7 @@ class CommandAnnotatedExpression implements CommandAnnotated {
 
                     throw new CommandException("The first parameter of method '" + this.commandMethod.getName() + " in " + this.commandClass + " is no CommandSender.");
                 }
-                if(Player.class.isAssignableFrom(methodParameterTypes[0]) && !(sender instanceof Player)) {
+                if((Player.class.isAssignableFrom(methodParameterTypes[0]) || MoonLakePlayer.class.isAssignableFrom(methodParameterTypes[0])) && !(sender instanceof Player)) {
 
                     throw new CommandIllegalSenderException();
                 }
@@ -257,8 +259,14 @@ class CommandAnnotatedExpression implements CommandAnnotated {
                     }
                     methodParameterTypeObjects[i] = parseArgument(methodParameterTypes[i], args[i - 1]);
                 }
-                methodParameterTypeObjects[0] = sender;
+                if(MoonLakePlayer.class.isAssignableFrom(methodParameterTypes[0])) {
 
+                    methodParameterTypeObjects[0] = PlayerManager.adapter((Player) sender);
+                }
+                else {
+
+                    methodParameterTypeObjects[0] = sender;
+                }
                 if(methodParameterTypes.length - 1 > args.length) {
 
                     for(int i = args.length; i < methodParameterTypes.length; i++) {
@@ -393,7 +401,7 @@ class CommandAnnotatedExpression implements CommandAnnotated {
 
                 throw new CommandException("The second parameter of method '" + commandCompletionMethod.getName() + " in " + commandCompletionMethod + " is no CommandSender");
             }
-            if (Player.class.isAssignableFrom(methodParameterTypes[1])) {
+            if (Player.class.isAssignableFrom(methodParameterTypes[1]) || MoonLakePlayer.class.isAssignableFrom(methodParameterTypes[1])) {
 
                 if (!(sender instanceof Player)) {
 
@@ -439,7 +447,15 @@ class CommandAnnotatedExpression implements CommandAnnotated {
             }
             @SuppressWarnings("unchecked")
             List<String> list = (List<String>) (methodParameterTypeObjects[0] = new ArrayList<String>());
-            methodParameterTypeObjects[1] = sender;
+
+            if(MoonLakePlayer.class.isAssignableFrom(methodParameterTypes[1])) {
+
+                methodParameterTypeObjects[1] = PlayerManager.adapter((Player) sender);
+            }
+            else {
+
+                methodParameterTypeObjects[1] = sender;
+            }
 
             commandCompletionMethod.invoke(commandClass, methodParameterTypeObjects);
             return getPossibleCompletionsForGivenArgs(args, list);

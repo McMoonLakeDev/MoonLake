@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.fancy.FancyMessage;
+import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -195,6 +196,7 @@ public interface BasePlayer {
      *
      * @param sound 音效名
      * @throws IllegalArgumentException 如果音效名对象为 {@code null} 则抛出异常
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.10 则抛出异常
      */
     void stopSound(String sound);
 
@@ -203,6 +205,7 @@ public interface BasePlayer {
      *
      * @param sound 音效
      * @throws IllegalArgumentException 如果音效对象为 {@code null} 则抛出异常
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.10 则抛出异常
      */
     void stopSound(Sound sound);
 

@@ -18,9 +18,9 @@
  
 package com.minecraft.moonlake.api.fancy;
 
+import com.minecraft.moonlake.api.nbt.NBTFactory;
 import com.minecraft.moonlake.json.JsonRepresentedObject;
 import com.minecraft.moonlake.json.JsonWrite;
-import com.minecraft.moonlake.manager.ItemManager;
 import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.util.StringUtil;
@@ -93,7 +93,7 @@ class FancyMessageExpression implements FancyMessage {
 
         if (partList.get().size() == 1) {
 
-            getLaster().writeJson(jsonWrite);
+            getLast().writeJson(jsonWrite);
         }
         else {
 
@@ -122,7 +122,7 @@ class FancyMessageExpression implements FancyMessage {
     @Override
     public FancyMessage text(TextualComponent text) {
 
-        FancyMessagePart laster = getLaster();
+        FancyMessagePart laster = getLast();
 
         laster.text.set(text);
 
@@ -136,7 +136,7 @@ class FancyMessageExpression implements FancyMessage {
 
         Validate.isTrue(color.isColor(), "The fancy message chatcolor type not is color.");
 
-        getLaster().color.set(color);
+        getLast().color.set(color);
 
         dirty.set(true);
 
@@ -148,7 +148,7 @@ class FancyMessageExpression implements FancyMessage {
 
         Validate.notNull(style, "The fancy message style object is null.");
 
-        getLaster().styles.get().addAll(Arrays.asList(style));
+        getLast().styles.get().addAll(Arrays.asList(style));
 
         dirty.set(true);
 
@@ -190,7 +190,7 @@ class FancyMessageExpression implements FancyMessage {
 
         Validate.notNull(command, "The fancy message insert command object is null.");
 
-        getLaster().insertion.set(command);
+        getLast().insertion.set(command);
 
         dirty.set(true);
 
@@ -243,7 +243,7 @@ class FancyMessageExpression implements FancyMessage {
 
         Validate.notNull(itemStack, "The tooltip itemstack object is null.");
 
-        String tag = ItemManager.getTagString(itemStack);
+        String tag = NBTFactory.get().readSafe(itemStack).toString();
 
         onHover("show_item", new FancyJsonString(
 
@@ -272,7 +272,7 @@ class FancyMessageExpression implements FancyMessage {
 
         for (final String str : replacements) {
 
-            getLaster().translationReplacements.get().add(new FancyJsonString(str));
+            getLast().translationReplacements.get().add(new FancyJsonString(str));
         }
         dirty.set(true);
 
@@ -286,7 +286,7 @@ class FancyMessageExpression implements FancyMessage {
 
         for (final FancyMessage fancyMessage : replacements) {
 
-            getLaster().translationReplacements.get().add(fancyMessage);
+            getLast().translationReplacements.get().add(fancyMessage);
         }
         dirty.set(true);
 
@@ -297,7 +297,7 @@ class FancyMessageExpression implements FancyMessage {
     @SuppressWarnings("deprecation")
     public FancyMessage then() {
 
-        Validate.isTrue(getLaster().hasText(), "The fancy message part laster not has text.");
+        Validate.isTrue(getLast().hasText(), "The fancy message part last not has text.");
 
         partList.get().add(new FancyMessagePart());
         dirty.set(true);
@@ -314,11 +314,26 @@ class FancyMessageExpression implements FancyMessage {
     @Override
     public FancyMessage then(TextualComponent text) {
 
-        Validate.isTrue(getLaster().hasText(), "The fancy message part laster not has text.");
+        Validate.isTrue(getLast().hasText(), "The fancy message part last not has text.");
 
         partList.get().add(new FancyMessagePart(text));
         dirty.set(true);
 
+        return this;
+    }
+
+    @Override
+    public FancyMessage join(FancyMessage fancyMessage) {
+
+        Validate.notNull(fancyMessage, "The fancy message object is null.");
+        Validate.isTrue(getLast().hasText(), "The fancy message part last not has text.");
+
+        Iterator<FancyMessagePart> iterator = fancyMessage.iterator();
+
+        while(iterator.hasNext()) {
+
+            partList.get().add(iterator.next());
+        }
         return this;
     }
 
@@ -383,27 +398,27 @@ class FancyMessageExpression implements FancyMessage {
         Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tellraw @a " + jsonString.get());    // @a = All Player
     }
 
-    protected FancyMessagePart getLaster() {
+    protected FancyMessagePart getLast() {
 
         return partList.get().get(partList.get().size() - 1);
     }
 
     private void onClick(String name, String data) {
 
-        FancyMessagePart laster = getLaster();
+        FancyMessagePart last = getLast();
 
-        laster.clickAction.set(name);
-        laster.clickActionValue.set(data);
+        last.clickAction.set(name);
+        last.clickActionValue.set(data);
 
         dirty.set(true);
     }
 
     private void onHover(String name, JsonRepresentedObject data) {
 
-        FancyMessagePart laster = getLaster();
+        FancyMessagePart last = getLast();
 
-        laster.hoverAction.set(name);
-        laster.hoverActionValue.set(data);
+        last.hoverAction.set(name);
+        last.hoverActionValue.set(data);
 
         dirty.set(true);
     }

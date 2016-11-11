@@ -43,6 +43,7 @@ import java.util.UUID;
  * <hr />
  *
  * @see AbstractPlayer
+ * @see SimpleMoonLakePlayer
  * @see NMSPlayer
  * @see InternetPlayer
  * @see SkinmePlayer
