@@ -18,8 +18,8 @@
  
 package com.minecraft.moonlake.manager;
 
-import com.minecraft.moonlake.api.player.MoonLakePlayer;
-import com.minecraft.moonlake.api.player.SimpleMoonLakePlayer;
+import com.minecraft.moonlake.api.player.*;
+import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
@@ -43,6 +43,7 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  */
 public class PlayerManager extends MoonLakeManager {
 
+    private final static Class<? extends SimpleMoonLakePlayer> CLASS_SIMPLEMOONLAKEPLAYER;
     private final static Class<?> CLASS_CRAFTPLAYER;
     private final static Class<?> CLASS_ENTITYHUMAN;
     private final static Method METHOD_GETHANDLE;
@@ -52,6 +53,20 @@ public class PlayerManager extends MoonLakeManager {
 
         try {
 
+            switch (getServerVersionNumber()) {
+
+                case 8:     // Bukkit 1.8
+                    CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_8.class;
+                    break;
+                case 9:     // Bukkit 1.9
+                    CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_9.class;
+                    break;
+                case 10:    // Bukkit 1.10
+                    CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_10.class;
+                    break;
+                default:    // Not Support
+                    CLASS_SIMPLEMOONLAKEPLAYER = null;
+            }
             CLASS_CRAFTPLAYER = PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
             CLASS_ENTITYHUMAN = PackageType.MINECRAFT_SERVER.getClass("EntityHuman");
             METHOD_GETHANDLE = getMethod(CLASS_CRAFTPLAYER, "getHandle");
@@ -154,7 +169,7 @@ public class PlayerManager extends MoonLakeManager {
     /**
      * 将字符串玩家对象转换到 Bukkit 玩家对象
      *
-     * @param players 字符串 玩家
+     * @param player 字符串 玩家
      * @return Bukkit 玩家
      * @throws IllegalArgumentException 如果字符串玩家对象为 {@code null} 则抛出异常
      */
@@ -171,6 +186,7 @@ public class PlayerManager extends MoonLakeManager {
      * @param players Bukkit 玩家
      * @return MoonLake 玩家
      * @throws IllegalArgumentException 如果 Bukkit 玩家对象为 {@code null} 则抛出异常
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本不支持则抛出异常
      */
     public static MoonLakePlayer[] adapter(Player... players) {
 
@@ -179,9 +195,25 @@ public class PlayerManager extends MoonLakeManager {
         int index = 0;
         MoonLakePlayer[] adapter = new MoonLakePlayer[players.length];
 
+        //
+        // 验证类是否为 null 则抛出非法 Bukkit 版本异常
+
+        if(CLASS_SIMPLEMOONLAKEPLAYER == null) {
+
+            throw new IllegalBukkitVersionException("The moonlake player class not support bukkit version.");
+        }
+        ///
+
         for(final Player player : players) {
 
-            adapter[index++] = new SimpleMoonLakePlayer(player);
+            try {
+
+                adapter[index++] = CLASS_SIMPLEMOONLAKEPLAYER.getConstructor(Player.class).newInstance(player);
+            }
+            catch (Exception e) {
+
+                throw new MoonLakeException("The adapter player to moonlake player exception.", e);
+            }
         }
         return adapter;
     }
@@ -189,7 +221,7 @@ public class PlayerManager extends MoonLakeManager {
     /**
      * 将 Bukkit 玩家对象转换到 MoonLake 玩家对象
      *
-     * @param players Bukkit 玩家
+     * @param player Bukkit 玩家
      * @return MoonLake 玩家
      * @throws IllegalArgumentException 如果 Bukkit 玩家对象为 {@code null} 则抛出异常
      */
@@ -224,7 +256,7 @@ public class PlayerManager extends MoonLakeManager {
     /**
      * 将 MoonLake 玩家对象转换到 Bukkit 玩家对象
      *
-     * @param players MoonLake 玩家
+     * @param player MoonLake 玩家
      * @return Bukkit 玩家
      * @throws IllegalArgumentException 如果 MoonLake 玩家对象为 {@code null} 则抛出异常
      */

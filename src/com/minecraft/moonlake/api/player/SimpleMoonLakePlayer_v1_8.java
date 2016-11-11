@@ -14,156 +14,172 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
- 
+
+
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 /**
  * <h1>SimpleMoonLakePlayer</h1>
- * 月色之湖玩家接口单包装类
+ * 月色之湖玩家接口单包装类 - Bukkit 1.8
  *
  * @version 1.0
  * @author Month_Light
- * @see MoonLakePlayer
- * @see AbstractPlayer
- * @see SimpleMoonLakePlayer_v1_8
- * @see SimpleMoonLakePlayer_v1_9
- * @see SimpleMoonLakePlayer_v1_10
  */
-public class SimpleMoonLakePlayer extends AbstractPlayer {
+public class SimpleMoonLakePlayer_v1_8 extends SimpleMoonLakePlayer {
 
     /**
-     * 月色之湖玩家接口单包装类构造函数
+     * 月色之湖玩家接口单包装类 - Bukkit 1.8 构造函数
      *
      * @param name 玩家名
      * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家没有在线则抛出异常
      */
-    public SimpleMoonLakePlayer(String name) throws IllegalArgumentException, PlayerNotOnlineException {
+    public SimpleMoonLakePlayer_v1_8(String name) throws IllegalArgumentException, PlayerNotOnlineException {
 
         super(name);
     }
 
     /**
-     * 月色之湖玩家接口单包装类构造函数
+     * 月色之湖玩家接口单包装类 - Bukkit 1.8 构造函数
      *
      * @param player 玩家对象
      * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家没有在线则抛出异常
      */
-    public SimpleMoonLakePlayer(Player player) throws IllegalArgumentException, PlayerNotOnlineException {
+    public SimpleMoonLakePlayer_v1_8(Player player) throws IllegalArgumentException, PlayerNotOnlineException {
 
         super(player);
     }
 
+    //
+    // 这些函数 Bukkit 1.8 均不支持
+
     @Override
     public void stopSound(String sound) {
 
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public void stopSound(Sound sound) {
 
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public boolean isGliding() {
 
-        return false;
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public void setGliding(boolean gliding) {
 
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public void setGlowing(boolean flag) {
 
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public boolean isGlowing() {
 
-        return false;
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public void setInvulnerable(boolean flag) {
 
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public boolean isInvulnerable() {
 
-        return false;
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public boolean isSilent() {
 
-        return false;
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public void setSilent(boolean flag) {
 
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public boolean hasGravity() {
 
-        return false;
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public void setGravity(boolean gravity) {
 
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public void addPotionEffect(PotionEffectType type, int level, int time, boolean ambient, boolean particles, Color color) {
 
+        Validate.notNull(type, "The potion effect type object is null.");
+
+        getBukkitPlayer().addPotionEffect(new PotionEffect(type, time, level - 1, ambient, particles));
     }
 
     @Override
     public Entity getSpectatorTarget() {
 
-        return null;
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public void setSpectatorTarget(Entity entity) {
 
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public ItemStack getItemInMainHand() {
 
-        return null;
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public ItemStack getItemInOffHand() {
 
-        return null;
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public void setItemInMainHand(ItemStack itemStack) {
 
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
 
     @Override
     public void setItemInOffHand(ItemStack itemStack) {
 
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
+
+    ///
 }

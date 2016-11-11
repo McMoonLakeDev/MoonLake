@@ -20,12 +20,18 @@ package com.minecraft.moonlake.api.player.ability;
 
 import com.minecraft.moonlake.api.player.BasePlayer;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
+import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
@@ -41,7 +47,7 @@ import java.util.UUID;
  * @author Month_Light
  * @see BasePlayer
  */
-public interface AbilityPlayer extends BasePlayer, AnimalTamer {
+public interface AbilityPlayer extends BasePlayer, AnimalTamer, CommandSender {
 
     /**
      * 获取此玩家的名称
@@ -325,6 +331,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * 获取此玩家是否滑翔状态
      *
      * @return 是否滑翔
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.9 则抛出异常
      */
     boolean isGliding();
 
@@ -332,6 +339,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * 设置此玩家是否滑翔状态
      *
      * @param gliding 是否滑翔
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.9 则抛出异常
      */
     void setGliding(boolean gliding);
 
@@ -339,6 +347,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * 设置此玩家是否发光
      *
      * @param flag 是否发光
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.9 则抛出异常
      */
     void setGlowing(boolean flag);
 
@@ -346,6 +355,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * 获取此实体是否发光
      *
      * @return 是否发光
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.9 则抛出异常
      */
     boolean isGlowing();
 
@@ -353,6 +363,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * 设置此玩家是否坚不可摧 (无敌)
      *
      * @param flag 是否坚不可摧
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.9 则抛出异常
      */
     void setInvulnerable(boolean flag);
 
@@ -360,6 +371,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * 获取此玩家是否坚不可摧 (无敌)
      *
      * @return 是否坚不可摧
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.9 则抛出异常
      */
     boolean isInvulnerable();
 
@@ -367,6 +379,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * 获取此玩家是否沉默
      *
      * @return 是否沉默
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.10 则抛出异常
      */
     boolean isSilent();
 
@@ -374,6 +387,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * 设置此玩家是否沉默
      *
      * @param flag 是否沉默
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.10 则抛出异常
      */
     void setSilent(boolean flag);
 
@@ -381,6 +395,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * 获取此玩家是否拥有重力
      *
      * @return 是否拥有重力
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.10 则抛出异常
      */
     boolean hasGravity();
 
@@ -388,6 +403,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * 设置此玩家是否拥有重力
      *
      * @param gravity 是否拥有重力
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.10 则抛出异常
      */
     void setGravity(boolean gravity);
 
@@ -440,15 +456,6 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * @throws IllegalArgumentException 如果游戏模式对象为 {@code null} 则抛出异常
      */
     void setGameMode(GameMode mode);
-
-    /**
-     * 获取此玩家是否拥有指定权限
-     *
-     * @param permission 权限
-     * @return true 拥有此权限 else 没有
-     * @throws IllegalArgumentException 如果权限对象为 {@code null} 则抛出异常
-     */
-    boolean hasPermission(String permission);
 
     /**
      * 获取此玩家是否潜行中
@@ -514,6 +521,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * @param particles 是否拥有粒子效果
      * @param color 药水粒子的颜色
      * @throws IllegalArgumentException 如果药水效果类型对象为 {@code null} 则抛出异常
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.9 则抛出异常
      */
     void addPotionEffect(PotionEffectType type, int level, int time, boolean ambient, boolean particles, Color color);
 
@@ -545,6 +553,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * 获取此玩家在观察者模式的追踪目标实体
      *
      * @return 目标实体 没有则返回 null
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.9 则抛出异常
      */
     Entity getSpectatorTarget();
 
@@ -553,6 +562,7 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      *
      * @param entity 实体对象
      * @throws IllegalArgumentException 如果此玩家的游戏模式不为 {@link GameMode#SPECTATOR} 则抛出异常
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.9 则抛出异常
      */
     void setSpectatorTarget(Entity entity);
 
@@ -619,4 +629,140 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer {
      * @throws IllegalArgumentException 如果命令对象为 {@code null} 则抛出异常
      */
     boolean performCommand(String command);
+
+    /**
+     * 给此玩家发送消息
+     *
+     * @param message 消息
+     * @throws IllegalArgumentException 如果发送的消息对象为 {@code null} 则抛出异常
+     */
+    @Override
+    void sendMessage(String message);
+
+    /**
+     * 给此玩家发送消息
+     *
+     * @param messages 消息
+     * @throws IllegalArgumentException 如果发送的消息对象为 {@code null} 则抛出异常
+     */
+    @Override
+    void sendMessage(String[] messages);
+
+    /**
+     * 获取此玩家的服务器对象
+     *
+     * @return 服务器
+     */
+    @Override
+    Server getServer();
+
+    /**
+     * 获取此玩家是否拥有指定权限的重写
+     *
+     * @param name 权限名
+     * @return 是否拥有
+     */
+    @Override
+    boolean isPermissionSet(String name);
+
+    /**
+     * 获取此玩家是否拥有指定权限的重写
+     *
+     * @param perm 权限
+     * @return 是否拥有
+     * @throws IllegalArgumentException 如果权限对象为 {@code null} 则抛出异常
+     */
+    @Override
+    boolean isPermissionSet(Permission perm);
+
+    /**
+     * 获取此玩家是否拥有指定权限
+     *
+     * @param name 权限名
+     * @return 是否拥有
+     * @throws IllegalArgumentException 如果权限对象为 {@code null} 则抛出异常
+     */
+    boolean hasPermission(String name);
+
+    /**
+     * 获取此玩家是否拥有指定权限
+     *
+     * @param perm 权限
+     * @return 是否拥有
+     * @throws IllegalArgumentException 如果权限对象为 {@code null} 则抛出异常
+     */
+    @Override
+    boolean hasPermission(Permission perm);
+
+    /**
+     * 给此玩家添加指定名称和值的单权限依赖
+     *
+     * @param plugin 插件
+     * @param name 权限名
+     * @param value 权限值
+     * @return 权限依赖
+     */
+    @Override
+    PermissionAttachment addAttachment(Plugin plugin, String name, boolean value);
+
+    /**
+     * 给此玩家添加空的单权限依赖
+     *
+     * @param plugin 插件
+     * @return 权限依赖
+     */
+    @Override
+    PermissionAttachment addAttachment(Plugin plugin);
+
+    /**
+     * 给此玩家添加指定时间的名称和值的单权限依赖
+     *
+     * @param plugin 插件
+     * @param name 权限名
+     * @param value 权限值
+     * @param ticks 时间
+     * @return 权限依赖
+     */
+    @Override
+    PermissionAttachment addAttachment(Plugin plugin, String name, boolean value, int ticks);
+
+    /**
+     * 给此玩家添加指定时间的空的单权限依赖
+     *
+     * @param plugin 插件
+     * @param ticks 时间
+     * @return 权限依赖
+     */
+    @Override
+    PermissionAttachment addAttachment(Plugin plugin, int ticks);
+
+    /**
+     * 删除此玩家指定权限依赖
+     *
+     * @param attachment 权限依赖
+     */
+    @Override
+    void removeAttachment(PermissionAttachment attachment);
+
+    /**
+     * 重新计算此玩家的权限依赖对象
+     */
+    @Override
+    void recalculatePermissions();
+
+    /**
+     * 获取此玩家在当前效果中所拥有的权限
+     *
+     * @return 权限集合
+     */
+    @Override
+    Set<PermissionAttachmentInfo> getEffectivePermissions();
+
+    /**
+     * 设置此玩家是否为管理员
+     *
+     * @param value 是否为管理员
+     */
+    @Override
+    void setOp(boolean value);
 }

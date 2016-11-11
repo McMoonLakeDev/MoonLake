@@ -19,9 +19,13 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.fancy.FancyMessage;
-import com.minecraft.moonlake.nms.packet.Packet;
+import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.manager.PlayerManager;
-import com.minecraft.moonlake.property.*;
+import com.minecraft.moonlake.nms.packet.Packet;
+import com.minecraft.moonlake.property.ReadOnlyObjectProperty;
+import com.minecraft.moonlake.property.ReadOnlyStringProperty;
+import com.minecraft.moonlake.property.SimpleObjectProperty;
+import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
@@ -35,6 +39,10 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
@@ -68,8 +76,10 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
      * 月色之湖玩家抽象类构造函数
      *
      * @param name 玩家名
+     * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
+     * @throws PlayerNotOnlineException 如果玩家没有在线则抛出异常
      */
-    public AbstractPlayer(String name) {
+    public AbstractPlayer(String name) throws IllegalArgumentException, PlayerNotOnlineException {
 
         this(Bukkit.getPlayer(name));
     }
@@ -78,9 +88,17 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
      * 月色之湖玩家抽象类构造函数
      *
      * @param player 玩家对象
+     * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
+     * @throws PlayerNotOnlineException 如果玩家没有在线则抛出异常
      */
-    public AbstractPlayer(Player player) {
+    public AbstractPlayer(Player player) throws IllegalArgumentException, PlayerNotOnlineException {
 
+        Validate.notNull(player, "The player object is null.");
+
+        if(!player.isOnline()) {
+
+            throw new PlayerNotOnlineException(player.getName());
+        }
         this.nameProperty = new SimpleStringProperty(player.getName());
         this.playerProperty = new SimpleObjectProperty<>(player);
     }
@@ -282,18 +300,6 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     public void setScoreboard(Scoreboard scoreboard) {
 
         getBukkitPlayer().setScoreboard(scoreboard);
-    }
-
-    @Override
-    public Entity getSpectatorTarget() {
-
-        return getBukkitPlayer().getSpectatorTarget();
-    }
-
-    @Override
-    public void setSpectatorTarget(Entity entity) {
-
-        getBukkitPlayer().setSpectatorTarget(entity);
     }
 
     @Override
@@ -527,22 +533,6 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void stopSound(String sound) {
-
-        Validate.notNull(sound, "The sound string object is null.");
-
-        getBukkitPlayer().stopSound(sound);
-    }
-
-    @Override
-    public void stopSound(Sound sound) {
-
-        Validate.notNull(sound, "The sound object is null.");
-
-        getBukkitPlayer().stopSound(sound);
-    }
-
-    @Override
     public double distance(Location target) {
 
         Validate.notNull(target, "The distance target object is null.");
@@ -551,33 +541,9 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public ItemStack getItemInMainHand() {
-
-        return getInventory().getItemInMainHand();
-    }
-
-    @Override
-    public ItemStack getItemInOffHand() {
-
-        return getInventory().getItemInOffHand();
-    }
-
-    @Override
     public ItemStack getItemOnCursor() {
 
         return getBukkitPlayer().getItemOnCursor();
-    }
-
-    @Override
-    public void setItemInMainHand(ItemStack itemStack) {
-
-        getInventory().setItemInMainHand(itemStack);
-    }
-
-    @Override
-    public void setItemInOffHand(ItemStack itemStack) {
-
-        getInventory().setItemInOffHand(itemStack);
     }
 
     @Override
@@ -617,14 +583,6 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void addPotionEffect(PotionEffectType type, int level, int time, boolean ambient, boolean particles, Color color) {
-
-        Validate.notNull(type, "The potion effect type object is null.");
-
-        getBukkitPlayer().addPotionEffect(new PotionEffect(type, time, level - 1, ambient, particles, color));
-    }
-
-    @Override
     public boolean hasPotionEffect(PotionEffectType type) {
 
         Validate.notNull(type, "The potion effect type object is null.");
@@ -652,14 +610,6 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     public Map<Integer, ItemStack> removeItemStack(ItemStack... itemStacks) {
 
         return getInventory().removeItem(itemStacks);
-    }
-
-    @Override
-    public boolean hasPermission(String permission) {
-
-        Validate.notNull(permission, "The permission string object is null.");
-
-        return getBukkitPlayer().hasPermission(permission);
     }
 
     @Override
@@ -931,18 +881,6 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public boolean isGliding() {
-
-        return getBukkitPlayer().isGliding();
-    }
-
-    @Override
-    public void setGliding(boolean gliding) {
-
-        getBukkitPlayer().setGliding(gliding);
-    }
-
-    @Override
     public void clearPotionEffect() {
 
         if(getBukkitPlayer() != null && !getBukkitPlayer().getActivePotionEffects().isEmpty()) {
@@ -1013,54 +951,6 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void setGlowing(boolean flag) {
-
-        getBukkitPlayer().setGlowing(flag);
-    }
-
-    @Override
-    public boolean isGlowing() {
-
-        return getBukkitPlayer().isGlowing();
-    }
-
-    @Override
-    public void setInvulnerable(boolean flag) {
-
-        getBukkitPlayer().setInvulnerable(flag);
-    }
-
-    @Override
-    public boolean isInvulnerable() {
-
-        return getBukkitPlayer().isInvulnerable();
-    }
-
-    @Override
-    public boolean isSilent() {
-
-        return getBukkitPlayer().isSilent();
-    }
-
-    @Override
-    public void setSilent(boolean flag) {
-
-        getBukkitPlayer().setSilent(flag);
-    }
-
-    @Override
-    public boolean hasGravity() {
-
-        return getBukkitPlayer().hasGravity();
-    }
-
-    @Override
-    public void setGravity(boolean gravity) {
-
-        getBukkitPlayer().setGravity(gravity);
-    }
-
-    @Override
     public void setResourcePack(String url) {
 
         Validate.notNull(url, "The resource pack url string object is null.");
@@ -1083,6 +973,104 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
         Validate.notNull(vector, "The projectile vector object is null.");
 
         return getBukkitPlayer().launchProjectile(projectile, vector);
+    }
+
+    @Override
+    public void sendMessage(String message) {
+
+        send(message);
+    }
+
+    @Override
+    public void sendMessage(String[] messages) {
+
+        send(messages);
+    }
+
+    @Override
+    public Server getServer() {
+
+        return getBukkitPlayer().getServer();
+    }
+
+    @Override
+    public boolean isPermissionSet(String name) {
+
+        Validate.notNull(name, "The permission name object is null.");
+
+        return getBukkitPlayer().isPermissionSet(name);
+    }
+
+    @Override
+    public boolean isPermissionSet(Permission perm) {
+
+        Validate.notNull(perm, "The permission object is null.");
+
+        return getBukkitPlayer().isPermissionSet(perm);
+    }
+
+    @Override
+    public boolean hasPermission(String permission) {
+
+        Validate.notNull(permission, "The permission string object is null.");
+
+        return getBukkitPlayer().hasPermission(permission);
+    }
+
+    @Override
+    public boolean hasPermission(Permission perm) {
+
+        Validate.notNull(perm, "The permission object is null.");
+
+        return getBukkitPlayer().hasPermission(perm);
+    }
+
+    @Override
+    public PermissionAttachment addAttachment(Plugin plugin, String name, boolean value) {
+
+        return getBukkitPlayer().addAttachment(plugin, name, value);
+    }
+
+    @Override
+    public PermissionAttachment addAttachment(Plugin plugin) {
+
+        return getBukkitPlayer().addAttachment(plugin);
+    }
+
+    @Override
+    public PermissionAttachment addAttachment(Plugin plugin, String name, boolean value, int ticks) {
+
+        return getBukkitPlayer().addAttachment(plugin, name, value, ticks);
+    }
+
+    @Override
+    public PermissionAttachment addAttachment(Plugin plugin, int ticks) {
+
+        return getBukkitPlayer().addAttachment(plugin, ticks);
+    }
+
+    @Override
+    public void removeAttachment(PermissionAttachment attachment) {
+
+        getBukkitPlayer().removeAttachment(attachment);
+    }
+
+    @Override
+    public void recalculatePermissions() {
+
+        getBukkitPlayer().recalculatePermissions();
+    }
+
+    @Override
+    public Set<PermissionAttachmentInfo> getEffectivePermissions() {
+
+        return getBukkitPlayer().getEffectivePermissions();
+    }
+
+    @Override
+    public void setOp(boolean value) {
+
+        getBukkitPlayer().setOp(value);
     }
 
     @Override
@@ -1114,6 +1102,10 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public boolean equals(Object object) {
 
+        if(object == this) {
+
+            return true;
+        }
         if(object != null) {
 
             if(object instanceof MoonLakePlayer) {
