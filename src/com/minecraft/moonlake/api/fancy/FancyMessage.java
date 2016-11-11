@@ -226,6 +226,15 @@ public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable
     FancyMessage then(TextualComponent text);
 
     /**
+     * 将指定花式消息和此花式消息连接
+     *
+     * @param fancyMessage 花式消息
+     * @throws IllegalArgumentException 如果花式消息对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果最后一个花式消息对象没有文本内容则抛出异常
+     */
+    FancyMessage join(FancyMessage fancyMessage);
+
+    /**
      * 创建花式消息对象
      */
     @Override
