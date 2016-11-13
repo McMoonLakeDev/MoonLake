@@ -93,6 +93,9 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
 
         MAIN = this;
 
+        // set MoonLake API Object
+        MoonLakeAPI.setMoonlake(this);
+
         this.configuration = new MoonLakePluginConfig(this);
         this.configuration.reload();
 
