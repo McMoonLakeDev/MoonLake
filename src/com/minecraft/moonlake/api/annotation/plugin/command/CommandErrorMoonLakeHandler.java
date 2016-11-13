@@ -46,8 +46,10 @@ public class CommandErrorMoonLakeHandler extends CommandErrorFeedbackHandler {
         if(sender instanceof Player) {
 
             FancyMessageFactory.get()
-                    .message("[MoonLake] ")
-                    .color(ChatColor.YELLOW)
+                    .message("MoonLake")
+                    .color(ChatColor.DARK_AQUA)
+                    .then(" >> ")
+                    .color(ChatColor.GRAY)
                     .then("未知错误, 请查看控制台的错误反馈: ")
                     .color(ChatColor.RED)
                     .then("异常信息")
@@ -67,8 +69,10 @@ public class CommandErrorMoonLakeHandler extends CommandErrorFeedbackHandler {
         if(sender instanceof Player) {
 
             FancyMessageFactory.get()
-                    .message("[MoonLake] ")
-                    .color(ChatColor.YELLOW)
+                    .message("MoonLake")
+                    .color(ChatColor.DARK_AQUA)
+                    .then(" >> ")
+                    .color(ChatColor.GRAY)
                     .then("你没有使用这个命令的")
                     .color(ChatColor.RED)
                     .then("权限")
@@ -86,7 +90,7 @@ public class CommandErrorMoonLakeHandler extends CommandErrorFeedbackHandler {
 
     public void handleCommandIllegalSenderException(CommandIllegalSenderException exception, CommandSender sender, org.bukkit.command.Command command, String[] args) {
 
-        sender.sendMessage(StringUtil.toColor("&e[MoonLake] &c控制台不能使用这个命令."));
+        sender.sendMessage(StringUtil.toColor("&3MoonLake &7>> &c控制台不能使用这个命令."));
     }
 
     public void handleCommandUnhandledException(CommandUnhandledException exception, CommandSender sender, org.bukkit.command.Command command, String[] args) {
@@ -94,8 +98,10 @@ public class CommandErrorMoonLakeHandler extends CommandErrorFeedbackHandler {
         if(sender instanceof Player) {
 
             FancyMessageFactory.get()
-                    .message("[MoonLake] ")
-                    .color(ChatColor.YELLOW)
+                    .message("MoonLake")
+                    .color(ChatColor.DARK_AQUA)
+                    .then(" >> ")
+                    .color(ChatColor.GRAY)
                     .then("未知错误, 请查看控制台的错误反馈: ")
                     .color(ChatColor.RED)
                     .then("异常信息")
@@ -115,16 +121,20 @@ public class CommandErrorMoonLakeHandler extends CommandErrorFeedbackHandler {
         if(sender instanceof Player) {
 
             FancyMessageFactory.get()
-                    .message("[MoonLake] ")
-                    .color(ChatColor.YELLOW)
+                    .message("MoonLake")
+                    .color(ChatColor.DARK_AQUA)
+                    .then(" >> ")
+                    .color(ChatColor.GRAY)
                     .then("错误的命令参数长度.")
                     .color(ChatColor.RED)
                     .tooltip(exception.getMessage())
                     .build()
                     .send((Player) sender);
             FancyMessageFactory.get()
-                    .message("[MoonLake] ")
-                    .color(ChatColor.YELLOW)
+                    .message("MoonLake")
+                    .color(ChatColor.DARK_AQUA)
+                    .then(" >> ")
+                    .color(ChatColor.GRAY)
                     .then("请使用: /" + command.getName() + " " + command.getUsage())
                     .color(ChatColor.RED)
                     .build()
@@ -139,8 +149,10 @@ public class CommandErrorMoonLakeHandler extends CommandErrorFeedbackHandler {
         if(sender instanceof Player) {
 
             FancyMessageFactory.get()
-                    .message("[MoonLake] ")
-                    .color(ChatColor.YELLOW)
+                    .message("MoonLake")
+                    .color(ChatColor.DARK_AQUA)
+                    .then(" >> ")
+                    .color(ChatColor.GRAY)
                     .then("此命令参数解析错误: ")
                     .color(ChatColor.RED)
                     .then("异常信息")
