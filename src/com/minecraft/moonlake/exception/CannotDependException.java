@@ -19,22 +19,38 @@
 package com.minecraft.moonlake.exception;
 
 /**
- * Created by Intellij IDEA.
- * User: MoonLake
- * Date: 2016/11/14 14:48
+ * <h1>CannotDependException</h1>
+ * 无法依赖异常类
+ *
+ * @version 1.0
+ * @author Month_Light
  */
 public class CannotDependException extends MoonLakeException {
 
+    /**
+     * 无法依赖异常类构造函数
+     */
     public CannotDependException() {
 
         this("The cannot depend plugin exception");
     }
 
+    /**
+     * 无法依赖异常类构造函数
+     *
+     * @param message 异常消息
+     */
     public CannotDependException(String message) {
 
         super(message);
     }
 
+    /**
+     * 无法依赖异常类构造函数
+     *
+     * @param message 异常消息
+     * @param cause 异常原因
+     */
     public CannotDependException(String message, Throwable cause) {
 
         super(message, cause);
