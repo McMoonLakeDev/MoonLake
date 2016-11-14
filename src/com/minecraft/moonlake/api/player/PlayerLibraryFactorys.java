@@ -18,6 +18,8 @@
  
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.exception.CannotDependException;
+
 /**
  * <h1>PlayerLibraryFactorys</h1>
  * 玩家支持库静态工厂类
@@ -28,6 +30,9 @@ package com.minecraft.moonlake.api.player;
 public class PlayerLibraryFactorys {
 
     private static PlayerLibrary playerLibraryInstance;
+
+    private static DependEconomyPlayer dependEconomyPlayer;
+    private static Boolean dependEconomyPlayerHook = null;
 
     /**
      * 玩家支持库静态工厂类构造函数
@@ -58,5 +63,40 @@ public class PlayerLibraryFactorys {
     public static NMSPlayerLibrary nmsPlayer() {
 
         return player();
+    }
+
+    /**
+     * 获取依赖经济插件玩家 DependEconomyPlayer 对象
+     *
+     * @return DependEconomyPlayer
+     * @throws IllegalArgumentException 如果无法加载依赖插件则抛出异常
+     */
+    public static DependEconomyPlayer economyPlayer() throws CannotDependException {
+
+        if(dependEconomyPlayer == null && dependEconomyPlayerHook == null) {
+
+            try {
+
+                dependEconomyPlayer = new DependEconomyPlayer();
+                dependEconomyPlayerHook = true;
+            }
+            catch (Exception e) {
+
+                dependEconomyPlayerHook = false;
+
+                throw new CannotDependException("The hook 'MoonLakeEconomy' plugin failed exception.", e);
+            }
+        }
+        return dependEconomyPlayer;
+    }
+
+    /**
+     * 获取是否成功依赖经济插件玩家
+     *
+     * @return 是否成功依赖
+     */
+    public static Boolean isDependEconomyPlayerHook() {
+
+        return dependEconomyPlayerHook;
     }
 }

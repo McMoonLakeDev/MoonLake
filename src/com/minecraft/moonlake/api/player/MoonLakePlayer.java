@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.player.ability.AbilityPlayer;
+import com.minecraft.moonlake.api.player.depend.DependPlayer;
 import com.minecraft.moonlake.api.player.inventory.InventoryPlayer;
 import org.bukkit.entity.Player;
 
@@ -49,10 +50,11 @@ import java.util.UUID;
  * @see SkinmePlayer
  * @see AbilityPlayer
  * @see InventoryPlayer
+ * @see DependPlayer
  * @version 1.1
  * @author Month_Light
  */
-public interface MoonLakePlayer extends AbilityPlayer, InventoryPlayer, NMSPlayer, InternetPlayer, SkinmePlayer, Comparable<MoonLakePlayer> {
+public interface MoonLakePlayer extends AbilityPlayer, InventoryPlayer, NMSPlayer, InternetPlayer, SkinmePlayer, DependPlayer, Comparable<MoonLakePlayer> {
 
     /**
      * 获取此玩家的 Bukkit 玩家对象

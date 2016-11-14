@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.fancy.FancyMessage;
+import com.minecraft.moonlake.exception.CannotDependException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.nms.packet.Packet;
@@ -1184,5 +1185,109 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     public boolean hasItemCooldown(Material type) {
 
         return PlayerLibraryFactorys.player().hasItemCooldown(getName(), type);
+    }
+
+    @Override
+    public double getMoney() {
+
+        try {
+
+            return PlayerLibraryFactorys.economyPlayer().getMoney(getName());
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'MoonLakeEconomy' plugin method 'getMoney' exception.", e);
+        }
+    }
+
+    @Override
+    public void setMoney(double money) {
+
+        try {
+
+            PlayerLibraryFactorys.economyPlayer().setMoney(getName(), money);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'MoonLakeEconomy' plugin method 'setMoney' exception.", e);
+        }
+    }
+
+    @Override
+    public void giveMoney(double money) {
+
+        try {
+
+            PlayerLibraryFactorys.economyPlayer().giveMoney(getName(), money);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'MoonLakeEconomy' plugin method 'giveMoney' exception.", e);
+        }
+    }
+
+    @Override
+    public void takeMoney(double money) {
+
+        try {
+
+            PlayerLibraryFactorys.economyPlayer().takeMoney(getName(), money);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'MoonLakeEconomy' plugin method 'takeMoney' exception.", e);
+        }
+    }
+
+    @Override
+    public int getPoint() {
+
+        try {
+
+            return PlayerLibraryFactorys.economyPlayer().getPoint(getName());
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'MoonLakeEconomy' plugin method 'getPoint' exception.", e);
+        }
+    }
+
+    @Override
+    public void setPoint(int point) {
+
+        try {
+
+            PlayerLibraryFactorys.economyPlayer().setPoint(getName(), point);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'MoonLakeEconomy' plugin method 'setPoint' exception.", e);
+        }
+    }
+
+    @Override
+    public void givePoint(int point) {
+
+        try {
+
+            PlayerLibraryFactorys.economyPlayer().givePoint(getName(), point);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'MoonLakeEconomy' plugin method 'givePoint' exception.", e);
+        }
+    }
+
+    @Override
+    public void takePoint(int point) {
+
+        try {
+
+            PlayerLibraryFactorys.economyPlayer().takePoint(getName(), point);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'MoonLakeEconomy' plugin method 'takePoint' exception.", e);
+        }
     }
 }
