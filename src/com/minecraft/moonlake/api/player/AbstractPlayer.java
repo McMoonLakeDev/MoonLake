@@ -51,10 +51,7 @@ import org.bukkit.util.Vector;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.util.Date;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * <hr />
@@ -1288,6 +1285,348 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
         catch (Exception e) {
 
             throw new CannotDependException("The call 'MoonLakeEconomy' plugin method 'takePoint' exception.", e);
+        }
+    }
+
+    @Override
+    public void addPermissionsExGroup(String group) throws CannotDependException {
+
+        Validate.notNull(group, "The group object is null.");
+
+        try {
+
+            PlayerLibraryFactorys.permissionsExPlayer().addPermissionsExGroup(this, group);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'addPermissionsExGroup' exception.", e);
+        }
+    }
+
+    @Override
+    public void addPermissionsExGroup(String group, String world) throws CannotDependException {
+
+        Validate.notNull(group, "The group object is null.");
+
+        try {
+
+            PlayerLibraryFactorys.permissionsExPlayer().addPermissionsExGroup(this, group, world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'addPermissionsExGroup' exception.", e);
+        }
+    }
+
+    @Override
+    public void removePermissionsExGroup(String group) throws CannotDependException {
+
+        Validate.notNull(group, "The group object is null.");
+
+        try {
+
+            PlayerLibraryFactorys.permissionsExPlayer().removePermissionsExGroup(this, group);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'removePermissionsExGroup' exception.", e);
+        }
+    }
+
+    @Override
+    public void removePermissionsExGroup(String group, String world) throws CannotDependException {
+
+        Validate.notNull(group, "The group object is null.");
+
+        try {
+
+            PlayerLibraryFactorys.permissionsExPlayer().removePermissionsExGroup(this, group, world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'removePermissionsExGroup' exception.", e);
+        }
+    }
+
+    @Override
+    public boolean inPermissionsExGroup(String group) throws CannotDependException {
+
+        Validate.notNull(group, "The group object is null.");
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().inPermissionsExGroup(this, group);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'inPermissionsExGroup' exception.", e);
+        }
+    }
+
+    @Override
+    public boolean inPermissionsExGroup(String group, String world) throws CannotDependException {
+
+        Validate.notNull(group, "The group object is null.");
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().inPermissionsExGroup(this, group, world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'inPermissionsExGroup' exception.", e);
+        }
+    }
+
+    @Override
+    public boolean inPermissionsExGroup(String group, boolean checkInheritance) throws CannotDependException {
+
+        Validate.notNull(group, "The group object is null.");
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().inPermissionsExGroup(this, group, checkInheritance);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'inPermissionsExGroup' exception.", e);
+        }
+    }
+
+    @Override
+    public boolean inPermissionsExGroup(String group, String world, boolean checkInheritance) throws CannotDependException {
+
+        Validate.notNull(group, "The group object is null.");
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().inPermissionsExGroup(this, group, world, checkInheritance);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'inPermissionsExGroup' exception.", e);
+        }
+    }
+
+    @Override
+    public List<String> getPermissionsExPer() throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExPer(this);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'getPermissionsExPer' exception.", e);
+        }
+    }
+
+    @Override
+    public List<String> getPermissionsExPer(String world) throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExPer(this, world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'getPermissionsExPer' exception.", e);
+        }
+    }
+
+    @Override
+    public String getPermissionsExPrefix() throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExPrefix(this);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'getPermissionsExPrefix' exception.", e);
+        }
+    }
+
+    @Override
+    public String getPermissionsExPrefix(String world) throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExPrefix(this, world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'getPermissionsExPrefix' exception.", e);
+        }
+    }
+
+    @Override
+    public String getPermissionsExOwnPrefix() throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExOwnPerfix(this);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'getPermissionsExOwnPrefix' exception.", e);
+        }
+    }
+
+    @Override
+    public String getPermissionsExOwnPrefix(String world) throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExOwnPerfix(this, world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'getPermissionsExOwnPrefix' exception.", e);
+        }
+    }
+
+    @Override
+    public String getPermissionsExSuffix() throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExSuffix(this);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'getPermissionsExSuffix' exception.", e);
+        }
+    }
+
+    @Override
+    public String getPermissionsExSuffix(String world) throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExSuffix(this, world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'getPermissionsExSuffix' exception.", e);
+        }
+    }
+
+    @Override
+    public String getPermissionsExOwnSuffix() throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExOwnSuffix(this);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'getPermissionsExOwnSuffix' exception.", e);
+        }
+    }
+
+    @Override
+    public String getPermissionsExOwnSuffix(String world) throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExOwnSuffix(this, world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'getPermissionsExOwnSuffix' exception.", e);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public String[] getPermissionsExGroupNames() throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExGroupNames(this);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'getPermissionsExGroupNames' exception.", e);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public String[] getPermissionsExGroupNames(String world) throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExGroupNames(this, world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'getPermissionsExGroupNames' exception.", e);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void setPermissionsExGroup(String group) throws CannotDependException {
+
+        Validate.notNull(group, "The group object is null.");
+
+        try {
+
+            PlayerLibraryFactorys.permissionsExPlayer().setPermissionsExGroup(this, group);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'setPermissionsExGroup' exception.", e);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void setPermissionsExGroup(String group, String world) throws CannotDependException {
+
+        Validate.notNull(group, "The group object is null.");
+
+        try {
+
+            PlayerLibraryFactorys.permissionsExPlayer().setPermissionsExGroup(this, group, world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'setPermissionsExGroup' exception.", e);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void setPermissionsExGroups(String[] groups) throws CannotDependException {
+
+        Validate.notNull(groups, "The groups object is null.");
+
+        try {
+
+            PlayerLibraryFactorys.permissionsExPlayer().setPermissionsExGroups(this, groups);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'setPermissionsExGroups' exception.", e);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void setPermissionsExGroups(String[] groups, String world) throws CannotDependException {
+
+        Validate.notNull(groups, "The groups object is null.");
+
+        try {
+
+            PlayerLibraryFactorys.permissionsExPlayer().setPermissionsExGroups(this, groups, world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'PermissionsEx' plugin method 'setPermissionsExGroups' exception.", e);
         }
     }
 }

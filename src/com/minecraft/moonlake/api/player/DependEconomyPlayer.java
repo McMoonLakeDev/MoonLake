@@ -39,8 +39,10 @@ class DependEconomyPlayer {
 
     /**
      * 依赖经济插件玩家实现类构造函数
+     *
+     * @throws CannotDependException 如果无法加载依赖插件则抛出异常
      */
-    public DependEconomyPlayer() {
+    public DependEconomyPlayer() throws CannotDependException {
 
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("MoonLakeEconomy");
 

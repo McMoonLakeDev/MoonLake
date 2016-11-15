@@ -33,6 +33,8 @@ public class PlayerLibraryFactorys {
 
     private static DependEconomyPlayer dependEconomyPlayer;
     private static Boolean dependEconomyPlayerHook = null;
+    private static DependPermissionsExPlayer dependPermissionsExPlayer;
+    private static Boolean dependPermissionsExPlayerHook = null;
 
     /**
      * 玩家支持库静态工厂类构造函数
@@ -69,7 +71,7 @@ public class PlayerLibraryFactorys {
      * 获取依赖经济插件玩家 DependEconomyPlayer 对象
      *
      * @return DependEconomyPlayer
-     * @throws IllegalArgumentException 如果无法加载依赖插件则抛出异常
+     * @throws CannotDependException 如果无法加载依赖插件则抛出异常
      */
     public static DependEconomyPlayer economyPlayer() throws CannotDependException {
 
@@ -95,8 +97,43 @@ public class PlayerLibraryFactorys {
      *
      * @return 是否成功依赖
      */
-    public static Boolean isDependEconomyPlayerHook() {
+    public static boolean isDependEconomyPlayerHook() {
 
         return dependEconomyPlayerHook;
+    }
+
+    /**
+     * 获取依赖权限插件玩家 DependPermissionsExPlayer 对象
+     *
+     * @return DependPermissionsExPlayer
+     * @throws CannotDependException 如果无法加载依赖插件则抛出异常
+     */
+    public static DependPermissionsExPlayer permissionsExPlayer() throws CannotDependException {
+
+        if(dependPermissionsExPlayer == null && dependPermissionsExPlayerHook == null) {
+
+            try {
+
+                dependPermissionsExPlayer = new DependPermissionsExPlayer();
+                dependPermissionsExPlayerHook = true;
+            }
+            catch (Exception e) {
+
+                dependPermissionsExPlayerHook = false;
+
+                throw new CannotDependException("The hook 'PermissionsEx' plugin failed exception.", e);
+            }
+        }
+        return dependPermissionsExPlayer;
+    }
+
+    /**
+     * 获取是否成功依赖权限插件玩家
+     *
+     * @return 是否成功依赖
+     */
+    public static boolean isDependPermissionsExPlayerHook() {
+
+        return dependPermissionsExPlayerHook;
     }
 }
