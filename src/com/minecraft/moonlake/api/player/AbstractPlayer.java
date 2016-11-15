@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.fancy.FancyMessage;
+import com.minecraft.moonlake.api.player.depend.EconomyPlayerData;
 import com.minecraft.moonlake.exception.CannotDependException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.manager.PlayerManager;
@@ -1185,7 +1186,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public double getMoney() {
+    public double getEconomyMoney() {
 
         try {
 
@@ -1198,7 +1199,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void setMoney(double money) {
+    public void setEconomyMoney(double money) {
 
         try {
 
@@ -1211,7 +1212,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void giveMoney(double money) {
+    public void giveEconomyMoney(double money) {
 
         try {
 
@@ -1224,7 +1225,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void takeMoney(double money) {
+    public void takeEconomyMoney(double money) {
 
         try {
 
@@ -1237,7 +1238,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public int getPoint() {
+    public int getEconomyPoint() {
 
         try {
 
@@ -1250,7 +1251,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void setPoint(int point) {
+    public void setEconomyPoint(int point) {
 
         try {
 
@@ -1263,7 +1264,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void givePoint(int point) {
+    public void giveEconomyPoint(int point) {
 
         try {
 
@@ -1276,7 +1277,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void takePoint(int point) {
+    public void takeEconomyPoint(int point) {
 
         try {
 
@@ -1285,6 +1286,19 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
         catch (Exception e) {
 
             throw new CannotDependException("The call 'MoonLakeEconomy' plugin method 'takePoint' exception.", e);
+        }
+    }
+
+    @Override
+    public EconomyPlayerData getEconomyData() {
+
+        try {
+
+            return PlayerLibraryFactorys.economyPlayer().getData(this);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'MoonLakeEconomy' plugin method 'getEconomyData' exception.", e);
         }
     }
 
