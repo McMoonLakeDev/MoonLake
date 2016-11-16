@@ -35,6 +35,8 @@ public class PlayerLibraryFactorys {
     private static Boolean dependEconomyPlayerHook = null;
     private static DependPermissionsExPlayer dependPermissionsExPlayer;
     private static Boolean dependPermissionsExPlayerHook = null;
+    private static DependEconomyVaultPlayer dependEconomyVaultPlayer;
+    private static Boolean dependEconomyVaultPlayerHook;
 
     /**
      * 玩家支持库静态工厂类构造函数
@@ -135,5 +137,40 @@ public class PlayerLibraryFactorys {
     public static boolean isDependPermissionsExPlayerHook() {
 
         return dependPermissionsExPlayerHook;
+    }
+
+    /**
+     * 获取依赖 Vault 经济插件玩家 DependEconomyVaultPlayer 对象
+     *
+     * @return DependEconomyVaultPlayer
+     * @throws CannotDependException 如果无法加载依赖插件则抛出异常
+     */
+    public static DependEconomyVaultPlayer economyVaultPlayer() throws CannotDependException {
+
+        if(dependEconomyVaultPlayer == null && dependEconomyVaultPlayerHook == null) {
+
+            try {
+
+                dependEconomyVaultPlayer = new DependEconomyVaultPlayer();
+                dependEconomyVaultPlayerHook = true;
+            }
+            catch (Exception e) {
+
+                dependEconomyVaultPlayerHook = false;
+
+                throw new CannotDependException("The hook 'Vault' plugin 'Economy' module failed exception.", e);
+            }
+        }
+        return dependEconomyVaultPlayer;
+    }
+
+    /**
+     * 获取是否成功依赖 Vault 经济插件玩家
+     *
+     * @return 是否成功依赖
+     */
+    public static boolean isDependEconomyVaultPlayerHook() {
+
+        return dependEconomyVaultPlayerHook;
     }
 }

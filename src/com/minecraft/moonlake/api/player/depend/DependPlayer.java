@@ -25,7 +25,8 @@ package com.minecraft.moonlake.api.player.depend;
  * @version 1.0
  * @author Month_Light
  * @see EconomyPlayer
+ * @see EconomyVaultPlayer
  * @see PermissionsExPlayer
  */
-public interface DependPlayer extends EconomyPlayer, PermissionsExPlayer {
+public interface DependPlayer extends EconomyPlayer, EconomyVaultPlayer, PermissionsExPlayer {
 }
