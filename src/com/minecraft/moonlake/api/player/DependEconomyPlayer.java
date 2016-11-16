@@ -19,9 +19,12 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.player.depend.EconomyPlayerData;
 import com.minecraft.moonlake.economy.EconomyPlugin;
 import com.minecraft.moonlake.economy.api.MoonLakeEconomy;
+import com.minecraft.moonlake.economy.api.PlayerEconomy;
 import com.minecraft.moonlake.exception.CannotDependException;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -156,5 +159,32 @@ class DependEconomyPlayer {
     public boolean takePoint(String name, int point) {
 
         return moonLakeEconomy.takePoint(name, point);
+    }
+
+    /**
+     * 获取指定玩家的经济数据
+     *
+     * @param name 玩家名
+     * @return 经济数据
+     * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
+     */
+    protected PlayerEconomy getEconomy(String name) {
+
+        return moonLakeEconomy.getData(name);
+    }
+
+    /**
+     * 获取指定玩家的经济数据并转换到 MoonLake 包的类对象
+     *
+     * @param moonLakePlayer 月色之湖玩家
+     * @return 经济数据
+     * @throws IllegalArgumentException 如果月色之湖玩家对象为 {@code null} 则抛出异常
+     */
+    public EconomyPlayerData getData(MoonLakePlayer moonLakePlayer) {
+
+        Validate.notNull(moonLakePlayer, "The moonlake player object is null.");
+
+        PlayerEconomy playerEconomy = getEconomy(moonLakePlayer.getName());
+        return new EconomyPlayerData(moonLakePlayer, playerEconomy.getMoney(), playerEconomy.getPoint());
     }
 }

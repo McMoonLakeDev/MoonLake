@@ -19,6 +19,8 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.fancy.FancyMessage;
+import com.minecraft.moonlake.api.player.depend.EconomyPlayerData;
+import com.minecraft.moonlake.api.player.depend.EconomyVaultPlayerResponse;
 import com.minecraft.moonlake.exception.CannotDependException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.manager.PlayerManager;
@@ -1185,7 +1187,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public double getMoney() {
+    public double getEconomyMoney() throws CannotDependException {
 
         try {
 
@@ -1198,7 +1200,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void setMoney(double money) {
+    public void setEconomyMoney(double money) throws CannotDependException {
 
         try {
 
@@ -1211,7 +1213,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void giveMoney(double money) {
+    public void giveEconomyMoney(double money) throws CannotDependException {
 
         try {
 
@@ -1224,7 +1226,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void takeMoney(double money) {
+    public void takeEconomyMoney(double money) throws CannotDependException {
 
         try {
 
@@ -1237,7 +1239,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public int getPoint() {
+    public int getEconomyPoint() throws CannotDependException {
 
         try {
 
@@ -1250,7 +1252,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void setPoint(int point) {
+    public void setEconomyPoint(int point) throws CannotDependException {
 
         try {
 
@@ -1263,7 +1265,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void givePoint(int point) {
+    public void giveEconomyPoint(int point) throws CannotDependException {
 
         try {
 
@@ -1276,7 +1278,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void takePoint(int point) {
+    public void takeEconomyPoint(int point) throws CannotDependException {
 
         try {
 
@@ -1285,6 +1287,19 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
         catch (Exception e) {
 
             throw new CannotDependException("The call 'MoonLakeEconomy' plugin method 'takePoint' exception.", e);
+        }
+    }
+
+    @Override
+    public EconomyPlayerData getEconomyData() throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.economyPlayer().getData(this);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'MoonLakeEconomy' plugin method 'getEconomyData' exception.", e);
         }
     }
 
@@ -1627,6 +1642,162 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
         catch (Exception e) {
 
             throw new CannotDependException("The call 'PermissionsEx' plugin method 'setPermissionsExGroups' exception.", e);
+        }
+    }
+
+    @Override
+    public boolean hasEconomyVaultAccount() throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.economyVaultPlayer().hasAccount(getBukkitPlayer());
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'Vault' plugin 'Economy' method 'hasEconomyVaultAccount' exception.", e);
+        }
+    }
+
+    @Override
+    public boolean hasEconomyVaultAccount(String world) throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.economyVaultPlayer().hasAccount(getBukkitPlayer(), world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'Vault' plugin 'Economy' method 'hasEconomyVaultAccount' exception.", e);
+        }
+    }
+
+    @Override
+    public boolean createEconomyVaultAccount() throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.economyVaultPlayer().createAccount(getBukkitPlayer());
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'Vault' plugin 'Economy' method 'createEconomyVaultAccount' exception.", e);
+        }
+    }
+
+    @Override
+    public boolean createEconomyVaultAccount(String world) throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.economyVaultPlayer().createAccount(getBukkitPlayer(), world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'Vault' plugin 'Economy' method 'createEconomyVaultAccount' exception.", e);
+        }
+    }
+
+    @Override
+    public double getEconomyVaultBalance() throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.economyVaultPlayer().getBalance(getBukkitPlayer());
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'Vault' plugin 'Economy' method 'getEconomyVaultBalance' exception.", e);
+        }
+    }
+
+    @Override
+    public double getEconomyVaultBalance(String world) throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.economyVaultPlayer().getBalance(getBukkitPlayer(), world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'Vault' plugin 'Economy' method 'getEconomyVaultBalance' exception.", e);
+        }
+    }
+
+    @Override
+    public boolean hasEconomyVaultBalance(double amount) throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.economyVaultPlayer().hasBalance(getBukkitPlayer(), amount);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'Vault' plugin 'Economy' method 'hasEconomyVaultBalance' exception.", e);
+        }
+    }
+
+    @Override
+    public boolean hasEconomyVaultBalance(double amount, String world) throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.economyVaultPlayer().hasBalance(getBukkitPlayer(), amount, world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'Vault' plugin 'Economy' method 'hasEconomyVaultBalance' exception.", e);
+        }
+    }
+
+    @Override
+    public EconomyVaultPlayerResponse withdrawEconomyVaultBalance(double amount) throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.economyVaultPlayer().withdrawBalance(getBukkitPlayer(), amount);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'Vault' plugin 'Economy' method 'withdrawEconomyVaultBalance' exception.", e);
+        }
+    }
+
+    @Override
+    public EconomyVaultPlayerResponse withdrawEconomyVaultBalance(double amount, String world) throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.economyVaultPlayer().withdrawBalance(getBukkitPlayer(), amount, world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'Vault' plugin 'Economy' method 'withdrawEconomyVaultBalance' exception.", e);
+        }
+    }
+
+    @Override
+    public EconomyVaultPlayerResponse depositEconomyVaultBalance(double amount) throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.economyVaultPlayer().depositBalance(getBukkitPlayer(), amount);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'Vault' plugin 'Economy' method 'depositEconomyVaultBalance' exception.", e);
+        }
+    }
+
+    @Override
+    public EconomyVaultPlayerResponse depositEconomyVaultBalance(double amount, String world) throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.economyVaultPlayer().depositBalance(getBukkitPlayer(), amount, world);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'Vault' plugin 'Economy' method 'depositEconomyVaultBalance' exception.", e);
         }
     }
 }
