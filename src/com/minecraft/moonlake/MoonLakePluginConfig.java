@@ -39,9 +39,6 @@ public class MoonLakePluginConfig {
     @ConfigValue(path = "version")
     private String version;
 
-    @ConfigValue(path = "Language")
-    private String language;
-
     @ConfigValue(path = "PacketChannelListener")
     private boolean packetChannelListener;
 
@@ -122,16 +119,6 @@ public class MoonLakePluginConfig {
     public String getVersion() {
 
         return version;
-    }
-
-    /**
-     * 获取加载的国际化语言配置
-     *
-     * @return 国际化语言配置
-     */
-    public String getLanguage() {
-
-        return language;
     }
 
     /**

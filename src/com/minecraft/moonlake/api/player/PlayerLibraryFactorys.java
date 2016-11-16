@@ -36,7 +36,7 @@ public class PlayerLibraryFactorys {
     private static DependPermissionsExPlayer dependPermissionsExPlayer;
     private static Boolean dependPermissionsExPlayerHook = null;
     private static DependEconomyVaultPlayer dependEconomyVaultPlayer;
-    private static Boolean dependEconomyVaultPlayerHook;
+    private static Boolean dependEconomyVaultPlayerHook = null;
 
     /**
      * 玩家支持库静态工厂类构造函数

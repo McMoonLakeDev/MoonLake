@@ -417,7 +417,7 @@ public final class MoonLakeAPI {
      * @param text 文本
      * @return FancyMessage
      */
-    public static FancyMessage newFancymessage(String text) {
+    public static FancyMessage newFancyMessage(String text) {
 
         return FancyMessageFactory.get().message(text);
     }
@@ -428,7 +428,7 @@ public final class MoonLakeAPI {
      * @param text 文本
      * @return FancyMessage
      */
-    public static FancyMessage newFancymessage(TextualComponent text) {
+    public static FancyMessage newFancyMessage(TextualComponent text) {
 
         return FancyMessageFactory.get().message(text);
     }
