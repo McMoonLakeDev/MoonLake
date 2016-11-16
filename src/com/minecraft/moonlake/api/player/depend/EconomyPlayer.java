@@ -35,7 +35,7 @@ public interface EconomyPlayer {
      * @return 金币
      * @throws CannotDependException 如果无法加载依赖插件则抛出异常
      */
-    double getMoney() throws CannotDependException;
+    double getEconomyMoney() throws CannotDependException;
 
     /**
      * 设置此玩家的金币数据
@@ -43,7 +43,7 @@ public interface EconomyPlayer {
      * @param money 金币
      * @throws CannotDependException 如果无法加载依赖插件则抛出异常
      */
-    void setMoney(double money) throws CannotDependException;
+    void setEconomyMoney(double money) throws CannotDependException;
 
     /**
      * 给予此玩家指定金币数据
@@ -51,7 +51,7 @@ public interface EconomyPlayer {
      * @param money 金币
      * @throws CannotDependException 如果无法加载依赖插件则抛出异常
      */
-    void giveMoney(double money) throws CannotDependException;
+    void giveEconomyMoney(double money) throws CannotDependException;
 
     /**
      * 减少此玩家指定金币数据
@@ -59,7 +59,7 @@ public interface EconomyPlayer {
      * @param money 金币
      * @throws CannotDependException 如果无法加载依赖插件则抛出异常
      */
-    void takeMoney(double money) throws CannotDependException;
+    void takeEconomyMoney(double money) throws CannotDependException;
 
     /**
      * 获取此玩家的点券数据
@@ -67,7 +67,7 @@ public interface EconomyPlayer {
      * @return 点券
      * @throws CannotDependException 如果无法加载依赖插件则抛出异常
      */
-    int getPoint() throws CannotDependException;
+    int getEconomyPoint() throws CannotDependException;
 
     /**
      * 设置此玩家的点券数据
@@ -75,7 +75,7 @@ public interface EconomyPlayer {
      * @param point 点券
      * @throws CannotDependException 如果无法加载依赖插件则抛出异常
      */
-    void setPoint(int point) throws CannotDependException;
+    void setEconomyPoint(int point) throws CannotDependException;
 
     /**
      * 给予此玩家指定点券数据
@@ -83,13 +83,21 @@ public interface EconomyPlayer {
      * @param point 点券
      * @throws CannotDependException 如果无法加载依赖插件则抛出异常
      */
-    void givePoint(int point) throws CannotDependException;
+    void giveEconomyPoint(int point) throws CannotDependException;
 
     /**
      * 减少此玩家指定点券数据
      *
-     * @param point
+     * @param point 点券
      * @throws CannotDependException 如果无法加载依赖插件则抛出异常
      */
-    void takePoint(int point) throws CannotDependException;
+    void takeEconomyPoint(int point) throws CannotDependException;
+
+    /**
+     * 获取此玩家的经济数据
+     *
+     * @return 经济数据
+     * @throws CannotDependException 如果无法加载依赖插件则抛出异常
+     */
+    EconomyPlayerData getEconomyData() throws CannotDependException;
 }
