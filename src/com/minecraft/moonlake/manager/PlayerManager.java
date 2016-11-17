@@ -64,6 +64,9 @@ public class PlayerManager extends MoonLakeManager {
                 case 10:    // Bukkit 1.10
                     CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_10.class;
                     break;
+                case 11:    // Bukkit 1.11
+                    CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_11.class;
+                    break;
                 default:    // Not Support
                     CLASS_SIMPLEMOONLAKEPLAYER = null;
             }

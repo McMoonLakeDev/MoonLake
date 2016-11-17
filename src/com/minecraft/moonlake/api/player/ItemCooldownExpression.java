@@ -152,6 +152,7 @@ class ItemCooldownExpression implements ItemCooldown {
         return    version.equals("v1_9_R1") ? "da"
                 : version.equals("v1_9_R2") ? "db"
                 : version.equals("v1_10_R1") ? "df"
+                : version.equals("v1_11_R1") ? "di"
                 : null;
     }
 }

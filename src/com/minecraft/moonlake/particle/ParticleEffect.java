@@ -264,6 +264,14 @@ public enum ParticleEffect {
      * 粒子效果: 掉落尘 (服务器版本支持: 1.10+ | 需求: 方块数据)
      */
     FALLING_DUST("fallingdust", 46, 10, ParticleProperty.REQUIRES_DATA),
+    /**
+     * 粒子效果: 不死图腾 (服务器版本支持: 1.11+)
+     */
+    TOTEM("totem", 47, 11),
+    /**
+     * 粒子效果: 羊驼口水 (服务器版本支持: 1.11+)
+     */
+    SPIT("spit", 48, 11),
     ;
 
     private final String name;
@@ -349,7 +357,7 @@ public enum ParticleEffect {
      */
     public boolean isSupported() {
 
-        return requiredVersion == -1 || ParticlePacket.version >= requiredVersion;
+        return requiredVersion == -1 || Reflect.getServerVersionNumber() >= requiredVersion;
     }
 
     /**
@@ -422,7 +430,7 @@ public enum ParticleEffect {
      * 判断指定粒子效果和粒子效果颜色是否符合
      *
      * @param effect 粒子效果
-     * @param data 粒子效果颜色
+     * @param color 粒子效果颜色
      * @return true 数据则符合
      */
     private static boolean isColorCorrect(ParticleEffect effect, ParticleColor color) {
@@ -783,7 +791,7 @@ public enum ParticleEffect {
      * @param direction 矢量方向
      * @param speed 速度
      * @param center 位置
-     * @param range 范围
+     * @param players 玩家
      * @throws ParticleException 如果粒子效果不支持版本则抛出异常
      * @throws ParticleException 如果粒子效果没有数据属性则抛出异常
      * @throws ParticleException 如果粒子效果的数据属性不符合则抛出异常
@@ -1056,7 +1064,7 @@ public enum ParticleEffect {
          * 将此粒子效果数据包发送到指定位置
          *
          * @param center 位置
-         * @param player 玩家
+         * @param players 玩家
          */
         public void sendTo(Location center, List<Player> players) {
 
