@@ -40,9 +40,9 @@ import java.util.Set;
  *     <div>
  *         <h2>目前插件支持的服务端版本有:</h2>
  *         <ul>
- *             <li>Bukkit [1.8.x - 1.10.x] <span style="color: red">✔</span> 不完全支持</li>
- *             <li>Spigot [1.8.x - 1.10.x] <span style="color: rgb(85, 255, 85)">✔</span> 完完全全支持</li>
- *             <li>PaperSpigot [1.8.x - 1.10.x] <span style="color: rgb(85, 255, 85)"><s>✔</s></span> 部分功能不支持</li>
+ *             <li>Bukkit [1.8.x - 1.11.x] <span style="color: red">✔</span> 不完全支持</li>
+ *             <li>Spigot [1.8.x - 1.11.x] <span style="color: rgb(85, 255, 85)">✔</span> 完完全全支持</li>
+ *             <li>PaperSpigot [1.8.x - 1.11.x] <span style="color: rgb(85, 255, 85)"><s>✔</s></span> 完完全全支持</li>
  *             <li>Cauldron | KCauldron [模组服务端] <span style="color: red">✘</span> 完全不支持</li>
  *         </ul>
  *     </div>

@@ -150,6 +150,17 @@ public abstract class Enchantment {
     public final static Enchantment 经验修补 = new Enchantment(70, "MENDING", 9) {};
     ///
 
+    // 1.11 增加的新附魔（不兼容 1.10 以下
+    /**
+     * 附魔类型: 绑定诅咒
+     */
+    public final static Enchantment 绑定诅咒 = new Enchantment(10, "BINDING_CURSE", 11) {};
+    /**
+     * 附魔类型: 消失诅咒
+     */
+    public final static Enchantment 消失诅咒 = new Enchantment(71, "VANISHING_CURSE", 11) {};
+    ///
+
     private final int id;
     private final String name;
     private final int requiredVersion;
@@ -229,6 +240,19 @@ public abstract class Enchantment {
                 throw new IllegalBukkitVersionException("The bukkit version not support enchantment: " + id);
             }
         }
+        //
+        // 貌似这两个 1.11 新增加的附魔效果用 getByName 获取到的是 null
+        // 看了底层代码 switch case 没有这两个 name 的判断, 所以暂时这样
+        if(id == 10) {
+
+            return org.bukkit.enchantments.Enchantment.BINDING_CURSE;
+        }
+        else if(id == 71) {
+
+            return org.bukkit.enchantments.Enchantment.VANISHING_CURSE;
+        }
+        ///
+
         //return org.bukkit.enchantments.Enchantment.getById(id);
         return org.bukkit.enchantments.Enchantment.getByName(name);
     }
