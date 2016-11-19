@@ -18,7 +18,7 @@
 
 package com.minecraft.moonlake.api.packet.listener;
 
-import com.minecraft.moonlake.MoonLakePlugin;
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.event.MoonLakeListener;
 import com.minecraft.moonlake.api.event.player.MoonLakePlayerJoinEvent;
 import com.minecraft.moonlake.api.packet.listener.channel.PacketChannel;
@@ -28,7 +28,6 @@ import com.minecraft.moonlake.api.packet.listener.handler.PacketReceived;
 import com.minecraft.moonlake.api.packet.listener.handler.PacketSent;
 import com.minecraft.moonlake.event.EventHelper;
 import com.minecraft.moonlake.exception.MoonLakeException;
-import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import com.minecraft.moonlake.task.TaskHelper;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
@@ -53,7 +52,6 @@ import java.util.Map;
  * @version 1.0
  * @author Month_Light
  */
-@SuppressWarnings("deprecation")
 public final class PacketListenerFactory {
 
     private final static PacketChannel PACKET_CHANNEL;
@@ -64,7 +62,7 @@ public final class PacketListenerFactory {
 
     static {
 
-        if(!MoonLakePlugin.getInstances().getConfiguration().isPacketChannelListener()) {
+        if(!MoonLakeAPI.getConfiguration().isPacketChannelListener()) {
 
             throw new MoonLakeException("The config.yml 'PacketChannelListener' value not is 'true', this api unavailable.");
         }
@@ -141,7 +139,7 @@ public final class PacketListenerFactory {
 
                         PROTOCOL_VERSION_MAP.put(addressString, protocolVersion);
                     }
-                    TaskHelper.runTaskLater(MoonLakePlugin.getInstances().getPlugin(), new Runnable() {
+                    TaskHelper.runTaskLater(MoonLakeAPI.getMoonLake(), new Runnable() {
 
                         @Override
                         public void run() {
@@ -197,7 +195,7 @@ public final class PacketListenerFactory {
                 PACKET_CHANNEL.removeChannel(event.getPlayer());
             }
         };
-        EventHelper.registerEvent(PACKET_CHANNEL_PLAYER_LISTENER, MoonLakePlugin.getInstances().getPlugin());
+        EventHelper.registerEvent(PACKET_CHANNEL_PLAYER_LISTENER, MoonLakeAPI.getMoonLake());
     }
 
     /**
@@ -214,6 +212,7 @@ public final class PacketListenerFactory {
 
         if(!has) {
 
+            PacketHandler.handlerMethodOptions(handler);
         }
         PACKET_HANDLERS.add(handler);
 
@@ -238,17 +237,7 @@ public final class PacketListenerFactory {
      */
     private static void notifyHandlers(PacketSent packet) {
 
-        for(PacketHandler handler : PACKET_HANDLERS) {
-
-            try {
-
-                handler.onSend(packet);
-            }
-            catch (Exception e) {
-
-                throw new PacketException("The exception occured while trying to execute 'onSend'" + (handler.getPlugin() != null ? " in plugin " + handler.getPlugin().getName() : ""), e);
-            }
-        }
+        PacketHandler.notifyHandlers(PACKET_HANDLERS, packet);
     }
 
     /**
@@ -258,17 +247,7 @@ public final class PacketListenerFactory {
      */
     private static void notifyHandlers(PacketReceived packet) {
 
-        for(PacketHandler handler : PACKET_HANDLERS) {
-
-            try {
-
-                handler.onReceive(packet);
-            }
-            catch (Exception e) {
-
-                throw new PacketException("The exception occured while trying to execute 'onReceive'" + (handler.getPlugin() != null ? " in plugin " + handler.getPlugin().getName() : ""), e);
-            }
-        }
+        PacketHandler.notifyHandlers(PACKET_HANDLERS, packet);
     }
 
     /**

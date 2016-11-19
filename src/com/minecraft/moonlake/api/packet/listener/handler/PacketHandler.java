@@ -18,7 +18,10 @@
 
 package com.minecraft.moonlake.api.packet.listener.handler;
 
+import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import org.bukkit.plugin.Plugin;
+
+import java.util.List;
 
 /**
  * <h1>PacketHandler</h1>
@@ -30,6 +33,12 @@ import org.bukkit.plugin.Plugin;
 public abstract class PacketHandler {
 
     private final Plugin plugin;
+    private boolean hasSendOption;
+    private boolean forcePlayerSend;
+    private boolean forceServerSend;
+    private boolean hasReceiveOption;
+    private boolean forcePlayerReceive;
+    private boolean forceServerReceive;
 
     /**
      * 数据包处理器类构造函数
@@ -64,4 +73,108 @@ public abstract class PacketHandler {
      * @param packet 数据包
      */
     public abstract void onReceive(PacketReceived packet);
+
+    //
+    // Packet Handler Static Method
+
+    public static void handlerMethodOptions(PacketHandler handler) throws IllegalArgumentException, PacketException {
+
+        try {
+
+            PacketOption onSendOption = handler.getClass().getMethod("onSend", PacketSent.class).getAnnotation(PacketOption.class);
+
+            if(onSendOption != null) {
+
+                handler.hasSendOption = true;
+
+                if(onSendOption.forcePlayer() && onSendOption.forceServer()) {
+
+                    throw new IllegalArgumentException("Cannot force player and server packets at the same time!");
+                }
+                if(onSendOption.forcePlayer()) {
+
+                    handler.forcePlayerSend = true;
+                }
+                else if(onSendOption.forceServer()) {
+
+                    handler.forceServerSend = true;
+                }
+            }
+        }
+        catch (Exception e) {
+
+            throw new PacketException("The failed to register packet handler method 'onSend' options exception.", e);
+        }
+        try {
+
+            PacketOption onReceiveOption = handler.getClass().getMethod("onReceive", PacketReceived.class).getAnnotation(PacketOption.class);
+
+            if(onReceiveOption != null) {
+
+                handler.hasReceiveOption = true;
+
+                if(onReceiveOption.forcePlayer() && onReceiveOption.forceServer()) {
+
+                    throw new IllegalArgumentException("Cannot force player and server packets at the same time!");
+                }
+                if(onReceiveOption.forcePlayer()) {
+
+                    handler.forcePlayerReceive = true;
+                }
+                else if(onReceiveOption.forceServer()) {
+
+                    handler.forceServerReceive = true;
+                }
+            }
+        }
+        catch (Exception e) {
+
+            throw new PacketException("The failed to register packet handler method 'onReceive' options exception.", e);
+        }
+    }
+
+    public static void notifyHandlers(List<PacketHandler> handlerList, PacketSent packet) throws PacketException {
+
+        for(PacketHandler handler : handlerList) {
+
+            try {
+
+                if((!handler.hasSendOption) ||
+                        (handler.forcePlayerSend ?
+                        packet.hasPlayer() :
+                        (!handler.forceServerSend) ||
+                        (packet.hasChannel()))) {
+
+                    handler.onSend(packet);
+                }
+            }
+            catch (Exception e) {
+
+                throw new PacketException("The exception occured while trying to execute 'onSend'" + (handler.getPlugin() != null ? " in plugin " + handler.getPlugin().getName() : ""), e);
+            }
+        }
+    }
+
+    public static void notifyHandlers(List<PacketHandler> handlerList, PacketReceived packet) throws PacketException {
+
+        for(PacketHandler handler : handlerList) {
+
+            try {
+
+                if((!handler.hasReceiveOption) ||
+                        (handler.forcePlayerReceive ?
+                        packet.hasPlayer() :
+                        (!handler.forceServerReceive) ||
+                        (packet.hasChannel()))) {
+
+                    handler.onReceive(packet);
+                }
+            }
+            catch (Exception e) {
+
+                throw new PacketException("The exception occured while trying to execute 'onReceive'" + (handler.getPlugin() != null ? " in plugin " + handler.getPlugin().getName() : ""), e);
+            }
+        }
+    }
+    ///
 }

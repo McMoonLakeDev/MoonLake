@@ -92,6 +92,16 @@ public final class MoonLakeAPI {
     }
 
     /**
+     * 获取月色之湖插件对象
+     *
+     * @return 插件对象
+     */
+    public static MoonLakePlugin getMoonLake() {
+
+        return moonlake;
+    }
+
+    /**
      * 获取控制台日志对象
      *
      * @return 日志对象

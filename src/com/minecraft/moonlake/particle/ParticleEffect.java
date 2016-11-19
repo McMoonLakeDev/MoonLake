@@ -72,9 +72,9 @@ import java.util.*;
  */
 public enum ParticleEffect {
 
-    /**
-     * 带有 ? 的均为不确定意义
-     */
+    //
+    // 带有 ? 的均为不确定意义
+    ///
 
     /**
      * 粒子效果: 普通型爆炸 (服务器版本支持: 全版本 | 需求: 矢量方向)
@@ -390,8 +390,8 @@ public enum ParticleEffect {
      */
     private static boolean isWater(Location location) {
 
-        Material marterial = location.getBlock().getType();
-        return marterial == Material.WATER || marterial == Material.STATIONARY_WATER;
+        Material material = location.getBlock().getType();
+        return material == Material.WATER || material == Material.STATIONARY_WATER;
     }
 
     /**

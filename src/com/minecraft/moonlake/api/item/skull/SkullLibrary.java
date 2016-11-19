@@ -72,12 +72,23 @@ public interface SkullLibrary {
     /**
      * 创建头颅物品栈 ItemStack 对象
      *
-     * @param skinURL 头颅材质信息 URL
+     * @param data 头颅材质信息
      * @return ItemStack
      * @throws IllegalArgumentException 如果头颅材质信息对象为 {@code null} 则抛出异常
      * @throws MoonLakeException 如果设置头颅材质时错误则抛出异常
      */
-    ItemStack createSkullWithSkin(String skinURL) throws MoonLakeException;
+    ItemStack createSkullWithSkin(String data) throws MoonLakeException;
+
+    /**
+     * 创建头颅物品栈 ItemStack 对象
+     *
+     * @param value 头颅材质值
+     * @param signature 头颅材质签名
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果头颅材质值对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果设置头颅材质时错误则抛出异常
+     */
+    ItemStack createSkullWithSkins(String value, String signature) throws MoonLakeException;
 
     /**
      * 创建头颅物品栈 ItemStack 对象
@@ -86,20 +97,34 @@ public interface SkullLibrary {
      * @return ItemStack
      * @throws IllegalArgumentException 如果头颅材质信息对象为 {@code null} 则抛出异常
      * @throws MoonLakeException 如果设置头颅材质时错误则抛出异常
+     * @deprecated 已过时, 使用将直接抛出 {@link NotImplementedException} 异常.
      */
+    @Deprecated
     ItemStack createSkullWithSkin(URL skinURL) throws MoonLakeException;
 
     /**
      * 创建头颅物品栈 ItemStack 对象
      *
-     * @param skinURL 头颅材质信息 URL
+     * @param data 头颅材质信息
      * @param displayName 头颅显示名称
      * @return ItemStack
      * @throws IllegalArgumentException 如果头颅显示名称对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果头颅材质信息对象为 {@code null} 则抛出异常
      * @throws MoonLakeException 如果设置头颅材质时错误则抛出异常
      */
-    ItemStack createSkullWithSkin(String skinURL, String displayName) throws MoonLakeException;
+    ItemStack createSkullWithSkin(String data, String displayName) throws MoonLakeException;
+
+    /**
+     * 创建头颅物品栈 ItemStack 对象
+     *
+     * @param value 头颅材质值
+     * @param signature 头颅材质签名
+     * @param displayName 头颅显示名称
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果头颅材质值对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果设置头颅材质时错误则抛出异常
+     */
+    ItemStack createSkullWithSkins(String value, String signature, String displayName) throws MoonLakeException;
 
     /**
      * 创建头颅物品栈 ItemStack 对象
@@ -110,7 +135,9 @@ public interface SkullLibrary {
      * @throws IllegalArgumentException 如果头颅显示名称对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果头颅材质信息对象为 {@code null} 则抛出异常
      * @throws MoonLakeException 如果设置头颅材质时错误则抛出异常
+     * @deprecated 已过时, 使用将直接抛出 {@link NotImplementedException} 异常.
      */
+    @Deprecated
     ItemStack createSkullWithSkin(URL skinURL, String displayName) throws MoonLakeException;
 
     /**
