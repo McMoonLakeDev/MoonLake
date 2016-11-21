@@ -20,11 +20,16 @@ package com.minecraft.moonlake.nms.packet;
 
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.nms.packet.exception.PacketException;
+import com.minecraft.moonlake.nms.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
-import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
+
+import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutPlayerInfo</h1>
@@ -33,7 +38,27 @@ import org.bukkit.entity.Player;
  * @version 1.0
  * @author Month_Light
  */
-public abstract class PacketPlayOutPlayerInfo<T extends PacketPlayOutPlayerInfo> extends PacketAbstract<T> {
+public class PacketPlayOutPlayerInfo extends PacketAbstract<PacketPlayOutPlayerInfo> {
+
+    private final static Class<?> CLASS_PACKETPLAYOUTPLAYERINFO;
+    private final static Class<?> CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION;
+    private final static Class<?> CLASS_ENTITYPLAYER;
+    private final static Method METHOD_VALUEOF;
+
+    static {
+
+        try {
+
+            CLASS_PACKETPLAYOUTPLAYERINFO = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPlayerInfo");
+            CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION = PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") ? "EnumPlayerInfoAction" : "PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
+            CLASS_ENTITYPLAYER = PackageType.MINECRAFT_SERVER.getClass("EntityPlayer");
+            METHOD_VALUEOF = getMethod(CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION, "valueOf", String.class);
+        }
+        catch (Exception e) {
+
+            throw new PacketInitializeException("The nms packet play out player info reflect raw initialize exception.", e);
+        }
+    }
 
     private ObjectProperty<Action> action;
     private ObjectProperty<Player> player;
@@ -82,7 +107,27 @@ public abstract class PacketPlayOutPlayerInfo<T extends PacketPlayOutPlayerInfo>
         return player;
     }
 
-    public abstract void send(Player... players) throws PacketException;
+    public void send(Player... players) throws PacketException {
+
+        if(super.fireEvent(this, players)) return;
+
+        try {
+
+            Object enumPlayerInfoAction = METHOD_VALUEOF.invoke(null, getAction().get().name());
+            Object nmsPlayer = PacketReflect.get().getNMSPlayer(getPlayer().get());
+            Object arrayEntityPlayerObj = Array.newInstance(CLASS_ENTITYPLAYER, 1);
+
+            Array.set(arrayEntityPlayerObj, 0, nmsPlayer);
+
+            Object packet = instantiateObject(CLASS_PACKETPLAYOUTPLAYERINFO, enumPlayerInfoAction, arrayEntityPlayerObj);
+
+            PacketReflect.get().send(players, packet);
+        }
+        catch (Exception e) {
+
+            throw new PacketException("The nms packet play out player info send exception.", e);
+        }
+    }
 
     /**
      * <h1>Action</h1>
@@ -123,25 +168,15 @@ public abstract class PacketPlayOutPlayerInfo<T extends PacketPlayOutPlayerInfo>
      * @return PacketPlayOutPlayerInfo
      * @throws IllegalArgumentException 如果交互对象或玩家对象为 {@code null} 则抛出异常
      * @throws PacketException 如果不存在或获取错误则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 已修复版本兼容问题.
      */
-    public static <T extends PacketPlayOutPlayerInfo> T get(Action action, Player player) throws PacketException {
+    @Deprecated
+    public static PacketPlayOutPlayerInfo get(Action action, Player player) throws PacketException {
 
         Validate.notNull(action, "The player info action object is null.");
         Validate.notNull(player, "The target player object is null.");
 
-        String version = Reflect.getServerVersion();
-
-        try {
-
-            @SuppressWarnings("unchecked")
-            Class<T> target = (Class<T>) Class.forName(PacketPlayOutPlayerInfo.class.getName() + "_" + version);
-
-            return target.getConstructor(Action.class, Player.class).newInstance(action, player);
-        }
-        catch (Exception e) {
-
-            throw new PacketException("The nms packet play out play player info get exception.", e);
-        }
+        return new PacketPlayOutPlayerInfo(action, player);
     }
 
     /**
@@ -152,11 +187,14 @@ public abstract class PacketPlayOutPlayerInfo<T extends PacketPlayOutPlayerInfo>
      * @return PacketPlayOutPlayerInfo
      * @throws IllegalArgumentException 如果交互对象或玩家对象为 {@code null} 则抛出异常
      * @throws PacketException 如果不存在或获取错误则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 已修复版本兼容问题.
      */
-    public static <T extends PacketPlayOutPlayerInfo> T get(Action action, MoonLakePlayer player) throws PacketException {
+    @Deprecated
+    public static PacketPlayOutPlayerInfo get(Action action, MoonLakePlayer player) throws PacketException {
 
+        Validate.notNull(action, "The player info action object is null.");
         Validate.notNull(player, "The player object is null.");
 
-        return get(action, player.getBukkitPlayer());
+        return new PacketPlayOutPlayerInfo(action, player.getBukkitPlayer());
     }
 }
