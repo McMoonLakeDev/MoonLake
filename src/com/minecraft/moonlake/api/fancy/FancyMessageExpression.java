@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api.fancy;
 
 import com.minecraft.moonlake.api.nbt.NBTFactory;
+import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.json.JsonRepresentedObject;
 import com.minecraft.moonlake.json.JsonWrite;
 import com.minecraft.moonlake.manager.PlayerManager;
@@ -380,6 +381,14 @@ class FancyMessageExpression implements FancyMessage {
             build();
         }
         Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tellraw " + player.getName() + " " + jsonString.get());
+    }
+
+    @Override
+    public void send(MoonLakePlayer moonLakePlayer) {
+
+        Validate.notNull(moonLakePlayer, "The moonlake player object is null.");
+
+        send(moonLakePlayer.getBukkitPlayer());
     }
 
     @Override

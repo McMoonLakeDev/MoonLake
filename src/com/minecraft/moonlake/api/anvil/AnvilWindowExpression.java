@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api.anvil;
 
 import com.minecraft.moonlake.api.event.MoonLakeListener;
+import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.event.EventHelper;
 import com.minecraft.moonlake.nms.exception.NMSException;
 import com.minecraft.moonlake.validate.Validate;
@@ -212,6 +213,14 @@ class AnvilWindowExpression implements AnvilWindow {
 
         AnvilWindowReflect.get().openAnvil(player, this);
         initialize();
+    }
+
+    @Override
+    public void openAnvil(MoonLakePlayer moonLakePlayer) throws NMSException {
+
+        Validate.notNull(moonLakePlayer, "The moonlake player object is null.");
+
+        openAnvil(moonLakePlayer.getBukkitPlayer());
     }
 
     @Override

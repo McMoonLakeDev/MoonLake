@@ -157,7 +157,8 @@ public interface SkullLibrary {
      * @return 材质 URL
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.SKULL_ITEM} 则抛出异常
-     * @throws NotImplementedException 尚未实现
+     * @deprecated 已过时, 使用将直接抛出 {@link NotImplementedException} 异常.
      */
+    @Deprecated
     String getSkullSkinURL(ItemStack itemStack);
 }
