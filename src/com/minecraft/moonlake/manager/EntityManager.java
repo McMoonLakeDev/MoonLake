@@ -571,7 +571,10 @@ public class EntityManager extends MoonLakeManager {
      * @param damage 真实伤害
      * @throws IllegalArgumentException 如果源实体对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果攻击者实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public static void realDamage(LivingEntity source, MoonLakePlayer damager, double damage) {
 
         realDamage(source, damager.getBukkitPlayer(), damage);
@@ -585,7 +588,9 @@ public class EntityManager extends MoonLakeManager {
      * @param damage 真实伤害
      * @throws IllegalArgumentException 如果源实体对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果攻击者实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
+    @Deprecated
     @SuppressWarnings("deprecation")
     public static void realDamage(LivingEntity source, LivingEntity damager, double damage) {
 

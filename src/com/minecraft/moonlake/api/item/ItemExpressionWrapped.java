@@ -84,6 +84,12 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
+    public ItemStack createSkullWithSkins(String value, String signature) throws MoonLakeException {
+
+        return base.createSkullWithSkins(value, signature);
+    }
+
+    @Override
     public ItemStack createSkullWithSkin(URL skinURL) throws MoonLakeException {
 
         return base.createSkullWithSkin(skinURL);
@@ -93,6 +99,12 @@ class ItemExpressionWrapped extends ItemExpression {
     public ItemStack createSkullWithSkin(String skinURL, String displayName) {
 
         return base.createSkullWithSkin(skinURL, displayName);
+    }
+
+    @Override
+    public ItemStack createSkullWithSkins(String value, String signature, String displayName) throws MoonLakeException {
+
+        return base.createSkullWithSkins(value, signature, displayName);
     }
 
     @Override

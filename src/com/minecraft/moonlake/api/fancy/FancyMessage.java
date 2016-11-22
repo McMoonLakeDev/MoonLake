@@ -18,6 +18,7 @@
  
 package com.minecraft.moonlake.api.fancy;
 
+import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.builder.Builder;
 import com.minecraft.moonlake.json.JsonRepresentedObject;
 import org.bukkit.ChatColor;
@@ -254,6 +255,14 @@ public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable
      * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
      */
     void send(Player player);
+
+    /**
+     * 将此花式消息发送给指定玩家
+     *
+     * @param moonLakePlayer 月色之湖玩家对象
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     */
+    void send(MoonLakePlayer moonLakePlayer);
 
     /**
      * 将此花式消息发送给指定玩家

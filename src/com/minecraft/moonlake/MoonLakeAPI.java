@@ -24,6 +24,8 @@ import com.minecraft.moonlake.api.annotation.plugin.command.CommandAnnotation;
 import com.minecraft.moonlake.api.annotation.plugin.config.ConfigAnnotation;
 import com.minecraft.moonlake.api.anvil.AnvilWindow;
 import com.minecraft.moonlake.api.anvil.AnvilWindowFactory;
+import com.minecraft.moonlake.api.event.MoonLakeEvent;
+import com.minecraft.moonlake.api.event.MoonLakeListener;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.api.fancy.FancyMessageFactory;
 import com.minecraft.moonlake.api.fancy.TextualComponent;
@@ -40,6 +42,7 @@ import com.minecraft.moonlake.api.nbt.NBTLibrary;
 import com.minecraft.moonlake.api.nbt.NBTList;
 import com.minecraft.moonlake.api.player.PlayerLibrary;
 import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
+import com.minecraft.moonlake.event.EventHelper;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.logger.MLogger;
 import com.minecraft.moonlake.mysql.MySQLConnection;
@@ -58,13 +61,20 @@ import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
@@ -89,6 +99,16 @@ public final class MoonLakeAPI {
             throw new UnsupportedOperationException("Cannot redefine singleton MoonLake.");
         }
         moonlake = moonLakePlugin;
+    }
+
+    /**
+     * 获取月色之湖插件对象
+     *
+     * @return 插件对象
+     */
+    public static MoonLakePlugin getMoonLake() {
+
+        return moonlake;
     }
 
     /**
@@ -1562,5 +1582,143 @@ public final class MoonLakeAPI {
         Validate.notNull(effect, "The particle effect object is null.");
 
         effect.display(data, center, range, offsetX, offsetY, offsetZ, speed, amount);
+    }
+
+    /**
+     * 调用事件帮助器触发指定事件
+     *
+     * @param event 事件
+     */
+    public static void callEvent(Event event) {
+
+        EventHelper.callEvent(event);
+    }
+
+    /**
+     * 调用事件帮助器触发指定事件
+     *
+     * @param event 事件
+     */
+    public static void callEvent(MoonLakeEvent event) {
+
+        EventHelper.callEvent(event);
+    }
+
+    /**
+     * 调用事件帮助器注册事件监听器
+     *
+     * @param listener 监听器
+     * @param plugin 插件
+     */
+    public static void registerEvent(Listener listener, Plugin plugin) {
+
+        EventHelper.registerEvent(listener, plugin);
+    }
+
+    /**
+     * 调用事件帮助器注册事件监听器
+     *
+     * @param listener 监听器
+     * @param plugin 插件
+     */
+    public static void registerEvent(MoonLakeListener listener, Plugin plugin) {
+
+        EventHelper.registerEvent(listener, plugin);
+    }
+
+    /**
+     * 调用事件帮助器注册事件监听器
+     *
+     * @param event 事件类
+     * @param listener 监听器
+     * @param priority 事件优先度
+     * @param executor 事件执行器
+     * @param plugin 插件
+     */
+    public static void registerEvent(Class<? extends Event> event, Listener listener, EventPriority priority, EventExecutor executor, Plugin plugin) {
+
+        EventHelper.registerEvent(event, listener, priority, executor, plugin);
+    }
+
+    /**
+     * 调用事件帮助器注册事件监听器
+     *
+     * @param event 事件类
+     * @param listener 监听器
+     * @param priority 事件优先度
+     * @param executor 事件执行器
+     * @param plugin 插件
+     * @param ignoreCancelled 是否忽略阻止
+     */
+    public static void registerEvent(Class<? extends Event> event, Listener listener, EventPriority priority, EventExecutor executor, Plugin plugin, boolean ignoreCancelled) {
+
+        EventHelper.registerEvent(event, listener, priority, executor, plugin, ignoreCancelled);
+    }
+
+    /**
+     * 调用事件帮助器注册事件监听器
+     *
+     * @param event 事件类
+     * @param listener 监听器
+     * @param priority 事件优先度
+     * @param executor 事件执行器
+     * @param plugin 插件
+     */
+    public static void registerEvent(Class<? extends MoonLakeEvent> event, MoonLakeListener listener, EventPriority priority, EventExecutor executor, Plugin plugin) {
+
+        EventHelper.registerEvent(event, listener, priority, executor, plugin);
+    }
+
+    /**
+     * 调用事件帮助器注册事件监听器
+     *
+     * @param event 事件类
+     * @param listener 监听器
+     * @param priority 事件优先度
+     * @param executor 事件执行器
+     * @param plugin 插件
+     * @param ignoreCancelled 是否忽略阻止
+     */
+    public static void registerEvent(Class<? extends MoonLakeEvent> event, MoonLakeListener listener, EventPriority priority, EventExecutor executor, Plugin plugin, boolean ignoreCancelled) {
+
+        EventHelper.registerEvent(event, listener, priority, executor, plugin, ignoreCancelled);
+    }
+
+    /**
+     * 调用事件帮助器卸载全部事件监听器
+     */
+    public static void unregisterAll() {
+
+        EventHelper.unregisterAll();
+    }
+
+    /**
+     * 调用事件帮助器卸载指定插件的全部事件监听器
+     *
+     * @param plugin 插件
+     */
+    public static void unregisterAll(Plugin plugin) {
+
+        EventHelper.unregisterAll(plugin);
+    }
+
+    /**
+     * 调用事件帮助器卸载指定事件监听器
+     *
+     * @param listener 监听器
+     */
+    public static void unregisterAll(Listener listener) {
+
+        EventHelper.unregisterAll(listener);
+    }
+
+    /**
+     * 调用事件帮助器卸载指定事件监听器
+     *
+     * @param listener 监听器
+     */
+    public static void unregisterAll(MoonLakeListener listener) {
+
+        EventHelper.unregisterAll(listener);
     }
 }

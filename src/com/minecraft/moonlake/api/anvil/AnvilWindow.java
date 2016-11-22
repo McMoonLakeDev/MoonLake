@@ -18,6 +18,7 @@
 
 package com.minecraft.moonlake.api.anvil;
 
+import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.nms.exception.NMSException;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -82,6 +83,15 @@ public interface AnvilWindow {
      * @throws NMSException 如果打开错误则抛出异常
      */
     void openAnvil(Player player) throws NMSException;
+
+    /**
+     * 将此铁砧窗口打开给指定玩家
+     *
+     * @param moonLakePlayer 月色之湖玩家
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     * @throws NMSException 如果打开错误则抛出异常
+     */
+    void openAnvil(MoonLakePlayer moonLakePlayer) throws NMSException;
 
     /**
      * 设置此铁砧窗口指定槽位的物品栈

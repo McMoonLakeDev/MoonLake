@@ -30,7 +30,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.net.URL;
-import java.util.Base64;
 import java.util.UUID;
 
 /**
@@ -76,6 +75,26 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
         return itemStack;
     }
 
+    protected GameProfile createGameProfile(String data) {
+
+        GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
+        gameProfile.getProperties().put("textures", new Property("textures", data));
+
+        return gameProfile;
+    }
+
+    protected GameProfile createGameProfile(String value, String signature) {
+
+        if(signature == null) {
+
+            return createGameProfile(value);
+        }
+        GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
+        gameProfile.getProperties().put("textures", new Property("textures", value, signature));
+
+        return gameProfile;
+    }
+
     @Override
     public ItemStack createSkullWithOwner(String skullOwner, String displayName) {
 
@@ -89,61 +108,96 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
     }
 
     @Override
-    public ItemStack createSkullWithSkin(String skinURL) throws MoonLakeException {
+    public ItemStack createSkullWithSkin(String data) throws MoonLakeException {
 
-        Validate.notNull(skinURL, "The itemstack skull skin url object is null.");
+        Validate.notNull(data, "The itemstack skull skin data object is null.");
 
-        if(skinURL.isEmpty()) {
+        if(data.isEmpty()) {
 
             return createSkull();
         }
-        String targetURL = "{\"textures\":{\"SKIN\":{\"url\":\"" + skinURL + "\"}}}";
-
         ItemStack itemStack = createSkull();
         SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
-        GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
-        gameProfile.getProperties().put("textures", new Property("textures", Base64.getEncoder().encodeToString(targetURL.getBytes())));
 
         try {
 
-            Reflect.getField(SkullMeta.class, true, "profile").set(skullMeta, gameProfile);
+            Reflect.getField("CraftMetaSkull", Reflect.PackageType.CRAFTBUKKIT_INVENTORY, true, "profile").set(skullMeta, createGameProfile(data));
         }
         catch (Exception e) {
 
-            throw new MoonLakeException("The set itemstack skull skin textures exception.", e);
+            throw new MoonLakeException("The create skull with skin meta exception.", e);
         }
+        itemStack.setItemMeta(skullMeta);
+
+        return itemStack;
+    }
+
+    @Override
+    public ItemStack createSkullWithSkins(String value, String signature) throws MoonLakeException {
+
+        Validate.notNull(value, "The itemstack skull skin value object is null.");
+
+        if(signature == null) {
+
+            return createSkullWithSkin(value);
+        }
+        if(value.isEmpty()) {
+
+            return createSkull();
+        }
+        ItemStack itemStack = createSkull();
+        SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+
+        try {
+
+            Reflect.getField("CraftMetaSkull", Reflect.PackageType.CRAFTBUKKIT_INVENTORY, true, "profile").set(skullMeta, createGameProfile(value, signature));
+        }
+        catch (Exception e) {
+
+            throw new MoonLakeException("The create skull with skin meta exception.", e);
+        }
+        itemStack.setItemMeta(skullMeta);
+
         return itemStack;
     }
 
     @Override
     public ItemStack createSkullWithSkin(URL skinURL) throws MoonLakeException {
 
-        Validate.notNull(skinURL, "The itemstack skull skin url object is null.");
-
-        return createSkullWithSkin(skinURL.toString());
+        throw new NotImplementedException();
     }
 
     @Override
-    public ItemStack createSkullWithSkin(String skinURL, String displayName) throws MoonLakeException {
+    public ItemStack createSkullWithSkin(String data, String displayName) throws MoonLakeException {
 
-        Validate.notNull(skinURL, "The itemstack skull skin url object is null.");
+        Validate.notNull(data, "The itemstack skull skin data object is null.");
         Validate.notNull(displayName, "The itemstack skull displayName object is null.");
 
-        if(skinURL.isEmpty()) {
+        if(data.isEmpty()) {
 
             return createSkull(displayName);
         }
-        ItemStack itemStack = createSkullWithSkin(skinURL);
+        ItemStack itemStack = createSkullWithSkin(data);
         itemStack = setDisplayName(itemStack, displayName);
+
+        return itemStack;
+    }
+
+    @Override
+    public ItemStack createSkullWithSkins(String value, String signature, String displayName) throws MoonLakeException {
+
+        Validate.notNull(displayName, "The itemstack skull displayName object is null.");
+
+        ItemStack itemStack = createSkullWithSkins(value, signature);
+        itemStack = setDisplayName(itemStack, displayName);
+
         return itemStack;
     }
 
     @Override
     public ItemStack createSkullWithSkin(URL skinURL, String displayName) {
 
-        Validate.notNull(skinURL, "The itemstack skull skin url object is null.");
-
-        return createSkullWithSkin(skinURL.toString(), displayName);
+        throw new NotImplementedException();
     }
 
     @Override
