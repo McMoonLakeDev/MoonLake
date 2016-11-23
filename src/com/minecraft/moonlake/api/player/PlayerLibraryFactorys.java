@@ -46,6 +46,75 @@ public class PlayerLibraryFactorys {
     private static DependEconomyVaultPlayer dependEconomyVaultPlayer;
     private static Boolean dependEconomyVaultPlayerHook = null;
 
+    static {
+
+        // 初始化插件重载事件监听器
+        // 单一实例里面注册事件, 那么不让 jvm 加载这个类的话这个事件不会被注册
+        // 这样让用户调用一次后再加载事件, 这样如果他用插件管理之类的插件
+        // 加载或者卸载其他插件, 这里就能让 API 接口的功能重新去 Hook
+        EventHelper.registerEvent(new MoonLakeListener() {
+
+            @EventHandler(priority = EventPriority.LOWEST)
+            public void onEnable(PluginEnableEvent event) {
+
+                Plugin plugin = event.getPlugin();
+                String pluginName = plugin.getName();
+
+                try {
+
+                    if(pluginName.equals("MoonLakeEconomy") && dependEconomyPlayerHook == null) {
+                        // Hook MoonLakeEconomy
+                        economyPlayer();
+                    }
+                    else if(pluginName.equals("PermissionsEx") && dependPermissionsExPlayerHook == null) {
+                        // Hook PermissionsEx
+                        permissionsExPlayer();
+                    }
+                    else if(pluginName.equals("Vault") && dependEconomyVaultPlayerHook == null) {
+                        // Hook Vault Economy
+                        economyVaultPlayer();
+                    }
+                }
+                catch (Exception e) {
+
+                    MoonLakeAPI.getMLogger().error("The hook '" + pluginName + "' plugin failed, exception info: ");
+
+                    e.printStackTrace();
+                }
+            }
+
+            @EventHandler(priority = EventPriority.LOWEST)
+            public void onDisable(PluginDisableEvent event) {
+
+                Plugin plugin = event.getPlugin();
+                String pluginName = plugin.getName();
+
+                if(pluginName.equals("MoonLakeEconomy") && dependEconomyPlayerHook != null) {
+                    // Unhook MoonLakeEconomy
+                    dependEconomyPlayer = null;
+                    dependEconomyPlayerHook = null;
+
+                    MoonLakeAPI.getMLogger().warn("The unhook 'MoonLakeEconomy' plugin, now 'EconomyPlayer' interface is unavailable.");
+                }
+                else if(pluginName.equals("PermissionsEx") && dependPermissionsExPlayerHook != null) {
+                    // Unhook PermissionsEx
+                    dependPermissionsExPlayer = null;
+                    dependPermissionsExPlayerHook = null;
+
+                    MoonLakeAPI.getMLogger().warn("The unhook 'PermissionsEx' plugin, now 'PermissionsExPlayer' interface is unavailable.");
+                }
+                else if(pluginName.equals("Vault") && dependEconomyVaultPlayerHook != null) {
+                    // Unhook Vault Economy
+                    dependEconomyVaultPlayer = null;
+                    dependEconomyVaultPlayerHook = null;
+
+                    MoonLakeAPI.getMLogger().warn("The unhook 'Vault' plugin 'Economy' module, now 'EconomyVaultPlayer' interface is unavailable.");
+                }
+            }
+        }, MoonLakeAPI.getMoonLake());
+        ///
+    }
+
     /**
      * 玩家支持库静态工厂类构造函数
      */
@@ -63,72 +132,6 @@ public class PlayerLibraryFactorys {
         if(playerLibraryInstance == null) {
 
             playerLibraryInstance = PlayerLibraryFactory.get().player();
-
-            // 初始化插件重载事件监听器
-            // 单一实例里面注册事件, 那么不让 jvm 加载这个类的话这个事件不会被注册
-            // 这样让用户调用一次后再加载事件, 这样如果他用插件管理之类的插件
-            // 加载或者卸载其他插件, 这里就能让 API 接口的功能重新去 Hook
-            EventHelper.registerEvent(new MoonLakeListener() {
-
-                @EventHandler(priority = EventPriority.LOWEST)
-                public void onEnable(PluginEnableEvent event) {
-
-                    Plugin plugin = event.getPlugin();
-                    String pluginName = plugin.getName();
-
-                    try {
-
-                        if(pluginName.equals("MoonLakeEconomy") && dependEconomyPlayerHook == null) {
-                            // Hook MoonLakeEconomy
-                            economyPlayer();
-                        }
-                        else if(pluginName.equals("PermissionsEx") && dependPermissionsExPlayerHook == null) {
-                            // Hook PermissionsEx
-                            permissionsExPlayer();
-                        }
-                        else if(pluginName.equals("Vault") && dependEconomyVaultPlayerHook == null) {
-                            // Hook Vault Economy
-                            economyVaultPlayer();
-                        }
-                    }
-                    catch (Exception e) {
-
-                        MoonLakeAPI.getMLogger().error("The hook '" + pluginName + "' plugin failed, exception info: ");
-
-                        e.printStackTrace();
-                    }
-                }
-
-                @EventHandler(priority = EventPriority.LOWEST)
-                public void onDisable(PluginDisableEvent event) {
-
-                    Plugin plugin = event.getPlugin();
-                    String pluginName = plugin.getName();
-
-                    if(pluginName.equals("MoonLakeEconomy") && dependEconomyPlayerHook != null) {
-                        // Unhook MoonLakeEconomy
-                        dependEconomyPlayer = null;
-                        dependEconomyPlayerHook = null;
-
-                        MoonLakeAPI.getMLogger().warn("The unhook 'MoonLakeEconomy' plugin, now 'EconomyPlayer' interface is unavailable.");
-                    }
-                    else if(pluginName.equals("PermissionsEx") && dependPermissionsExPlayerHook != null) {
-                        // Unhook PermissionsEx
-                        dependPermissionsExPlayer = null;
-                        dependPermissionsExPlayerHook = null;
-
-                        MoonLakeAPI.getMLogger().warn("The unhook 'PermissionsEx' plugin, now 'PermissionsExPlayer' interface is unavailable.");
-                    }
-                    else if(pluginName.equals("Vault") && dependEconomyVaultPlayerHook != null) {
-                        // Unhook Vault Economy
-                        dependEconomyVaultPlayer = null;
-                        dependEconomyVaultPlayerHook = null;
-
-                        MoonLakeAPI.getMLogger().warn("The unhook 'Vault' plugin 'Economy' module, now 'EconomyVaultPlayer' interface is unavailable.");
-                    }
-                }
-            }, MoonLakeAPI.getMoonLake());
-            ///
         }
         return playerLibraryInstance;
     }

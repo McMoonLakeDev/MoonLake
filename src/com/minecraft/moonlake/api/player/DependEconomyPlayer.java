@@ -37,7 +37,6 @@ import org.bukkit.plugin.Plugin;
  */
 class DependEconomyPlayer {
 
-    private EconomyPlugin economyPlugin;
     private MoonLakeEconomy moonLakeEconomy;
 
     /**
@@ -53,8 +52,7 @@ class DependEconomyPlayer {
 
             throw new CannotDependException("The cannot depend 'MoonLakeEconomy' plugin exception.");
         }
-        this.economyPlugin = (EconomyPlugin) plugin;
-        this.moonLakeEconomy = this.economyPlugin.getEconomy();
+        this.moonLakeEconomy = ((EconomyPlugin) plugin).getEconomy();
 
         MoonLakeAPI.getMLogger().info("Success hook 'MoonLakeEconomy' plugin, 'EconomyPlayer' interface be use.");
     }
