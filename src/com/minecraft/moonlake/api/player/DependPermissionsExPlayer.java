@@ -41,7 +41,6 @@ import java.util.List;
  */
 class DependPermissionsExPlayer {
 
-    private PermissionsEx permissionsExPlugin;
     private PermissionManager permissionManager;
 
     /**
@@ -65,8 +64,7 @@ class DependPermissionsExPlayer {
             // 服务端加载的 PermissionsEx 插件版本小于 1.23 则抛出异常
             throw new CannotDependVersionException("The depend 'PermissionsEx' plugin, but version less than 1.23 exception.");
         }
-        this.permissionsExPlugin = (PermissionsEx) plugin;
-        this.permissionManager = this.permissionsExPlugin.getPermissionsManager();
+        this.permissionManager = ((PermissionsEx) plugin).getPermissionsManager();
 
         MoonLakeAPI.getMLogger().info("Success hook 'PermissionsEx' plugin, 'PermissionsExPlayer' interface be use.");
     }
