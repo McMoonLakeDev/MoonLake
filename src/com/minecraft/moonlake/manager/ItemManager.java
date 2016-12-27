@@ -18,22 +18,30 @@
  
 package com.minecraft.moonlake.manager;
 
+import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.item.AttributeModify;
+import com.minecraft.moonlake.api.item.ItemBuilder;
 import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.api.nbt.NBTFactory;
+import com.minecraft.moonlake.data.Conversions;
 import com.minecraft.moonlake.data.NBTTagData;
 import com.minecraft.moonlake.data.NBTTagDataWrapped;
 import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Base64;
+import java.util.List;
+import java.util.Set;
 
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
@@ -453,5 +461,234 @@ public class ItemManager extends MoonLakeManager {
             }
         }
         return null;
+    }
+
+    /** Serialize ItemStack To File */
+    public static File serializeToFile(ItemBuilder builder) {
+
+        Validate.notNull(builder, "The item builder object is null.");
+
+        return serializeToFile(builder.build(true));
+    }
+
+    public static File serializeToFile(ItemStack itemStack) {
+
+        throw new UnsupportedOperationException();
+    }
+    /** Serialize ItemStack To File */
+
+    /**
+     * 将特定 YAML 文件数据反序列化为物品栈对象
+     *
+     * @param path 文件路径
+     * @return 物品栈对象 异常返回 null
+     * @throws IllegalArgumentException 如果路径对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果文件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果文件对象不存在或不是文件则抛出异常
+     * @throws IllegalArgumentException 如果文件对象后缀类型名不为 {@code yml} 则抛出异常
+     * @throws MoonLakeException 如果反序列化错误则抛出异常
+     */
+    public static ItemStack deserializeFromFile(String path) {
+
+        Validate.notNull(path, "The file path object is null.");
+
+        return deserializeFromFile(new File(path));
+    }
+
+    /**
+     * 将特定 YAML 文件数据反序列化为物品栈对象
+     *
+     * <p>By Month_Light Ver: 1.0</p>
+     *
+     * @param file 文件
+     * @return 物品栈对象 异常返回 null
+     * @throws IllegalArgumentException 如果文件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果文件对象不存在或不是文件则抛出异常
+     * @throws IllegalArgumentException 如果文件对象后缀类型名不为 {@code yml} 则抛出异常
+     * @throws MoonLakeException 如果反序列化错误则抛出异常
+     */
+    public static ItemStack deserializeFromFile(File file) {
+
+        Validate.notNull(file, "The file object is null.");
+        Validate.isTrue(file.exists() && file.isFile(), "The file not exists or not file.");
+        Validate.isTrue(file.getName().endsWith(".yml"), "The file not is yml suffix.");
+
+        YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
+        ItemBuilder itemBuilder = null;
+
+        if(!yml.isSet("Type"))
+            throw new MoonLakeException("The yml file not exists 'Type' attribute.");
+
+        String type = yml.getString("Type");
+        Material material = Material.matchMaterial(type);
+
+        if(material == null)
+            throw new MoonLakeException("The yml file 'Type' attribute is unknown material: " + type);
+
+        if(material == Material.AIR)
+            return new ItemStack(Material.AIR);
+
+        // base
+        int data = yml.isSet("Data") ? yml.getInt("Data", 0) : 0;
+        int amount = yml.isSet("Amount") ? yml.getInt("Amount", 1) : 1;
+
+        // init
+        itemBuilder = MoonLakeAPI.newItemBuilder(material, data, amount);
+
+        // displayName
+        String displayName = yml.isSet("DisplayName") ? yml.getString("DisplayName", null) : null;
+
+        if(displayName != null)
+            itemBuilder.setDisplayName(displayName);
+
+        // lore
+        List<String> lore = yml.isSet("Lore") ? yml.getStringList("Lore") : null;
+
+        if(lore != null)
+            itemBuilder.setLore(StringUtil.toColor(lore));
+
+        // enchantment
+        if(yml.isSet("Enchantment")) {
+
+            ConfigurationSection section = yml.getConfigurationSection("Enchantment");
+            Set<String> keys = section != null ? section.getKeys(false) : null;
+
+            if(keys != null && !keys.isEmpty()) {
+
+                for(final String key : keys) {
+
+                    Enchantment enchantment = null;
+                    int level = yml.getInt("Enchantment." + key);
+
+                    if(key.matches("([0-9])+"))
+                        enchantment = Enchantment.getById(Conversions.toInt(key));
+                    else
+                        enchantment = Enchantment.getByName(key.toUpperCase());
+
+                    if(enchantment == null)
+                        MoonLakeAPI.getMLogger().error("The deserialize from file '" + file.getName() + "' key 'Enchantment' error enchantment: " + key);
+                    else
+                        itemBuilder.addEnchantment(enchantment, level);
+                }
+            }
+        }
+
+        // hide flag
+        if(yml.isSet("HideFlag")) {
+
+            List<String> list = yml.getStringList("HideFlag");
+
+            if(list != null && !list.isEmpty()) {
+
+                for(final String hideFlag : list) {
+
+                    ItemFlag itemFlag = null;
+
+                    try {
+
+                        itemFlag = ItemFlag.valueOf(hideFlag.toUpperCase());
+                    }
+                    catch (Exception e) {
+                    }
+
+                    if(itemFlag == null)
+                        MoonLakeAPI.getMLogger().error("The deserialize from file '" + file.getName() + "' key 'HideFlag' error flag: " + hideFlag);
+                    else
+                        itemBuilder.addFlags(itemFlag);
+                }
+            }
+        }
+
+        // unbreakable
+        if(yml.isSet("Unbreakable")) {
+
+            boolean result = yml.getBoolean("Unbreakable", false);
+
+            if(result)
+                itemBuilder.setUnbreakable(true);
+        }
+
+        // attribute modifiers
+        if(yml.isSet("AttributeModifiers")) {
+
+            ConfigurationSection section = yml.getConfigurationSection("AttributeModifiers");
+            Set<String> keys = section != null ? section.getKeys(false) : null;
+
+            if(keys != null && !keys.isEmpty()) {
+
+                for(final String key : keys) {
+
+                    AttributeModify.Type attType = AttributeModify.Type.fromType(key);
+
+                    if(attType == null) {
+
+                        MoonLakeAPI.getMLogger().error("The deserialize from file '" + file.getName() + "' key 'AttributeModifiers' error type: " + key);
+                        continue;
+                    }
+                    double value = yml.getDouble("AttributeModifiers." + key + ".Value", -1d);
+                    boolean percent = yml.getBoolean("AttributeModifiers." + key + ".Percent", false);
+                    String slot = yml.getString("AttributeModifiers." + key + ".Slot", null);
+                    AttributeModify.Slot slotObj = slot != null ? AttributeModify.Slot.fromType(slot) : AttributeModify.Slot.MAIN_HAND;
+                    // add
+                    itemBuilder.setAttribute(new AttributeModify(
+                            attType,
+                            slotObj,
+                            percent ? AttributeModify.Operation.ADD_PERCENTAGE : AttributeModify.Operation.ADD_NUMBER,
+                            value
+                    ));
+                }
+            }
+        }
+
+        // nbt modifiers
+        ItemStack result = itemBuilder.build(true);
+        NBTCompound tag = MoonLakeAPI.getNBTLibrary().read(result);
+
+        // skull owner
+        if(yml.isSet("SkullOwner")) {
+
+            if(material == Material.SKULL_ITEM) {
+
+                String target = yml.getString("SkullOwner", null);
+
+                if(target != null && !target.isEmpty())
+                    tag.put("SkullOwner", target);
+            }
+        }
+
+        // age
+        if(yml.isSet("Age")) {
+
+            int age = yml.getInt("Age", 6000);
+
+            if(age != 6000)
+                tag.put("Age", age);
+        }
+
+        // pickup delay
+        if(yml.isSet("PickupDelay")) {
+
+            int pickupDelay = yml.getInt("PickupDelay", -1);
+
+            if(pickupDelay != -1)
+                tag.put("PickupDelay", pickupDelay);
+        }
+
+        // generation
+        /*if(yml.isSet("Generation")) {
+
+            if(material == Material.WRITTEN_BOOK) {
+
+                int value = yml.getInt("Generation", -1);
+
+                if(value != -1)
+                    tag.put("generation", value);
+            }
+        }*/
+
+        // write nbt
+        MoonLakeAPI.getNBTLibrary().write(result, tag);
+
+        return result;
     }
 }
