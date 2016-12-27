@@ -57,10 +57,12 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
 
         try {
 
+            String enumGamemode = getServerVersion().equals("v1_8_R1") || getServerVersionNumber() >= 10 ? "EnumGamemode" : "WorldSettings$EnumGamemode";
+
             CLASS_PACKETPLAYOUTRESPAWN = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutRespawn");
             CLASS_WORLDTYPE = PackageType.MINECRAFT_SERVER.getClass("WorldType");
             CLASS_ENUMDIFFICULTY = PackageType.MINECRAFT_SERVER.getClass("EnumDifficulty");
-            CLASS_ENUMGAMEMODE = PackageType.MINECRAFT_SERVER.getClass("EnumGamemode");
+            CLASS_ENUMGAMEMODE = PackageType.MINECRAFT_SERVER.getClass(enumGamemode);
             CLASS_WORLD = PackageType.MINECRAFT_SERVER.getClass("World");
             CLASS_WORLDPROVIDER = PackageType.MINECRAFT_SERVER.getClass("WorldProvider");
             CLASS_ENTITY = PackageType.MINECRAFT_SERVER.getClass("Entity");

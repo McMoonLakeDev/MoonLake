@@ -35,6 +35,32 @@ import java.util.Set;
 public interface CommandAnnotation extends PluginAnnotation {
 
     /**
+     * 将指定插件的指定对象加载数据
+     *
+     * @param plugin 插件
+     * @param obj 对象
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果指定加载对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果加载错误则抛出异常
+     * @see #load(Plugin, MoonLakeCommand)
+     */
+    @Override
+    @Deprecated
+    void load(Plugin plugin, Object obj) throws MoonLakeException;
+
+    /**
+     * 将指定插件的指定对象加载数据
+     *
+     * @param plugin 插件
+     * @param obj 对象命令
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果指定加载对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果加载错误则抛出异常
+     * @see #registerCommand(Plugin, MoonLakeCommand)
+     */
+    void load(Plugin plugin, MoonLakeCommand obj) throws MoonLakeException;
+
+    /**
      * 将指定插件的指定对象注册命令
      *
      * @param plugin 插件
@@ -43,6 +69,21 @@ public interface CommandAnnotation extends PluginAnnotation {
      * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果指定加载对象为 {@code null} 则抛出异常
      * @throws MoonLakeException 如果注册错误则抛出异常
+     * @deprecated @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #registerCommand(Plugin, MoonLakeCommand)}
+     * @see #registerCommand(Plugin, MoonLakeCommand)
      */
+    @Deprecated
     Set<CommandAnnotated> registerCommand(Plugin plugin, Object obj) throws MoonLakeException;
+
+    /**
+     * 将指定插件的指定对象注册命令
+     *
+     * @param plugin 插件
+     * @param obj 对象命令
+     * @return 命令
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果指定加载对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果注册错误则抛出异常
+     */
+    Set<CommandAnnotated> registerCommand(Plugin plugin, MoonLakeCommand obj) throws MoonLakeException;
 }

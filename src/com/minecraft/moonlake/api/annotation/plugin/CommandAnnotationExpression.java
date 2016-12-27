@@ -26,6 +26,7 @@ import org.bukkit.plugin.Plugin;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * <h1>CommandAnnotationExpression</h1>
@@ -50,10 +51,21 @@ class CommandAnnotationExpression extends PluginAnnotationAbstract implements Co
     }
 
     @Override
+    public void load(Plugin plugin, MoonLakeCommand obj) throws MoonLakeException {
+
+        registerCommand(plugin, obj);
+    }
+
+    @Override
     public Set<CommandAnnotated> registerCommand(Plugin plugin, Object obj) throws MoonLakeException {
 
         Validate.notNull(plugin, "The plugin object is null.");
         Validate.notNull(obj, "The obj object is null.");
+
+        if(!(obj instanceof MoonLakeCommand)) {
+            // warn new version need implements MoonLakeCommand
+            plugin.getLogger().log(Level.WARNING, "[MoonLake] 警告: 新版本核心插件命令类需要实现 MoonLakeCommand 接口. (请注意更新!)");
+        }
 
         Class<?> clazz = obj.getClass();
         Set<CommandAnnotated> commands = new HashSet<>();
@@ -97,5 +109,11 @@ class CommandAnnotationExpression extends PluginAnnotationAbstract implements Co
             }
         }
         return commands;
+    }
+
+    @Override
+    public Set<CommandAnnotated> registerCommand(Plugin plugin, MoonLakeCommand obj) throws MoonLakeException {
+
+        return registerCommand(plugin, (Object) obj);
     }
 }

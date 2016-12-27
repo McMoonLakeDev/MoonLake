@@ -1,6 +1,6 @@
 name: MoonLake
 main: com.minecraft.moonlake.MoonLakePlugin
-version: 1.8-r3
+version: 1.8-a4
 prefix: MoonLake
 description: Minecraft MoonLake Core API Plugin
 website: http://www.mcyszh.com/
