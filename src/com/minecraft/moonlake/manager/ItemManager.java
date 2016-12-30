@@ -35,13 +35,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Base64;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
@@ -463,19 +462,194 @@ public class ItemManager extends MoonLakeManager {
         return null;
     }
 
-    /** Serialize ItemStack To File */
-    public static File serializeToFile(ItemBuilder builder) {
+    /**
+     * 将物品栈对象数据序列化为特定 YAML 文件数据
+     *
+     * @param builder 物品栈构建器
+     * @param out 输出的文件
+     * @throws IllegalArgumentException 如果物品栈构建器对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果输出文件对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果保存到文件时错误则抛出异常
+     */
+    public static void serializeToFile(ItemBuilder builder, File out) {
+
+        serializeToFile(builder, out, null);
+    }
+
+    /**
+     * 将物品栈对象数据序列化为特定 YAML 文件数据
+     *
+     * @param builder 物品栈构建器
+     * @param out 输出的文件
+     * @param charset 文件编码
+     * @throws IllegalArgumentException 如果物品栈构建器对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果输出文件对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果保存到文件时错误则抛出异常
+     */
+    public static void serializeToFile(ItemBuilder builder, File out, String charset) {
 
         Validate.notNull(builder, "The item builder object is null.");
 
-        return serializeToFile(builder.build(true));
+        serializeToFile(builder.build(true), out, charset);
     }
 
-    public static File serializeToFile(ItemStack itemStack) {
+    /**
+     * 将物品栈对象数据序列化为特定 YAML 文件数据
+     *
+     * @param itemStack 物品栈
+     * @param out 输出的文件
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果输出文件对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果保存到文件时错误则抛出异常
+     */
+    public static void serializeToFile(ItemStack itemStack, File out) {
 
-        throw new UnsupportedOperationException();
+        serializeToFile(itemStack, out, null);
     }
-    /** Serialize ItemStack To File */
+
+    /**
+     * 将物品栈对象数据序列化为特定 YAML 文件数据
+     *
+     * @param itemStack 物品栈
+     * @param out 输出的文件
+     * @param charset 文件编码
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果输出文件对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果保存到文件时错误则抛出异常
+     */
+    public static void serializeToFile(ItemStack itemStack, File out, String charset) {
+
+        Validate.notNull(itemStack, "The itemstack object is null.");
+        Validate.notNull(out, "The file out object is null.");
+
+        YamlConfiguration yaml = new YamlConfiguration();
+        yaml.set("Type", itemStack.getType().name());
+        yaml.set("Data", (int) itemStack.getDurability());
+        yaml.set("Amount", itemStack.getAmount());
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+
+        // display name
+        if(itemMeta.hasDisplayName())
+            yaml.set("DisplayName", itemMeta.getDisplayName());
+
+        // lore
+        if(itemMeta.hasLore())
+            yaml.set("Lore", itemMeta.getLore());
+
+        // enchantment
+        if(itemMeta.hasEnchants()) {
+
+            Map<Enchantment, Integer> enchantments = itemMeta.getEnchants();
+
+            for (final Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+
+                yaml.set("Enchantment." + entry.getKey().getName(), entry.getValue());
+            }
+        }
+
+        // hide flag
+        Set<ItemFlag> hideFlags = itemMeta.getItemFlags();
+
+        if(hideFlags != null && !hideFlags.isEmpty()) {
+
+            List<String> result = new ArrayList<>();
+
+            for(final ItemFlag flag : hideFlags)
+                result.add(flag.name());
+
+            yaml.set("HideFlag", result);
+        }
+
+        // unbreakable
+        if(MoonLakeAPI.getItemLibrary().isUnbreakable(itemStack))
+            yaml.set("Unbreakable", true);
+
+        // attribute modifiers
+        Set<AttributeModify> atts = MoonLakeAPI.getItemLibrary().getAttributes(itemStack);
+
+        if(atts != null && !atts.isEmpty()) {
+
+            for(final AttributeModify att : atts) {
+
+                AttributeModify.Slot slot = att.getSlot().get();
+                AttributeModify.Type type = att.getType().get();
+                AttributeModify.Operation operation = att.getOperation().get();
+
+                yaml.set("AttributeModifiers." + type.getType() + ".Value", att.getAmount().getValue());
+
+                if(operation == AttributeModify.Operation.ADD_PERCENTAGE)
+                    // percent
+                    yaml.set("AttributeModifiers." + type.getType() + ".Percent", true);
+
+                if(slot != null && slot != AttributeModify.Slot.MAIN_HAND && slot != AttributeModify.Slot.ALL)
+                    // slot
+                    yaml.set("AttributeModifiers." + type.getType() + ".Slot", slot.getType());
+            }
+        }
+
+        // nbt modifiers
+        NBTCompound tag = MoonLakeAPI.getNBTLibrary().readSafe(itemStack);
+
+        // skull owner
+        if(itemStack.getType() == Material.SKULL_ITEM) {
+
+            String skullOwner = tag.getString("SkullOwner", null);
+
+            if(skullOwner != null)
+                yaml.set("SkullOwner", skullOwner);
+        }
+
+        // age
+        int age = tag.getInt("Age", 6000);
+
+        if(age != 6000)
+            yaml.set("Age", age);
+
+        // pickup delay
+        int pickupDelay = tag.getInt("PickupDelay", -1);
+
+        if(pickupDelay != -1)
+            yaml.set("PickupDelay", pickupDelay);
+
+        // save file
+        OutputStreamWriter osw = null;
+
+        try {
+
+            if(charset == null) {
+                // use yaml default save
+                yaml.save(out);
+            }
+            else {
+                // use out stream save
+                String data = yaml.saveToString();
+
+                if(data.contains("\\u"))
+                    // unicode
+                    data = StringUtil.decodeUnicode(data);
+
+                osw = new OutputStreamWriter(new FileOutputStream(out), charset);
+                osw.write(data);
+            }
+        }
+        catch (Exception e) {
+
+            throw new MoonLakeException("The serialize to file save exception.");
+        }
+        finally {
+
+            try {
+
+                if(osw != null) {
+                    osw.flush();
+                    osw.close();
+                }
+            }
+            catch (Exception e) {
+            }
+        }
+    }
 
     /**
      * 将特定 YAML 文件数据反序列化为物品栈对象
@@ -497,8 +671,6 @@ public class ItemManager extends MoonLakeManager {
 
     /**
      * 将特定 YAML 文件数据反序列化为物品栈对象
-     *
-     * <p>By Month_Light Ver: 1.0</p>
      *
      * @param file 文件
      * @return 物品栈对象 异常返回 null
@@ -673,18 +845,6 @@ public class ItemManager extends MoonLakeManager {
             if(pickupDelay != -1)
                 tag.put("PickupDelay", pickupDelay);
         }
-
-        // generation
-        /*if(yml.isSet("Generation")) {
-
-            if(material == Material.WRITTEN_BOOK) {
-
-                int value = yml.getInt("Generation", -1);
-
-                if(value != -1)
-                    tag.put("generation", value);
-            }
-        }*/
 
         // write nbt
         MoonLakeAPI.getNBTLibrary().write(result, tag);
