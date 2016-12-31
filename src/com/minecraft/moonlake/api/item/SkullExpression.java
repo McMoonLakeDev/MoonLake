@@ -110,55 +110,13 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
     @Override
     public ItemStack createSkullWithSkin(String data) throws MoonLakeException {
 
-        Validate.notNull(data, "The itemstack skull skin data object is null.");
-
-        if(data.isEmpty()) {
-
-            return createSkull();
-        }
-        ItemStack itemStack = createSkull();
-        SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
-
-        try {
-
-            Reflect.getField("CraftMetaSkull", Reflect.PackageType.CRAFTBUKKIT_INVENTORY, true, "profile").set(skullMeta, createGameProfile(data));
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The create skull with skin meta exception.", e);
-        }
-        itemStack.setItemMeta(skullMeta);
-
-        return itemStack;
+        return setSkullWithSkin(createSkull(), data);
     }
 
     @Override
     public ItemStack createSkullWithSkins(String value, String signature) throws MoonLakeException {
 
-        Validate.notNull(value, "The itemstack skull skin value object is null.");
-
-        if(signature == null) {
-
-            return createSkullWithSkin(value);
-        }
-        if(value.isEmpty()) {
-
-            return createSkull();
-        }
-        ItemStack itemStack = createSkull();
-        SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
-
-        try {
-
-            Reflect.getField("CraftMetaSkull", Reflect.PackageType.CRAFTBUKKIT_INVENTORY, true, "profile").set(skullMeta, createGameProfile(value, signature));
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The create skull with skin meta exception.", e);
-        }
-        itemStack.setItemMeta(skullMeta);
-
-        return itemStack;
+        return setSkullWithSkin(createSkull(), value, signature);
     }
 
     @Override
@@ -219,5 +177,59 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
     public String getSkullSkinURL(ItemStack itemStack) {
 
         throw new NotImplementedException();
+    }
+
+    @Override
+    public ItemStack setSkullWithSkin(ItemStack itemStack, String data) throws MoonLakeException {
+
+        Validate.notNull(data, "The itemstack skull skin data object is null.");
+        Validate.isTrue(itemStack.getType() == Material.SKULL_ITEM, "The itemstack type not is skull.");
+
+        if(data.isEmpty()) {
+
+            return createSkull();
+        }
+        SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+
+        try {
+
+            Reflect.getField("CraftMetaSkull", Reflect.PackageType.CRAFTBUKKIT_INVENTORY, true, "profile").set(skullMeta, createGameProfile(data));
+        }
+        catch (Exception e) {
+
+            throw new MoonLakeException("The create skull with skin meta exception.", e);
+        }
+        itemStack.setItemMeta(skullMeta);
+
+        return itemStack;
+    }
+
+    @Override
+    public ItemStack setSkullWithSkin(ItemStack itemStack, String value, String signature) throws MoonLakeException {
+
+        Validate.notNull(value, "The itemstack skull skin value object is null.");
+        Validate.isTrue(itemStack.getType() == Material.SKULL_ITEM, "The itemstack type not is skull.");
+
+        if(signature == null) {
+
+            return setSkullWithSkin(itemStack, value);
+        }
+        if(value.isEmpty()) {
+
+            return createSkull();
+        }
+        SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+
+        try {
+
+            Reflect.getField("CraftMetaSkull", Reflect.PackageType.CRAFTBUKKIT_INVENTORY, true, "profile").set(skullMeta, createGameProfile(value, signature));
+        }
+        catch (Exception e) {
+
+            throw new MoonLakeException("The create skull with skin meta exception.", e);
+        }
+        itemStack.setItemMeta(skullMeta);
+
+        return itemStack;
     }
 }

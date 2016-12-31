@@ -18,6 +18,8 @@
  
 package com.minecraft.moonlake.api.item.potion;
 
+import com.minecraft.moonlake.validate.Validate;
+
 /**
  * <h1>PotionBase</h1>
  * 基础药水效果
@@ -162,11 +164,11 @@ public abstract class PotionBase {
     /**
      * 基础药水效果类型: 虚弱药水
      */
-    public final static PotionBase LONG_WEAKNESS = new PotionBase("weakness") {};
+    public final static PotionBase WEAKNESS = new PotionBase("weakness") {};
     /**
      * 基础药水效果类型: 虚弱药水 延长版
      */
-    public final static PotionBase WEAKNESS = new PotionBase("long_weakness") {};
+    public final static PotionBase LONG_WEAKNESS = new PotionBase("long_weakness") {};
 
     private String value;
 
@@ -188,5 +190,106 @@ public abstract class PotionBase {
     public String getValue() {
 
         return value;
+    }
+
+    /**
+     * 将指定基础效果名转换为药水基础效果对象
+     *
+     * @param type 名称
+     * @return PotionBase
+     * @throws IllegalArgumentException 如果名称对象为 {@code null} 则抛出异常
+     */
+    public static PotionBase valueOf(String type) {
+
+        return valueOf(type, null);
+    }
+
+    /**
+     * 将指定基础效果名转换为药水基础效果对象
+     *
+     * @param type 名称
+     * @param def 默认值
+     * @return PotionBase
+     * @throws IllegalArgumentException 如果名称对象为 {@code null} 则抛出异常
+     */
+    public static PotionBase valueOf(String type, PotionBase def) {
+
+        Validate.notNull(type, "The potion base type object is null.");
+
+        switch (type.toLowerCase()) {
+
+            case "water":
+                return WATER;
+            case "mundane":
+                return MUNDANE_WATER;
+            case "thick":
+                return THICK_WATER;
+            case "awkward":
+                return AWKWARD_WATER;
+            case "night_vision":
+                return NIGHT_VISION;
+            case "long_night_vision":
+                return LONG_NIGHT_VISION;
+            case "invisibility":
+                return INVISIBILITY;
+            case "long_invisibility":
+                return LONG_INVISIBILITY;
+            case "leaping":
+                return LEAPING;
+            case "strong_leaping":
+                return STRONG_LEAPING;
+            case "long_leaping":
+                return LONG_LEAPING;
+            case "fire_resistance":
+                return FIRE_RESISTANCE;
+            case "long_fire_resistance":
+                return LONG_FIRE_RESISTANCE;
+            case "swiftness":
+                return SWIFTNESS;
+            case "strong_swiftness":
+                return STRONG_SWIFTNESS;
+            case "long_swiftness":
+                return LONG_SWIFTNESS;
+            case "slowness":
+                return SLOWNESS;
+            case "long_slowness":
+                return LONG_SLOWNESS;
+            case "water_breathing":
+                return WATER_BREATHING;
+            case "long_water_breathing":
+                return LONG_WATER_BREATHING;
+            case "healing":
+                return HEALING;
+            case "strong_healing":
+                return STRONG_HEALING;
+            case "harming":
+                return HARMING;
+            case "strong_harming":
+                return STRONG_HARMING;
+            case "poison":
+                return POISON;
+            case "strong_poison":
+                return STRONG_POISON;
+            case "long_poison":
+                return LONG_POISON;
+            case "regeneration":
+                return REGENERATION;
+            case "strong_regeneration":
+                return STRONG_REGENERATION;
+            case "long_regeneration":
+                return LONG_REGENERATION;
+            case "strength":
+                return STRENGTH;
+            case "strong_strength":
+                return STRONG_STRENGTH;
+            case "long_strength":
+                return LONG_STRENGTH;
+            case "weakness":
+                return WEAKNESS;
+            case "long_weakness":
+                return LONG_WEAKNESS;
+            default:
+                return def;
+        }
     }
 }

@@ -217,7 +217,7 @@ public class IoManager extends MoonLakeManager {
                     String key = line.substring(0, $);
                     String value = line.substring($ + 1);
 
-                    if (value.charAt(0) != '#') {
+                    if (!value.isEmpty() && value.charAt(0) != '#') {
 
                         temp.put(key, value.contains("" + StringUtil.COLOR_CHAR) ? StringUtil.toColor(prefix + value) : prefix + value);
                     }

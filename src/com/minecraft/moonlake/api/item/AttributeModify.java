@@ -244,6 +244,7 @@ public final class AttributeModify {
             for(final Type type : values()) {
 
                 NAME_MAP.put(type.getType(), type);
+                NAME_MAP.put(type.getAttributeName(), type); // put attribute name
             }
         }
 

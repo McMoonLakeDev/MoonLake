@@ -523,6 +523,22 @@ class ItemBuilderWrapped implements ItemBuilder {
     }
 
     @Override
+    public ItemBuilder setSkullWithSkin(String data) {
+
+        update(library().setSkullWithSkin(get(), data));
+
+        return this;
+    }
+
+    @Override
+    public ItemBuilder setSkullWithSkin(String value, String signature) {
+
+        update(library().setSkullWithSkin(get(), value, signature));
+
+        return this;
+    }
+
+    @Override
     public ItemStack build() {
 
         return build(true);
