@@ -102,9 +102,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        int nowDurability = itemStack.getDurability();
-
-        return setDurability(itemStack, nowDurability - durability); // set durability subtract be add durability
+        return setDurability(itemStack, itemStack.getDurability() - durability); // set durability subtract be add durability
     }
 
     @Override
@@ -112,9 +110,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        int nowDurability = itemStack.getDurability();
-
-        return setDurability(itemStack, nowDurability + durability); // set durability add be add durability
+        return setDurability(itemStack, itemStack.getDurability() + durability); // set durability add be add durability
     }
 
     @Override
@@ -448,7 +444,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         if(itemMeta == null) {
 
-            return null;
+            return new HashSet<>();
         }
         return itemMeta.getItemFlags();
     }

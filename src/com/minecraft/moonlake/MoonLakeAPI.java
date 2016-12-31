@@ -489,6 +489,26 @@ public final class MoonLakeAPI {
     }
 
     /**
+     * 获取插件注解配置文件类接口 ConfigAnnotation 实例对象
+     *
+     * @return ConfigAnnotation
+     */
+    public static ConfigAnnotation getConfigAnnotation() {
+
+        return getPluginAnnotation().getConfig();
+    }
+
+    /**
+     * 获取插件注解m了类接口 CommandAnnotation 实例对象
+     *
+     * @return CommandAnnotation
+     */
+    public static CommandAnnotation getCommandAnnotation() {
+
+        return getPluginAnnotation().getCommand();
+    }
+
+    /**
      * 获取 NBTLibrary 对象
      *
      * @return NBTLibrary

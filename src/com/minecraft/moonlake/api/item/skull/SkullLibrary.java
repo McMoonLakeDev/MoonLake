@@ -161,4 +161,27 @@ public interface SkullLibrary {
      */
     @Deprecated
     String getSkullSkinURL(ItemStack itemStack);
+
+    /**
+     * 设置头颅物品栈的皮肤材质数据
+     *
+     * @param data 头颅材质信息
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果头颅材质信息对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.SKULL_ITEM} 则抛出异常
+     * @throws MoonLakeException 如果设置头颅材质时错误则抛出异常
+     */
+    ItemStack setSkullWithSkin(ItemStack itemStack, String data) throws MoonLakeException;
+
+    /**
+     * 设置头颅物品栈的皮肤材质数据
+     *
+     * @param value 头颅材质值
+     * @param signature 头颅材质签名
+     * @return ItemStack
+     * @throws IllegalArgumentException 如果头颅材质值对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.SKULL_ITEM} 则抛出异常
+     * @throws MoonLakeException 如果设置头颅材质时错误则抛出异常
+     */
+    ItemStack setSkullWithSkin(ItemStack itemStack, String value, String signature) throws MoonLakeException;
 }

@@ -21,6 +21,7 @@ package com.minecraft.moonlake.api.item;
 import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.api.item.potion.PotionEffectType;
 import com.minecraft.moonlake.builder.Builder;
+import com.minecraft.moonlake.exception.MoonLakeException;
 import org.bukkit.Color;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -410,4 +411,25 @@ public interface ItemBuilder extends Builder<ItemStack> {
      * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.*Potion} 则抛出异常
      */
     ItemBuilder setCustomPotion(com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles);
+
+    /**
+     * 设置头颅物品栈的头颅材质皮肤数据
+     *
+     * @param data 皮肤数据
+     * @throws IllegalArgumentException 如果头颅材质信息对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.SKULL_ITEM} 则抛出异常
+     * @throws MoonLakeException 如果设置头颅材质时错误则抛出异常
+     */
+    ItemBuilder setSkullWithSkin(String data);
+
+    /**
+     * 设置头颅物品栈的头颅材质皮肤数据
+     *
+     * @param value 头颅材质值
+     * @param signature 头颅材质签名
+     * @throws IllegalArgumentException 如果头颅材质值对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.SKULL_ITEM} 则抛出异常
+     * @throws MoonLakeException 如果设置头颅材质时错误则抛出异常
+     */
+    ItemBuilder setSkullWithSkin(String value, String signature);
 }

@@ -153,6 +153,8 @@ public class MoonLakePlayerJoinEvent extends MoonLakePlayerEvent {
         v1_10_1(210),
         v1_10_2(210),
         v1_11(315),
+        v1_11_1(316),
+        v1_11_2(316),
         ;
 
         private final int protocol;

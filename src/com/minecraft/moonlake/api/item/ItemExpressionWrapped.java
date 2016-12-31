@@ -126,6 +126,18 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
+    public ItemStack setSkullWithSkin(ItemStack itemStack, String data) throws MoonLakeException {
+
+        return base.setSkullWithSkin(itemStack, data);
+    }
+
+    @Override
+    public ItemStack setSkullWithSkin(ItemStack itemStack, String value, String signature) throws MoonLakeException {
+
+        return base.setSkullWithSkin(itemStack, value, signature);
+    }
+
+    @Override
     public ItemStack setUnbreakable(ItemStack itemStack, boolean unbreakable) {
 
         return base.setUnbreakable(itemStack, unbreakable);
