@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <h1>StringUtil</h1>
@@ -39,6 +41,7 @@ import java.util.List;
 public class StringUtil {
 
     public final static char COLOR_CHAR = '\u0026';
+    public final static Pattern UNICODE_PATTERN = Pattern.compile("\\\\u[a-zA-Z0-9]{2,4}");
 
     /**
      * 字符串实现类构造函数
@@ -278,5 +281,28 @@ public class StringUtil {
     public static double rounding(double value, int bit) {
 
         return new BigDecimal(value).setScale(bit, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+    /**
+     * 将指定包含 Unicode 码的字符串转换为中文
+     *
+     * @param unicode 包含 Unicode 码的字符串
+     * @return 转换中文后的字符串
+     */
+    public static String decodeUnicode(final String unicode) {
+
+        if(unicode == null)
+            return null;
+
+        Matcher matcher = UNICODE_PATTERN.matcher(unicode);
+        StringBuffer buffer = new StringBuffer();
+
+        while (matcher.find()) {
+            String group = matcher.group();
+            group = group.substring(group.indexOf("\\u") + 2, group.length());
+            matcher.appendReplacement(buffer, String.valueOf((char) Integer.parseInt(group, 16)));
+        }
+        matcher.appendTail(buffer);
+        return buffer.toString();
     }
 }
