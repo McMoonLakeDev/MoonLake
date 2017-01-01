@@ -22,6 +22,7 @@ import com.minecraft.moonlake.mysql.exception.MySQLException;
 import com.minecraft.moonlake.mysql.exception.MySQLInitializeException;
 import com.minecraft.moonlake.validate.Validate;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.sql.*;
@@ -31,7 +32,7 @@ import java.util.*;
  * <h1>MySQLConnectionExpression</h1>
  * 数据库连接接口实现类
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 class MySQLConnectionExpression implements MySQLConnection {
@@ -59,13 +60,21 @@ class MySQLConnectionExpression implements MySQLConnection {
     /**
      * 数据库连接接口实现类构造函数
      *
-     * @param username 数据库用户名
-     * @param password 数据库密码
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public MySQLConnectionExpression(String username, String password) throws MySQLInitializeException {
+    public MySQLConnectionExpression() throws MySQLInitializeException {
+
+        this(null, null);
+    }
+
+    /**
+     * 数据库连接接口实现类构造函数
+     *
+     * @param username 数据库用户名
+     * @param password 数据库密码
+     * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
+     */
+    public MySQLConnectionExpression(@Nullable String username, @Nullable String password) throws MySQLInitializeException {
 
         this("localhost", 3306, username, password, MYSQL_DEFAULT_CHARSET);
     }
@@ -76,12 +85,10 @@ class MySQLConnectionExpression implements MySQLConnection {
      * @param username 数据库用户名
      * @param password 数据库密码
      * @param charset 数据库编码
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库编码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public MySQLConnectionExpression(String username, String password, String charset) throws MySQLInitializeException {
+    public MySQLConnectionExpression(@Nullable String username, @Nullable String password, String charset) throws MySQLInitializeException {
 
         this("localhost", 3306, username, password, charset);
     }
@@ -92,12 +99,10 @@ class MySQLConnectionExpression implements MySQLConnection {
      * @param username 数据库用户名
      * @param password 数据库密码
      * @param charset 数据库编码
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库编码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public MySQLConnectionExpression(String username, String password, Charset charset) throws MySQLInitializeException {
+    public MySQLConnectionExpression(@Nullable String username, @Nullable String password, Charset charset) throws MySQLInitializeException {
 
         this("localhost", 3306, username, password, charset);
     }
@@ -111,11 +116,9 @@ class MySQLConnectionExpression implements MySQLConnection {
      * @param password 数据库密码
      * @throws IllegalArgumentException 如果数据库地址对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库端口值小于 0 或大于 65535 则抛出异常
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public MySQLConnectionExpression(String host, int port, String username, String password) throws MySQLInitializeException {
+    public MySQLConnectionExpression(String host, int port, @Nullable String username, @Nullable String password) throws MySQLInitializeException {
 
         this(host, port, username, password, MYSQL_DEFAULT_CHARSET);
     }
@@ -130,12 +133,10 @@ class MySQLConnectionExpression implements MySQLConnection {
      * @param charset 数据库编码
      * @throws IllegalArgumentException 如果数据库地址对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库端口值小于 0 或大于 65535 则抛出异常
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库编码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public MySQLConnectionExpression(String host, int port, String username, String password, String charset) throws MySQLInitializeException {
+    public MySQLConnectionExpression(String host, int port, @Nullable String username, @Nullable String password, String charset) throws MySQLInitializeException {
 
         this(host, port, username, password, Charset.forName(charset));
     }
@@ -150,17 +151,13 @@ class MySQLConnectionExpression implements MySQLConnection {
      * @param charset 数据库编码
      * @throws IllegalArgumentException 如果数据库地址对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库端口值小于 0 或大于 65535 则抛出异常
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库编码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public MySQLConnectionExpression(String host, int port, String username, String password, Charset charset) throws MySQLInitializeException {
+    public MySQLConnectionExpression(String host, int port, @Nullable String username, @Nullable String password, Charset charset) throws MySQLInitializeException {
 
         Validate.notNull(host, "The mysql host object is null.");
         Validate.isTrue(port >= 0 && port <= 65535, "The mysql port is illegal value. (must: 0 - 65535)");
-        Validate.notNull(username, "The mysql username object is null.");
-        Validate.notNull(password, "The mysql password object is null.");
         Validate.notNull(charset, "The mysql charset object is null.");
 
         this.host = host;

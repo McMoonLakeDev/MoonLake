@@ -20,6 +20,7 @@ package com.minecraft.moonlake.mysql;
 
 import com.minecraft.moonlake.mysql.exception.MySQLException;
 
+import javax.annotation.Nullable;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Set;
@@ -44,7 +45,7 @@ import java.util.Set;
  * </div>
  * <hr />
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public interface MySQLConnection {
@@ -68,6 +69,7 @@ public interface MySQLConnection {
      *
      * @return 用户名
      */
+    @Nullable
     String getUsername();
 
     /**
@@ -75,6 +77,7 @@ public interface MySQLConnection {
      *
      * @return 密码
      */
+    @Nullable
     String getPassword();
 
     /**

@@ -69,6 +69,7 @@ import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Collection;
@@ -652,14 +653,23 @@ public final class MoonLakeAPI {
     /**
      * 获取 MySQL 连接实例对象
      *
+     * @return MySQLConnection
+     * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
+     */
+    public static MySQLConnection newMySQLConnection() throws MySQLInitializeException {
+
+        return MySQLFactory.connection();
+    }
+
+    /**
+     * 获取 MySQL 连接实例对象
+     *
      * @param username 数据库用户名
      * @param password 数据库密码
      * @return MySQLConnection
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public static MySQLConnection newMySQLConnection(String username, String password) throws MySQLInitializeException {
+    public static MySQLConnection newMySQLConnection(@Nullable String username, @Nullable String password) throws MySQLInitializeException {
 
         return MySQLFactory.connection(username, password);
     }
@@ -671,12 +681,10 @@ public final class MoonLakeAPI {
      * @param password 数据库密码
      * @param charset 数据库编码
      * @return MySQLConnection
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库编码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public static MySQLConnection newMySQLConnection(String username, String password, String charset) throws MySQLInitializeException {
+    public static MySQLConnection newMySQLConnection(@Nullable String username, @Nullable String password, String charset) throws MySQLInitializeException {
 
         return MySQLFactory.connection(username, password, charset);
     }
@@ -688,12 +696,10 @@ public final class MoonLakeAPI {
      * @param password 数据库密码
      * @param charset 数据库编码
      * @return MySQLConnection
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库编码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public static MySQLConnection newMySQLConnection(String username, String password, Charset charset) throws MySQLInitializeException {
+    public static MySQLConnection newMySQLConnection(@Nullable String username, @Nullable String password, Charset charset) throws MySQLInitializeException {
 
         return MySQLFactory.connection(username, password, charset);
     }
@@ -708,11 +714,9 @@ public final class MoonLakeAPI {
      * @return MySQLConnection
      * @throws IllegalArgumentException 如果数据库地址对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库端口值小于 0 或大于 65535 则抛出异常
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public static MySQLConnection newMySQLConnection(String host, int port, String username, String password) throws MySQLInitializeException {
+    public static MySQLConnection newMySQLConnection(@Nullable String host, int port, @Nullable String username, String password) throws MySQLInitializeException {
 
         return MySQLFactory.connection(host, port, username, password);
     }
@@ -728,12 +732,10 @@ public final class MoonLakeAPI {
      * @return MySQLConnection
      * @throws IllegalArgumentException 如果数据库地址对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库端口值小于 0 或大于 65535 则抛出异常
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库编码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public static MySQLConnection newMySQLConnection(String host, int port, String username, String password, String charset) throws MySQLInitializeException {
+    public static MySQLConnection newMySQLConnection(String host, int port, @Nullable String username, @Nullable String password, String charset) throws MySQLInitializeException {
 
         return MySQLFactory.connection(host, port, username, password, charset);
     }
@@ -749,12 +751,10 @@ public final class MoonLakeAPI {
      * @return MySQLConnection
      * @throws IllegalArgumentException 如果数据库地址对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库端口值小于 0 或大于 65535 则抛出异常
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库编码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public static MySQLConnection newMySQLConnection(String host, int port, String username, String password, Charset charset) throws MySQLInitializeException {
+    public static MySQLConnection newMySQLConnection(String host, int port, @Nullable String username, @Nullable String password, Charset charset) throws MySQLInitializeException {
 
         return MySQLFactory.connection(host, port, username, password, charset);
     }

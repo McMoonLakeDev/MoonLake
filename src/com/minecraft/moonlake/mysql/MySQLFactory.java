@@ -20,6 +20,7 @@ package com.minecraft.moonlake.mysql;
 
 import com.minecraft.moonlake.mysql.exception.MySQLInitializeException;
 
+import javax.annotation.Nullable;
 import java.nio.charset.Charset;
 
 /**
@@ -41,14 +42,23 @@ public class MySQLFactory {
     /**
      * 获取 MySQL 连接实例对象
      *
+     * @return MySQLConnection
+     * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
+     */
+    public static MySQLConnection connection() throws MySQLInitializeException {
+
+        return new MySQLConnectionExpression();
+    }
+
+    /**
+     * 获取 MySQL 连接实例对象
+     *
      * @param username 数据库用户名
      * @param password 数据库密码
      * @return MySQLConnection
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public static MySQLConnection connection(String username, String password) throws MySQLInitializeException {
+    public static MySQLConnection connection(@Nullable String username, @Nullable String password) throws MySQLInitializeException {
 
         return new MySQLConnectionExpression(username, password);
     }
@@ -60,12 +70,10 @@ public class MySQLFactory {
      * @param password 数据库密码
      * @param charset 数据库编码
      * @return MySQLConnection
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库编码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public static MySQLConnection connection(String username, String password, String charset) throws MySQLInitializeException {
+    public static MySQLConnection connection(@Nullable String username, @Nullable String password, String charset) throws MySQLInitializeException {
 
         return new MySQLConnectionExpression(username, password, charset);
     }
@@ -77,12 +85,10 @@ public class MySQLFactory {
      * @param password 数据库密码
      * @param charset 数据库编码
      * @return MySQLConnection
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库编码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public static MySQLConnection connection(String username, String password, Charset charset) throws MySQLInitializeException {
+    public static MySQLConnection connection(@Nullable String username, @Nullable String password, Charset charset) throws MySQLInitializeException {
 
         return new MySQLConnectionExpression(username, password, charset);
     }
@@ -97,11 +103,9 @@ public class MySQLFactory {
      * @return MySQLConnection
      * @throws IllegalArgumentException 如果数据库地址对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库端口值小于 0 或大于 65535 则抛出异常
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public static MySQLConnection connection(String host, int port, String username, String password) throws MySQLInitializeException {
+    public static MySQLConnection connection(String host, int port, @Nullable String username, @Nullable String password) throws MySQLInitializeException {
 
         return new MySQLConnectionExpression(host, port, username, password);
     }
@@ -117,12 +121,10 @@ public class MySQLFactory {
      * @return MySQLConnection
      * @throws IllegalArgumentException 如果数据库地址对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库端口值小于 0 或大于 65535 则抛出异常
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库编码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public static MySQLConnection connection(String host, int port, String username, String password, String charset) throws MySQLInitializeException {
+    public static MySQLConnection connection(String host, int port, @Nullable String username, @Nullable String password, String charset) throws MySQLInitializeException {
 
         return new MySQLConnectionExpression(host, port, username, password, charset);
     }
@@ -138,12 +140,10 @@ public class MySQLFactory {
      * @return MySQLConnection
      * @throws IllegalArgumentException 如果数据库地址对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库端口值小于 0 或大于 65535 则抛出异常
-     * @throws IllegalArgumentException 如果数据库用户名对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果数据库密码对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果数据库编码对象为 {@code null} 则抛出异常
      * @throws MySQLInitializeException 如果数据库初始化错误则抛出异常
      */
-    public static MySQLConnection connection(String host, int port, String username, String password, Charset charset) throws MySQLInitializeException {
+    public static MySQLConnection connection(String host, int port, @Nullable String username, @Nullable String password, Charset charset) throws MySQLInitializeException {
 
         return new MySQLConnectionExpression(host, port, username, password, charset);
     }
