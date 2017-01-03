@@ -19,13 +19,17 @@
 package com.minecraft.moonlake.task;
 
 import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.execute.Consumer;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
+import javax.annotation.Nullable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 /**
  * <h1>TaskHelper</h1>
@@ -250,6 +254,109 @@ public final class TaskHelper {
         catch (Exception e) {
 
             throw new MoonLakeException("The get future value exception.", e);
+        }
+    }
+
+    /**
+     * 调用同步任务来获取回调并给予消费者
+     *
+     * @param plugin 插件
+     * @param callback 回调
+     * @param consumer 消费者
+     * @param <T> 类型
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果回调对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果运行时错误则抛出异常
+     */
+    public static <T> void callBackSyncConsumer(Plugin plugin, Callable<T> callback, Consumer<T> consumer) {
+
+        callBackTaskConsumer0(plugin, callback, consumer, null, false);
+    }
+
+    /**
+     * 调用同步任务来延迟获取回调并给予消费者
+     *
+     * @param plugin 插件
+     * @param callback 回调
+     * @param consumer 消费者
+     * @param <T> 类型
+     * @param delay 延迟
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果回调对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果运行时错误则抛出异常
+     */
+    public static <T> void callBackSyncConsumer(Plugin plugin, Callable<T> callback, Consumer<T> consumer, long delay) {
+
+        callBackTaskConsumer0(plugin, callback, consumer, delay, false);
+    }
+
+    /**
+     * 调用异步任务来获取回调并给予消费者
+     *
+     * @param plugin 插件
+     * @param callback 回调
+     * @param consumer 消费者
+     * @param <T> 类型
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果回调对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果运行时错误则抛出异常
+     */
+    public static <T> void callBackAsyncConsumer(Plugin plugin, Callable<T> callback, Consumer<T> consumer) {
+
+        callBackTaskConsumer0(plugin, callback, consumer, null, true);
+    }
+
+    /**
+     * 调用异步任务来延迟获取回调并给予消费者
+     *
+     * @param plugin 插件
+     * @param callback 回调
+     * @param consumer 消费者
+     * @param <T> 类型
+     * @param delay 延迟
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果回调对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果运行时错误则抛出异常
+     */
+    public static <T> void callBackAsyncConsumer(Plugin plugin, Callable<T> callback, Consumer<T> consumer, long delay) {
+
+        callBackTaskConsumer0(plugin, callback, consumer, delay, true);
+    }
+
+    private static <T> void callBackTaskConsumer0(Plugin plugin, final Callable<T> callback, final Consumer<T> consumer, @Nullable Long delay, boolean async) {
+
+        Validate.notNull(plugin, "The plugin object is null.");
+        Validate.notNull(callback, "The callback object is null.");
+        Validate.notNull(consumer, "The consumer object is null.");
+
+        final FutureTask<T> futureTask = new FutureTask<>(callback);
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    futureTask.run();
+                    consumer.accept(futureTask.get());
+                } catch (Exception e) {
+                    throw new MoonLakeException(e.getMessage(), e);
+                }
+            }
+        };
+
+        if (delay == null) {
+            if (async)
+                runTaskAsync(plugin, runnable);
+            else
+                runTask(plugin, runnable);
+        }
+        else {
+            if(async)
+                runTaskLaterAsync(plugin, runnable, delay);
+            else
+                runTaskLater(plugin, runnable, delay);
         }
     }
 
