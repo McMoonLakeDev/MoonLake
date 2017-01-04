@@ -476,4 +476,35 @@ public class Validate {
             }
         }
     }
+
+    /**
+     * 检测指定参考对象是否不为 {@code null} 则返回, 否则抛出异常
+     *
+     * @param reference 参考对象
+     * @param <T> 类型
+     * @return 参考对象
+     * @throws IllegalArgumentException 如果参考对象为 {@code null} 则抛出异常
+     */
+    public static <T> T checkNotNull(T reference) {
+
+        return checkNotNull(reference, "The validated reference object is null.");
+    }
+
+    /**
+     * 检测指定参考对象是否不为 {@code null} 则返回, 否则抛出异常
+     *
+     * @param reference 参考对象
+     * @param message 异常消息
+     * @param <T> 类型
+     * @return 参考对象
+     * @throws IllegalArgumentException 如果参考对象为 {@code null} 则抛出异常
+     */
+    public static <T> T checkNotNull(T reference, String message) {
+
+        if(reference == null) {
+
+            throw new IllegalArgumentException(message);
+        }
+        return reference;
+    }
 }
