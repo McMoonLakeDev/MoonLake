@@ -29,7 +29,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
-import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -90,12 +89,6 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public ItemStack createSkullWithSkin(URL skinURL) throws MoonLakeException {
-
-        return base.createSkullWithSkin(skinURL);
-    }
-
-    @Override
     public ItemStack createSkullWithSkin(String skinURL, String displayName) {
 
         return base.createSkullWithSkin(skinURL, displayName);
@@ -108,21 +101,9 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public ItemStack createSkullWithSkin(URL skinURL, String displayName) {
-
-        return base.createSkullWithSkin(skinURL, displayName);
-    }
-
-    @Override
     public String getSkullOwner(ItemStack itemStack) {
 
         return base.getSkullOwner(itemStack);
-    }
-
-    @Override
-    public String getSkullSkinURL(ItemStack itemStack) {
-
-        return base.getSkullSkinURL(itemStack);
     }
 
     @Override

@@ -19,10 +19,7 @@
 package com.minecraft.moonlake.api.item.skull;
 
 import com.minecraft.moonlake.exception.MoonLakeException;
-import com.minecraft.moonlake.exception.NotImplementedException;
 import org.bukkit.inventory.ItemStack;
-
-import java.net.URL;
 
 /**
  * <h1>ItemStack SkullLibrary</h1>
@@ -93,18 +90,6 @@ public interface SkullLibrary {
     /**
      * 创建头颅物品栈 ItemStack 对象
      *
-     * @param skinURL 头颅材质信息 URL
-     * @return ItemStack
-     * @throws IllegalArgumentException 如果头颅材质信息对象为 {@code null} 则抛出异常
-     * @throws MoonLakeException 如果设置头颅材质时错误则抛出异常
-     * @deprecated 已过时, 使用将直接抛出 {@link NotImplementedException} 异常.
-     */
-    @Deprecated
-    ItemStack createSkullWithSkin(URL skinURL) throws MoonLakeException;
-
-    /**
-     * 创建头颅物品栈 ItemStack 对象
-     *
      * @param data 头颅材质信息
      * @param displayName 头颅显示名称
      * @return ItemStack
@@ -127,20 +112,6 @@ public interface SkullLibrary {
     ItemStack createSkullWithSkins(String value, String signature, String displayName) throws MoonLakeException;
 
     /**
-     * 创建头颅物品栈 ItemStack 对象
-     *
-     * @param skinURL 头颅材质信息 URL
-     * @param displayName 头颅显示名称
-     * @return ItemStack
-     * @throws IllegalArgumentException 如果头颅显示名称对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果头颅材质信息对象为 {@code null} 则抛出异常
-     * @throws MoonLakeException 如果设置头颅材质时错误则抛出异常
-     * @deprecated 已过时, 使用将直接抛出 {@link NotImplementedException} 异常.
-     */
-    @Deprecated
-    ItemStack createSkullWithSkin(URL skinURL, String displayName) throws MoonLakeException;
-
-    /**
      * 获取头颅物品栈 ItemStack 对象的拥有者
      *
      * @param itemStack 头颅物品栈
@@ -149,18 +120,6 @@ public interface SkullLibrary {
      * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.SKULL_ITEM} 则抛出异常
      */
     String getSkullOwner(ItemStack itemStack);
-
-    /**
-     * 获取指定头颅物品栈的皮肤材质 URL
-     *
-     * @param itemStack 头颅物品栈
-     * @return 材质 URL
-     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果物品栈类型不为 {@code Material.SKULL_ITEM} 则抛出异常
-     * @deprecated 已过时, 使用将直接抛出 {@link NotImplementedException} 异常.
-     */
-    @Deprecated
-    String getSkullSkinURL(ItemStack itemStack);
 
     /**
      * 设置头颅物品栈的皮肤材质数据
