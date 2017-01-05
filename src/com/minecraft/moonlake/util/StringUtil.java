@@ -41,6 +41,7 @@ import java.util.regex.Pattern;
 public class StringUtil {
 
     public final static char COLOR_CHAR = '\u0026';
+    public final static String COLOR_STRING = "" + COLOR_CHAR;
     public final static Pattern UNICODE_PATTERN = Pattern.compile("\\\\u[a-zA-Z0-9]{2,4}");
 
     /**
