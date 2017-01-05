@@ -18,6 +18,7 @@
  
 package com.minecraft.moonlake.api.nbt;
 
+import com.minecraft.moonlake.execute.Consumer;
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -93,6 +94,17 @@ public interface NBTLibrary {
     NBTCompound readSafe(ItemStack itemStack) throws NBTException;
 
     /**
+     * 安全读取指定物品栈的 NBT 数据并给予消费者
+     *
+     * @param itemStack 物品栈
+     * @param consumer 消费者
+     * @throws NBTException 如果读取物品栈时错误则抛出异常
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     */
+    void readSafeConsumer(ItemStack itemStack, Consumer<NBTCompound> consumer) throws NBTException;
+
+    /**
      * 将指定 NBT 数据写入到物品栈
      *
      * @param itemStack 物品栈
@@ -121,6 +133,17 @@ public interface NBTLibrary {
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      */
     NBTCompound readSafe(Entity entity) throws NBTException;
+
+    /**
+     * 安全读取指定实体的 NBT 数据并给予消费者
+     *
+     * @param entity 实体
+     * @param consumer 消费者
+     * @throws NBTException 如果读取实体时错误则抛出异常
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     */
+    void readSafeConsumer(Entity entity, Consumer<NBTCompound> consumer) throws NBTException;
 
     /**
      * 将指定 NBT 数据写入到实体
@@ -153,6 +176,17 @@ public interface NBTLibrary {
     NBTCompound readSafe(Block block) throws NBTException;
 
     /**
+     * 安全读取指定方块的 NBT 数据并给予消费者
+     *
+     * @param block 方块
+     * @param consumer 消费者
+     * @throws NBTException 如果读取方块时错误则抛出异常
+     * @throws IllegalArgumentException 如果方块对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     */
+    void readSafeConsumer(Block block, Consumer<NBTCompound> consumer) throws NBTException;
+
+    /**
      * 将指定 NBT 数据写入到方块
      *
      * @param block 方块
@@ -181,6 +215,17 @@ public interface NBTLibrary {
      * @throws IllegalArgumentException 如果区块对象为 {@code null} 则抛出异常
      */
     NBTCompound readSafe(Chunk chunk) throws NBTException;
+
+    /**
+     * 安全读取指定区块的 NBT 数据并给予消费者
+     *
+     * @param chunk 区块
+     * @param consumer 消费者
+     * @throws NBTException 如果读取区块时错误则抛出异常
+     * @throws IllegalArgumentException 如果区块对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     */
+    void readSafeConsumer(Chunk chunk, Consumer<NBTCompound> consumer) throws NBTException;
 
     /**
      * 将指定 NBT 数据写入到区块
