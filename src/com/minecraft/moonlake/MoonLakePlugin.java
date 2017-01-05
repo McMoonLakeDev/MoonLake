@@ -20,6 +20,7 @@ package com.minecraft.moonlake;
 
 import com.minecraft.moonlake.api.MoonLake;
 import com.minecraft.moonlake.api.packet.listener.PacketListenerFactory;
+import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.logger.MLogger;
 import com.minecraft.moonlake.logger.MLoggerWrapped;
@@ -99,20 +100,28 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         this.configuration = new MoonLakePluginConfig(this);
         this.configuration.reload();
 
-        if(configuration.isPacketChannelListener()) {
+        // load class
+        this.loadClass();
 
-            try {
+        this.getMLogger().info("月色之湖核心 API 插件 v" + getPluginVersion() + " 成功加载.");
+    }
 
+    private void loadClass() {
+        // load class
+        try {
+            if(getConfiguration().isPacketChannelListener()) {
+                // load PacketListenerFactory class
                 Class.forName(PacketListenerFactory.class.getName());
 
                 this.getMLogger().info("月色之湖数据包通道监听器(PCL)成功加载.");
             }
-            catch (Exception e) {
-
-                throw new MoonLakeException("The initialize packet channel listener exception.", e);
-            }
+            // load PlayerLibraryFactorys class to register listener
+            Class.forName(PlayerLibraryFactorys.class.getName());
         }
-        this.getMLogger().info("月色之湖核心 API 插件 v" + getPluginVersion() + " 成功加载.");
+        catch (Exception e) {
+
+            throw new MoonLakeException("The load moonlake library class exception.", e);
+        }
     }
 
     @Deprecated
