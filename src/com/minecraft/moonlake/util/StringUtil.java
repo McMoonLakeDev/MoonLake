@@ -345,6 +345,17 @@ public class StringUtil {
     }
 
     /**
+     * 获取指定对象是否不为 {@code null}
+     *
+     * @param obj 对象
+     * @return 不为 {@code null} 则返回 true
+     */
+    public static boolean isNotNull(Object obj) {
+
+        return !isNull(obj);
+    }
+
+    /**
      * 获取指定字符串是否为 {@code null | empty}
      *
      * @param str 字符串
@@ -386,7 +397,7 @@ public class StringUtil {
      */
     public static boolean isEquals(String str1, String str2) {
 
-        return (isEmpty(str1) && isEmpty(str2)) || (!isNull(str1) && str1.equals(str2));
+        return (isEmpty(str1) && isEmpty(str2)) || (isNotNull(str1) && str1.equals(str2));
     }
 
     /**
@@ -398,7 +409,7 @@ public class StringUtil {
      */
     public static boolean isEqualsIgnoreCase(String str1, String str2) {
 
-        return (isEmpty(str1) && isEmpty(str2)) || (!isNull(str1) && str1.equalsIgnoreCase(str2));
+        return (isEmpty(str1) && isEmpty(str2)) || (isNotNull(str1) && str1.equalsIgnoreCase(str2));
     }
 
     /**
@@ -422,7 +433,7 @@ public class StringUtil {
      */
     public static boolean isInteger(String str) {
 
-        return !isNull(str) && INTEGER_PATTERN.matcher(str).matches();
+        return isNotNull(str) && INTEGER_PATTERN.matcher(str).matches();
     }
 
     /**
@@ -433,7 +444,7 @@ public class StringUtil {
      */
     public static boolean isDouble(String str) {
 
-        return !isNull(str) && DOUBLE_PATTERN.matcher(str).matches();
+        return isNotNull(str) && DOUBLE_PATTERN.matcher(str).matches();
     }
 
     /**
@@ -722,7 +733,7 @@ public class StringUtil {
      */
     public static String[] collectionToArray(Collection<? extends String> strCollection, int size) {
 
-        return !isEmpty(strCollection) ? strCollection.toArray(new String[size]) : null;
+        return !isNull(strCollection) ? strCollection.toArray(new String[size]) : new String[0];
     }
 
     /**
