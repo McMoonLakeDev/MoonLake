@@ -20,6 +20,7 @@ package com.minecraft.moonlake.api.item;
 
 import com.minecraft.moonlake.api.item.firework.FireworkBuilder;
 import com.minecraft.moonlake.api.item.firework.FireworkType;
+import com.minecraft.moonlake.manager.EntityManager;
 import com.minecraft.moonlake.manager.RandomManager;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Color;
@@ -165,7 +166,7 @@ class FireworkBuilderWrapped implements FireworkBuilder {
 
         for(int i = amount; i > 0; i--) {
 
-            Firework firework = location.getWorld().spawn(location, Firework.class);
+            Firework firework = EntityManager.spawnEntity(location, Firework.class);
             FireworkMeta fireworkMeta = firework.getFireworkMeta();
             fireworkMeta.setPower(power);
             fireworkMeta.addEffects(effect);
