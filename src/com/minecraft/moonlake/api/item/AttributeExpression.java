@@ -51,11 +51,18 @@ class AttributeExpression implements AttributeLibrary {
         Validate.notNull(itemStack, "The itemstack object is null.");
 
         NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
-        nbtCompound.put("Unbreakable", unbreakable ? 1 : 0);
 
-        NBTFactory.get().write(itemStack, nbtCompound);
+        setUnbreakable(nbtCompound, unbreakable);
+
+        nbtCompound.write(itemStack);
 
         return itemStack;
+    }
+
+    @Override
+    public void setUnbreakable(NBTCompound nbtCompound, boolean unbreakable) {
+
+        Validate.checkNotNull(nbtCompound).put("Unbreakable", unbreakable ? 1 : 0);
     }
 
     @Override
@@ -69,7 +76,13 @@ class AttributeExpression implements AttributeLibrary {
 
             return false;
         }
-        return nbtCompound.getByte("Unbreakable") == 1;
+        return isUnbreakable(nbtCompound);
+    }
+
+    @Override
+    public boolean isUnbreakable(NBTCompound nbtCompound) {
+
+        return Validate.checkNotNull(nbtCompound).getByte("Unbreakable") == 1;
     }
 
     @Override
@@ -79,6 +92,20 @@ class AttributeExpression implements AttributeLibrary {
         Validate.notNull(attribute, "The itemstack attribute object is null.");
 
         NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
+
+        setAttribute(nbtCompound, attribute);
+
+        nbtCompound.write(itemStack);
+
+        return itemStack;
+    }
+
+    @Override
+    public void setAttribute(NBTCompound nbtCompound, AttributeModify attribute) {
+
+        Validate.notNull(nbtCompound, "The nbc compound object is null.");
+        Validate.notNull(attribute, "The attribute object is null.");
+
         NBTList attributeModifiers = nbtCompound.getList("AttributeModifiers");
 
         if(attributeModifiers == null) {
@@ -131,10 +158,6 @@ class AttributeExpression implements AttributeLibrary {
         attributeNewCompound.put("UUIDLeast", uuid.getLeastSignificantBits());
         attributeModifiers.add(attributeNewCompound);
         nbtCompound.put("AttributeModifiers", attributeModifiers);
-
-        NBTFactory.get().write(itemStack, nbtCompound);
-
-        return itemStack;
     }
 
     @Override
@@ -153,12 +176,34 @@ class AttributeExpression implements AttributeLibrary {
     }
 
     @Override
+    public void setAttribute(NBTCompound nbtCompound, AttributeModify.Type type, AttributeModify.Operation operation, double amount) {
+
+        setAttribute(nbtCompound, type, null, operation, amount);
+    }
+
+    @Override
+    public void setAttribute(NBTCompound nbtCompound, AttributeModify.Type type, AttributeModify.Slot slot, AttributeModify.Operation operation, double amount) {
+
+        Validate.notNull(type, "The itemstack attribute type object is null.");
+        Validate.notNull(operation, "The itemstack attribute opreation object is null.");
+
+        setAttribute(nbtCompound, new AttributeModify(type, slot, operation, amount));
+    }
+
+    @Override
     public Set<AttributeModify> getAttributes(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
+        return getAttributes(NBTFactory.get().readSafe(itemStack));
+    }
+
+    @Override
+    public Set<AttributeModify> getAttributes(NBTCompound nbtCompound) {
+
+        Validate.notNull(nbtCompound, "The nbt compound object is null.");
+
         Set<AttributeModify> attributeModifyList = new HashSet<>();
-        NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
         NBTList attributeModifiers = nbtCompound.getList("AttributeModifiers");
 
         if(attributeModifiers == null || attributeModifiers.isEmpty()) {
@@ -195,9 +240,18 @@ class AttributeExpression implements AttributeLibrary {
     @Override
     public boolean hasAttribute(ItemStack itemStack, AttributeModify.Type type) {
 
+        Validate.notNull(itemStack, "The itemstack object is null.");
+
+        return hasAttribute(NBTFactory.get().readSafe(itemStack), type);
+    }
+
+    @Override
+    public boolean hasAttribute(NBTCompound nbtCompound, AttributeModify.Type type) {
+
+        Validate.notNull(nbtCompound, "The nbt compound object is null.");
         Validate.notNull(type, "The itemstack attribute type object is null.");
 
-        Set<AttributeModify> attributeModifies = getAttributes(itemStack);
+        Set<AttributeModify> attributeModifies = getAttributes(nbtCompound);
 
         if(attributeModifies == null || attributeModifies.isEmpty()) {
 
@@ -237,40 +291,10 @@ class AttributeExpression implements AttributeLibrary {
             return itemStack;
         }
         NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
-        NBTList customPotionEffects = nbtCompound.getList("CustomPotionEffects");
 
-        if(customPotionEffects == null || customPotionEffects.size() <= 0) {
+        setCustomPotion(nbtCompound, effects);
 
-            customPotionEffects = NBTFactory.newList();
-
-            if(!effects.isEmpty()) {
-
-                for(final PotionEffectCustom effect : effects) {
-
-                    PotionEffectType effectType = effect.getType();
-
-                    if(effectType != null) {
-
-                        nbtCompound.put("Potion", "minecraft:" + effectType.getTagName());
-                        break;
-                    }
-                }
-            }
-        }
-        for(final PotionEffectCustom effect : effects) {
-
-            NBTCompound effectNewCompound = NBTFactory.newCompound();
-            effectNewCompound.put("Id", effect.getId());
-            effectNewCompound.put("Amplifier", effect.getAmplifier());
-            effectNewCompound.put("Duration", effect.getDuration().get());
-            effectNewCompound.put("Ambient", (byte) (effect.getAmbient().get() ? 1 : 0));
-            effectNewCompound.put("ShowParticles", (byte) (effect.getShowParticles().get() ? 1 : 0));
-
-            customPotionEffects.add(effectNewCompound);
-        }
-        nbtCompound.put("CustomPotionEffects", customPotionEffects);
-
-        NBTFactory.get().write(itemStack, nbtCompound);
+        nbtCompound.write(itemStack);
 
         return itemStack;
     }
@@ -314,14 +338,120 @@ class AttributeExpression implements AttributeLibrary {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public Set<PotionEffectCustom> getCustomPotion(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.isTrue(ItemLibraryFactorys.item().isPotion(itemStack), "The itemstack material object not potion.");
 
+        return getCustomPotion(NBTFactory.get().readSafe(itemStack));
+    }
+
+    @Override
+    public boolean hasCustomPotion(ItemStack itemStack, PotionEffectType effectType) {
+
+        Validate.notNull(effectType, "The itemstack potion effect object is null.");
+
+        return hasCustomPotion(NBTFactory.get().readSafe(itemStack), effectType);
+    }
+
+    @Override
+    public boolean hasCustomPotion(ItemStack itemStack, com.minecraft.moonlake.enums.PotionEffectType effectType) {
+
+        Validate.notNull(effectType, "The itemstack potion effect object is null.");
+
+        return hasCustomPotion(itemStack, effectType.to());
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, PotionEffectCustom... effects) {
+
+        setCustomPotion(nbtCompound, Arrays.asList(effects));
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, Collection<? extends PotionEffectCustom> effects) {
+
+        Validate.notNull(nbtCompound, "The nbt compound object is null.");
+
+        NBTList customPotionEffects = nbtCompound.getList("CustomPotionEffects");
+
+        if(customPotionEffects == null || customPotionEffects.size() <= 0) {
+
+            customPotionEffects = NBTFactory.newList();
+
+            if(!effects.isEmpty()) {
+
+                for(final PotionEffectCustom effect : effects) {
+
+                    PotionEffectType effectType = effect.getType();
+
+                    if(effectType != null) {
+
+                        nbtCompound.put("Potion", "minecraft:" + effectType.getTagName());
+                        break;
+                    }
+                }
+            }
+        }
+        for(final PotionEffectCustom effect : effects) {
+
+            NBTCompound effectNewCompound = NBTFactory.newCompound();
+            effectNewCompound.put("Id", effect.getId());
+            effectNewCompound.put("Amplifier", effect.getAmplifier());
+            effectNewCompound.put("Duration", effect.getDuration().get());
+            effectNewCompound.put("Ambient", (byte) (effect.getAmbient().get() ? 1 : 0));
+            effectNewCompound.put("ShowParticles", (byte) (effect.getShowParticles().get() ? 1 : 0));
+
+            customPotionEffects.add(effectNewCompound);
+        }
+        nbtCompound.put("CustomPotionEffects", customPotionEffects);
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, PotionEffectType effectType, int amplifier, int duration) {
+
+        setCustomPotion(nbtCompound, effectType, amplifier, duration, false);
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, PotionEffectType effectType, int amplifier, int duration, boolean ambient) {
+
+        setCustomPotion(nbtCompound, effectType, amplifier, duration, ambient, false);
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        setCustomPotion(nbtCompound, new PotionEffectCustom(effectType, amplifier, duration, ambient, showParticles));
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration) {
+
+        setCustomPotion(nbtCompound, effectType, amplifier, duration, false);
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient) {
+
+        setCustomPotion(nbtCompound, effectType, amplifier, duration, ambient, false);
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        Validate.notNull(effectType, "The itemstack potion effect object is null.");
+
+        setCustomPotion(nbtCompound, effectType.to(), amplifier, duration, ambient, showParticles);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public Set<PotionEffectCustom> getCustomPotion(NBTCompound nbtCompound) {
+
+        Validate.notNull(nbtCompound, "The nbt compound object is null.");
+
         Set<PotionEffectCustom> effects = new HashSet<>();
-        NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
         NBTList customPotionEffects = nbtCompound.getList("CustomPotionEffects");
 
         if(customPotionEffects == null || customPotionEffects.isEmpty()) {
@@ -350,11 +480,12 @@ class AttributeExpression implements AttributeLibrary {
 
     @Override
     @SuppressWarnings("deprecation")
-    public boolean hasCustomPotion(ItemStack itemStack, PotionEffectType effectType) {
+    public boolean hasCustomPotion(NBTCompound nbtCompound, PotionEffectType effectType) {
 
-        Validate.notNull(effectType, "The itemstack potion effect object is null.");
+        Validate.notNull(nbtCompound, "The nbt compound object is null.");
+        Validate.notNull(effectType, "The effect type object is null.");
 
-        Set<PotionEffectCustom> effects = getCustomPotion(itemStack);
+        Set<PotionEffectCustom> effects = getCustomPotion(nbtCompound);
 
         if(effects == null || effects.isEmpty()) {
 
@@ -375,10 +506,10 @@ class AttributeExpression implements AttributeLibrary {
     }
 
     @Override
-    public boolean hasCustomPotion(ItemStack itemStack, com.minecraft.moonlake.enums.PotionEffectType effectType) {
+    public boolean hasCustomPotion(NBTCompound nbtCompound, com.minecraft.moonlake.enums.PotionEffectType effectType) {
 
         Validate.notNull(effectType, "The itemstack potion effect object is null.");
 
-        return hasCustomPotion(itemStack, effectType.to());
+        return hasCustomPotion(nbtCompound, effectType.to());
     }
 }
