@@ -61,6 +61,13 @@ public interface BasePlayer {
     GameProfile getProfile();
 
     /**
+     * 获取此玩家的本地语言
+     *
+     * @return 本地语言
+     */
+    String getLanguage();
+
+    /**
      * 获取此玩家的显示名称
      *
      * @return 显示名称

@@ -128,6 +128,12 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    public String getLanguage() {
+
+        return PlayerManager.getLanguage(getBukkitPlayer());
+    }
+
+    @Override
     public String getDisplayName() {
 
         return getBukkitPlayer().getDisplayName();
@@ -1096,7 +1102,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public int compareTo(MoonLakePlayer target) {
 
-        return getName().compareTo(target == null ? null : target.getName());
+        return getName().compareTo(target.getName());
     }
 
     @Override
@@ -1112,7 +1118,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
                 MoonLakePlayer target = (MoonLakePlayer)object;
 
-                return getName().equals(target.getName());
+                return getBukkitPlayer().equals(target.getBukkitPlayer());
             }
         }
         return false;
