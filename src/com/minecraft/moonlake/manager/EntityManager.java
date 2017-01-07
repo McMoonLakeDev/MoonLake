@@ -27,15 +27,12 @@ import com.minecraft.moonlake.execute.Consumer;
 import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Field;
@@ -449,58 +446,6 @@ public class EntityManager extends MoonLakeManager {
             }
         }
         return entityList;
-    }
-
-    /**
-     * 给予指定实体真实的伤害
-     *
-     * @param source 源实体
-     * @param damager 攻击者实体
-     * @param damage 真实伤害
-     * @throws IllegalArgumentException 如果源实体对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果攻击者实体对象为 {@code null} 则抛出异常
-     * @deprecated 已过时, 将于 v2.0 删除.
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public static void realDamage(LivingEntity source, MoonLakePlayer damager, double damage) {
-
-        realDamage(source, damager.getBukkitPlayer(), damage);
-    }
-
-    /**
-     * 给予指定实体真实的伤害
-     *
-     * @param source 源实体
-     * @param damager 攻击者实体
-     * @param damage 真实伤害
-     * @throws IllegalArgumentException 如果源实体对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果攻击者实体对象为 {@code null} 则抛出异常
-     * @deprecated 已过时, 将于 v2.0 删除.
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public static void realDamage(LivingEntity source, LivingEntity damager, double damage) {
-
-        Validate.notNull(source, "The entity source object is null.");
-        Validate.notNull(damager, "The entity damager object is null.");
-
-        if(!source.isDead() && !damager.isDead() && damage > 0d) {
-
-            EntityDamageByEntityEvent edbee = new EntityDamageByEntityEvent(damager, source, EntityDamageEvent.DamageCause.CUSTOM, damage);
-
-            source.damage(0d, damager);
-            source.setLastDamageCause(edbee);
-
-            Bukkit.getServer().getPluginManager().callEvent(edbee);
-
-            if(source.getHealth() <= damage) {
-
-                source.setHealth(0d);
-                return;
-            }
-            source.setHealth(source.getHealth() - damage);
-        }
     }
 
     /**
