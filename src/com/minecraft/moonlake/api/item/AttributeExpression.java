@@ -30,7 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 /**
- * <h1>AttributeExpression_v1_8</h1>
+ * <h1>AttributeExpression</h1>
  * 物品栈属性支持库接口实现类
  *
  * @version 1.0
