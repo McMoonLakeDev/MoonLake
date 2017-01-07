@@ -135,7 +135,7 @@ public class EntityManager extends MoonLakeManager {
 
         try {
 
-            return METHOD_GETENTITYHANDLE.invoke(null, entity);
+            return METHOD_GETENTITYHANDLE.invoke(entity);
         }
         catch (Exception e) {
 

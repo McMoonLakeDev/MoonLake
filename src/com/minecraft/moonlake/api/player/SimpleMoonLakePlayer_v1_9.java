@@ -18,8 +18,11 @@
 
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.entity.AttributeType;
+import com.minecraft.moonlake.api.player.attribute.Attribute;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -177,5 +180,13 @@ public class SimpleMoonLakePlayer_v1_9 extends SimpleMoonLakePlayer_v1_8 {
     public void setItemInOffHand(ItemStack itemStack) {
 
         getBukkitPlayer().getInventory().setItemInOffHand(itemStack);
+    }
+
+    @Override
+    public Attribute getAttribute(AttributeType type) {
+
+        Validate.notNull(type, "The attribute type object is null.");
+
+        return new AttributeExpression_v1_9_Plus(getBukkitPlayer(), type);
     }
 }

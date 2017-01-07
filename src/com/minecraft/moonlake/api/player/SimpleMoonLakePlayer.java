@@ -18,7 +18,10 @@
  
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.entity.AttributeType;
+import com.minecraft.moonlake.api.player.attribute.Attribute;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -165,5 +168,13 @@ public class SimpleMoonLakePlayer extends AbstractPlayer {
     @Override
     public void setItemInOffHand(ItemStack itemStack) {
 
+    }
+
+    @Override
+    public Attribute getAttribute(AttributeType type) {
+
+        Validate.notNull(type, "The attribute type object is null.");
+
+        return new AttributeExpression(getBukkitPlayer(), type);
     }
 }

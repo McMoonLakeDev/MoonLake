@@ -68,7 +68,7 @@ public class StringUtil {
     /**
      * 双精度浮点数匹配模式对象
      */
-    public final static Pattern DOUBLE_PATTERN = Pattern.compile("^[-+]?[0-9]+\\.[0-9]+$");
+    public final static Pattern DOUBLE_PATTERN = Pattern.compile("^[-+]?[0-9]+|[-+]?[0-9]+\\.[0-9]+$");
 
     /**
      * 字符串实现类构造函数
