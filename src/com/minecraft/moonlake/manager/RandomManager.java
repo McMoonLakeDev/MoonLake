@@ -71,21 +71,6 @@ public class RandomManager extends MoonLakeManager {
      * @param max 最大范围
      * @return 范围内的随机数
      * @throws IllegalArgumentException 如果最低范围大于最大范围则抛出异常
-     * @deprecated {@link #nextInt(int, int)}
-     */
-    @Deprecated
-    public static int getRandomNumber(int min, int max) {
-
-        return nextInt(min, max);
-    }
-
-    /**
-     * 获取指定范围的整数型随机数
-     *
-     * @param min 最低范围
-     * @param max 最大范围
-     * @return 范围内的随机数
-     * @throws IllegalArgumentException 如果最低范围大于最大范围则抛出异常
      */
     public static int nextInt(final int min, final int max) {
 
@@ -159,18 +144,6 @@ public class RandomManager extends MoonLakeManager {
      * 获取随机的 UUID 对象
      *
      * @return UUID
-     * @deprecated {@link #nextUUID()}
-     */
-    @Deprecated
-    public static UUID getRandomUUID() {
-
-        return nextUUID();
-    }
-
-    /**
-     * 获取随机的 UUID 对象
-     *
-     * @return UUID
      */
     public static UUID nextUUID() {
 
@@ -182,37 +155,10 @@ public class RandomManager extends MoonLakeManager {
      *
      * @param length 长度
      * @return 随机字符串
-     * @deprecated {@link #nextString(int)}
-     */
-    @Deprecated
-    public static String getRandomString(int length) {
-
-        return nextString(length);
-    }
-
-    /**
-     * 获取随机长度的字符串
-     *
-     * @param length 长度
-     * @return 随机字符串
      */
     public static String nextString(int length) {
 
         return nextString(length, STRING_CHAR);
-    }
-
-    /**
-     * 获取随机长度的字符串
-     *
-     * @param length 长度
-     * @return 随机字符串
-     * @throws IllegalArgumentException 如果随机字符数组对象为 {@code null} 则抛出异常
-     * @deprecated {@link #nextString(int, char[])}
-     */
-    @Deprecated
-    public static String getRandomString(int length, char[] randomChar) {
-
-        return nextString(length, randomChar);
     }
 
     /**
@@ -233,18 +179,6 @@ public class RandomManager extends MoonLakeManager {
             valueChar[i] = randomChar[getRandom().nextInt(randomChar.length)];
         }
         return new String(valueChar);
-    }
-
-    /**
-     * 获取随机的 RGB 颜色 (0 - 255)
-     *
-     * @return 随机颜色
-     * @deprecated {@link #nextColor()}
-     */
-    @Deprecated
-    public static Color getRandomColor() {
-
-        return nextColor();
     }
 
     /**

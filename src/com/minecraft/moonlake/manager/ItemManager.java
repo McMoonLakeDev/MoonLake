@@ -24,8 +24,6 @@ import com.minecraft.moonlake.api.item.ItemBuilder;
 import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.api.nbt.NBTFactory;
 import com.minecraft.moonlake.data.Conversions;
-import com.minecraft.moonlake.data.NBTTagData;
-import com.minecraft.moonlake.data.NBTTagDataWrapped;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
@@ -134,100 +132,6 @@ public class ItemManager extends MoonLakeManager {
 
             throw new MoonLakeException("The as bukkit copy itemstack exception.", e);
         }
-    }
-
-    /**
-     * 设置物品栈 NBT 标签指定键的值
-     *
-     * @param itemStack 物品栈
-     * @param key 键
-     * @param value 值
-     * @return 改变 NBT 标签属性后的物品栈对象 异常返回 源
-     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
-     * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
-     */
-    @Deprecated
-    public static ItemStack setTagValue(ItemStack itemStack, String key, Object value) {
-
-        Validate.notNull(itemStack, "The itemstack object is null.");
-
-        NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
-        nbtCompound.put(key, value);
-
-        NBTFactory.get().write(itemStack, nbtCompound);
-
-        return itemStack;
-    }
-
-    /**
-     * 获取物品栈 NBT 标签指定键的值
-     *
-     * @param itemStack 物品栈
-     * @param key 键
-     * @return 物品栈指定 NBT 标签属性的值 异常或没有返回 null
-     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
-     * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
-     */
-    @Deprecated
-    public static NBTTagData getTagValue(ItemStack itemStack, String key) {
-
-        Validate.notNull(itemStack, "The itemstack object is null.");
-
-        NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
-        Object value = nbtCompound.get(key);
-
-        if(value == null) {
-
-            return null;
-        }
-        return new NBTTagDataWrapped(value);
-    }
-
-    /**
-     * 获取物品栈 NBT 标签指定键的字符串值
-     *
-     * @param itemStack 物品栈
-     * @param key 键
-     * @return 物品栈指定 NBT 标签属性的字符串值 异常或没有返回 null
-     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
-     * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
-     */
-    @Deprecated
-    public static String getTagStringValue(ItemStack itemStack, String key) {
-
-        NBTTagData nbtTagData = getTagValue(itemStack, key);
-        return nbtTagData == null ? null : nbtTagData.asString();
-    }
-
-    /**
-     * 获取物品栈是否拥有 NBT 标签
-     *
-     * @param itemStack 物品栈
-     * @return true 拥有 NBT 标签属性 else 没有
-     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
-     * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
-     */
-    @Deprecated
-    public static boolean hasTag(ItemStack itemStack) {
-
-        Validate.notNull(itemStack, "The itemstack object is null.");
-
-        return NBTFactory.get().read(itemStack) != null;
-    }
-
-    /**
-     * 获取物品栈是否拥有 NBT 标签指定键
-     *
-     * @param itemStack 物品栈
-     * @param key 键
-     * @return true 拥有 NBT 标签属性键 else 没有
-     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
-     * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
-     */
-    @Deprecated
-    public static boolean hasTagKey(ItemStack itemStack, String key) {
-
-        return getTagValue(itemStack, key) != null;
     }
 
     /**
@@ -517,6 +421,7 @@ public class ItemManager extends MoonLakeManager {
      * @throws IllegalArgumentException 如果输出文件对象为 {@code null} 则抛出异常
      * @throws MoonLakeException 如果保存到文件时错误则抛出异常
      */
+    @SuppressWarnings("deprecation")
     public static void serializeToFile(ItemStack itemStack, File out, String charset) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
@@ -679,6 +584,7 @@ public class ItemManager extends MoonLakeManager {
      * @throws IllegalArgumentException 如果文件对象后缀类型名不为 {@code yml} 则抛出异常
      * @throws MoonLakeException 如果反序列化错误则抛出异常
      */
+    @SuppressWarnings("deprecation")
     public static ItemStack deserializeFromFile(File file) {
 
         Validate.notNull(file, "The file object is null.");

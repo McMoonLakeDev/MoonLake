@@ -551,7 +551,7 @@ public class EntityManager extends MoonLakeManager {
 
         if(regain && entity instanceof LivingEntity) {
 
-            ((LivingEntity)entity).setHealth(((LivingEntity)entity).getMaxHealth());
+            ((LivingEntity)entity).setHealth(((LivingEntity)entity).getMaxHealth()); // TODO
         }
     }
 

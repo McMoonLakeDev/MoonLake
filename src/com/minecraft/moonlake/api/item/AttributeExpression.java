@@ -369,6 +369,7 @@ class AttributeExpression implements AttributeLibrary {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void setCustomPotion(NBTCompound nbtCompound, Collection<? extends PotionEffectCustom> effects) {
 
         Validate.notNull(nbtCompound, "The nbt compound object is null.");

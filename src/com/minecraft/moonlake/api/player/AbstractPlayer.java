@@ -205,7 +205,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public double getMaxHealth() {
 
-        return getBukkitPlayer().getMaxHealth();
+        return getBukkitPlayer().getMaxHealth(); // TODO
     }
 
     @Override
@@ -251,7 +251,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void setMaxHealth(double maxHealth) {
 
-        getBukkitPlayer().setMaxHealth(maxHealth);
+        getBukkitPlayer().setMaxHealth(maxHealth); // TODO
     }
 
     @Override
@@ -605,14 +605,12 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public Map<Integer, ItemStack> addItemStack(ItemStack... itemStacks) {
 
         return getInventory().addItem(itemStacks);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public Map<Integer, ItemStack> removeItemStack(ItemStack... itemStacks) {
 
         return getInventory().removeItem(itemStacks);
@@ -883,7 +881,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void resetMaxHealth() {
 
-        getBukkitPlayer().resetMaxHealth();
+        getBukkitPlayer().resetMaxHealth(); // TODO
     }
 
     @Override

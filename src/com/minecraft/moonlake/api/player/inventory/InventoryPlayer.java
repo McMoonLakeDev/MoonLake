@@ -111,7 +111,6 @@ public interface InventoryPlayer extends InventoryHolder {
      * @param itemStacks 物品栈
      * @return 未成功添加到玩家背包的物品栈集合
      */
-    @Deprecated
     Map<Integer, ItemStack> addItemStack(ItemStack... itemStacks);
 
     /**
@@ -120,6 +119,5 @@ public interface InventoryPlayer extends InventoryHolder {
      * @param itemStacks 物品栈
      * @return 未成功清除到玩家背包的物品栈集合
      */
-    @Deprecated
     Map<Integer, ItemStack> removeItemStack(ItemStack... itemStacks);
 }
