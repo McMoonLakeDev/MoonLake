@@ -94,7 +94,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
     @Override
     public ItemStack resetDurability(ItemStack itemStack) {
 
-        return setDurability(itemStack, 0); // set durability to 0 be recipe itemstack
+        return setDurability(itemStack, itemStack.getType().getMaxDurability()); // set durability to max be recipe itemstack
     }
 
     @Override
