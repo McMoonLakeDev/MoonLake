@@ -1026,12 +1026,11 @@ public final class MoonLakeAPI {
     }
 
     /**
-     * <h1>将字符串按 & 颜色字符转换到颜色字符串</h1>
-     *
-     * <img src="http://a2.qpic.cn/psb?/V146eXZS0CF2Hk/kvJ2xbLnUa7lHBXQI61bD05xx5DwHpyx.4C.hf2Nk7g!/b/dKwAAAAAAAAA&bo=vALxAbwC8QEDByI!&rf=viewer_4" />
+     * <h1>将字符串按 {@link StringUtil#COLOR_CHAR} 颜色字符转换到颜色字符串</h1>
      *
      * @param source 字符串源
      * @return 颜色字符串
+     * @see com.minecraft.moonlake.util.ColorTableDoc
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
      */
     public static String toColor(String source) {
@@ -1053,12 +1052,11 @@ public final class MoonLakeAPI {
     }
 
     /**
-     * <h1>将字符串按 & 颜色字符转换到颜色字符串</h1>
-     *
-     * <img src="http://a2.qpic.cn/psb?/V146eXZS0CF2Hk/kvJ2xbLnUa7lHBXQI61bD05xx5DwHpyx.4C.hf2Nk7g!/b/dKwAAAAAAAAA&bo=vALxAbwC8QEDByI!&rf=viewer_4" />
+     * <h1>将字符串按 {@link StringUtil#COLOR_CHAR} 颜色字符转换到颜色字符串</h1>
      *
      * @param source 字符串源
      * @return 颜色字符串
+     * @see com.minecraft.moonlake.util.ColorTableDoc
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
      */
     public static String[] toColor(String... source) {
@@ -1080,12 +1078,11 @@ public final class MoonLakeAPI {
     }
 
     /**
-     * <h1>将字符串按 & 颜色字符转换到颜色字符串</h1>
-     *
-     * <img src="http://a2.qpic.cn/psb?/V146eXZS0CF2Hk/kvJ2xbLnUa7lHBXQI61bD05xx5DwHpyx.4C.hf2Nk7g!/b/dKwAAAAAAAAA&bo=vALxAbwC8QEDByI!&rf=viewer_4" />
+     * <h1>将字符串按 {@link StringUtil#COLOR_CHAR} 颜色字符转换到颜色字符串</h1>
      *
      * @param source 字符串源
      * @return 颜色字符串
+     * @see com.minecraft.moonlake.util.ColorTableDoc
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
      */
     public static List<String> toColor(Collection<? extends String> source) {
