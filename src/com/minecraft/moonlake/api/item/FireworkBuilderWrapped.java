@@ -26,8 +26,13 @@ import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Firework;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <h1>FireworkBuilderWrapped</h1>
@@ -172,5 +177,37 @@ class FireworkBuilderWrapped implements FireworkBuilder {
             fireworkMeta.addEffects(effect);
             firework.setFireworkMeta(fireworkMeta);
         }
+    }
+
+    @Override
+    public ItemStack build() {
+
+        return build(builder.build());
+    }
+
+    @Override
+    public ItemStack build(FireworkBuilder... join) {
+
+        if(join == null || join.length <= 0)
+            return build();
+
+        List<FireworkEffect> effects = new ArrayList<>();
+        effects.add(builder.build());
+
+        for(FireworkBuilder fireworkBuilder : join)
+            if(FireworkBuilderWrapped.class.isInstance(fireworkBuilder))
+                effects.add(((FireworkBuilderWrapped) fireworkBuilder).builder.build());
+
+        return build(effects.toArray(new FireworkEffect[effects.size()]));
+    }
+
+    protected final ItemStack build(FireworkEffect... effects) {
+
+        ItemStack itemStack = new ItemStack(Material.FIREWORK);
+        FireworkMeta fireworkMeta = (FireworkMeta) itemStack.getItemMeta();
+        fireworkMeta.addEffects(effects);
+        fireworkMeta.setPower(power);
+        itemStack.setItemMeta(fireworkMeta);
+        return itemStack;
     }
 }
