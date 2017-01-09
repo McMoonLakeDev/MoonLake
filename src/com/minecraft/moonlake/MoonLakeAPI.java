@@ -44,6 +44,7 @@ import com.minecraft.moonlake.api.player.PlayerLibrary;
 import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
 import com.minecraft.moonlake.event.EventHelper;
 import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.execute.Consumer;
 import com.minecraft.moonlake.logger.MLogger;
 import com.minecraft.moonlake.mysql.MySQLConnection;
 import com.minecraft.moonlake.mysql.MySQLFactory;
@@ -1025,12 +1026,11 @@ public final class MoonLakeAPI {
     }
 
     /**
-     * <h1>将字符串按 & 颜色字符转换到颜色字符串</h1>
-     *
-     * <img src="http://a2.qpic.cn/psb?/V146eXZS0CF2Hk/kvJ2xbLnUa7lHBXQI61bD05xx5DwHpyx.4C.hf2Nk7g!/b/dKwAAAAAAAAA&bo=vALxAbwC8QEDByI!&rf=viewer_4" />
+     * <h1>将字符串按 {@link StringUtil#COLOR_CHAR} 颜色字符转换到颜色字符串</h1>
      *
      * @param source 字符串源
      * @return 颜色字符串
+     * @see com.minecraft.moonlake.util.ColorTableDoc
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
      */
     public static String toColor(String source) {
@@ -1052,12 +1052,11 @@ public final class MoonLakeAPI {
     }
 
     /**
-     * <h1>将字符串按 & 颜色字符转换到颜色字符串</h1>
-     *
-     * <img src="http://a2.qpic.cn/psb?/V146eXZS0CF2Hk/kvJ2xbLnUa7lHBXQI61bD05xx5DwHpyx.4C.hf2Nk7g!/b/dKwAAAAAAAAA&bo=vALxAbwC8QEDByI!&rf=viewer_4" />
+     * <h1>将字符串按 {@link StringUtil#COLOR_CHAR} 颜色字符转换到颜色字符串</h1>
      *
      * @param source 字符串源
      * @return 颜色字符串
+     * @see com.minecraft.moonlake.util.ColorTableDoc
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
      */
     public static String[] toColor(String... source) {
@@ -1079,12 +1078,11 @@ public final class MoonLakeAPI {
     }
 
     /**
-     * <h1>将字符串按 & 颜色字符转换到颜色字符串</h1>
-     *
-     * <img src="http://a2.qpic.cn/psb?/V146eXZS0CF2Hk/kvJ2xbLnUa7lHBXQI61bD05xx5DwHpyx.4C.hf2Nk7g!/b/dKwAAAAAAAAA&bo=vALxAbwC8QEDByI!&rf=viewer_4" />
+     * <h1>将字符串按 {@link StringUtil#COLOR_CHAR} 颜色字符转换到颜色字符串</h1>
      *
      * @param source 字符串源
      * @return 颜色字符串
+     * @see com.minecraft.moonlake.util.ColorTableDoc
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
      */
     public static List<String> toColor(Collection<? extends String> source) {
@@ -1740,5 +1738,75 @@ public final class MoonLakeAPI {
     public static void unregisterAll(MoonLakeListener listener) {
 
         EventHelper.unregisterAll(listener);
+    }
+
+    /**
+     * 调用同步任务来获取回调并给予消费者
+     *
+     * @param plugin 插件
+     * @param callback 回调
+     * @param consumer 消费者
+     * @param <T> 类型
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果回调对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果运行时错误则抛出异常
+     */
+    public static <T> void callBackSyncConsumer(Plugin plugin, Callable<T> callback, Consumer<T> consumer) {
+
+        TaskHelper.callBackSyncConsumer(plugin, callback, consumer);
+    }
+
+    /**
+     * 调用同步任务来延迟获取回调并给予消费者
+     *
+     * @param plugin 插件
+     * @param callback 回调
+     * @param consumer 消费者
+     * @param <T> 类型
+     * @param delay 延迟
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果回调对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果运行时错误则抛出异常
+     */
+    public static <T> void callBackSyncConsumer(Plugin plugin, Callable<T> callback, Consumer<T> consumer, long delay) {
+
+        TaskHelper.callBackSyncConsumer(plugin, callback, consumer, delay);
+    }
+
+    /**
+     * 调用异步任务来获取回调并给予消费者
+     *
+     * @param plugin 插件
+     * @param callback 回调
+     * @param consumer 消费者
+     * @param <T> 类型
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果回调对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果运行时错误则抛出异常
+     */
+    public static <T> void callBackAsyncConsumer(Plugin plugin, Callable<T> callback, Consumer<T> consumer) {
+
+        TaskHelper.callBackAsyncConsumer(plugin, callback, consumer);
+    }
+
+    /**
+     * 调用异步任务来延迟获取回调并给予消费者
+     *
+     * @param plugin 插件
+     * @param callback 回调
+     * @param consumer 消费者
+     * @param <T> 类型
+     * @param delay 延迟
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果回调对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果运行时错误则抛出异常
+     */
+    public static <T> void callBackAsyncConsumer(Plugin plugin, Callable<T> callback, Consumer<T> consumer, long delay) {
+
+        TaskHelper.callBackAsyncConsumer(plugin, callback, consumer, delay);
     }
 }

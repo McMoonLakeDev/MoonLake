@@ -20,23 +20,19 @@ package com.minecraft.moonlake.manager;
 
 import com.google.common.collect.Sets;
 import com.minecraft.moonlake.api.entity.AttributeType;
-import com.minecraft.moonlake.api.nbt.NBTCompound;
-import com.minecraft.moonlake.api.nbt.NBTFactory;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.execute.Consumer;
 import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Field;
@@ -139,7 +135,7 @@ public class EntityManager extends MoonLakeManager {
 
         try {
 
-            return METHOD_GETENTITYHANDLE.invoke(null, entity);
+            return METHOD_GETENTITYHANDLE.invoke(entity);
         }
         catch (Exception e) {
 
@@ -318,89 +314,6 @@ public class EntityManager extends MoonLakeManager {
     }
 
     /**
-     * 设置实体 NBT 标签指定键的值
-     *
-     * @param entity 实体
-     * @param key 键
-     * @param value 值
-     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
-     * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
-     */
-    @Deprecated
-    public static void setTagValue(Entity entity, String key, Object value) {
-
-        Validate.notNull(entity, "The entity object is null.");
-
-        NBTCompound nbtCompound = NBTFactory.get().readSafe(entity);
-        nbtCompound.put(key, value);
-
-        NBTFactory.get().write(entity, nbtCompound);
-    }
-
-    /**
-     * 设置实体的 NoAI 属性
-     *
-     * @param entity 实体
-     * @param flag 是否无 AI
-     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
-     * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
-     */
-    @Deprecated
-    public static void setNoAI(Entity entity, boolean flag) {
-
-        try {
-
-            setTagValue(entity, "NoAI", (byte) (flag ? 1 : 0));
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The set entity no ai exception.", e);
-        }
-    }
-
-    /**
-     * 设置实体的沉默属性
-     *
-     * @param entity 实体
-     * @param flag 是否沉默
-     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
-     * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
-     */
-    @Deprecated
-    public static void setSilent(Entity entity, boolean flag) {
-
-        try {
-
-            setTagValue(entity, "Silent", (byte) (flag ? 1 : 0));
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The set entity silent exception.", e);
-        }
-    }
-
-    /**
-     * 设置实体的坚不可摧属性
-     *
-     * @param entity 实体
-     * @param flag 是否坚不可摧
-     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
-     * @deprecated 已过期, 详情查看新版 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}
-     */
-    @Deprecated
-    public static void setInvulnerable(Entity entity, boolean flag) {
-
-        try {
-
-            setTagValue(entity, "Invulnerable", (byte) (flag ? 1 : 0));
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The set entity invulnerable exception.", e);
-        }
-    }
-
-    /**
      * 获取指定位置的半径内的实体
      *
      * @param location 位置
@@ -429,18 +342,7 @@ public class EntityManager extends MoonLakeManager {
 
         List<LivingEntity> entityList = getEntityInRadius(location, radius);
 
-        for(int i = 0; i < entityList.size(); i++) {
-
-            LivingEntity entity = entityList.get(i);
-
-            if(entity instanceof Player && ((Player)entity).getName().equals(owner.getName())) {
-
-                entityList.remove(entity);
-
-                i--;
-            }
-        }
-        return entityList;
+        return getEntityInRadius0(entityList, owner);
     }
 
     /**
@@ -460,18 +362,7 @@ public class EntityManager extends MoonLakeManager {
 
         List<LivingEntity> entityList = getEntityInRadius(location, radius, ignoreEntity);
 
-        for(int i = 0; i < entityList.size(); i++) {
-
-            LivingEntity entity = entityList.get(i);
-
-            if(entity instanceof Player && ((Player)entity).getName().equals(owner.getName())) {
-
-                entityList.remove(entity);
-
-                i--;
-            }
-        }
-        return entityList;
+        return getEntityInRadius0(entityList, owner);
     }
 
     /**
@@ -490,18 +381,7 @@ public class EntityManager extends MoonLakeManager {
 
         List<LivingEntity> entityList = getEntityInRadius(location, radius);
 
-        for(int i = 0; i < entityList.size(); i++) {
-
-            LivingEntity entity = entityList.get(i);
-
-            if(entity instanceof Player && ((Player)entity).getName().equals(owner.getName())) {
-
-                entityList.remove(entity);
-
-                i--;
-            }
-        }
-        return entityList;
+        return getEntityInRadius0(entityList, owner.getBukkitPlayer());
     }
 
     /**
@@ -522,11 +402,16 @@ public class EntityManager extends MoonLakeManager {
 
         List<LivingEntity> entityList = getEntityInRadius(location, radius, ignoreEntity);
 
+        return getEntityInRadius0(entityList, owner.getBukkitPlayer());
+    }
+
+    private static List<LivingEntity> getEntityInRadius0(List<LivingEntity> entityList, Player owner) {
+
         for(int i = 0; i < entityList.size(); i++) {
 
             LivingEntity entity = entityList.get(i);
 
-            if(entity instanceof Player && ((Player)entity).getName().equals(owner.getName())) {
+            if(entity instanceof Player && ((Player) entity).equals(owner)) {
 
                 entityList.remove(entity);
 
@@ -561,58 +446,6 @@ public class EntityManager extends MoonLakeManager {
             }
         }
         return entityList;
-    }
-
-    /**
-     * 给予指定实体真实的伤害
-     *
-     * @param source 源实体
-     * @param damager 攻击者实体
-     * @param damage 真实伤害
-     * @throws IllegalArgumentException 如果源实体对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果攻击者实体对象为 {@code null} 则抛出异常
-     * @deprecated 已过时, 将于 v2.0 删除.
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public static void realDamage(LivingEntity source, MoonLakePlayer damager, double damage) {
-
-        realDamage(source, damager.getBukkitPlayer(), damage);
-    }
-
-    /**
-     * 给予指定实体真实的伤害
-     *
-     * @param source 源实体
-     * @param damager 攻击者实体
-     * @param damage 真实伤害
-     * @throws IllegalArgumentException 如果源实体对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果攻击者实体对象为 {@code null} 则抛出异常
-     * @deprecated 已过时, 将于 v2.0 删除.
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public static void realDamage(LivingEntity source, LivingEntity damager, double damage) {
-
-        Validate.notNull(source, "The entity source object is null.");
-        Validate.notNull(damager, "The entity damager object is null.");
-
-        if(!source.isDead() && !damager.isDead() && damage > 0d) {
-
-            EntityDamageByEntityEvent edbee = new EntityDamageByEntityEvent(damager, source, EntityDamageEvent.DamageCause.CUSTOM, damage);
-
-            source.damage(0d, damager);
-            source.setLastDamageCause(edbee);
-
-            Bukkit.getServer().getPluginManager().callEvent(edbee);
-
-            if(source.getHealth() <= damage) {
-
-                source.setHealth(0d);
-                return;
-            }
-            source.setHealth(source.getHealth() - damage);
-        }
     }
 
     /**
@@ -718,7 +551,7 @@ public class EntityManager extends MoonLakeManager {
 
         if(regain && entity instanceof LivingEntity) {
 
-            ((LivingEntity)entity).setHealth(((LivingEntity)entity).getMaxHealth());
+            ((LivingEntity)entity).setHealth(value);
         }
     }
 
@@ -908,5 +741,41 @@ public class EntityManager extends MoonLakeManager {
 
             throw new MoonLakeException("The get entity attribute exception.", e);
         }
+    }
+
+    /**
+     * 将指定实体类生成到指定位置
+     *
+     * @param location 位置
+     * @param entityClass 实体类
+     * @param <T> 实体类
+     * @return 实体对象
+     * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果实体类不能生成则抛出异常
+     */
+    public static <T extends Entity> T spawnEntity(Location location, Class<T> entityClass) {
+
+        return Validate.checkNotNull(location).getWorld().spawn(location, entityClass);
+    }
+
+    /**
+     * 将指定实体类生成到指定位置
+     *
+     * @param location 位置
+     * @param entityClass 实体类
+     * @param consumer 消费者
+     * @param <T> 实体类
+     * @return 实体对象
+     * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果实体类不能生成则抛出异常
+     */
+    public static <T extends Entity> T spawnEntity(Location location, Class<T> entityClass, Consumer<T> consumer) {
+
+        T t = spawnEntity(location, entityClass);
+
+        if(consumer != null)
+            consumer.accept(t);
+
+        return t;
     }
 }

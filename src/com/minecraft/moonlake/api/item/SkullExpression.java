@@ -20,7 +20,6 @@ package com.minecraft.moonlake.api.item;
 
 import com.minecraft.moonlake.api.item.skull.SkullLibrary;
 import com.minecraft.moonlake.exception.MoonLakeException;
-import com.minecraft.moonlake.exception.NotImplementedException;
 import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
@@ -29,7 +28,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.net.URL;
 import java.util.UUID;
 
 /**
@@ -120,12 +118,6 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
     }
 
     @Override
-    public ItemStack createSkullWithSkin(URL skinURL) throws MoonLakeException {
-
-        throw new NotImplementedException();
-    }
-
-    @Override
     public ItemStack createSkullWithSkin(String data, String displayName) throws MoonLakeException {
 
         Validate.notNull(data, "The itemstack skull skin data object is null.");
@@ -153,12 +145,6 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
     }
 
     @Override
-    public ItemStack createSkullWithSkin(URL skinURL, String displayName) {
-
-        throw new NotImplementedException();
-    }
-
-    @Override
     public String getSkullOwner(ItemStack itemStack) {
 
         Validate.notNull(itemStack, "The itemstack skull object is null.");
@@ -171,12 +157,6 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
             return null;
         }
         return skullMeta.getOwner();
-    }
-
-    @Override
-    public String getSkullSkinURL(ItemStack itemStack) {
-
-        throw new NotImplementedException();
     }
 
     @Override

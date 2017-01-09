@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.item.potion.PotionBase;
 import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.api.item.potion.PotionEffectType;
 import com.minecraft.moonlake.api.item.potion.PotionType;
+import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -29,7 +30,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
-import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -90,12 +90,6 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public ItemStack createSkullWithSkin(URL skinURL) throws MoonLakeException {
-
-        return base.createSkullWithSkin(skinURL);
-    }
-
-    @Override
     public ItemStack createSkullWithSkin(String skinURL, String displayName) {
 
         return base.createSkullWithSkin(skinURL, displayName);
@@ -108,21 +102,9 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public ItemStack createSkullWithSkin(URL skinURL, String displayName) {
-
-        return base.createSkullWithSkin(skinURL, displayName);
-    }
-
-    @Override
     public String getSkullOwner(ItemStack itemStack) {
 
         return base.getSkullOwner(itemStack);
-    }
-
-    @Override
-    public String getSkullSkinURL(ItemStack itemStack) {
-
-        return base.getSkullSkinURL(itemStack);
     }
 
     @Override
@@ -144,15 +126,33 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
+    public void setUnbreakable(NBTCompound nbtCompound, boolean unbreakable) {
+
+        base.setUnbreakable(nbtCompound, unbreakable);
+    }
+
+    @Override
     public boolean isUnbreakable(ItemStack itemStack) {
 
         return base.isUnbreakable(itemStack);
     }
 
     @Override
+    public boolean isUnbreakable(NBTCompound nbtCompound) {
+
+        return base.isUnbreakable(nbtCompound);
+    }
+
+    @Override
     public ItemStack setAttribute(ItemStack itemStack, AttributeModify attribute) {
 
         return base.setAttribute(itemStack, attribute);
+    }
+
+    @Override
+    public void setAttribute(NBTCompound nbtCompound, AttributeModify attribute) {
+
+        base.setAttribute(nbtCompound, attribute);
     }
 
     @Override
@@ -168,15 +168,39 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
+    public void setAttribute(NBTCompound nbtCompound, AttributeModify.Type type, AttributeModify.Operation operation, double amount) {
+
+        base.setAttribute(nbtCompound, type, operation, amount);
+    }
+
+    @Override
+    public void setAttribute(NBTCompound nbtCompound, AttributeModify.Type type, AttributeModify.Slot slot, AttributeModify.Operation operation, double amount) {
+
+        base.setAttribute(nbtCompound, type, slot, operation, amount);
+    }
+
+    @Override
     public Set<AttributeModify> getAttributes(ItemStack itemStack) {
 
         return base.getAttributes(itemStack);
     }
 
     @Override
+    public Set<AttributeModify> getAttributes(NBTCompound nbtCompound) {
+
+        return base.getAttributes(nbtCompound);
+    }
+
+    @Override
     public boolean hasAttribute(ItemStack itemStack, AttributeModify.Type type) {
 
         return base.hasAttribute(itemStack, type);
+    }
+
+    @Override
+    public boolean hasAttribute(NBTCompound nbtCompound, AttributeModify.Type type) {
+
+        return base.hasAttribute(nbtCompound, type);
     }
 
     @Override
@@ -243,6 +267,72 @@ class ItemExpressionWrapped extends ItemExpression {
     public boolean hasCustomPotion(ItemStack itemStack, com.minecraft.moonlake.enums.PotionEffectType effectType) {
 
         return base.hasCustomPotion(itemStack, effectType);
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, PotionEffectCustom... effects) {
+
+        base.setCustomPotion(nbtCompound, effects);
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, Collection<? extends PotionEffectCustom> effects) {
+
+        base.setCustomPotion(nbtCompound, effects);
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, PotionEffectType effectType, int amplifier, int duration) {
+
+        base.setCustomPotion(nbtCompound, effectType, amplifier, duration);
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, PotionEffectType effectType, int amplifier, int duration, boolean ambient) {
+
+        base.setCustomPotion(nbtCompound, effectType, amplifier, duration, ambient);
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        base.setCustomPotion(nbtCompound, effectType, amplifier, duration, ambient, showParticles);
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration) {
+
+        base.setCustomPotion(nbtCompound, effectType, amplifier, duration);
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient) {
+
+        base.setCustomPotion(nbtCompound, effectType, amplifier, duration, ambient);
+    }
+
+    @Override
+    public void setCustomPotion(NBTCompound nbtCompound, com.minecraft.moonlake.enums.PotionEffectType effectType, int amplifier, int duration, boolean ambient, boolean showParticles) {
+
+        base.setCustomPotion(nbtCompound, effectType, amplifier, duration, ambient, showParticles);
+    }
+
+    @Override
+    public Set<PotionEffectCustom> getCustomPotion(NBTCompound nbtCompound) {
+
+        return base.getCustomPotion(nbtCompound);
+    }
+
+    @Override
+    public boolean hasCustomPotion(NBTCompound nbtCompound, PotionEffectType effectType) {
+
+        return base.hasCustomPotion(nbtCompound, effectType);
+    }
+
+    @Override
+    public boolean hasCustomPotion(NBTCompound nbtCompound, com.minecraft.moonlake.enums.PotionEffectType effectType) {
+
+        return base.hasCustomPotion(nbtCompound, effectType);
     }
 
     @Override

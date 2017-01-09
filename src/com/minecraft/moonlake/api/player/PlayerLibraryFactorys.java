@@ -113,6 +113,7 @@ public class PlayerLibraryFactorys {
             }
         }, MoonLakeAPI.getMoonLake());
         ///
+        MoonLakeAPI.getMLogger().info("月色之湖玩家支持库的依赖监听器成功加载.");
     }
 
     /**

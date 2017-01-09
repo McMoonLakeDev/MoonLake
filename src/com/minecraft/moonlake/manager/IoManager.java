@@ -18,10 +18,14 @@
  
 package com.minecraft.moonlake.manager;
 
+import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.execute.Consumer;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +39,11 @@ import java.util.Map;
  * @author Month_Light
  */
 public class IoManager extends MoonLakeManager {
+
+    /**
+     * UTF-8 Charset
+     */
+    public final static Charset UTF_8 = Charset.forName("UTF-8");
 
     /**
      * 输入输出流管理实现类构造函数
@@ -70,41 +79,21 @@ public class IoManager extends MoonLakeManager {
         Validate.notNull(out, "The file out object is null.");
         Validate.notNull(is, "The input stream object is null.");
 
-        FileOutputStream fs = null;
-
         try {
 
-            fs = new FileOutputStream(out);
+            FileOutputStream fos = new FileOutputStream(out);
             byte[] buff = new byte[buf];
+            int length;
 
-            int len;
-
-            while((len = is.read(buff)) > 0) {
-
-                fs.write(buff, 0, len);
+            try {
+                while ((length = is.read(buff)) > 0)
+                    fos.write(buff, 0, length);
+            } finally {
+                fos.flush();
+                fos.close();
             }
-        }
-        catch (Exception e) {
-
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
-        	
-        	try {
-        		
-        		if(fs != null) {
-        			
-        			fs.flush();
-        			fs.close();
-        		}
-        		if(is != null) {
-        			
-        			is.close();
-        		}
-        	}
-        	catch(Exception e) {
-        		
-        	}
         }
     }
 
@@ -127,55 +116,78 @@ public class IoManager extends MoonLakeManager {
      * @param charset 文件编码
      * @return 字符串数组
      * @throws IllegalArgumentException 如果文件对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果文件编码对象未知则抛出异常
+     * @throws UnsupportedCharsetException 如果文件编码对象未知则抛出异常
      */
     public static String[] readFileTextLines(File file, String charset) {
 
+        Validate.notNull(charset, "The charset object is null.");
+
+        List<String> lineList = readFileTextLines(file, Charset.forName(charset));
+        return lineList.toArray(new String[lineList.size()]);
+    }
+
+    /**
+     * 读取文件的所有行数到字符串列表
+     *
+     * @param file 文件对象
+     * @param charset 文件编码
+     * @return 字符串列表
+     * @throws IllegalArgumentException 如果文件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果编码对象为 {@code null} 则抛出异常
+     */
+    public static List<String> readFileTextLines(File file, Charset charset) {
+
         Validate.notNull(file, "The file object is null.");
+        Validate.notNull(charset, "The charset object is null.");
 
-        if(!file.exists()) {
+        List<String> lineList = new ArrayList<>();
 
-            return new String[0];
-        }
-        String[] lines = null;
-        BufferedReader bf = null;
-        InputStreamReader isr = null;
+        if(!file.exists())
+            return lineList;
 
         try {
 
-            isr = new InputStreamReader(new FileInputStream(file), charset == null ? "utf-8" : charset);
-            bf = new BufferedReader(isr);
-            List<String> texts = new ArrayList<>();
-            String temp = null;
+            String temp;
 
-            while((temp = bf.readLine()) != null) {
-
-                texts.add(temp);
+            try (BufferedReader bufferedReader = newReader(file, charset)) {
+                while ((temp = bufferedReader.readLine()) != null)
+                    lineList.add(temp);
+                bufferedReader.close();
             }
-            lines = texts.toArray(new String[texts.size()]);
-        }
-        catch (Exception e) {
-
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        finally {
+        return lineList;
+    }
 
-            try {
+    /**
+     * 以 UTF-8 编码读取文件的所有行数并给予消费者
+     *
+     * @param file 文件对象
+     * @param consumer 消费者
+     * @throws IllegalArgumentException 如果文件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     */
+    public static void readFileTextLinesConsumer(File file, Consumer<List<String>> consumer) {
 
-                if(bf != null) {
+        readFileTextLinesConsumer(file, UTF_8, consumer);
+    }
 
-                    bf.close();
-                }
-                if(isr != null) {
+    /**
+     * 读取文件的所有行数并给予消费者
+     *
+     * @param file 文件对象
+     * @param charset 文件编码
+     * @param consumer 消费者
+     * @throws IllegalArgumentException 如果文件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果编码对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     */
+    public static void readFileTextLinesConsumer(File file, Charset charset, Consumer<List<String>> consumer) {
 
-                    isr.close();
-                }
-            }
-            catch (Exception e) {
+        Validate.notNull(consumer, "The consumer object is null.");
 
-            }
-        }
-        return lines;
+        consumer.accept(readFileTextLines(file, charset));
     }
 
     /**
@@ -204,30 +216,167 @@ public class IoManager extends MoonLakeManager {
 
         Map<String, String> temp = new HashMap<>();
 
-        String[] lines = readFileTextLines(lang);
-
-        for(final String line : lines) {
+        for(final String line : readFileTextLines(lang, UTF_8)) {
 
             if(!line.equals("") && !line.startsWith("#")) {
 
-                if(line.contains("=")) {
+                if(!line.contains("="))
+                    continue;
 
-                    int $ = line.indexOf("=");
+                int $ = line.indexOf("=");
+                String key = line.substring(0, $);
+                String value = line.substring($ + 1);
 
-                    String key = line.substring(0, $);
-                    String value = line.substring($ + 1);
-
-                    if (!value.isEmpty() && value.charAt(0) != '#') {
-
-                        temp.put(key, value.contains("" + StringUtil.COLOR_CHAR) ? StringUtil.toColor(prefix + value) : prefix + value);
-                    }
-                    else {
-
-                        temp.put(key, value.contains("" + StringUtil.COLOR_CHAR) ? StringUtil.toColor(value.substring(1)) : value.substring(1));
-                    }
-                }
+                if (!value.isEmpty() && value.charAt(0) != '#')
+                    temp.put(key, value.contains(StringUtil.COLOR_STRING) ? StringUtil.toColor(prefix + value) : prefix + value);
+                else
+                    temp.put(key, value.contains(StringUtil.COLOR_STRING) ? StringUtil.toColor(value.substring(1)) : value.substring(1));
             }
         }
         return temp;
+    }
+
+    /**
+     * 创建一个对指定文件以 {@code UTF-8} 编码读取的缓存读取器
+     *
+     * @param file 文件
+     * @return BufferedReader
+     * @throws IllegalArgumentException 如果文件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果编码对象为 {@code null} 则抛出异常
+     * @throws FileNotFoundException 如果文件不存在则抛出异常
+     */
+    public static BufferedReader newReader(File file) throws FileNotFoundException {
+
+        return newReader(file, UTF_8);
+    }
+
+    /**
+     * 创建一个对指定文件以指定编码读取的缓存读取器
+     *
+     * @param file 文件
+     * @param charset 编码
+     * @return BufferedReader
+     * @throws IllegalArgumentException 如果文件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果编码对象为 {@code null} 则抛出异常
+     * @throws FileNotFoundException 如果文件不存在则抛出异常
+     */
+    public static BufferedReader newReader(File file, Charset charset) throws FileNotFoundException {
+
+        Validate.notNull(file, "The file object is null.");
+        Validate.notNull(charset, "The charset object is null.");
+
+        return new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
+    }
+
+    /**
+     * 创建一个对指定文件以 {@code UTF-8} 编码写出的缓存写出器
+     *
+     * @param file 文件
+     * @return BufferedWriter
+     * @throws IllegalArgumentException 如果文件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果编码对象为 {@code null} 则抛出异常
+     * @throws FileNotFoundException 如果文件不存在则抛出异常
+     */
+    public static BufferedWriter newWriter(File file) throws FileNotFoundException {
+
+        return newWriter(file, UTF_8);
+    }
+
+    /**
+     * 创建一个对指定文件以指定编码写出的缓存写出器
+     *
+     * @param file 文件
+     * @param charset 编码
+     * @return BufferedWriter
+     * @throws IllegalArgumentException 如果文件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果编码对象为 {@code null} 则抛出异常
+     * @throws FileNotFoundException 如果文件不存在则抛出异常
+     */
+    public static BufferedWriter newWriter(File file, Charset charset) throws FileNotFoundException {
+
+        Validate.notNull(file, "The file object is null.");
+        Validate.notNull(charset, "The charset object is null.");
+
+        return new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), charset));
+    }
+
+    /**
+     * 获取指定文件名的扩展名
+     *
+     * @param file 文件
+     * @return 扩展名
+     * @throws IllegalArgumentException 如果文件对象为 {@code null} 则抛出异常
+     */
+    public static String getFileExtension(File file) {
+
+        String fullName = Validate.checkNotNull(file).getName();
+        return getFileExtension(fullName);
+    }
+
+    /**
+     * 获取指定文件名的扩展名
+     *
+     * @param fullName 文件全名称
+     * @return 扩展名
+     * @throws IllegalArgumentException 如果文件全名称对象为 {@code null} 则抛出异常
+     */
+    public static String getFileExtension(String fullName) {
+
+        Validate.notNull(fullName, "The full name object is null.");
+
+        int dotIndex = fullName.lastIndexOf(46);
+        return dotIndex == -1 ? null : fullName.substring(dotIndex + 1);
+    }
+
+    /**
+     * 获取指定文件名不带扩展名
+     *
+     * @param file 文件
+     * @return 文件名不带扩展名
+     * @throws IllegalArgumentException 如果文件对象为 {@code null} 则抛出异常
+     */
+    public static String getFileNameWithoutExtension(File file) {
+
+        String fullName = Validate.checkNotNull(file).getName();
+        return getFileNameWithoutExtension(fullName);
+    }
+
+    /**
+     * 获取指定文件名不带扩展名
+     *
+     * @param fullName 文件全名称
+     * @return 文件名不带扩展名
+     * @throws IllegalArgumentException 如果文件全名称对象为 {@code null} 则抛出异常
+     */
+    public static String getFileNameWithoutExtension(String fullName) {
+
+        Validate.notNull(fullName, "The full name object is null.");
+
+        String fileName = (new File(fullName)).getName();
+        int dotIndex = fileName.lastIndexOf(46);
+        return dotIndex == -1 ? fileName : fileName.substring(0, dotIndex);
+    }
+
+    /**
+     * 创建指定文件对象的父目录
+     *
+     * @param file 文件
+     * @throws IllegalArgumentException 如果文件对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果创建时错误则抛出异常
+     */
+    public static void createParentDirs(File file) {
+
+        try {
+
+            File parent = Validate.checkNotNull(file).getCanonicalFile().getParentFile();
+
+            if(parent != null) {
+
+                parent.mkdirs();
+            }
+        } catch (Exception e) {
+
+            throw new MoonLakeException(e.getMessage(), e);
+        }
     }
 }

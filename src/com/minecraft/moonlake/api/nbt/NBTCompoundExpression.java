@@ -18,6 +18,12 @@
  
 package com.minecraft.moonlake.api.nbt;
 
+import com.minecraft.moonlake.validate.Validate;
+import org.bukkit.Chunk;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.inventory.ItemStack;
+
 import java.util.*;
 
 /**
@@ -484,6 +490,38 @@ class NBTCompoundExpression implements NBTCompound {
         Object value0 = get(key);
         put0(key, value.getHandle());
         return value0;
+    }
+
+    @Override
+    public void write(ItemStack itemStack) {
+
+        Validate.notNull(itemStack, "The itemstack object is null.");
+
+        NBTFactory.get().write(itemStack, this);
+    }
+
+    @Override
+    public void write(Block block) {
+
+        Validate.notNull(block, "The block object is null.");
+
+        NBTFactory.get().write(block, this);
+    }
+
+    @Override
+    public void write(Entity entity) {
+
+        Validate.notNull(entity, "The entity object is null.");
+
+        NBTFactory.get().write(entity, this);
+    }
+
+    @Override
+    public void write(Chunk chunk) {
+
+        Validate.notNull(chunk, "The chunk object is null.");
+
+        NBTFactory.get().write(chunk, this);
     }
 
     public boolean containsKey(String key, Class type) {

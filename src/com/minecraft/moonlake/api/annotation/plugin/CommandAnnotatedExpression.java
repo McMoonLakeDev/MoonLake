@@ -456,8 +456,13 @@ class CommandAnnotatedExpression implements CommandAnnotated {
 
                 methodParameterTypeObjects[1] = sender;
             }
-
             commandCompletionMethod.invoke(commandClass, methodParameterTypeObjects);
+
+            if(list.isEmpty())
+                // 如果为空表示对应的 tab 函数可能没有处理
+                // 则返回 bukkit 命令自带的处理函数
+                return command.superTabComplete(sender, alias, args);
+
             return getPossibleCompletionsForGivenArgs(args, list);
         }
         catch (CommandException e) {
@@ -641,6 +646,10 @@ class CommandAnnotatedExpression implements CommandAnnotated {
                 }
                 return parameterType.getDeclaredMethod("parse" + parseName, String.class).invoke(null, argument);
             }
+            if(parameterType.isEnum()) {
+
+                return parameterType.getMethod("valueOf", String.class).invoke(null, argument);
+            }
             throw new CommandArgumentParseException("The failed to parse argument '" + argument + "' to " + parameterType, argument, parameterType);
         }
         catch (ReflectiveOperationException e) {
@@ -710,21 +719,19 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         @Override
         public boolean execute(CommandSender sender, String label, String[] args) {
 
-            if(executor != null) {
-
-                return executor.onCommand(sender, this, label, args);
-            }
-            return false;
+            return executor != null && executor.onCommand(sender, this, label, args);
         }
 
         @Override
         public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
 
-            if(executor != null) {
+            List<String> result = executor != null ? executor.onTabComplete(sender, this, alias, args) : null;
+            return result != null ? result : superTabComplete(sender, alias, args);
+        }
 
-                return executor.onTabComplete(sender, this, alias, args);
-            }
-            return null;
+        private List<String> superTabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+
+            return super.tabComplete(sender, alias, args);
         }
     }
 }

@@ -18,8 +18,10 @@
  
 package com.minecraft.moonlake.api.item.firework;
 
+import com.minecraft.moonlake.builder.Builder;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * <hr />
@@ -44,7 +46,23 @@ import org.bukkit.Location;
  * @version 1.0
  * @author Month_Light
  */
-public interface FireworkBuilder {
+public interface FireworkBuilder extends Builder<ItemStack> {
+
+    /**
+     * 构建并获取物品栈对象
+     *
+     * @return ItemStack
+     */
+    @Override
+    ItemStack build();
+
+    /**
+     * 构建并获取物品栈对象
+     *
+     * @param join 烟花构建器
+     * @return ItemStack
+     */
+    ItemStack build(FireworkBuilder... join);
 
     /**
      * 设置烟花效果具有的颜色值

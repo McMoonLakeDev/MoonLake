@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The MoonLake Authors
+ * Copyright (C) 2017 The MoonLake Authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,42 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
- 
-package com.minecraft.moonlake.data;
 
-import com.minecraft.moonlake.api.nbt.NBTCompound;
-import com.minecraft.moonlake.api.nbt.NBTList;
+
+package com.minecraft.moonlake.api.player.attribute;
+
+import com.minecraft.moonlake.api.entity.AttributeType;
 
 /**
- * <h1>NBTTagDataWrapped</h1>
- * NBT 数据接口包装类
+ * <h1>AttributePlayer</h1>
+ * 特殊属性玩家接口（详细doc待补充...）
  *
  * @version 1.0
  * @author Month_Light
  */
-@Deprecated
-public class NBTTagDataWrapped extends ConversionDataWrapped implements NBTTagData {
+public interface AttributePlayer {
 
     /**
-     * NBT 数据接口包装类构造函数
+     * 获取此玩家指定特殊属性
      *
-     * @param obj 对象
+     * @param type 特殊属性类型
+     * @return 特殊属性
+     * @throws IllegalArgumentException 如果特殊属性类型对象为 {@code null} 则抛出异常
+     * @throws com.minecraft.moonlake.exception.IllegalBukkitVersionException 如果特殊属性类型不支持 Bukkit 版本则抛出异常
      */
-    public NBTTagDataWrapped(Object obj) {
-
-        super(obj);
-    }
-
-    @Override
-    public NBTCompound asCompound() {
-
-        return obj instanceof NBTCompound ? (NBTCompound) obj : null;
-    }
-
-    @Override
-    public NBTList asList() {
-
-        return obj instanceof NBTList ? (NBTList) obj : null;
-    }
+    Attribute getAttribute(AttributeType type);
 }

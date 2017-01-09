@@ -18,6 +18,11 @@
  
 package com.minecraft.moonlake.api.nbt;
 
+import org.bukkit.Chunk;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.inventory.ItemStack;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -281,6 +286,38 @@ public interface NBTCompound extends Map<String, Object> {
     Object bind(String key, NBTCompound value);
 
     Object bind(String key, NBTList value);
+
+    /**
+     * 将此 NBT 复合对象写入到指定物品栈
+     *
+     * @param itemStack 物品栈
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     */
+    void write(ItemStack itemStack);
+
+    /**
+     * 将此 NBT 复合对象写入到指定方块
+     *
+     * @param block 方块
+     * @throws IllegalArgumentException 如果方块对象为 {@code null} 则抛出异常
+     */
+    void write(Block block);
+
+    /**
+     * 将此 NBT 复合对象写入到指定实体
+     *
+     * @param entity 实体
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    void write(Entity entity);
+
+    /**
+     * 将此 NBT 复合对象写入到指定区块
+     *
+     * @param chunk 区块
+     * @throws IllegalArgumentException 如果区块对象为 {@code null} 则抛出异常
+     */
+    void write(Chunk chunk);
 
     /**
      * 获取此 NBT 复合是否包含指定键的值类型

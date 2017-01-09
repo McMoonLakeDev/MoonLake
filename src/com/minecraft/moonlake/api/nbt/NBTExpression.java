@@ -18,6 +18,7 @@
  
 package com.minecraft.moonlake.api.nbt;
 
+import com.minecraft.moonlake.execute.Consumer;
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Chunk;
@@ -62,6 +63,14 @@ class NBTExpression implements NBTLibrary {
     }
 
     @Override
+    public void readSafeConsumer(ItemStack itemStack, Consumer<NBTCompound> consumer) throws NBTException {
+
+        Validate.notNull(consumer, "The consumer object is null.");
+
+        consumer.accept(readSafe(itemStack));
+    }
+
+    @Override
     public void write(ItemStack itemStack, NBTCompound nbt) throws NBTException {
 
         Validate.notNull(nbt, "The nbt tag object is null.");
@@ -87,6 +96,14 @@ class NBTExpression implements NBTLibrary {
             temp = NBTFactory.newCompound();
         }
         return temp;
+    }
+
+    @Override
+    public void readSafeConsumer(Entity entity, Consumer<NBTCompound> consumer) throws NBTException {
+
+        Validate.notNull(consumer, "The consumer object is null.");
+
+        consumer.accept(readSafe(entity));
     }
 
     @Override
@@ -116,6 +133,14 @@ class NBTExpression implements NBTLibrary {
     }
 
     @Override
+    public void readSafeConsumer(Block block, Consumer<NBTCompound> consumer) throws NBTException {
+
+        Validate.notNull(consumer, "The consumer object is null.");
+
+        consumer.accept(readSafe(block));
+    }
+
+    @Override
     public void write(Block block, NBTCompound nbt) throws NBTException {
 
         NBTFactory.getBlock().writeBlock(block, nbt.getHandleCopy());
@@ -140,6 +165,14 @@ class NBTExpression implements NBTLibrary {
             temp = NBTFactory.newCompound();
         }
         return temp;
+    }
+
+    @Override
+    public void readSafeConsumer(Chunk chunk, Consumer<NBTCompound> consumer) throws NBTException {
+
+        Validate.notNull(consumer, "The consumer object is null.");
+
+        consumer.accept(readSafe(chunk));
     }
 
     @Override

@@ -26,6 +26,8 @@ import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,8 +48,10 @@ public class PlayerManager extends MoonLakeManager {
     private final static Class<? extends SimpleMoonLakePlayer> CLASS_SIMPLEMOONLAKEPLAYER;
     private final static Class<?> CLASS_CRAFTPLAYER;
     private final static Class<?> CLASS_ENTITYHUMAN;
+    private final static Class<?> CLASS_ENTITYPLAYER;
     private final static Method METHOD_GETHANDLE;
     private final static Method METHOD_GETPROFILE;
+    private final static Field FIELD_LOCALE;
 
     static {
 
@@ -72,8 +76,10 @@ public class PlayerManager extends MoonLakeManager {
             }
             CLASS_CRAFTPLAYER = PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
             CLASS_ENTITYHUMAN = PackageType.MINECRAFT_SERVER.getClass("EntityHuman");
+            CLASS_ENTITYPLAYER = PackageType.MINECRAFT_SERVER.getClass("EntityPlayer");
             METHOD_GETHANDLE = getMethod(CLASS_CRAFTPLAYER, "getHandle");
             METHOD_GETPROFILE = getMethod(CLASS_ENTITYHUMAN, "getProfile");
+            FIELD_LOCALE = getField(CLASS_ENTITYPLAYER, true, "locale");
         }
         catch (Exception e) {
 
@@ -195,9 +201,6 @@ public class PlayerManager extends MoonLakeManager {
 
         Validate.notNull(players, "The player object is null.");
 
-        int index = 0;
-        MoonLakePlayer[] adapter = new MoonLakePlayer[players.length];
-
         //
         // 验证类是否为 null 则抛出非法 Bukkit 版本异常
 
@@ -207,16 +210,21 @@ public class PlayerManager extends MoonLakeManager {
         }
         ///
 
-        for(final Player player : players) {
+        int index = 0;
+        MoonLakePlayer[] adapter = new MoonLakePlayer[players.length];
 
-            try {
+        try {
 
-                adapter[index++] = CLASS_SIMPLEMOONLAKEPLAYER.getConstructor(Player.class).newInstance(player);
+            Constructor<? extends SimpleMoonLakePlayer> constructor = CLASS_SIMPLEMOONLAKEPLAYER.getConstructor(Player.class);
+
+            for(final Player player : players) {
+
+                adapter[index++] = constructor.newInstance(player);
             }
-            catch (Exception e) {
+        }
+        catch (Exception e) {
 
-                throw new MoonLakeException("The adapter player to moonlake player exception.", e);
-            }
+            throw new MoonLakeException("The adapter player to moonlake player exception.", e);
         }
         return adapter;
     }
@@ -290,6 +298,29 @@ public class PlayerManager extends MoonLakeManager {
         catch (Exception e) {
 
             throw new MoonLakeException("The get player profile exception.", e);
+        }
+    }
+
+    /**
+     * 获取指定玩家的本地化语言
+     *
+     * @param player 玩家
+     * @return 本地化语言 异常则返回 null
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     */
+    public static String getLanguage(Player player) {
+
+        Validate.notNull(player, "The player object is null.");
+
+        try {
+
+            Object nmsPlayer = METHOD_GETHANDLE.invoke(player);
+
+            return (String) FIELD_LOCALE.get(nmsPlayer);
+        }
+        catch (Exception e) {
+
+            throw new MoonLakeException("The get player language exception.", e);
         }
     }
 }

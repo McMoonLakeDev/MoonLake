@@ -35,13 +35,40 @@ import java.util.regex.Pattern;
  * <h1>StringUtil</h1>
  * 字符串实现类（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public class StringUtil {
 
+    /**
+     * 颜色字符: \u0026
+     */
     public final static char COLOR_CHAR = '\u0026';
+
+    /**
+     * 默认合并字符: 44
+     */
+    public final static char DEF_MERGE_CHAR = 44; // ansi code = ','
+
+    /**
+     * 颜色字符串: {@link #COLOR_CHAR}
+     */
+    public final static String COLOR_STRING = "" + COLOR_CHAR;
+
+    /**
+     * Unicode 码匹配模式对象
+     */
     public final static Pattern UNICODE_PATTERN = Pattern.compile("\\\\u[a-zA-Z0-9]{2,4}");
+
+    /**
+     * 整型匹配模式对象
+     */
+    public final static Pattern INTEGER_PATTERN = Pattern.compile("^[-+]?[0-9]+$");
+
+    /**
+     * 双精度浮点数匹配模式对象
+     */
+    public final static Pattern DOUBLE_PATTERN = Pattern.compile("^[-+]?[0-9]+|[-+]?[0-9]+\\.[0-9]+$");
 
     /**
      * 字符串实现类构造函数
@@ -51,13 +78,12 @@ public class StringUtil {
     }
 
     /**
-     * <h1>将字符串按 & 颜色字符转换到颜色字符串</h1>
-     *
-     * <img src="http://a2.qpic.cn/psb?/V146eXZS0CF2Hk/kvJ2xbLnUa7lHBXQI61bD05xx5DwHpyx.4C.hf2Nk7g!/b/dKwAAAAAAAAA&bo=vALxAbwC8QEDByI!&rf=viewer_4" />
+     * <h1>将字符串按 {@link #COLOR_CHAR} 颜色字符转换到颜色字符串</h1>
      *
      * @param source 字符串源
      * @return 颜色字符串
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
+     * @see ColorTableDoc
      */
     public static String toColor(String source) {
 
@@ -71,6 +97,7 @@ public class StringUtil {
      * @param altColorChar 颜色字符
      * @return 颜色字符串
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
+     * @see ColorTableDoc
      */
     public static String toColor(char altColorChar, String source) {
 
@@ -80,13 +107,12 @@ public class StringUtil {
     }
 
     /**
-     * <h1>将字符串按 & 颜色字符转换到颜色字符串</h1>
-     *
-     * <img src="http://a2.qpic.cn/psb?/V146eXZS0CF2Hk/kvJ2xbLnUa7lHBXQI61bD05xx5DwHpyx.4C.hf2Nk7g!/b/dKwAAAAAAAAA&bo=vALxAbwC8QEDByI!&rf=viewer_4" />
+     * <h1>将字符串按 {@link #COLOR_CHAR} 颜色字符转换到颜色字符串</h1>
      *
      * @param source 字符串源
      * @return 颜色字符串
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
+     * @see ColorTableDoc
      */
     public static String[] toColor(String... source) {
 
@@ -100,6 +126,7 @@ public class StringUtil {
      * @param altColorChar 颜色字符
      * @return 颜色字符串
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
+     * @see ColorTableDoc
      */
     public static String[] toColor(char altColorChar, String... source) {
 
@@ -116,13 +143,12 @@ public class StringUtil {
     }
 
     /**
-     * <h1>将字符串按 & 颜色字符转换到颜色字符串</h1>
-     *
-     * <img src="http://a2.qpic.cn/psb?/V146eXZS0CF2Hk/kvJ2xbLnUa7lHBXQI61bD05xx5DwHpyx.4C.hf2Nk7g!/b/dKwAAAAAAAAA&bo=vALxAbwC8QEDByI!&rf=viewer_4" />
+     * <h1>将字符串按 {@link #COLOR_CHAR} 颜色字符转换到颜色字符串</h1>
      *
      * @param source 字符串源
      * @return 颜色字符串
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
+     * @see ColorTableDoc
      */
     public static List<String> toColor(Collection<? extends String> source) {
 
@@ -136,6 +162,7 @@ public class StringUtil {
      * @param altColorChar 颜色字符
      * @return 颜色字符串
      * @throws IllegalArgumentException 如果字符串源对象为 {@code null} 则抛出异常
+     * @see ColorTableDoc
      */
     public static List<String> toColor(char altColorChar, Collection<? extends String> source) {
 
@@ -304,5 +331,431 @@ public class StringUtil {
         }
         matcher.appendTail(buffer);
         return buffer.toString();
+    }
+
+    /**
+     * 获取指定对象是否为 {@code null}
+     *
+     * @param obj 对象
+     * @return 为 {@code null} 则返回 true
+     */
+    public static boolean isNull(Object obj) {
+
+        return obj == null;
+    }
+
+    /**
+     * 获取指定对象是否不为 {@code null}
+     *
+     * @param obj 对象
+     * @return 不为 {@code null} 则返回 true
+     */
+    public static boolean isNotNull(Object obj) {
+
+        return !isNull(obj);
+    }
+
+    /**
+     * 获取指定字符串是否为 {@code null | empty}
+     *
+     * @param str 字符串
+     * @return 为则返回 true
+     */
+    public static boolean isEmpty(String str) {
+
+        return isNull(str) || str.trim().isEmpty();
+    }
+
+    /**
+     * 获取指定对象数组是否为 {@code null | empty}
+     *
+     * @param objArray 对象数组
+     * @return 为则返回 true
+     */
+    public static boolean isEmpty(Object[] objArray) {
+
+        return isNull(objArray) || objArray.length == 0;
+    }
+
+    /**
+     * 获取指定集合对象是否为 {@code null | empty}
+     *
+     * @param collection 集合对象
+     * @return 为则返回 true
+     */
+    public static boolean isEmpty(Collection<?> collection) {
+
+        return isNull(collection) || collection.isEmpty();
+    }
+
+    /**
+     * 判断指定两个字符串对象是否完全相等
+     *
+     * @param str1 字符串 1
+     * @param str2 字符串 2
+     * @return 完全相等则返回 true
+     */
+    public static boolean isEquals(String str1, String str2) {
+
+        return (isEmpty(str1) && isEmpty(str2)) || (isNotNull(str1) && str1.equals(str2));
+    }
+
+    /**
+     * 判断指定两个字符串对象是否完全相等 (忽略大小写)
+     *
+     * @param str1 字符串 1
+     * @param str2 字符串 2
+     * @return 完全相等 (忽略大小写) 则返回 true
+     */
+    public static boolean isEqualsIgnoreCase(String str1, String str2) {
+
+        return (isEmpty(str1) && isEmpty(str2)) || (isNotNull(str1) && str1.equalsIgnoreCase(str2));
+    }
+
+    /**
+     * 判断指定字符串是否符合指定正则表达式匹配
+     *
+     * @param str 字符串
+     * @param regex 正则表达式匹配
+     * @return 匹配则返回 true
+     * @throws IllegalArgumentException 如果匹配的字符串对象为 {@code null} 则抛出异常
+     */
+    public static boolean isMatches(String str, String regex) {
+
+        return Validate.checkNotNull(str).matches(regex);
+    }
+
+    /**
+     * 获取指定字符串是否为整数
+     *
+     * @param str 字符串
+     * @return 是否为整数
+     */
+    public static boolean isInteger(String str) {
+
+        return isNotNull(str) && INTEGER_PATTERN.matcher(str).matches();
+    }
+
+    /**
+     * 获取指定字符串是否为双精度浮点数
+     *
+     * @param str 字符串
+     * @return 是否为双精度浮点数
+     */
+    public static boolean isDouble(String str) {
+
+        return isNotNull(str) && DOUBLE_PATTERN.matcher(str).matches();
+    }
+
+    /**
+     * 将指定字符串解析为整数
+     *
+     * @param str 字符串
+     * @return 整数, 异常返回 0
+     */
+    public static int parseInt(String str) {
+
+        return parseInt(str, 0);
+    }
+
+    /**
+     * 将指定字符串解析为整数
+     *
+     * @param str 字符串
+     * @param def 默认值
+     * @return 整数, 异常返回默认值
+     */
+    public static int parseInt(String str, int def) {
+
+        return parseInt((Object) str, def);
+    }
+
+    /**
+     * 将指定对象解析为整数
+     *
+     * @param obj 对象
+     * @return 整数, 异常返回 0
+     */
+    public static int parseInt(Object obj) {
+
+        return parseInt(obj, 0);
+    }
+
+    /**
+     * 将指定对象解析为整数
+     *
+     * @param obj 对象
+     * @param def 默认值
+     * @return 整数, 异常返回默认值
+     */
+    public static int parseInt(Object obj, int def) {
+
+        if(obj instanceof Number)
+            return ((Number) obj).intValue();
+
+        if(obj instanceof String) {
+
+            String str = obj.toString();
+
+            if(!isInteger(str))
+                return def;
+
+            try {
+                return Integer.parseInt(str);
+            } catch (Exception e) {
+            }
+        }
+        return def;
+    }
+
+    /**
+     * 将指定字符串解析为长整数
+     *
+     * @param str 字符串
+     * @return 长整数, 异常返回 0
+     */
+    public static long parseLong(String str) {
+
+        return parseLong(str, 0L);
+    }
+
+    /**
+     * 将指定字符串解析为长整数
+     *
+     * @param str 字符串
+     * @param def 默认值
+     * @return 长整数, 异常返回默认值
+     */
+    public static long parseLong(String str, long def) {
+
+        return parseLong((Object) str, def);
+    }
+
+    /**
+     * 将指定对象解析为长整数
+     *
+     * @param obj 对象
+     * @return 长整数, 异常返回 0
+     */
+    public static long parseLong(Object obj) {
+
+        return parseLong(obj, 0L);
+    }
+
+    /**
+     * 将指定对象解析为长整数
+     *
+     * @param obj 对象
+     * @param def 默认值
+     * @return 长整数, 异常返回默认值
+     */
+    public static long parseLong(Object obj, long def) {
+
+        if(obj instanceof Number)
+            return ((Number) obj).longValue();
+
+        if(obj instanceof String) {
+
+            try {
+                return Long.parseLong(obj.toString());
+            } catch (Exception e) {
+            }
+        }
+        return def;
+    }
+
+    /**
+     * 将指定字符串解析为单精度浮点数
+     *
+     * @param str 字符串
+     * @return 单精度浮点数, 异常返回 0
+     */
+    public static double parseFloat(String str) {
+
+        return parseFloat(str, 0f);
+    }
+
+    /**
+     * 将指定字符串解析为单精度浮点数
+     *
+     * @param str 字符串
+     * @param def 默认值
+     * @return 单精度浮点数, 异常返回默认值
+     */
+    public static double parseFloat(String str, float def) {
+
+        return parseFloat((Object) str, def);
+    }
+
+    /**
+     * 将指定对象解析为单精度浮点数
+     *
+     * @param obj 对象
+     * @return 单精度浮点数, 异常返回 0
+     */
+    public static double parseFloat(Object obj) {
+
+        return parseFloat(obj, 0f);
+    }
+
+    /**
+     * 将指定对象解析为单精度浮点数
+     *
+     * @param obj 对象
+     * @param def 默认值
+     * @return 单精度浮点数, 异常返回默认值
+     */
+    public static double parseFloat(Object obj, float def) {
+
+        if(obj instanceof Number)
+            return ((Number) obj).floatValue();
+
+        if(obj instanceof String) {
+
+            try {
+                return Float.parseFloat(obj.toString());
+            } catch (Exception e) {
+            }
+        }
+        return def;
+    }
+
+    /**
+     * 将指定字符串解析为双精度浮点数
+     *
+     * @param str 字符串
+     * @return 双精度浮点数, 异常返回 0
+     */
+    public static double parseDouble(String str) {
+
+        return parseDouble(str, 0d);
+    }
+
+    /**
+     * 将指定字符串解析为双精度浮点数
+     *
+     * @param str 字符串
+     * @param def 默认值
+     * @return 双精度浮点数, 异常返回默认值
+     */
+    public static double parseDouble(String str, double def) {
+
+        return parseDouble((Object) str, def);
+    }
+
+    /**
+     * 将指定对象解析为双精度浮点数
+     *
+     * @param obj 对象
+     * @return 双精度浮点数, 异常返回 0
+     */
+    public static double parseDouble(Object obj) {
+
+        return parseDouble(obj, 0d);
+    }
+
+    /**
+     * 将指定对象解析为双精度浮点数
+     *
+     * @param obj 对象
+     * @param def 默认值
+     * @return 双精度浮点数, 异常返回默认值
+     */
+    public static double parseDouble(Object obj, double def) {
+
+        if(obj instanceof Number)
+            return ((Number) obj).doubleValue();
+
+        if(obj instanceof String) {
+
+            String str = obj.toString();
+
+            if(!isDouble(str))
+                return def;
+
+            try {
+                return Double.parseDouble(str);
+            } catch (Exception e) {
+            }
+        }
+        return def;
+    }
+
+    /**
+     * 将指定字符串数组按 {@link #DEF_MERGE_CHAR} 合并为单个字符串对象
+     *
+     * @param strArray 字符串数组
+     * @return 合并后的字符串
+     */
+    public static String arrayMerge(String[] strArray) {
+
+        return arrayMerge(strArray, DEF_MERGE_CHAR);
+    }
+
+    /**
+     * 将指定字符串数组按指定字符合并为单个字符串对象
+     *
+     * @param strArray 字符串数组
+     * @param mergeChar 合并字符
+     * @return 合并后的字符串
+     */
+    public static String arrayMerge(String[] strArray, char mergeChar) {
+
+        if(isEmpty(strArray))
+            return null;
+
+        StringBuilder builder = new StringBuilder();
+
+        for(String str : strArray)
+            builder.append(str).append(mergeChar);
+
+        builder.deleteCharAt(builder.length() - 1); // delete last merge char
+        return builder.toString();
+    }
+
+    /**
+     * 将指定字符串集合转换到字符串数组对象
+     *
+     * @param strCollection 字符串集合
+     * @return 字符串数组
+     */
+    public static String[] collectionToArray(Collection<? extends String> strCollection) {
+
+        return collectionToArray(strCollection, strCollection.size());
+    }
+
+    /**
+     * 将指定字符串集合转换到指定大小长度的字符串数组对象
+     *
+     * @param strCollection 字符串集合
+     * @param size 大小
+     * @return 字符串数组
+     */
+    public static String[] collectionToArray(Collection<? extends String> strCollection, int size) {
+
+        return !isNull(strCollection) ? strCollection.toArray(new String[size]) : new String[0];
+    }
+
+    /**
+     * 将指定字符串集合按 {@link #DEF_MERGE_CHAR} 合并为单个字符串对象
+     *
+     * @param strCollection 字符串集合
+     * @return 合并后的字符串
+     */
+    public static String collectionMerge(Collection<? extends String> strCollection) {
+
+        return collectionMerge(strCollection, DEF_MERGE_CHAR);
+    }
+
+    /**
+     * 将指定字符串集合按指定字符合并为单个字符串对象
+     *
+     * @param strCollection 字符串集合
+     * @param mergeChar 合并字符
+     * @return 合并后的字符串
+     */
+    public static String collectionMerge(Collection<? extends String> strCollection, char mergeChar) {
+
+        return arrayMerge(collectionToArray(strCollection), mergeChar);
     }
 }

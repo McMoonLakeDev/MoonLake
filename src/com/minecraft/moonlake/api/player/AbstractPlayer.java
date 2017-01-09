@@ -18,6 +18,7 @@
  
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.api.player.depend.EconomyPlayerData;
 import com.minecraft.moonlake.api.player.depend.EconomyVaultPlayerResponse;
@@ -128,6 +129,12 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    public String getLanguage() {
+
+        return PlayerManager.getLanguage(getBukkitPlayer());
+    }
+
+    @Override
     public String getDisplayName() {
 
         return getBukkitPlayer().getDisplayName();
@@ -199,7 +206,8 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public double getMaxHealth() {
 
-        return getBukkitPlayer().getMaxHealth();
+        //return getBukkitPlayer().getMaxHealth();
+        return getAttribute(AttributeType.MAX_HEALTH).getValue();
     }
 
     @Override
@@ -245,7 +253,8 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void setMaxHealth(double maxHealth) {
 
-        getBukkitPlayer().setMaxHealth(maxHealth);
+        //getBukkitPlayer().setMaxHealth(maxHealth);
+        getAttribute(AttributeType.MAX_HEALTH).setValue(maxHealth);
     }
 
     @Override
@@ -599,14 +608,12 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public Map<Integer, ItemStack> addItemStack(ItemStack... itemStacks) {
 
         return getInventory().addItem(itemStacks);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public Map<Integer, ItemStack> removeItemStack(ItemStack... itemStacks) {
 
         return getInventory().removeItem(itemStacks);
@@ -877,7 +884,8 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void resetMaxHealth() {
 
-        getBukkitPlayer().resetMaxHealth();
+        //getBukkitPlayer().resetMaxHealth();
+        getAttribute(AttributeType.MAX_HEALTH).setValue(AttributeType.MAX_HEALTH.getDef());
     }
 
     @Override
@@ -932,8 +940,6 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
     @Override
     public Block getTargetBlock(Set<Material> transparent, int maxDistance) {
-
-        Validate.notNull(transparent, "The transparent collection object is null.");
 
         return getBukkitPlayer().getTargetBlock(transparent, maxDistance);
     }
@@ -1096,7 +1102,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public int compareTo(MoonLakePlayer target) {
 
-        return getName().compareTo(target == null ? null : target.getName());
+        return getName().compareTo(target.getName());
     }
 
     @Override
@@ -1112,7 +1118,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
                 MoonLakePlayer target = (MoonLakePlayer)object;
 
-                return getName().equals(target.getName());
+                return getBukkitPlayer().equals(target.getBukkitPlayer());
             }
         }
         return false;

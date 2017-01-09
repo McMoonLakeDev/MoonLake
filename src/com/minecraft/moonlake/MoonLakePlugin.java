@@ -20,6 +20,7 @@ package com.minecraft.moonlake;
 
 import com.minecraft.moonlake.api.MoonLake;
 import com.minecraft.moonlake.api.packet.listener.PacketListenerFactory;
+import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.logger.MLogger;
 import com.minecraft.moonlake.logger.MLoggerWrapped;
@@ -33,7 +34,7 @@ import java.util.Set;
  * <hr />
  * <div>
  *     <h1>Minecraft MoonLake Core API Plugin</h1>
- *     <p>By Month_Light Ver: 1.8-b4.1</p>
+ *     <p>By Month_Light Ver: 1.8-final</p>
  *     <p>Website: <a href="http://www.mcyszh.com" target="_blank" style="text-decoration: none;">MoonLake Website</a></p>
  *     <p>QQ Group: 377607025 -> <a href="http://jq.qq.com/?_wv=1027&k=2IfPFrH" target="_blank">Jump</a></p>
  *     <hr />
@@ -68,7 +69,7 @@ import java.util.Set;
  *     <h1>修改操作请您遵守 <a href="https://github.com/u2g/MoonLake/blob/master/LICENSE" target="_blank">GPLv3</a> 协议，您必须公开修改过的所有代码！</h1>
  * </div>
  *
- * @version 1.8-b4.1
+ * @version 1.8-final
  * @author Month_Light
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
@@ -99,20 +100,28 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         this.configuration = new MoonLakePluginConfig(this);
         this.configuration.reload();
 
-        if(configuration.isPacketChannelListener()) {
+        // load class
+        this.loadClass();
 
-            try {
+        this.getMLogger().info("月色之湖核心 API 插件 v" + getPluginVersion() + " 成功加载.");
+    }
 
+    private void loadClass() {
+        // load class
+        try {
+            if(getConfiguration().isPacketChannelListener()) {
+                // load PacketListenerFactory class
                 Class.forName(PacketListenerFactory.class.getName());
 
                 this.getMLogger().info("月色之湖数据包通道监听器(PCL)成功加载.");
             }
-            catch (Exception e) {
-
-                throw new MoonLakeException("The initialize packet channel listener exception.", e);
-            }
+            // load PlayerLibraryFactorys class to register listener
+            Class.forName(PlayerLibraryFactorys.class.getName());
         }
-        this.getMLogger().info("月色之湖核心 API 插件 v" + getPluginVersion() + " 成功加载.");
+        catch (Exception e) {
+
+            throw new MoonLakeException("The load moonlake library class exception.", e);
+        }
     }
 
     @Deprecated

@@ -92,10 +92,12 @@ class CommandAnnotationExpression extends PluginAnnotationAbstract implements Co
 
                 for(final Method method1 : commandCompletionMethods) {
 
-                    if(method1.getName().equals(method.getName())) {
+                    CommandCompletion commandCompletion = method1.getAnnotation(CommandCompletion.class);
+
+                    if(method1.getName().equals(method.getName()) || commandCompletion.name().equals(commandAnnotation.name())) {
 
                         commandCompletionMethod = method1;
-                        commandCompletionAnnotation = method1.getAnnotation(CommandCompletion.class);
+                        commandCompletionAnnotation = commandCompletion;
                     }
                 }
                 CommandAnnotated commandAnnotated = new CommandAnnotatedExpression(
