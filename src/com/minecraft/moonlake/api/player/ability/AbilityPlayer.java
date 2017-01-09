@@ -609,7 +609,6 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer, CommandSender {
      * @param transparent 无视的方块类型
      * @param maxDistance 最大距离
      * @return 目标方块
-     * @throws IllegalArgumentException 如果无视的方块类型集合对象为 {@code null} 则抛出异常
      */
     Block getTargetBlock(Set<Material> transparent, int maxDistance);
 

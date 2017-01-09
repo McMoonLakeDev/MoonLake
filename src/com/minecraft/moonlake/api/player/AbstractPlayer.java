@@ -18,6 +18,7 @@
  
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.api.player.depend.EconomyPlayerData;
 import com.minecraft.moonlake.api.player.depend.EconomyVaultPlayerResponse;
@@ -205,7 +206,8 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public double getMaxHealth() {
 
-        return getBukkitPlayer().getMaxHealth(); // TODO
+        //return getBukkitPlayer().getMaxHealth();
+        return getAttribute(AttributeType.MAX_HEALTH).getValue();
     }
 
     @Override
@@ -251,7 +253,8 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void setMaxHealth(double maxHealth) {
 
-        getBukkitPlayer().setMaxHealth(maxHealth); // TODO
+        //getBukkitPlayer().setMaxHealth(maxHealth);
+        getAttribute(AttributeType.MAX_HEALTH).setValue(maxHealth);
     }
 
     @Override
@@ -881,7 +884,8 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void resetMaxHealth() {
 
-        getBukkitPlayer().resetMaxHealth(); // TODO
+        //getBukkitPlayer().resetMaxHealth();
+        getAttribute(AttributeType.MAX_HEALTH).setValue(AttributeType.MAX_HEALTH.getDef());
     }
 
     @Override
@@ -936,8 +940,6 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
     @Override
     public Block getTargetBlock(Set<Material> transparent, int maxDistance) {
-
-        Validate.notNull(transparent, "The transparent collection object is null.");
 
         return getBukkitPlayer().getTargetBlock(transparent, maxDistance);
     }
