@@ -26,6 +26,7 @@ import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -200,9 +201,6 @@ public class PlayerManager extends MoonLakeManager {
 
         Validate.notNull(players, "The player object is null.");
 
-        int index = 0;
-        MoonLakePlayer[] adapter = new MoonLakePlayer[players.length];
-
         //
         // 验证类是否为 null 则抛出非法 Bukkit 版本异常
 
@@ -212,16 +210,21 @@ public class PlayerManager extends MoonLakeManager {
         }
         ///
 
-        for(final Player player : players) {
+        int index = 0;
+        MoonLakePlayer[] adapter = new MoonLakePlayer[players.length];
 
-            try {
+        try {
 
-                adapter[index++] = CLASS_SIMPLEMOONLAKEPLAYER.getConstructor(Player.class).newInstance(player);
+            Constructor<? extends SimpleMoonLakePlayer> constructor = CLASS_SIMPLEMOONLAKEPLAYER.getConstructor(Player.class);
+
+            for(final Player player : players) {
+
+                adapter[index++] = constructor.newInstance(player);
             }
-            catch (Exception e) {
+        }
+        catch (Exception e) {
 
-                throw new MoonLakeException("The adapter player to moonlake player exception.", e);
-            }
+            throw new MoonLakeException("The adapter player to moonlake player exception.", e);
         }
         return adapter;
     }
