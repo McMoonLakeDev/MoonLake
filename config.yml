@@ -1,10 +1,10 @@
 ################################
 #   MoonLake Core API Plugin   #
-#  By Month_Light Ver: 1.8-final  #
+#  By Month_Light Ver: 1.9-alpha  #
 ################################
 
 # 插件版本号: 此项请勿修改!
-version: '1.8-final'
+version: '1.9-alpha'
 
 # 数据包通道监听器
 # 此项可设置是否开启这个功能

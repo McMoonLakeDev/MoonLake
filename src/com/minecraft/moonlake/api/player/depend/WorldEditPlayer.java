@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The MoonLake Authors
+ * Copyright (C) 2017 The MoonLake Authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,16 +18,25 @@
 
 package com.minecraft.moonlake.api.player.depend;
 
+import com.minecraft.moonlake.exception.CannotDependException;
+
+import javax.annotation.Nullable;
+
 /**
- * <h1>DependPlayer</h1>
- * 依赖玩家接口类（详细doc待补充...）
+ * <h1>WorldEditPlayer</h1>
+ * 创世神玩家接口 # 依赖 <a href="https://github.com/sk89q/worldedit" target="_blank">WorldEdit</a> 插件
  *
  * @version 1.0
  * @author Month_Light
- * @see EconomyPlayer
- * @see EconomyVaultPlayer
- * @see PermissionsExPlayer
- * @see WorldEditPlayer
  */
-public interface DependPlayer extends EconomyPlayer, EconomyVaultPlayer, PermissionsExPlayer, WorldEditPlayer {
+public interface WorldEditPlayer {
+
+    /**
+     * 获取此玩家的创世神选择区域
+     *
+     * @return 创世神选择区域
+     * @throws CannotDependException 如果无法加载依赖插件则抛出异常
+     */
+    @Nullable
+    WorldEditSelection getWorldEditSelection() throws CannotDependException;
 }
