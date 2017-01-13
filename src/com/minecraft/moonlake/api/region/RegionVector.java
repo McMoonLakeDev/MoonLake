@@ -16,11 +16,10 @@
  */
 
 
-package com.minecraft.moonlake.api.player.depend;
+package com.minecraft.moonlake.api.region;
 
 import com.minecraft.moonlake.api.VectorConvertible;
-import com.minecraft.moonlake.api.region.RegionBlockVector;
-import com.minecraft.moonlake.api.region.RegionVector;
+import com.minecraft.moonlake.api.player.depend.WorldEditVector;
 import com.minecraft.moonlake.util.StringUtil;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -29,48 +28,48 @@ import org.bukkit.util.Vector;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class WorldEditVector implements VectorConvertible, ConfigurationSerializable, Comparable<WorldEditVector> {
+public class RegionVector implements VectorConvertible,  ConfigurationSerializable, Comparable<RegionVector> {
 
-    public final static WorldEditVector ZERO = new WorldEditVector(0d, 0d, 0d);
+    public final static RegionVector ZERO = new RegionVector(0d, 0d, 0d);
 
     static {
 
-        ConfigurationSerialization.registerClass(WorldEditVector.class);
+        ConfigurationSerialization.registerClass(RegionVector.class);
     }
 
     protected final double x;
     protected final double y;
     protected final double z;
 
-    public WorldEditVector(double x, double y, double z) {
+    public RegionVector(double x, double y, double z) {
 
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public WorldEditVector(float x, float y, float z) {
+    public RegionVector(float x, float y, float z) {
 
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public WorldEditVector(int x, int y, int z) {
+    public RegionVector(int x, int y, int z) {
 
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public WorldEditVector(WorldEditVector other) {
+    public RegionVector(RegionVector other) {
 
         this.x = other.x;
         this.y = other.y;
         this.z = other.z;
     }
 
-    public WorldEditVector() {
+    public RegionVector() {
 
         this.x = 0d;
         this.y = 0d;
@@ -107,124 +106,124 @@ public class WorldEditVector implements VectorConvertible, ConfigurationSerializ
         return (int) Math.round(z);
     }
 
-    public WorldEditVector setX(double x) {
+    public RegionVector setX(double x) {
 
-        return new WorldEditVector(x, y, z);
+        return new RegionVector(x, y, z);
     }
 
-    public WorldEditVector setY(double y) {
+    public RegionVector setY(double y) {
 
-        return new WorldEditVector(x, y, z);
+        return new RegionVector(x, y, z);
     }
 
-    public WorldEditVector setZ(double z) {
+    public RegionVector setZ(double z) {
 
-        return new WorldEditVector(x, y, z);
+        return new RegionVector(x, y, z);
     }
 
-    public WorldEditVector setX(int x) {
+    public RegionVector setX(int x) {
 
-        return new WorldEditVector(x, y, z);
+        return new RegionVector(x, y, z);
     }
 
-    public WorldEditVector setY(int y) {
+    public RegionVector setY(int y) {
 
-        return new WorldEditVector(x, y, z);
+        return new RegionVector(x, y, z);
     }
 
-    public WorldEditVector setZ(int z) {
+    public RegionVector setZ(int z) {
 
-        return new WorldEditVector(x, y, z);
+        return new RegionVector(x, y, z);
     }
 
-    public WorldEditVector add(WorldEditVector vector) {
+    public RegionVector add(RegionVector vector) {
 
-        return new WorldEditVector(x + vector.x, y + vector.y, z + vector.z);
+        return new RegionVector(x + vector.x, y + vector.y, z + vector.z);
     }
 
-    public WorldEditVector add(double x, double y, double z) {
+    public RegionVector add(double x, double y, double z) {
 
-        return new WorldEditVector(this.x + x, this.y + y, this.z + z);
+        return new RegionVector(this.x + x, this.y + y, this.z + z);
     }
 
-    public WorldEditVector add(int x, int y, int z) {
+    public RegionVector add(int x, int y, int z) {
 
-        return new WorldEditVector(this.x + x, this.y + y, this.z + z);
+        return new RegionVector(this.x + x, this.y + y, this.z + z);
     }
 
-    public WorldEditVector subtract(WorldEditVector vector) {
+    public RegionVector subtract(RegionVector vector) {
 
-        return new WorldEditVector(x - vector.x, y - vector.y, z - vector.z);
+        return new RegionVector(x - vector.x, y - vector.y, z - vector.z);
     }
 
-    public WorldEditVector subtract(double x, double y, double z) {
+    public RegionVector subtract(double x, double y, double z) {
 
-        return new WorldEditVector(this.x - x, this.y - y, this.z - z);
+        return new RegionVector(this.x - x, this.y - y, this.z - z);
     }
 
-    public WorldEditVector subtract(int x, int y, int z) {
+    public RegionVector subtract(int x, int y, int z) {
 
-        return new WorldEditVector(this.x - x, this.y - y, this.z - z);
+        return new RegionVector(this.x - x, this.y - y, this.z - z);
     }
 
-    public WorldEditVector multiply(WorldEditVector vector) {
+    public RegionVector multiply(RegionVector vector) {
 
-        return new WorldEditVector(x * vector.x, y * vector.y, z * vector.z);
+        return new RegionVector(x * vector.x, y * vector.y, z * vector.z);
     }
 
-    public WorldEditVector multiply(double x, double y, double z) {
+    public RegionVector multiply(double x, double y, double z) {
 
-        return new WorldEditVector(this.x * x, this.y * y, this.z * z);
+        return new RegionVector(this.x * x, this.y * y, this.z * z);
     }
 
-    public WorldEditVector multiply(int x, int y, int z) {
+    public RegionVector multiply(int x, int y, int z) {
 
-        return new WorldEditVector(this.x * x, this.y * y, this.z * z);
+        return new RegionVector(this.x * x, this.y * y, this.z * z);
     }
 
-    public WorldEditVector multiply(double n) {
+    public RegionVector multiply(double n) {
 
-        return new WorldEditVector(this.x * n, this.y * n, this.z * n);
+        return new RegionVector(this.x * n, this.y * n, this.z * n);
     }
 
-    public WorldEditVector multiply(float n) {
+    public RegionVector multiply(float n) {
 
-        return new WorldEditVector(this.x * n, this.y * n, this.z * n);
+        return new RegionVector(this.x * n, this.y * n, this.z * n);
     }
 
-    public WorldEditVector multiply(int n) {
+    public RegionVector multiply(int n) {
 
-        return new WorldEditVector(this.x * n, this.y * n, this.z * n);
+        return new RegionVector(this.x * n, this.y * n, this.z * n);
     }
 
-    public WorldEditVector divide(WorldEditVector vector) {
+    public RegionVector divide(RegionVector vector) {
 
-        return new WorldEditVector(x / vector.x, y / vector.y, z / vector.z);
+        return new RegionVector(x / vector.x, y / vector.y, z / vector.z);
     }
 
-    public WorldEditVector divide(double x, double y, double z) {
+    public RegionVector divide(double x, double y, double z) {
 
-        return new WorldEditVector(this.x / x, this.y / y, this.z / z);
+        return new RegionVector(this.x / x, this.y / y, this.z / z);
     }
 
-    public WorldEditVector divide(int x, int y, int z) {
+    public RegionVector divide(int x, int y, int z) {
 
-        return new WorldEditVector(this.x / x, this.y / y, this.z / z);
+        return new RegionVector(this.x / x, this.y / y, this.z / z);
     }
 
-    public WorldEditVector divide(double n) {
+    public RegionVector divide(double n) {
 
-        return new WorldEditVector(this.x / n, this.y / n, this.z / n);
+        return new RegionVector(this.x / n, this.y / n, this.z / n);
     }
 
-    public WorldEditVector divide(float n) {
+    public RegionVector divide(float n) {
 
-        return new WorldEditVector(this.x / n, this.y / n, this.z / n);
+        return new RegionVector(this.x / n, this.y / n, this.z / n);
     }
 
-    public WorldEditVector divide(int n) {
+    public RegionVector divide(int n) {
 
-        return new WorldEditVector(this.x / n, this.y / n, this.z / n);
+        return new RegionVector(this.x / n, this.y / n, this.z / n);
     }
 
     public double length() {
@@ -237,19 +236,24 @@ public class WorldEditVector implements VectorConvertible, ConfigurationSerializ
         return x * x + y * y + z * z;
     }
 
-    public double distance(WorldEditVector vector) {
+    public double distance(RegionVector vector) {
 
         return Math.sqrt(distanceSq(vector));
     }
 
-    public double distanceSq(WorldEditVector vector) {
+    public double distanceSq(RegionVector vector) {
 
         return Math.pow(x - vector.x, 2d) + Math.pow(y - vector.y, 2d) + Math.pow(z - vector.z, 2d);
     }
 
-    public WorldEditVector normalize() {
+    public RegionVector normalize() {
 
         return divide(length());
+    }
+
+    public RegionVector2D toRegionVector2D() {
+
+        return new RegionVector2D(x, z);
     }
 
     @Override
@@ -257,7 +261,7 @@ public class WorldEditVector implements VectorConvertible, ConfigurationSerializ
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        WorldEditVector that = (WorldEditVector) o;
+        RegionVector that = (RegionVector) o;
 
         if (Double.compare(that.x, x) != 0) return false;
         if (Double.compare(that.y, y) != 0) return false;
@@ -279,7 +283,7 @@ public class WorldEditVector implements VectorConvertible, ConfigurationSerializ
 
     @Override
     public String toString() {
-        return "WorldEditVector{" +
+        return "RegionVector{" +
                 "x=" + x +
                 ", y=" + y +
                 ", z=" + z +
@@ -287,7 +291,7 @@ public class WorldEditVector implements VectorConvertible, ConfigurationSerializ
     }
 
     @Override
-    public int compareTo(WorldEditVector o) {
+    public int compareTo(RegionVector o) {
 
         if(x != o.x)
             return Double.compare(x, o.x);
@@ -308,12 +312,12 @@ public class WorldEditVector implements VectorConvertible, ConfigurationSerializ
         return result;
     }
 
-    public static WorldEditVector deserialize(Map<String, Object> args) {
+    public static RegionVector deserialize(Map<String, Object> args) {
 
         double x = StringUtil.parseDouble(args.get("x"));
         double y = StringUtil.parseDouble(args.get("y"));
         double z = StringUtil.parseDouble(args.get("z"));
-        return new WorldEditVector(x, y, z);
+        return new RegionVector(x, y, z);
     }
 
     @Override
@@ -325,18 +329,18 @@ public class WorldEditVector implements VectorConvertible, ConfigurationSerializ
     @Override
     public WorldEditVector asWorldEditVector() {
 
-        return new WorldEditVector(this);
+        return new WorldEditVector(x, y, z);
     }
 
     @Override
     public RegionVector asRegionVector() {
 
-        return new RegionVector(x, y, z);
+        return new RegionVector(this);
     }
 
     @Override
     public RegionBlockVector asRegionBlockVector() {
 
-        return new RegionBlockVector(x, y, z);
+        return new RegionBlockVector(this);
     }
 }
