@@ -18,12 +18,15 @@
 
 package com.minecraft.moonlake.api.region;
 
+import com.minecraft.moonlake.api.region.iterator.RegionIterator;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+
+import java.util.Iterator;
 
 public abstract class AbstractRegion implements Region {
 
@@ -94,6 +97,12 @@ public abstract class AbstractRegion implements Region {
     public boolean contains(Block block) {
 
         return contains(Validate.checkNotNull(block).getLocation());
+    }
+
+    @Override
+    public Iterator<RegionBlockVector> iterator() {
+
+        return new RegionIterator(this);
     }
 
     @Override

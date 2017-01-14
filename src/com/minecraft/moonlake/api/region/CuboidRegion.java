@@ -18,6 +18,7 @@
 
 package com.minecraft.moonlake.api.region;
 
+import com.google.common.collect.Iterators;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -171,6 +172,85 @@ public class CuboidRegion extends AbstractRegion implements FlatRegion {
     public CuboidRegion clone() {
 
         return (CuboidRegion) super.clone();
+    }
+
+    public Iterable<RegionVector2D> asFlatRegion() {
+
+        return new Iterable<RegionVector2D>() {
+
+            @Override
+            public Iterator<RegionVector2D> iterator() {
+
+                return new Iterator<RegionVector2D>() {
+
+                    private RegionVector min = getMinimumPoint();
+                    private RegionVector max = getMinimumPoint();
+                    private int nextX = min.getBlockX();
+                    private int nextZ = min.getBlockZ();
+
+                    @Override
+                    public boolean hasNext() {
+
+                        return nextX != 0x7fffffff;
+                    }
+
+                    @Override
+                    public RegionVector2D next() {
+
+                        if(!hasNext())
+                            throw new NoSuchElementException();
+
+                        RegionVector2D answer = new RegionVector2D(nextX, nextZ);
+
+                        if(++nextX > max.getBlockX()) {
+
+                            nextX = min.getBlockX();
+
+                            if(++nextZ > max.getBlockZ()) {
+
+                                nextX = 0x7fffffff;
+                            }
+                        }
+                        return answer;
+                    }
+
+                    @Override
+                    public void remove() {
+
+                        throw new UnsupportedOperationException();
+                    }
+                };
+            }
+        };
+    }
+
+    public Iterable<RegionBlockVector> getFaces() {
+
+        return new Iterable<RegionBlockVector>() {
+
+            private RegionVector min = getMinimumPoint();
+            private RegionVector max = getMaximumPoint();
+            private Region[] faceRegions = {
+
+                    new CuboidRegion(world, pos1.setX(min.getX()), pos2.setX(min.getX())),
+                    new CuboidRegion(world, pos1.setX(max.getX()), pos2.setX(max.getX())),
+                    new CuboidRegion(world, pos1.setZ(min.getZ()), pos2.setZ(min.getZ())),
+                    new CuboidRegion(world, pos1.setZ(max.getZ()), pos2.setZ(max.getZ())),
+                    new CuboidRegion(world, pos1.setY(min.getY()), pos2.setY(min.getY())),
+                    new CuboidRegion(world, pos1.setY(max.getY()), pos2.setY(max.getY()))
+            };
+
+            @Override
+            public Iterator<RegionBlockVector> iterator() {
+
+                Iterator<RegionBlockVector>[] iterators = new Iterator[faceRegions.length];
+
+                for(int i = 0; i < faceRegions.length; i++)
+                    iterators[i] = faceRegions[i].iterator();
+
+                return Iterators.concat(iterators);
+            }
+        };
     }
 
     @Override

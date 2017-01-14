@@ -23,4 +23,6 @@ public interface FlatRegion extends Region {
     int getMinimumY();
 
     int getMaximumY();
+
+    Iterable<RegionVector2D> asFlatRegion();
 }
