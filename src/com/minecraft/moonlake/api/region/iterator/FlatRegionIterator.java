@@ -26,6 +26,13 @@ import com.minecraft.moonlake.validate.Validate;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * <h1>FlatRegionIterator</h1>
+ * 平面区域矢量 2D 迭代器
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class FlatRegionIterator implements Iterator<RegionVector2D> {
 
     private Region region;
@@ -36,6 +43,12 @@ public class FlatRegionIterator implements Iterator<RegionVector2D> {
     private int maxX;
     private int maxZ;
 
+    /**
+     * 平面区域矢量 2D 迭代器构造函数
+     *
+     * @param region 区域对象
+     * @throws IllegalArgumentException 如果区域对象为 {@code null} 则抛出异常
+     */
     public FlatRegionIterator(Region region) {
 
         this.region = Validate.checkNotNull(region);

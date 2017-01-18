@@ -20,7 +20,6 @@ package com.minecraft.moonlake.api.region;
 
 import com.minecraft.moonlake.api.region.iterator.RegionIterator;
 import com.minecraft.moonlake.exception.MoonLakeException;
-import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -28,10 +27,25 @@ import org.bukkit.entity.Entity;
 
 import java.util.Iterator;
 
+/**
+ * <h1>AbstractRegion</h1>
+ * 区域抽象实现类
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see Region
+ * @see CuboidRegion
+ * @see CylinderRegion
+ */
 public abstract class AbstractRegion implements Region {
 
     protected final World world;
 
+    /**
+     * 区域抽象实现类构造函数
+     *
+     * @param world 世界
+     */
     public AbstractRegion(World world) {
 
         this.world = world;
@@ -90,13 +104,13 @@ public abstract class AbstractRegion implements Region {
     @Override
     public boolean contains(Entity entity) {
 
-        return contains(Validate.checkNotNull(entity).getLocation());
+        return entity != null && contains(entity.getLocation());
     }
 
     @Override
     public boolean contains(Block block) {
 
-        return contains(Validate.checkNotNull(block).getLocation());
+        return block != null && contains(block.getLocation());
     }
 
     @Override

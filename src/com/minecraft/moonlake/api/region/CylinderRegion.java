@@ -21,6 +21,7 @@ package com.minecraft.moonlake.api.region;
 import com.minecraft.moonlake.api.region.iterator.FlatRegion3DIterator;
 import com.minecraft.moonlake.api.region.iterator.FlatRegionIterator;
 import com.minecraft.moonlake.util.StringUtil;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -29,6 +30,15 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * <h1>CylinderRegion</h1>
+ * 圆柱区域（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see Region
+ * @see FlatRegion
+ */
 public class CylinderRegion extends AbstractRegion implements FlatRegion {
 
     static {
@@ -41,6 +51,15 @@ public class CylinderRegion extends AbstractRegion implements FlatRegion {
     private int minY = 0, maxY = 0;
     private boolean hasY = false;
 
+    /**
+     * 圆柱区域构造函数
+     *
+     * @param world 世界
+     * @param center 中心点
+     * @param radius 半径
+     * @param minY 最小 Y
+     * @param maxY 最大 Y
+     */
     public CylinderRegion(World world, RegionVector2D center, RegionVector2D radius, int minY, int maxY) {
 
         super(world);
@@ -52,11 +71,27 @@ public class CylinderRegion extends AbstractRegion implements FlatRegion {
         this.hasY = true;
     }
 
+    /**
+     * 圆柱区域构造函数
+     *
+     * @param world 世界
+     * @param center 中心点
+     * @param radius 半径
+     */
     public CylinderRegion(World world, RegionVector2D center, RegionVector2D radius) {
 
         this(world, center, radius, 0, 0);
     }
 
+    /**
+     * 圆柱区域构造函数
+     *
+     * @param world 世界
+     * @param center 中心点
+     * @param radius 半径
+     * @param minY 最小 Y
+     * @param maxY 最大 Y
+     */
     public CylinderRegion(World world, RegionVector center, RegionVector2D radius, int minY, int maxY) {
 
         super(world);
@@ -68,29 +103,56 @@ public class CylinderRegion extends AbstractRegion implements FlatRegion {
         this.hasY = true;
     }
 
+    /**
+     * 圆柱区域构造函数
+     *
+     * @param world 世界
+     * @param center 中心点
+     * @param radius 半径
+     */
     public CylinderRegion(World world, RegionVector center, RegionVector2D radius) {
 
         this(world, center, radius, 0, 0);
     }
 
+    /**
+     * 获取此圆柱区域的最小 Y
+     *
+     * @return 最小 Y
+     */
     @Override
     public int getMinimumY() {
 
         return minY;
     }
 
+    /**
+     * 获取此圆柱区域的最大 Y
+     *
+     * @return 最大 Y
+     */
     @Override
     public int getMaximumY() {
 
         return maxY;
     }
 
+    /**
+     * 设置此圆柱区域的最小 Y
+     *
+     * @param minY 最小 Y
+     */
     public void setMinimumY(int minY) {
 
         this.minY = minY;
         this.hasY = true;
     }
 
+    /**
+     * 设置此圆柱区域的最大 Y
+     *
+     * @param maxY
+     */
     public void setMaximumY(int maxY) {
 
         this.maxY = maxY;
@@ -103,21 +165,48 @@ public class CylinderRegion extends AbstractRegion implements FlatRegion {
         return center.toRegionVector((maxY + minY) / 2);
     }
 
+    /**
+     * 设置此圆柱区域的中心点
+     *
+     * @param center 中心点
+     * @throws IllegalArgumentException 如果中心点对象为 {@code null} 则抛出异常
+     */
     public void setCenter(RegionVector2D center) {
+
+        Validate.notNull(center, "The center vector object is null.");
 
         this.center = center;
     }
 
+    /**
+     * 获取此圆柱区域的半径矢量 2D
+     *
+     * @return 半径矢量 2D
+     */
     public RegionVector2D getRadius() {
 
         return radius.subtract(0.5d, 0.5d);
     }
 
+    /**
+     * 设置此圆柱区域的半径
+     *
+     * @param radius 半径矢量 2D
+     * @throws IllegalArgumentException 如果半径矢量2D对象为 {@code null} 则抛出异常
+     */
     public void setRadius(RegionVector2D radius) {
+
+        Validate.notNull(radius, "The radius vector object is null.");
 
         this.radius = radius.add(0.5d, 0.5d);
     }
 
+    /**
+     * 设置此圆柱区域的 Y
+     *
+     * @param y Y
+     * @return 是否成功
+     */
     public boolean setY(int y) {
 
         if(!hasY) {

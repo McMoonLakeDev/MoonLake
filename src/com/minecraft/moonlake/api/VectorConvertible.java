@@ -23,13 +23,40 @@ import com.minecraft.moonlake.api.region.RegionBlockVector;
 import com.minecraft.moonlake.api.region.RegionVector;
 import org.bukkit.util.Vector;
 
+/**
+ * <h1>VectorConvertible</h1>
+ * 矢量可转换接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface VectorConvertible {
 
+    /**
+     * 转换为 Bukkit 的矢量对象
+     *
+     * @return Vector
+     */
     Vector asBukkitVector();
 
+    /**
+     * 转换为 WorldEdit 的矢量对象
+     *
+     * @return WorldEditVector
+     */
     WorldEditVector asWorldEditVector();
 
+    /**
+     * 转换为区域矢量对象
+     *
+     * @return RegionVector
+     */
     RegionVector asRegionVector();
 
+    /**
+     * 转换为区域方块矢量对象
+     *
+     * @return RegionBlockVector
+     */
     RegionBlockVector asRegionBlockVector();
 }

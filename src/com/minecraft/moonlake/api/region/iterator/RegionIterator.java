@@ -26,6 +26,13 @@ import com.minecraft.moonlake.validate.Validate;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * <h1>RegionIterator</h1>
+ * 区域方块矢量迭代器
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class RegionIterator implements Iterator<RegionBlockVector> {
 
     private final Region region;
@@ -37,6 +44,12 @@ public class RegionIterator implements Iterator<RegionBlockVector> {
     private int nextY;
     private int nextZ;
 
+    /**
+     * 区域方块矢量迭代器构造函数
+     *
+     * @param region 区域
+     * @throws IllegalArgumentException 如果区域对象为 {@code null} 则抛出异常
+     */
     public RegionIterator(Region region) {
 
         this.region = Validate.checkNotNull(region);

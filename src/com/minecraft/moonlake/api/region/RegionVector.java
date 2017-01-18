@@ -21,6 +21,7 @@ package com.minecraft.moonlake.api.region;
 import com.minecraft.moonlake.api.VectorConvertible;
 import com.minecraft.moonlake.api.player.depend.WorldEditVector;
 import com.minecraft.moonlake.util.StringUtil;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.util.Vector;
@@ -28,8 +29,18 @@ import org.bukkit.util.Vector;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class RegionVector implements VectorConvertible,  ConfigurationSerializable, Comparable<RegionVector> {
+/**
+ * <h1>RegionVector</h1>
+ * 区域矢量（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
+public class RegionVector implements VectorConvertible, ConfigurationSerializable, Comparable<RegionVector> {
 
+    /**
+     * 区域矢量 ZERO 值
+     */
     public final static RegionVector ZERO = new RegionVector(0d, 0d, 0d);
 
     static {
@@ -41,6 +52,13 @@ public class RegionVector implements VectorConvertible,  ConfigurationSerializab
     protected final double y;
     protected final double z;
 
+    /**
+     * 区域矢量构造函数
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public RegionVector(double x, double y, double z) {
 
         this.x = x;
@@ -48,6 +66,13 @@ public class RegionVector implements VectorConvertible,  ConfigurationSerializab
         this.z = z;
     }
 
+    /**
+     * 区域矢量构造函数
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public RegionVector(float x, float y, float z) {
 
         this.x = x;
@@ -55,6 +80,13 @@ public class RegionVector implements VectorConvertible,  ConfigurationSerializab
         this.z = z;
     }
 
+    /**
+     * 区域矢量构造函数
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public RegionVector(int x, int y, int z) {
 
         this.x = x;
@@ -62,13 +94,24 @@ public class RegionVector implements VectorConvertible,  ConfigurationSerializab
         this.z = z;
     }
 
+    /**
+     * 区域矢量构造函数
+     *
+     * @param other 区域矢量
+     * @throws IllegalArgumentException 如果区域矢量对象为 {@code null} 则抛出异常
+     */
     public RegionVector(RegionVector other) {
+
+        Validate.notNull(other, "The other vector object is null.");
 
         this.x = other.x;
         this.y = other.y;
         this.z = other.z;
     }
 
+    /**
+     * 区域矢量构造函数
+     */
     public RegionVector() {
 
         this.x = 0d;
@@ -76,181 +119,379 @@ public class RegionVector implements VectorConvertible,  ConfigurationSerializab
         this.z = 0d;
     }
 
+    /**
+     * 获取此区域矢量的 X
+     *
+     * @return X
+     */
     public double getX() {
 
         return x;
     }
 
+    /**
+     * 获取此区域矢量的 Y
+     *
+     * @return Y
+     */
     public double getY() {
 
         return y;
     }
 
+    /**
+     * 获取此区域矢量的 Z
+     *
+     * @return Z
+     */
     public double getZ() {
 
         return z;
     }
 
+    /**
+     * 获取此区域矢量的方块 X
+     *
+     * @return 方块 X
+     */
     public int getBlockX() {
 
         return (int) Math.round(x);
     }
+    /**
+     * 获取此区域矢量的方块 Y
+     *
+     * @return 方块 Y
+     */
 
     public int getBlockY() {
 
         return (int) Math.round(y);
     }
 
+    /**
+     * 获取此区域矢量的方块 Z
+     *
+     * @return 方块 Z
+     */
     public int getBlockZ() {
 
         return (int) Math.round(z);
     }
 
+    /**
+     * 设置此区域矢量的 X
+     *
+     * @param x X
+     */
     public RegionVector setX(double x) {
 
         return new RegionVector(x, y, z);
     }
 
+    /**
+     * 设置此区域矢量的 Y
+     *
+     * @param y Y
+     */
     public RegionVector setY(double y) {
 
         return new RegionVector(x, y, z);
     }
 
+    /**
+     * 设置此区域矢量的 Z
+     *
+     * @param z Z
+     */
     public RegionVector setZ(double z) {
 
         return new RegionVector(x, y, z);
     }
 
+    /**
+     * 设置此区域矢量的 X
+     *
+     * @param x X
+     */
     public RegionVector setX(int x) {
 
         return new RegionVector(x, y, z);
     }
 
+    /**
+     * 设置此区域矢量的 Y
+     *
+     * @param y Y
+     */
     public RegionVector setY(int y) {
 
         return new RegionVector(x, y, z);
     }
 
+    /**
+     * 设置此区域矢量的 Z
+     *
+     * @param z Z
+     */
     public RegionVector setZ(int z) {
 
         return new RegionVector(x, y, z);
     }
 
+    /**
+     * 将指定区域矢量和此区域矢量相加
+     *
+     * @param vector 区域矢量
+     */
     public RegionVector add(RegionVector vector) {
 
         return new RegionVector(x + vector.x, y + vector.y, z + vector.z);
     }
 
+    /**
+     * 将指定 X Y Z 和此区域矢量相加
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public RegionVector add(double x, double y, double z) {
 
         return new RegionVector(this.x + x, this.y + y, this.z + z);
     }
 
+    /**
+     * 将指定 X Y Z 和此区域矢量相加
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public RegionVector add(int x, int y, int z) {
 
         return new RegionVector(this.x + x, this.y + y, this.z + z);
     }
 
+    /**
+     * 将指定区域矢量和此区域矢量相减
+     *
+     * @param vector 区域矢量
+     */
     public RegionVector subtract(RegionVector vector) {
 
         return new RegionVector(x - vector.x, y - vector.y, z - vector.z);
     }
 
+    /**
+     * 将指定 X Y Z 和此区域矢量相减
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public RegionVector subtract(double x, double y, double z) {
 
         return new RegionVector(this.x - x, this.y - y, this.z - z);
     }
 
+    /**
+     * 将指定 X Y Z 和此区域矢量相减
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public RegionVector subtract(int x, int y, int z) {
 
         return new RegionVector(this.x - x, this.y - y, this.z - z);
     }
 
+    /**
+     * 将指定区域矢量和此区域矢量相乘
+     *
+     * @param vector 区域矢量
+     */
     public RegionVector multiply(RegionVector vector) {
 
         return new RegionVector(x * vector.x, y * vector.y, z * vector.z);
     }
 
+    /**
+     * 将指定 X Y Z 和此区域矢量相乘
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public RegionVector multiply(double x, double y, double z) {
 
         return new RegionVector(this.x * x, this.y * y, this.z * z);
     }
 
+    /**
+     * 将指定 X Y Z 和此区域矢量相乘
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public RegionVector multiply(int x, int y, int z) {
 
         return new RegionVector(this.x * x, this.y * y, this.z * z);
     }
 
+    /**
+     * 将指定 N 和此区域矢量相乘
+     *
+     * @param n N
+     */
     public RegionVector multiply(double n) {
 
         return new RegionVector(this.x * n, this.y * n, this.z * n);
     }
 
+    /**
+     * 将指定 N 和此区域矢量相乘
+     *
+     * @param n N
+     */
     public RegionVector multiply(float n) {
 
         return new RegionVector(this.x * n, this.y * n, this.z * n);
     }
 
+    /**
+     * 将指定 N 和此区域矢量相乘
+     *
+     * @param n N
+     */
     public RegionVector multiply(int n) {
 
         return new RegionVector(this.x * n, this.y * n, this.z * n);
     }
 
+    /**
+     * 将指定区域矢量和此区域矢量相除
+     *
+     * @param vector 区域矢量
+     */
     public RegionVector divide(RegionVector vector) {
 
         return new RegionVector(x / vector.x, y / vector.y, z / vector.z);
     }
 
+    /**
+     * 将指定 X Y Z 和此区域矢量相除
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public RegionVector divide(double x, double y, double z) {
 
         return new RegionVector(this.x / x, this.y / y, this.z / z);
     }
 
+    /**
+     * 将指定 X Y Z 和此区域矢量相除
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public RegionVector divide(int x, int y, int z) {
 
         return new RegionVector(this.x / x, this.y / y, this.z / z);
     }
 
+    /**
+     * 将指定 N 和此区域矢量相除
+     *
+     * @param n N
+     */
     public RegionVector divide(double n) {
 
         return new RegionVector(this.x / n, this.y / n, this.z / n);
     }
 
+    /**
+     * 将指定 N 和此区域矢量相除
+     *
+     * @param n N
+     */
     public RegionVector divide(float n) {
 
         return new RegionVector(this.x / n, this.y / n, this.z / n);
     }
 
+    /**
+     * 将指定 N 和此区域矢量相除
+     *
+     * @param n N
+     */
     public RegionVector divide(int n) {
 
         return new RegionVector(this.x / n, this.y / n, this.z / n);
     }
 
+    /**
+     * 获取此区域矢量的长度
+     *
+     * @return 长度
+     */
     public double length() {
 
         return Math.sqrt(lengthSq());
     }
 
+    /**
+     * 获取此区域矢量的长度平方
+     *
+     * @return 长度平方
+     */
     public double lengthSq() {
 
         return x * x + y * y + z * z;
     }
 
+    /**
+     * 获取指定区域矢量和此区域矢量的距离
+     *
+     * @param vector 区域矢量
+     * @return 距离
+     */
     public double distance(RegionVector vector) {
 
         return Math.sqrt(distanceSq(vector));
     }
 
+    /**
+     * 获取指定区域矢量和此区域矢量的距离平方
+     *
+     * @param vector 区域矢量
+     * @return 距离平方
+     */
     public double distanceSq(RegionVector vector) {
 
         return Math.pow(x - vector.x, 2d) + Math.pow(y - vector.y, 2d) + Math.pow(z - vector.z, 2d);
     }
 
+    /**
+     * 获取此区域矢量的归一化
+     *
+     * @return 使归一化的区域矢量
+     */
     public RegionVector normalize() {
 
         return divide(length());
     }
 
+    /**
+     * 将此区域矢量转换为区域矢量 2D
+     *
+     * @return 区域矢量 2D
+     */
     public RegionVector2D toRegionVector2D() {
 
         return new RegionVector2D(x, z);

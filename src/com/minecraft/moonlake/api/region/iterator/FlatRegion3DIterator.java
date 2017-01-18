@@ -26,6 +26,13 @@ import com.minecraft.moonlake.validate.Validate;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * <h1>FlatRegion3DIterator</h1>
+ * 平面区域方块矢量迭代器
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class FlatRegion3DIterator implements Iterator<RegionBlockVector> {
 
     private Iterator<RegionVector2D> flatIterator;
@@ -34,6 +41,13 @@ public class FlatRegion3DIterator implements Iterator<RegionBlockVector> {
     private RegionVector2D next2D;
     private int nextY;
 
+    /**
+     * 平面区域方块矢量迭代器构造函数
+     *
+     * @param region 区域对象
+     * @param flatIterator 平面区域矢量 2D 迭代器对象
+     * @throws IllegalArgumentException 如果区域对象为 {@code null} 则抛出异常
+     */
     public FlatRegion3DIterator(FlatRegion region, Iterator<RegionVector2D> flatIterator) {
 
         Validate.notNull(region);
@@ -53,6 +67,12 @@ public class FlatRegion3DIterator implements Iterator<RegionBlockVector> {
         this.nextY = this.minY;
     }
 
+    /**
+     * 平面区域方块矢量迭代器构造函数
+     *
+     * @param region 区域对象
+     * @throws IllegalArgumentException 如果区域对象为 {@code null} 则抛出异常
+     */
     public FlatRegion3DIterator(FlatRegion region) {
 
         this(region, region.asFlatRegion().iterator());

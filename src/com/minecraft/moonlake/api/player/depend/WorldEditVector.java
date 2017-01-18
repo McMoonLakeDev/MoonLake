@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.VectorConvertible;
 import com.minecraft.moonlake.api.region.RegionBlockVector;
 import com.minecraft.moonlake.api.region.RegionVector;
 import com.minecraft.moonlake.util.StringUtil;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.util.Vector;
@@ -29,8 +30,18 @@ import org.bukkit.util.Vector;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * <h1>WorldEditVector</h1>
+ * 创世神矢量（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class WorldEditVector implements VectorConvertible, ConfigurationSerializable, Comparable<WorldEditVector> {
 
+    /**
+     * 创世神矢量 ZERO 值
+     */
     public final static WorldEditVector ZERO = new WorldEditVector(0d, 0d, 0d);
 
     static {
@@ -42,6 +53,13 @@ public class WorldEditVector implements VectorConvertible, ConfigurationSerializ
     protected final double y;
     protected final double z;
 
+    /**
+     * 创世神矢量构造函数
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public WorldEditVector(double x, double y, double z) {
 
         this.x = x;
@@ -49,6 +67,13 @@ public class WorldEditVector implements VectorConvertible, ConfigurationSerializ
         this.z = z;
     }
 
+    /**
+     * 创世神矢量构造函数
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public WorldEditVector(float x, float y, float z) {
 
         this.x = x;
@@ -56,6 +81,13 @@ public class WorldEditVector implements VectorConvertible, ConfigurationSerializ
         this.z = z;
     }
 
+    /**
+     * 创世神矢量构造函数
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public WorldEditVector(int x, int y, int z) {
 
         this.x = x;
@@ -63,13 +95,24 @@ public class WorldEditVector implements VectorConvertible, ConfigurationSerializ
         this.z = z;
     }
 
+    /**
+     * 创世神矢量构造函数
+     *
+     * @param other 创世神矢量
+     * @throws IllegalArgumentException 如果创世神矢量对象为 {@code null} 则抛出异常
+     */
     public WorldEditVector(WorldEditVector other) {
+
+        Validate.notNull(other, "The other vector object is null.");
 
         this.x = other.x;
         this.y = other.y;
         this.z = other.z;
     }
 
+    /**
+     * 创世神矢量构造函数
+     */
     public WorldEditVector() {
 
         this.x = 0d;
@@ -77,176 +120,369 @@ public class WorldEditVector implements VectorConvertible, ConfigurationSerializ
         this.z = 0d;
     }
 
+    /**
+     * 获取此创世神矢量的 X
+     *
+     * @return X
+     */
     public double getX() {
 
         return x;
     }
 
+    /**
+     * 获取此创世神矢量的 Y
+     *
+     * @return Y
+     */
     public double getY() {
 
         return y;
     }
 
+    /**
+     * 获取此创世神矢量的 Z
+     *
+     * @return Z
+     */
     public double getZ() {
 
         return z;
     }
 
+    /**
+     * 获取此创世神矢量的方块 X
+     *
+     * @return 方块 X
+     */
     public int getBlockX() {
 
         return (int) Math.round(x);
     }
 
+    /**
+     * 获取此创世神矢量的方块 Y
+     *
+     * @return 方块 Y
+     */
     public int getBlockY() {
 
         return (int) Math.round(y);
     }
 
+    /**
+     * 获取此创世神矢量的方块 Z
+     *
+     * @return 方块 Z
+     */
     public int getBlockZ() {
 
         return (int) Math.round(z);
     }
 
+    /**
+     * 设置此创世神矢量的 X
+     *
+     * @param x X
+     */
     public WorldEditVector setX(double x) {
 
         return new WorldEditVector(x, y, z);
     }
 
+    /**
+     * 设置此创世神矢量的 Y
+     *
+     * @param y Y
+     */
     public WorldEditVector setY(double y) {
 
         return new WorldEditVector(x, y, z);
     }
 
+    /**
+     * 设置此创世神矢量的 Z
+     *
+     * @param z Z
+     */
     public WorldEditVector setZ(double z) {
 
         return new WorldEditVector(x, y, z);
     }
 
+    /**
+     * 设置此创世神矢量的 X
+     *
+     * @param x X
+     */
     public WorldEditVector setX(int x) {
 
         return new WorldEditVector(x, y, z);
     }
 
+    /**
+     * 设置此创世神矢量的 Y
+     *
+     * @param y Y
+     */
     public WorldEditVector setY(int y) {
 
         return new WorldEditVector(x, y, z);
     }
 
+    /**
+     * 设置此创世神矢量的 Z
+     *
+     * @param z Z
+     */
     public WorldEditVector setZ(int z) {
 
         return new WorldEditVector(x, y, z);
     }
 
+    /**
+     * 将指定创世神矢量和此创世神矢量相加
+     *
+     * @param vector 创世神矢量
+     */
     public WorldEditVector add(WorldEditVector vector) {
 
         return new WorldEditVector(x + vector.x, y + vector.y, z + vector.z);
     }
 
+    /**
+     * 将指定 X Y Z 和此创世神矢量相加
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public WorldEditVector add(double x, double y, double z) {
 
         return new WorldEditVector(this.x + x, this.y + y, this.z + z);
     }
 
+    /**
+     * 将指定 X Y Z 和此创世神矢量相加
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public WorldEditVector add(int x, int y, int z) {
 
         return new WorldEditVector(this.x + x, this.y + y, this.z + z);
     }
 
+    /**
+     * 将指定创世神矢量和此创世神矢量相减
+     *
+     * @param vector 创世神矢量
+     */
     public WorldEditVector subtract(WorldEditVector vector) {
 
         return new WorldEditVector(x - vector.x, y - vector.y, z - vector.z);
     }
 
+    /**
+     * 将指定 X Y Z 和此创世神矢量相减
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public WorldEditVector subtract(double x, double y, double z) {
 
         return new WorldEditVector(this.x - x, this.y - y, this.z - z);
     }
 
+    /**
+     * 将指定 X Y Z 和此创世神矢量相减
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public WorldEditVector subtract(int x, int y, int z) {
 
         return new WorldEditVector(this.x - x, this.y - y, this.z - z);
     }
+    /**
+     * 将指定创世神矢量和此创世神矢量相乘
+     *
+     * @param vector 创世神矢量
+     */
 
     public WorldEditVector multiply(WorldEditVector vector) {
 
         return new WorldEditVector(x * vector.x, y * vector.y, z * vector.z);
     }
 
+    /**
+     * 将指定 X Y Z 和此创世神矢量相乘
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public WorldEditVector multiply(double x, double y, double z) {
 
         return new WorldEditVector(this.x * x, this.y * y, this.z * z);
     }
 
+    /**
+     * 将指定 X Y Z 和此创世神矢量相乘
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public WorldEditVector multiply(int x, int y, int z) {
 
         return new WorldEditVector(this.x * x, this.y * y, this.z * z);
     }
 
+    /**
+     * 将指定 N 和此创世神矢量相乘
+     *
+     * @param n N
+     */
     public WorldEditVector multiply(double n) {
 
         return new WorldEditVector(this.x * n, this.y * n, this.z * n);
     }
 
+    /**
+     * 将指定 N 和此创世神矢量相乘
+     *
+     * @param n N
+     */
     public WorldEditVector multiply(float n) {
 
         return new WorldEditVector(this.x * n, this.y * n, this.z * n);
     }
 
+    /**
+     * 将指定 N 和此创世神矢量相乘
+     *
+     * @param n N
+     */
     public WorldEditVector multiply(int n) {
 
         return new WorldEditVector(this.x * n, this.y * n, this.z * n);
     }
 
+    /**
+     * 将指定创世神矢量和此创世神矢量相除
+     *
+     * @param vector 创世神矢量
+     */
     public WorldEditVector divide(WorldEditVector vector) {
 
         return new WorldEditVector(x / vector.x, y / vector.y, z / vector.z);
     }
 
+    /**
+     * 将指定 X Y Z 和此创世神矢量相除
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public WorldEditVector divide(double x, double y, double z) {
 
         return new WorldEditVector(this.x / x, this.y / y, this.z / z);
     }
 
+    /**
+     * 将指定 X Y Z 和此创世神矢量相除
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public WorldEditVector divide(int x, int y, int z) {
 
         return new WorldEditVector(this.x / x, this.y / y, this.z / z);
     }
 
+    /**
+     * 将指定 N 和此创世神矢量相除
+     *
+     * @param n N
+     */
     public WorldEditVector divide(double n) {
 
         return new WorldEditVector(this.x / n, this.y / n, this.z / n);
     }
 
+    /**
+     * 将指定 N 和此创世神矢量相除
+     *
+     * @param n N
+     */
     public WorldEditVector divide(float n) {
 
         return new WorldEditVector(this.x / n, this.y / n, this.z / n);
     }
 
+    /**
+     * 将指定 N 和此创世神矢量相除
+     *
+     * @param n N
+     */
     public WorldEditVector divide(int n) {
 
         return new WorldEditVector(this.x / n, this.y / n, this.z / n);
     }
 
+    /**
+     * 获取此创世神矢量的长度
+     *
+     * @return 长度
+     */
     public double length() {
 
         return Math.sqrt(lengthSq());
     }
 
+    /**
+     * 获取此创世神矢量的长度平方
+     *
+     * @return 长度平方
+     */
     public double lengthSq() {
 
         return x * x + y * y + z * z;
     }
 
+    /**
+     * 获取指定创世神矢量和此创世神矢量的距离
+     *
+     * @param vector 创世神矢量
+     * @return 距离
+     */
     public double distance(WorldEditVector vector) {
 
         return Math.sqrt(distanceSq(vector));
     }
 
+    /**
+     * 获取指定创世神矢量和此创世神矢量的距离平方
+     *
+     * @param vector 创世神矢量
+     * @return 距离平方
+     */
     public double distanceSq(WorldEditVector vector) {
 
         return Math.pow(x - vector.x, 2d) + Math.pow(y - vector.y, 2d) + Math.pow(z - vector.z, 2d);
     }
 
+    /**
+     * 获取此创世神矢量的归一化
+     *
+     * @return 使归一化的创世神矢量
+     */
     public WorldEditVector normalize() {
 
         return divide(length());

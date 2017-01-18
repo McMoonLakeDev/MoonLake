@@ -18,25 +18,63 @@
 
 package com.minecraft.moonlake.api.region;
 
+/**
+ * <h1>RegionBlockVector</h1>
+ * 区域方块矢量（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see RegionVector
+ */
 public class RegionBlockVector extends RegionVector {
 
+    /**
+     * 区域方块矢量 ZERO 值
+     */
     public final static RegionBlockVector ZERO = new RegionBlockVector(0d, 0d, 0d);
 
+    /**
+     * 区域方块矢量构造函数
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public RegionBlockVector(double x, double y, double z) {
 
         super(x, y, z);
     }
 
+    /**
+     * 区域方块矢量构造函数
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public RegionBlockVector(float x, float y, float z) {
 
         super(x, y, z);
     }
 
+    /**
+     * 区域方块矢量构造函数
+     *
+     * @param x X
+     * @param y Y
+     * @param z Z
+     */
     public RegionBlockVector(int x, int y, int z) {
 
         super(x, y, z);
     }
 
+    /**
+     * 区域方块矢量构造函数
+     *
+     * @param vector 区域矢量
+     * @throws IllegalArgumentException 如果区域矢量对象为 {@code null} 则抛出异常
+     */
     public RegionBlockVector(RegionVector vector) {
 
         super(vector);

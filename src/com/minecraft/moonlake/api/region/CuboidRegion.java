@@ -30,6 +30,15 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+/**
+ * <h1>CuboidRegion</h1>
+ * 长方体区域（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see Region
+ * @see FlatRegion
+ */
 public class CuboidRegion extends AbstractRegion implements FlatRegion {
 
     static {
@@ -40,6 +49,13 @@ public class CuboidRegion extends AbstractRegion implements FlatRegion {
     private RegionVector pos1;
     private RegionVector pos2;
 
+    /**
+     * 长方体区域构造函数
+     *
+     * @param world 世界
+     * @param pos1 点 1
+     * @param pos2 点 2
+     */
     public CuboidRegion(World world, RegionVector pos1, RegionVector pos2) {
 
         super(world);
@@ -48,6 +64,15 @@ public class CuboidRegion extends AbstractRegion implements FlatRegion {
         this.pos2 = pos2;
     }
 
+    /**
+     * 长方体区域构造函数
+     *
+     * @param world 世界
+     * @param pos1 点 1
+     * @param pos2 点 2
+     * @throws IllegalArgumentException 如果点1的世界对象不符合参数世界则抛出异常
+     * @throws IllegalArgumentException 如果点2的世界对象不符合参数世界则抛出异常
+     */
     public CuboidRegion(World world, Location pos1, Location pos2) {
 
         super(world);
@@ -59,22 +84,48 @@ public class CuboidRegion extends AbstractRegion implements FlatRegion {
         this.pos2 = new RegionVector(pos2.getX(), pos2.getY(), pos2.getZ());
     }
 
+    /**
+     * 获取此长方体区域的点 1 矢量
+     *
+     * @return 点 1 矢量
+     */
     public RegionVector getPos1() {
 
         return pos1;
     }
 
+    /**
+     * 设置此长方体区域的点 1 矢量
+     *
+     * @param pos1 点 1 矢量
+     * @throws IllegalArgumentException 如果点1矢量对象为 {@code null} 则抛出异常
+     */
     public void setPos1(RegionVector pos1) {
+
+        Validate.notNull(pos1, "The pos1 vector object is null.");
 
         this.pos1 = pos1;
     }
 
+    /**
+     * 获取此长方体区域的点 2 矢量
+     *
+     * @return 点 2 矢量
+     */
     public RegionVector getPos2() {
 
         return pos2;
     }
 
+    /**
+     * 设置此长方体区域的点 2 矢量
+     *
+     * @param pos2 点 2 矢量
+     * @throws IllegalArgumentException 如果点2矢量对象为 {@code null} 则抛出异常
+     */
     public void setPos2(RegionVector pos2) {
+
+        Validate.notNull(pos2, "The pos2 vector object is null.");
 
         this.pos2 = pos2;
     }
@@ -174,6 +225,7 @@ public class CuboidRegion extends AbstractRegion implements FlatRegion {
         return (CuboidRegion) super.clone();
     }
 
+    @Override
     public Iterable<RegionVector2D> asFlatRegion() {
 
         return new Iterable<RegionVector2D>() {
@@ -224,6 +276,11 @@ public class CuboidRegion extends AbstractRegion implements FlatRegion {
         };
     }
 
+    /**
+     * 获取此长方体区域的所有面的迭代区域方块矢量
+     *
+     * @return 迭代区域方块矢量
+     */
     public Iterable<RegionBlockVector> getFaces() {
 
         return new Iterable<RegionBlockVector>() {
