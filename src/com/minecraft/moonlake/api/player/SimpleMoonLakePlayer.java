@@ -149,6 +149,12 @@ public class SimpleMoonLakePlayer extends AbstractPlayer {
     }
 
     @Override
+    public ItemStack getItemInHand() {
+
+        return null;
+    }
+
+    @Override
     public ItemStack getItemInMainHand() {
 
         return null;

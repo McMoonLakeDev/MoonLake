@@ -53,6 +53,13 @@ public interface InventoryPlayer extends InventoryHolder {
     void closeInventory();
 
     /**
+     * 获取此玩家的手中物品 (注: 如果 Bukkit 版本为 1.9 或更高不建议使用此函数)
+     *
+     * @return 手中物品
+     */
+    ItemStack getItemInHand();
+
+    /**
      * 获取此玩家的主手中物品
      *
      * @return 主手中物品
