@@ -20,6 +20,7 @@ package com.minecraft.moonlake.event;
 
 import com.minecraft.moonlake.api.event.MoonLakeEvent;
 import com.minecraft.moonlake.api.event.MoonLakeListener;
+import com.minecraft.moonlake.task.TaskHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
@@ -61,6 +62,42 @@ public final class EventHelper {
     public static void callEvent(MoonLakeEvent event) {
 
         Bukkit.getServer().getPluginManager().callEvent(event);
+    }
+
+    /**
+     * 调用事件帮助器异步触发指定事件
+     *
+     * @param plugin 插件
+     * @param event 事件
+     */
+    public static void callEventAsync(Plugin plugin, Event event) {
+
+        TaskHelper.runTaskAsync(plugin, new Runnable() {
+
+            @Override
+            public void run() {
+
+                callEvent(event);
+            }
+        });
+    }
+
+    /**
+     * 调用事件帮助器异步触发指定事件
+     *
+     * @param plugin 插件
+     * @param event 事件
+     */
+    public static void callEventAsync(Plugin plugin, MoonLakeEvent event) {
+
+        TaskHelper.runTaskAsync(plugin, new Runnable() {
+
+            @Override
+            public void run() {
+
+                callEvent(event);
+            }
+        });
     }
 
     /**

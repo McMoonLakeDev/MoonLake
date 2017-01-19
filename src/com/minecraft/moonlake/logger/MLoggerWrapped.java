@@ -30,7 +30,10 @@ import java.util.logging.Logger;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除.
  */
+@Deprecated
+@SuppressWarnings("deprecation")
 public final class MLoggerWrapped implements MLogger {
 
     private final ReadOnlyStringProperty prefixProperty;

@@ -22,8 +22,6 @@ import com.minecraft.moonlake.api.MoonLake;
 import com.minecraft.moonlake.api.packet.listener.PacketListenerFactory;
 import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
 import com.minecraft.moonlake.exception.MoonLakeException;
-import com.minecraft.moonlake.logger.MLogger;
-import com.minecraft.moonlake.logger.MLoggerWrapped;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -74,7 +72,6 @@ import java.util.Set;
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
 
-    private final MLogger mLogger;
     private final PluginDescriptionFile description;
     private MoonLakePluginConfig configuration;
 
@@ -86,7 +83,6 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     public MoonLakePlugin() {
 
         this.description = getDescription();
-        this.mLogger = new MLoggerWrapped("MoonLake");
     }
 
     @Override
@@ -103,7 +99,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         // load class
         this.loadClass();
 
-        this.getMLogger().info("月色之湖核心 API 插件 v" + getPluginVersion() + " 成功加载.");
+        this.getLogger().info("月色之湖核心 API 插件 v" + getPluginVersion() + " 成功加载.");
     }
 
     private void loadClass() {
@@ -113,7 +109,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
                 // load PacketListenerFactory class
                 Class.forName(PacketListenerFactory.class.getName());
 
-                this.getMLogger().info("月色之湖数据包通道监听器(PCL)成功加载.");
+                this.getLogger().info("月色之湖数据包通道监听器(PCL)成功加载.");
             }
             // load PlayerLibraryFactorys class to register listener
             Class.forName(PlayerLibraryFactorys.class.getName());
@@ -141,12 +137,6 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     public static MoonLake getInstances() {
 
         return MAIN;
-    }
-
-    @Override
-    public MLogger getMLogger() {
-
-        return mLogger;
     }
 
     @Override

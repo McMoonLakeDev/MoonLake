@@ -40,14 +40,14 @@ public class AnvilWindowClickEvent extends AnvilWindowAbstractEvent implements C
      *
      * @param clicked 点击者玩家
      * @param anvilWindow 铁砧窗口对象
-     * @param clickSolt 点击的槽位
+     * @param clickSlot 点击的槽位
      * @param clickItemStack 点击的物品栈
      */
-    public AnvilWindowClickEvent(Player clicked, AnvilWindow anvilWindow, AnvilWindowSlot clickSolt, ItemStack clickItemStack) {
+    public AnvilWindowClickEvent(Player clicked, AnvilWindow anvilWindow, AnvilWindowSlot clickSlot, ItemStack clickItemStack) {
 
         super(clicked, anvilWindow);
 
-        this.clickSlot = clickSolt;
+        this.clickSlot = clickSlot;
         this.clickItemStack = clickItemStack;
     }
 

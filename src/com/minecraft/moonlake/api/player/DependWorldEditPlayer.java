@@ -56,7 +56,7 @@ class DependWorldEditPlayer {
         }
         this.worldEdit = ((WorldEditPlugin) plugin);
 
-        MoonLakeAPI.getMLogger().info("Success hook 'WorldEdit' plugin, 'WorldEditPlayer' interface be use.");
+        MoonLakeAPI.getLogger().info("Success hook 'WorldEdit' plugin, 'WorldEditPlayer' interface be use.");
     }
 
     /**

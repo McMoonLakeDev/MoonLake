@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api.item.firework;
 
 import com.minecraft.moonlake.builder.Builder;
+import com.minecraft.moonlake.builder.UncertainParamBuilder;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -46,7 +47,7 @@ import org.bukkit.inventory.ItemStack;
  * @version 1.0
  * @author Month_Light
  */
-public interface FireworkBuilder extends Builder<ItemStack> {
+public interface FireworkBuilder extends Builder<ItemStack>, UncertainParamBuilder<ItemStack, FireworkBuilder> {
 
     /**
      * 构建并获取物品栈对象
@@ -62,6 +63,7 @@ public interface FireworkBuilder extends Builder<ItemStack> {
      * @param join 烟花构建器
      * @return ItemStack
      */
+    @Override
     ItemStack build(FireworkBuilder... join);
 
     /**
