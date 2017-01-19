@@ -272,6 +272,8 @@ public class CylinderRegion extends AbstractRegion implements FlatRegion {
     @Override
     public boolean contains(RegionVector vector) {
 
+        if(vector == null) return false;
+
         int blockY = vector.getBlockY();
 
         if(blockY < minY || blockY > maxY)

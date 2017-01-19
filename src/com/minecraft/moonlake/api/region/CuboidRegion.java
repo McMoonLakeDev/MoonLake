@@ -145,7 +145,7 @@ public class CuboidRegion extends AbstractRegion implements FlatRegion {
     @Override
     public boolean contains(RegionVector vector) {
 
-        Validate.notNull(vector, "The vector object is null.");
+        if(vector == null) return false;
 
         double x = vector.getX();
         double y = vector.getY();
