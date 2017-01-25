@@ -20,7 +20,6 @@ package com.minecraft.moonlake.api.packet.listener;
 
 import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.event.MoonLakeListener;
-import com.minecraft.moonlake.api.event.player.MoonLakePlayerJoinEvent;
 import com.minecraft.moonlake.api.packet.listener.channel.PacketChannel;
 import com.minecraft.moonlake.api.packet.listener.channel.PacketChannelWrapped;
 import com.minecraft.moonlake.api.packet.listener.handler.PacketHandler;
@@ -28,7 +27,6 @@ import com.minecraft.moonlake.api.packet.listener.handler.PacketReceived;
 import com.minecraft.moonlake.api.packet.listener.handler.PacketSent;
 import com.minecraft.moonlake.event.EventHelper;
 import com.minecraft.moonlake.exception.MoonLakeException;
-import com.minecraft.moonlake.task.TaskHelper;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -36,14 +34,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
-import org.spigotmc.SpigotConfig;
 
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <h1>PacketListenerFactory</h1>
@@ -56,9 +50,7 @@ public final class PacketListenerFactory {
 
     private final static PacketChannel PACKET_CHANNEL;
     private final static List<PacketHandler> PACKET_HANDLERS;
-    private final static long PROTOCOL_VERSION_MAP_TIMEOUT;
     private final static MoonLakeListener PACKET_CHANNEL_PLAYER_LISTENER;
-    private final static Map<String, MoonLakePlayerJoinEvent.ProtocolVersion> PROTOCOL_VERSION_MAP;
 
     static {
 
@@ -67,8 +59,6 @@ public final class PacketListenerFactory {
             throw new MoonLakeException("The config.yml 'PacketChannelListener' value not is 'true', this api unavailable.");
         }
         PACKET_HANDLERS = new ArrayList<>();
-        PROTOCOL_VERSION_MAP_TIMEOUT = 60L;
-        PROTOCOL_VERSION_MAP = new HashMap<>();
         PACKET_CHANNEL = new PacketINCChannel(new PacketListener() {
 
             @Override
@@ -106,52 +96,6 @@ public final class PacketListenerFactory {
 
                     packetReceived = new PacketReceivedExpression(packet, cancellable, (PacketChannelWrapped) sender);
                 }
-                //
-                // MoonLakePlayerJoinEvent 玩家客户端协议版本获取
-                if(packetReceived.hasChannel() && packetReceived.getPacketName().equals("PacketHandshakingInSetProtocol")) {
-
-                    SocketAddress address = packetReceived.getChannel().getRemoteAddress();
-                    int protocol = (int) packetReceived.getPacketValue("a");
-                    String hostname = null;
-
-                    try {
-
-                        if(SpigotConfig.bungee) {
-
-                            hostname = (String) packetReceived.getPacketValue("hostname");
-                        }
-                    }
-                    catch (Exception e) {
-                    }
-                    if(hostname != null) {
-
-                        String[] split = hostname.split("\000");
-
-                        if(split.length >= 3) {
-
-                            address = new InetSocketAddress(split[1], ((InetSocketAddress) address).getPort());
-                        }
-                    }
-                    final String addressString = address.toString().substring(1);
-                    MoonLakePlayerJoinEvent.ProtocolVersion protocolVersion = MoonLakePlayerJoinEvent.ProtocolVersion.fromProtocol(protocol);
-
-                    if(!PROTOCOL_VERSION_MAP.containsKey(addressString)) {
-
-                        PROTOCOL_VERSION_MAP.put(addressString, protocolVersion);
-                    }
-                    TaskHelper.runTaskLater(MoonLakeAPI.getMoonLake(), new Runnable() {
-
-                        @Override
-                        public void run() {
-
-                            if(PROTOCOL_VERSION_MAP.containsKey(addressString)) {
-
-                                PROTOCOL_VERSION_MAP.remove(addressString);
-                            }
-                        }
-                    }, PROTOCOL_VERSION_MAP_TIMEOUT);
-                }
-                ///
                 notifyHandlers(packetReceived);
 
                 if(packetReceived.getPacket() != null) {
@@ -168,25 +112,6 @@ public final class PacketListenerFactory {
             public void onJoin(PlayerJoinEvent event) {
 
                 PACKET_CHANNEL.addChannel(event.getPlayer());
-
-                //
-                // 触发 MoonLakePlayerJoinEvent 并获取客户端协议版本
-                MoonLakePlayerJoinEvent mpje = null;
-                String address = toAddress(event.getPlayer().getAddress());
-
-                if(!PROTOCOL_VERSION_MAP.containsKey(address)) {
-
-                    mpje = new MoonLakePlayerJoinEvent(event.getPlayer(), event.getJoinMessage(), MoonLakePlayerJoinEvent.ProtocolVersion.UNKNOWN);
-                }
-                else {
-
-                    MoonLakePlayerJoinEvent.ProtocolVersion protocolVersion = PROTOCOL_VERSION_MAP.remove(address);
-                    mpje = new MoonLakePlayerJoinEvent(event.getPlayer(), event.getJoinMessage(), protocolVersion);
-                }
-                EventHelper.callEvent(mpje);
-
-                event.setJoinMessage(mpje.getJoinMessage());
-                ///
             }
 
             @EventHandler(priority = EventPriority.HIGHEST)
@@ -228,6 +153,27 @@ public final class PacketListenerFactory {
     public static boolean removeHandler(PacketHandler handler) {
 
         return PACKET_HANDLERS.remove(handler);
+    }
+
+    /**
+     * 将指定插件的所有数据包通道监听器处理器删除
+     *
+     * @param plugin 插件
+     */
+    public static void removeHandler(Plugin plugin) {
+
+        if(plugin != null) {
+
+            PACKET_HANDLERS.removeAll(getHandlersFromPlugin(plugin));
+        }
+    }
+
+    /**
+     * 清除所有的数据包通道监听器处理器
+     */
+    public static void removeAll() {
+
+        PACKET_HANDLERS.clear();
     }
 
     /**
