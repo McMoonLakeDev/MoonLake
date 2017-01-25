@@ -32,6 +32,13 @@ import java.lang.reflect.Method;
 
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
+/**
+ * <h1>PacketPlayOutBlockChange</h1>
+ * 数据包输出方块改变类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class PacketPlayOutBlockChange extends PacketAbstract<PacketPlayOutBlockChange> {
 
     private final static Class<?> CLASS_PACKETPLAYOUTBLOCKCHANGE;
@@ -55,27 +62,54 @@ public class PacketPlayOutBlockChange extends PacketAbstract<PacketPlayOutBlockC
     private ObjectProperty<World> world;
     private ObjectProperty<BlockPosition> blockPosition;
 
+    /**
+     * 数据包输出方块改变类构造函数
+     *
+     * @deprecated 已过时, 请使用 {@link #PacketPlayOutBlockChange(World, BlockPosition)}
+     */
+    @Deprecated
     public PacketPlayOutBlockChange() {
 
         this(Bukkit.getServer().getWorlds().get(0), BlockPosition.ZERO);
     }
 
+    /**
+     * 数据包输出方块改变类构造函数
+     *
+     * @param block 方块
+     */
     public PacketPlayOutBlockChange(Block block) {
 
         this(block.getWorld(), new BlockPosition(block.getX(), block.getY(), block.getZ()));
     }
 
+    /**
+     * 数据包输出方块改变类构造函数
+     *
+     * @param world 世界
+     * @param blockPosition 方块位置
+     */
     public PacketPlayOutBlockChange(World world, BlockPosition blockPosition) {
 
         this.world = new SimpleObjectProperty<>(world);
         this.blockPosition = new SimpleObjectProperty<>(blockPosition);
     }
 
+    /**
+     * 获取此数据包输出方块改变的世界
+     *
+     * @return 世界
+     */
     public ObjectProperty<World> getWorld() {
 
         return world;
     }
 
+    /**
+     * 获取此数据包输出方块改变的方块位置
+     *
+     * @return 方块位置
+     */
     public ObjectProperty<BlockPosition> getBlockPosition() {
 
         return blockPosition;
