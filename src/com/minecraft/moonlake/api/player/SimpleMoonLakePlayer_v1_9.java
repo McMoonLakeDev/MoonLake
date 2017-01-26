@@ -177,6 +177,12 @@ public class SimpleMoonLakePlayer_v1_9 extends SimpleMoonLakePlayer_v1_8 {
     }
 
     @Override
+    public void setItemInHand(ItemStack itemStack) {
+
+        setItemInMainHand(itemStack);
+    }
+
+    @Override
     public void setItemInMainHand(ItemStack itemStack) {
 
         getBukkitPlayer().getInventory().setItemInMainHand(itemStack);

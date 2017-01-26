@@ -18,6 +18,7 @@
  
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.api.player.depend.EconomyPlayerData;
@@ -31,6 +32,7 @@ import com.minecraft.moonlake.property.ReadOnlyObjectProperty;
 import com.minecraft.moonlake.property.ReadOnlyStringProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
 import com.minecraft.moonlake.property.SimpleStringProperty;
+import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
@@ -377,6 +379,17 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void updateInventory() {
 
+        if(Reflect.getServerVersionNumber() <= 8) {
+            // 服务端版本低于 1.8 或为 1.8
+            MoonLakeAPI.runTaskLaterAsync(MoonLakeAPI.getMoonLake(), new Runnable() {
+                @Override
+                public void run() {
+                    // 则延迟 1tick 更新
+                    getBukkitPlayer().updateInventory();
+                }
+            }, 1L);
+            return;
+        }
         getBukkitPlayer().updateInventory();
     }
 

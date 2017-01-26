@@ -177,6 +177,13 @@ public class SimpleMoonLakePlayer_v1_8 extends SimpleMoonLakePlayer {
     }
 
     @Override
+    @SuppressWarnings("deprecation") // 移除过期警告, 1.8 版本此函数没有警告
+    public void setItemInHand(ItemStack itemStack) {
+
+        getBukkitPlayer().setItemInHand(itemStack);
+    }
+
+    @Override
     public void setItemInMainHand(ItemStack itemStack) {
 
         throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");

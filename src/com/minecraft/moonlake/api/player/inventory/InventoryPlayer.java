@@ -83,6 +83,13 @@ public interface InventoryPlayer extends InventoryHolder {
     ItemStack getItemOnCursor();
 
     /**
+     * 设置此玩家的手中物品 (注: 如果 Bukkit 版本为 1.9 或更高不建议使用此函数)
+     *
+     * @param itemStack 物品栈
+     */
+    void setItemInHand(ItemStack itemStack);
+
+    /**
      * 设置此玩家的主手中物品
      *
      * @param itemStack 物品栈
