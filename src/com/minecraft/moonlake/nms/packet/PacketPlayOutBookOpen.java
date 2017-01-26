@@ -26,6 +26,8 @@ import com.minecraft.moonlake.property.BooleanProperty;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleBooleanProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
+import com.minecraft.moonlake.reflect.Reflect;
+import io.netty.buffer.ByteBuf;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -107,7 +109,7 @@ public class PacketPlayOutBookOpen extends PacketAbstract<PacketPlayOutBookOpen>
                 ItemStack handItemStack = mplayer.getItemInHand();
                 mplayer.setItemInHand(book.get());
                 // 发送数据包
-                new PacketPlayOutCustomPayload(CHANNEL, new PacketDataSerializer()).send(mplayer);
+                new PacketPlayOutCustomPayload(CHANNEL, handlerEnumHand()).send(mplayer);
                 // 判断是否需要恢复原来的手中物品
                 if(onlyPacket.get())
                     mplayer.setItemInHand(handItemStack);
@@ -119,5 +121,27 @@ public class PacketPlayOutBookOpen extends PacketAbstract<PacketPlayOutBookOpen>
 
             throw new PacketException("The nms packet play out book open send exception.", e);
         }
+    }
+
+    private static PacketDataSerializer handlerEnumHand() {
+
+        if(Reflect.getServerVersionNumber() <= 8)
+            // 1.8 版本不需要这个 EnumHand 的
+            return new PacketDataSerializer();
+
+        // 处理 1.9+ 版本打开书本需要枚举手的数据
+        // 0 为 MAIN_HAND, 1 为 OFF_HAND
+        PacketDataSerializer data = new PacketDataSerializer();
+        writeEnumHand(data.getByteBuf(), 0);
+        return data;
+    }
+
+    private static void writeEnumHand(ByteBuf byteBuf, int i) {
+        // 此代码摘自 PacketDataSerializer 的 d(int i) 函数
+        while((i & 0xffffff80) != 0) {
+            byteBuf.writeByte(i & 0x7f | 0x80);
+            i >>>= 7;
+        }
+        byteBuf.writeByte(i);
     }
 }
