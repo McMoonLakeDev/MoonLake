@@ -35,7 +35,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
-import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -244,16 +243,5 @@ public final class PacketListenerFactory {
      * 数据包监听器工厂实现类构造函数
      */
     private PacketListenerFactory() {
-    }
-
-    /**
-     * 将指定网络套子节地址转换为地址加端口形式
-     *
-     * @param address 网络套子节地址
-     * @return 地址:端口 (例: 127.0.0.1:25565)
-     */
-    private static String toAddress(InetSocketAddress address) {
-
-        return address.getHostName() + ":" + address.getPort();
     }
 }

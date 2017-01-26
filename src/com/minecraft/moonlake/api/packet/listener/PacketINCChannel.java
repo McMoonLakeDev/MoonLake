@@ -82,7 +82,10 @@ class PacketINCChannel extends PacketChannelAbstract {
 
                     try {
 
-                        channel.pipeline().addBefore(KEY_HANDLER, KEY_PLAYER, new ChannelHandler(player));
+                        if(channel.pipeline().get(KEY_PLAYER) == null) {
+
+                            channel.pipeline().addBefore(KEY_HANDLER, KEY_PLAYER, new ChannelHandler(player));
+                        }
                     }
                     catch (Exception e) {
 
@@ -232,7 +235,10 @@ class PacketINCChannel extends PacketChannelAbstract {
 
                                 channel = (Channel) FIELD_CHANNEL.get(obj);
                             }
-                            channel.pipeline().remove(KEY_SERVER);
+                            if(channel.pipeline().get(KEY_SERVER) != null) {
+
+                                channel.pipeline().remove(KEY_SERVER);
+                            }
                         }
                         catch (Exception e) {
                         }
