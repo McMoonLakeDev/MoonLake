@@ -18,8 +18,10 @@
  
 package com.minecraft.moonlake.api.player;
 
-import com.minecraft.moonlake.MoonLakePlugin;
+import com.minecraft.moonlake.MoonLakeAPI;
 import org.bukkit.Material;
+
+import java.util.logging.Level;
 
 /**
  * <h1>PlayerExpressionWrapped</h1>
@@ -47,7 +49,7 @@ class PlayerExpressionWrapped extends PlayerExpression {
         }
         catch (Exception e) {
 
-            MoonLakePlugin.getInstances().getMLogger().error("The player library nms or item cooldown exception: " + e.getMessage());
+            MoonLakeAPI.getLogger().log(Level.SEVERE, "The player library nms or item cooldown exception: ", e);
 
             e.printStackTrace();
         }

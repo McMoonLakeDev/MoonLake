@@ -21,6 +21,7 @@ package com.minecraft.moonlake.manager;
 import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.item.AttributeModify;
 import com.minecraft.moonlake.api.item.ItemBuilder;
+import com.minecraft.moonlake.api.item.ItemLibraryFactorys;
 import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.api.nbt.NBTFactory;
 import com.minecraft.moonlake.data.Conversions;
@@ -271,6 +272,72 @@ public class ItemManager extends MoonLakeManager {
     public static boolean compareNull(ItemStack source, ItemStack target) {
 
         return source == null && target == null;
+    }
+
+    /**
+     * 判断指定物品栈是否为工具类型
+     *
+     * @param itemStack 物品栈
+     * @return true 则物品栈类型为工具
+     */
+    public static boolean isTool(ItemStack itemStack) {
+
+        return !isAir(itemStack) && ItemLibraryFactorys.item().isTool(itemStack);
+    }
+
+    /**
+     * 判断指定物品栈是否为武器类型
+     *
+     * @param itemStack 物品栈
+     * @return true 则物品栈类型为武器
+     */
+    public static boolean isWeapon(ItemStack itemStack) {
+
+        return !isAir(itemStack) && ItemLibraryFactorys.item().isWeapon(itemStack);
+    }
+
+    /**
+     * 判断指定物品栈是否为护甲类型
+     *
+     * @param itemStack 物品栈
+     * @return true 则物品栈类型为护甲
+     */
+    public static boolean isArmor(ItemStack itemStack) {
+
+        return !isAir(itemStack) && ItemLibraryFactorys.item().isArmor(itemStack);
+    }
+
+    /**
+     * 判断指定物品栈是否为皮革护甲类型
+     *
+     * @param itemStack 物品栈
+     * @return true 则物品栈类型为皮革护甲
+     */
+    public static boolean isLeatherArmor(ItemStack itemStack) {
+
+        return !isAir(itemStack) && ItemLibraryFactorys.item().isLeatherArmor(itemStack);
+    }
+
+    /**
+     * 判断指定物品栈是否为药水类型
+     *
+     * @param itemStack 物品栈
+     * @return true 则物品栈类型为药水
+     */
+    public static boolean isPotion(ItemStack itemStack) {
+
+        return !isAir(itemStack) && ItemLibraryFactorys.item().isPotion(itemStack);
+    }
+
+    /**
+     * 判断指定物品栈是否为书类型
+     *
+     * @param itemStack 物品栈
+     * @return true 则物品栈类型为书
+     */
+    public static boolean isWrittenBook(ItemStack itemStack) {
+
+        return !isAir(itemStack) && ItemLibraryFactorys.item().isWrittenBook(itemStack);
     }
 
     /**
@@ -644,7 +711,7 @@ public class ItemManager extends MoonLakeManager {
                         enchantment = Enchantment.getByName(key.toUpperCase());
 
                     if(enchantment == null)
-                        MoonLakeAPI.getMLogger().error("The deserialize from file '" + file.getName() + "' key 'Enchantment' error enchantment: " + key);
+                        MoonLakeAPI.getLogger().warning("The deserialize from file '" + file.getName() + "' key 'Enchantment' error enchantment: " + key);
                     else
                         itemBuilder.addEnchantment(enchantment, level);
                 }
@@ -670,7 +737,7 @@ public class ItemManager extends MoonLakeManager {
                     }
 
                     if(itemFlag == null)
-                        MoonLakeAPI.getMLogger().error("The deserialize from file '" + file.getName() + "' key 'HideFlag' error flag: " + hideFlag);
+                        MoonLakeAPI.getLogger().warning("The deserialize from file '" + file.getName() + "' key 'HideFlag' error flag: " + hideFlag);
                     else
                         itemBuilder.addFlags(itemFlag);
                 }
@@ -700,7 +767,7 @@ public class ItemManager extends MoonLakeManager {
 
                     if(attType == null) {
 
-                        MoonLakeAPI.getMLogger().error("The deserialize from file '" + file.getName() + "' key 'AttributeModifiers' error type: " + key);
+                        MoonLakeAPI.getLogger().warning("The deserialize from file '" + file.getName() + "' key 'AttributeModifiers' error type: " + key);
                         continue;
                     }
                     double value = yml.getDouble("AttributeModifiers." + key + ".Value", -1d);

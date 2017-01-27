@@ -62,7 +62,7 @@ class DependEconomyVaultPlayer {
             throw new CannotDependException("The depend 'Vault' plugin 'Economy' service provider object is null.");
         }
 
-        MoonLakeAPI.getMLogger().info("Success hook 'Vault' plugin 'Economy' service provider, 'EconomyVaultPlayer' interface be use.");
+        MoonLakeAPI.getLogger().info("Success hook 'Vault' plugin 'Economy' service provider, 'EconomyVaultPlayer' interface be use.");
     }
 
     /**

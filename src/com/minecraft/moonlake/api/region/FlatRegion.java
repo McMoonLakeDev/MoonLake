@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The MoonLake Authors
+ * Copyright (C) 2017 The MoonLake Authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +16,38 @@
  */
 
 
-package com.minecraft.moonlake.api.player.depend;
+package com.minecraft.moonlake.api.region;
 
 /**
- * <h1>DependPlayer</h1>
- * 依赖玩家接口类（详细doc待补充...）
+ * <h1>FlatRegion</h1>
+ * 平面区域接口（详细doc待补充...）
  *
  * @version 1.0
  * @author Month_Light
- * @see EconomyPlayer
- * @see EconomyVaultPlayer
- * @see PermissionsExPlayer
- * @see WorldEditPlayer
+ * @see Region
+ * @see CuboidRegion
+ * @see CylinderRegion
  */
-public interface DependPlayer extends EconomyPlayer, EconomyVaultPlayer, PermissionsExPlayer, WorldEditPlayer {
+public interface FlatRegion extends Region {
+
+    /**
+     * 获取此平面区域的最小 Y
+     *
+     * @return 最小 Y
+     */
+    int getMinimumY();
+
+    /**
+     * 获取此平面区域的最大 Y
+     *
+     * @return 最大 Y
+     */
+    int getMaximumY();
+
+    /**
+     * 获取此平面区域的区域迭代矢量 2D
+     *
+     * @return 迭代矢量 2D
+     */
+    Iterable<RegionVector2D> asFlatRegion();
 }

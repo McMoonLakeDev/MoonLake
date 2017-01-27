@@ -25,6 +25,7 @@ import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
 import org.bukkit.GameMode;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
@@ -92,6 +93,68 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
     public PacketPlayOutRespawn() {
 
         this(WorldDimension.OVERWORLD, WorldDifficulty.PEACEFUL, GameMode.SURVIVAL, WorldType.NORMAL);
+    }
+
+    /**
+     * 数据包输出重生类构造函数
+     *
+     * @param world 世界
+     * @param gameMode 游戏模式
+     */
+    public PacketPlayOutRespawn(World world, GameMode gameMode) {
+
+        WorldDimension worldDimension;
+        WorldDifficulty worldDifficulty;
+        WorldType worldType;
+
+        // dimension
+        switch (world.getEnvironment()) {
+            case NORMAL:
+                worldDimension = WorldDimension.OVERWORLD; break;
+            case NETHER:
+                worldDimension = WorldDimension.NETHER; break;
+            case THE_END:
+                worldDimension = WorldDimension.THE_END; break;
+            default:
+                worldDimension = WorldDimension.OVERWORLD; break;
+        }
+
+        // difficulty
+        switch (world.getDifficulty()) {
+            case PEACEFUL:
+                worldDifficulty = WorldDifficulty.PEACEFUL; break;
+            case EASY:
+                worldDifficulty = WorldDifficulty.EASY; break;
+            case NORMAL:
+                worldDifficulty = WorldDifficulty.NORMAL; break;
+            case HARD:
+                worldDifficulty = WorldDifficulty.HARD; break;
+            default:
+                worldDifficulty = WorldDifficulty.EASY; break;
+        }
+
+        // worldtype
+        switch (world.getWorldType()) {
+            case NORMAL:
+                worldType = WorldType.NORMAL; break;
+            case AMPLIFIED:
+                worldType = WorldType.AMPLIFIED; break;
+            case CUSTOMIZED:
+                worldType = WorldType.CUSTOMIZED; break;
+            case FLAT:
+                worldType = WorldType.FLAT; break;
+            case LARGE_BIOMES:
+                worldType = WorldType.LARGE_BIOMES; break;
+            case VERSION_1_1:
+                worldType = WorldType.NORMAL_1_1; break;
+            default:
+                worldType = WorldType.NORMAL; break;
+        }
+
+        this.worldDimensionId = new SimpleIntegerProperty(worldDimension.getId());
+        this.worldDifficulty = new SimpleObjectProperty<>(worldDifficulty);
+        this.worldGameMode = new SimpleObjectProperty<>(gameMode);
+        this.worldType = new SimpleObjectProperty<>(worldType);
     }
 
     /**

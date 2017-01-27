@@ -28,6 +28,8 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 
+import java.util.logging.Level;
+
 /**
  * <h1>PlayerLibraryFactorys</h1>
  * 玩家支持库静态工厂类
@@ -45,6 +47,8 @@ public class PlayerLibraryFactorys {
     private static Boolean dependPermissionsExPlayerHook = null;
     private static DependEconomyVaultPlayer dependEconomyVaultPlayer;
     private static Boolean dependEconomyVaultPlayerHook = null;
+    private static DependWorldEditPlayer dependWorldEditPlayer;
+    private static Boolean dependWorldEditPlayerHook = null;
 
     static {
 
@@ -74,12 +78,14 @@ public class PlayerLibraryFactorys {
                         // Hook Vault Economy
                         economyVaultPlayer();
                     }
+                    else if(pluginName.equals("WorldEdit") && dependWorldEditPlayerHook == null) {
+                        // Hook WorldEdit
+                        worldEditPlayer();
+                    }
                 }
                 catch (Exception e) {
 
-                    MoonLakeAPI.getMLogger().error("The hook '" + pluginName + "' plugin failed, exception info: ");
-
-                    e.printStackTrace();
+                    MoonLakeAPI.getLogger().log(Level.SEVERE, "The hook '" + pluginName + "' plugin failed, exception info: ", e);
                 }
             }
 
@@ -94,26 +100,33 @@ public class PlayerLibraryFactorys {
                     dependEconomyPlayer = null;
                     dependEconomyPlayerHook = null;
 
-                    MoonLakeAPI.getMLogger().warn("The unhook 'MoonLakeEconomy' plugin, now 'EconomyPlayer' interface is unavailable.");
+                    MoonLakeAPI.getLogger().warning("The unhook 'MoonLakeEconomy' plugin, now 'EconomyPlayer' interface is unavailable.");
                 }
                 else if(pluginName.equals("PermissionsEx") && dependPermissionsExPlayerHook != null) {
                     // Unhook PermissionsEx
                     dependPermissionsExPlayer = null;
                     dependPermissionsExPlayerHook = null;
 
-                    MoonLakeAPI.getMLogger().warn("The unhook 'PermissionsEx' plugin, now 'PermissionsExPlayer' interface is unavailable.");
+                    MoonLakeAPI.getLogger().warning("The unhook 'PermissionsEx' plugin, now 'PermissionsExPlayer' interface is unavailable.");
                 }
                 else if(pluginName.equals("Vault") && dependEconomyVaultPlayerHook != null) {
                     // Unhook Vault Economy
                     dependEconomyVaultPlayer = null;
                     dependEconomyVaultPlayerHook = null;
 
-                    MoonLakeAPI.getMLogger().warn("The unhook 'Vault' plugin 'Economy' module, now 'EconomyVaultPlayer' interface is unavailable.");
+                    MoonLakeAPI.getLogger().warning("The unhook 'Vault' plugin 'Economy' module, now 'EconomyVaultPlayer' interface is unavailable.");
+                }
+                else if(pluginName.equals("WorldEdit") && dependWorldEditPlayerHook != null) {
+                    // Unhook WorldEdit
+                    dependWorldEditPlayer = null;
+                    dependWorldEditPlayerHook = null;
+
+                    MoonLakeAPI.getLogger().warning("The unhook 'WorldEdit' plugin, now 'WorldEditPlayer' interface is unavailable.");
                 }
             }
         }, MoonLakeAPI.getMoonLake());
         ///
-        MoonLakeAPI.getMLogger().info("月色之湖玩家支持库的依赖监听器成功加载.");
+        MoonLakeAPI.getLogger().info("月色之湖玩家支持库的依赖监听器成功加载.");
     }
 
     /**
@@ -250,5 +263,40 @@ public class PlayerLibraryFactorys {
     public static boolean isDependEconomyVaultPlayerHook() {
 
         return dependEconomyVaultPlayerHook;
+    }
+
+    /**
+     * 获取依赖传送书插件玩家 DependWorldEditPlayer 对象
+     *
+     * @return DependWorldEditPlayer
+     * @throws CannotDependException 如果无法加载依赖插件则抛出异常
+     */
+    public static DependWorldEditPlayer worldEditPlayer() throws CannotDependException {
+
+        if(dependWorldEditPlayer == null && dependWorldEditPlayerHook == null) {
+
+            try {
+
+                dependWorldEditPlayer = new DependWorldEditPlayer();
+                dependWorldEditPlayerHook = true;
+            }
+            catch (Exception e) {
+
+                dependWorldEditPlayerHook = false;
+
+                throw new CannotDependException("The hook 'WorldEdit' plugin failed exception.", e);
+            }
+        }
+        return dependWorldEditPlayer;
+    }
+
+    /**
+     * 获取是否成功依赖 WorldEdit 创世神插件玩家
+     *
+     * @return 是否成功依赖
+     */
+    public static boolean isDependWorldEditPlayerHook() {
+
+        return dependWorldEditPlayerHook;
     }
 }

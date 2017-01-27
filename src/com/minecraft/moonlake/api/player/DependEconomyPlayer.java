@@ -54,7 +54,7 @@ class DependEconomyPlayer {
         }
         this.moonLakeEconomy = ((EconomyPlugin) plugin).getEconomy();
 
-        MoonLakeAPI.getMLogger().info("Success hook 'MoonLakeEconomy' plugin, 'EconomyPlayer' interface be use.");
+        MoonLakeAPI.getLogger().info("Success hook 'MoonLakeEconomy' plugin, 'EconomyPlayer' interface be use.");
     }
 
     /**

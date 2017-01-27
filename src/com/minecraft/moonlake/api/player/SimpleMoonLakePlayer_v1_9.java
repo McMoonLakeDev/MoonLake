@@ -159,6 +159,12 @@ public class SimpleMoonLakePlayer_v1_9 extends SimpleMoonLakePlayer_v1_8 {
     }
 
     @Override
+    public ItemStack getItemInHand() {
+
+        return getItemInMainHand();
+    }
+
+    @Override
     public ItemStack getItemInMainHand() {
 
         return getBukkitPlayer().getInventory().getItemInMainHand();
@@ -168,6 +174,12 @@ public class SimpleMoonLakePlayer_v1_9 extends SimpleMoonLakePlayer_v1_8 {
     public ItemStack getItemInOffHand() {
 
         return getBukkitPlayer().getInventory().getItemInOffHand();
+    }
+
+    @Override
+    public void setItemInHand(ItemStack itemStack) {
+
+        setItemInMainHand(itemStack);
     }
 
     @Override

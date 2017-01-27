@@ -18,16 +18,17 @@
  
 package com.minecraft.moonlake.util;
 
+import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -757,5 +758,67 @@ public class StringUtil {
     public static String collectionMerge(Collection<? extends String> strCollection, char mergeChar) {
 
         return arrayMerge(collectionToArray(strCollection), mergeChar);
+    }
+
+    /**
+     * 获取指定配置对象的指定 Bukkit 配置序列化类指定键的对象
+     *
+     * @param clazz 类
+     * @param configuration 配置对象
+     * @param key 键
+     * @param <T> 类型
+     * @return 类对象
+     * @throws IllegalArgumentException 如果类对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果配置对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果键对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果配置序列化类没有被注册获取 Map 后没有 {@code deserialize | valueOf} 函数则抛出异常
+     */
+    public static <T extends ConfigurationSerializable> T deserializeConfigurationClass(Class<T> clazz, Configuration configuration, String key) {
+
+        return deserializeConfigurationClass(clazz, configuration, key, null);
+    }
+
+    /**
+     * 获取指定配置对象的指定 Bukkit 配置序列化类指定键的对象
+     *
+     * @param clazz 类
+     * @param configuration 配置对象
+     * @param key 键
+     * @param def 默认值
+     * @param <T> 类型
+     * @return 类对象
+     * @throws IllegalArgumentException 如果类对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果配置对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果键对象为 {@code null} 则抛出异常
+     * @throws MoonLakeException 如果配置序列化类没有被注册获取 Map 后没有 {@code deserialize | valueOf} 函数则抛出异常
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends ConfigurationSerializable> T deserializeConfigurationClass(Class<T> clazz, Configuration configuration, String key, T def) {
+
+        Validate.notNull(clazz, "The class object is null.");
+        Validate.notNull(configuration, "The configuration object is null.");
+        Validate.notNull(key, "The configuration key object is null.");
+
+        Object obj = configuration.get(key, null);
+
+        if(obj == null)
+            return def;
+
+        if(clazz.isInstance(obj))
+            return (T) obj;
+        else if(obj instanceof Map) {
+            // map deserialize
+            try {
+                Method method = clazz.getMethod("deserialize");
+                if(method == null) clazz.getMethod("valueOf");
+                if(method == null) throw new MoonLakeException("The value is map, but class not exists 'deserialize' or 'valueOf' method.");
+                // deserialize
+                return (T) method.invoke(null, obj);
+            } catch (Exception e) {
+                throw new MoonLakeException(e.getMessage(), e);
+            }
+        } else {
+            return def;
+        }
     }
 }

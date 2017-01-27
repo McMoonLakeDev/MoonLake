@@ -21,6 +21,11 @@ package com.minecraft.moonlake.nms.packet.wrapped;
 import com.minecraft.moonlake.nms.exception.NMSException;
 import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
+import com.minecraft.moonlake.validate.Validate;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+
+import java.lang.reflect.Method;
 
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
@@ -28,24 +33,37 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  * <h1>BlockPosition</h1>
  * 方块位置封装类（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public class BlockPosition {
 
     private final static Class<?> CLASS_BLOCKPOSITION;
+    private final static Class<?> CLASS_BASEBLOCKPOSITION;
+    private final static Method METHOD_GETX;
+    private final static Method METHOD_GETY;
+    private final static Method METHOD_GETZ;
 
     static {
 
         try {
 
             CLASS_BLOCKPOSITION = PackageType.MINECRAFT_SERVER.getClass("BlockPosition");
+            CLASS_BASEBLOCKPOSITION = PackageType.MINECRAFT_SERVER.getClass("BaseBlockPosition");
+            METHOD_GETX = getMethod(CLASS_BASEBLOCKPOSITION, "getX");
+            METHOD_GETY = getMethod(CLASS_BASEBLOCKPOSITION, "getY");
+            METHOD_GETZ = getMethod(CLASS_BASEBLOCKPOSITION, "getZ");
         }
         catch (Exception e) {
 
             throw new NMSException("The nms block position initialize exception.", e);
         }
     }
+
+    /**
+     * Zero Block Position
+     */
+    public final static BlockPosition ZERO = new BlockPosition(0, 0, 0);
 
     private final ReadOnlyIntegerProperty x;
     private final ReadOnlyIntegerProperty y;
@@ -115,6 +133,18 @@ public class BlockPosition {
         return z.get();
     }
 
+    /**
+     * 获取此方块位置在指定世界的方块对象
+     *
+     * @param world 世界
+     * @return Block
+     * @throws IllegalArgumentException 如果世界对象为 {@code null} 则抛出异常
+     */
+    public Block getBlock(World world) {
+
+        return Validate.checkNotNull(world).getBlockAt(getX(), getY(), getZ());
+    }
+
     @Override
     public String toString() {
 
@@ -136,6 +166,32 @@ public class BlockPosition {
         try {
 
             return instantiateObject(CLASS_BLOCKPOSITION, getX(),getY(), getZ());
+        }
+        catch (Exception e) {
+
+            throw new NMSException();
+        }
+    }
+
+    /**
+     * 将指定 NMS 的 BlockPosition 对象转换到此 BlockPosition 对象
+     *
+     * @param nmsBlockPosition NMS BlockPosition
+     * @return BlockPosition
+     * @throws IllegalArgumentException 如果 NMS BlockPosition 对象为 {@code null} 或不是实例则抛出异常
+     * @throws NMSException 如果转换错误则抛出异常
+     */
+    public static BlockPosition fromNMS(Object nmsBlockPosition) throws NMSException {
+
+        Validate.notNull(nmsBlockPosition, "The nms block position object is null.");
+        Validate.isTrue(CLASS_BASEBLOCKPOSITION.isInstance(nmsBlockPosition), "The nms block position object is not instance.");
+
+        try {
+
+            int x = (int) METHOD_GETX.invoke(nmsBlockPosition);
+            int y = (int) METHOD_GETY.invoke(nmsBlockPosition);
+            int z = (int) METHOD_GETZ.invoke(nmsBlockPosition);
+            return new BlockPosition(x, y, z);
         }
         catch (Exception e) {
 

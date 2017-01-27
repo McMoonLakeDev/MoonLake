@@ -66,7 +66,7 @@ class DependPermissionsExPlayer {
         }
         this.permissionManager = ((PermissionsEx) plugin).getPermissionsManager();
 
-        MoonLakeAPI.getMLogger().info("Success hook 'PermissionsEx' plugin, 'PermissionsExPlayer' interface be use.");
+        MoonLakeAPI.getLogger().info("Success hook 'PermissionsEx' plugin, 'PermissionsExPlayer' interface be use.");
     }
 
     /**

@@ -45,7 +45,6 @@ import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
 import com.minecraft.moonlake.event.EventHelper;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.execute.Consumer;
-import com.minecraft.moonlake.logger.MLogger;
 import com.minecraft.moonlake.mysql.MySQLConnection;
 import com.minecraft.moonlake.mysql.MySQLFactory;
 import com.minecraft.moonlake.mysql.exception.MySQLInitializeException;
@@ -79,6 +78,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.logging.Logger;
 
 /**
  * <h1>MoonLakeAPI</h1>
@@ -118,9 +118,9 @@ public final class MoonLakeAPI {
      *
      * @return 日志对象
      */
-    public static MLogger getMLogger() {
+    public static Logger getLogger() {
 
-        return moonlake.getMLogger();
+        return moonlake.getLogger();
     }
 
     /**
@@ -1620,6 +1620,28 @@ public final class MoonLakeAPI {
     public static void callEvent(MoonLakeEvent event) {
 
         EventHelper.callEvent(event);
+    }
+
+    /**
+     * 调用事件帮助器异步触发指定事件
+     *
+     * @param plugin 插件
+     * @param event 事件
+     */
+    public static void callEventAsync(Plugin plugin, Event event) {
+
+        EventHelper.callEventAsync(plugin, event);
+    }
+
+    /**
+     * 调用事件帮助器异步触发指定事件
+     *
+     * @param plugin 插件
+     * @param event 事件
+     */
+    public static void callEventAsync(Plugin plugin, MoonLakeEvent event) {
+
+        EventHelper.callEventAsync(plugin, event);
     }
 
     /**

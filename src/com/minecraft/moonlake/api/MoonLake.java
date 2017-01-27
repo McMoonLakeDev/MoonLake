@@ -20,7 +20,8 @@ package com.minecraft.moonlake.api;
 
 import com.minecraft.moonlake.MoonLakePlugin;
 import com.minecraft.moonlake.MoonLakePluginConfig;
-import com.minecraft.moonlake.logger.MLogger;
+
+import java.util.logging.Logger;
 
 /**
  * <hr />
@@ -40,7 +41,7 @@ public interface MoonLake extends MoonLakeCore, MoonLakeInfo, BukkitInfo {
      *
      * @return 日志对象
      */
-    MLogger getMLogger();
+    Logger getLogger();
 
     /**
      * 获取月色之湖插件对象

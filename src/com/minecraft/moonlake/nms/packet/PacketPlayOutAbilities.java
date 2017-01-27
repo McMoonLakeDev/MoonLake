@@ -18,12 +18,14 @@
  
 package com.minecraft.moonlake.nms.packet;
 
+import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import com.minecraft.moonlake.nms.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.BooleanProperty;
 import com.minecraft.moonlake.property.FloatProperty;
 import com.minecraft.moonlake.property.SimpleBooleanProperty;
 import com.minecraft.moonlake.property.SimpleFloatProperty;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
@@ -41,6 +43,8 @@ public class PacketPlayOutAbilities extends PacketAbstract<PacketPlayOutAbilitie
 
     private final static Class<?> CLASS_PACKETPLAYOUTABILITIES;
     private final static Class<?> CLASS_PLAYERABILITIES;
+    private final static Class<?> CLASS_ENTITYHUMAN;
+    private final static Field FIELD_ABILITIES;
     private final static Field FIELD_ISINVULNERABLE;
     private final static Field FIELD_ISFLYING;
     private final static Field FIELD_CANFLY;
@@ -55,6 +59,8 @@ public class PacketPlayOutAbilities extends PacketAbstract<PacketPlayOutAbilitie
 
             CLASS_PACKETPLAYOUTABILITIES = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutAbilities");
             CLASS_PLAYERABILITIES = PackageType.MINECRAFT_SERVER.getClass("PlayerAbilities");
+            CLASS_ENTITYHUMAN = PackageType.MINECRAFT_SERVER.getClass("EntityHuman");
+            FIELD_ABILITIES = getField(CLASS_ENTITYHUMAN, true, "abilities");
             FIELD_ISINVULNERABLE = getField(CLASS_PLAYERABILITIES, true, "isInvulnerable");
             FIELD_ISFLYING = getField(CLASS_PLAYERABILITIES, true, "isFlying");
             FIELD_CANFLY = getField(CLASS_PLAYERABILITIES, true, "canFly");
@@ -179,6 +185,36 @@ public class PacketPlayOutAbilities extends PacketAbstract<PacketPlayOutAbilitie
             this.mayBuild = new SimpleBooleanProperty(mayBuild);
             this.flySpeed = new SimpleFloatProperty(flySpeed);
             this.walkSpeed = new SimpleFloatProperty(walkSpeed);
+        }
+
+        /**
+         * 玩家能力封装类构造函数
+         *
+         * @param player 玩家
+         * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+         * @throws MoonLakeException 如果获取玩家的能力属性时错误则抛出异常
+         */
+        public PlayerAbilities(Player player) {
+
+            Validate.notNull(player, "The player object is null.");
+
+            try {
+
+                Object nmsPlayer = PacketReflect.get().getNMSPlayer(player);
+                Object abilities = FIELD_ABILITIES.get(nmsPlayer);
+
+                this.isInvulnerable = new SimpleBooleanProperty((Boolean) FIELD_ISINVULNERABLE.get(abilities));
+                this.isFlying = new SimpleBooleanProperty((Boolean) FIELD_ISFLYING.get(abilities));
+                this.canFly = new SimpleBooleanProperty((Boolean) FIELD_CANFLY.get(abilities));
+                this.canInstantlyBuild = new SimpleBooleanProperty((Boolean) FIELD_CANINSTANTLYBUILD.get(abilities));
+                this.mayBuild = new SimpleBooleanProperty((Boolean) FIELD_MAYBUILD.get(abilities));
+                this.flySpeed = new SimpleFloatProperty((Float) FIELD_FLYSPEED.get(abilities));
+                this.walkSpeed = new SimpleFloatProperty((Float) FIELD_WALKSPEED.get(abilities));
+            }
+            catch (Exception e) {
+
+                throw new MoonLakeException("The get player abilities object value exception.", e);
+            }
         }
 
         public BooleanProperty getIsInvulnerable() {

@@ -74,6 +74,16 @@ public class PacketPlayOutHeldItemSlot extends PacketAbstract<PacketPlayOutHeldI
     }
 
     /**
+     * 数据包输出手持物品槽位构造函数
+     *
+     * @param player 玩家
+     */
+    public PacketPlayOutHeldItemSlot(Player player) {
+
+        this.heldItemSlot = new SimpleIntegerProperty(player.getInventory().getHeldItemSlot());
+    }
+
+    /**
      * 获取此数据包输出手持物品槽位的槽位
      *
      * @return 槽位

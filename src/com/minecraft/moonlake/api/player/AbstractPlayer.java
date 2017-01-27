@@ -18,10 +18,12 @@
  
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.api.player.depend.EconomyPlayerData;
 import com.minecraft.moonlake.api.player.depend.EconomyVaultPlayerResponse;
+import com.minecraft.moonlake.api.player.depend.WorldEditSelection;
 import com.minecraft.moonlake.exception.CannotDependException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.manager.PlayerManager;
@@ -30,6 +32,7 @@ import com.minecraft.moonlake.property.ReadOnlyObjectProperty;
 import com.minecraft.moonlake.property.ReadOnlyStringProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
 import com.minecraft.moonlake.property.SimpleStringProperty;
+import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
@@ -52,6 +55,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 
+import javax.annotation.Nullable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.*;
@@ -375,6 +379,17 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void updateInventory() {
 
+        if(Reflect.getServerVersionNumber() <= 8) {
+            // 服务端版本低于 1.8 或为 1.8
+            MoonLakeAPI.runTaskLaterAsync(MoonLakeAPI.getMoonLake(), new Runnable() {
+                @Override
+                public void run() {
+                    // 则延迟 1tick 更新
+                    getBukkitPlayer().updateInventory();
+                }
+            }, 1L);
+            return;
+        }
         getBukkitPlayer().updateInventory();
     }
 
@@ -1804,6 +1819,20 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
         catch (Exception e) {
 
             throw new CannotDependException("The call 'Vault' plugin 'Economy' method 'depositEconomyVaultBalance' exception.", e);
+        }
+    }
+
+    @Nullable
+    @Override
+    public WorldEditSelection getWorldEditSelection() throws CannotDependException {
+
+        try {
+
+            return PlayerLibraryFactorys.worldEditPlayer().getSelection(this);
+        }
+        catch (Exception e) {
+
+            throw new CannotDependException("The call 'WorldEdit plugin method 'getWorldEditSelection' exception.", e);
         }
     }
 }
