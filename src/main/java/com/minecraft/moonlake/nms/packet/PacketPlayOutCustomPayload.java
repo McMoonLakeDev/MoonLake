@@ -72,6 +72,17 @@ public class PacketPlayOutCustomPayload extends PacketAbstract<PacketPlayOutCust
      * @param channel 通道
      * @param data 数据
      */
+    public PacketPlayOutCustomPayload(String channel, byte[] data) {
+
+        this(channel, new PacketDataSerializer(data));
+    }
+
+    /**
+     * 数据包输出自定义通道数据构造函数
+     *
+     * @param channel 通道
+     * @param data 数据
+     */
     public PacketPlayOutCustomPayload(String channel, PacketDataSerializer data) {
 
         this.channel = new SimpleStringProperty(channel);

@@ -25,6 +25,13 @@ import com.minecraft.moonlake.reflect.Reflect;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
+/**
+ * <h1>PacketDataSerializer</h1>
+ * 数据包数据串行器包装类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class PacketDataSerializer {
 
     private final static Class<?> CLASS_PACKETDATASERIALIZER;
@@ -43,24 +50,62 @@ public class PacketDataSerializer {
 
     private ObjectProperty<ByteBuf> byteBuf;
 
+    /**
+     * 数据包数据串行器包装类构造函数
+     */
     public PacketDataSerializer() {
 
         this(Unpooled.buffer());
     }
 
+    /**
+     * 数据包数据串行器包装类构造函数
+     *
+     * @param byteBuf 数据
+     */
+    public PacketDataSerializer(byte[] byteBuf) {
+
+        this(Unpooled.wrappedBuffer(byteBuf));
+    }
+
+    /**
+     * 数据包数据串行器包装类构造函数
+     *
+     * @param byteBuf 数据
+     */
     public PacketDataSerializer(ByteBuf byteBuf) {
 
         this.byteBuf = new SimpleObjectProperty<>(byteBuf);
     }
 
+    /**
+     * 获取此数据包数据串行器的数据
+     *
+     * @return 数据
+     */
     public ByteBuf getByteBuf() {
 
         return byteBuf.get();
     }
 
+    /**
+     * 设置此数据包数据串行器的数据
+     *
+     * @param byteBuf 数据
+     */
     public void setByteBuf(ByteBuf byteBuf) {
 
         this.byteBuf.set(byteBuf);
+    }
+
+    /**
+     * 设置此数据包数据串行器的数据
+     *
+     * @param byteBuf 数据
+     */
+    public void setByteBuf(byte[] byteBuf) {
+
+        this.byteBuf.set(Unpooled.wrappedBuffer(byteBuf));
     }
 
     @Override
@@ -70,6 +115,12 @@ public class PacketDataSerializer {
                 '}';
     }
 
+    /**
+     * 将此 PacketDataSerializer 转换到 NMS 的 PacketDataSerializer 对象
+     *
+     * @return NMS PacketDataSerializer
+     * @throws NMSException 如果转换错误则抛出异常
+     */
     public Object asNMS() throws NMSException {
 
         try {
