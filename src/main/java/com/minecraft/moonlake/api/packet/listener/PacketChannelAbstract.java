@@ -64,8 +64,8 @@ abstract class PacketChannelAbstract implements PacketChannel {
     static {
 
         KEY_HANDLER = "packet_handler";
-        KEY_PLAYER = "packet_listener_player";
-        KEY_SERVER = "packet_listener_server";
+        KEY_PLAYER = "moonlake_packet_listener_player";
+        KEY_SERVER = "moonlake_packet_listener_server";
 
         try {
 
