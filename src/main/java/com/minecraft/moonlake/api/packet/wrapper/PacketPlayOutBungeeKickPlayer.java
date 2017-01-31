@@ -23,10 +23,23 @@ import com.minecraft.moonlake.property.StringProperty;
 
 import java.io.IOException;
 
+/**
+ * <h1>PacketPlayOutBungeeKickPlayer</h1>
+ * 数据包输出蹦极目标 KICK
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class PacketPlayOutBungeeKickPlayer extends PacketPlayOutBungeeAbstractTarget {
 
     private StringProperty reason;
 
+    /**
+     * 数据包输出蹦极目标 KICK 构造函数
+     *
+     * @param target 目标玩家名
+     * @param reason 原因
+     */
     public PacketPlayOutBungeeKickPlayer(String target, String reason) {
 
         super(target);
@@ -34,11 +47,11 @@ public class PacketPlayOutBungeeKickPlayer extends PacketPlayOutBungeeAbstractTa
         this.reason = new SimpleStringProperty(reason);
     }
 
-    public StringProperty getTarget() {
-
-        return target;
-    }
-
+    /**
+     * 获取此数据包输出蹦极目标 KICK 的原因
+     *
+     * @return 原因
+     */
     public StringProperty getReason() {
 
         return reason;

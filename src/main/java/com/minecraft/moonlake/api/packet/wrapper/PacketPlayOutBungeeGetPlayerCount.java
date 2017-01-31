@@ -20,13 +20,28 @@ package com.minecraft.moonlake.api.packet.wrapper;
 
 import java.io.IOException;
 
+/**
+ * <h1>PacketPlayOutBungeeGetPlayerCount</h1>
+ * 数据包输出蹦极服务器获取玩家数量
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class PacketPlayOutBungeeGetPlayerCount extends PacketPlayOutBungeeAbstractServer {
 
+    /**
+     * 数据包输出蹦极服务器获取玩家数量构造函数 (默认目标服务器 ALL)
+     */
     public PacketPlayOutBungeeGetPlayerCount() {
 
         super("ALL");
     }
 
+    /**
+     * 数据包输出蹦极服务器获取玩家数量构造函数
+     *
+     * @param targetServer 目标服务器
+     */
     public PacketPlayOutBungeeGetPlayerCount(String targetServer) {
 
         super(targetServer);

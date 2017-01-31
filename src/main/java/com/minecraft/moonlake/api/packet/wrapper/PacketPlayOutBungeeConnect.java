@@ -20,8 +20,20 @@ package com.minecraft.moonlake.api.packet.wrapper;
 
 import java.io.IOException;
 
+/**
+ * <h1>PacketPlayOutBungeeConnect</h1>
+ * 数据包输出蹦极服务器连接
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class PacketPlayOutBungeeConnect extends PacketPlayOutBungeeAbstractServer {
 
+    /**
+     * 数据包输出蹦极服务器连接构造函数
+     *
+     * @param targetServer 目标服务器
+     */
     public PacketPlayOutBungeeConnect(String targetServer) {
 
         super(targetServer);

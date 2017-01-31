@@ -20,8 +20,18 @@ package com.minecraft.moonlake.api.packet.wrapper;
 
 import java.io.IOException;
 
+/**
+ * <h1>PacketPlayOutBungeeGetServers</h1>
+ * 数据包输出蹦极获取所有服务器
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class PacketPlayOutBungeeGetServers extends PacketPlayOutBungeeAbstract {
 
+    /**
+     * 数据包输出蹦极获取所有服务器构造函数
+     */
     public PacketPlayOutBungeeGetServers() {
     }
 

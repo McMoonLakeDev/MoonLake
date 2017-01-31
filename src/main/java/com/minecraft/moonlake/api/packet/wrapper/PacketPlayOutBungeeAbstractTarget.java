@@ -18,20 +18,40 @@
 
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
 import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.property.StringProperty;
 
 import java.io.IOException;
 
+/**
+ * <h1>PacketPlayOutBungeeAbstractTarget</h1>
+ * 数据包输出蹦极目标抽象类
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see PacketPlayOutBungee
+ * @see PacketPlayOutBungeeAbstract
+ */
 public abstract class PacketPlayOutBungeeAbstractTarget extends PacketPlayOutBungeeAbstract {
 
     final StringProperty target;
 
+    /**
+     * 数据包输出蹦极目标抽象类构造函数
+     *
+     * @param target 目标玩家名
+     */
     PacketPlayOutBungeeAbstractTarget(String target) {
 
         this.target = new SimpleStringProperty(target);
     }
 
+    /**
+     * 获取此数据包输出蹦极目标的目标玩家名
+     *
+     * @return 目标玩家名
+     */
     public StringProperty getTarget() {
 
         return target;

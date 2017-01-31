@@ -20,8 +20,20 @@ package com.minecraft.moonlake.api.packet.wrapper;
 
 import java.io.IOException;
 
+/**
+ * <h1>PacketPlayOutBungeeGetServerIp</h1>
+ * 数据包输出蹦极服务器获取 IP
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class PacketPlayOutBungeeGetServerIp extends PacketPlayOutBungeeAbstractServer {
 
+    /**
+     * 数据包输出蹦极服务器获取 IP 构造函数
+     *
+     * @param targetServer 目标服务器
+     */
     public PacketPlayOutBungeeGetServerIp(String targetServer) {
 
         super(targetServer);

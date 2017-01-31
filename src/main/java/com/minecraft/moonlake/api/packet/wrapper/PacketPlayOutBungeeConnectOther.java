@@ -23,10 +23,23 @@ import com.minecraft.moonlake.property.StringProperty;
 
 import java.io.IOException;
 
+/**
+ * <h1>PacketPlayOutBungeeConnectOther</h1>
+ * 数据包输出蹦极目标连接服务器
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class PacketPlayOutBungeeConnectOther extends PacketPlayOutBungeeAbstractTarget {
 
     private StringProperty targetServer;
 
+    /**
+     * 数据包输出蹦极目标连接服务器构造函数
+     *
+     * @param target 目标玩家名
+     * @param targetServer 目标服务器
+     */
     public PacketPlayOutBungeeConnectOther(String target, String targetServer) {
 
         super(target);
@@ -34,6 +47,11 @@ public class PacketPlayOutBungeeConnectOther extends PacketPlayOutBungeeAbstract
         this.targetServer = new SimpleStringProperty(targetServer);
     }
 
+    /**
+     * 获取此数据包输出蹦极目标连接服务器的目标服务器
+     *
+     * @return 目标服务器
+     */
     public StringProperty getTargetServer() {
 
         return targetServer;

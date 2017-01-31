@@ -32,20 +32,34 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+/**
+ * <h1>PacketPlayOutBungeeAbstract</h1>
+ * 数据包输出蹦极抽象类
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see PacketPlayOutBungee
+ */
 public abstract class PacketPlayOutBungeeAbstract implements PacketPlayOutBungee {
 
-    // BungeeCord Channel Name
-    private final static String CHANNEL = "BungeeCord";
     private final ByteArrayOutputStream data;
 
     final DataOutputStream dataOut;
 
+    /**
+     * 数据包输出蹦极抽象类构造函数
+     */
     PacketPlayOutBungeeAbstract() {
 
         this.data = new ByteArrayOutputStream();
         this.dataOut = new DataOutputStream(data);
     }
 
+    /**
+     * 将需要发送的数据写入到 {@link #dataOut} 对象内
+     *
+     * @throws IOException 如果 IO 异常则抛出
+     */
     protected abstract void write() throws IOException;
 
     private void writePacket() {

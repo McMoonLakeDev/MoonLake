@@ -20,8 +20,18 @@ package com.minecraft.moonlake.api.packet.wrapper;
 
 import java.io.IOException;
 
+/**
+ * <h1>PacketPlayOutBungeeGetUUID</h1>
+ * 数据包输出蹦极获取发送者 UUID
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class PacketPlayOutBungeeGetUUID extends PacketPlayOutBungeeAbstract {
 
+    /**
+     * 数据包输出蹦极获取发送者 UUID 构造函数
+     */
     public PacketPlayOutBungeeGetUUID() {
     }
 

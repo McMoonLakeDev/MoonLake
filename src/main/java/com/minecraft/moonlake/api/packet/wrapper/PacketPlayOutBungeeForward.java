@@ -25,11 +25,24 @@ import com.minecraft.moonlake.property.StringProperty;
 
 import java.io.IOException;
 
+/**
+ * <h1>PacketPlayOutBungeeForward</h1>
+ * 数据包输出蹦极服务器数据
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class PacketPlayOutBungeeForward extends PacketPlayOutBungeeAbstractServer {
 
     private StringProperty channel;
     private ObjectProperty<byte[]> data;
 
+    /**
+     * 数据包输出蹦极服务器数据构造函数 (默认目标服务器 ALL, 可用: ALL,ONLINE)
+     *
+     * @param channel 通道名
+     * @param data 数据
+     */
     public PacketPlayOutBungeeForward(String channel, byte[] data) {
 
         super("ALL"); // ALL 或 ONLINE, 默认 ALL
@@ -38,6 +51,13 @@ public class PacketPlayOutBungeeForward extends PacketPlayOutBungeeAbstractServe
         this.data = new SimpleObjectProperty<>(data);
     }
 
+    /**
+     * 数据包输出蹦极服务器数据构造函数
+     *
+     * @param targetServer 目标服务器
+     * @param channel 通道名
+     * @param data 数据
+     */
     public PacketPlayOutBungeeForward(String targetServer, String channel, byte[] data) {
 
         super(targetServer);
@@ -46,11 +66,21 @@ public class PacketPlayOutBungeeForward extends PacketPlayOutBungeeAbstractServe
         this.data = new SimpleObjectProperty<>(data);
     }
 
+    /**
+     * 获取此数据包输出蹦极服务器数据的通道名
+     *
+     * @return 通道名
+     */
     public StringProperty getChannel() {
 
         return channel;
     }
 
+    /**
+     * 获取此数据包输出蹦极服务器数据的数据
+     *
+     * @return 数据
+     */
     public ObjectProperty<byte[]> getData() {
 
         return data;

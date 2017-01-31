@@ -25,11 +25,25 @@ import com.minecraft.moonlake.property.StringProperty;
 
 import java.io.IOException;
 
+/**
+ * <h1>PacketPlayOutBungeeForwardToPlayer</h1>
+ * 数据包输出蹦极数据服务器到目标
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class PacketPlayOutBungeeForwardToPlayer extends PacketPlayOutBungeeAbstractTarget {
 
     private StringProperty channel;
     private ObjectProperty<byte[]> data;
 
+    /**
+     * 数据包输出蹦极数据服务器到目标构造函数
+     *
+     * @param target 目标玩家名
+     * @param channel 通道名
+     * @param data 数据
+     */
     public PacketPlayOutBungeeForwardToPlayer(String target, String channel, byte[] data) {
 
         super(target);
@@ -38,11 +52,21 @@ public class PacketPlayOutBungeeForwardToPlayer extends PacketPlayOutBungeeAbstr
         this.data = new SimpleObjectProperty<>(data);
     }
 
+    /**
+     * 获取此数据包输出蹦极数据服务器到目标的通道名
+     *
+     * @return 通道名
+     */
     public StringProperty getChannel() {
 
         return channel;
     }
 
+    /**
+     * 获取此数据包输出蹦极数据服务器到目标的数据
+     *
+     * @return 数据
+     */
     public ObjectProperty<byte[]> getData() {
 
         return data;

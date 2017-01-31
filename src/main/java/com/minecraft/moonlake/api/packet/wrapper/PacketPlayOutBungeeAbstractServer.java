@@ -18,20 +18,40 @@
 
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
 import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.property.StringProperty;
 
 import java.io.IOException;
 
+/**
+ * <h1>PacketPlayOutBungeeAbstractServer</h1>
+ * 数据包输出蹦极服务器抽象类
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see PacketPlayOutBungee
+ * @see PacketPlayOutBungeeAbstract
+ */
 public abstract class PacketPlayOutBungeeAbstractServer extends PacketPlayOutBungeeAbstract {
 
     final StringProperty targetServer;
 
+    /**
+     * 数据包输出蹦极服务器抽象类构造函数
+     *
+     * @param targetServer 目标服务器
+     */
     PacketPlayOutBungeeAbstractServer(String targetServer) {
 
         this.targetServer = new SimpleStringProperty(targetServer);
     }
 
+    /**
+     * 获取此数据包输出蹦极服务器的目标服务器
+     *
+     * @return 目标服务器
+     */
     public StringProperty getTargetServer() {
 
         return targetServer;
