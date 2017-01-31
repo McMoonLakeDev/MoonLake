@@ -27,6 +27,8 @@ import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -81,8 +83,60 @@ abstract class PacketChannelAbstract implements PacketChannel {
             FIELD_CONSOLE = getField(CLASS_CRAFTSERVER, true, "console");
             FIELD_PLAYERCONNECTION = getField(CLASS_ENTITYPLAYER, true, "playerConnection");
             FIELD_NETWORKMANAGER = getField(CLASS_PLAYERCONNECTION, true, "networkManager");
-            FIELD_SERVERCONNECTION = getField(CLASS_MINECRAFTSERVER, true, getServerVersionNumber() <= 8 ? "q" : "p");
-            FIELD_NETWORKMANAGERLIST = getField(CLASS_SERVERCONNECTION, true, getServerVersionNumber() <= 8 ? "g" : "h");
+
+            Field FIELD_SERVERCONNECTION_TEMP = null;
+            Field FIELD_NETWORKMANAGERLIST_TEMP = null;
+
+            try {
+
+                FIELD_SERVERCONNECTION_TEMP = getField(CLASS_MINECRAFTSERVER, true, getServerVersionNumber() <= 8 ? "q" : "p");
+                FIELD_NETWORKMANAGERLIST_TEMP = getField(CLASS_SERVERCONNECTION, true, getServerVersionNumber() <= 8 ? "g" : "h");
+            }
+            catch (Exception e) {
+            }
+            try {
+
+                if(FIELD_SERVERCONNECTION_TEMP == null || !CLASS_SERVERCONNECTION.isAssignableFrom(FIELD_SERVERCONNECTION_TEMP.getType())) {
+
+                    Field[] fields = CLASS_MINECRAFTSERVER.getDeclaredFields();
+
+                    for(Field field : fields) {
+
+                        if(CLASS_SERVERCONNECTION.isAssignableFrom(field.getType())) {
+
+                            FIELD_SERVERCONNECTION_TEMP = field;
+                            FIELD_SERVERCONNECTION_TEMP.setAccessible(true);
+                            break;
+                        }
+                    }
+                }
+                if(FIELD_NETWORKMANAGERLIST_TEMP == null || !CLASS_NETWORKMANAGER.isAssignableFrom(FIELD_NETWORKMANAGERLIST_TEMP.getType())) {
+
+                    Field[] fields = CLASS_SERVERCONNECTION.getDeclaredFields();
+
+                    for(Field field : fields) {
+
+                        if(List.class.isAssignableFrom(field.getType())) {
+
+                            ParameterizedType type = (ParameterizedType) field.getGenericType();
+                            Type valueType = type.getActualTypeArguments()[0];
+
+                            if(CLASS_NETWORKMANAGER.getTypeName().equals(valueType.getTypeName())) {
+
+                                FIELD_NETWORKMANAGERLIST_TEMP = field;
+                                FIELD_NETWORKMANAGERLIST_TEMP.setAccessible(true);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e) {
+
+                throw new NMSException(e.getMessage(), e);
+            }
+            FIELD_SERVERCONNECTION = FIELD_SERVERCONNECTION_TEMP;
+            FIELD_NETWORKMANAGERLIST = FIELD_NETWORKMANAGERLIST_TEMP;
         }
         catch (Exception e) {
 

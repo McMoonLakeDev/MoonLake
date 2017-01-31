@@ -21,12 +21,12 @@ package com.minecraft.moonlake;
 import com.minecraft.moonlake.api.MoonLake;
 import com.minecraft.moonlake.api.packet.listener.PacketListenerFactory;
 import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
-import com.minecraft.moonlake.exception.MoonLakeException;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * <hr />
@@ -96,27 +96,27 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         this.configuration = new MoonLakePluginConfig(this);
         this.configuration.reload();
 
-        // load class
-        this.loadClass();
+        // load library class
+        this.loadLibraryClass();
 
         this.getLogger().info("月色之湖核心 API 插件 v" + getPluginVersion() + " 成功加载.");
     }
 
-    private void loadClass() {
+    private void loadLibraryClass() {
         // load class
         try {
+            // load PlayerLibraryFactorys class to register listener
+            Class.forName(PlayerLibraryFactorys.class.getName());
+
             if(getConfiguration().isPacketChannelListener()) {
                 // load PacketListenerFactory class
                 Class.forName(PacketListenerFactory.class.getName());
-
                 this.getLogger().info("月色之湖数据包通道监听器(PCL)成功加载.");
             }
-            // load PlayerLibraryFactorys class to register listener
-            Class.forName(PlayerLibraryFactorys.class.getName());
         }
         catch (Exception e) {
 
-            throw new MoonLakeException("The load moonlake library class exception.", e);
+            this.getLogger().log(Level.WARNING, "The load moonlake library class exception.", e);
         }
     }
 
