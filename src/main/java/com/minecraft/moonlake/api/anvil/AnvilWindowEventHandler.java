@@ -18,7 +18,7 @@
  
 package com.minecraft.moonlake.api.anvil;
 
-import com.minecraft.moonlake.execute.Execute;
+import com.minecraft.moonlake.executor.Executor;
 
 /**
  * <h1>AnvilWindowEventHandler</h1>
@@ -27,12 +27,12 @@ import com.minecraft.moonlake.execute.Execute;
  * @version 1.0
  * @author Month_Light
  */
-public interface AnvilWindowEventHandler<T extends AnvilWindowEvent> extends Execute<T> {
+public interface AnvilWindowEventHandler<T extends AnvilWindowEvent> extends Executor<T> {
 
     /**
      * 铁砧窗口事件处理接口执行器
      *
      * @param event 事件
      */
-    void onExecute(T event);
+    void execute(T event);
 }

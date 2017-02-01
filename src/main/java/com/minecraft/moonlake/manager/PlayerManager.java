@@ -18,13 +18,16 @@
  
 package com.minecraft.moonlake.manager;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.player.*;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -321,6 +324,33 @@ public class PlayerManager extends MoonLakeManager {
         catch (Exception e) {
 
             throw new MoonLakeException("The get player language exception.", e);
+        }
+    }
+
+    /**
+     * 安全的更新指定玩家的物品栏
+     *
+     * @param player 玩家
+     */
+    public static void updateInventorySafe(Plugin plugin, final Player player) {
+
+        Validate.notNull(plugin, "The plugin object is null");
+        Validate.notNull(player, "The player object is null.");
+
+        if(Reflect.getServerVersionNumber() <= 8) {
+
+            MoonLakeAPI.runTaskLaterAsync(plugin, new Runnable() {
+
+                @Override
+                public void run() {
+
+                    player.updateInventory();
+                }
+            }, 1L);
+        }
+        else {
+
+            player.updateInventory();
         }
     }
 }

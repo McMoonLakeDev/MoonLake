@@ -44,7 +44,7 @@ import com.minecraft.moonlake.api.player.PlayerLibrary;
 import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
 import com.minecraft.moonlake.event.EventHelper;
 import com.minecraft.moonlake.exception.MoonLakeException;
-import com.minecraft.moonlake.execute.Consumer;
+import com.minecraft.moonlake.executor.Consumer;
 import com.minecraft.moonlake.mysql.MySQLConnection;
 import com.minecraft.moonlake.mysql.MySQLFactory;
 import com.minecraft.moonlake.mysql.exception.MySQLInitializeException;

@@ -19,7 +19,7 @@
 package com.minecraft.moonlake.manager;
 
 import com.minecraft.moonlake.exception.MoonLakeException;
-import com.minecraft.moonlake.execute.Consumer;
+import com.minecraft.moonlake.executor.Consumer;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
 

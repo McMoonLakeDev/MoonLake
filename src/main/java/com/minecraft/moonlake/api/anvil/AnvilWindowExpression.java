@@ -21,6 +21,7 @@ package com.minecraft.moonlake.api.anvil;
 import com.minecraft.moonlake.api.event.MoonLakeListener;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.event.EventHelper;
+import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.nms.exception.NMSException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
@@ -128,7 +129,7 @@ class AnvilWindowExpression implements AnvilWindow {
                     event.setResult(Event.Result.DENY);
                     event.setCancelled(true);
 
-                    player.updateInventory();
+                    PlayerManager.updateInventorySafe(getPlugin(), player);
                 }
             };
             registerListener(listenerMove);
@@ -164,12 +165,12 @@ class AnvilWindowExpression implements AnvilWindow {
 
                     if(clickSlot == null) return;
                     AnvilWindowClickEvent awce = new AnvilWindowClickEvent(player, AnvilWindowExpression.this, clickSlot, clickItemStack);
-                    clickEventHandle.onExecute(awce);
+                    clickEventHandle.execute(awce);
 
                     if(awce.isCancelled()) {
 
                         event.setCancelled(true);
-                        player.updateInventory();
+                        PlayerManager.updateInventorySafe(getPlugin(), player);
                     }
                 }
             };
@@ -199,7 +200,7 @@ class AnvilWindowExpression implements AnvilWindow {
                     Player player = (Player) event.getPlayer();
 
                     AnvilWindowCloseEvent awce = new AnvilWindowCloseEvent(player, AnvilWindowExpression.this);
-                    closeEventHandle.onExecute(awce);
+                    closeEventHandle.execute(awce);
                 }
             };
             registerListener(listenerClose);

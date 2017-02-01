@@ -18,7 +18,7 @@
  
 package com.minecraft.moonlake.api.nbt;
 
-import com.minecraft.moonlake.execute.Consumer;
+import com.minecraft.moonlake.executor.Consumer;
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import org.bukkit.Chunk;
 import org.bukkit.World;

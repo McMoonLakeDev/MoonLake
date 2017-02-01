@@ -23,7 +23,7 @@ import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.MoonLakeException;
-import com.minecraft.moonlake.execute.Consumer;
+import com.minecraft.moonlake.executor.Consumer;
 import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;

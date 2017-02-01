@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The MoonLake Authors
+ * Copyright (C) 2016 The MoonLake Authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,24 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-
-package com.minecraft.moonlake.execute;
+ 
+ 
+package com.minecraft.moonlake.builder;
 
 /**
- * <h1>Consumer</h1>
- * 消费者接口
+ * <h1>SingleParamBuilder</h1>
+ * 单参数建造接口（详细doc待补充...）
  *
  * @version 1.0
  * @author Month_Light
- * @param <T> 类型
  */
-public interface Consumer<T> {
+public interface SingleParamBuilder<R, P> {
 
     /**
-     * 接受参数类型值
+     * 单参数建造接口函数
      *
-     * @param t 类型值
+     * @param param 参数
+     * @return 结果
      */
-    void accept(T t);
+    R build(P param);
 }

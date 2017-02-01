@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The MoonLake Authors
+ * Copyright (C) 2017 The MoonLake Authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,23 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
- 
-package com.minecraft.moonlake.execute;
+
+
+package com.minecraft.moonlake.executor;
 
 /**
- * <h1>Execute</h1>
- * 执行接口（详细doc待补充...）
+ * <h1>Executor</h1>
+ * 执行者接口（详细doc待补充...）
  *
  * @version 1.0
  * @author Month_Light
  */
-public interface Execute<T> {
+public interface Executor<T> {
 
     /**
-     * 执行接口函数
+     * 执行者接口函数
      *
      * @param param 参数
      */
-    void onExecute(T param);
+    void execute(T param);
 }

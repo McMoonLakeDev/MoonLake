@@ -19,7 +19,7 @@
 package com.minecraft.moonlake.task;
 
 import com.minecraft.moonlake.exception.MoonLakeException;
-import com.minecraft.moonlake.execute.Consumer;
+import com.minecraft.moonlake.executor.Consumer;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
