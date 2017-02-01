@@ -18,7 +18,10 @@
  
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
+import com.minecraft.moonlake.nms.packet.exception.PacketException;
+import org.bukkit.plugin.Plugin;
 
 import java.net.InetSocketAddress;
 
@@ -59,4 +62,84 @@ public interface InternetPlayer {
      * @return 网络套接字地址端口号
      */
     int getPort();
+
+    /**
+     * 从此玩家发送蹦极数据包到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果插件对象没有注册 {@link PacketPlayOutBungee#CHANNEL} 通道则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    void sendBungeePacket(Plugin plugin, PacketPlayOutBungee packet);
+
+    /**
+     * 从此玩家异步发送蹦极数据包到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果插件对象没有注册 {@link PacketPlayOutBungee#CHANNEL} 通道则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    void sendBungeePacketAsync(Plugin plugin, PacketPlayOutBungee packet);
+
+    /**
+     * 从此玩家发送不安全蹦极数据包到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    void sendBungeePacketUnsafe(Plugin plugin, PacketPlayOutBungee packet);
+
+    /**
+     * 从此玩家异步发送不安全蹦极数据包到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    void sendBungeePacketUnsafeAsync(Plugin plugin, PacketPlayOutBungee packet);
+
+    /**
+     * 从此玩家发送蹦极连接数据包到蹦极代理
+     *
+     * @param plugin 插件
+     * @param targetServer 目标服务器
+     * @throws IllegalArgumentException 如果插件对象没有注册 {@link PacketPlayOutBungee#CHANNEL} 通道则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    void sendBungeeConnect(Plugin plugin, String targetServer);
+
+    /**
+     * 从此玩家异步发送蹦极连接数据包到蹦极代理
+     *
+     * @param plugin 插件
+     * @param targetServer 目标服务器
+     * @throws IllegalArgumentException 如果插件对象没有注册 {@link PacketPlayOutBungee#CHANNEL} 通道则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    void sendBungeeConnectAsync(Plugin plugin, String targetServer);
+
+    /**
+     * 从此玩家发送不安全蹦极连接数据包到蹦极代理
+     *
+     * @param plugin 插件
+     * @param targetServer 目标服务器
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    void sendBungeeConnectUnsafe(Plugin plugin, String targetServer);
+
+    /**
+     * 从此玩家异步发送不安全蹦极连接数据包到蹦极代理
+     *
+     * @param plugin 插件
+     * @param targetServer 目标服务器
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    void sendBungeeConnectUnsafeAsync(Plugin plugin, String targetServer);
 }

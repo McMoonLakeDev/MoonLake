@@ -21,6 +21,8 @@ package com.minecraft.moonlake.api.player;
 import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutBungeeConnect;
 import com.minecraft.moonlake.api.player.depend.EconomyPlayerData;
 import com.minecraft.moonlake.api.player.depend.EconomyVaultPlayerResponse;
 import com.minecraft.moonlake.api.player.depend.WorldEditSelection;
@@ -1112,6 +1114,62 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     public int getPort() {
 
         return getAddress().getPort();
+    }
+
+    @Override
+    public void sendBungeePacket(Plugin plugin, PacketPlayOutBungee packet) {
+
+        Validate.notNull(packet, "The bungee packet play out object is null.");
+
+        packet.sendPacket(plugin, getBukkitPlayer());
+    }
+
+    @Override
+    public void sendBungeePacketAsync(Plugin plugin, PacketPlayOutBungee packet) {
+
+        Validate.notNull(packet, "The bungee packet play out object is null.");
+
+        packet.sendPacketAsync(plugin, getBukkitPlayer());
+    }
+
+    @Override
+    public void sendBungeePacketUnsafe(Plugin plugin, PacketPlayOutBungee packet) {
+
+        Validate.notNull(packet, "The bungee packet play out object is null.");
+
+        packet.sendPacketUnsafe(plugin, getBukkitPlayer());
+    }
+
+    @Override
+    public void sendBungeePacketUnsafeAsync(Plugin plugin, PacketPlayOutBungee packet) {
+
+        Validate.notNull(packet, "The bungee packet play out object is null.");
+
+        packet.sendPacketUnsafeAsync(plugin, getBukkitPlayer());
+    }
+
+    @Override
+    public void sendBungeeConnect(Plugin plugin, String targetServer) {
+
+        sendBungeePacket(plugin, new PacketPlayOutBungeeConnect(targetServer));
+    }
+
+    @Override
+    public void sendBungeeConnectAsync(Plugin plugin, String targetServer) {
+
+        sendBungeePacketAsync(plugin, new PacketPlayOutBungeeConnect(targetServer));
+    }
+
+    @Override
+    public void sendBungeeConnectUnsafe(Plugin plugin, String targetServer) {
+
+        sendBungeePacketUnsafe(plugin, new PacketPlayOutBungeeConnect(targetServer));
+    }
+
+    @Override
+    public void sendBungeeConnectUnsafeAsync(Plugin plugin, String targetServer) {
+
+        sendBungeePacketUnsafeAsync(plugin, new PacketPlayOutBungeeConnect(targetServer));
     }
 
     @Override
