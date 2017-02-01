@@ -40,14 +40,18 @@ import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.api.nbt.NBTFactory;
 import com.minecraft.moonlake.api.nbt.NBTLibrary;
 import com.minecraft.moonlake.api.nbt.NBTList;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
+import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.api.player.PlayerLibrary;
 import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
 import com.minecraft.moonlake.event.EventHelper;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.executor.Consumer;
+import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.mysql.MySQLConnection;
 import com.minecraft.moonlake.mysql.MySQLFactory;
 import com.minecraft.moonlake.mysql.exception.MySQLInitializeException;
+import com.minecraft.moonlake.nbt.exception.NBTException;
 import com.minecraft.moonlake.nms.packet.Packet;
 import com.minecraft.moonlake.nms.packet.PacketFactory;
 import com.minecraft.moonlake.nms.packet.exception.PacketException;
@@ -58,8 +62,11 @@ import com.minecraft.moonlake.task.MoonLakeRunnable;
 import com.minecraft.moonlake.task.TaskHelper;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
@@ -78,6 +85,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -1830,5 +1838,391 @@ public final class MoonLakeAPI {
     public static <T> void callBackAsyncConsumer(Plugin plugin, Callable<T> callback, Consumer<T> consumer, long delay) {
 
         TaskHelper.callBackAsyncConsumer(plugin, callback, consumer, delay);
+    }
+
+    private static void packetBungeeClose(PacketPlayOutBungee packet) {
+
+        if(packet == null) return;
+
+        try {
+
+            packet.close();
+        }
+        catch (Exception e) {
+
+            MoonLakeAPI.getLogger().log(Level.WARNING, "The close bungee packet play out '" + packet + "' exception.", e);
+        }
+    }
+
+    /**
+     * 将指定蹦极数据包以指定玩家发送到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @param sender 发送者
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果发送者对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果插件对象没有注册 {@link PacketPlayOutBungee#CHANNEL} 通道则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    public static void sendBungeePacket(Plugin plugin, PacketPlayOutBungee packet, Player... sender) {
+
+        Validate.notNull(packet, "The bungee packet play out object is null.");
+
+        packet.sendPacket(plugin, sender);
+        packetBungeeClose(packet);
+    }
+
+    /**
+     * 将指定蹦极数据包以指定玩家异步发送到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @param sender 发送者
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果发送者对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果插件对象没有注册 {@link PacketPlayOutBungee#CHANNEL} 通道则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    public static void sendBungeePacketAsync(Plugin plugin, PacketPlayOutBungee packet, Player... sender) {
+
+        Validate.notNull(packet, "The bungee packet play out object is null.");
+
+        packet.sendPacketAsync(plugin, sender);
+        packetBungeeClose(packet);
+    }
+
+    /**
+     * 将指定蹦极数据包以指定玩家不安全的发送到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @param sender 发送者
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果发送者对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    public static void sendBungeePacketUnsafe(Plugin plugin, PacketPlayOutBungee packet, Player... sender) {
+
+        Validate.notNull(packet, "The bungee packet play out object is null.");
+
+        packet.sendPacketUnsafe(plugin, sender);
+        packetBungeeClose(packet);
+    }
+
+    /**
+     * 将指定蹦极数据包以指定玩家不安全的异步发送到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @param sender 发送者
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果发送者对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    public static void sendBungeePacketUnsafeAsync(Plugin plugin, PacketPlayOutBungee packet, Player... sender) {
+
+        Validate.notNull(packet, "The bungee packet play out object is null.");
+
+        packet.sendPacketUnsafeAsync(plugin, sender);
+        packetBungeeClose(packet);
+    }
+
+    /**
+     * 将指定蹦极数据包以指定玩家发送到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @param sender 发送者
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果发送者对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果插件对象没有注册 {@link PacketPlayOutBungee#CHANNEL} 通道则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    public static void sendBungeePacket(Plugin plugin, PacketPlayOutBungee packet, MoonLakePlayer... sender) {
+
+        Validate.notNull(packet, "The bungee packet play out object is null.");
+
+        packet.sendPacket(plugin, sender);
+        packetBungeeClose(packet);
+    }
+
+    /**
+     * 将指定蹦极数据包以指定玩家异步发送到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @param sender 发送者
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果发送者对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果插件对象没有注册 {@link PacketPlayOutBungee#CHANNEL} 通道则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    public static void sendBungeePacketAsync(Plugin plugin, PacketPlayOutBungee packet, MoonLakePlayer... sender) {
+
+        Validate.notNull(packet, "The bungee packet play out object is null.");
+
+        packet.sendPacketAsync(plugin, sender);
+        packetBungeeClose(packet);
+    }
+
+    /**
+     * 将指定蹦极数据包以指定玩家不安全的发送到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @param sender 发送者
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果发送者对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    public static void sendBungeePacketUnsafe(Plugin plugin, PacketPlayOutBungee packet, MoonLakePlayer... sender) {
+
+        Validate.notNull(packet, "The bungee packet play out object is null.");
+
+        packet.sendPacketUnsafe(plugin, sender);
+        packetBungeeClose(packet);
+    }
+
+    /**
+     * 将指定蹦极数据包以指定玩家不安全的异步发送到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @param sender 发送者
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果发送者对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    public static void sendBungeePacketUnsafeAsync(Plugin plugin, PacketPlayOutBungee packet, MoonLakePlayer... sender) {
+
+        Validate.notNull(packet, "The bungee packet play out object is null.");
+
+        packet.sendPacketUnsafeAsync(plugin, sender);
+        packetBungeeClose(packet);
+    }
+
+    /**
+     * 将指定蹦极数据包以在线玩家发送到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果插件对象没有注册 {@link PacketPlayOutBungee#CHANNEL} 通道则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    public static void sendBungeePacketOnline(Plugin plugin, PacketPlayOutBungee packet) {
+
+        sendBungeePacket(plugin, packet, PlayerManager.getOnlines());
+    }
+
+    /**
+     * 将指定蹦极数据包以在线玩家异步发送到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果插件对象没有注册 {@link PacketPlayOutBungee#CHANNEL} 通道则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    public static void sendBungeePacketOnlineAsync(Plugin plugin, PacketPlayOutBungee packet) {
+
+        sendBungeePacketAsync(plugin, packet, PlayerManager.getOnlines());
+    }
+
+    /**
+     * 将指定蹦极数据包以在线玩家不安全的发送到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果发送者对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    public static void sendBungeePacketOnlineUnsafe(Plugin plugin, PacketPlayOutBungee packet) {
+
+        sendBungeePacketUnsafe(plugin, packet, PlayerManager.getOnlines());
+    }
+
+    /**
+     * 将指定蹦极数据包以在线玩家不安全的异步发送到蹦极代理
+     *
+     * @param plugin 插件
+     * @param packet 蹦极数据包
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果蹦极数据包对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果发送者对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    public static void sendBungeePacketOnlineUnsafeAsync(Plugin plugin, PacketPlayOutBungee packet) {
+
+        sendBungeePacketUnsafeAsync(plugin, packet, PlayerManager.getOnlines());
+    }
+
+    /**
+     * 读取指定物品栈的 NBT 数据
+     *
+     * @param itemStack 物品栈
+     * @return Null | NBTCompound
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws NBTException 如果读取物品栈时错误则抛出异常
+     */
+    public static NBTCompound readNBT(ItemStack itemStack) {
+
+        return getNBTLibrary().read(itemStack);
+    }
+
+    /**
+     * 读取指定方块的 NBT 数据
+     *
+     * @param block 方块
+     * @return Null | NBTCompound
+     * @throws IllegalArgumentException 如果方块对象为 {@code null} 则抛出异常
+     * @throws NBTException 如果读取方块时错误则抛出异常
+     */
+    public static NBTCompound readNBT(Block block) {
+
+        return getNBTLibrary().read(block);
+    }
+
+    /**
+     * 读取指定实体的 NBT 数据
+     *
+     * @param entity 实体
+     * @return Null | NBTCompound
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @throws NBTException 如果读取实体时错误则抛出异常
+     */
+    public static NBTCompound readNBT(Entity entity) {
+
+        return getNBTLibrary().read(entity);
+    }
+
+    /**
+     * 读取指定区块的 NBT 数据
+     *
+     * @param chunk 区块
+     * @return Null | NBTCompound
+     * @throws IllegalArgumentException 如果区块对象为 {@code null} 则抛出异常
+     * @throws NBTException 如果读取区块时错误则抛出异常
+     */
+    public static NBTCompound readNBT(Chunk chunk) {
+
+        return getNBTLibrary().read(chunk);
+    }
+
+    /**
+     * 安全读取指定物品栈的 NBT 数据
+     *
+     * @param itemStack 物品栈
+     * @return NBTCompound
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws NBTException 如果读取物品栈时错误则抛出异常
+     */
+    public static NBTCompound readSafeNBT(ItemStack itemStack) {
+
+        return getNBTLibrary().readSafe(itemStack);
+    }
+
+    /**
+     * 安全读取指定方块的 NBT 数据
+     *
+     * @param block 方块
+     * @return NBTCompound
+     * @throws IllegalArgumentException 如果方块对象为 {@code null} 则抛出异常
+     * @throws NBTException 如果读取方块时错误则抛出异常
+     */
+    public static NBTCompound readSafeNBT(Block block) {
+
+        return getNBTLibrary().readSafe(block);
+    }
+
+    /**
+     * 安全读取指定实体的 NBT 数据
+     *
+     * @param entity 实体
+     * @return NBTCompound
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @throws NBTException 如果读取实体时错误则抛出异常
+     */
+    public static NBTCompound readSafeNBT(Entity entity) {
+
+        return getNBTLibrary().readSafe(entity);
+    }
+
+    /**
+     * 安全读取指定区块的 NBT 数据
+     *
+     * @param chunk 区块
+     * @return NBTCompound
+     * @throws IllegalArgumentException 如果区块对象为 {@code null} 则抛出异常
+     * @throws NBTException 如果读取区块时错误则抛出异常
+     */
+    public static NBTCompound readSafeNBT(Chunk chunk) {
+
+        return getNBTLibrary().readSafe(chunk);
+    }
+
+    /**
+     * 安全读取指定物品栈的 NBT 数据并给予消费者
+     *
+     * @param itemStack 物品栈
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     * @throws NBTException 如果读取物品栈时错误则抛出异常
+     */
+    public static void readSafeConsumerNBT(ItemStack itemStack, Consumer<NBTCompound> consumer) {
+
+        getNBTLibrary().readSafeConsumer(itemStack, consumer);
+    }
+
+    /**
+     * 安全读取指定方块的 NBT 数据并给予消费者
+     *
+     * @param block 方块
+     * @throws IllegalArgumentException 如果方块对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     * @throws NBTException 如果读取方块时错误则抛出异常
+     */
+    public static void readSafeConsumerNBT(Block block, Consumer<NBTCompound> consumer) {
+
+        getNBTLibrary().readSafeConsumer(block, consumer);
+    }
+
+    /**
+     * 安全读取指定实体的 NBT 数据并给予消费者
+     *
+     * @param entity 实体
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     * @throws NBTException 如果读取实体时错误则抛出异常
+     */
+    public static void readSafeConsumerNBT(Entity entity, Consumer<NBTCompound> consumer) {
+
+        getNBTLibrary().readSafeConsumer(entity, consumer);
+    }
+
+    /**
+     * 安全读取指定区块的 NBT 数据并给予消费者
+     *
+     * @param chunk 区块
+     * @throws IllegalArgumentException 如果区块对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果消费者对象为 {@code null} 则抛出异常
+     * @throws NBTException 如果读取区块时错误则抛出异常
+     */
+    public static void readSafeConsumerNBT(Chunk chunk, Consumer<NBTCompound> consumer) {
+
+        getNBTLibrary().readSafeConsumer(chunk, consumer);
     }
 }
