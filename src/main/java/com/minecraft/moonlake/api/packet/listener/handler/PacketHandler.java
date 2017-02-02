@@ -177,4 +177,45 @@ public abstract class PacketHandler {
         }
     }
     ///
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PacketHandler that = (PacketHandler) o;
+
+        if (hasSendOption != that.hasSendOption) return false;
+        if (forcePlayerSend != that.forcePlayerSend) return false;
+        if (forceServerSend != that.forceServerSend) return false;
+        if (hasReceiveOption != that.hasReceiveOption) return false;
+        if (forcePlayerReceive != that.forcePlayerReceive) return false;
+        if (forceServerReceive != that.forceServerReceive) return false;
+        return plugin.equals(that.plugin);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = plugin.hashCode();
+        result = 31 * result + (hasSendOption ? 1 : 0);
+        result = 31 * result + (forcePlayerSend ? 1 : 0);
+        result = 31 * result + (forceServerSend ? 1 : 0);
+        result = 31 * result + (hasReceiveOption ? 1 : 0);
+        result = 31 * result + (forcePlayerReceive ? 1 : 0);
+        result = 31 * result + (forceServerReceive ? 1 : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "PacketHandler{" +
+                "plugin=" + plugin +
+                ", hasSendOption=" + hasSendOption +
+                ", forcePlayerSend=" + forcePlayerSend +
+                ", forceServerSend=" + forceServerSend +
+                ", hasReceiveOption=" + hasReceiveOption +
+                ", forcePlayerReceive=" + forcePlayerReceive +
+                ", forceServerReceive=" + forceServerReceive +
+                '}';
+    }
 }

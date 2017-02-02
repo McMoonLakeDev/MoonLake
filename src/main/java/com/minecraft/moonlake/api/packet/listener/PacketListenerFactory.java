@@ -182,6 +182,8 @@ public final class PacketListenerFactory {
      */
     private static void notifyHandlers(PacketSent packet) {
 
+        if(PACKET_HANDLERS.isEmpty()) return;
+
         PacketHandler.notifyHandlers(PACKET_HANDLERS, packet);
     }
 
@@ -191,6 +193,8 @@ public final class PacketListenerFactory {
      * @param packet 数据包接收
      */
     private static void notifyHandlers(PacketReceived packet) {
+
+        if(PACKET_HANDLERS.isEmpty()) return;
 
         PacketHandler.notifyHandlers(PACKET_HANDLERS, packet);
     }
