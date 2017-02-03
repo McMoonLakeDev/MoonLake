@@ -1,0 +1,9 @@
+name: MoonLake
+main: com.minecraft.moonlake.MoonLakePlugin
+version: ${project.version}
+prefix: MoonLake
+description: Minecraft MoonLake Core API Plugin
+website: http://www.mcyszh.com/
+author: Month_Light
+authors: [Month_Light, MoonLake]
+softdepend: [MoonLakeEconomy, PermissionsEx, Vault, WorldEdit]
