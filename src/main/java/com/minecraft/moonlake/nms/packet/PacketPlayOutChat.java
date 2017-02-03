@@ -81,6 +81,11 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
         this(message, Mode.CHAT);
     }
 
+    /**
+     * 数据包输出聊天消息类构造函数
+     *
+     * @param fancyMessage 花式消息
+     */
     public PacketPlayOutChat(FancyMessage fancyMessage) {
 
         this.message = new SimpleStringProperty(fancyMessage.toJsonString());
