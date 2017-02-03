@@ -418,7 +418,14 @@ class NBTListExpression implements NBTList {
             while(true) {
 
                 Object obj = itr.next();
-                stringBuilder.append(obj);
+                if(obj instanceof String) {
+                    stringBuilder.append("\"");
+                    stringBuilder.append(obj);
+                    stringBuilder.append("\"");
+                }
+                else {
+                    stringBuilder.append(obj);
+                }
 
                 if(!itr.hasNext()) {
 
