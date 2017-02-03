@@ -18,12 +18,10 @@
  
 package com.minecraft.moonlake.nms.packet;
 
+import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import com.minecraft.moonlake.nms.packet.exception.PacketInitializeException;
-import com.minecraft.moonlake.property.ObjectProperty;
-import com.minecraft.moonlake.property.SimpleObjectProperty;
-import com.minecraft.moonlake.property.SimpleStringProperty;
-import com.minecraft.moonlake.property.StringProperty;
+import com.minecraft.moonlake.property.*;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Method;
@@ -48,7 +46,7 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
         try {
 
             CLASS_PACKETPLAYOUTCHAT = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutChat");
-            CLASS_CHATSERIALIZER = PackageType.MINECRAFT_SERVER.getClass("IChatBaseComponent$ChatSerializer");
+            CLASS_CHATSERIALIZER =  PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") ? "ChatSerializer" : "IChatBaseComponent$ChatSerializer");
             METHOD_CHARSERIALIZER_A = getMethod(CLASS_CHATSERIALIZER, "a", String.class);
         }
         catch (Exception e) {
@@ -59,6 +57,7 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
 
     private StringProperty message;
     private ObjectProperty<Mode> mode;
+    private BooleanProperty fancyMessage;
 
     /**
      * 数据包输出聊天消息类构造函数
@@ -80,6 +79,13 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
     public PacketPlayOutChat(String message) {
 
         this(message, Mode.CHAT);
+    }
+
+    public PacketPlayOutChat(FancyMessage fancyMessage) {
+
+        this.message = new SimpleStringProperty(fancyMessage.toJsonString());
+        this.mode = new SimpleObjectProperty<>(Mode.CHAT);
+        this.fancyMessage = new SimpleBooleanProperty(true);
     }
 
     /**
@@ -121,7 +127,7 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
 
         try {
 
-            Object nmsChat = METHOD_CHARSERIALIZER_A.invoke(null, "{\"text\":\"" + message.get() + "\"}");
+            Object nmsChat = METHOD_CHARSERIALIZER_A.invoke(null, fancyMessage == null ? "{\"text\":\"" + message.get() + "\"}" : message.get());
             Object packet = instantiateObject(CLASS_PACKETPLAYOUTCHAT, nmsChat, mode.get() == null ? (byte) 1 : mode.get().getMode());
 
             PacketReflect.get().send(players, packet);

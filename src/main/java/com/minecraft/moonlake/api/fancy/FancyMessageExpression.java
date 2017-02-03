@@ -23,10 +23,10 @@ import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.json.JsonRepresentedObject;
 import com.minecraft.moonlake.json.JsonWrite;
 import com.minecraft.moonlake.manager.PlayerManager;
+import com.minecraft.moonlake.nms.packet.PacketPlayOutChat;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -380,7 +380,8 @@ class FancyMessageExpression implements FancyMessage {
 
             build();
         }
-        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tellraw " + player.getName() + " " + jsonString.get());
+        //Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tellraw " + player.getName() + " " + jsonString.get());
+        new PacketPlayOutChat(this).send(player);
     }
 
     @Override
@@ -404,7 +405,8 @@ class FancyMessageExpression implements FancyMessage {
 
             build();
         }
-        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tellraw @a " + jsonString.get());    // @a = All Player
+        //Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tellraw @a " + jsonString.get());    // @a = All Player
+        new PacketPlayOutChat(this).sendAll();
     }
 
     protected FancyMessagePart getLast() {
