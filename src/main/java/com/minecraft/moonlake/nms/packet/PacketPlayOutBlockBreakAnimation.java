@@ -30,7 +30,7 @@ import org.bukkit.entity.Player;
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
- * <h1>PacketPlayOutBukkitBlockBreakAnimation</h1>
+ * <h1>PacketPlayOutBlockBreakAnimation</h1>
  * 数据包输出方块破坏动画（详细doc待补充...）
  *
  * @version 1.0
@@ -46,7 +46,7 @@ public class PacketPlayOutBlockBreakAnimation extends PacketAbstract<PacketPlayO
 
         try {
 
-            CLASS_PACKETPLAYOUTBLOCKBREAKANIMATION = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutBukkitBlockBreakAnimation");
+            CLASS_PACKETPLAYOUTBLOCKBREAKANIMATION = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutBlockBreakAnimation");
         }
         catch (Exception e) {
 
