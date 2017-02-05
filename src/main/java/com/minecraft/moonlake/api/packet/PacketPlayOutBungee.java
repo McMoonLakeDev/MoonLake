@@ -31,7 +31,7 @@ import org.bukkit.plugin.Plugin;
  * @version 1.0
  * @author Month_Light
  */
-public interface PacketPlayOutBungee extends AutoCloseable {
+public interface PacketPlayOutBungee extends PacketPlayOut, AutoCloseable {
 
     /**
      * BungeeCord Channel Name

@@ -34,7 +34,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除.
  */
+@Deprecated
 class PacketReflect {
 
     private Class<?> CLASS_PACKET;

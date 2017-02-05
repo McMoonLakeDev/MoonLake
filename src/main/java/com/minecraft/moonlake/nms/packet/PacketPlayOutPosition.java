@@ -248,7 +248,12 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
                     nmsFlags.add(METHOD_VALUEOF.invoke(null, flag.name()));
                 }
             }
-            Object packet = instantiateObject(CLASS_PACKETPLAYOUTPOSITION, x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlags, g.get());
+            Object packet;
+
+            if(getServerVersionNumber() <= 8) // 1.8 版本没有 g 这个 int 参数
+                packet = instantiateObject(CLASS_PACKETPLAYOUTPOSITION, x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlags);
+            else
+                packet = instantiateObject(CLASS_PACKETPLAYOUTPOSITION, x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlags, g.get());
 
             PacketReflect.get().send(players, packet);
         }

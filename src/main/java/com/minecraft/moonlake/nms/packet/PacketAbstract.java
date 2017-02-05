@@ -32,7 +32,9 @@ import org.bukkit.entity.Player;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutBukkitAbstract}
  */
+@Deprecated
 public abstract class PacketAbstract<T extends Packet> implements Packet<T> {
 
     /**

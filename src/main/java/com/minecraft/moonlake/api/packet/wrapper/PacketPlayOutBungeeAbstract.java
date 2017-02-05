@@ -40,7 +40,7 @@ import java.io.IOException;
  * @author Month_Light
  * @see PacketPlayOutBungee
  */
-public abstract class PacketPlayOutBungeeAbstract implements PacketPlayOutBungee {
+public abstract class PacketPlayOutBungeeAbstract extends PacketPlayOutAbstract implements PacketPlayOutBungee {
 
     private final ByteArrayOutputStream data;
 
@@ -53,6 +53,12 @@ public abstract class PacketPlayOutBungeeAbstract implements PacketPlayOutBungee
 
         this.data = new ByteArrayOutputStream();
         this.dataOut = new DataOutputStream(data);
+    }
+
+    @Override
+    protected boolean sendPacket(Player... players) throws Exception {
+
+        throw new UnsupportedOperationException();
     }
 
     /**

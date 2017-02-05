@@ -32,7 +32,9 @@ import org.bukkit.event.HandlerList;
  * @author Month_Light
  * @see MoonLakePacketEvent
  * @see Packet
+ * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MoonLakePacketOutEvent}
  */
+@Deprecated
 public class MoonLakePacketDispatchEvent extends MoonLakePacketEvent implements Cancellable {
 
     private final static HandlerList handlerList = new HandlerList();

@@ -38,7 +38,9 @@ import static com.minecraft.moonlake.reflect.Reflect.instantiateObject;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutExplosion}
  */
+@Deprecated
 public class PacketPlayOutExplosion extends PacketAbstract<PacketPlayOutExplosion> {
 
     private final static Class<?> CLASS_PACKETPLAYOUTEXPLOSION;
