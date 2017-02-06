@@ -106,14 +106,16 @@ public abstract class PacketPlayOutBukkitAbstract extends PacketPlayOutAbstract 
         }
     }
 
-    static void setFieldAccessibleAndValue(int dest, Field[] fields, Object instance, Object... values) throws Exception {
+    protected static void setFieldAccessibleAndValueSend(Player[] players, int dest, Class<?> packetClass, Object packet, Object... values) throws Exception {
 
+        Field[] fields = packetClass.getDeclaredFields();
         for(int i = 0; i < dest; i++) {
             Field field = fields[i];
             if(!field.isAccessible())
                 field.setAccessible(true);
-            field.set(instance, values[i]);
+            field.set(packet, values[i]);
         }
+        sendPacket(players, packet);
     }
 
     PacketPlayOutBukkitAbstract() {

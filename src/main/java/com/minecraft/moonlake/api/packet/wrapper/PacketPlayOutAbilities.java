@@ -31,7 +31,7 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutAbilities</h1>
- * 数据包输出玩家能力
+ * 数据包输出玩家能力（详细doc待补充...）
  *
  * @version 2.0
  * @author Month_Light
@@ -72,7 +72,7 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
         }
     }
 
-    private final PlayerAbilitiesProperty playerAbilitiesProperty;
+    private final PlayerAbilitiesProperty playerAbilities;
 
     public PacketPlayOutAbilities() {
 
@@ -81,7 +81,7 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
 
     public PacketPlayOutAbilities(PlayerAbilities abilities) {
 
-        this.playerAbilitiesProperty = new PlayerAbilitiesProperty(abilities);
+        this.playerAbilities = new PlayerAbilitiesProperty(abilities);
     }
 
     public PacketPlayOutAbilities(Player player) {
@@ -101,7 +101,7 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
 
     public PlayerAbilitiesProperty playerAbilitiesProperty() {
 
-        return playerAbilitiesProperty;
+        return playerAbilities;
     }
 
     @Override
@@ -127,8 +127,7 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
         } catch (Exception e) {
             // 如果异常了说明 NMS 的 PacketPlayOutAbilities 构造函数不存在这个参数类型
             // 那么用反射直接设置字段值方式来发送
-            Field[] fields = CLASS_PACKETPLAYOUTABILITIES.getDeclaredFields();
-            if(fields.length == 6) {
+            try {
                 // 判断字段数量等于 6 个的话就是有此方式
                 // 这六个字段分别对应 PlayerAbilities 的 6 个属性
                 Object packet = instantiateObject(CLASS_PACKETPLAYOUTABILITIES);
@@ -139,17 +138,20 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
                         playerAbilities.canInstantlyBuild.get(),
                         playerAbilities.flySpeed.get(),
                         playerAbilities.walkSpeed.get()};
-                setFieldAccessibleAndValue(6, fields, packet, values);
-                sendPacket(players, packet);
+                setFieldAccessibleAndValueSend(players, 6, CLASS_PACKETPLAYOUTABILITIES, packet, values);
                 return true;
+
+            } catch (Exception e1) {
             }
-            else if(fields.length == 1 && CLASS_PLAYERABILITIES.isAssignableFrom(fields[0].getType())) {
+
+            try {
                 // 否则只有 1 个字段的话并且字段类型为 PlayerAbilities 的方式
                 Object nmsAbilities = instantiateObject(CLASS_PLAYERABILITIES);
                 Object packet = instantiateObject(CLASS_PACKETPLAYOUTABILITIES);
-                setFieldAccessibleAndValue(1, fields, packet, nmsAbilities);
-                sendPacket(players, packet);
+                setFieldAccessibleAndValueSend(players, 1, CLASS_PACKETPLAYOUTABILITIES, packet, nmsAbilities);
                 return true;
+
+            } catch (Exception e1) {
             }
         }
         // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
@@ -199,6 +201,12 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
         public FloatProperty walkSpeedProperty() {
 
             return get().walkSpeed;
+        }
+
+        @Override
+        public String toString() {
+
+            return "PlayerAbilitiesProperty [value: " + get() + "]";
         }
     }
 
@@ -312,6 +320,49 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
         public FloatProperty walkSpeedProperty() {
 
             return walkSpeed;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            PlayerAbilities that = (PlayerAbilities) o;
+
+            if (isInvulnerable != null ? !isInvulnerable.equals(that.isInvulnerable) : that.isInvulnerable != null)
+                return false;
+            if (isFlying != null ? !isFlying.equals(that.isFlying) : that.isFlying != null) return false;
+            if (canFly != null ? !canFly.equals(that.canFly) : that.canFly != null) return false;
+            if (canInstantlyBuild != null ? !canInstantlyBuild.equals(that.canInstantlyBuild) : that.canInstantlyBuild != null)
+                return false;
+            if (mayBuild != null ? !mayBuild.equals(that.mayBuild) : that.mayBuild != null) return false;
+            if (flySpeed != null ? !flySpeed.equals(that.flySpeed) : that.flySpeed != null) return false;
+            return walkSpeed != null ? walkSpeed.equals(that.walkSpeed) : that.walkSpeed == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = isInvulnerable != null ? isInvulnerable.hashCode() : 0;
+            result = 31 * result + (isFlying != null ? isFlying.hashCode() : 0);
+            result = 31 * result + (canFly != null ? canFly.hashCode() : 0);
+            result = 31 * result + (canInstantlyBuild != null ? canInstantlyBuild.hashCode() : 0);
+            result = 31 * result + (mayBuild != null ? mayBuild.hashCode() : 0);
+            result = 31 * result + (flySpeed != null ? flySpeed.hashCode() : 0);
+            result = 31 * result + (walkSpeed != null ? walkSpeed.hashCode() : 0);
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "PlayerAbilities{" +
+                    "isInvulnerable=" + isInvulnerable.get() +
+                    ", isFlying=" + isFlying.get() +
+                    ", canFly=" + canFly.get() +
+                    ", canInstantlyBuild=" + canInstantlyBuild.get() +
+                    ", mayBuild=" + mayBuild.get() +
+                    ", flySpeed=" + flySpeed.get() +
+                    ", walkSpeed=" + walkSpeed.get() +
+                    '}';
         }
     }
 }

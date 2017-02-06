@@ -18,8 +18,9 @@
 
 package com.minecraft.moonlake.api.packet.wrapper;
 
-import com.minecraft.moonlake.nms.exception.NMSException;
-import com.minecraft.moonlake.property.ReadOnlyIntegerProperty;
+import com.minecraft.moonlake.api.nms.exception.NMSException;
+import com.minecraft.moonlake.property.IntegerProperty;
+import com.minecraft.moonlake.property.ObjectPropertyBase;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.World;
@@ -65,9 +66,9 @@ public class BlockPosition {
      */
     public final static BlockPosition ZERO = new BlockPosition(0, 0, 0);
 
-    private final ReadOnlyIntegerProperty x;
-    private final ReadOnlyIntegerProperty y;
-    private final ReadOnlyIntegerProperty z;
+    private final IntegerProperty x;
+    private final IntegerProperty y;
+    private final IntegerProperty z;
 
     /**
      * 方块位置封装类构造函数
@@ -196,6 +197,43 @@ public class BlockPosition {
         catch (Exception e) {
 
             throw new NMSException();
+        }
+    }
+
+    public final static class BlockPositionProperty extends ObjectPropertyBase<BlockPosition> {
+
+        public BlockPositionProperty() {
+        }
+
+        public BlockPositionProperty(BlockPosition blockPosition) {
+
+            super(blockPosition);
+        }
+
+        public BlockPositionProperty(int x, int y, int z) {
+
+            super(new BlockPosition(x, y, z));
+        }
+
+        public IntegerProperty xProperty() {
+
+            return get().x;
+        }
+
+        public IntegerProperty yProperty() {
+
+            return get().y;
+        }
+
+        public IntegerProperty zProperty() {
+
+            return get().z;
+        }
+
+        @Override
+        public String toString() {
+
+            return "BlockPositionProperty [value: " + get() + "]";
         }
     }
 }
