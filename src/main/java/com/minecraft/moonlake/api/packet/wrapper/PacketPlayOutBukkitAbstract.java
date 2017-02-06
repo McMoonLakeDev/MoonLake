@@ -27,6 +27,7 @@ import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -108,9 +109,21 @@ public abstract class PacketPlayOutBukkitAbstract extends PacketPlayOutAbstract 
 
     protected static void setFieldAccessibleAndValueSend(Player[] players, int dest, Class<?> packetClass, Object packet, Object... values) throws Exception {
 
+        setFieldAccessibleAndValueSend(null, players, dest, packetClass, packet, values);
+    }
+
+    protected static void setFieldAccessibleAndValueSend(@Nullable Class<?>[] ignoreFieldTypes, Player[] players, int dest, Class<?> packetClass, Object packet, Object... values) throws Exception {
+
         Field[] fields = packetClass.getDeclaredFields();
-        for(int i = 0; i < dest; i++) {
+        main:for(int i = 0; i < dest; i++) {
             Field field = fields[i];
+            if(ignoreFieldTypes != null)
+                for(Class<?> ignoreFieldType : ignoreFieldTypes)
+                    if(ignoreFieldType.isAssignableFrom(field.getType())) {
+                        i--; // 由于字段类型属于忽略类型则让 i 自减
+                        continue main;
+                    }
+
             if(!field.isAccessible())
                 field.setAccessible(true);
             field.set(packet, values[i]);
