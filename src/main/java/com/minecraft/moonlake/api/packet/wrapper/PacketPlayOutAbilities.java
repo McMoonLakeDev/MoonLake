@@ -68,7 +68,7 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
         }
         catch (Exception e) {
 
-            throw new PacketInitializeException("The nms packet play out playerAbilities reflect raw initialize exception.", e);
+            throw new PacketInitializeException("The nms packet play out abilities reflect raw initialize exception.", e);
         }
     }
 
