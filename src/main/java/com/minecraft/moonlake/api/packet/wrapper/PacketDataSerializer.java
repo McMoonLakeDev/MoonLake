@@ -18,9 +18,8 @@
 
 package com.minecraft.moonlake.api.packet.wrapper;
 
-import com.minecraft.moonlake.nms.exception.NMSException;
-import com.minecraft.moonlake.property.ObjectProperty;
-import com.minecraft.moonlake.property.SimpleObjectProperty;
+import com.minecraft.moonlake.api.nms.exception.NMSException;
+import com.minecraft.moonlake.property.ObjectPropertyBase;
 import com.minecraft.moonlake.reflect.Reflect;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -48,7 +47,7 @@ public class PacketDataSerializer {
         }
     }
 
-    private ObjectProperty<ByteBuf> byteBuf;
+    private ByteBufProperty byteBuf;
 
     /**
      * 数据包数据串行器包装类构造函数
@@ -75,7 +74,12 @@ public class PacketDataSerializer {
      */
     public PacketDataSerializer(ByteBuf byteBuf) {
 
-        this.byteBuf = new SimpleObjectProperty<>(byteBuf);
+        this.byteBuf = new ByteBufProperty(byteBuf);
+    }
+
+    public ByteBufProperty byteBufProperty() {
+
+        return byteBuf;
     }
 
     /**
@@ -130,6 +134,58 @@ public class PacketDataSerializer {
         catch (Exception e) {
 
             throw new NMSException();
+        }
+    }
+
+    public final static class PacketDataSerializerProperty extends ObjectPropertyBase<PacketDataSerializer> {
+
+        public PacketDataSerializerProperty() {
+        }
+
+        public PacketDataSerializerProperty(PacketDataSerializer data) {
+
+            super(data);
+        }
+
+        public PacketDataSerializerProperty(byte[] byteBuf) {
+
+            super(new PacketDataSerializer(byteBuf));
+        }
+
+        public PacketDataSerializerProperty(ByteBuf byteBuf) {
+
+            super(new PacketDataSerializer(byteBuf));
+        }
+
+        public ByteBufProperty byteBufProperty() {
+
+            return get().byteBuf;
+        }
+
+        @Override
+        public String toString() {
+            return "PacketDataSerializerProperty [value: " + get() + "]";
+        }
+    }
+
+    public final static class ByteBufProperty extends ObjectPropertyBase<ByteBuf> {
+
+        public ByteBufProperty() {
+        }
+
+        public ByteBufProperty(byte[] byteBuf) {
+
+            super(Unpooled.wrappedBuffer(byteBuf));
+        }
+
+        public ByteBufProperty(ByteBuf byteBuf) {
+
+            super(byteBuf);
+        }
+
+        @Override
+        public String toString() {
+            return "ByteBufProperty [value: " + get() + "]";
         }
     }
 }
