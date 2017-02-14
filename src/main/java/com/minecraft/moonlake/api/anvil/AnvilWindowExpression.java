@@ -62,7 +62,7 @@ class AnvilWindowExpression implements AnvilWindow {
     public AnvilWindowExpression(Plugin plugin) {
 
         this.plugin = plugin;
-        this.allowMove = true;
+        this.setAllowMove(true);
     }
 
 
@@ -109,7 +109,7 @@ class AnvilWindowExpression implements AnvilWindow {
      */
     private void setAllowMove0(boolean flag) {
 
-        if(flag && listenerMove == null) {
+        if(!flag && listenerMove == null) {
 
             listenerMove = new MoonLakeListener() {
 
@@ -134,7 +134,7 @@ class AnvilWindowExpression implements AnvilWindow {
             };
             registerListener(listenerMove);
         }
-        else if(!flag && listenerMove != null) {
+        else if(flag && listenerMove != null) {
 
             disposeMove();
         }
