@@ -83,7 +83,7 @@ class AnvilWindowReflect {
             CLASS_CONTAINER = PackageType.MINECRAFT_SERVER.getClass("Container");
             CLASS_ICRAFTING = PackageType.MINECRAFT_SERVER.getClass("ICrafting");
 
-            CONSTRUCTOR_ANVILWINDOW = CLASS_ANVILWINDOW.getConstructor(CLASS_ENTITYHUMAN);
+            CONSTRUCTOR_ANVILWINDOW = CLASS_ANVILWINDOW.getConstructor(Player.class, AnvilWindowExpression.class);
 
             METHOD_GETHANDLE = getMethod(CLASS_CRAFTPLAYER, "getHandle");
             METHOD_GETBUKKITVIEW = getMethod(CLASS_ANVILWINDOW, "getBukkitView");
@@ -136,7 +136,7 @@ class AnvilWindowReflect {
 
             if(anvilWindow.anvilInventory == null) {
 
-                Object nmsAnvil = CONSTRUCTOR_ANVILWINDOW.newInstance(nmsPlayer);
+                Object nmsAnvil = CONSTRUCTOR_ANVILWINDOW.newInstance(player, anvilWindow);
                 Object cbBukkitView = METHOD_GETBUKKITVIEW.invoke(nmsAnvil);
                 anvilWindow.anvilInventory = (Inventory) METHOD_GETTOPINVENTORY.invoke(cbBukkitView);
                 anvilWindow.anvilInventoryHandle = nmsAnvil;
@@ -155,5 +155,20 @@ class AnvilWindowReflect {
 
             throw new NMSException("The open nms anvil window exception.", e);
         }
+    }
+
+    public String callAnvilInputEvent(Player player, AnvilWindowExpression anvilWindow, String input) {
+
+        if(anvilWindow.getInputEventHandle() == null)
+            return input;
+
+        // 铁砧窗口的输入事件处理器不为 null 则处理
+        AnvilWindowInputEvent awie = new AnvilWindowInputEvent(player, anvilWindow, input);
+        anvilWindow.getInputEventHandle().execute(awie);
+
+        if(!awie.isCancelled())
+            return awie.getInput();
+
+        return null;
     }
 }

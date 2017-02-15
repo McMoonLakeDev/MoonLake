@@ -28,7 +28,7 @@ import org.bukkit.plugin.Plugin;
  * <h1>AnvilWindow</h1>
  * 铁砧窗口接口（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public interface AnvilWindow {
@@ -60,6 +60,13 @@ public interface AnvilWindow {
      * @param allowMove 是否允许移动物品
      */
     void setAllowMove(boolean allowMove);
+
+    /**
+     * 设置此铁砧窗口的输入事件监听器
+     *
+     * @param inputEvent 输入事件
+     */
+    void setInput(AnvilWindowEventHandler<AnvilWindowInputEvent> inputEvent);
 
     /**
      * 设置此铁砧窗口的点击事件监听器
