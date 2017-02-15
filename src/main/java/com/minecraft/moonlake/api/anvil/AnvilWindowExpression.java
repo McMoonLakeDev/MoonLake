@@ -38,7 +38,7 @@ import org.bukkit.plugin.Plugin;
  * <h1>AnvilWindowExpression</h1>
  * 铁砧窗口接口实现类
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 class AnvilWindowExpression implements AnvilWindow {
@@ -49,6 +49,7 @@ class AnvilWindowExpression implements AnvilWindow {
     private MoonLakeListener listenerMove;
     private boolean allowMove;
     private boolean isInitialized;
+    private AnvilWindowEventHandler<AnvilWindowInputEvent> inputEventHandle;
     private AnvilWindowEventHandler<AnvilWindowClickEvent> clickEventHandle;
     private AnvilWindowEventHandler<AnvilWindowCloseEvent> closeEventHandle;
     Inventory anvilInventory;
@@ -138,6 +139,29 @@ class AnvilWindowExpression implements AnvilWindow {
 
             disposeMove();
         }
+    }
+
+    @Override
+    public void setInput(AnvilWindowEventHandler<AnvilWindowInputEvent> inputEvent) {
+
+        if(inputEvent == null) {
+
+            disposeInput();
+        }
+        else {
+
+            inputEventHandle = inputEvent;
+        }
+    }
+
+    /**
+     * 获取此铁砧窗口的输入事件处理器
+     *
+     * @return 输入事件处理器
+     */
+    AnvilWindowEventHandler<AnvilWindowInputEvent> getInputEventHandle() {
+
+        return inputEventHandle;
     }
 
     @Override
@@ -266,6 +290,7 @@ class AnvilWindowExpression implements AnvilWindow {
     public void dispose() {
 
         disposeMove();
+        disposeInput();
         disposeClick();
         disposeClose();
     }
@@ -277,6 +302,14 @@ class AnvilWindowExpression implements AnvilWindow {
 
         disposeListener(listenerMove);
         listenerMove = null;
+    }
+
+    /**
+     * 释放此铁砧窗口的输入事件处理器
+     */
+    private void disposeInput() {
+
+        inputEventHandle = null;
     }
 
     /**

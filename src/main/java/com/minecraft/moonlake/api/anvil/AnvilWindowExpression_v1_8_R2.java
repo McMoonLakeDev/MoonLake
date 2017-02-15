@@ -21,29 +21,46 @@ package com.minecraft.moonlake.api.anvil;
 import net.minecraft.server.v1_8_R2.BlockPosition;
 import net.minecraft.server.v1_8_R2.ContainerAnvil;
 import net.minecraft.server.v1_8_R2.EntityHuman;
+import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 
 /**
  * <h1>AnvilWindowExpression_v1_8_R2</h1>
  * 铁砧窗口 v1.8-R2 版容器类
  *
- * @version 1.0
+ * @version 2.0
  * @author Month_Light
  */
 class AnvilWindowExpression_v1_8_R2 extends ContainerAnvil {
 
+    private final Player owner;
+    private final AnvilWindowExpression anvilWindow;
+
     /**
      * 铁砧窗口 v1.8-R2 版容器类构造函数
      *
-     * @param entityHuman EntityHuman
+     * @param owner 拥有者
+     * @param anvilWindow 铁砧窗口
      */
-    public AnvilWindowExpression_v1_8_R2(EntityHuman entityHuman) {
+    public AnvilWindowExpression_v1_8_R2(Player owner, AnvilWindowExpression anvilWindow) {
 
-        super(entityHuman.inventory, entityHuman.world, BlockPosition.ZERO, entityHuman);
+        super(((CraftPlayer) owner).getHandle().inventory, ((CraftPlayer) owner).getHandle().world, BlockPosition.ZERO, ((CraftPlayer) owner).getHandle());
+
+        this.owner = owner;
+        this.anvilWindow = anvilWindow;
     }
 
     @Override
     public boolean a(EntityHuman entityhuman) {
 
         return true;
+    }
+
+    @Override
+    public void a(String s) {
+
+        String input = AnvilWindowReflect.get().callAnvilInputEvent(owner, anvilWindow, s);
+        if(input != null)
+            super.a(input);
     }
 }
