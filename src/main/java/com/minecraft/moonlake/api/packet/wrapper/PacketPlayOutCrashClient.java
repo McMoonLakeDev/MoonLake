@@ -19,12 +19,15 @@
 package com.minecraft.moonlake.api.packet.wrapper;
 
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
 
 /**
  * <h1>PacketPlayOutCrashClient</h1>
  * 数据包输出崩溃客户端（详细doc待补充...）
  *
- * @version 1.0
+ * @version 2.0
  * @author Month_Light
  */
 public class PacketPlayOutCrashClient extends PacketPlayOutBukkitAbstract {
@@ -34,6 +37,10 @@ public class PacketPlayOutCrashClient extends PacketPlayOutBukkitAbstract {
 
     @Override
     protected boolean sendPacket(Player... players) throws Exception {
-        return false;
+
+        for(Player player : players)
+            new PacketPlayOutExplosion(player.getLocation(), Float.MAX_VALUE, new ArrayList<>(), new Vector(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE)).send(player);
+
+        return true;
     }
 }
