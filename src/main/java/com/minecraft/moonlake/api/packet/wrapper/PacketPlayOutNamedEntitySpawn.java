@@ -129,7 +129,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
             } catch (Exception e1) {
             }
         }
-
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
         return false;
     }
 }
