@@ -50,7 +50,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
         }
         catch (Exception e) {
 
-            throw new PacketInitializeException("The nms packet play out named entity spawn reflect raw initialize exception.", e);
+            throw new PacketInitializeException("The net.minecraft.server packet play out named entity spawn reflect raw initialize exception.", e);
         }
     }
 
