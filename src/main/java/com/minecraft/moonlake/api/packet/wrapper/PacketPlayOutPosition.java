@@ -145,6 +145,10 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
     @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
+        // 触发事件判断如果为 true 则阻止发送
+        if(super.fireEvent(this, players))
+            return true;
+
         try {
             // 先用调用 NMS 的 PacketPlayOutPosition 构造函数
             // 参数 double, double, double, float, float, Set

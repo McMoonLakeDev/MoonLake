@@ -112,6 +112,10 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
     @SuppressWarnings({ "deprecation", "unchecked" })
     protected boolean sendPacket(Player... players) throws Exception {
 
+        // 触发事件判断如果为 true 则阻止发送
+        if(super.fireEvent(this, players))
+            return true;
+
         Action action = actionProperty().get();
         List<Data> dataList = dataListProperty().get();
         Validate.notNull(action, "The action object is null.");

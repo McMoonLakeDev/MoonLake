@@ -18,6 +18,8 @@
 
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.event.core.MoonLakePacketOutEvent;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import org.bukkit.entity.Player;
 
@@ -28,7 +30,9 @@ public abstract class PacketPlayOutAbstract implements PacketPlayOut {
 
     protected boolean fireEvent(PacketPlayOut packet, Player... players) {
 
-        return false;
+        MoonLakePacketOutEvent mlpoe = new MoonLakePacketOutEvent(packet, players);
+        MoonLakeAPI.callEvent(mlpoe);
+        return mlpoe.isCancelled();
     }
 
     protected abstract boolean sendPacket(Player... players) throws Exception;

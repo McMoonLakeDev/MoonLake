@@ -72,7 +72,12 @@ public class PacketPlayOutBookOpen extends PacketPlayOutBukkitAbstract {
     @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
+        // 触发事件判断如果为 true 则阻止发送
+        if(super.fireEvent(this, players))
+            return true;
+
         ItemStack bookItemStack = bookProperty().get();
+        boolean onlyPacket = onlyPacketProperty().get();
         Validate.notNull(bookItemStack, "The itemstack object is null.");
         Validate.isTrue(MoonLakeAPI.getItemLibrary().isWrittenBook(bookItemStack), "The itemstack type not is 'WRITTEN_BOOK'.");
 
@@ -91,8 +96,7 @@ public class PacketPlayOutBookOpen extends PacketPlayOutBukkitAbstract {
             // 发送数据包
             ppocp.send(moonLakePlayer.getBukkitPlayer());
             // 判断是否需要恢复原来的手中物品
-            if(onlyPacket.get())
-                moonLakePlayer.setItemInHand(handItemStack);
+            if(onlyPacket) moonLakePlayer.setItemInHand(handItemStack);
             // 更新玩家的背包
             moonLakePlayer.updateInventory();
         }

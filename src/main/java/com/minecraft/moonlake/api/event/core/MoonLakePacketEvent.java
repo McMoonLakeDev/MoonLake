@@ -54,7 +54,7 @@ public abstract class MoonLakePacketEvent extends MoonLakeEvent {
      * @return Packet
      * @see Packet
      */
-    public final Packet getPacket() {
+    public Packet getPacket() {
 
         return packet;
     }

@@ -38,6 +38,10 @@ public class PacketPlayOutCrashClient extends PacketPlayOutBukkitAbstract {
     @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
+        // 触发事件判断如果为 true 则阻止发送
+        if(super.fireEvent(this, players))
+            return true;
+
         for(Player player : players)
             new PacketPlayOutExplosion(player.getLocation(), Float.MAX_VALUE, new ArrayList<>(), new Vector(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE)).send(player);
 

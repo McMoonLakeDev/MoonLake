@@ -87,6 +87,10 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbst
     @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
+        // 触发事件判断如果为 true 则阻止发送
+        if(super.fireEvent(this, players))
+            return true;
+
         String header = headerProperty().get();
         String footer = footerProperty().get();
         Validate.notNull(header, "The header object is null.");

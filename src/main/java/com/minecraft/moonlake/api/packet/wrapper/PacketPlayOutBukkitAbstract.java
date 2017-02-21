@@ -18,6 +18,9 @@
 
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.event.core.MoonLakePacketOutBukkitEvent;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketException;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
@@ -142,6 +145,17 @@ public abstract class PacketPlayOutBukkitAbstract extends PacketPlayOutAbstract 
     }
 
     PacketPlayOutBukkitAbstract() {
+    }
+
+    @Override
+    protected boolean fireEvent(PacketPlayOut packet, Player... players) {
+
+        if(super.fireEvent(packet, players))
+            return true;
+
+        MoonLakePacketOutBukkitEvent mlpobe = new MoonLakePacketOutBukkitEvent((PacketPlayOutBukkit) packet, players);
+        MoonLakeAPI.callEvent(mlpobe);
+        return mlpobe.isCancelled();
     }
 
     @Override

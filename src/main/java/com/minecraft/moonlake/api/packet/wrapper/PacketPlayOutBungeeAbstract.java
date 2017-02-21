@@ -19,6 +19,8 @@
 package com.minecraft.moonlake.api.packet.wrapper;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.event.core.MoonLakePacketOutBungeeEvent;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.manager.PlayerManager;
@@ -53,6 +55,17 @@ public abstract class PacketPlayOutBungeeAbstract extends PacketPlayOutAbstract 
 
         this.data = new ByteArrayOutputStream();
         this.dataOut = new DataOutputStream(data);
+    }
+
+    @Override
+    protected boolean fireEvent(PacketPlayOut packet, Player... players) {
+
+        if(super.fireEvent(packet, players))
+            return true;
+
+        MoonLakePacketOutBungeeEvent mlpobe = new MoonLakePacketOutBungeeEvent(this, players);
+        MoonLakeAPI.callEvent(mlpobe);
+        return mlpobe.isCancelled();
     }
 
     @Override
@@ -95,6 +108,9 @@ public abstract class PacketPlayOutBungeeAbstract extends PacketPlayOutAbstract 
         Validate.notNull(plugin, "The plugin object is null.");
         Validate.notNull(senders, "The sender player object is null.");
 
+        if(fireEvent(this, senders))
+            return;
+
         for(Player sender : senders)
             sender.sendPluginMessage(plugin, CHANNEL, getDataByteArray());
     }
@@ -117,6 +133,9 @@ public abstract class PacketPlayOutBungeeAbstract extends PacketPlayOutAbstract 
 
         Validate.notNull(plugin, "The plugin object is null.");
         Validate.notNull(senders, "The sender player object is null.");
+
+        if(fireEvent(this, senders))
+            return;
 
         PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(CHANNEL, getDataByteArray());
         packet.send(senders);

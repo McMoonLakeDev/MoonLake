@@ -81,15 +81,20 @@ public class PacketPlayOutCustomPayload extends PacketPlayOutBukkitAbstract {
     @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
+        // 触发事件判断如果为 true 则阻止发送
+        if(super.fireEvent(this, players))
+            return true;
+
+        String channel = channelProperty().get();
         PacketDataSerializer dataSerializer = dataProperty().get();
-        Validate.notNull(channel.get(), "The channel object is null.");
+        Validate.notNull(channel, "The channel object is null.");
         Validate.notNull(dataSerializer, "The packet data serializer object is null.");
         Validate.isTrue(dataSerializer.getByteBuf().writerIndex() <= 1048576, "The packet data larger than 1048576 bytes.");
 
         try {
             // 先用调用 NMS 的 PacketPlayOutCustomPayload 构造函数, 参数 String, PacketDataSerializer
             // 进行反射实例发送
-            sendPacket(players, instantiateObject(CLASS_PACKETPLAYOUTCUSTOMPAYLOAD, channel.get(), dataSerializer.asNMS()));
+            sendPacket(players, instantiateObject(CLASS_PACKETPLAYOUTCUSTOMPAYLOAD, channel, dataSerializer.asNMS()));
             return true;
 
         } catch (Exception e) {
@@ -99,7 +104,7 @@ public class PacketPlayOutCustomPayload extends PacketPlayOutBukkitAbstract {
                 // 判断字段数量大于等于 2 个的话就是有此方式
                 // 这两个字段分别对应 String, PacketDataSerializer 的 2 个属性
                 Object packet = instantiateObject(CLASS_PACKETPLAYOUTCUSTOMPAYLOAD);
-                Object[] values = { channel.get(), dataSerializer.asNMS() };
+                Object[] values = { channel, dataSerializer.asNMS() };
                 setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTCUSTOMPAYLOAD, packet, values);
                 return true;
 

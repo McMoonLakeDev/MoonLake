@@ -77,6 +77,10 @@ public class PacketPlayOutBlockChange extends PacketPlayOutBukkitAbstract {
     @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
+        // 触发事件判断如果为 true 则阻止发送
+        if(super.fireEvent(this, players))
+            return true;
+
         Validate.notNull(world.get(), "The world object is null.");
         Validate.notNull(blockPosition.get(), "The block position object is null.");
 

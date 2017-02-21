@@ -18,33 +18,23 @@
 
 package com.minecraft.moonlake.api.event.core;
 
-import com.minecraft.moonlake.api.event.Cancellable;
-import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
-public class MoonLakePacketOutEvent extends MoonLakePacketEvent implements Cancellable {
+public class MoonLakePacketOutBungeeEvent extends MoonLakePacketOutEvent {
 
     private final static HandlerList handlerList = new HandlerList();
-    private final Player[] players;
-    private boolean cancel = false;
 
-    public MoonLakePacketOutEvent(PacketPlayOut packet, Player... players) throws IllegalArgumentException {
+    public MoonLakePacketOutBungeeEvent(PacketPlayOutBungee packet, Player... players) throws IllegalArgumentException {
 
-        super(packet);
-
-        this.players = players;
-    }
-
-    public Player[] getPlayers() {
-
-        return players;
+        super(packet, players);
     }
 
     @Override
-    public PacketPlayOut getPacket() {
+    public PacketPlayOutBungee getPacket() {
 
-        return (PacketPlayOut) super.getPacket();
+        return (PacketPlayOutBungee) super.getPacket();
     }
 
     @Override
@@ -56,17 +46,5 @@ public class MoonLakePacketOutEvent extends MoonLakePacketEvent implements Cance
     public static HandlerList getHandlerList() {
 
         return handlerList;
-    }
-
-    @Override
-    public boolean isCancelled() {
-
-        return cancel;
-    }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-
-        this.cancel = cancel;
     }
 }

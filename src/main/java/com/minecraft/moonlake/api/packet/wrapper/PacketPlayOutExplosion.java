@@ -130,6 +130,10 @@ public class PacketPlayOutExplosion extends PacketPlayOutBukkitAbstract {
     @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
+        // 触发事件判断如果为 true 则阻止发送
+        if(super.fireEvent(this, players))
+            return true;
+
         Vector vector = vectorProperty().get();
         Validate.notNull(vector, "The vector object is null.");
 

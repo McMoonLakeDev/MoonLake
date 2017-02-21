@@ -114,6 +114,10 @@ public class PacketPlayOutRespawn extends PacketPlayOutBukkitAbstract {
     @SuppressWarnings("deprecation")
     protected boolean sendPacket(Player... players) throws Exception {
 
+        // 触发事件判断如果为 true 则阻止发送
+        if(super.fireEvent(this, players))
+            return true;
+
         WorldType worldType = worldTypeProperty().get();
         WorldDifficulty worldDifficulty = worldDifficultyProperty().get();
         GameMode worldGameMode = worldGameModeProperty().get();

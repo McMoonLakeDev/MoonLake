@@ -108,6 +108,10 @@ public class PacketPlayOutOpenWindow extends PacketPlayOutBukkitAbstract {
     @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
+        // 触发事件判断如果为 true 则阻止发送
+        if(super.fireEvent(this, players))
+            return true;
+
         String windowTitle = windowTitleProperty().get();
         WindowType windowType = windowTypeProperty().get();
         Validate.notNull(windowTitle, "The window title object is null.");
