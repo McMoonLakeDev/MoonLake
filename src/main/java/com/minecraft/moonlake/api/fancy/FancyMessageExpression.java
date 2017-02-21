@@ -19,11 +19,11 @@
 package com.minecraft.moonlake.api.fancy;
 
 import com.minecraft.moonlake.api.nbt.NBTFactory;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutChat;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.json.JsonRepresentedObject;
 import com.minecraft.moonlake.json.JsonWrite;
 import com.minecraft.moonlake.manager.PlayerManager;
-import com.minecraft.moonlake.nms.packet.PacketPlayOutChat;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;

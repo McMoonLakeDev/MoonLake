@@ -18,11 +18,11 @@
  
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutChat;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutPlayerListHeaderFooter;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutTitle;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
-import com.minecraft.moonlake.nms.packet.PacketPlayOutChat;
-import com.minecraft.moonlake.nms.packet.PacketPlayOutPlayerListHeaderFooter;
-import com.minecraft.moonlake.nms.packet.PacketPlayOutTitle;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 

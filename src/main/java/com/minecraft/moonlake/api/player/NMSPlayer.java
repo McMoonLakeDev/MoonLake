@@ -18,9 +18,9 @@
  
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
-import com.minecraft.moonlake.nms.packet.Packet;
 import org.bukkit.Material;
 
 /**
@@ -46,9 +46,19 @@ public interface NMSPlayer {
      * @param packet 数据包
      * @throws IllegalArgumentException 如果数据包对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #sendPacket(PacketPlayOutBukkit)}
      */
-    void sendPacket(Packet<?> packet);
-    
+    @Deprecated
+    void sendPacket(com.minecraft.moonlake.nms.packet.Packet<?> packet);
+
+    /**
+     * 给此玩家发送数据包
+     *
+     * @param packet 数据包
+     * @throws IllegalArgumentException 如果数据包对象为 {@code null} 则抛出异常
+     */
+    void sendPacket(PacketPlayOutBukkit packet);
+
     /**
      * 给此玩家发送标题数据包
      *

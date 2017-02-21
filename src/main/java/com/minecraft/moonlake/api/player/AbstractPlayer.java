@@ -21,6 +21,7 @@ package com.minecraft.moonlake.api.player;
 import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
 import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutBungeeConnect;
 import com.minecraft.moonlake.api.player.depend.EconomyPlayerData;
@@ -29,7 +30,6 @@ import com.minecraft.moonlake.api.player.depend.WorldEditSelection;
 import com.minecraft.moonlake.exception.CannotDependException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.manager.PlayerManager;
-import com.minecraft.moonlake.nms.packet.Packet;
 import com.minecraft.moonlake.property.ReadOnlyObjectProperty;
 import com.minecraft.moonlake.property.ReadOnlyStringProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
@@ -1204,7 +1204,15 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void sendPacket(Packet<?> packet) {
+    public void sendPacket(com.minecraft.moonlake.nms.packet.Packet<?> packet) {
+
+        Validate.notNull(packet, "The packet object is null.");
+
+        packet.send(getBukkitPlayer());
+    }
+
+    @Override
+    public void sendPacket(PacketPlayOutBukkit packet) {
 
         Validate.notNull(packet, "The packet object is null.");
 
