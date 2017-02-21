@@ -18,9 +18,9 @@
 
 package com.minecraft.moonlake.api.packet;
 
+import com.minecraft.moonlake.api.packet.exception.PacketException;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutCustomPayload;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
-import com.minecraft.moonlake.nms.packet.PacketPlayOutCustomPayload;
-import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
