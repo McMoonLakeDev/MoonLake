@@ -61,6 +61,8 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
     private BooleanProperty isFancyMessage;
 
     public PacketPlayOutChat() {
+
+        this((String) null);
     }
 
     public PacketPlayOutChat(String message) {
