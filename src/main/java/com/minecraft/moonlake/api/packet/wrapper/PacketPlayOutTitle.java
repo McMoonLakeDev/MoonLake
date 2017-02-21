@@ -57,7 +57,7 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
         }
         catch (Exception e) {
 
-            throw new PacketInitializeException("The nms packet play out title reflect raw initialize exception.", e);
+            throw new PacketInitializeException("The net.minecraft.server packet play out title reflect raw initialize exception.", e);
         }
     }
 

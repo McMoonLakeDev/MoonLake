@@ -44,7 +44,7 @@ public class PacketPlayOutHeldItemSlot extends PacketPlayOutBukkitAbstract {
         }
         catch (Exception e) {
 
-            throw new PacketInitializeException("The nms packet play out held item slot reflect raw initialize exception.", e);
+            throw new PacketInitializeException("The net.minecraft.server packet play out held item slot reflect raw initialize exception.", e);
         }
     }
 

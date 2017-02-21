@@ -51,7 +51,7 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbst
         }
         catch (Exception e) {
 
-            throw new PacketInitializeException("The nms packet play out player list header footer reflect raw initialize exception.", e);
+            throw new PacketInitializeException("The net.minecraft.server packet play out player list header footer reflect raw initialize exception.", e);
         }
     }
 
