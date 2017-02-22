@@ -18,6 +18,9 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
@@ -36,6 +39,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutExplosion extends PacketPlayOutBukkitAbstract {
 
@@ -62,31 +68,73 @@ public class PacketPlayOutExplosion extends PacketPlayOutBukkitAbstract {
     private List<BlockPosition> records;
     private ObjectProperty<Vector> vector;
 
+    /**
+     * 数据包输出爆炸构造函数
+     */
     public PacketPlayOutExplosion() {
 
         this(0d, 0d, 0d);
     }
 
+    /**
+     * 数据包输出爆炸构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     */
     public PacketPlayOutExplosion(double x, double y, double z) {
 
         this(x, y, z, 0f, null, null);
     }
 
+    /**
+     * 数据包输出爆炸构造函数
+     *
+     * @param location 位置
+     * @param radius 半径
+     */
     public PacketPlayOutExplosion(Location location, float radius) {
 
         this(location.getX(), location.getY(), location.getZ(), radius, null, null);
     }
 
+    /**
+     * 数据包输出爆炸构造函数
+     *
+     * @param location 位置
+     * @param radius 半径
+     * @param records 方块位置记录
+     * @param vector 矢量
+     */
     public PacketPlayOutExplosion(Location location, float radius, List<BlockPosition> records, Vector vector) {
 
         this(location.getX(), location.getY(), location.getZ(), radius, records, vector);
     }
 
+    /**
+     * 数据包输出爆炸构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     * @param radius 半径
+     */
     public PacketPlayOutExplosion(double x, double y, double z, float radius) {
 
         this(x, y, z, radius, null, null);
     }
 
+    /**
+     * 数据包输出爆炸构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     * @param radius 半径
+     * @param records 方块位置记录
+     * @param vector 矢量
+     */
     public PacketPlayOutExplosion(double x, double y, double z, float radius, List<BlockPosition> records, Vector vector) {
 
         this.x = new SimpleDoubleProperty(x);
@@ -97,31 +145,61 @@ public class PacketPlayOutExplosion extends PacketPlayOutBukkitAbstract {
         this.vector = new SimpleObjectProperty<>(vector == null ? new Vector() : vector);
     }
 
+    /**
+     * 获取此数据包输出爆炸的 X 坐标属性
+     *
+     * @return X 坐标属性
+     */
     public DoubleProperty xProperty() {
 
         return x;
     }
 
+    /**
+     * 获取此数据包输出爆炸的 Y 坐标属性
+     *
+     * @return Y 坐标属性
+     */
     public DoubleProperty yProperty() {
 
         return y;
     }
 
+    /**
+     * 获取此数据包输出爆炸的 Z 坐标属性
+     *
+     * @return Z 坐标属性
+     */
     public DoubleProperty zProperty() {
 
         return z;
     }
 
+    /**
+     * 获取此数据包输出爆炸的半径属性
+     *
+     * @return 半径属性
+     */
     public FloatProperty radiusProperty() {
 
         return radius;
     }
 
+    /**
+     * 获取此数据包输出爆炸的方块位置记录属性
+     *
+     * @return 方块位置记录属性
+     */
     public List<BlockPosition> recordsProperty() {
 
         return records;
     }
 
+    /**
+     * 获取此数据包输出爆炸的矢量属性
+     *
+     * @return 矢量属性
+     */
     public ObjectProperty<Vector> vectorProperty() {
 
         return vector;

@@ -23,12 +23,28 @@ import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
+/**
+ * <h1>MoonLakePacketOutEvent</h1>
+ * 月色之湖数据包输出事件类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see MoonLakePacketEvent
+ * @see PacketPlayOut
+ */
 public class MoonLakePacketOutEvent extends MoonLakePacketEvent implements Cancellable {
 
     private final static HandlerList handlerList = new HandlerList();
     private final Player[] players;
     private boolean cancel = false;
 
+    /**
+     * 月色之湖数据包输出事件类构造函数
+     *
+     * @param packet 数据包输出
+     * @param players 玩家
+     * @throws IllegalArgumentException 如果数据包对象为 {@code null} 则抛出异常
+     */
     public MoonLakePacketOutEvent(PacketPlayOut packet, Player... players) throws IllegalArgumentException {
 
         super(packet);
@@ -36,6 +52,11 @@ public class MoonLakePacketOutEvent extends MoonLakePacketEvent implements Cance
         this.players = players;
     }
 
+    /**
+     * 获取此数据包输出的玩家
+     *
+     * @return 玩家
+     */
     public Player[] getPlayers() {
 
         return players;

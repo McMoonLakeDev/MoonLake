@@ -18,6 +18,9 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -29,9 +32,15 @@ import java.util.ArrayList;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutCrashClient extends PacketPlayOutBukkitAbstract {
 
+    /**
+     * 数据包输出崩溃客户端构造函数
+     */
     public PacketPlayOutCrashClient() {
     }
 

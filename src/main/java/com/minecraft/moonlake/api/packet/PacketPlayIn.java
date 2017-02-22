@@ -18,5 +18,13 @@
 
 package com.minecraft.moonlake.api.packet;
 
+/**
+ * <h1>PacketPlayIn</h1>
+ * Minecraft 数据包输入
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see Packet
+ */
 public interface PacketPlayIn extends Packet {
 }

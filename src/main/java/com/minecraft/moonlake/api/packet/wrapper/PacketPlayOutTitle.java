@@ -18,6 +18,9 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
@@ -36,6 +39,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
 
@@ -67,26 +73,57 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
     private IntegerProperty stay;
     private IntegerProperty fadeOut;
 
+    /**
+     * 数据包输出标题构造函数
+     */
     public PacketPlayOutTitle() {
 
         this(null);
     }
 
+    /**
+     * 数据包输出标题构造函数
+     *
+     * @param title 主标题
+     */
     public PacketPlayOutTitle(String title) {
 
         this(title, null);
     }
 
+    /**
+     * 数据包输出标题构造函数
+     *
+     * @param title 主标题
+     * @param subTitle 副标题
+     */
     public PacketPlayOutTitle(String title, String subTitle) {
 
         this(title, subTitle, -1, -1, -1);
     }
 
+    /**
+     * 数据包输出标题构造函数
+     *
+     * @param title 主标题
+     * @param fadeIn 淡入时间
+     * @param stay 停留时间
+     * @param fadeOut 淡出时间
+     */
     public PacketPlayOutTitle(String title, int fadeIn, int stay, int fadeOut) {
 
         this(title, null, fadeIn, stay, fadeOut);
     }
 
+    /**
+     * 数据包输出标题构造函数
+     *
+     * @param title 主标题
+     * @param subTitle 副标题
+     * @param fadeIn 淡入时间
+     * @param stay 停留时间
+     * @param fadeOut 淡出时间
+     */
     public PacketPlayOutTitle(String title, String subTitle, int fadeIn, int stay, int fadeOut) {
 
         this.title = new SimpleStringProperty(title);
@@ -96,26 +133,51 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
         this.fadeOut = new SimpleIntegerProperty(fadeOut);
     }
 
+    /**
+     * 获取此数据包输出标题的主标题属性
+     *
+     * @return 主标题属性
+     */
     public StringProperty titleProperty() {
 
         return title;
     }
 
+    /**
+     * 获取此数据包输出标题的副标题属性
+     *
+     * @return 副标题属性
+     */
     public StringProperty subTitleProperty() {
 
         return subTitle;
     }
 
+    /**
+     * 获取此数据包输出标题的淡入时间属性
+     *
+     * @return 淡入时间属性
+     */
     public IntegerProperty fadeInProperty() {
 
         return fadeIn;
     }
 
+    /**
+     * 获取此数据包输出标题的停留时间属性
+     *
+     * @return 停留时间属性
+     */
     public IntegerProperty stayProperty() {
 
         return stay;
     }
 
+    /**
+     * 获取此数据包输出标题的淡出时间属性
+     *
+     * @return 淡出时间属性
+     */
     public IntegerProperty fadeOutProperty() {
 
         return fadeOut;

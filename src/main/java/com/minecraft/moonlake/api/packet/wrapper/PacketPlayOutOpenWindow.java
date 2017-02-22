@@ -18,6 +18,9 @@
 
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
@@ -31,6 +34,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutOpenWindow extends PacketPlayOutBukkitAbstract {
 
@@ -56,21 +62,48 @@ public class PacketPlayOutOpenWindow extends PacketPlayOutBukkitAbstract {
     private IntegerProperty slotCount;
     private IntegerProperty entityHorseId;
 
+    /**
+     * 数据包输出打开窗口构造函数
+     */
     public PacketPlayOutOpenWindow() {
 
         this(0, null, null);
     }
 
+    /**
+     * 数据包输出打开窗口构造函数
+     *
+     * @param windowId 窗口 Id
+     * @param windowType 窗口类型
+     * @param windowTitle 窗口标题
+     */
     public PacketPlayOutOpenWindow(int windowId, WindowType windowType, String windowTitle) {
 
         this(windowId, windowType, windowTitle, 0);
     }
 
+    /**
+     * 数据包输出打开窗口构造函数
+     *
+     * @param windowId 窗口 Id
+     * @param windowType 窗口类型
+     * @param windowTitle 窗口标题
+     * @param slotCount 槽位数量
+     */
     public PacketPlayOutOpenWindow(int windowId, WindowType windowType, String windowTitle, int slotCount) {
 
         this(windowId, windowType, windowTitle, slotCount, 0);
     }
 
+    /**
+     * 数据包输出打开窗口构造函数
+     *
+     * @param windowId 窗口 Id
+     * @param windowType 窗口类型
+     * @param windowTitle 窗口标题
+     * @param slotCount 槽位数量
+     * @param entityHorseId 实体马 Id
+     */
     public PacketPlayOutOpenWindow(int windowId, WindowType windowType, String windowTitle, int slotCount, int entityHorseId) {
 
         this.windowId = new SimpleIntegerProperty(windowId);
@@ -80,26 +113,51 @@ public class PacketPlayOutOpenWindow extends PacketPlayOutBukkitAbstract {
         this.entityHorseId = new SimpleIntegerProperty(entityHorseId);
     }
 
+    /**
+     * 获取此数据包输出打开窗口的窗口 Id 属性
+     *
+     * @return 窗口 Id 属性
+     */
     public IntegerProperty windowIdProperty() {
 
         return windowId;
     }
 
+    /**
+     * 获取此数据包输出打开窗口的窗口类型属性
+     *
+     * @return 窗口类型属性
+     */
     public ObjectProperty<WindowType> windowTypeProperty() {
 
         return windowType;
     }
 
+    /**
+     * 获取此数据包输出打开窗口的窗口标题属性
+     *
+     * @return 窗口标题属性
+     */
     public StringProperty windowTitleProperty() {
 
         return windowTitle;
     }
 
+    /**
+     * 获取此数据包输出打开窗口的槽位数量属性
+     *
+     * @return 槽位数量属性
+     */
     public IntegerProperty slotCountProperty() {
 
         return slotCount;
     }
 
+    /**
+     * 获取此数据包输出打开窗口的实体马 Id 属性
+     *
+     * @return 实体马 Id 属性
+     */
     public IntegerProperty entityHorseIdProperty() {
 
         return entityHorseId;

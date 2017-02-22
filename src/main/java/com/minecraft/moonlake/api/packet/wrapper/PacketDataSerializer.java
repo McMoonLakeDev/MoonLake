@@ -77,6 +77,11 @@ public class PacketDataSerializer {
         this.byteBuf = new ByteBufProperty(byteBuf);
     }
 
+    /**
+     * 获取此数据包数据串行器的数据属性
+     *
+     * @return 数据属性
+     */
     public ByteBufProperty byteBufProperty() {
 
         return byteBuf;
@@ -137,26 +142,56 @@ public class PacketDataSerializer {
         }
     }
 
+    /**
+     * <h1>PacketDataSerializerProperty</h1>
+     * 数据包数据串行器包装属性类
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     public final static class PacketDataSerializerProperty extends ObjectPropertyBase<PacketDataSerializer> {
 
+        /**
+         * 数据包数据串行器包装属性类构造函数
+         */
         public PacketDataSerializerProperty() {
         }
 
+        /**
+         * 数据包数据串行器包装属性类构造函数
+         *
+         * @param data 数据包数据串行器对象
+         */
         public PacketDataSerializerProperty(PacketDataSerializer data) {
 
             super(data);
         }
 
+        /**
+         * 数据包数据串行器包装属性类构造函数
+         *
+         * @param byteBuf 数据包数据串行器数据
+         */
         public PacketDataSerializerProperty(byte[] byteBuf) {
 
             super(new PacketDataSerializer(byteBuf));
         }
 
+        /**
+         * 数据包数据串行器包装属性类构造函数
+         *
+         * @param byteBuf 数据包数据串行器数据
+         */
         public PacketDataSerializerProperty(ByteBuf byteBuf) {
 
             super(new PacketDataSerializer(byteBuf));
         }
 
+        /**
+         * 获取此数据包数据串行器的数据属性
+         *
+         * @return 数据属性
+         */
         public ByteBufProperty byteBufProperty() {
 
             return get().byteBuf;
@@ -168,16 +203,36 @@ public class PacketDataSerializer {
         }
     }
 
+    /**
+     * <h1>ByteBufProperty</h1>
+     * 字节数据缓存属性类
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     public final static class ByteBufProperty extends ObjectPropertyBase<ByteBuf> {
 
+        /**
+         * 字节数据缓存属性类构造函数
+         */
         public ByteBufProperty() {
         }
 
+        /**
+         * 字节数据缓存属性类构造函数
+         *
+         * @param byteBuf 字节数据缓存
+         */
         public ByteBufProperty(byte[] byteBuf) {
 
             super(Unpooled.wrappedBuffer(byteBuf));
         }
 
+        /**
+         * 字节数据缓存属性类构造函数
+         *
+         * @param byteBuf 字节数据缓存
+         */
         public ByteBufProperty(ByteBuf byteBuf) {
 
             super(byteBuf);

@@ -22,6 +22,15 @@ import com.minecraft.moonlake.api.packet.exception.PacketException;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import org.bukkit.entity.Player;
 
+/**
+ * <h1>PacketPlayOutBukkit</h1>
+ * Minecraft 数据包输出 Bukkit
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ */
 public interface PacketPlayOutBukkit extends PacketPlayOut {
 
     /**

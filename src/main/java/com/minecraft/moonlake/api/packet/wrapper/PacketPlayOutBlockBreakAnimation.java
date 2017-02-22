@@ -18,6 +18,9 @@
 
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.property.IntegerProperty;
@@ -33,6 +36,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutBlockBreakAnimation extends PacketPlayOutBukkitAbstract {
 
@@ -54,21 +60,45 @@ public class PacketPlayOutBlockBreakAnimation extends PacketPlayOutBukkitAbstrac
     private BlockPosition.BlockPositionProperty blockPosition;
     private IntegerProperty value;
 
+    /**
+     * 数据包输出方块破坏动画构造函数
+     */
     public PacketPlayOutBlockBreakAnimation() {
 
         this(0, BlockPosition.ZERO, 0);
     }
 
+    /**
+     * 数据包输出方块破坏动画构造函数
+     *
+     * @param player 玩家
+     * @param blockPosition 方块位置
+     * @param value 方块破坏值 (0-9)
+     */
     public PacketPlayOutBlockBreakAnimation(Player player, BlockPosition blockPosition, int value) {
 
         this(player.getEntityId(), blockPosition, value);
     }
 
+    /**
+     * 数据包输出方块破坏动画构造函数
+     *
+     * @param player 月色之湖玩家
+     * @param blockPosition 方块位置
+     * @param value 方块破坏值 (0-9)
+     */
     public PacketPlayOutBlockBreakAnimation(MoonLakePlayer player, BlockPosition blockPosition, int value) {
 
         this(player.getBukkitPlayer().getEntityId(), blockPosition, value);
     }
 
+    /**
+     * 数据包输出方块破坏动画构造函数
+     *
+     * @param entityId 实体 Id
+     * @param blockPosition 方块位置
+     * @param value 方块破坏值 (0-9)
+     */
     public PacketPlayOutBlockBreakAnimation(int entityId, BlockPosition blockPosition, int value) {
 
         this.entityId = new SimpleIntegerProperty(entityId);
@@ -76,16 +106,31 @@ public class PacketPlayOutBlockBreakAnimation extends PacketPlayOutBukkitAbstrac
         this.value = new SimpleIntegerProperty(value);
     }
 
+    /**
+     * 获取此数据包输出方块破坏动画的实体 Id 属性
+     *
+     * @return 实体 Id 属性
+     */
     public IntegerProperty entityIdProperty() {
 
         return entityId;
     }
 
+    /**
+     * 获取此数据包输出方块破坏动画的方块位置属性
+     *
+     * @return 方块位置属性
+     */
     public BlockPosition.BlockPositionProperty blockPositionProperty() {
 
         return blockPosition;
     }
 
+    /**
+     * 获取此数据包输出方块破坏动画的方块破坏值属性
+     *
+     * @return 方块破坏值属性
+     */
     public IntegerProperty valueProperty() {
 
         return value;

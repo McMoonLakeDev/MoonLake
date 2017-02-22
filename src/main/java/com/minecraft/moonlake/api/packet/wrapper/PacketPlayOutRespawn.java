@@ -18,6 +18,9 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.ObjectProperty;
@@ -38,6 +41,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutRespawn extends PacketPlayOutBukkitAbstract {
 
@@ -72,16 +78,33 @@ public class PacketPlayOutRespawn extends PacketPlayOutBukkitAbstract {
     private ObjectProperty<GameMode> worldGameMode;
     private ObjectProperty<WorldType> worldType;
 
+    /**
+     * 数据包输出重生构造函数
+     */
     public PacketPlayOutRespawn() {
 
         this(WorldDimension.OVERWORLD, null, null, null);
     }
 
+    /**
+     * 数据包输出重生构造函数
+     *
+     * @param world 世界
+     * @param gameMode 游戏模式
+     */
     public PacketPlayOutRespawn(World world, GameMode gameMode) {
 
         this(WorldDimension.fromWorld(world), WorldDifficulty.fromWorld(world), gameMode, WorldType.fromWorld(world));
     }
 
+    /**
+     * 数据包输出重生构造函数
+     *
+     * @param worldDimension 世界维度
+     * @param worldDifficulty 世界难度
+     * @param worldGameMode 世界游戏模式
+     * @param worldType 世界类型
+     */
     public PacketPlayOutRespawn(WorldDimension worldDimension, WorldDifficulty worldDifficulty, GameMode worldGameMode, WorldType worldType) {
 
         this.worldDimensionId = new SimpleIntegerProperty(worldDimension.getId());
@@ -90,21 +113,41 @@ public class PacketPlayOutRespawn extends PacketPlayOutBukkitAbstract {
         this.worldType = new SimpleObjectProperty<>(worldType);
     }
 
+    /**
+     * 获取此数据包输出重生的世界维度 Id 属性
+     *
+     * @return 世界维度 Id 属性
+     */
     public IntegerProperty worldDimensionIdProperty() {
 
         return worldDimensionId;
     }
 
+    /**
+     * 获取此数据包输出重生的世界难度属性
+     *
+     * @return 世界难度属性
+     */
     public ObjectProperty<WorldDifficulty> worldDifficultyProperty() {
 
         return worldDifficulty;
     }
 
+    /**
+     * 获取此数据包输出重生的世界游戏模式属性
+     *
+     * @return 世界游戏模式属性
+     */
     public ObjectProperty<GameMode> worldGameModeProperty() {
 
         return worldGameMode;
     }
 
+    /**
+     * 获取此数据包输出重生的世界类型属性
+     *
+     * @return 世界类型属性
+     */
     public ObjectProperty<WorldType> worldTypeProperty() {
 
         return worldType;

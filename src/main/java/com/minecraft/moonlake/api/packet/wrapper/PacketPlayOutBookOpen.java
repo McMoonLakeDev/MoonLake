@@ -19,6 +19,9 @@
 package com.minecraft.moonlake.api.packet.wrapper;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.property.BooleanProperty;
@@ -36,6 +39,9 @@ import org.bukkit.inventory.ItemStack;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutBookOpen extends PacketPlayOutBukkitAbstract {
 
@@ -43,27 +49,51 @@ public class PacketPlayOutBookOpen extends PacketPlayOutBukkitAbstract {
     private ObjectProperty<ItemStack> book;
     private BooleanProperty onlyPacket;
 
+    /**
+     * 数据包输出书本打开构造函数
+     */
     public PacketPlayOutBookOpen() {
 
         this(null, false);
     }
 
+    /**
+     * 数据包输出书本打开构造函数
+     *
+     * @param itemStack 书本物品栈
+     */
     public PacketPlayOutBookOpen(ItemStack itemStack) {
 
         this(itemStack, false);
     }
 
+    /**
+     * 数据包输出书本打开构造函数
+     *
+     * @param itemStack 书本物品栈
+     * @param onlyPacket 是否只是数据包
+     */
     public PacketPlayOutBookOpen(ItemStack itemStack, boolean onlyPacket) {
 
         this.book = new SimpleObjectProperty<>(itemStack);
         this.onlyPacket = new SimpleBooleanProperty(onlyPacket);
     }
 
+    /**
+     * 获取此数据包输出书本打开的书本物品栈属性
+     *
+     * @return 书本物品栈属性
+     */
     public ObjectProperty<ItemStack> bookProperty() {
 
         return book;
     }
 
+    /**
+     * 获取此数据包输出书本打开的是否只是数据包属性
+     *
+     * @return 是否只是数据包属性
+     */
     public BooleanProperty onlyPacketProperty() {
 
         return onlyPacket;

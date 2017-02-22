@@ -18,6 +18,9 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
 import com.minecraft.moonlake.manager.PlayerManager;
@@ -37,10 +40,13 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutPlayerInfo</h1>
- * 数据包输出玩家信息类（详细doc待补充...）
+ * 数据包输出玩家信息（详细doc待补充...）
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
 
@@ -75,11 +81,20 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
     private ObjectProperty<Action> action;
     private DataListProperty dataList;
 
+    /**
+     * 数据包输出玩家信息构造函数
+     */
     public PacketPlayOutPlayerInfo() {
 
         this(null, new ArrayList<>());
     }
 
+    /**
+     * 数据包输出玩家信息构造函数
+     *
+     * @param action 交互类型
+     * @param players 玩家
+     */
     public PacketPlayOutPlayerInfo(Action action, Player... players) {
 
         this.action = new SimpleObjectProperty<>(action);
@@ -87,22 +102,44 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
         this.dataList.add(players);
     }
 
+    /**
+     * 数据包输出玩家信息构造函数
+     *
+     * @param action 交互类型
+     * @param data 数据
+     */
     public PacketPlayOutPlayerInfo(Action action, Data... data) {
 
         this(action, Arrays.asList(data));
     }
 
+    /**
+     * 数据包输出玩家信息构造函数
+     *
+     * @param action 交互类型
+     * @param dataList 数据列表
+     */
     public PacketPlayOutPlayerInfo(Action action, List<Data> dataList) {
 
         this.action = new SimpleObjectProperty<>(action);
         this.dataList = new DataListProperty(dataList);
     }
 
+    /**
+     * 获取此数据包输出玩家信息的交互类型属性
+     *
+     * @return 交互类型属性
+     */
     public ObjectProperty<Action> actionProperty() {
 
         return action;
     }
 
+    /**
+     * 获取此数据包输出玩家信息的数据列表属性
+     *
+     * @return 数据列表属性
+     */
     public DataListProperty dataListProperty() {
 
         return dataList;
@@ -192,6 +229,13 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
         REMOVE_PLAYER,;
     }
 
+    /**
+     * <h1>Data</h1>
+     * 数据包输出玩家信息数据类
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     public final static class Data {
 
         private IntegerProperty ping;
@@ -199,6 +243,14 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
         private ObjectProperty<GameMode> gameMode;
         private StringProperty playerListName;
 
+        /**
+         * 数据包输出玩家信息数据构造函数
+         *
+         * @param ping 延迟
+         * @param gameProfile 游戏简介
+         * @param gameMode 游戏模式
+         * @param playerListName 玩家列表名称
+         */
         public Data(int ping, GameProfile gameProfile, GameMode gameMode, String playerListName) {
 
             this.ping = new SimpleIntegerProperty(ping);
@@ -207,44 +259,89 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
             this.playerListName = new SimpleStringProperty(playerListName);
         }
 
+        /**
+         * 获取此数据包输出玩家信息数据的延迟属性
+         *
+         * @return 延迟属性
+         */
         public IntegerProperty pingProperty() {
 
             return ping;
         }
 
+        /**
+         * 获取此数据包输出玩家信息数据的游戏简介属性
+         *
+         * @return 游戏简介属性
+         */
         public ObjectProperty<GameProfile> gameProfileProperty() {
 
             return gameProfile;
         }
 
+        /**
+         * 获取此数据包输出玩家信息数据的游戏模式属性
+         *
+         * @return 游戏模式属性
+         */
         public ObjectProperty<GameMode> gameModeProperty() {
 
             return gameMode;
         }
 
+        /**
+         * 获取此数据包输出玩家信息数据的玩家列表名称属性
+         *
+         * @return 玩家列表名称属性
+         */
         public StringProperty playerListNameProperty() {
 
             return playerListName;
         }
     }
 
+    /**
+     * <h1>DataListProperty</h1>
+     * 数据包输出玩家信息数据列表属性类
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     public final static class DataListProperty extends ObjectPropertyBase<List<Data>> {
 
+        /**
+         * 数据包输出玩家信息数据列表属性构造函数
+         */
         public DataListProperty() {
 
             super(new ArrayList<>());
         }
 
+        /**
+         * 数据包输出玩家信息数据列表属性构造函数
+         *
+         * @param dataList 数据列表
+         */
         public DataListProperty(List<Data> dataList) {
 
             super(dataList);
         }
 
+        /**
+         * 将此数据包输出玩家信息数据列表添加数据
+         *
+         * @param data 数据
+         */
         public void add(Data data) {
 
             get().add(data);
         }
 
+        /**
+         * 将此数据包输出玩家信息数据列表添加数据
+         *
+         * @param players 玩家
+         */
         public void add(Player... players) {
 
             Validate.notNull(players, "The players object is null.");
@@ -253,6 +350,11 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
                 add(player);
         }
 
+        /**
+         * 将此数据包输出玩家信息数据列表添加数据
+         *
+         * @param player 玩家
+         */
         public void add(Player player) {
 
             GameProfile gameProfile = PlayerManager.getProfile(player);
@@ -260,31 +362,67 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
             add(ping, gameProfile, player.getGameMode(), player.getPlayerListName());
         }
 
+        /**
+         * 将此数据包输出玩家信息数据列表添加数据
+         *
+         * @param gameProfile 游戏简介
+         * @param gameMode 游戏模式
+         * @param playerListName 玩家列表名称
+         */
         public void add(GameProfile gameProfile, GameMode gameMode, String playerListName) {
 
             add(0, gameProfile, gameMode, playerListName);
         }
 
+        /**
+         * 将此数据包输出玩家信息数据列表添加数据
+         *
+         * @param ping 延迟
+         * @param gameProfile 游戏简介
+         * @param gameMode 游戏模式
+         * @param playerListName 玩家列表名称
+         */
         public void add(int ping, GameProfile gameProfile, GameMode gameMode, String playerListName) {
 
             get().add(new Data(ping, gameProfile, gameMode, playerListName));
         }
 
+        /**
+         * 获取此数据包输出玩家信息数据列表指定索引的数据
+         *
+         * @param index 索引
+         * @return 数据
+         */
         public Data get(int index) {
 
             return get().get(index);
         }
 
+        /**
+         * 获取此数据包输出玩家信息数据列表第一个索引的数据
+         *
+         * @return 数据
+         */
         public Data getFirst() {
 
             return get(0);
         }
 
+        /**
+         * 获取此数据包输出玩家信息数据列表最后一个索引的数据
+         *
+         * @return 数据
+         */
         public Data getLast() {
 
             return get(size() - 1);
         }
 
+        /**
+         * 获取此数据包输出玩家信息数据列表的大小
+         *
+         * @return 大小
+         */
         public int size() {
 
             return get().size();

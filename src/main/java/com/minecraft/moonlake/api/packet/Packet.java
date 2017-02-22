@@ -18,5 +18,12 @@
 
 package com.minecraft.moonlake.api.packet;
 
+/**
+ * <h1>Packet</h1>
+ * Minecraft 数据包
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface Packet {
 }

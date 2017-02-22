@@ -18,6 +18,9 @@
 
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
@@ -31,10 +34,13 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutBlockChange</h1>
- * 数据包输出方块改变类（详细doc待补充...）
+ * 数据包输出方块改变（详细doc待补充...）
  *
  * @version 1.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutBlockChange extends PacketPlayOutBukkitAbstract {
 
@@ -65,9 +71,20 @@ public class PacketPlayOutBlockChange extends PacketPlayOutBukkitAbstract {
     private ObjectProperty<World> world;
     private BlockPosition.BlockPositionProperty blockPosition;
 
+    /**
+     * 数据包输出方块改变构造函数
+     */
     public PacketPlayOutBlockChange() {
+
+        this(null, BlockPosition.ZERO);
     }
 
+    /**
+     * 数据包输出方块改变构造函数
+     *
+     * @param world 世界
+     * @param blockPosition 方块位置
+     */
     public PacketPlayOutBlockChange(World world, BlockPosition blockPosition) {
 
         this.world = new SimpleObjectProperty<>(world);

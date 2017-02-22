@@ -22,10 +22,26 @@ import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
+/**
+ * <h1>MoonLakePacketOutBukkitEvent</h1>
+ * 月色之湖数据包输出 Bukkit 事件类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see MoonLakePacketOutEvent
+ * @see PacketPlayOutBukkit
+ */
 public class MoonLakePacketOutBukkitEvent extends MoonLakePacketOutEvent {
 
     private final static HandlerList handlerList = new HandlerList();
 
+    /**
+     * 月色之湖数据包输出 Bukkit 事件类构造函数
+     *
+     * @param packet 数据包输出 Bukkit
+     * @param players 玩家
+     * @throws IllegalArgumentException 如果数据包对象为 {@code null} 则抛出异常
+     */
     public MoonLakePacketOutBukkitEvent(PacketPlayOutBukkit packet, Player... players) throws IllegalArgumentException {
 
         super(packet, players);

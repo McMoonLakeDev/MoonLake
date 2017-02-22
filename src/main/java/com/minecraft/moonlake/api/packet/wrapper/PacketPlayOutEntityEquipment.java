@@ -18,6 +18,9 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.ObjectProperty;
@@ -39,6 +42,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
 
@@ -70,16 +76,33 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
     private ObjectProperty<EquipmentSlot> equipmentSlot;
     private ObjectProperty<ItemStack> itemStack;
 
+    /**
+     * 数据包输出实体装备构造函数
+     */
     public PacketPlayOutEntityEquipment() {
 
         this(0, null, null);
     }
 
+    /**
+     * 数据包输出实体装备构造函数
+     *
+     * @param entity 实体
+     * @param equipmentSlot 装备槽位
+     * @param itemStack 物品栈
+     */
     public PacketPlayOutEntityEquipment(Entity entity, EquipmentSlot equipmentSlot, ItemStack itemStack) {
 
         this(entity.getEntityId(), equipmentSlot, itemStack);
     }
 
+    /**
+     * 数据包输出实体装备构造函数
+     *
+     * @param entityId 实体 Id
+     * @param equipmentSlot 装备槽位
+     * @param itemStack 物品栈
+     */
     public PacketPlayOutEntityEquipment(int entityId, EquipmentSlot equipmentSlot, ItemStack itemStack) {
 
         this.entityId = new SimpleIntegerProperty(entityId);
@@ -87,16 +110,31 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
         this.itemStack = new SimpleObjectProperty<>(itemStack);
     }
 
+    /**
+     * 获取此数据包输出实体装备的实体 Id 属性
+     *
+     * @return 实体 Id 属性
+     */
     public IntegerProperty entityIdProperty() {
 
         return entityId;
     }
 
+    /**
+     * 获取此数据包输出实体装备的装备槽位属性
+     *
+     * @return 装备槽位属性
+     */
     public ObjectProperty<EquipmentSlot> equipmentSlotProperty() {
 
         return equipmentSlot;
     }
 
+    /**
+     * 获取此数据包输出实体装备的物品栈属性
+     *
+     * @return 物品栈属性
+     */
     public ObjectProperty<ItemStack> itemStackProperty() {
 
         return itemStack;

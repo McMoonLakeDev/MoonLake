@@ -18,6 +18,9 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
@@ -31,6 +34,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutHeldItemSlot extends PacketPlayOutBukkitAbstract {
 
@@ -50,21 +56,39 @@ public class PacketPlayOutHeldItemSlot extends PacketPlayOutBukkitAbstract {
 
     private IntegerProperty heldItemSlot;
 
+    /**
+     * 数据包输出手持物品槽位构造函数
+     */
     public PacketPlayOutHeldItemSlot() {
 
         this(0);
     }
 
+    /**
+     * 数据包输出手持物品槽位构造函数
+     *
+     * @param heldItemSlot 手持物品槽位 (0-8)
+     */
     public PacketPlayOutHeldItemSlot(int heldItemSlot) {
 
         this.heldItemSlot = new SimpleIntegerProperty(heldItemSlot);
     }
 
+    /**
+     * 数据包输出手持物品槽位构造函数
+     *
+     * @param player 玩家
+     */
     public PacketPlayOutHeldItemSlot(Player player) {
 
         this(player.getInventory().getHeldItemSlot());
     }
 
+    /**
+     * 获取此数据包输出手持物品槽位的手持物品槽位属性
+     *
+     * @return 手持物品槽位属性
+     */
     public IntegerProperty heldItemSlotProperty() {
 
         return heldItemSlot;

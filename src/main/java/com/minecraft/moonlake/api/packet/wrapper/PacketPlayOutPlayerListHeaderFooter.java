@@ -18,6 +18,9 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.property.StringProperty;
@@ -34,6 +37,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbstract {
 
@@ -58,27 +64,51 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbst
     private StringProperty header;
     private StringProperty footer;
 
+    /**
+     * 数据包输出玩家列表头脚文本构造函数
+     */
     public PacketPlayOutPlayerListHeaderFooter() {
 
         this(null, null);
     }
 
+    /**
+     * 数据包输出玩家列表头脚文本构造函数
+     *
+     * @param header 头文本
+     */
     public PacketPlayOutPlayerListHeaderFooter(String header) {
 
         this(header, null);
     }
 
+    /**
+     * 数据包输出玩家列表头脚文本构造函数
+     *
+     * @param header 头文本
+     * @param footer 脚文本
+     */
     public PacketPlayOutPlayerListHeaderFooter(String header, String footer) {
 
         this.header = new SimpleStringProperty(header);
         this.footer = new SimpleStringProperty(footer);
     }
 
+    /**
+     * 获取此数据包输出玩家列表头脚文本的头文本属性
+     *
+     * @return 头文本属性
+     */
     public StringProperty headerProperty() {
 
         return header;
     }
 
+    /**
+     * 获取此数据包输出玩家列表头脚文本的脚文本属性
+     *
+     * @return 脚文本属性
+     */
     public StringProperty footerProperty() {
 
         return footer;

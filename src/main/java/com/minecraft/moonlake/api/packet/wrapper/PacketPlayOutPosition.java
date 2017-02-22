@@ -18,6 +18,9 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.*;
 import org.bukkit.entity.Player;
@@ -36,6 +39,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
 
@@ -65,36 +71,94 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
     private List<PlayerTeleportFlag> flagList;
     private IntegerProperty value;
 
+    /**
+     * 数据包输出位置构造函数
+     */
     public PacketPlayOutPosition() {
 
         this(0d, 0d, 0d);
     }
 
+    /**
+     * 数据包输出位置构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     */
     public PacketPlayOutPosition(double x, double y, double z) {
 
         this(x, y, z, 0f, 0f, 0);
     }
 
+    /**
+     * 数据包输出位置构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     * @param value 值
+     */
     public PacketPlayOutPosition(double x, double y, double z, int value) {
 
         this(x, y, z, 0f, 0f, value);
     }
 
+    /**
+     * 数据包输出位置构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     * @param yaw Yaw 偏航角
+     * @param pitch Pitch 俯仰角
+     */
     public PacketPlayOutPosition(double x, double y, double z, float yaw, float pitch) {
 
         this(x, y, z, yaw, pitch, new ArrayList<>(), 0);
     }
 
+    /**
+     * 数据包输出位置构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     * @param yaw Yaw 偏航角
+     * @param pitch Pitch 俯仰角
+     * @param value 值
+     */
     public PacketPlayOutPosition(double x, double y, double z, float yaw, float pitch, int value) {
 
         this(x, y, z, yaw, pitch, new ArrayList<>(), value);
     }
 
+    /**
+     * 数据包输出位置构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     * @param yaw Yaw 偏航角
+     * @param pitch Pitch 俯仰角
+     * @param flagList 传送标示列表
+     */
     public PacketPlayOutPosition(double x, double y, double z, float yaw, float pitch, List<PlayerTeleportFlag> flagList) {
 
         this(x, y, z, yaw, pitch, flagList, 0);
     }
 
+    /**
+     * 数据包输出位置构造函数
+     *
+     * @param x X 坐标
+     * @param y Y 坐标
+     * @param z Z 坐标
+     * @param yaw Yaw 偏航角
+     * @param pitch Pitch 俯仰角
+     * @param flagList 传送标示列表
+     * @param value 值
+     */
     public PacketPlayOutPosition(double x, double y, double z, float yaw, float pitch, List<PlayerTeleportFlag> flagList, int value) {
 
         this.x = new SimpleDoubleProperty(x);
@@ -106,37 +170,71 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
         this.value = new SimpleIntegerProperty(value);
     }
 
+    /**
+     * 获取此数据包输出位置的 X 坐标属性
+     *
+     * @return X 坐标属性
+     */
     public DoubleProperty xProperty() {
 
         return x;
     }
 
+    /**
+     * 获取此数据包输出位置的 Y 坐标属性
+     *
+     * @return Y 坐标属性
+     */
     public DoubleProperty yProperty() {
 
         return y;
     }
 
+    /**
+     * 获取此数据包输出位置的 Z 坐标属性
+     *
+     * @return Z 坐标属性
+     */
     public DoubleProperty zProperty() {
-
 
         return z;
     }
 
+    /**
+     * 获取此数据包输出位置的 Yaw 偏航角属性
+     *
+     * @return Yaw 偏航角属性
+     */
     public FloatProperty yawProperty() {
 
         return yaw;
     }
 
+    /**
+     * 获取此数据包输出位置的 Pitch 俯仰角属性
+     *
+     * @return Pitch 俯仰角属性
+     */
     public FloatProperty pitchProperty() {
 
         return pitch;
     }
 
+    /**
+     * 获取此数据包输出位置的传送标示列表属性
+     *
+     * @return 传送标示列表属性
+     */
     public List<PlayerTeleportFlag> getFlagList() {
 
         return flagList;
     }
 
+    /**
+     * 获取此数据包输出位置的值属性
+     *
+     * @return 值属性
+     */
     public IntegerProperty valueProperty() {
 
         return value;

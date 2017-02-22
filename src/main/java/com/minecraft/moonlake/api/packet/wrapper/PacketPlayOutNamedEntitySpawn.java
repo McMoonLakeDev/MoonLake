@@ -18,6 +18,9 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
@@ -35,6 +38,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
 
@@ -56,16 +62,29 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
 
     private ObjectProperty<Player> entity;
 
+    /**
+     * 数据包输出名称实体生成构造函数
+     */
     public PacketPlayOutNamedEntitySpawn() {
 
         this(null);
     }
 
+    /**
+     * 数据包输出名称实体生成构造函数
+     *
+     * @param entity 实体玩家
+     */
     public PacketPlayOutNamedEntitySpawn(Player entity) {
 
         this.entity = new SimpleObjectProperty<>(entity);
     }
 
+    /**
+     * 获取此数据包输出名称实体生成的实体玩家属性
+     *
+     * @return 实体玩家属性
+     */
     public ObjectProperty<Player> entityProperty() {
 
         return entity;

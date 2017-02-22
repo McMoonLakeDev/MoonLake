@@ -18,6 +18,9 @@
 
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
@@ -31,6 +34,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutCloseWindow extends PacketPlayOutBukkitAbstract {
 
@@ -50,16 +56,29 @@ public class PacketPlayOutCloseWindow extends PacketPlayOutBukkitAbstract {
 
     private IntegerProperty windowId;
 
+    /**
+     * 数据包输出关闭窗口构造函数
+     */
     public PacketPlayOutCloseWindow() {
 
         this(0);
     }
 
+    /**
+     * 数据包输出关闭窗口构造函数
+     *
+     * @param windowId 窗口 Id
+     */
     public PacketPlayOutCloseWindow(int windowId) {
 
         this.windowId = new SimpleIntegerProperty(windowId);
     }
 
+    /**
+     * 获取此数据包输出关闭窗口的窗口 Id 属性
+     *
+     * @return 窗口 Id 属性
+     */
     public IntegerProperty windowIdProperty() {
 
         return windowId;

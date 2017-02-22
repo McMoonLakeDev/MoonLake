@@ -26,10 +26,12 @@ import org.bukkit.plugin.Plugin;
 
 /**
  * <h1>PacketPlayOutBungee</h1>
- * 数据包输出蹦极（详细doc待补充...）
+ * Minecraft 数据包输出蹦极（详细doc待补充...）
  *
  * @version 1.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
  */
 public interface PacketPlayOutBungee extends PacketPlayOut, AutoCloseable {
 

@@ -200,31 +200,68 @@ public class BlockPosition {
         }
     }
 
+    /**
+     * <h1>BlockPositionProperty</h1>
+     * 方块位置封装属性类
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     public final static class BlockPositionProperty extends ObjectPropertyBase<BlockPosition> {
 
+        /**
+         * 方块位置封装属性类构造函数
+         */
         public BlockPositionProperty() {
         }
 
+        /**
+         * 方块位置封装属性类构造函数
+         *
+         * @param blockPosition 方块位置对象
+         */
         public BlockPositionProperty(BlockPosition blockPosition) {
 
             super(blockPosition);
         }
 
+        /**
+         * 方块位置封装属性类构造函数
+         *
+         * @param x X 坐标
+         * @param y Y 坐标
+         * @param z Z 坐标
+         */
         public BlockPositionProperty(int x, int y, int z) {
 
             super(new BlockPosition(x, y, z));
         }
 
+        /**
+         * 获取此方块位置的 X 坐标属性
+         *
+         * @return X
+         */
         public IntegerProperty xProperty() {
 
             return get().x;
         }
 
+        /**
+         * 获取此方块位置的 Y 坐标属性
+         *
+         * @return Y
+         */
         public IntegerProperty yProperty() {
 
             return get().y;
         }
 
+        /**
+         * 获取此方块位置的 Z 坐标属性
+         *
+         * @return Z
+         */
         public IntegerProperty zProperty() {
 
             return get().z;

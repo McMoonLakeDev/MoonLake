@@ -18,10 +18,26 @@
 
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayIn;
 
+/**
+ * <h1>PacketPlayInAbstract</h1>
+ * Minecraft 数据包输入抽象类
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see Packet
+ * @see PacketPlayIn
+ */
 public abstract class PacketPlayInAbstract implements PacketPlayIn {
 
+    /**
+     * 触发数据包输入事件
+     *
+     * @param packet 数据包对象
+     * @return 是否阻止
+     */
     protected boolean fireEvent(PacketPlayIn packet) {
 
         return false;

@@ -22,10 +22,26 @@ import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
+/**
+ * <h1>MoonLakePacketOutBungeeEvent</h1>
+ * 月色之湖数据包输出蹦极事件类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see MoonLakePacketOutEvent
+ * @see PacketPlayOutBungee
+ */
 public class MoonLakePacketOutBungeeEvent extends MoonLakePacketOutEvent {
 
     private final static HandlerList handlerList = new HandlerList();
 
+    /**
+     * 月色之湖数据包输出蹦极事件类构造函数
+     *
+     * @param packet 数据包输出蹦极
+     * @param players 玩家
+     * @throws IllegalArgumentException 如果数据包对象为 {@code null} 则抛出异常
+     */
     public MoonLakePacketOutBungeeEvent(PacketPlayOutBungee packet, Player... players) throws IllegalArgumentException {
 
         super(packet, players);

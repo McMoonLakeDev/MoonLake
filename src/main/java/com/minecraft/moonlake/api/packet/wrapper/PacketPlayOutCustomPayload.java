@@ -18,6 +18,9 @@
 
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.property.StringProperty;
@@ -32,6 +35,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutCustomPayload extends PacketPlayOutBukkitAbstract {
 
@@ -52,27 +58,52 @@ public class PacketPlayOutCustomPayload extends PacketPlayOutBukkitAbstract {
     private StringProperty channel;
     private PacketDataSerializer.PacketDataSerializerProperty data;
 
+    /**
+     * 数据包输出自定义通道数据构造函数
+     */
     public PacketPlayOutCustomPayload() {
 
         this("MC", new PacketDataSerializer());
     }
 
+    /**
+     * 数据包输出自定义通道数据构造函数
+     *
+     * @param channel 通道名
+     * @param data 字节数据
+     */
     public PacketPlayOutCustomPayload(String channel, byte[] data) {
 
         this(channel, new PacketDataSerializer(data));
     }
 
+    /**
+     * 数据包输出自定义通道数据构造函数
+     *
+     * @param channel 通道名
+     * @param data 数据包数据串行器
+     */
     public PacketPlayOutCustomPayload(String channel, PacketDataSerializer data) {
 
         this.channel = new SimpleStringProperty(channel);
         this.data = new PacketDataSerializer.PacketDataSerializerProperty(data);
     }
 
+    /**
+     * 获取此数据包输出自定义通道数据的通道名属性
+     *
+     * @return 通道名属性
+     */
     public StringProperty channelProperty() {
 
         return channel;
     }
 
+    /**
+     * 获取此数据包输出自定义通道数据的数据串行器属性
+     *
+     * @return 数据串行器属性
+     */
     public PacketDataSerializer.PacketDataSerializerProperty dataProperty() {
 
         return data;

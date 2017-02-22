@@ -18,6 +18,9 @@
 
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.exception.MoonLakeException;
@@ -35,6 +38,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
 
@@ -74,31 +80,65 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
 
     private final PlayerAbilitiesProperty playerAbilities;
 
+    /**
+     * 数据包输出玩家能力构造函数
+     */
     public PacketPlayOutAbilities() {
 
         this((PlayerAbilities) null);
     }
 
+    /**
+     * 数据包输出玩家能力构造函数
+     *
+     * @param abilities 玩家能力对象
+     */
     public PacketPlayOutAbilities(PlayerAbilities abilities) {
 
         this.playerAbilities = new PlayerAbilitiesProperty(abilities);
     }
 
+    /**
+     * 数据包输出玩家能力构造函数
+     *
+     * @param player 玩家对象
+     */
     public PacketPlayOutAbilities(Player player) {
 
         this(new PlayerAbilities(player));
     }
 
+    /**
+     * 数据包输出玩家能力构造函数
+     *
+     * @param player 月色之湖玩家对象
+     */
     public PacketPlayOutAbilities(MoonLakePlayer player) {
 
         this(player.getBukkitPlayer());
     }
 
+    /**
+     * 数据包输出玩家能力构造函数
+     *
+     * @param isInvulnerable 是否坚不可摧
+     * @param isFlying 是否飞行中
+     * @param canFly 是否可以飞行
+     * @param canInstantlyBuild 是否可以快速建造
+     * @param mayBuild 是否可以建造
+     * @param flySpeed 飞行速度
+     * @param walkSpeed 移动速度
+     */
     public PacketPlayOutAbilities(boolean isInvulnerable, boolean isFlying, boolean canFly, boolean canInstantlyBuild, boolean mayBuild, float flySpeed, float walkSpeed) {
 
         this(new PlayerAbilities(isInvulnerable, isFlying, canFly, canInstantlyBuild, mayBuild, flySpeed, walkSpeed));
     }
 
+    /**
+     * 获取此数据包输出玩家能力的玩家能力属性
+     *
+     * @return 玩家能力属性
+     */
     public PlayerAbilitiesProperty playerAbilitiesProperty() {
 
         return playerAbilities;
@@ -162,46 +202,96 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
         return false;
     }
 
+    /**
+     * <h1>PlayerAbilitiesProperty</h1>
+     * 玩家能力封装属性类
+     *
+     * @version 1.0
+     * @author Month_Light
+     */
     public final static class PlayerAbilitiesProperty extends ObjectPropertyBase<PlayerAbilities> {
 
+        /**
+         * 玩家能力封装属性类构造函数
+         */
         public PlayerAbilitiesProperty() {
         }
 
+        /**
+         * 玩家能力封装属性类构造函数
+         *
+         * @param playerAbilities 玩家能力对象
+         */
         public PlayerAbilitiesProperty(PlayerAbilities playerAbilities) {
 
             super(playerAbilities);
         }
 
+        /**
+         * 获取此玩家能力的是否坚不可摧属性
+         *
+         * @return 是否坚不可摧属性
+         */
         public BooleanProperty isInvulnerableProperty() {
 
             return get().isInvulnerable;
         }
 
+        /**
+         * 获取此玩家能力的是否飞行中属性
+         *
+         * @return 是否飞行中属性
+         */
         public BooleanProperty isFlyingProperty() {
 
             return get().isFlying;
         }
 
+        /**
+         * 获取此玩家能力的是否可以飞行属性
+         *
+         * @return 是否可以飞行属性
+         */
         public BooleanProperty canFlyProperty() {
 
             return get().canFly;
         }
 
+        /**
+         * 获取此玩家能力的是否可以快速建造属性
+         *
+         * @return 是否可以快速建造属性
+         */
         public BooleanProperty canInstantlyBuildProperty() {
 
             return get().canInstantlyBuild;
         }
 
+        /**
+         * 获取此玩家能力的是否可以建造属性
+         *
+         * @return 是否可以建造属性
+         */
         public BooleanProperty mayBuildProperty() {
 
             return get().mayBuild;
         }
 
+        /**
+         * 获取此玩家能力的飞行速度属性
+         *
+         * @return 飞行速度属性
+         */
         public FloatProperty flySpeedProperty() {
 
             return get().flySpeed;
         }
 
+        /**
+         * 获取此玩家能力的移动速度属性
+         *
+         * @return 移动速度属性
+         */
         public FloatProperty walkSpeedProperty() {
 
             return get().walkSpeed;
@@ -291,36 +381,71 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
             }
         }
 
+        /**
+         * 获取此玩家能力的是否坚不可摧属性
+         *
+         * @return 是否坚不可摧属性
+         */
         public BooleanProperty isInvulnerableProperty() {
 
             return isInvulnerable;
         }
 
+        /**
+         * 获取此玩家能力的是否飞行中属性
+         *
+         * @return 是否飞行中属性
+         */
         public BooleanProperty isFlyingProperty() {
 
             return isFlying;
         }
 
+        /**
+         * 获取此玩家能力的是否可以飞行属性
+         *
+         * @return 是否可以飞行属性
+         */
         public BooleanProperty canFlyProperty() {
 
             return canFly;
         }
 
+        /**
+         * 获取此玩家能力的是否可以快速建造属性
+         *
+         * @return 是否可以快速建造属性
+         */
         public BooleanProperty canInstantlyBuildProperty() {
 
             return canInstantlyBuild;
         }
 
+        /**
+         * 获取此玩家能力的是否可以建造属性
+         *
+         * @return 是否可以建造属性
+         */
         public BooleanProperty mayBuildProperty() {
 
             return mayBuild;
         }
 
+        /**
+         * 获取此玩家能力的飞行速度属性
+         *
+         * @return 飞行速度属性
+         */
         public FloatProperty flySpeedProperty() {
 
             return flySpeed;
         }
 
+        /**
+         * 获取此玩家能力的移动速度属性
+         *
+         * @return 移动速度属性
+         */
         public FloatProperty walkSpeedProperty() {
 
             return walkSpeed;

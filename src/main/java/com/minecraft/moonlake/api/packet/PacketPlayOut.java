@@ -18,5 +18,13 @@
 
 package com.minecraft.moonlake.api.packet;
 
+/**
+ * <h1>PacketPlayOut</h1>
+ * Minecraft 数据包输出
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see Packet
+ */
 public interface PacketPlayOut extends Packet {
 }

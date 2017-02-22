@@ -19,6 +19,9 @@
 package com.minecraft.moonlake.api.packet.wrapper;
 
 import com.minecraft.moonlake.api.fancy.FancyMessage;
+import com.minecraft.moonlake.api.packet.Packet;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
@@ -35,6 +38,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 2.0
  * @author Month_Light
+ * @see Packet
+ * @see PacketPlayOut
+ * @see PacketPlayOutBukkit
  */
 public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
 
@@ -60,16 +66,29 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
     private ObjectProperty<Mode> mode;
     private BooleanProperty isFancyMessage;
 
+    /**
+     * 数据包输出聊天消息构造函数
+     */
     public PacketPlayOutChat() {
 
         this((String) null);
     }
 
+    /**
+     * 数据包输出聊天消息构造函数
+     *
+     * @param message 消息
+     */
     public PacketPlayOutChat(String message) {
 
         this(message, Mode.CHAT);
     }
 
+    /**
+     * 数据包输出聊天消息构造函数
+     *
+     * @param fancyMessage 花式消息
+     */
     public PacketPlayOutChat(FancyMessage fancyMessage) {
 
         this.message = new SimpleStringProperty(fancyMessage.toJsonString());
@@ -77,6 +96,12 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
         this.isFancyMessage = new SimpleBooleanProperty(true);
     }
 
+    /**
+     * 数据包输出聊天消息构造函数
+     *
+     * @param message 消息
+     * @param mode 模式
+     */
     public PacketPlayOutChat(String message, Mode mode) {
 
         this.message = new SimpleStringProperty(message);
@@ -84,11 +109,21 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
         this.isFancyMessage = null;
     }
 
+    /**
+     * 获取此数据包输出聊天消息的消息属性
+     *
+     * @return 消息属性
+     */
     public StringProperty messageProperty() {
 
         return message;
     }
 
+    /**
+     * 获取此数据包输出聊天消息的模式属性
+     *
+     * @return 模式属性
+     */
     public ObjectProperty<Mode> modeProperty() {
 
         return mode;
