@@ -18,6 +18,7 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
@@ -47,8 +48,6 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTTITLE;
     private final static Class<?> CLASS_ENUMTITLEACTION;
-    private final static Class<?> CLASS_CHATSERIALIZER;
-    private final static Method METHOD_CHARSERIALIZER_A;
     private final static Method METHOD_ENUMTITLEACTION_A;
 
     static {
@@ -57,8 +56,6 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
 
             CLASS_PACKETPLAYOUTTITLE = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutTitle");
             CLASS_ENUMTITLEACTION = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutTitle$EnumTitleAction");
-            CLASS_CHATSERIALIZER =  PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") ? "ChatSerializer" : "IChatBaseComponent$ChatSerializer");
-            METHOD_CHARSERIALIZER_A = getMethod(CLASS_CHATSERIALIZER, "a", String.class);
             METHOD_ENUMTITLEACTION_A = getMethod(CLASS_ENUMTITLEACTION, "a", String.class);
         }
         catch (Exception e) {
@@ -199,8 +196,8 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
             // 参数 EnumTitleAction, IChatBaseComponent
             // 参数 int, int, int
             // 进行反射实例发送
-            Object nmsTitle = METHOD_CHARSERIALIZER_A.invoke(null, "{\"text\":\"" + title + "\"}");
-            Object nmsSubTitle = subTitle != null ? METHOD_CHARSERIALIZER_A.invoke(null, "{\"text\":\"" + subTitle + "\"}") : null;
+            Object nmsTitle = ChatSerializer.fromJson("{\"text\":\"" + title + "\"}");
+            Object nmsSubTitle = subTitle != null ? ChatSerializer.fromJson("{\"text\":\"" + subTitle + "\"}") : null;
             Object packet0 = instantiateObject(CLASS_PACKETPLAYOUTTITLE, fadeIn.get(), stay.get(), fadeOut.get()); // TIMES Packet
             Object packet1 = instantiateObject(CLASS_PACKETPLAYOUTTITLE, METHOD_ENUMTITLEACTION_A.invoke(null, "TITLE"), nmsTitle); // Title Packet
             Object packet2 = nmsSubTitle != null ?  instantiateObject(CLASS_PACKETPLAYOUTTITLE, METHOD_ENUMTITLEACTION_A.invoke(null, "SUBTITLE"), nmsSubTitle) : null; // SubTitle Packet
@@ -220,12 +217,12 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
                 Object[] values0 = {  METHOD_ENUMTITLEACTION_A.invoke(null, "TIMES"), fadeIn.get(), stay.get(), fadeOut.get() };
                 setFieldAccessibleAndValueSend(players, 2, 5, CLASS_PACKETPLAYOUTTITLE, packet0, values0);
 
-                Object nmsTitle = METHOD_CHARSERIALIZER_A.invoke(null, "{\"text\":\"" + title + "\"}");
+                Object nmsTitle = ChatSerializer.fromJson("{\"text\":\"" + title + "\"}");
                 Object packet1 = instantiateObject(CLASS_PACKETPLAYOUTTITLE); // 再设置并发送 TITLE 的标题数据包
                 Object[] values1 = { METHOD_ENUMTITLEACTION_A.invoke(null, "TITLE"), nmsTitle };
                 setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTTITLE, packet1, values1);
 
-                Object nmsSubTitle = subTitle != null ? METHOD_CHARSERIALIZER_A.invoke(null, "{\"text\":\"" + subTitle + "\"}") : null;
+                Object nmsSubTitle = subTitle != null ? ChatSerializer.fromJson("{\"text\":\"" + subTitle + "\"}") : null;
                 if(nmsSubTitle != null) {
                     // 如果副标题不为 null 则进行设置并发送
                     Object packet2 = instantiateObject(CLASS_PACKETPLAYOUTTITLE); // 最后设置并发送 SUBTITLE 的标题数据包

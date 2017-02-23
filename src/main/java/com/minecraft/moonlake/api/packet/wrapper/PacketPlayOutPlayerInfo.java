@@ -18,6 +18,7 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
@@ -53,8 +54,6 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
     private final static Class<?> CLASS_PACKETPLAYOUTPLAYERINFO_PLAYERINFODATA;
     private final static Class<?> CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION;
     private final static Class<?> CLASS_ENUMGAMEMODE;
-    private final static Class<?> CLASS_CHATSERIALIZER;
-    private final static Method METHOD_CHARSERIALIZER_A;
     private final static Method METHOD_GETBYID;
     private final static Method METHOD_VALUEOF;
 
@@ -66,9 +65,7 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
             CLASS_PACKETPLAYOUTPLAYERINFO_PLAYERINFODATA = PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") ? "PlayerInfoData" : "PacketPlayOutPlayerInfo$PlayerInfoData");
             CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION = PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") ? "EnumPlayerInfoAction" : "PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
             CLASS_ENUMGAMEMODE = PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") || getServerVersionNumber() >= 10 ? "EnumGamemode" : "WorldSettings$EnumGamemode");
-            CLASS_CHATSERIALIZER =  PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") ? "ChatSerializer" : "IChatBaseComponent$ChatSerializer");
             METHOD_VALUEOF = getMethod(CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION, "valueOf", String.class);
-            METHOD_CHARSERIALIZER_A = getMethod(CLASS_CHATSERIALIZER, "a", String.class);
             METHOD_GETBYID = getMethod(CLASS_ENUMGAMEMODE, "getById", int.class);
         }
         catch (Exception e) {
@@ -169,7 +166,7 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
             // 构造函数的参数为 GameProfile, int, EnumGamemode, IChatBaseComponent
             for(Data data : dataList) {
                 // 循环遍历 Data 列表进行转换到 PlayerInfoData 然后添加到 List 内
-                Object nmsPlayerListName = METHOD_CHARSERIALIZER_A.invoke(null, "{\"text\":\"" + data.playerListName.get() + "\"}");
+                Object nmsPlayerListName = ChatSerializer.fromJson("{\"text\":\"" + data.playerListName.get() + "\"}");
                 Object nmsGamemode = METHOD_GETBYID.invoke(null, data.gameMode.get().getValue()); // @SuppressWarnings("deprecation")
                 Object nmsData = null;
                 // 不是很懂 bukkit，反编译明明是四个参数, 但是传入后说找不到构造函数

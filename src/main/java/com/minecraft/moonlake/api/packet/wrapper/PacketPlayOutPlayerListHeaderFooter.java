@@ -18,6 +18,7 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
@@ -27,9 +28,8 @@ import com.minecraft.moonlake.property.StringProperty;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Method;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
+import static com.minecraft.moonlake.reflect.Reflect.PackageType;
+import static com.minecraft.moonlake.reflect.Reflect.instantiateObject;
 
 /**
  * <h1>PacketPlayOutPlayerListHeaderFooter</h1>
@@ -44,16 +44,12 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER;
-    private final static Class<?> CLASS_CHATSERIALIZER;
-    private final static Method METHOD_CHARSERIALIZER_A;
 
     static {
 
         try {
 
             CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPlayerListHeaderFooter");
-            CLASS_CHATSERIALIZER =  PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") ? "ChatSerializer" : "IChatBaseComponent$ChatSerializer");
-            METHOD_CHARSERIALIZER_A = getMethod(CLASS_CHATSERIALIZER, "a", String.class);
         }
         catch (Exception e) {
 
@@ -124,15 +120,17 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbst
         String header = headerProperty().get();
         String footer = footerProperty().get();
         Validate.notNull(header, "The header object is null.");
-        Validate.notNull(footer, "The footer object is null.");
 
         try {
             // 先用调用 NMS 的 PacketPlayOutPlayerListHeaderFooter 构造函数, 参数 IChatBaseComponent
             // 进行反射实例发送
-            Object nmsHeader = METHOD_CHARSERIALIZER_A.invoke(null, "{\"text\":\"" + header + "\"}");
-            Object nmsFooter = METHOD_CHARSERIALIZER_A.invoke(null, "{\"text\":\"" + footer + "\"}");
+            Object nmsHeader = ChatSerializer.fromJson("{\"text\":\"" + header + "\"}");
+            Object nmsFooter = footer != null ? ChatSerializer.fromJson("{\"text\":\"" + footer + "\"}") : null;
             Object packet = instantiateObject(CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, nmsHeader);
-            setFieldAccessibleAndValueSend(players, 1, 2, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, nmsFooter);
+            if(nmsFooter != null)
+                setFieldAccessibleAndValueSend(players, 1, 2, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, nmsFooter);
+            else
+                sendPacket(players, packet);
             return true;
 
         } catch (Exception e) {
@@ -141,11 +139,13 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbst
             try {
                 // 判断字段数量大于等于 2 个的话就是有此方式
                 // 这两个字段分别对应 IChatBaseComponent, IChatBaseComponent 的 2 个属性
-                Object nmsHeader = METHOD_CHARSERIALIZER_A.invoke(null, "{\"text\":\"" + header + "\"}");
-                Object nmsFooter = METHOD_CHARSERIALIZER_A.invoke(null, "{\"text\":\"" + footer + "\"}");
-                Object[] values = { nmsHeader, nmsFooter };
+                Object nmsHeader = ChatSerializer.fromJson("{\"text\":\"" + header + "\"}");
+                Object nmsFooter = footer != null ? ChatSerializer.fromJson("{\"text\":\"" + footer + "\"}") : null;
                 Object packet = instantiateObject(CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER);
-                setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, values);
+                if(nmsFooter != null)
+                    setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, nmsHeader, nmsFooter);
+                else
+                    setFieldAccessibleAndValueSend(players, 1, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, nmsHeader);
                 return true;
 
             } catch (Exception e1) {

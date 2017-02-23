@@ -18,6 +18,7 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
@@ -28,9 +29,8 @@ import com.minecraft.moonlake.validate.Validate;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Method;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
+import static com.minecraft.moonlake.reflect.Reflect.PackageType;
+import static com.minecraft.moonlake.reflect.Reflect.instantiateObject;
 
 /**
  * <h1>PacketPlayOutChat</h1>
@@ -45,16 +45,12 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTCHAT;
-    private final static Class<?> CLASS_CHATSERIALIZER;
-    private final static Method METHOD_CHARSERIALIZER_A;
 
     static {
 
         try {
 
             CLASS_PACKETPLAYOUTCHAT = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutChat");
-            CLASS_CHATSERIALIZER =  PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") ? "ChatSerializer" : "IChatBaseComponent$ChatSerializer");
-            METHOD_CHARSERIALIZER_A = getMethod(CLASS_CHATSERIALIZER, "a", String.class);
         }
         catch (Exception e) {
 
@@ -142,7 +138,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
         try {
             // 先用调用 NMS 的 PacketPlayOutChat 构造函数, 参数 IChatBaseComponent, byte
             // 进行反射实例发送
-            Object nmsChat = METHOD_CHARSERIALIZER_A.invoke(null, isFancyMessage == null ? ("{\"text\":\"" + message + "\"}") : message);
+            Object nmsChat = ChatSerializer.fromJson(isFancyMessage == null ? ("{\"text\":\"" + message + "\"}") : message);
             Object packet = instantiateObject(CLASS_PACKETPLAYOUTCHAT, nmsChat, mode.get() == null ? (byte) 1 : mode.get().getMode());
             sendPacket(players, packet);
             return true;
@@ -155,7 +151,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
                 // 这两个字段分别对应 IChatBaseComponent, byte 的 2 个属性
                 // 貌似 PacketPlayOutChat 有一个 md_5 包的 BaseComponent 类数组字段需要忽略
                 Object packet = instantiateObject(CLASS_PACKETPLAYOUTCHAT);
-                Object nmsChat = METHOD_CHARSERIALIZER_A.invoke(null, isFancyMessage == null ? ("{\"text\":\"" + message + "\"}") : message);
+                Object nmsChat = ChatSerializer.fromJson(isFancyMessage == null ? ("{\"text\":\"" + message + "\"}") : message);
                 Object[] values = { nmsChat, mode.get().getMode() };
                 Class<?>[] ignoreFieldTypes = { BaseComponent[].class }; // 忽略字段类型为 BaseComponent[] 数组
                 setFieldAccessibleAndValueSend(ignoreFieldTypes, players, 2, CLASS_PACKETPLAYOUTCHAT, packet, values);
