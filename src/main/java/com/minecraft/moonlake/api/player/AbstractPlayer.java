@@ -24,6 +24,9 @@ import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
 import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutBungeeConnect;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutChat;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutPlayerListHeaderFooter;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutTitle;
 import com.minecraft.moonlake.api.player.depend.EconomyPlayerData;
 import com.minecraft.moonlake.api.player.depend.EconomyVaultPlayerResponse;
 import com.minecraft.moonlake.api.player.depend.WorldEditSelection;
@@ -1193,6 +1196,10 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
                 return getBukkitPlayer().equals(target.getBukkitPlayer());
             }
+            else if(object instanceof Player) {
+
+                return getBukkitPlayer().equals(object);
+            }
         }
         return false;
     }
@@ -1200,7 +1207,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public int getPing() {
 
-        return PlayerLibraryFactorys.nmsPlayer().getPing(getName());
+        return PlayerManager.getPing(getBukkitPlayer());
     }
 
     @Override
@@ -1212,6 +1219,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    @SuppressWarnings("SpellCheckingInspection")
     public void sendPacket(PacketPlayOutBukkit packet) {
 
         Validate.notNull(packet, "The packet object is null.");
@@ -1222,55 +1230,72 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void sendTitlePacket(String title) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(getName(), StringUtil.toColor(title));
+        Validate.notNull(title, "The title object is null.");
+
+        new PacketPlayOutTitle(StringUtil.toColor(title)).send(getBukkitPlayer());
     }
 
     @Override
     public void sendTitlePacket(String title, String subTitle) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(getName(), StringUtil.toColor(title), StringUtil.toColor(subTitle));
+        Validate.notNull(title, "The title object is null.");
+        Validate.notNull(subTitle, "The sub title object is null.");
+
+        new PacketPlayOutTitle(StringUtil.toColor(title), StringUtil.toColor(subTitle)).send(getBukkitPlayer());
     }
 
     @Override
     public void sendTitlePacket(String title, int fadeIn, int stay, int fadeOut) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(getName(), StringUtil.toColor(title), fadeIn, stay, fadeOut);
+        Validate.notNull(title, "The title object is null.");
+
+        new PacketPlayOutTitle(StringUtil.toColor(title), fadeIn, stay, fadeOut).send(getBukkitPlayer());
     }
 
     @Override
     public void sendTitlePacket(String title, String subTitle, int fadeIn, int stay, int fadeOut) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTitlePacket(getName(), StringUtil.toColor(title), StringUtil.toColor(subTitle), fadeIn, stay, fadeOut);
+        Validate.notNull(title, "The title object is null.");
+        Validate.notNull(subTitle, "The sub title object is null.");
+
+        new PacketPlayOutTitle(StringUtil.toColor(title), StringUtil.toColor(subTitle), fadeIn, stay, fadeOut).send(getBukkitPlayer());
     }
 
     @Override
     public void sendMainChatPacket(String message) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendMainChatPacket(getName(), StringUtil.toColor(message));
+        Validate.notNull(message, "The message object is null.");
+
+        new PacketPlayOutChat(StringUtil.toColor(message), PacketPlayOutChat.Mode.HOTBAR).send(getBukkitPlayer());
     }
 
     @Override
     public void sendTabListPacket(String header) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTabListPacket(getName(), header);
+        Validate.notNull(header, "The header object is null.");
+
+        new PacketPlayOutPlayerListHeaderFooter(StringUtil.toColor(header)).send(getBukkitPlayer());
     }
 
     @Override
     public void sendTabListPacket(String header, String footer) {
 
-        PlayerLibraryFactorys.nmsPlayer().sendTabListPacket(getName(), header, footer);
+        Validate.notNull(header, "The header object is null.");
+        Validate.notNull(footer, "The footer object is null.");
+
+        new PacketPlayOutPlayerListHeaderFooter(StringUtil.toColor(header), StringUtil.toColor(footer)).send(getBukkitPlayer());
     }
 
     @Override
     public void setItemCooldown(Material type, int tick) {
 
-        PlayerLibraryFactorys.player().setItemCooldown(getName(), type, tick);
+        PlayerManager.setItemCoolDown(getBukkitPlayer(), type, tick);
     }
 
     @Override
     public boolean hasItemCooldown(Material type) {
 
-        return PlayerLibraryFactorys.player().hasItemCooldown(getName(), type);
+        return PlayerManager.hasItemCoolDown(getBukkitPlayer(), type);
     }
 
     @Override

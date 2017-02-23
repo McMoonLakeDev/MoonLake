@@ -36,7 +36,6 @@ public interface NMSPlayer {
      * 获取此玩家的网络 Ping 值
      *
      * @return Ping 值
-     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
     int getPing();
 
@@ -64,7 +63,6 @@ public interface NMSPlayer {
      *
      * @param title 主标题
      * @throws IllegalArgumentException 如果主标题对象为 {@code null} 则抛出异常
-     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
     void sendTitlePacket(String title);
 
@@ -75,7 +73,6 @@ public interface NMSPlayer {
      * @param subTitle 子标题
      * @throws IllegalArgumentException 如果主标题对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果子标题对象为 {@code null} 则抛出异常
-     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
     void sendTitlePacket(String title, String subTitle);
 
@@ -87,7 +84,6 @@ public interface NMSPlayer {
      * @param stay 停留时间
      * @param fadeOut 淡出时间
      * @throws IllegalArgumentException 如果主标题对象为 {@code null} 则抛出异常
-     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
     void sendTitlePacket(String title, int fadeIn, int stay, int fadeOut);
 
@@ -101,7 +97,6 @@ public interface NMSPlayer {
      * @param fadeOut 淡出时间
      * @throws IllegalArgumentException 如果主标题对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果子标题对象为 {@code null} 则抛出异常
-     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
     void sendTitlePacket(String title, String subTitle, int fadeIn, int stay, int fadeOut);
 
@@ -109,7 +104,7 @@ public interface NMSPlayer {
      * 给此玩家发送主聊天消息 (经验条上面)
      *
      * @param message 消息
-     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
+     * @throws IllegalArgumentException 如果消息对象为 {@code null} 则抛出异常
      */
     void sendMainChatPacket(String message);
 
@@ -117,7 +112,7 @@ public interface NMSPlayer {
      * 给此玩家发送 TAB 列表数据包
      *
      * @param header 头内容
-     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
+     * @throws IllegalArgumentException 如果头内容对象为 {@code null} 则抛出异常
      */
     void sendTabListPacket(String header);
 
@@ -128,7 +123,6 @@ public interface NMSPlayer {
      * @param footer 脚内容
      * @throws IllegalArgumentException 如果头内容对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果脚内容对象为 {@code null} 则抛出异常
-     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
     void sendTabListPacket(String header, String footer);
 
@@ -138,7 +132,6 @@ public interface NMSPlayer {
      * @param material 物品栈类型
      * @param tick 时间 Tick (1s = 20tick)
      * @throws IllegalArgumentException 如果物品栈类型对象为 {@code null} 则抛出异常
-     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
      */
     void setItemCooldown(Material material, int tick);
@@ -149,7 +142,6 @@ public interface NMSPlayer {
      * @param material 物品栈类型
      * @return true 则物品栈类型拥有冷却时间
      * @throws IllegalArgumentException 如果物品栈类型对象为 {@code null} 则抛出异常
-     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
      */
     boolean hasItemCooldown(Material material);

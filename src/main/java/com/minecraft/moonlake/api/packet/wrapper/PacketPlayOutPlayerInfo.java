@@ -22,7 +22,6 @@ import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
-import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
 import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
@@ -357,8 +356,8 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
          */
         public void add(Player player) {
 
+            int ping = PlayerManager.getPing(player);
             GameProfile gameProfile = PlayerManager.getProfile(player);
-            int ping = PlayerLibraryFactorys.nmsPlayer().getPing(player.getName());
             add(ping, gameProfile, player.getGameMode(), player.getPlayerListName());
         }
 

@@ -19,7 +19,6 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
-import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import org.bukkit.plugin.Plugin;
 
@@ -38,7 +37,6 @@ public interface InternetPlayer {
      * 获取此玩家的网络 Ping 值
      *
      * @return Ping 值
-     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      */
     int getPing();
 

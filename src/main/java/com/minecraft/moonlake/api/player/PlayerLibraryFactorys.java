@@ -39,6 +39,7 @@ import java.util.logging.Level;
  */
 public class PlayerLibraryFactorys {
 
+    @Deprecated
     private static PlayerLibrary playerLibraryInstance;
 
     private static DependEconomyPlayer dependEconomyPlayer;
@@ -140,7 +141,9 @@ public class PlayerLibraryFactorys {
      * 获取 PlayerLibrary 对象
      *
      * @return PlayerLibrary
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
+    @Deprecated
     public static PlayerLibrary player() {
 
         if(playerLibraryInstance == null) {
@@ -154,7 +157,9 @@ public class PlayerLibraryFactorys {
      * 获取 NMSPlayerLibrary 对象
      *
      * @return NMSPlayerLibrary
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
+    @Deprecated
     public static NMSPlayerLibrary nmsPlayer() {
 
         return player();

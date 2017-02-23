@@ -18,7 +18,12 @@
  
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutChat;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutPlayerListHeaderFooter;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutTitle;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
+import com.minecraft.moonlake.manager.PlayerManager;
+import org.bukkit.entity.Player;
 
 /**
  * <h1>NMSPlayerLibrary</h1>
@@ -26,7 +31,9 @@ import com.minecraft.moonlake.exception.PlayerNotOnlineException;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除.
  */
+@Deprecated
 public interface NMSPlayerLibrary {
 
     /**
@@ -36,7 +43,9 @@ public interface NMSPlayerLibrary {
      * @return Ping 值
      * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link PlayerManager#getPing(Player)}
      */
+    @Deprecated
     int getPing(String player);
 
     /**
@@ -47,7 +56,9 @@ public interface NMSPlayerLibrary {
      * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果主标题对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link PacketPlayOutTitle}
      */
+    @Deprecated
     void sendTitlePacket(String player, String title);
 
     /**
@@ -60,7 +71,9 @@ public interface NMSPlayerLibrary {
      * @throws IllegalArgumentException 如果主标题对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果子标题对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link PacketPlayOutTitle}
      */
+    @Deprecated
     void sendTitlePacket(String player, String title, String subTitle);
 
     /**
@@ -74,7 +87,9 @@ public interface NMSPlayerLibrary {
      * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果主标题对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link PacketPlayOutTitle}
      */
+    @Deprecated
     void sendTitlePacket(String player, String title, int fadeIn, int stay, int fadeOut);
 
     /**
@@ -90,7 +105,9 @@ public interface NMSPlayerLibrary {
      * @throws IllegalArgumentException 如果主标题对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果子标题对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link PacketPlayOutTitle}
      */
+    @Deprecated
     void sendTitlePacket(String player, String title, String subTitle, int fadeIn, int stay, int fadeOut);
 
     /**
@@ -100,7 +117,9 @@ public interface NMSPlayerLibrary {
      * @param message 消息
      * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link PacketPlayOutChat}
      */
+    @Deprecated
     void sendMainChatPacket(String player, String message);
 
     /**
@@ -111,7 +130,9 @@ public interface NMSPlayerLibrary {
      * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果头内容对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link PacketPlayOutPlayerListHeaderFooter}
      */
+    @Deprecated
     void sendTabListPacket(String player, String header);
 
     /**
@@ -124,6 +145,8 @@ public interface NMSPlayerLibrary {
      * @throws IllegalArgumentException 如果头内容对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果脚内容对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link PacketPlayOutPlayerListHeaderFooter}
      */
+    @Deprecated
     void sendTabListPacket(String player, String header, String footer);
 }

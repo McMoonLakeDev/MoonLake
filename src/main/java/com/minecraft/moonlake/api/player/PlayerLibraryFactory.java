@@ -24,7 +24,9 @@ package com.minecraft.moonlake.api.player;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除.
  */
+@Deprecated
 public class PlayerLibraryFactory {
 
     /**
@@ -43,7 +45,9 @@ public class PlayerLibraryFactory {
      * 获取 PlayerLibraryFactory 对象
      *
      * @return PlayerLibraryFactory
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
+    @Deprecated
     public static PlayerLibraryFactory get() {
 
         if(instance == null) {
@@ -57,7 +61,9 @@ public class PlayerLibraryFactory {
      * 获取 PlayerLibrary 实例对象
      *
      * @return PlayerLibrary
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
+    @Deprecated
     public PlayerLibrary player() {
 
         return new PlayerExpressionWrapped();
@@ -67,7 +73,9 @@ public class PlayerLibraryFactory {
      * 获取 NMSPlayerLibrary 实例对象
      *
      * @return NMSPlayerLibrary
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
+    @Deprecated
     public NMSPlayerLibrary nmsPlayer() {
 
         return new NMSPlayerExpression();

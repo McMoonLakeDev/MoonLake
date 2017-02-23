@@ -32,7 +32,9 @@ import java.util.UUID;
  * @author Month_Light
  * @see AbilityLibrary
  * @see NMSPlayerLibrary
+ * @deprecated 已过时, 将于 v2.0 删除.
  */
+@Deprecated
 public interface PlayerLibrary extends NMSPlayerLibrary, AbilityLibrary {
 
     /**
@@ -41,7 +43,9 @@ public interface PlayerLibrary extends NMSPlayerLibrary, AbilityLibrary {
      * @param name 玩家名
      * @return Player
      * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
+    @Deprecated
     Player fromName(String name);
 
     /**
@@ -50,7 +54,9 @@ public interface PlayerLibrary extends NMSPlayerLibrary, AbilityLibrary {
      * @param uuid UUID
      * @return Player
      * @throws IllegalArgumentException 如果 {@code UUID} 对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
+    @Deprecated
     Player fromUUID(UUID uuid);
 
     /**
@@ -58,9 +64,9 @@ public interface PlayerLibrary extends NMSPlayerLibrary, AbilityLibrary {
      *
      * @param uuid UUID 字符串
      * @return Player
-     * @deprecated 不推荐使用 UUID 字符串
      * @see PlayerLibrary#fromUUID(UUID)
      * @throws IllegalArgumentException 如果 {@code UUID} 字符串对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
     @Deprecated
     Player fromUUID(String uuid);
@@ -72,7 +78,9 @@ public interface PlayerLibrary extends NMSPlayerLibrary, AbilityLibrary {
      * @return MoonLakePlayer
      * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家没有在线则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
+    @Deprecated
     MoonLakePlayer fromNames(String name);
 
     /**
@@ -82,7 +90,9 @@ public interface PlayerLibrary extends NMSPlayerLibrary, AbilityLibrary {
      * @return MoonLakePlayer
      * @throws IllegalArgumentException 如果 {@code UUID} 对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家没有在线则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
+    @Deprecated
     MoonLakePlayer fromUUIDs(UUID uuid);
 
     /**
@@ -90,10 +100,10 @@ public interface PlayerLibrary extends NMSPlayerLibrary, AbilityLibrary {
      *
      * @param uuid UUID 字符串
      * @return MoonLakePlayer
-     * @deprecated 不推荐使用 UUID 字符串
      * @see PlayerLibrary#fromUUIDs(UUID)
      * @throws IllegalArgumentException 如果 {@code UUID} 字符串对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家没有在线则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
     @Deprecated
     MoonLakePlayer fromUUIDs(String uuid);
