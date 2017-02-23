@@ -1120,6 +1120,14 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    public void sendBukkitPacket(PacketPlayOutBukkit packet) {
+
+        Validate.notNull(packet, "The bukkit packet play out object is null.");
+
+        packet.send(getBukkitPlayer());
+    }
+
+    @Override
     public void sendBungeePacket(Plugin plugin, PacketPlayOutBungee packet) {
 
         Validate.notNull(packet, "The bungee packet play out object is null.");

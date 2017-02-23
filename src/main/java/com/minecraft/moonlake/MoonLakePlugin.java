@@ -50,11 +50,11 @@ import java.util.logging.Level;
  * <div>
  *     <h1>目前已经实现的功能有:</h1>
  *     <ul>
- *          <li>玩家支持库 {@link com.minecraft.moonlake.api.player.PlayerLibrary}</li>
+ *          <li>月色之湖玩家 {@link com.minecraft.moonlake.api.player.MoonLakePlayer}</li>
  *          <li>物品栈支持库 {@link com.minecraft.moonlake.api.item.ItemLibrary}</li>
  *          <li>数据库支持库 {@link com.minecraft.moonlake.mysql.MySQLConnection}</li>
  *          <li>花式消息支持库 {@link com.minecraft.moonlake.api.fancy.FancyMessage}</li>
- *          <li>NMS 数据包发送 {@link com.minecraft.moonlake.nms.packet.Packet}</li>
+ *          <li>NMS 数据包发送 {@link com.minecraft.moonlake.api.packet.Packet}</li>
  *          <li>NBT 操作支持库 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}</li>
  *          <li>插件注解支持库 {@link com.minecraft.moonlake.api.annotation.plugin.PluginAnnotation}</li>
  *          <li>数据包通道监听器 {@link com.minecraft.moonlake.api.packet.listener.PacketListener}</li>

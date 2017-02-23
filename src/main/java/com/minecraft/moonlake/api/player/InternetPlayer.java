@@ -18,8 +18,9 @@
  
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
-import com.minecraft.moonlake.nms.packet.exception.PacketException;
+import com.minecraft.moonlake.api.packet.exception.PacketException;
 import org.bukkit.plugin.Plugin;
 
 import java.net.InetSocketAddress;
@@ -60,6 +61,15 @@ public interface InternetPlayer {
      * @return 网络套接字地址端口号
      */
     int getPort();
+
+    /**
+     * 给此玩家发送指定 Bukkit 数据包输出
+     *
+     * @param packet 数据包
+     * @throws IllegalArgumentException 如果数据包对象为 {@code null} 则抛出异常
+     * @throws PacketException 如果发送时错误则抛出异常
+     */
+    void sendBukkitPacket(PacketPlayOutBukkit packet);
 
     /**
      * 从此玩家发送蹦极数据包到蹦极代理
