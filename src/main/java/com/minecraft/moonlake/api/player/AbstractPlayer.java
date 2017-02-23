@@ -1311,7 +1311,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.economyPlayer().getMoney(getName());
+            return DependPlayerPluginListener.economyPlayer().getMoney(getName());
         }
         catch (Exception e) {
 
@@ -1324,7 +1324,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            PlayerLibraryFactorys.economyPlayer().setMoney(getName(), money);
+            DependPlayerPluginListener.economyPlayer().setMoney(getName(), money);
         }
         catch (Exception e) {
 
@@ -1337,7 +1337,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            PlayerLibraryFactorys.economyPlayer().giveMoney(getName(), money);
+            DependPlayerPluginListener.economyPlayer().giveMoney(getName(), money);
         }
         catch (Exception e) {
 
@@ -1350,7 +1350,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            PlayerLibraryFactorys.economyPlayer().takeMoney(getName(), money);
+            DependPlayerPluginListener.economyPlayer().takeMoney(getName(), money);
         }
         catch (Exception e) {
 
@@ -1363,7 +1363,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.economyPlayer().getPoint(getName());
+            return DependPlayerPluginListener.economyPlayer().getPoint(getName());
         }
         catch (Exception e) {
 
@@ -1376,7 +1376,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            PlayerLibraryFactorys.economyPlayer().setPoint(getName(), point);
+            DependPlayerPluginListener.economyPlayer().setPoint(getName(), point);
         }
         catch (Exception e) {
 
@@ -1389,7 +1389,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            PlayerLibraryFactorys.economyPlayer().givePoint(getName(), point);
+            DependPlayerPluginListener.economyPlayer().givePoint(getName(), point);
         }
         catch (Exception e) {
 
@@ -1402,7 +1402,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            PlayerLibraryFactorys.economyPlayer().takePoint(getName(), point);
+            DependPlayerPluginListener.economyPlayer().takePoint(getName(), point);
         }
         catch (Exception e) {
 
@@ -1415,7 +1415,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.economyPlayer().getData(this);
+            return DependPlayerPluginListener.economyPlayer().getData(this);
         }
         catch (Exception e) {
 
@@ -1430,7 +1430,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            PlayerLibraryFactorys.permissionsExPlayer().addPermissionsExGroup(this, group);
+            DependPlayerPluginListener.permissionsExPlayer().addPermissionsExGroup(this, group);
         }
         catch (Exception e) {
 
@@ -1445,7 +1445,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            PlayerLibraryFactorys.permissionsExPlayer().addPermissionsExGroup(this, group, world);
+            DependPlayerPluginListener.permissionsExPlayer().addPermissionsExGroup(this, group, world);
         }
         catch (Exception e) {
 
@@ -1460,7 +1460,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            PlayerLibraryFactorys.permissionsExPlayer().removePermissionsExGroup(this, group);
+            DependPlayerPluginListener.permissionsExPlayer().removePermissionsExGroup(this, group);
         }
         catch (Exception e) {
 
@@ -1475,7 +1475,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            PlayerLibraryFactorys.permissionsExPlayer().removePermissionsExGroup(this, group, world);
+            DependPlayerPluginListener.permissionsExPlayer().removePermissionsExGroup(this, group, world);
         }
         catch (Exception e) {
 
@@ -1490,7 +1490,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().inPermissionsExGroup(this, group);
+            return DependPlayerPluginListener.permissionsExPlayer().inPermissionsExGroup(this, group);
         }
         catch (Exception e) {
 
@@ -1505,7 +1505,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().inPermissionsExGroup(this, group, world);
+            return DependPlayerPluginListener.permissionsExPlayer().inPermissionsExGroup(this, group, world);
         }
         catch (Exception e) {
 
@@ -1520,7 +1520,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().inPermissionsExGroup(this, group, checkInheritance);
+            return DependPlayerPluginListener.permissionsExPlayer().inPermissionsExGroup(this, group, checkInheritance);
         }
         catch (Exception e) {
 
@@ -1535,7 +1535,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().inPermissionsExGroup(this, group, world, checkInheritance);
+            return DependPlayerPluginListener.permissionsExPlayer().inPermissionsExGroup(this, group, world, checkInheritance);
         }
         catch (Exception e) {
 
@@ -1548,7 +1548,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExPer(this);
+            return DependPlayerPluginListener.permissionsExPlayer().getPermissionsExPer(this);
         }
         catch (Exception e) {
 
@@ -1561,7 +1561,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExPer(this, world);
+            return DependPlayerPluginListener.permissionsExPlayer().getPermissionsExPer(this, world);
         }
         catch (Exception e) {
 
@@ -1574,7 +1574,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExPrefix(this);
+            return DependPlayerPluginListener.permissionsExPlayer().getPermissionsExPrefix(this);
         }
         catch (Exception e) {
 
@@ -1587,7 +1587,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExPrefix(this, world);
+            return DependPlayerPluginListener.permissionsExPlayer().getPermissionsExPrefix(this, world);
         }
         catch (Exception e) {
 
@@ -1600,7 +1600,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExOwnPerfix(this);
+            return DependPlayerPluginListener.permissionsExPlayer().getPermissionsExOwnPerfix(this);
         }
         catch (Exception e) {
 
@@ -1613,7 +1613,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExOwnPerfix(this, world);
+            return DependPlayerPluginListener.permissionsExPlayer().getPermissionsExOwnPerfix(this, world);
         }
         catch (Exception e) {
 
@@ -1626,7 +1626,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExSuffix(this);
+            return DependPlayerPluginListener.permissionsExPlayer().getPermissionsExSuffix(this);
         }
         catch (Exception e) {
 
@@ -1639,7 +1639,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExSuffix(this, world);
+            return DependPlayerPluginListener.permissionsExPlayer().getPermissionsExSuffix(this, world);
         }
         catch (Exception e) {
 
@@ -1652,7 +1652,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExOwnSuffix(this);
+            return DependPlayerPluginListener.permissionsExPlayer().getPermissionsExOwnSuffix(this);
         }
         catch (Exception e) {
 
@@ -1665,7 +1665,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExOwnSuffix(this, world);
+            return DependPlayerPluginListener.permissionsExPlayer().getPermissionsExOwnSuffix(this, world);
         }
         catch (Exception e) {
 
@@ -1679,7 +1679,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExGroupNames(this);
+            return DependPlayerPluginListener.permissionsExPlayer().getPermissionsExGroupNames(this);
         }
         catch (Exception e) {
 
@@ -1693,7 +1693,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.permissionsExPlayer().getPermissionsExGroupNames(this, world);
+            return DependPlayerPluginListener.permissionsExPlayer().getPermissionsExGroupNames(this, world);
         }
         catch (Exception e) {
 
@@ -1709,7 +1709,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            PlayerLibraryFactorys.permissionsExPlayer().setPermissionsExGroup(this, group);
+            DependPlayerPluginListener.permissionsExPlayer().setPermissionsExGroup(this, group);
         }
         catch (Exception e) {
 
@@ -1725,7 +1725,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            PlayerLibraryFactorys.permissionsExPlayer().setPermissionsExGroup(this, group, world);
+            DependPlayerPluginListener.permissionsExPlayer().setPermissionsExGroup(this, group, world);
         }
         catch (Exception e) {
 
@@ -1741,7 +1741,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            PlayerLibraryFactorys.permissionsExPlayer().setPermissionsExGroups(this, groups);
+            DependPlayerPluginListener.permissionsExPlayer().setPermissionsExGroups(this, groups);
         }
         catch (Exception e) {
 
@@ -1757,7 +1757,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            PlayerLibraryFactorys.permissionsExPlayer().setPermissionsExGroups(this, groups, world);
+            DependPlayerPluginListener.permissionsExPlayer().setPermissionsExGroups(this, groups, world);
         }
         catch (Exception e) {
 
@@ -1770,7 +1770,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.economyVaultPlayer().hasAccount(getBukkitPlayer());
+            return DependPlayerPluginListener.economyVaultPlayer().hasAccount(getBukkitPlayer());
         }
         catch (Exception e) {
 
@@ -1783,7 +1783,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.economyVaultPlayer().hasAccount(getBukkitPlayer(), world);
+            return DependPlayerPluginListener.economyVaultPlayer().hasAccount(getBukkitPlayer(), world);
         }
         catch (Exception e) {
 
@@ -1796,7 +1796,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.economyVaultPlayer().createAccount(getBukkitPlayer());
+            return DependPlayerPluginListener.economyVaultPlayer().createAccount(getBukkitPlayer());
         }
         catch (Exception e) {
 
@@ -1809,7 +1809,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.economyVaultPlayer().createAccount(getBukkitPlayer(), world);
+            return DependPlayerPluginListener.economyVaultPlayer().createAccount(getBukkitPlayer(), world);
         }
         catch (Exception e) {
 
@@ -1822,7 +1822,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.economyVaultPlayer().getBalance(getBukkitPlayer());
+            return DependPlayerPluginListener.economyVaultPlayer().getBalance(getBukkitPlayer());
         }
         catch (Exception e) {
 
@@ -1835,7 +1835,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.economyVaultPlayer().getBalance(getBukkitPlayer(), world);
+            return DependPlayerPluginListener.economyVaultPlayer().getBalance(getBukkitPlayer(), world);
         }
         catch (Exception e) {
 
@@ -1848,7 +1848,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.economyVaultPlayer().hasBalance(getBukkitPlayer(), amount);
+            return DependPlayerPluginListener.economyVaultPlayer().hasBalance(getBukkitPlayer(), amount);
         }
         catch (Exception e) {
 
@@ -1861,7 +1861,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.economyVaultPlayer().hasBalance(getBukkitPlayer(), amount, world);
+            return DependPlayerPluginListener.economyVaultPlayer().hasBalance(getBukkitPlayer(), amount, world);
         }
         catch (Exception e) {
 
@@ -1874,7 +1874,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.economyVaultPlayer().withdrawBalance(getBukkitPlayer(), amount);
+            return DependPlayerPluginListener.economyVaultPlayer().withdrawBalance(getBukkitPlayer(), amount);
         }
         catch (Exception e) {
 
@@ -1887,7 +1887,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.economyVaultPlayer().withdrawBalance(getBukkitPlayer(), amount, world);
+            return DependPlayerPluginListener.economyVaultPlayer().withdrawBalance(getBukkitPlayer(), amount, world);
         }
         catch (Exception e) {
 
@@ -1900,7 +1900,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.economyVaultPlayer().depositBalance(getBukkitPlayer(), amount);
+            return DependPlayerPluginListener.economyVaultPlayer().depositBalance(getBukkitPlayer(), amount);
         }
         catch (Exception e) {
 
@@ -1913,7 +1913,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.economyVaultPlayer().depositBalance(getBukkitPlayer(), amount, world);
+            return DependPlayerPluginListener.economyVaultPlayer().depositBalance(getBukkitPlayer(), amount, world);
         }
         catch (Exception e) {
 
@@ -1927,7 +1927,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         try {
 
-            return PlayerLibraryFactorys.worldEditPlayer().getSelection(this);
+            return DependPlayerPluginListener.worldEditPlayer().getSelection(this);
         }
         catch (Exception e) {
 

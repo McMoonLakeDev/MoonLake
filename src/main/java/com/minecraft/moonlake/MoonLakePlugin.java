@@ -19,8 +19,6 @@
 package com.minecraft.moonlake;
 
 import com.minecraft.moonlake.api.MoonLake;
-import com.minecraft.moonlake.api.packet.listener.PacketListenerFactory;
-import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -105,13 +103,18 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     private void loadLibraryClass() {
         // load class
         try {
-            // load PlayerLibraryFactorys class to register listener
-            Class.forName(PlayerLibraryFactorys.class.getName());
+            // load depend player class to register listener
+            Class.forName("com.minecraft.moonlake.api.player.DependPlayerPluginListener");
+        }
+        catch (Exception e) {
+
+            this.getLogger().log(Level.WARNING, "The load depend player plugin listener exception.", e);
+        }
+        try {
 
             if(getConfiguration().isPacketChannelListener()) {
                 // load PacketListenerFactory class
-                Class.forName(PacketListenerFactory.class.getName());
-                this.getLogger().info("月色之湖数据包通道监听器(PCL)成功加载.");
+                Class.forName("com.minecraft.moonlake.api.packet.listener.PacketListenerFactory");
             }
         }
         catch (Exception e) {
