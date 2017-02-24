@@ -25,6 +25,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -165,6 +166,14 @@ public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable
      * @throws IllegalArgumentException 如果文本字符串对象为 {@code null} 则抛出异常
      */
     FancyMessage tooltip(String... texts);
+
+    /**
+     * 设置此花式消息移动上后显示的文本内容
+     *
+     * @param text 文本
+     * @throws IllegalArgumentException 如果文本集合对象为 {@code null} 则抛出异常
+     */
+    FancyMessage tooltip(Collection<? extends String> text);
 
     /**
      * 设置此花式消息移动上后显示物品栈

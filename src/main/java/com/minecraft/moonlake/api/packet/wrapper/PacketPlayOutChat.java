@@ -106,9 +106,10 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
     }
 
     /**
-     * 获取此数据包输出聊天消息的消息属性
+     * 获取此数据包输出聊天消息的消息属性 (注: 如果是花式消息不建议二次修改值, 非法格式会抛出异常)
      *
      * @return 消息属性
+     * @see #isFancyMessagePerperty()
      */
     public StringProperty messageProperty() {
 
@@ -125,6 +126,16 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
         return mode;
     }
 
+    /**
+     * 获取此数据包输出聊天消息是否为花式消息属性
+     *
+     * @return 是否为花式消息属性
+     */
+    public ReadOnlyBooleanProperty isFancyMessagePerperty() {
+
+        return isFancyMessage;
+    }
+
     @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
@@ -139,6 +150,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
             // 先用调用 NMS 的 PacketPlayOutChat 构造函数, 参数 IChatBaseComponent, byte
             // 进行反射实例发送
             Object nmsChat = ChatSerializer.fromJson(isFancyMessage == null ? ("{\"text\":\"" + message + "\"}") : message);
+            if(nmsChat == null) ChatSerializer.fromJson("{\"text\":\"" + message + "\"}"); // 如果为 null 的话再调用一次进行格式化
             Object packet = instantiateObject(CLASS_PACKETPLAYOUTCHAT, nmsChat, mode.get() == null ? (byte) 1 : mode.get().getMode());
             sendPacket(players, packet);
             return true;
@@ -152,6 +164,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
                 // 貌似 PacketPlayOutChat 有一个 md_5 包的 BaseComponent 类数组字段需要忽略
                 Object packet = instantiateObject(CLASS_PACKETPLAYOUTCHAT);
                 Object nmsChat = ChatSerializer.fromJson(isFancyMessage == null ? ("{\"text\":\"" + message + "\"}") : message);
+                if(nmsChat == null) throw new IllegalArgumentException("The message object is illegal value: " + message);
                 Object[] values = { nmsChat, mode.get().getMode() };
                 Class<?>[] ignoreFieldTypes = { BaseComponent[].class }; // 忽略字段类型为 BaseComponent[] 数组
                 setFieldAccessibleAndValueSend(ignoreFieldTypes, players, 2, CLASS_PACKETPLAYOUTCHAT, packet, values);
