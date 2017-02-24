@@ -109,7 +109,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
      * 获取此数据包输出聊天消息的消息属性 (注: 如果是花式消息不建议二次修改值, 非法格式会抛出异常)
      *
      * @return 消息属性
-     * @see #isFancyMessagePerperty()
+     * @see #isFancyMessage()
      */
     public StringProperty messageProperty() {
 
@@ -127,13 +127,13 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
     }
 
     /**
-     * 获取此数据包输出聊天消息是否为花式消息属性
+     * 获取此数据包输出聊天消息是否为花式消息
      *
-     * @return 是否为花式消息属性
+     * @return 是否为花式消息
      */
-    public ReadOnlyBooleanProperty isFancyMessagePerperty() {
+    public boolean isFancyMessage() {
 
-        return isFancyMessage;
+        return isFancyMessage != null && isFancyMessage.get();
     }
 
     @Override
