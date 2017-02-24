@@ -38,7 +38,7 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 1.0
  * @author Month_Light
- * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutBlockChange}
+ * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutBlockChange}
  */
 @Deprecated
 public class PacketPlayOutBlockChange extends PacketAbstract<PacketPlayOutBlockChange> {

@@ -31,7 +31,7 @@ import io.netty.buffer.Unpooled;
  *
  * @version 1.0
  * @author Month_Light
- * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link com.minecraft.moonlake.api.packet.wrapper.PacketDataSerializer}
+ * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link com.minecraft.moonlake.api.packet.wrapper.PacketDataSerializer}
  */
 @Deprecated
 public class PacketDataSerializer {

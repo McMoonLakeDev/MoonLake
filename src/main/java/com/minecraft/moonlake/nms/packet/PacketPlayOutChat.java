@@ -170,7 +170,7 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
         /**
          * 默认的聊天消息显示位置
          *
-         * @deprecated 已过时, 将于 v2.0 去除. 请使用 {@link #CHAT}
+         * @deprecated 已过时, 将于 v1.9-a5 去除. 请使用 {@link #CHAT}
          */
         @Deprecated
         DEFAULT((byte)1),
