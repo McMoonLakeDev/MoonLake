@@ -34,7 +34,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutChat}
  */
+@Deprecated
 public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
 
     private final static Class<?> CLASS_PACKETPLAYOUTCHAT;
@@ -168,7 +170,7 @@ public class PacketPlayOutChat extends PacketAbstract<PacketPlayOutChat> {
         /**
          * 默认的聊天消息显示位置
          *
-         * @deprecated 已过时, 将于 v2.0 去除. 请使用 {@link #CHAT}
+         * @deprecated 已过时, 将于 v1.9-a5 去除. 请使用 {@link #CHAT}
          */
         @Deprecated
         DEFAULT((byte)1),

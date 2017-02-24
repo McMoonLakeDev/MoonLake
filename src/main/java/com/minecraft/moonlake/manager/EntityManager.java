@@ -18,7 +18,6 @@
  
 package com.minecraft.moonlake.manager;
 
-import com.google.common.collect.Sets;
 import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
@@ -37,10 +36,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
@@ -300,10 +296,10 @@ public class EntityManager extends MoonLakeManager {
                 }
                 else {
 
-                    FIELD_PATHFINDERGOALSELECTOR_B.set(nmsGoalSelector, Sets.newLinkedHashSet());
-                    FIELD_PATHFINDERGOALSELECTOR_C.set(nmsGoalSelector, Sets.newLinkedHashSet());
-                    FIELD_PATHFINDERGOALSELECTOR_B.set(nmsTargetSelector, Sets.newLinkedHashSet());
-                    FIELD_PATHFINDERGOALSELECTOR_C.set(nmsTargetSelector, Sets.newLinkedHashSet());
+                    FIELD_PATHFINDERGOALSELECTOR_B.set(nmsGoalSelector, new LinkedHashSet<>());
+                    FIELD_PATHFINDERGOALSELECTOR_C.set(nmsGoalSelector, new LinkedHashSet<>());
+                    FIELD_PATHFINDERGOALSELECTOR_B.set(nmsTargetSelector, new LinkedHashSet<>());
+                    FIELD_PATHFINDERGOALSELECTOR_C.set(nmsTargetSelector, new LinkedHashSet<>());
                 }
             }
         }

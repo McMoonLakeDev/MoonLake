@@ -39,18 +39,15 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutRespawn}
  */
+@Deprecated
 public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
 
     private final static Class<?> CLASS_PACKETPLAYOUTRESPAWN;
     private final static Class<?> CLASS_WORLDTYPE;
     private final static Class<?> CLASS_ENUMDIFFICULTY;
     private final static Class<?> CLASS_ENUMGAMEMODE;
-    private final static Class<?> CLASS_WORLD;
-    private final static Class<?> CLASS_ENTITY;
-    private final static Class<?> CLASS_WORLDPROVIDER;
-    private final static Class<?> CLASS_DIMENSIONMANAGER;
-    private final static Class<?> CLASS_CRAFTENTITY;
     private final static Method METHOD_GETBYID0;
     private final static Method METHOD_GETBYID1;
 
@@ -64,11 +61,6 @@ public class PacketPlayOutRespawn extends PacketAbstract<PacketPlayOutRespawn> {
             CLASS_WORLDTYPE = PackageType.MINECRAFT_SERVER.getClass("WorldType");
             CLASS_ENUMDIFFICULTY = PackageType.MINECRAFT_SERVER.getClass("EnumDifficulty");
             CLASS_ENUMGAMEMODE = PackageType.MINECRAFT_SERVER.getClass(enumGamemode);
-            CLASS_WORLD = PackageType.MINECRAFT_SERVER.getClass("World");
-            CLASS_WORLDPROVIDER = PackageType.MINECRAFT_SERVER.getClass("WorldProvider");
-            CLASS_ENTITY = PackageType.MINECRAFT_SERVER.getClass("Entity");
-            CLASS_DIMENSIONMANAGER = PackageType.MINECRAFT_SERVER.getClass("DimensionManager");
-            CLASS_CRAFTENTITY = PackageType.MINECRAFT_SERVER.getClass("CraftEntity");
             METHOD_GETBYID0 = getMethod(CLASS_ENUMDIFFICULTY, "getById", int.class);
             METHOD_GETBYID1 = getMethod(CLASS_ENUMGAMEMODE, "getById", int.class);
         }

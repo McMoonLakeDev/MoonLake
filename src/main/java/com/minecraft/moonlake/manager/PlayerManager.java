@@ -26,16 +26,14 @@ import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
@@ -49,12 +47,20 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 public class PlayerManager extends MoonLakeManager {
 
     private final static Class<? extends SimpleMoonLakePlayer> CLASS_SIMPLEMOONLAKEPLAYER;
+    private final static Class<?> CLASS_CRAFTMAGICNUMBERS;
+    private final static Class<?> CLASS_ITEMCOOLDOWN;
+    private final static Class<?> CLASS_ITEM;
     private final static Class<?> CLASS_CRAFTPLAYER;
     private final static Class<?> CLASS_ENTITYHUMAN;
     private final static Class<?> CLASS_ENTITYPLAYER;
     private final static Method METHOD_GETHANDLE;
     private final static Method METHOD_GETPROFILE;
+    private final static Method METHOD_GETITEM;
+    private final static Method METHOD_TARGET;
+    private final static Method METHOD_A0;
+    private final static Method METHOD_A1;
     private final static Field FIELD_LOCALE;
+    private final static Field FIELD_PING;
 
     static {
 
@@ -83,6 +89,42 @@ public class PlayerManager extends MoonLakeManager {
             METHOD_GETHANDLE = getMethod(CLASS_CRAFTPLAYER, "getHandle");
             METHOD_GETPROFILE = getMethod(CLASS_ENTITYHUMAN, "getProfile");
             FIELD_LOCALE = getField(CLASS_ENTITYPLAYER, true, "locale");
+            FIELD_PING = getField(CLASS_ENTITYPLAYER, true, "ping");
+
+            if(getServerVersionNumber() >= 9) {
+
+                String name = null;
+
+                // TODO 函数名十分不固定, 以后可以用模糊反射来获取
+                switch (getServerVersion()) {
+                    case "v1_9_R1":
+                        name = "da"; break;
+                    case "v1_9_R2":
+                        name = "db"; break;
+                    case "v1_10_R1":
+                        name = "df"; break;
+                    case "v1_11_R1":
+                        name = "di"; break;
+                    default:
+                        name = "di"; break;
+                }
+                CLASS_ITEM = PackageType.MINECRAFT_SERVER.getClass("Item");
+                CLASS_ITEMCOOLDOWN = PackageType.MINECRAFT_SERVER.getClass("ItemCooldown");
+                CLASS_CRAFTMAGICNUMBERS = PackageType.CRAFTBUKKIT_UTIL.getClass("CraftMagicNumbers");
+                METHOD_GETITEM = getMethod(CLASS_CRAFTMAGICNUMBERS, "getItem", Material.class);
+                METHOD_TARGET = getMethod(CLASS_ENTITYHUMAN, name);
+                METHOD_A0 = getMethod(CLASS_ITEMCOOLDOWN, "a", CLASS_ITEM, int.class);
+                METHOD_A1 = getMethod(CLASS_ITEMCOOLDOWN, "a", CLASS_ITEM);
+            }
+            else {
+                CLASS_ITEM = null;
+                CLASS_ITEMCOOLDOWN = null;
+                CLASS_CRAFTMAGICNUMBERS = null;
+                METHOD_GETITEM = null;
+                METHOD_TARGET = null;
+                METHOD_A0 = null;
+                METHOD_A1 = null;
+            }
         }
         catch (Exception e) {
 
@@ -122,15 +164,91 @@ public class PlayerManager extends MoonLakeManager {
     }
 
     /**
+     * 获取在线玩家的集合对象
+     *
+     * @return 在线玩家集合
+     */
+    public static Collection<? extends Player> getOnlinePlayers() {
+
+        return Bukkit.getServer().getOnlinePlayers();
+    }
+
+    /**
+     * 获取在线月色之湖玩家的集合对象
+     *
+     * @return 在线月色之湖玩家集合
+     */
+    public static Collection<? extends MoonLakePlayer> getOnlineMoonLakePlayers() {
+
+        Player[] rawArray = getOnlines();
+        MoonLakePlayer[]  resultArray = adapter(rawArray);
+        return Arrays.asList(resultArray);
+    }
+
+    /**
      * 获取在线玩家的数组对象
      *
      * @return 在线玩家数组
      */
     public static Player[] getOnlines() {
 
-        Collection<? extends Player> collection = Bukkit.getServer().getOnlinePlayers();
-
+        Collection<? extends Player> collection = getOnlinePlayers();
         return collection.toArray(new Player[collection.size()]);
+    }
+
+    /**
+     * 获取在线玩家的集合对象除了目标玩家
+     *
+     * @param target 目标玩家
+     * @return 在线玩家集合除了目标玩家
+     * @throws IllegalArgumentException 如果目标玩家对象为 {@code null} 则抛出异常
+     */
+    public static Collection<? extends Player> getOnlinePlayersExceptTarget(Player target) {
+
+        Validate.notNull(target, "The player target object is null.");
+
+        Collection<? extends Player> collection = getOnlinePlayers();
+        Iterator<? extends Player> iterator = collection.iterator();
+
+        while(iterator.hasNext())
+            if(iterator.next().equals(target))
+                iterator.remove();
+
+        return collection;
+    }
+
+    /**
+     * 获取在线月色之湖玩家的集合对象除了目标玩家
+     *
+     * @param target 目标玩家
+     * @return 在线月色之湖玩家集合除了目标玩家
+     * @throws IllegalArgumentException 如果目标玩家对象为 {@code null} 则抛出异常
+     */
+    public static Collection<? extends MoonLakePlayer> getOnlineMoonLakePlayersExceptTarget(MoonLakePlayer target) {
+
+        Validate.notNull(target, "The player target object is null.");
+        return getOnlineMoonLakePlayersExceptTarget(target.getBukkitPlayer());
+    }
+
+    /**
+     * 获取在线月色之湖玩家的集合对象除了目标玩家
+     *
+     * @param target 目标玩家
+     * @return 在线月色之湖玩家集合除了目标玩家
+     * @throws IllegalArgumentException 如果目标玩家对象为 {@code null} 则抛出异常
+     */
+    public static Collection<? extends MoonLakePlayer> getOnlineMoonLakePlayersExceptTarget(Player target) {
+
+        Validate.notNull(target, "The player target object is null.");
+
+        Collection<? extends MoonLakePlayer> collection = getOnlineMoonLakePlayers();
+        Iterator<? extends MoonLakePlayer> iterator = collection.iterator();
+
+        while(iterator.hasNext())
+            if(iterator.next().equals(target))
+                iterator.remove();
+
+        return collection;
     }
 
     /**
@@ -142,19 +260,8 @@ public class PlayerManager extends MoonLakeManager {
      */
     public static Player[] getOnlinesExceptTarget(Player target) {
 
-        Validate.notNull(target, "The player target object is null.");
-
-        Player[] onlines = getOnlines();
-        List<Player> playerList = new ArrayList<>();
-
-        for(Player player : onlines) {
-
-            if(!player.equals(target)) {
-
-                playerList.add(player);
-            }
-        }
-        return playerList.toArray(new Player[playerList.size()]);
+        Collection<? extends Player> collection = getOnlinePlayersExceptTarget(target);
+        return collection.toArray(new Player[collection.size()]);
     }
 
     /**
@@ -282,6 +389,29 @@ public class PlayerManager extends MoonLakeManager {
     }
 
     /**
+     * 获取指定玩家的网络 Ping 值
+     *
+     * @param player 玩家
+     * @return Ping 值
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     */
+    public static int getPing(Player player) {
+
+        Validate.notNull(player, "The player object is null.");
+
+        try {
+
+            Object nmsPlayer = METHOD_GETHANDLE.invoke(player);
+
+            return (int) FIELD_PING.get(nmsPlayer);
+        }
+        catch (Exception e) {
+
+            throw new MoonLakeException("The get player ping exception.", e);
+        }
+    }
+
+    /**
      * 获取指定玩家的游戏简介
      *
      * @param player 玩家
@@ -351,6 +481,66 @@ public class PlayerManager extends MoonLakeManager {
         else {
 
             player.updateInventory();
+        }
+    }
+
+    /**
+     * 给指定玩家设置物品栈冷却时间
+     *
+     * @param player 玩家名
+     * @param material 物品栈类型
+     * @param tick 时间 Tick (1s = 20tick)
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型对象为 {@code null} 则抛出异常
+     * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
+     */
+    public static void setItemCoolDown(Player player, Material material, int tick) throws IllegalBukkitVersionException {
+
+        if(Reflect.getServerVersionNumber() <= 8)
+            throw new IllegalBukkitVersionException("The item cool down not support 1.8 or old bukkit version.");
+
+        Validate.notNull(player, "The player object is null.");
+        Validate.notNull(material, "The material object is null.");
+
+        try {
+
+            Object nmsPlayer = METHOD_GETHANDLE.invoke(player);
+            Object nmsItemCooldown = METHOD_TARGET.invoke(nmsPlayer);
+            METHOD_A0.invoke(nmsItemCooldown, METHOD_GETITEM.invoke(null, material), tick);
+        }
+        catch (Exception e) {
+
+            throw new MoonLakeException("The set player '" + player.getName() + "' item cool down exception.", e);
+        }
+    }
+
+    /**
+     * 获取指定玩家物品栈类型是否拥有冷却时间
+     *
+     * @param player 玩家名
+     * @param material 物品栈类型
+     * @return true 则物品栈类型拥有冷却时间
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型对象为 {@code null} 则抛出异常
+     * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
+     */
+    public static boolean hasItemCoolDown(Player player, Material material) throws IllegalBukkitVersionException {
+
+        if(Reflect.getServerVersionNumber() <= 8)
+            throw new IllegalBukkitVersionException("The item cool down not support 1.8 or old bukkit version.");
+
+        Validate.notNull(player, "The player object is null.");
+        Validate.notNull(material, "The material object is null.");
+
+        try {
+
+            Object nmsPlayer = METHOD_GETHANDLE.invoke(player);
+            Object nmsItemCooldown = METHOD_TARGET.invoke(nmsPlayer);
+            return (boolean) METHOD_A1.invoke(nmsItemCooldown, METHOD_GETITEM.invoke(null, material));
+        }
+        catch (Exception e) {
+
+            throw new MoonLakeException("The get player '" + player.getName() + "' has item cool down exception.", e);
         }
     }
 }

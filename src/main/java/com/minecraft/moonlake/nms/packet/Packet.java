@@ -56,8 +56,10 @@ import org.bukkit.entity.Player;
  *
  * @version 1.1
  * @author Month_Light
+ * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link com.minecraft.moonlake.api.packet.Packet}
  */
-public interface Packet<T extends Packet> {
+@Deprecated
+public interface Packet<T extends Packet> extends com.minecraft.moonlake.api.packet.Packet {
 
     /**
      * 将此数据包发送到指定玩家

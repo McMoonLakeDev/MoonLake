@@ -19,11 +19,11 @@
 package com.minecraft.moonlake.api.fancy;
 
 import com.minecraft.moonlake.api.nbt.NBTFactory;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutChat;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.json.JsonRepresentedObject;
 import com.minecraft.moonlake.json.JsonWrite;
 import com.minecraft.moonlake.manager.PlayerManager;
-import com.minecraft.moonlake.nms.packet.PacketPlayOutChat;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
@@ -33,10 +33,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static com.minecraft.moonlake.api.fancy.TextualComponent.rawText;
 
@@ -234,6 +231,25 @@ class FancyMessageExpression implements FancyMessage {
                 builder.append('\n');
             }
         }
+        tooltip(builder.toString());
+
+        return this;
+    }
+
+    @Override
+    public FancyMessage tooltip(Collection<? extends String> text) {
+
+        Validate.notNull(text, "The tooltip text object is null.");
+
+        StringBuilder builder = new StringBuilder();
+        Iterator<? extends String> iterator = text.iterator();
+
+        while(iterator.hasNext()) {
+
+            builder.append(iterator.next());
+            builder.append('\n');
+        }
+        builder.deleteCharAt(builder.length() - 1); // 删除最后一个换行符 \n
         tooltip(builder.toString());
 
         return this;

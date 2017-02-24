@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
+import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -31,7 +32,9 @@ import java.util.UUID;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除.
  */
+@Deprecated
 abstract class PlayerExpression implements PlayerLibrary {
 
     /**
@@ -58,7 +61,6 @@ abstract class PlayerExpression implements PlayerLibrary {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public Player fromUUID(String uuid) {
 
         Validate.notNull(uuid, "The player uuid object is null.");
@@ -75,7 +77,8 @@ abstract class PlayerExpression implements PlayerLibrary {
 
             throw new PlayerNotOnlineException(name);
         }
-        return new SimpleMoonLakePlayer(target);
+        //return new SimpleMoonLakePlayer(target);
+        return PlayerManager.adapter(target);
     }
 
     @Override
@@ -87,11 +90,11 @@ abstract class PlayerExpression implements PlayerLibrary {
 
             throw new PlayerNotOnlineException(uuid.toString());
         }
-        return new SimpleMoonLakePlayer(target);
+        //return new SimpleMoonLakePlayer(target);
+        return PlayerManager.adapter(target);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public MoonLakePlayer fromUUIDs(String uuid) {
 
         Validate.notNull(uuid, "The player uuid object is null.");

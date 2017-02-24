@@ -44,7 +44,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutEntityEquipment}
  */
+@Deprecated
 public class PacketPlayOutEntityEquipment extends PacketAbstract<PacketPlayOutEntityEquipment> {
 
     private final static Class<?> CLASS_PACKETPLAYOUTENTITYEQUIPMENT;
@@ -63,7 +65,7 @@ public class PacketPlayOutEntityEquipment extends PacketAbstract<PacketPlayOutEn
             CLASS_ENUMITEMSLOT = getServerVersionNumber() >= 9 ? PackageType.MINECRAFT_SERVER.getClass("EnumItemSlot") : null; // 1.8 没有这个类
             CLASS_ITEMSTACK = PackageType.MINECRAFT_SERVER.getClass("ItemStack");
             METHOD_ASNMSCOPY = getMethod(CLASS_CRAFTITEMSTACK, "asNMSCopy", ItemStack.class);
-            METHOD_VALUEOF = getMethod(CLASS_ENUMITEMSLOT, "valueOf", String.class);
+            METHOD_VALUEOF = CLASS_ENUMITEMSLOT != null ? getMethod(CLASS_ENUMITEMSLOT, "valueOf", String.class) : null;
         }
         catch (Exception e) {
 

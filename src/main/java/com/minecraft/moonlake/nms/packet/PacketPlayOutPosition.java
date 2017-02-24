@@ -36,7 +36,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutPosition}
  */
+@Deprecated
 public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition> {
 
     private final static Class<?> CLASS_PACKETPLAYOUTPOSITION;
@@ -248,7 +250,12 @@ public class PacketPlayOutPosition extends PacketAbstract<PacketPlayOutPosition>
                     nmsFlags.add(METHOD_VALUEOF.invoke(null, flag.name()));
                 }
             }
-            Object packet = instantiateObject(CLASS_PACKETPLAYOUTPOSITION, x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlags, g.get());
+            Object packet;
+
+            if(getServerVersionNumber() <= 8) // 1.8 版本没有 g 这个 int 参数
+                packet = instantiateObject(CLASS_PACKETPLAYOUTPOSITION, x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlags);
+            else
+                packet = instantiateObject(CLASS_PACKETPLAYOUTPOSITION, x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlags, g.get());
 
             PacketReflect.get().send(players, packet);
         }

@@ -26,7 +26,9 @@ import com.minecraft.moonlake.exception.MoonLakeException;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link com.minecraft.moonlake.api.nms.exception.NMSException}
  */
+@Deprecated
 public class NMSException extends MoonLakeException {
 
     /**

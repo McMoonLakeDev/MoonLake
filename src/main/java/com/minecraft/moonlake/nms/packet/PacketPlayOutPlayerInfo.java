@@ -37,7 +37,9 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutPlayerInfo}
  */
+@Deprecated
 public class PacketPlayOutPlayerInfo extends PacketAbstract<PacketPlayOutPlayerInfo> {
 
     private final static Class<?> CLASS_PACKETPLAYOUTPLAYERINFO;
@@ -168,7 +170,7 @@ public class PacketPlayOutPlayerInfo extends PacketAbstract<PacketPlayOutPlayerI
      * @return PacketPlayOutPlayerInfo
      * @throws IllegalArgumentException 如果交互对象或玩家对象为 {@code null} 则抛出异常
      * @throws PacketException 如果不存在或获取错误则抛出异常
-     * @deprecated 已过时, 将于 v2.0 删除. 已修复版本兼容问题.
+     * @deprecated 已过时, 将于 v1.9-a5 删除. 已修复版本兼容问题.
      */
     @Deprecated
     public static PacketPlayOutPlayerInfo get(Action action, Player player) throws PacketException {
@@ -187,7 +189,7 @@ public class PacketPlayOutPlayerInfo extends PacketAbstract<PacketPlayOutPlayerI
      * @return PacketPlayOutPlayerInfo
      * @throws IllegalArgumentException 如果交互对象或玩家对象为 {@code null} 则抛出异常
      * @throws PacketException 如果不存在或获取错误则抛出异常
-     * @deprecated 已过时, 将于 v2.0 删除. 已修复版本兼容问题.
+     * @deprecated 已过时, 将于 v1.9-a5 删除. 已修复版本兼容问题.
      */
     @Deprecated
     public static PacketPlayOutPlayerInfo get(Action action, MoonLakePlayer player) throws PacketException {

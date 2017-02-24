@@ -18,18 +18,13 @@
  
 package com.minecraft.moonlake.api.player;
 
-import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutChat;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutPlayerListHeaderFooter;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutTitle;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
-import com.minecraft.moonlake.nms.packet.PacketPlayOutChat;
-import com.minecraft.moonlake.nms.packet.PacketPlayOutPlayerListHeaderFooter;
-import com.minecraft.moonlake.nms.packet.PacketPlayOutTitle;
+import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>NMSPlayerExpression</h1>
@@ -37,32 +32,18 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除.
  */
+@Deprecated
 class NMSPlayerExpression implements NMSPlayerLibrary {
-
-    private Class<?> CLASS_CRAFTPLAYER;
-    private Class<?> CLASS_ENTITYPLAYER;
-    private Method METHOD_GETHANDLE;
-    private Field FIELD_PING;
 
     /**
      * 玩家 NMS 接口实现类构造函数
      *
-     * @throws IllegalBukkitVersionException 如果服务端版本不支持则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
-    public NMSPlayerExpression() throws IllegalBukkitVersionException {
-
-        try {
-
-            CLASS_CRAFTPLAYER = PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
-            CLASS_ENTITYPLAYER = PackageType.MINECRAFT_SERVER.getClass("EntityPlayer");
-            METHOD_GETHANDLE = getMethod(CLASS_CRAFTPLAYER, "getHandle");
-            FIELD_PING = getField(CLASS_ENTITYPLAYER, true, "ping");
-        }
-        catch (Exception e) {
-
-            throw new IllegalBukkitVersionException("The nms player library reflect raw expcetion.", e);
-        }
+    @Deprecated
+    public NMSPlayerExpression() {
     }
 
     @Override
@@ -76,15 +57,7 @@ class NMSPlayerExpression implements NMSPlayerLibrary {
 
             throw new PlayerNotOnlineException(player);
         }
-        try {
-
-            return (Integer) FIELD_PING.get(METHOD_GETHANDLE.invoke(target));
-        }
-        catch (Exception e) {
-
-            e.printStackTrace();
-        }
-        return 0;
+        return PlayerManager.getPing(target);
     }
 
     @Override

@@ -20,7 +20,9 @@ package com.minecraft.moonlake.api.player.ability;
 
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
+import com.minecraft.moonlake.manager.PlayerManager;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 /**
  * <h1>ItemCooldown</h1>
@@ -28,7 +30,9 @@ import org.bukkit.Material;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除.
  */
+@Deprecated
 public interface ItemCooldown {
 
     /**
@@ -41,7 +45,9 @@ public interface ItemCooldown {
      * @throws IllegalArgumentException 如果物品栈类型对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link PlayerManager#setItemCoolDown(Player, Material, int)}
      */
+    @Deprecated
     void setItemCooldown(String player, Material material, int tick);
 
     /**
@@ -54,6 +60,8 @@ public interface ItemCooldown {
      * @throws IllegalArgumentException 如果物品栈类型对象为 {@code null} 则抛出异常
      * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
      * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link PlayerManager#hasItemCoolDown(Player, Material)}
      */
+    @Deprecated
     boolean hasItemCooldown(String player, Material material);
 }

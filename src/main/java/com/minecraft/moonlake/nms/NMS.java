@@ -24,7 +24,9 @@ package com.minecraft.moonlake.nms;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v1.9-a5 删除.
  */
+@Deprecated
 public class NMS {
 
     /**

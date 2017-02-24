@@ -18,15 +18,14 @@
  
 package com.minecraft.moonlake.api.player;
 
-import com.minecraft.moonlake.MoonLakeAPI;
 import org.bukkit.Material;
-
-import java.util.logging.Level;
 
 /**
  * <h1>PlayerExpressionWrapped</h1>
  * 玩家支持库实现包装类
+ * @deprecated 已过时, 将于 v2.0 删除.
  */
+@Deprecated
 class PlayerExpressionWrapped extends PlayerExpression {
 
     private NMSPlayerExpression nmsPlayerExpression;
@@ -34,25 +33,14 @@ class PlayerExpressionWrapped extends PlayerExpression {
 
     /**
      * 玩家支持库实现包装类构造函数
+     *
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
-    @SuppressWarnings("deprecation")
+    @Deprecated
     public PlayerExpressionWrapped() {
 
-        //
-        // try catch 为了防止 1.8 服务端使用 NMS
-        // 导致物品冷却类的加载失败不处理而导致失效
-
-        try {
-
-            this.nmsPlayerExpression = new NMSPlayerExpression();
-            this.itemCooldownExpression = new ItemCooldownExpression();
-        }
-        catch (Exception e) {
-
-            MoonLakeAPI.getLogger().log(Level.SEVERE, "The player library nms or item cooldown exception: ", e);
-
-            e.printStackTrace();
-        }
+        this.nmsPlayerExpression = new NMSPlayerExpression();
+        this.itemCooldownExpression = new ItemCooldownExpression();
     }
 
     @Override

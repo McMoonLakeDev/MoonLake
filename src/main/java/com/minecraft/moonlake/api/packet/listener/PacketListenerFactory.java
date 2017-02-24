@@ -120,6 +120,8 @@ public final class PacketListenerFactory {
             }
         };
         EventHelper.registerEvent(PACKET_CHANNEL_PLAYER_LISTENER, MoonLakeAPI.getMoonLake());
+
+        MoonLakeAPI.getLogger().info("月色之湖数据包通道监听器(PCL)成功加载.");
     }
 
     /**

@@ -40,7 +40,9 @@ import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.api.nbt.NBTFactory;
 import com.minecraft.moonlake.api.nbt.NBTLibrary;
 import com.minecraft.moonlake.api.nbt.NBTList;
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
+import com.minecraft.moonlake.api.packet.exception.PacketException;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.api.player.PlayerLibrary;
 import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
@@ -54,7 +56,6 @@ import com.minecraft.moonlake.mysql.exception.MySQLInitializeException;
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import com.minecraft.moonlake.nms.packet.Packet;
 import com.minecraft.moonlake.nms.packet.PacketFactory;
-import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import com.minecraft.moonlake.particle.ParticleEffect;
 import com.minecraft.moonlake.particle.ParticleException;
 import com.minecraft.moonlake.reflect.Reflect;
@@ -435,7 +436,9 @@ public final class MoonLakeAPI {
      * 获取 PlayerLibrary 对象
      *
      * @return PlayerLibrary
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
+    @Deprecated
     public static PlayerLibrary getPlayerLibrary() {
 
         return PlayerLibraryFactorys.player();
@@ -775,7 +778,7 @@ public final class MoonLakeAPI {
      * @param <T> Packet
      * @return Packet 实例对象
      * @throws PacketException 如果获取错误则抛出异常
-     * @deprecated 已过时, 建议使用参数获取实例对象
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #newPacketPlayOutBukkit(Class)}
      * @see #newPacket(Class, Object...)
      */
     @Deprecated
@@ -793,10 +796,33 @@ public final class MoonLakeAPI {
      * @param <T> Packet
      * @return Packet 实例对象
      * @throws PacketException 如果获取错误则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #newPacketPlayOutBukkit(Class)}
      */
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public static <T extends Packet> T newPacket(Class<T> packet, Object... args) throws PacketException {
 
         return PacketFactory.get().instance(packet, args);
+    }
+
+    /**
+     * 获取指定 PacketPlayOutBukkit 的实例对象
+     *
+     * @param packet 数据包
+     * @param <T> 数据包类
+     * @return 数据包实例对象
+     * @throws PacketException 如果获取错误则抛出异常
+     */
+    public static <T extends PacketPlayOutBukkit> T newPacketPlayOutBukkit(Class<T> packet) throws PacketException {
+
+        try {
+
+            return packet.newInstance();
+
+        } catch (Exception e) {
+
+            throw new PacketException(e.getMessage(), e);
+        }
     }
 
     /**

@@ -1,7 +1,7 @@
-# MoonLake [![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=1.9-a2.2&x2=0)](https://github.com/u2g/MoonLake) [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://github.com/u2g/MoonLake) [![Open Source Love](https://badges.frapsoft.com/os/gpl/gpl.svg?v=102)](https://github.com/u2g/MoonLake)
+# MoonLake [![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=1.9-a3&x2=0)](https://github.com/u2g/MoonLake) [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://github.com/u2g/MoonLake) [![Open Source Love](https://badges.frapsoft.com/os/gpl/gpl.svg?v=102)](https://github.com/u2g/MoonLake)
 
 Minecraft MoonLake Core API Plugin
-By Month_Light Ver: 1.9-a2.2
+By Month_Light Ver: 1.9-a3
 
 ## 简介
 这个插件提供了大量的 API 功能，实现了一些 Bukkit 无法做到的 NMS 功能<br />
@@ -14,11 +14,11 @@ By Month_Light Ver: 1.9-a2.2
 * `Cauldron | KCauldron [模组服务端]` <span style="color: red">✘</span> 完全不支持
  
 ## 目前已经实现的功能
-* 玩家支持库: [点我](/src/main/java/com/minecraft/moonlake/api/player "Player Library")
+* 月色之湖玩家: [点我](/src/main/java/com/minecraft/moonlake/api/player/MoonLakePlayer.java "Player Library")
 * 物品栈支持库: [点我](/src/main/java/com/minecraft/moonlake/api/item "Item Library")
 * 数据库支持库: [点我](/src/main/java/com/minecraft/moonlake/mysql "MySQL Library")
 * 花式消息支持库: [点我](/src/main/java/com/minecraft/moonlake/api/fancy "FancyMessage")
-* NMS 数据包发送: [点我](/src/main/java/com/minecraft/moonlake/nms/packet "NMS Packet")
+* NMS 数据包发送: [点我](/src/main/java/com/minecraft/moonlake/api/packet "NMS Packet")
 * NBT 操作支持库: [点我](/src/main/java/com/minecraft/moonlake/api/nbt "NBT Library")
 * 插件注解支持库: [点我](/src/main/java/com/minecraft/moonlake/api/annotation/plugin "Plugin Annotation")
 * 数据包通道监听器: [点我](/src/main/java/com/minecraft/moonlake/api/packet/listener "Packet Channel Listener")

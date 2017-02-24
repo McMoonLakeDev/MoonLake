@@ -19,11 +19,12 @@
 package com.minecraft.moonlake.api.packet.wrapper;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.event.core.MoonLakePacketOutBungeeEvent;
+import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
+import com.minecraft.moonlake.api.packet.exception.PacketException;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.manager.PlayerManager;
-import com.minecraft.moonlake.nms.packet.PacketPlayOutCustomPayload;
-import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -40,7 +41,7 @@ import java.io.IOException;
  * @author Month_Light
  * @see PacketPlayOutBungee
  */
-public abstract class PacketPlayOutBungeeAbstract implements PacketPlayOutBungee {
+public abstract class PacketPlayOutBungeeAbstract extends PacketPlayOutAbstract implements PacketPlayOutBungee {
 
     private final ByteArrayOutputStream data;
 
@@ -53,6 +54,23 @@ public abstract class PacketPlayOutBungeeAbstract implements PacketPlayOutBungee
 
         this.data = new ByteArrayOutputStream();
         this.dataOut = new DataOutputStream(data);
+    }
+
+    @Override
+    protected boolean fireEvent(PacketPlayOut packet, Player... players) {
+
+        if(super.fireEvent(packet, players))
+            return true;
+
+        MoonLakePacketOutBungeeEvent mlpobe = new MoonLakePacketOutBungeeEvent(this, players);
+        MoonLakeAPI.callEvent(mlpobe);
+        return mlpobe.isCancelled();
+    }
+
+    @Override
+    protected boolean sendPacket(Player... players) throws Exception {
+
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -89,6 +107,9 @@ public abstract class PacketPlayOutBungeeAbstract implements PacketPlayOutBungee
         Validate.notNull(plugin, "The plugin object is null.");
         Validate.notNull(senders, "The sender player object is null.");
 
+        if(fireEvent(this, senders))
+            return;
+
         for(Player sender : senders)
             sender.sendPluginMessage(plugin, CHANNEL, getDataByteArray());
     }
@@ -111,6 +132,9 @@ public abstract class PacketPlayOutBungeeAbstract implements PacketPlayOutBungee
 
         Validate.notNull(plugin, "The plugin object is null.");
         Validate.notNull(senders, "The sender player object is null.");
+
+        if(fireEvent(this, senders))
+            return;
 
         PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(CHANNEL, getDataByteArray());
         packet.send(senders);
