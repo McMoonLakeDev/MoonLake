@@ -18,8 +18,8 @@
 
 package com.minecraft.moonlake.api.packet.listener.handler;
 
+import com.minecraft.moonlake.api.nms.exception.NMSException;
 import com.minecraft.moonlake.api.packet.listener.channel.PacketChannelWrapped;
-import com.minecraft.moonlake.nms.exception.NMSException;
 import org.bukkit.entity.Player;
 
 /**

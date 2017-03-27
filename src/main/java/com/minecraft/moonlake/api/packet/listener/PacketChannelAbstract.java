@@ -18,10 +18,10 @@
 
 package com.minecraft.moonlake.api.packet.listener;
 
+import com.minecraft.moonlake.api.nms.exception.NMSException;
+import com.minecraft.moonlake.api.packet.exception.PacketException;
 import com.minecraft.moonlake.api.packet.listener.channel.PacketChannel;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
-import com.minecraft.moonlake.nms.exception.NMSException;
-import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 

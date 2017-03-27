@@ -18,8 +18,8 @@
 
 package com.minecraft.moonlake.api.anvil;
 
+import com.minecraft.moonlake.api.nms.exception.NMSException;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
-import com.minecraft.moonlake.nms.exception.NMSException;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;

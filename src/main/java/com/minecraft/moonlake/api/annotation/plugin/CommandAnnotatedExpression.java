@@ -20,10 +20,10 @@ package com.minecraft.moonlake.api.annotation.plugin;
 
 import com.minecraft.moonlake.api.annotation.plugin.command.*;
 import com.minecraft.moonlake.api.annotation.plugin.command.exception.*;
+import com.minecraft.moonlake.api.nms.exception.NMSException;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.manager.PlayerManager;
-import com.minecraft.moonlake.nms.exception.NMSException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
