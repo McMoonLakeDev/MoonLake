@@ -18,5 +18,5 @@
 
 package com.minecraft.moonlake.api.event;
 
-public interface Cancellable extends org.bukkit.event.Cancellable, Cloneable {
+public interface Cancellable extends org.bukkit.event.Cancellable {
 }
