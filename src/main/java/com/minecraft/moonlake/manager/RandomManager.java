@@ -65,6 +65,18 @@ public class RandomManager extends MoonLakeManager {
     }
 
     /**
+     * 设置此随机管理器的随机对象种子
+     *
+     * @param seed 种子
+     * @throws UnsupportedOperationException 暂时不支持, 未来可能会支持此功能.
+     */
+    public static void setRandomSeed(long seed) {
+
+        //RANDOM.setSeed(seed);
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * 获取指定范围的整数型随机数
      *
      * @param min 最低范围
@@ -81,6 +93,30 @@ public class RandomManager extends MoonLakeManager {
             return min;
         }
         return Math.abs(getRandom().nextInt()) % (max - min + 1) + min;
+    }
+
+    /**
+     * <p>返回下一个伪随机数，它是此随机数生成器的序列中均匀分布的 {@code int} 值。</p>
+     * <p>{@code nextInt} 的常规协定是，伪随机地生成并返回一个 {@code int} 值。所有 {@code 232} 个可能 {@code int} 值的生成概率（大致）相同。</p>
+     *
+     * @return 下一个伪随机数，它是此随机数生成器的序列中均匀分布的 {@code int} 值。
+     */
+    public static int nextInt() {
+
+        return getRandom().nextInt();
+    }
+
+    /**
+     * <p>返回下一个伪随机数，它是此随机数生成器的序列中均匀分布的 {@code int} 值。</p>
+     * <p>nextInt 的常规协定是，伪随机地生成并返回一个 {@code int} 值。所有 所有 {@code 232} 个可能 {@code int} 值的生成概率（大致）相同。</p>
+     *
+     * @param bound 要返回的随机数的范围。必须为正数。
+     * @return 下一个伪随机数，在此随机数生成器序列中 {@code 0}（包括）和 {@code bound}（不包括）之间均匀分布的 {@code int} 值。
+     * @throws IllegalArgumentException 如果范围值不是整数则抛出异常
+     */
+    public static int nextInt(int bound) {
+
+        return getRandom().nextInt(bound);
     }
 
     /**
@@ -103,6 +139,17 @@ public class RandomManager extends MoonLakeManager {
     }
 
     /**
+     * <p>返回下一个伪随机数，它是取自此随机数生成器序列的均匀分布的 {@code long} 值。</p>
+     * <p>{@code nextLong} 的常规协定是，伪随机地生成并返回一个 {@code long} 值。 </p>
+     *
+     * @return 下一个伪随机数，它是此随机数生成器序列中均匀分布的 {@code long} 值。
+     */
+    public static long nextLong() {
+
+        return getRandom().nextLong();
+    }
+
+    /**
      * 获取指定范围的单精度浮点型随机数
      *
      * @param min 最低范围
@@ -122,6 +169,18 @@ public class RandomManager extends MoonLakeManager {
     }
 
     /**
+     * <p>返回下一个伪随机数，它是取自此随机数生成器序列的、在 {@code 0.0} 和 {@code 1.0}之间均匀分布的 {@code float} 值。</p>
+     * <p>{@code nextFloat} 的常规协定是，伪随机地生成并返回一个从 {@code 0.0f}（包括）到 {@code 1.0f}（包括）范围内均匀选择（大致）的 {@code float} 值。</p>
+     * <p>所有可能的 所有 {@code 224} 个 {@code float} 值（其形式为 {@code m x 2-24}，其中 {@code m} 是一个小于 {@code 224} 的正整数）的生成概率（大致）相同。</p>
+     *
+     * @return 下一个伪随机数，它是取自此随机数生成器序列的、在 {@code 0.0} 和 {@code 1.0} 之间均匀分布的 {@code float} 值
+     */
+    public static double nextFloat() {
+
+        return getRandom().nextFloat();
+    }
+
+    /**
      * 获取指定范围的双精度浮点型随机数
      *
      * @param min 最低范围
@@ -138,6 +197,39 @@ public class RandomManager extends MoonLakeManager {
             return min;
         }
         return Math.abs(getRandom().nextDouble()) * (max - min) + min;
+    }
+
+    /**
+     * <p>返回下一个伪随机数，它是取自此随机数生成器序列的、在 {@code 0.0} 和 {@code 1.0} 之间均匀分布的 {@code double} 值。 </p>
+     * <p>{@code nextDouble} 的常规协定是，伪随机地生成并返回一个从 {@code 0.0d}（包括）到 {@code 1.0d}（不包括）范围内均匀选择（大致）的 {@code double} 值。</p>
+     *
+     * @return 下一个伪随机数，它是此随机数生成器序列中 {@code 0.0} 和 {@code 1.0} 之间均匀分布的 {@code double} 值
+     */
+    public static double nextDouble() {
+
+        return getRandom().nextDouble();
+    }
+
+    /**
+     * <p>返回下一个伪随机数，它是取自此随机数生成器序列的均匀分布的 {@code boolean} 值。</p>
+     * <p>{@code nextBoolean} 的常规协定是，伪随机地生成并返回一个 {@code boolean} 值。值 {@code true} 和 {@code false} 的生成概率（大致）相同。 </p>
+     *
+     * @return 下一个伪随机数，它是此随机数生成器的序列中均匀分布的 {@code boolean} 值。
+     */
+    public static boolean nextBoolean() {
+
+        return getRandom().nextBoolean();
+    }
+
+    /**
+     * <p>生成随机字节并将其置于用户提供的 {@code byte} 数组中。所生成的随机字节数等于该 {@code byte} 数组的长度。</p>
+     *
+     * @param bytes 用随机字节填充的 {@code byte} 数组
+     * @throws NullPointerException 如果字节数组对象为 {@code null} 则抛出异常
+     */
+    public static void nextBytes(byte[] bytes) {
+
+        getRandom().nextBytes(bytes);
     }
 
     /**
