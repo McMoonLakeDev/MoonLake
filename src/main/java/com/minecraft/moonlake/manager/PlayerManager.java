@@ -53,6 +53,7 @@ public class PlayerManager extends MoonLakeManager {
     private final static Class<?> CLASS_CRAFTPLAYER;
     private final static Class<?> CLASS_ENTITYHUMAN;
     private final static Class<?> CLASS_ENTITYPLAYER;
+    private final static Constructor<? extends SimpleMoonLakePlayer> CONSTRUCTOR_SIMPLEMOONLAKEPLAYER;
     private final static Method METHOD_GETHANDLE;
     private final static Method METHOD_GETPROFILE;
     private final static Method METHOD_GETITEM;
@@ -83,6 +84,12 @@ public class PlayerManager extends MoonLakeManager {
                 default:    // Not Support
                     CLASS_SIMPLEMOONLAKEPLAYER = null;
             }
+
+            if(CLASS_SIMPLEMOONLAKEPLAYER != null)
+                CONSTRUCTOR_SIMPLEMOONLAKEPLAYER = CLASS_SIMPLEMOONLAKEPLAYER.getConstructor(Player.class);
+            else
+                CONSTRUCTOR_SIMPLEMOONLAKEPLAYER = null;
+
             CLASS_CRAFTPLAYER = PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
             CLASS_ENTITYHUMAN = PackageType.MINECRAFT_SERVER.getClass("EntityHuman");
             CLASS_ENTITYPLAYER = PackageType.MINECRAFT_SERVER.getClass("EntityPlayer");
@@ -325,11 +332,9 @@ public class PlayerManager extends MoonLakeManager {
 
         try {
 
-            Constructor<? extends SimpleMoonLakePlayer> constructor = CLASS_SIMPLEMOONLAKEPLAYER.getConstructor(Player.class);
-
             for(final Player player : players) {
 
-                adapter[index++] = constructor.newInstance(player);
+                adapter[index++] = CONSTRUCTOR_SIMPLEMOONLAKEPLAYER.newInstance(player);
             }
         }
         catch (Exception e) {
