@@ -62,7 +62,7 @@ import java.util.Iterator;
  * </div>
  * <hr />
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  * @see TextualComponent
  * @see FancyMessageFactory
@@ -212,7 +212,7 @@ public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable
      * @see FancyMessage#text(String)
      * @see FancyMessage#text(TextualComponent)
      * @throws IllegalArgumentException 如果最后一个花式消息对象没有文本内容则抛出异常
-     * @deprecated 如果忘记设置这个花式消息对象的消息接下来的操作可能会抛出异常
+     * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link #then(String)}. 如果忘记设置这个花式消息对象的消息接下来的操作可能会抛出异常
      */
     @Deprecated
     FancyMessage then();

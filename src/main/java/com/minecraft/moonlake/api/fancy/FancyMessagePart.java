@@ -20,8 +20,6 @@ package com.minecraft.moonlake.api.fancy;
 
 import com.minecraft.moonlake.json.JsonRepresentedObject;
 import com.minecraft.moonlake.json.JsonWrite;
-import com.minecraft.moonlake.property.ObjectProperty;
-import com.minecraft.moonlake.property.SimpleObjectProperty;
 import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.property.StringProperty;
 import org.bukkit.ChatColor;
@@ -33,16 +31,16 @@ import java.util.List;
  * <h1>FancyMessagePart</h1>
  * 花式消息部分实现类
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 class FancyMessagePart implements JsonRepresentedObject, Cloneable {
 
-    ObjectProperty<ChatColor> color;
-    ObjectProperty<TextualComponent> text;
-    ObjectProperty<List<FancyMessageStyle>> styles;
-    ObjectProperty<JsonRepresentedObject> hoverActionValue;
-    ObjectProperty<List<JsonRepresentedObject>> translationReplacements;
+    ChatColor color;
+    TextualComponent text;
+    List<FancyMessageStyle> styles;
+    JsonRepresentedObject hoverActionValue;
+    List<JsonRepresentedObject> translationReplacements;
     StringProperty clickAction, clickActionValue, hoverAction, insertion;
 
     /**
@@ -60,11 +58,11 @@ class FancyMessagePart implements JsonRepresentedObject, Cloneable {
      */
     public FancyMessagePart(TextualComponent text) {
 
-        this.text = new SimpleObjectProperty<>(text);
-        this.color = new SimpleObjectProperty<>(ChatColor.WHITE);
-        this.styles = new SimpleObjectProperty<>(new ArrayList<>());
-        this.hoverActionValue = new SimpleObjectProperty<>(null);
-        this.translationReplacements = new SimpleObjectProperty<>(new ArrayList<>());
+        this.text = text;
+        this.color = ChatColor.WHITE;
+        this.styles = new ArrayList<>();
+        this.hoverActionValue = null;
+        this.translationReplacements = new ArrayList<>();
         this.clickAction = new SimpleStringProperty(null);
         this.clickActionValue = new SimpleStringProperty(null);
         this.hoverAction = new SimpleStringProperty(null);
@@ -77,10 +75,10 @@ class FancyMessagePart implements JsonRepresentedObject, Cloneable {
         try {
 
             jsonWrite.beginObject();
-            text.get().writeJson(jsonWrite);
-            jsonWrite.name("color").value(color.get().name().toLowerCase());
+            text.writeJson(jsonWrite);
+            jsonWrite.name("color").value(color.name().toLowerCase());
 
-            for (final FancyMessageStyle style : styles.get()) {
+            for (final FancyMessageStyle style : styles) {
 
                 jsonWrite.name(style.getType().toLowerCase()).value(true);
             }
@@ -98,18 +96,18 @@ class FancyMessagePart implements JsonRepresentedObject, Cloneable {
                         .beginObject()
                         .name("action").value(hoverAction.get())
                         .name("value");
-                hoverActionValue.get().writeJson(jsonWrite);
+                hoverActionValue.writeJson(jsonWrite);
                 jsonWrite.endObject();
             }
             if (insertion.get() != null) {
 
                 jsonWrite.name("insertion").value(insertion.get());
             }
-            if (translationReplacements.get().size() > 0 && text.get() != null && TextualComponent.isTranslatableText(text.get())) {
+            if (translationReplacements.size() > 0 && text != null && TextualComponent.isTranslatableText(text)) {
 
                 jsonWrite.name("with").beginArray();
 
-                for (JsonRepresentedObject obj : translationReplacements.get()) {
+                for (JsonRepresentedObject obj : translationReplacements) {
 
                     obj.writeJson(jsonWrite);
                 }
@@ -130,6 +128,6 @@ class FancyMessagePart implements JsonRepresentedObject, Cloneable {
      */
     boolean hasText() {
 
-        return text.get() != null;
+        return text != null;
     }
 }

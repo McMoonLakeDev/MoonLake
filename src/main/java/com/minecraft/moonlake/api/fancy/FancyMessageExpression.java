@@ -41,14 +41,14 @@ import static com.minecraft.moonlake.api.fancy.TextualComponent.rawText;
  * <h1>FancyMessage Implement Class</h1>
  * 花式消息接口实现类
  *
- * @version 1.0
+ * @version 1.2
  * @author Month_Light
  */
 class FancyMessageExpression implements FancyMessage {
 
     private BooleanProperty dirty;
     private StringProperty jsonString;
-    private ObjectProperty<List<FancyMessagePart>> partList;
+    private List<FancyMessagePart> partList;
 
     /**
      * 花式消息实现类构造函数
@@ -80,8 +80,8 @@ class FancyMessageExpression implements FancyMessage {
      */
     public FancyMessageExpression(TextualComponent text) {
 
-        this.partList = new SimpleObjectProperty<>(new ArrayList<>());
-        this.partList.get().add(new FancyMessagePart(text));
+        this.partList = new ArrayList<>();
+        this.partList.add(new FancyMessagePart(text));
         this.jsonString = new SimpleStringProperty(null);
         this.dirty = new SimpleBooleanProperty(false);
     }
@@ -89,7 +89,7 @@ class FancyMessageExpression implements FancyMessage {
     @Override
     public void writeJson(JsonWrite jsonWrite) throws IOException {
 
-        if (partList.get().size() == 1) {
+        if (partList.size() == 1) {
 
             getLast().writeJson(jsonWrite);
         }
@@ -108,7 +108,7 @@ class FancyMessageExpression implements FancyMessage {
     @Override
     public Iterator<FancyMessagePart> iterator() {
 
-        return partList.get().iterator();
+        return partList.iterator();
     }
 
     @Override
@@ -122,7 +122,7 @@ class FancyMessageExpression implements FancyMessage {
 
         FancyMessagePart laster = getLast();
 
-        laster.text.set(text);
+        laster.text = text;
 
         dirty.set(true);
 
@@ -134,7 +134,7 @@ class FancyMessageExpression implements FancyMessage {
 
         Validate.isTrue(color.isColor(), "The fancy message chatcolor type not is color.");
 
-        getLast().color.set(color);
+        getLast().color = color;
 
         dirty.set(true);
 
@@ -146,7 +146,7 @@ class FancyMessageExpression implements FancyMessage {
 
         Validate.notNull(style, "The fancy message style object is null.");
 
-        getLast().styles.get().addAll(Arrays.asList(style));
+        getLast().styles.addAll(Arrays.asList(style));
 
         dirty.set(true);
 
@@ -289,7 +289,7 @@ class FancyMessageExpression implements FancyMessage {
 
         for (final String str : replacements) {
 
-            getLast().translationReplacements.get().add(new FancyJsonString(str));
+            getLast().translationReplacements.add(new FancyJsonString(str));
         }
         dirty.set(true);
 
@@ -303,7 +303,7 @@ class FancyMessageExpression implements FancyMessage {
 
         for (final FancyMessage fancyMessage : replacements) {
 
-            getLast().translationReplacements.get().add(fancyMessage);
+            getLast().translationReplacements.add(fancyMessage);
         }
         dirty.set(true);
 
@@ -316,7 +316,7 @@ class FancyMessageExpression implements FancyMessage {
 
         Validate.isTrue(getLast().hasText(), "The fancy message part last not has text.");
 
-        partList.get().add(new FancyMessagePart());
+        partList.add(new FancyMessagePart());
         dirty.set(true);
 
         return this;
@@ -333,7 +333,7 @@ class FancyMessageExpression implements FancyMessage {
 
         Validate.isTrue(getLast().hasText(), "The fancy message part last not has text.");
 
-        partList.get().add(new FancyMessagePart(text));
+        partList.add(new FancyMessagePart(text));
         dirty.set(true);
 
         return this;
@@ -349,7 +349,7 @@ class FancyMessageExpression implements FancyMessage {
 
         while(iterator.hasNext()) {
 
-            partList.get().add(iterator.next());
+            partList.add(iterator.next());
         }
         return this;
     }
@@ -427,7 +427,7 @@ class FancyMessageExpression implements FancyMessage {
 
     protected FancyMessagePart getLast() {
 
-        return partList.get().get(partList.get().size() - 1);
+        return partList.get(partList.size() - 1);
     }
 
     private void onClick(String name, String data) {
@@ -445,7 +445,7 @@ class FancyMessageExpression implements FancyMessage {
         FancyMessagePart last = getLast();
 
         last.hoverAction.set(name);
-        last.hoverActionValue.set(data);
+        last.hoverActionValue = data;
 
         dirty.set(true);
     }
