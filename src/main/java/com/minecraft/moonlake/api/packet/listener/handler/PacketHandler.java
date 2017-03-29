@@ -18,7 +18,7 @@
 
 package com.minecraft.moonlake.api.packet.listener.handler;
 
-import com.minecraft.moonlake.nms.packet.exception.PacketException;
+import com.minecraft.moonlake.api.packet.exception.PacketException;
 import org.bukkit.plugin.Plugin;
 
 import java.util.List;

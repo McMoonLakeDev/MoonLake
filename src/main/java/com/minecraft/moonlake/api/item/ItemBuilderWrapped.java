@@ -55,7 +55,7 @@ class ItemBuilderWrapped implements ItemBuilder {
         Validate.notNull(itemStack, "The itemstack object is null.");
 
         this.itemStack = itemStack;
-        this.itemLibrary = ItemLibraryFactory.get().item();
+        this.itemLibrary = ItemLibraryFactorys.item();
     }
 
     /**

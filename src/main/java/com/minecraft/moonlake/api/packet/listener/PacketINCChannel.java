@@ -18,8 +18,8 @@
 
 package com.minecraft.moonlake.api.packet.listener;
 
-import com.minecraft.moonlake.nms.exception.NMSException;
-import com.minecraft.moonlake.nms.packet.exception.PacketException;
+import com.minecraft.moonlake.api.nms.exception.NMSException;
+import com.minecraft.moonlake.api.packet.exception.PacketException;
 import com.minecraft.moonlake.validate.Validate;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
@@ -31,7 +31,7 @@ import java.lang.reflect.Field;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 
-import static com.minecraft.moonlake.reflect.Reflect.*;
+import static com.minecraft.moonlake.reflect.Reflect.getField;
 
 /**
  * <h1>PacketINCChannel</h1>

@@ -31,6 +31,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -703,6 +704,18 @@ class ItemExpressionWrapped extends ItemExpression {
     public Set<String> getLores(ItemStack itemStack, boolean ignoreColor) {
 
         return base.getLores(itemStack, ignoreColor);
+    }
+
+    @Override
+    public List<String> getLore(ItemStack itemStack) {
+
+        return base.getLore(itemStack);
+    }
+
+    @Override
+    public List<String> getLore(ItemStack itemStack, boolean ignoreColor) {
+
+        return base.getLore(itemStack, ignoreColor);
     }
 
     @Override

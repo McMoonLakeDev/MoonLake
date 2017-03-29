@@ -114,12 +114,16 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
     }
 
     @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public Set<String> getLores(ItemStack itemStack) {
 
         return getLores(itemStack, false);
     }
 
     @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public Set<String> getLores(ItemStack itemStack, boolean ignoreColor) {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
@@ -135,6 +139,30 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
             return new HashSet<>(itemMeta.getLore());
         }
         return new HashSet<>(StringUtil.stripColor(itemMeta.getLore()));
+    }
+
+    @Override
+    public List<String> getLore(ItemStack itemStack) {
+
+        return getLore(itemStack, false);
+    }
+
+    @Override
+    public List<String> getLore(ItemStack itemStack, boolean ignoreColor) {
+
+        Validate.notNull(itemStack, "The itemstack object is null.");
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+
+        if(itemMeta == null || !itemMeta.hasLore()) {
+
+            return null;
+        }
+        if(!ignoreColor) {
+
+            return itemMeta.getLore();
+        }
+        return StringUtil.stripColor(itemMeta.getLore());
     }
 
     @Override
@@ -169,11 +197,11 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
             return itemStack;
         }
-        Set<String> sourceLore = getLores(itemStack);
+        List<String> sourceLore = getLore(itemStack);
 
         if(sourceLore == null) {
 
-            sourceLore = new HashSet<>();
+            sourceLore = new ArrayList<>();
         }
         sourceLore.addAll(Arrays.asList(lore));
 
@@ -190,11 +218,11 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
             return itemStack;
         }
-        Set<String> sourceLore = getLores(itemStack);
+        List<String> sourceLore = getLore(itemStack);
 
         if(sourceLore == null) {
 
-            sourceLore = new HashSet<>();
+            sourceLore = new ArrayList<>();
         }
         sourceLore.addAll(lore);
 
@@ -214,7 +242,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
 
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        Set<String> lore = getLores(itemStack);
+        List<String> lore = getLore(itemStack);
 
         return lore != null && lore.size() > 0;
     }
@@ -233,7 +261,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(lore, "The itemstack lore object is null.");
 
-        Set<String> sourceLore = getLores(itemStack);
+        List<String> sourceLore = getLore(itemStack);
 
         if(sourceLore == null) {
 
@@ -267,7 +295,7 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
         Validate.notNull(itemStack, "The itemstack object is null.");
         Validate.notNull(lore, "The itemstack lore object is null.");
 
-        Set<String> sourceLore = getLores(itemStack, true);
+        List<String> sourceLore = getLore(itemStack, true);
 
         if(sourceLore == null) {
 

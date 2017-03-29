@@ -18,7 +18,7 @@
  
 package com.minecraft.moonlake.api.anvil;
 
-import com.minecraft.moonlake.nms.exception.NMSException;
+import com.minecraft.moonlake.api.nms.exception.NMSException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;

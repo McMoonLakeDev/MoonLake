@@ -18,9 +18,9 @@
 
 package com.minecraft.moonlake.api.packet.listener.channel;
 
+import com.minecraft.moonlake.api.packet.exception.PacketException;
 import com.minecraft.moonlake.api.packet.listener.PacketListenerList;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
-import com.minecraft.moonlake.nms.packet.exception.PacketException;
 import org.bukkit.entity.Player;
 
 /**
