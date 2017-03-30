@@ -43,10 +43,15 @@ import com.minecraft.moonlake.api.nbt.NBTList;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
 import com.minecraft.moonlake.api.packet.exception.PacketException;
+import com.minecraft.moonlake.api.player.DependPlayerFactory;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.api.player.PlayerLibrary;
 import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
+import com.minecraft.moonlake.api.player.depend.DependEconomy;
+import com.minecraft.moonlake.api.player.depend.DependEconomyVault;
+import com.minecraft.moonlake.api.player.depend.DependWorldEdit;
 import com.minecraft.moonlake.event.EventHelper;
+import com.minecraft.moonlake.exception.CannotDependException;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.executor.Consumer;
 import com.minecraft.moonlake.manager.PlayerManager;
@@ -2250,5 +2255,20 @@ public final class MoonLakeAPI {
     public static void readSafeConsumerNBT(Chunk chunk, Consumer<NBTCompound> consumer) {
 
         getNBTLibrary().readSafeConsumer(chunk, consumer);
+    }
+
+    public static DependEconomy getEconomyDepend() throws CannotDependException {
+
+        return DependPlayerFactory.get().dependEconomy();
+    }
+
+    public static DependEconomyVault getVaultDepend() throws CannotDependException {
+
+        return DependPlayerFactory.get().dependVault();
+    }
+
+    public static DependWorldEdit getWorldEditDepend() throws CannotDependException {
+
+        return DependPlayerFactory.get().dependWorldEdit();
     }
 }

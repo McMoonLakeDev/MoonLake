@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The MoonLake Authors
+ * Copyright (C) 2017 The MoonLake Authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,20 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
- 
-package com.minecraft.moonlake.api;
 
-/**
- * <hr />
- * <div>
- *     <h1>MoonLake Core API Plugin Info Interface</h1>
- *     <p>By Month_Light Ver: 1.0</p>
- * </div>
- * <hr />
- *
- * @version 1.1
- * @author Month_Light
- */
-public interface MoonLakeInfo extends JavaPluginInfo {
+
+package com.minecraft.moonlake.api.player.depend;
+
+public interface Depend extends DependPluginInfo {
 }
