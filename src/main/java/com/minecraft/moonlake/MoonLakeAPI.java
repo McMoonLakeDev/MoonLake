@@ -49,6 +49,7 @@ import com.minecraft.moonlake.api.player.PlayerLibrary;
 import com.minecraft.moonlake.api.player.PlayerLibraryFactorys;
 import com.minecraft.moonlake.api.player.depend.DependEconomy;
 import com.minecraft.moonlake.api.player.depend.DependEconomyVault;
+import com.minecraft.moonlake.api.player.depend.DependPermissionsEx;
 import com.minecraft.moonlake.api.player.depend.DependWorldEdit;
 import com.minecraft.moonlake.event.EventHelper;
 import com.minecraft.moonlake.exception.CannotDependException;
@@ -2270,5 +2271,10 @@ public final class MoonLakeAPI {
     public static DependWorldEdit getWorldEditDepend() throws CannotDependException {
 
         return DependPlayerFactory.get().dependWorldEdit();
+    }
+
+    public static DependPermissionsEx getPermissionsExDepend() throws CannotDependException {
+
+        return DependPlayerFactory.get().dependPermissionsEx();
     }
 }

@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 
 /**
  * <h1>DependEconomy</h1>
- * 依赖经济插件玩家接口 # 依赖 <a href="https://www.github.com/u2g/MoonLakeEconomy" target="_blank">MoonLakeEconomy</a> 插件
+ * 依赖经济插件接口 # 依赖 <a href="https://www.github.com/u2g/MoonLakeEconomy" target="_blank">MoonLakeEconomy</a> 插件
  *
  * @version 1.0
  * @author Month_Light

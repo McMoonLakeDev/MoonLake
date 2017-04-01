@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 
 /**
  * <h1>DependWorldEdit</h1>
- * 依赖创世神插件玩家接口 # 依赖 <a href="https://github.com/sk89q/worldedit" target="_blank">WorldEdit</a> 插件
+ * 依赖创世神插件接口 # 依赖 <a href="https://github.com/sk89q/worldedit" target="_blank">WorldEdit</a> 插件
  *
  * @version 1.0
  * @author Month_Light
