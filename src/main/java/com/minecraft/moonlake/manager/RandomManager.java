@@ -92,7 +92,7 @@ public class RandomManager extends MoonLakeManager {
 
             return min;
         }
-        return Math.abs(getRandom().nextInt()) % (max - min + 1) + min;
+        return Math.abs(nextInt()) % (max - min + 1) + min;
     }
 
     /**
@@ -135,7 +135,7 @@ public class RandomManager extends MoonLakeManager {
 
             return min;
         }
-        return Math.abs(getRandom().nextLong()) % (max - min + 1) + min;
+        return Math.abs(nextLong()) % (max - min + 1) + min;
     }
 
     /**
@@ -165,7 +165,7 @@ public class RandomManager extends MoonLakeManager {
 
             return min;
         }
-        return Math.abs(getRandom().nextFloat()) * (max - min) + min;
+        return Math.abs(nextFloat()) * (max - min) + min;
     }
 
     /**
@@ -196,7 +196,7 @@ public class RandomManager extends MoonLakeManager {
 
             return min;
         }
-        return Math.abs(getRandom().nextDouble()) * (max - min) + min;
+        return Math.abs(nextDouble()) * (max - min) + min;
     }
 
     /**
@@ -243,6 +243,16 @@ public class RandomManager extends MoonLakeManager {
     }
 
     /**
+     * 获取随机的 UUID 字符串对象
+     *
+     * @return UUID 字符串
+     */
+    public static String nextUUIDString() {
+
+        return nextUUID().toString();
+    }
+
+    /**
      * 获取随机长度的字符串
      *
      * @param length 长度
@@ -268,7 +278,7 @@ public class RandomManager extends MoonLakeManager {
 
         for(int i = 0; i < valueChar.length; i++) {
 
-            valueChar[i] = randomChar[getRandom().nextInt(randomChar.length)];
+            valueChar[i] = randomChar[nextInt(randomChar.length)];
         }
         return new String(valueChar);
     }
@@ -280,9 +290,9 @@ public class RandomManager extends MoonLakeManager {
      */
     public static Color nextColor() {
 
-        int red = getRandom().nextInt(256);
-        int green = getRandom().nextInt(256);
-        int blue = getRandom().nextInt(256);
+        int red = nextInt(256);
+        int green = nextInt(256);
+        int blue = nextInt(256);
 
         return Color.fromRGB(red, green, blue);
     }

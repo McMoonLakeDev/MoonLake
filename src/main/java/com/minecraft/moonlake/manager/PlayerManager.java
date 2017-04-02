@@ -27,6 +27,7 @@ import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -171,6 +172,36 @@ public class PlayerManager extends MoonLakeManager {
     }
 
     /**
+     * 获取指定离线玩家对象从目标名称
+     *
+     * @param name 玩家名
+     * @return 离线玩家对象
+     * @throws IllegalArgumentException 如果玩家名字对象为 {@code null} 则抛出异常
+     * @deprecated
+     * <p>用户的持久存储应该由 {@code UUID}, 因为名称在单个会话之后不再是唯一的.</p>
+     * <p>该方法可能涉及阻塞服务器, 向 {@code Web} 发送请求以获取给定名称的 {@code UUID}.</p>
+     * <p>即使玩家不存在, 也会返回一个对象. 对于这种方法, 所有玩家都会存在.</p>
+     */
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public static OfflinePlayer fromNameOffline(String name) {
+
+        return Bukkit.getServer().getOfflinePlayer(name);
+    }
+
+    /**
+     * 获取指定离线玩家对象从目标 UUID
+     *
+     * @param uuid 玩家 UUID
+     * @return 离线玩家对象
+     * @throws IllegalArgumentException 如果玩家 UUID 对象为 {@code null} 则抛出异常
+     */
+    public static OfflinePlayer fromUUIDOffline(UUID uuid) {
+
+        return Bukkit.getServer().getOfflinePlayer(uuid);
+    }
+
+    /**
      * 获取在线玩家的集合对象
      *
      * @return 在线玩家集合
@@ -178,6 +209,16 @@ public class PlayerManager extends MoonLakeManager {
     public static Collection<? extends Player> getOnlinePlayers() {
 
         return Bukkit.getServer().getOnlinePlayers();
+    }
+
+    /**
+     * 获取离线玩家的集合对象
+     *
+     * @return 离线玩家集合
+     */
+    public static Collection<? extends OfflinePlayer> getOfflinePlayers() {
+
+        return Arrays.asList(getOfflines());
     }
 
     /**
@@ -201,6 +242,16 @@ public class PlayerManager extends MoonLakeManager {
 
         Collection<? extends Player> collection = getOnlinePlayers();
         return collection.toArray(new Player[collection.size()]);
+    }
+
+    /**
+     * 获取离线玩家的数组对象
+     *
+     * @return 离线玩家数组
+     */
+    public static OfflinePlayer[] getOfflines() {
+
+        return Bukkit.getServer().getOfflinePlayers();
     }
 
     /**
