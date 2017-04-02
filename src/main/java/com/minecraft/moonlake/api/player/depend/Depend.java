@@ -18,5 +18,13 @@
 
 package com.minecraft.moonlake.api.player.depend;
 
+/**
+ * <h1>Depend</h1>
+ * 依赖插件接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see DependPluginInfo
+ */
 public interface Depend extends DependPluginInfo {
 }

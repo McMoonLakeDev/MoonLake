@@ -24,6 +24,7 @@ package com.minecraft.moonlake.api.player.depend;
  *
  * @version 1.0
  * @author Month_Light
+ * @see Depend
  */
 public interface DependPermissionsEx extends Depend {
 

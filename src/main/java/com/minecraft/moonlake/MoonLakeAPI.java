@@ -2258,21 +2258,45 @@ public final class MoonLakeAPI {
         getNBTLibrary().readSafeConsumer(chunk, consumer);
     }
 
+    /**
+     * 获取依赖 MoonLakeEconomy 经济接口 API 对象
+     *
+     * @return DependEconomy
+     * @throws CannotDependException 如果无法加载依赖插件则抛出异常
+     */
     public static DependEconomy getEconomyDepend() throws CannotDependException {
 
         return DependPlayerFactory.get().dependEconomy();
     }
 
+    /**
+     * 获取依赖 Vault 经济接口 API 对象
+     *
+     * @return DependEconomyVault
+     * @throws CannotDependException 如果无法加载依赖插件则抛出异常
+     */
     public static DependEconomyVault getVaultDepend() throws CannotDependException {
 
         return DependPlayerFactory.get().dependVault();
     }
 
+    /**
+     * 获取依赖 WorldEdit 创世神接口 API 对象
+     *
+     * @return DependEconomyVault
+     * @throws CannotDependException 如果无法加载依赖插件则抛出异常
+     */
     public static DependWorldEdit getWorldEditDepend() throws CannotDependException {
 
         return DependPlayerFactory.get().dependWorldEdit();
     }
 
+    /**
+     * 获取依赖 PermissionsEx 权限接口 API 对象
+     *
+     * @return DependPermissionsEx
+     * @throws CannotDependException 如果无法加载依赖插件则抛出异常
+     */
     public static DependPermissionsEx getPermissionsExDepend() throws CannotDependException {
 
         return DependPlayerFactory.get().dependPermissionsEx();

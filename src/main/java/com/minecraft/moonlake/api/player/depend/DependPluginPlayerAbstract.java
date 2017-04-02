@@ -25,6 +25,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * <h1>DependPluginPlayerAbstract</h1>
+ * 依赖插件玩家抽象类
+ *
+ * @param <T> 依赖插件
+ * @version 1.0
+ * @author Month_Light
+ * @see Depend
+ */
 public abstract class DependPluginPlayerAbstract<T extends JavaPlugin & Plugin> implements Depend {
 
     private T own;

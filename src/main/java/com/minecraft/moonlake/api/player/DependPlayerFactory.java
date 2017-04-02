@@ -24,6 +24,13 @@ import com.minecraft.moonlake.api.player.depend.DependPermissionsEx;
 import com.minecraft.moonlake.api.player.depend.DependWorldEdit;
 import com.minecraft.moonlake.exception.CannotDependException;
 
+/**
+ * <h1>DependPlayerFactory</h1>
+ * 依赖插件玩家工厂类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class DependPlayerFactory {
 
     private static DependPlayerFactory instance;
@@ -31,6 +38,11 @@ public class DependPlayerFactory {
     private DependPlayerFactory() {
     }
 
+    /**
+     * 获取 DependPlayerFactory 对象
+     *
+     * @return DependPlayerFactory
+     */
     public static DependPlayerFactory get() {
 
         if(instance == null) {
@@ -40,21 +52,45 @@ public class DependPlayerFactory {
         return instance;
     }
 
+    /**
+     * 获取 DependEconomy 对象
+     *
+     * @return DependEconomy
+     * @throws CannotDependException 如果无法加载依赖插件则抛出异常
+     */
     public DependEconomy dependEconomy() throws CannotDependException {
 
         return DependPlayerPluginListener.economyPlayer();
     }
 
+    /**
+     * 获取 DependEconomyVault 对象
+     *
+     * @return DependEconomyVault
+     * @throws CannotDependException 如果无法加载依赖插件则抛出异常
+     */
     public DependEconomyVault dependVault() throws CannotDependException {
 
         return DependPlayerPluginListener.economyVaultPlayer();
     }
 
+    /**
+     * 获取 DependWorldEdit 对象
+     *
+     * @return DependWorldEdit
+     * @throws CannotDependException 如果无法加载依赖插件则抛出异常
+     */
     public DependWorldEdit dependWorldEdit() throws CannotDependException {
 
         return DependPlayerPluginListener.worldEditPlayer();
     }
 
+    /**
+     * 获取 DependPermissionsEx 对象
+     *
+     * @return DependPermissionsEx
+     * @throws CannotDependException 如果无法加载依赖插件则抛出异常
+     */
     public DependPermissionsEx dependPermissionsEx() throws CannotDependException {
 
         return DependPlayerPluginListener.permissionsExPlayer();

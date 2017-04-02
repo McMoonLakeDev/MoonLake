@@ -30,6 +30,7 @@ import com.minecraft.moonlake.api.JavaPluginInfo;
  *
  * @version 1.0
  * @author Month_Light
+ * @see JavaPluginInfo
  */
 public interface DependPluginInfo extends JavaPluginInfo {
 }
