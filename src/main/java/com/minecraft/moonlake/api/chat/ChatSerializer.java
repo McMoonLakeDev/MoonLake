@@ -78,6 +78,16 @@ public class ChatSerializer {
     }
 
     /**
+     * 获取 IChatBaseComponent 的 NMS 类对象
+     *
+     * @return IChatBaseComponent Class
+     */
+    public static Class<?> getIChatBaseComponent() {
+
+        return CLASS_ICHATBASECOMPONENT;
+    }
+
+    /**
      * 将指定 Json 文本内容转换到 IChatBaseComponent 对象实例
      *
      * @param json Json 文本

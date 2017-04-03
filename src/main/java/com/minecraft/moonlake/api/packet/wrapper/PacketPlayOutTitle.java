@@ -23,13 +23,11 @@ import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
-import com.minecraft.moonlake.property.IntegerProperty;
-import com.minecraft.moonlake.property.SimpleIntegerProperty;
-import com.minecraft.moonlake.property.SimpleStringProperty;
-import com.minecraft.moonlake.property.StringProperty;
+import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 import static com.minecraft.moonlake.reflect.Reflect.*;
@@ -38,7 +36,7 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  * <h1>PacketPlayOutTitle</h1>
  * 数据包输出标题（详细doc待补充...）
  *
- * @version 2.0
+ * @version 2.1
  * @author Month_Light
  * @see Packet
  * @see PacketPlayOut
@@ -49,6 +47,79 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
     private final static Class<?> CLASS_PACKETPLAYOUTTITLE;
     private final static Class<?> CLASS_ENUMTITLEACTION;
     private final static Method METHOD_ENUMTITLEACTION_A;
+
+    /**
+     * <h1>PacketPlayOutTitleSpecial</h1>
+     * 数据包输出标题特殊
+     *
+     * @version 1.0
+     * @author Month_Light
+     * @see PacketPlayOutTitle
+     */
+    private static class PacketPlayOutTitleSpecial extends PacketPlayOutTitle {
+
+        private static Constructor<?> CONSTRUCTOR;
+        private String enumTitleActionName;
+
+        /**
+         * 数据包输出标题特殊构造函数
+         *
+         * @param enumTitleActionName 枚举标题交互名称
+         */
+        private PacketPlayOutTitleSpecial(String enumTitleActionName) {
+
+            super(null, null, -1, -1, -1);
+
+            this.enumTitleActionName = enumTitleActionName;
+        }
+
+        private Constructor<?> getConstructor0() {
+
+            if(CONSTRUCTOR == null) {
+
+                try {
+                    CONSTRUCTOR = getConstructor(CLASS_PACKETPLAYOUTTITLE, CLASS_ENUMTITLEACTION, ChatSerializer.getIChatBaseComponent());
+                } catch (Exception e) {
+                    throw new UnsupportedOperationException(e);
+                }
+            }
+            return CONSTRUCTOR;
+        }
+
+        @Override
+        public boolean isSpecial() {
+
+            return true;
+        }
+
+        @Override
+        protected boolean sendPacket(Player... players) throws Exception {
+
+            // 触发事件判断如果为 true 则阻止发送
+            if(super.fireEvent(this, players))
+                return true;
+
+            try {
+                Object packet = getConstructor0().newInstance(METHOD_ENUMTITLEACTION_A.invoke(null, enumTitleActionName), null);
+                sendPacket(players, packet);
+                return true;
+
+            } catch (Exception e) {
+            }
+            // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    /**
+     * 特殊: 数据包输出标题清除
+     */
+    public final static PacketPlayOutTitle CLEAR = new PacketPlayOutTitleSpecial("CLEAR");
+
+    /**
+     * 特殊: 数据包输出标题重置
+     */
+    public final static PacketPlayOutTitle RESET = new PacketPlayOutTitleSpecial("RESET");
 
     static {
 
@@ -178,6 +249,18 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
     public IntegerProperty fadeOutProperty() {
 
         return fadeOut;
+    }
+
+    /**
+     * 获取此数据包输出标题是否为特殊的
+     *
+     * @return 是否特殊
+     * @see #CLEAR
+     * @see #RESET
+     */
+    public boolean isSpecial() {
+
+        return false;
     }
 
     @Override
