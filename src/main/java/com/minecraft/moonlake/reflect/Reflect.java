@@ -53,12 +53,12 @@ public class Reflect {
      * 获取 Bukkit 的服务端版本号
      *
      * @return 版本号 10
-     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MoonLakeAPI#currentBukkitVersionRelease()}
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
     @Deprecated
     public static int getServerVersionNumber() {
 
-        return MoonLakeAPI.currentBukkitVersionRelease();
+        return MoonLakeAPI.getReleaseNumber(); // 等到 v2.0 一起删除
     }
 
     /**

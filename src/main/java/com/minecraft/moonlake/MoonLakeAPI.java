@@ -257,14 +257,14 @@ public final class MoonLakeAPI {
      * 获取 Bukkit 服务器的版本号
      *
      * @return 版本号
-     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #currentBukkitVersionRelease()}
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
     @Deprecated
     public static int getReleaseNumber() {
 
         //return moonlake.getReleaseNumber();
         //return Reflect.getServerVersionNumber();
-        return currentBukkitVersionRelease();
+        return currentBukkitVersion().getRelease();
     }
 
     /**
@@ -275,16 +275,6 @@ public final class MoonLakeAPI {
     public static String currentBukkitVersionString() {
 
         return currentBukkitVersion().getVersion();
-    }
-
-    /**
-     * 获取 Minecraft Bukkit 服务器的版本发行号
-     *
-     * @return 版本发行号
-     */
-    public static int currentBukkitVersionRelease() {
-
-        return currentBukkitVersion().getRelease();
     }
 
     /**

@@ -223,7 +223,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     @SuppressWarnings("deprecation")
     public int getReleaseNumber() {
 
-        return MoonLakeAPI.currentBukkitVersionRelease();
+        return MoonLakeAPI.getReleaseNumber();
     }
 
     @Override
