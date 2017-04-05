@@ -96,6 +96,9 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         this.configuration = new MoonLakePluginConfig(this);
         this.configuration.reload();
 
+        // log mc and bukkit version info
+        this.logServerVersion();
+
         // load library class
         this.loadLibraryClass();
 
@@ -123,6 +126,11 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
 
             this.getLogger().log(Level.WARNING, "The load moonlake library class exception.", e);
         }
+    }
+
+    private void logServerVersion() {
+        // log mc and bukkit version info
+        this.getLogger().log(Level.INFO, "服务器 {0} NMS: {1}", new Object[] { currentMCVersion(), currentBukkitVersion().getVersion() });
     }
 
     @Deprecated
