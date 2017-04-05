@@ -18,6 +18,8 @@
  
 package com.minecraft.moonlake.particle;
 
+import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -26,6 +28,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -36,7 +39,7 @@ import java.util.*;
  * <div>
  *     <h1>Minecraft Particle Effect Library</h1>
  *     <p>By DarkBlade12 Ver: 1.0</p>
- *     <p>By Month_Light Modify Ver: 1.1</p>
+ *     <p>By Month_Light Modify Ver: 1.1.1</p>
  * </div>
  * <hr />
  * <div>
@@ -66,7 +69,7 @@ import java.util.*;
  * </div>
  * <hr />
  *
- * @version 1.1
+ * @version 1.1.1
  * @author DarkBlade12
  * @author Month_Light Modify
  */
@@ -79,204 +82,204 @@ public enum ParticleEffect {
     /**
      * 粒子效果: 普通型爆炸 (服务器版本支持: 全版本 | 需求: 矢量方向)
      */
-    EXPLOSION_NORMAL("explode", 0, -1, ParticleProperty.DIRECTIONAL),
+    EXPLOSION_NORMAL("explode", 0, ParticleProperty.DIRECTIONAL),
     /**
      * 粒子效果: 大型爆炸 (服务器版本支持: 全版本)
      */
-    EXPLOSION_LARGE("largeexplode", 1, -1),
+    EXPLOSION_LARGE("largeexplode", 1),
     /**
      * 粒子效果: 巨大型爆炸 (服务器版本支持: 全版本)
      */
-    EXPLOSION_HUGE("hugeexplosion", 2, -1),
+    EXPLOSION_HUGE("hugeexplosion", 2),
     /**
      * 粒子效果: 烟花火星 (服务器版本支持: 全版本 | 需求: 矢量方向)
      */
-    FIREWORKS_SPARK("fireworksSpark", 3, -1, ParticleProperty.DIRECTIONAL),
+    FIREWORKS_SPARK("fireworksSpark", 3, ParticleProperty.DIRECTIONAL),
     /**
      * 粒子效果: 水泡 (服务器版本支持: 全版本 | 需求: 矢量方向, 需求: 水方块)
      */
-    WATER_BUBBLE("bubble", 4, -1, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_WATER),
+    WATER_BUBBLE("bubble", 4, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_WATER),
     /**
      * 粒子效果: 水花溅起 (服务器版本支持: 全版本 | 需求: 矢量方向)
      */
-    WATER_SPLASH("splash", 5, -1, ParticleProperty.DIRECTIONAL),
+    WATER_SPLASH("splash", 5, ParticleProperty.DIRECTIONAL),
     /**
      * 粒子效果: 水尾波 (服务器版本支持: 1.7+ | 需求: 矢量方向)
      */
-    WATER_WAKE("wake", 6, 7, ParticleProperty.DIRECTIONAL),
+    WATER_WAKE("wake", 6, MinecraftVersion.WORLD_UPDATE, ParticleProperty.DIRECTIONAL),
     /**
      * 粒子效果: 虚空? (服务器版本支持: 全版本 | 需求: 水方块)
      */
-    SUSPENDED("suspended", 7, -1, ParticleProperty.REQUIRES_WATER),
+    SUSPENDED("suspended", 7, ParticleProperty.REQUIRES_WATER),
     /**
      * 粒子效果: 深度虚空? (服务器版本支持: 全版本 | 需求: 矢量方向)
      */
-    SUSPENDED_DEPTH("depthSuspend", 8, -1, ParticleProperty.DIRECTIONAL),
+    SUSPENDED_DEPTH("depthSuspend", 8, ParticleProperty.DIRECTIONAL),
     /**
      * 粒子效果: 暴击 (服务器版本支持: 全版本 | 需求: 矢量方向)
      */
-    CRIT("crit", 9, -1, ParticleProperty.DIRECTIONAL),
+    CRIT("crit", 9, ParticleProperty.DIRECTIONAL),
     /**
      * 粒子效果: 魔法暴击 (服务器版本支持: 全版本 | 需求: 矢量方向)
      */
-    CRIT_MAGIC("magicCrit", 10, -1, ParticleProperty.DIRECTIONAL),
+    CRIT_MAGIC("magicCrit", 10, ParticleProperty.DIRECTIONAL),
     /**
      * 粒子效果: 普通型烟雾 (服务器版本支持: 全版本 | 需求: 矢量方向)
      */
-    SMOKE_NORMAL("smoke", 11, -1, ParticleProperty.DIRECTIONAL),
+    SMOKE_NORMAL("smoke", 11, ParticleProperty.DIRECTIONAL),
     /**
      * 粒子效果: 大型烟雾 (服务器版本支持: 全版本 | 需求: 矢量方向)
      */
-    SMOKE_LARGE("largesmoke", 12, -1, ParticleProperty.DIRECTIONAL),
+    SMOKE_LARGE("largesmoke", 12, ParticleProperty.DIRECTIONAL),
     /**
      * 粒子效果: 药水符咒 (服务器版本支持: 全版本)
      */
-    SPELL("spell", 13, -1),
+    SPELL("spell", 13),
     /**
      * 粒子效果: 瞬间药水符咒 (服务器版本支持: 全版本)
      */
-    SPELL_INSTANT("instantSpell", 14, -1),
+    SPELL_INSTANT("instantSpell", 14),
     /**
      * 粒子效果: 实体药水符咒 (服务器版本支持: 全版本 | 需求: 效果颜色)
      */
-    SPELL_MOB("mobSpell", 15, -1, ParticleProperty.COLORABLE),
+    SPELL_MOB("mobSpell", 15, ParticleProperty.COLORABLE),
     /**
      * 粒子效果: 实体药水符咒环境 (服务器版本支持: 全版本 | 需求: 效果颜色)
      */
-    SPELL_MOB_AMBIENT("mobSpellAmbient", 16, -1, ParticleProperty.COLORABLE),
+    SPELL_MOB_AMBIENT("mobSpellAmbient", 16, ParticleProperty.COLORABLE),
     /**
      * 粒子效果: 女巫魔法 (服务器版本支持: 全版本)
      */
-    SPELL_WITCH("witchMagic", 17, -1),
+    SPELL_WITCH("witchMagic", 17),
     /**
      * 粒子效果: 滴水 (服务器版本支持: 全版本)
      */
-    DRIP_WATER("dripWater", 18, -1),
+    DRIP_WATER("dripWater", 18),
     /**
      * 粒子效果: 滴岩浆 (服务器版本支持: 全版本)
      */
-    DRIP_LAVA("dripLava", 19, -1),
+    DRIP_LAVA("dripLava", 19),
     /**
      * 粒子效果: 生气村民 (服务器版本支持: 全版本)
      */
-    VILLAGER_ANGRY("angryVillager", 20, -1),
+    VILLAGER_ANGRY("angryVillager", 20),
     /**
      * 粒子效果: 高兴村民 (服务器版本支持: 全版本 | 需求: 矢量方向)
      */
-    VILLAGER_HAPPY("happyVillager", 21, -1, ParticleProperty.DIRECTIONAL),
+    VILLAGER_HAPPY("happyVillager", 21, ParticleProperty.DIRECTIONAL),
     /**
      * 粒子效果: 菌丝孢子 (服务器版本支持: 全版本)
      */
-    TOWN_AURA("townaura", 22, -1),
+    TOWN_AURA("townaura", 22),
     /**
      * 粒子效果: 音符 (服务器版本支持: 全版本 | 需求: 效果颜色)
      */
-    NOTE("note", 23, -1, ParticleProperty.COLORABLE),
+    NOTE("note", 23, ParticleProperty.COLORABLE),
     /**
      * 粒子效果: 传送门 (服务器版本支持: 全版本 | 需求: 矢量方向)
      */
-    PORTAL("portal", 24, -1, ParticleProperty.DIRECTIONAL),
+    PORTAL("portal", 24, ParticleProperty.DIRECTIONAL),
     /**
      * 粒子效果: 附魔台 (服务器版本支持: 全版本 | 需求: 矢量方向)
      */
-    ENCHANTMENT_TABLE("enchantmenttable", 25, -1, ParticleProperty.DIRECTIONAL),
+    ENCHANTMENT_TABLE("enchantmenttable", 25, ParticleProperty.DIRECTIONAL),
     /**
      * 粒子效果: 火焰 (服务器版本支持: 全版本 | 需求: 矢量方向)
      */
-    FLAME("flame", 26, -1, ParticleProperty.DIRECTIONAL),
+    FLAME("flame", 26, ParticleProperty.DIRECTIONAL),
     /**
      * 粒子效果: 岩浆 (服务器版本支持: 全版本)
      */
-    LAVA("lava", 27, -1),
+    LAVA("lava", 27),
     /**
      * 粒子效果: 脚印 (服务器版本支持: 全版本)
      */
-    FOOTSTEP("footstep", 28, -1),
+    FOOTSTEP("footstep", 28),
     /**
      * 粒子效果: 云 (服务器版本支持: 全版本 | 需求: 矢量方向)
      */
-    CLOUD("cloud", 29, -1, ParticleProperty.DIRECTIONAL),
+    CLOUD("cloud", 29, ParticleProperty.DIRECTIONAL),
     /**
      * 粒子效果: 红色尘 (服务器版本支持: 全版本 | 需求: 效果颜色)
      */
-    REDSTONE("reddust", 30, -1, ParticleProperty.COLORABLE),
+    REDSTONE("reddust", 30, ParticleProperty.COLORABLE),
     /**
      * 粒子效果: 雪球碎裂 (服务器版本支持: 全版本)
      */
-    SNOWBALL("snowballpoof", 31, -1),
+    SNOWBALL("snowballpoof", 31),
     /**
      * 粒子效果: 雪铲? (服务器版本支持: 全版本 | 需求: 矢量方向)
      */
-    SNOW_SHOVEL("snowshovel", 32, -1, ParticleProperty.DIRECTIONAL),
+    SNOW_SHOVEL("snowshovel", 32, ParticleProperty.DIRECTIONAL),
     /**
      * 粒子效果: 史莱姆 (服务器版本支持: 全版本)
      */
-    SLIME("slime", 33, -1),
+    SLIME("slime", 33),
     /**
      * 粒子效果: 红心 (服务器版本支持: 全版本)
      */
-    HEART("heart", 34, -1),
+    HEART("heart", 34),
     /**
      * 粒子效果: 屏障 (服务器版本支持: 1.8+)
      */
-    BARRIER("barrier", 35, 8),
+    BARRIER("barrier", 35, MinecraftVersion.V1_8),
     /**
      * 粒子效果: 物品破裂 (服务器版本支持: 全部 | 需求: 矢量方向, 需求: 物品数据)
      */
-    ITEM_CRACK("iconcrack", 36, -1, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_DATA),
+    ITEM_CRACK("iconcrack", 36, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_DATA),
     /**
      * 粒子效果: 方块破裂 (服务器版本支持: 全部 | 需求: 方块数据)
      */
-    BLOCK_CRACK("blockcrack", 37, -1, ParticleProperty.REQUIRES_DATA),
+    BLOCK_CRACK("blockcrack", 37, ParticleProperty.REQUIRES_DATA),
     /**
      * 粒子效果: 方块尘 (服务器版本支持: 1.7+ | 需求: 矢量方向, 需求: 方块数据)
      */
-    BLOCK_DUST("blockdust", 38, 7, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_DATA),
+    BLOCK_DUST("blockdust", 38, MinecraftVersion.WORLD_UPDATE, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_DATA),
     /**
      * 粒子效果: 水滴 (服务器版本支持: 1.8+)
      */
-    WATER_DROP("droplet", 39, 8),
+    WATER_DROP("droplet", 39, MinecraftVersion.V1_8),
     /**
      * 粒子效果: 物品获取? (服务器版本支持: 1.8+)
      */
-    ITEM_TAKE("take", 40, 8),
+    ITEM_TAKE("take", 40, MinecraftVersion.V1_8),
     /**
      * 粒子效果: 怪物外观 (远古守护者) (服务器版本支持: 1.8+)
      */
-    MOB_APPEARANCE("mobappearance", 41, 8),
+    MOB_APPEARANCE("mobappearance", 41, MinecraftVersion.V1_8),
     /**
      * 粒子效果: 龙息 (服务器版本支持: 1.9+)
      */
-    DRAGON_BREATH("dragonbreath", 42, 9),
+    DRAGON_BREATH("dragonbreath", 42, MinecraftVersion.V1_9),
     /**
      * 粒子效果: 末地烛 (服务器版本支持: 1.9+)
      */
-    END_ROD("endRod", 43, 9),
+    END_ROD("endRod", 43, MinecraftVersion.V1_9),
     /**
      * 粒子效果: 伤害指示器 (服务器版本支持: 1.9+)
      */
-    DAMAGE_INDICATOR("damageIndicator", 44, 9),
+    DAMAGE_INDICATOR("damageIndicator", 44, MinecraftVersion.V1_9),
     /**
      * 粒子效果: 扫荡攻击 (服务器版本支持: 1.9+)
      */
-    SWEEP_ATTACK("sweepAttack", 45, 9),
+    SWEEP_ATTACK("sweepAttack", 45, MinecraftVersion.V1_9),
     /**
      * 粒子效果: 掉落尘 (服务器版本支持: 1.10+ | 需求: 方块数据)
      */
-    FALLING_DUST("fallingdust", 46, 10, ParticleProperty.REQUIRES_DATA),
+    FALLING_DUST("fallingdust", 46, MinecraftVersion.V1_10, ParticleProperty.REQUIRES_DATA),
     /**
      * 粒子效果: 不死图腾 (服务器版本支持: 1.11+)
      */
-    TOTEM("totem", 47, 11),
+    TOTEM("totem", 47, MinecraftVersion.V1_11),
     /**
      * 粒子效果: 羊驼口水 (服务器版本支持: 1.11+)
      */
-    SPIT("spit", 48, 11),
+    SPIT("spit", 48, MinecraftVersion.V1_11),
     ;
 
     private final String name;
     private final int id;
-    private final int requiredVersion;
+    private final MinecraftVersion requiredVersion;
     private final List<ParticleProperty> properties;
     private final static Map<String, ParticleEffect> NAME_MAP;
     private final static Map<Integer, ParticleEffect> ID_MAP;
@@ -298,10 +301,22 @@ public enum ParticleEffect {
      *
      * @param name 粒子效果名称
      * @param id 粒子效果 Id
+     * @param properties 粒子效果属性
+     */
+    ParticleEffect(String name, int id, ParticleProperty... properties) {
+
+        this(name, id, null, properties);
+    }
+
+    /**
+     * 粒子效果实现类构造函数
+     *
+     * @param name 粒子效果名称
+     * @param id 粒子效果 Id
      * @param requiredVersion 需求版本
      * @param properties 粒子效果属性
      */
-    ParticleEffect(String name, int id, int requiredVersion, ParticleProperty... properties) {
+    ParticleEffect(String name, int id, MinecraftVersion requiredVersion, ParticleProperty... properties) {
 
         this.name = name;
         this.id = id;
@@ -330,11 +345,24 @@ public enum ParticleEffect {
     }
 
     /**
+     * 获取此粒子效果需求的次版本号
+     *
+     * @return 次版本号
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getRequiredMCVersion()}
+     */
+    @Deprecated
+    public int getRequiredVersion() {
+
+        return requiredVersion != null ? requiredVersion.getMinor() : -1;
+    }
+
+    /**
      * 获取此粒子效果需求的版本
      *
      * @return 需求版本
      */
-    public int getRequiredVersion() {
+    @Nullable
+    public MinecraftVersion getRequiredMCVersion() {
 
         return requiredVersion;
     }
@@ -357,7 +385,7 @@ public enum ParticleEffect {
      */
     public boolean isSupported() {
 
-        return requiredVersion == -1 || Reflect.getServerVersionNumber() >= requiredVersion;
+        return requiredVersion == null || MoonLakeAPI.currentMCVersion().isOrLater(requiredVersion);
     }
 
     /**
@@ -901,7 +929,6 @@ public enum ParticleEffect {
      */
     public final static class ParticlePacket {
 
-        private static int version;
         private static Class<?> enumParticle;
         private static Constructor<?> packetConstructor;
         private static Method getHandle;
@@ -1009,13 +1036,13 @@ public enum ParticleEffect {
 
                 try {
 
-                    version = Reflect.getServerVersionNumber();
+                    boolean newParticle = MoonLakeAPI.currentMCVersion().isLater(MinecraftVersion.WORLD_UPDATE);
 
-                    if(version > 7) {
+                    if(newParticle) {
 
                         enumParticle = Reflect.PackageType.MINECRAFT_SERVER.getClass("EnumParticle");
                     }
-                    Class<?> exception = Reflect.PackageType.MINECRAFT_SERVER.getClass(version < 7 ? "Packet63WorldParticles" : "PacketPlayOutWorldParticles");
+                    Class<?> exception = Reflect.PackageType.MINECRAFT_SERVER.getClass(!newParticle ? "Packet63WorldParticles" : "PacketPlayOutWorldParticles");
                     packetConstructor = Reflect.getConstructor(exception);
                     getHandle = Reflect.getMethod("CraftPlayer", Reflect.PackageType.CRAFTBUKKIT_ENTITY, "getHandle");
                     playerConnection = Reflect.getField("EntityPlayer", Reflect.PackageType.MINECRAFT_SERVER, false, "playerConnection");
@@ -1033,10 +1060,12 @@ public enum ParticleEffect {
          * 获取当前服务端的版本号
          *
          * @return 版本号
+         * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MoonLakeAPI#currentMCVersion()}
          */
+        @Deprecated
         public static int getVersion() {
 
-            return version;
+            return MoonLakeAPI.currentMCVersion().getMinor();
         }
 
         /**
@@ -1127,7 +1156,7 @@ public enum ParticleEffect {
 
                     packet = packetConstructor.newInstance();
 
-                    if(version < 8) {
+                    if(!MoonLakeAPI.currentMCVersion().isLater(MinecraftVersion.V1_8)) {
 
                         String name = effect.getName() + (data == null ? "" : data.getPacketDataString());
                         Reflect.setValue(packet, true, "a", name);

@@ -18,6 +18,8 @@
  
 package com.minecraft.moonlake.manager;
 
+import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.validate.Validate;
@@ -35,7 +37,7 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  * <h1>BlockManager</h1>
  * 方块管理实现类
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 @SuppressWarnings("deprecation")
@@ -100,8 +102,8 @@ public class BlockManager extends MoonLakeManager {
             METHOD_GETHANDLE = getMethod(CLASS_CRAFTWORLD, "getHandle");
             METHOD_PLAYERBLOCKACTION = getMethod(CLASS_WORLD, "playBlockAction", CLASS_BLOCKPOSITION, CLASS_BLOCK, int.class, int.class);
             METHOD_GETTILEENTITY = getMethod(CLASS_WORLD, "getTileEntity", CLASS_BLOCKPOSITION);
-            METHOD_GETBLOCKCHEST = getMethod(CLASS_TILEENTITYCHEST, getServerVersionNumber() <= 8 ? "w" : "getBlock");
-            METHOD_GETBLOCKENDERCHEST = getMethod(CLASS_TILEENTITYENDERCHEST, getServerVersionNumber() <= 8 ? "w" : "getBlock");
+            METHOD_GETBLOCKCHEST = getMethod(CLASS_TILEENTITYCHEST, !MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9) ? "w" : "getBlock");
+            METHOD_GETBLOCKENDERCHEST = getMethod(CLASS_TILEENTITYENDERCHEST, !MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9) ? "w" : "getBlock");
         }
         catch (Exception e) {
 

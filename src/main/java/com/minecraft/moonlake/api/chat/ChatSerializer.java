@@ -18,7 +18,9 @@
 
 package com.minecraft.moonlake.api.chat;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.nms.exception.NMSException;
+import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
 import com.minecraft.moonlake.validate.Validate;
 
 import java.lang.reflect.Method;
@@ -42,7 +44,7 @@ public class ChatSerializer {
 
         try {
             CLASS_ICHATBASECOMPONENT = PackageType.MINECRAFT_SERVER.getClass("IChatBaseComponent");
-            CLASS_CHARSERIALIZER = PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") ? "ChatSerializer" : "IChatBaseComponent$ChatSerializer");
+            CLASS_CHARSERIALIZER = PackageType.MINECRAFT_SERVER.getClass(MoonLakeAPI.currentBukkitVersionIs(MinecraftBukkitVersion.V1_8_R1) ? "ChatSerializer" : "IChatBaseComponent$ChatSerializer");
 
             Method JSONTOICBC_TEMP = null;
 

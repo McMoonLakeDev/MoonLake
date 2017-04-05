@@ -18,15 +18,18 @@
 
 package com.minecraft.moonlake.enums;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
-import com.minecraft.moonlake.reflect.Reflect;
+
+import javax.annotation.Nullable;
 
 /**
  * <h1>PotionEffectType</h1>
  * 药水效果类型中文汉化版（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 public abstract class PotionEffectType {
@@ -133,24 +136,24 @@ public abstract class PotionEffectType {
     /**
      * 药水效果类型: 发光
      */
-    public final static PotionEffectType 发光 = new PotionEffectType(24, "GLOWING", 9) {};
+    public final static PotionEffectType 发光 = new PotionEffectType(24, "GLOWING", MinecraftVersion.V1_9) {};
     /**
      * 药水效果类型: 漂浮
      */
-    public final static PotionEffectType 漂浮 = new PotionEffectType(25, "LEVITATION", 9) {};
+    public final static PotionEffectType 漂浮 = new PotionEffectType(25, "LEVITATION", MinecraftVersion.V1_9) {};
     /**
      * 药水效果类型: 幸运
      */
-    public final static PotionEffectType 幸运 = new PotionEffectType(26, "LUCK", 9) {};
+    public final static PotionEffectType 幸运 = new PotionEffectType(26, "LUCK", MinecraftVersion.V1_9) {};
     /**
      * 药水效果类型: 霉运
      */
-    public final static PotionEffectType 霉运 = new PotionEffectType(27, "UNLUCK", 9) {};
+    public final static PotionEffectType 霉运 = new PotionEffectType(27, "UNLUCK", MinecraftVersion.V1_9) {};
     ///
 
     private final int id;
     private final String name;
-    private final int requiredVersion;
+    private final MinecraftVersion requiredVersion;
 
     /**
      * 药水效果类型构造函数
@@ -160,7 +163,7 @@ public abstract class PotionEffectType {
      */
     private PotionEffectType(int id, String name) {
 
-        this(id, name, -1);
+        this(id, name, null);
     }
 
     /**
@@ -170,7 +173,7 @@ public abstract class PotionEffectType {
      * @param name 药水效果名称
      * @param requiredVersion 需求版本
      */
-    private PotionEffectType(int id, String name, int requiredVersion) {
+    private PotionEffectType(int id, String name, MinecraftVersion requiredVersion) {
 
         this.id = id;
         this.name = name;
@@ -200,11 +203,24 @@ public abstract class PotionEffectType {
     }
 
     /**
+     * 获取此药水效果类型需求的次版本号
+     *
+     * @return 次版本号
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getRequiredMCVersion()}
+     */
+    @Deprecated
+    public int getRequiredVersion() {
+
+        return requiredVersion != null ? requiredVersion.getMinor() : -1;
+    }
+
+    /**
      * 获取此药水效果类型需求的版本
      *
      * @return 版本
      */
-    public int getRequiredVersion() {
+    @Nullable
+    public MinecraftVersion getRequiredMCVersion() {
 
         return requiredVersion;
     }
@@ -218,14 +234,9 @@ public abstract class PotionEffectType {
     @SuppressWarnings("deprecation")
     public org.bukkit.potion.PotionEffectType as() {
 
-        if(requiredVersion != -1) {
+        if(requiredVersion != null && !MoonLakeAPI.currentMCVersion().isLater(requiredVersion)) {
 
-            int version = Reflect.getServerVersionNumber();
-
-            if(version < requiredVersion) {
-
-                throw new IllegalBukkitVersionException("The bukkit version not support potion effect: " + id);
-            }
+            throw new IllegalBukkitVersionException("The bukkit version not support potion effect: " + id);
         }
         //return org.bukkit.potion.PotionEffectType.getById(id);
         return org.bukkit.potion.PotionEffectType.getByName(name);

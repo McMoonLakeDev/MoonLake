@@ -18,8 +18,10 @@
  
 package com.minecraft.moonlake.manager;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.executor.Consumer;
@@ -44,7 +46,7 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  * <h1>EntityManager</h1>
  * 实体管理实现类
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 public class EntityManager extends MoonLakeManager {
@@ -287,7 +289,7 @@ public class EntityManager extends MoonLakeManager {
                 Object nmsGoalSelector = FIELD_GOALSELECTOR.get(nmsEntity);
                 Object nmsTargetSelector = FIELD_TARGETSELECTOR.get(nmsEntity);
 
-                if(getServerVersionNumber() <= 8) {
+                if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
 
                     FIELD_PATHFINDERGOALSELECTOR_B.set(nmsGoalSelector, instantiateObject(CLASS_UNSAFELIST));
                     FIELD_PATHFINDERGOALSELECTOR_C.set(nmsGoalSelector, instantiateObject(CLASS_UNSAFELIST));

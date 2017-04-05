@@ -274,13 +274,67 @@ public class MinecraftBukkitVersion implements Comparable<MinecraftBukkitVersion
     /**
      * 获取当前 Minecraft Bukkit 版本是否在参数 {@code other} 版本之后
      *
+     * <p>
+     *     {@code if(other ==} {@link #V1_10_R1}{@code )}
+     *     then {@link #getCurrentVersion()} {@code >} {@link #V1_10_R1} {@code = true}
+     * </p>
+     *
      * @param other 其他版本
-     * @return 之后
+     * @return 是否在参数版本之后
      * @see #compareTo(MinecraftBukkitVersion)
      */
     public boolean isLater(MinecraftBukkitVersion other) {
 
         return other != null && compareTo(other) > 0;
+    }
+
+    /**
+     * <h1>获取当前 Minecraft Bukkit 版本是否在参数 {@code other} 版本或之后</h1>
+     *
+     * <p>
+     *     {@code if(other ==} {@link #V1_10_R1}{@code )}
+     *     then {@link #getCurrentVersion()} {@code ≥} {@link #V1_10_R1} {@code = true}
+     * </p>
+     *
+     * @param other 其他版本
+     * @return 是否在参数版本或之后
+     * @see #compareTo(MinecraftBukkitVersion)
+     */
+    public boolean isOrLater(MinecraftBukkitVersion other) {
+
+        return other != null && compareTo(other) >= 0;
+    }
+
+    /**
+     * <h1>获取当前 Minecraft Bukkit 版本是否在参数 {@code min} 版本和参数 {@code max} 范围</h1>
+     *
+     * <p>举一个简单的例子: {@link #getCurrentVersion()}.isOrRange({@link #V1_8_R1}, {@link #V1_10_R1})</p>
+     * <p>当你服务端为 {@link #V1_8_R3} 那么结果为 {@code true}, 如为 {@link #V1_8_R1}、{@link #V1_10_R1} 结果为 {@code false}</p>
+     *
+     * @param min 最小版本
+     * @param max 最大版本
+     * @return 是否在参数 {@code min} 版本和参数 {@code max} 范围
+     * @see #compareTo(MinecraftBukkitVersion)
+     */
+    public boolean isRange(MinecraftBukkitVersion min, MinecraftBukkitVersion max) {
+
+        return min != null && max != null && (compareTo(min) > 0 && compareTo(max) < 0);
+    }
+
+    /**
+     * <h1>获取当前 Minecraft Bukkit 版本是否在参数 {@code min} 版本和参数 {@code max} 范围或</h1>
+     *
+     * <p>举一个简单的例子: {@link #getCurrentVersion()}.isOrRange({@link #V1_8_R1}, {@link #V1_10_R1})</p>
+     * <p>当你服务端为 {@link #V1_8_R3} 那么结果为 {@code true}, 或为 {@link #V1_8_R1}、{@link #V1_10_R1} 同样结果</p>
+     *
+     * @param min 最小版本
+     * @param max 最大版本
+     * @return 是否在参数 {@code min} 版本和参数 {@code max} 范围或
+     * @see #compareTo(MinecraftBukkitVersion)
+     */
+    public boolean isOrRange(MinecraftBukkitVersion min, MinecraftBukkitVersion max) {
+
+        return min != null && max != null && (compareTo(min) >= 0 && compareTo(max) <= 0);
     }
 
     @Override

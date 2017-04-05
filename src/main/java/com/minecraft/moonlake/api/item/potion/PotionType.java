@@ -18,8 +18,9 @@
  
 package com.minecraft.moonlake.api.item.potion;
 
+import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
-import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +32,7 @@ import java.util.Map;
  * <h1>PotionType</h1>
  * 药水类型
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 public enum PotionType {
@@ -136,15 +137,15 @@ public enum PotionType {
     @SuppressWarnings("deprecation")
     public Material getMaterial() throws IllegalBukkitVersionException {
 
-        int version = Reflect.getServerVersionNumber();
+        boolean newPotion = MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9); // 判断服务器 MC 版本是否在 1.9 或之后
 
-        if(version <= 8 && this == LINGERING_POTION) {
-            // 1.8 use lingering potion then throw new exception
+        if(!newPotion && this == LINGERING_POTION) {
+            // 1.8 使用滞留型药水则抛出异常, 因为滞留型药水是 1.9 添加的
             throw new IllegalBukkitVersionException("The lingering potion need bukkit version 1.9+ exception.");
         }
-        if(version <= 8 && this == SPLASH_POTION) {
-            // 1.8 Material not has Material.SPLASH_POTION
-            // need Material.POTION type
+        if(!newPotion && this == SPLASH_POTION) {
+            // 1.8 的 bukkit api 中 Material 没有 SPLASH_POTION 类型
+            // 所以需要返回 POTION 才行
             return Material.POTION;
         }
         return Material.getMaterial(id);

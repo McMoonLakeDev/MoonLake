@@ -18,8 +18,9 @@
  
 package com.minecraft.moonlake.api.entity;
 
+import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
-import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import org.spigotmc.SpigotConfig;
 
@@ -27,7 +28,7 @@ import org.spigotmc.SpigotConfig;
  * <hr />
  * <div>
  *     <h1>Minecraft Entity Attribute Type</h1>
- *     <p>By Month_Light Ver: 1.0</p>
+ *     <p>By Month_Light Ver: 1.0.1</p>
  * </div>
  * <hr />
  * <div>
@@ -36,7 +37,7 @@ import org.spigotmc.SpigotConfig;
  * </div>
  * <hr />
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 public enum AttributeType {
@@ -73,24 +74,24 @@ public enum AttributeType {
     /**
      * 实体属性类型: 攻击速度 (def: 4.0, range: 0.0 - 1024.0)
      */
-    ATTACK_SPEED("AttackSpeed", "f", 9, 4.0d, 0.0d, 1024.0d),
+    ATTACK_SPEED("AttackSpeed", "f", MinecraftVersion.V1_9, 4.0d, 0.0d, 1024.0d),
     /**
      * 实体属性类型: 护甲 (def: 0.0, range: 0.0 - 30.0)
      */
-    ARMOR("Armor", "g", 9, 0.0d, 0.0d, 30.0d),
+    ARMOR("Armor", "g", MinecraftVersion.V1_9, 0.0d, 0.0d, 30.0d),
     /**
      * 实体属性类型: 护甲韧性 (def: 0.0, range: 0.0 - 20.0)
      */
-    ARMOR_TOUGHNESS("ArmorToughness", "h", 9, 0.0d, 0.0d, 20.0d),
+    ARMOR_TOUGHNESS("ArmorToughness", "h", MinecraftVersion.V1_9, 0.0d, 0.0d, 20.0d),
     /**
      * 实体属性类型: 幸运 (def: 0.0, range: -1024.0 - 1024.0)
      */
-    LUCK("Luck", "i", 9, 0.0d, -1024.0d, 1024.0d),
+    LUCK("Luck", "i", MinecraftVersion.V1_9, 0.0d, -1024.0d, 1024.0d),
     ;
 
     private String type;
     private String field;
-    private int minimumVersion;
+    private MinecraftVersion minimumVersion;
     private double def;
     private double min;
     private double max;
@@ -106,7 +107,7 @@ public enum AttributeType {
      */
     AttributeType(String type, String field, double def, double min, double max) {
 
-        this(type, field, -1, def, min, max);
+        this(type, field, null, def, min, max);
     }
 
     /**
@@ -119,7 +120,7 @@ public enum AttributeType {
      * @param min 最小值
      * @param max 最大值
      */
-    AttributeType(String type, String field, int minimumVersion, double def, double min, double max) {
+    AttributeType(String type, String field, MinecraftVersion minimumVersion, double def, double min, double max) {
 
         this.type = type;
         this.field = field;
@@ -202,7 +203,7 @@ public enum AttributeType {
      */
     public boolean isSupported() {
 
-        boolean support = minimumVersion == -1 || Reflect.getServerVersionNumber() >= minimumVersion;
+        boolean support = minimumVersion == null || MoonLakeAPI.currentMCVersion().isOrLater(minimumVersion);
 
         if(!support) {
 

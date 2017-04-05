@@ -18,10 +18,12 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
@@ -40,7 +42,7 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  * <h1>PacketPlayOutEntityEquipment</h1>
  * 数据包输出实体装备（详细doc待补充...）
  *
- * @version 2.0
+ * @version 2.0.1
  * @author Month_Light
  * @see Packet
  * @see PacketPlayOut
@@ -61,7 +63,7 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
 
             CLASS_PACKETPLAYOUTENTITYEQUIPMENT = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutEntityEquipment");
             CLASS_CRAFTITEMSTACK = PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
-            CLASS_ENUMITEMSLOT = getServerVersionNumber() >= 9 ? PackageType.MINECRAFT_SERVER.getClass("EnumItemSlot") : null; // 1.8 没有这个类
+            CLASS_ENUMITEMSLOT = MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9) ? PackageType.MINECRAFT_SERVER.getClass("EnumItemSlot") : null; // 1.8 没有这个类
             CLASS_ITEMSTACK = PackageType.MINECRAFT_SERVER.getClass("ItemStack");
             METHOD_ASNMSCOPY = getMethod(CLASS_CRAFTITEMSTACK, "asNMSCopy", ItemStack.class);
             METHOD_VALUEOF = CLASS_ENUMITEMSLOT != null ? getMethod(CLASS_ENUMITEMSLOT, "valueOf", String.class) : null;
@@ -157,7 +159,7 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
             // 1.8 参数 int, int, ItemStack
             // 1.9+ 参数 int, EquipmentSlot, ItemStack
             // 进行反射实例发送
-            if(getServerVersionNumber() >= 9) {
+            if(MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                 // 1.9+ 版本的发送方式
                 Object enumItemSlot = METHOD_VALUEOF.invoke(null, slot.name());
                 Object nmsItemStack = METHOD_ASNMSCOPY.invoke(null, itemStack);
@@ -182,7 +184,7 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
             // 如果异常了说明 NMS 的 PacketPlayOutEntityEquipment 构造函数不存在这个参数类型
             // 那么用反射直接设置字段值方式来发送
             try {
-                if(getServerVersionNumber() >= 9) {
+                if(MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                     // 1.9+ 版本的发送方式
                     Object enumItemSlot = METHOD_VALUEOF.invoke(null, slot.name());
                     Object nmsItemStack = METHOD_ASNMSCOPY.invoke(null, itemStack);

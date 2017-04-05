@@ -223,15 +223,37 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
     }
 
     /**
-     * 获取当前 Minecraft 版本是否在参数 {@code other} 版本之后
+     * <h1>获取当前 Minecraft 版本是否在参数 {@code other} 版本之后</h1>
+     *
+     * <p>
+     *     {@code if(other ==} {@link #V1_10}{@code )}
+     *     then {@link #getCurrentVersion()} {@code >} {@link #V1_10} {@code = true}
+     * </p>
      *
      * @param other 其他版本
-     * @return 之后
+     * @return 是否在参数版本之后
      * @see #compareTo(MinecraftVersion)
      */
     public boolean isLater(MinecraftVersion other) {
 
         return other != null && compareTo(other) > 0;
+    }
+
+    /**
+     * <h1>获取当前 Minecraft 版本是否在参数 {@code other} 版本或之后</h1>
+     *
+     * <p>
+     *     {@code if(other ==} {@link #V1_10}{@code )}
+     *     then {@link #getCurrentVersion()} {@code ≥} {@link #V1_10} {@code = true}
+     * </p>
+     *
+     * @param other 其他版本
+     * @return 是否在参数版本或之后
+     * @see #compareTo(MinecraftVersion)
+     */
+    public boolean isOrLater(MinecraftVersion other) {
+
+        return other != null && compareTo(other) >= 0;
     }
 
     @Override

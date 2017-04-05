@@ -18,11 +18,14 @@
  
 package com.minecraft.moonlake.api;
 
+import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
+
 /**
  * <h1>BukkitInfo</h1>
  * Bukkit 服务端信息接口
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public interface BukkitInfo {
@@ -31,13 +34,31 @@ public interface BukkitInfo {
      * 获取 Bukkit 服务器的版本
      *
      * @return 版本
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #currentBukkitVersion()}
      */
+    @Deprecated
     String getBukkitVersion();
 
     /**
      * 获取 Bukkit 服务器的版本号
      *
      * @return 版本号
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #currentBukkitVersion()}
      */
+    @Deprecated
     int getReleaseNumber();
+
+    /**
+     * 获取此 Minecraft Bukkit 服务器的版本
+     *
+     * @return Bukkit 版本 | {@code null}
+     */
+    MinecraftBukkitVersion currentBukkitVersion();
+
+    /**
+     * 获取此 Minecraft 服务器的版本
+     *
+     * @return MC 版本 | {@code null}
+     */
+    MinecraftVersion currentMCVersion();
 }

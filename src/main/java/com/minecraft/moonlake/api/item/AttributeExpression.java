@@ -18,12 +18,13 @@
  
 package com.minecraft.moonlake.api.item;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.item.potion.PotionEffectCustom;
 import com.minecraft.moonlake.api.item.potion.PotionEffectType;
 import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.api.nbt.NBTFactory;
 import com.minecraft.moonlake.api.nbt.NBTList;
-import com.minecraft.moonlake.reflect.Reflect;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.inventory.ItemStack;
 
@@ -33,7 +34,7 @@ import java.util.*;
  * <h1>AttributeExpression</h1>
  * 物品栈属性支持库接口实现类
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 class AttributeExpression implements AttributeLibrary {
@@ -135,11 +136,11 @@ class AttributeExpression implements AttributeLibrary {
                 }
             }
         }
-        int version = Reflect.getServerVersionNumber();
+        boolean slotSupport = MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9); // 服务器 MC 版本是在 1.9 或之后则支持 slot 标签
         NBTCompound attributeNewCompound = NBTFactory.newCompound();
         AttributeModify.Slot attributeSlot = attribute.getSlot().get();
 
-        if(attributeSlot != null && attributeSlot != AttributeModify.Slot.ALL && version >= 9) {
+        if(attributeSlot != null && attributeSlot != AttributeModify.Slot.ALL && slotSupport) {
 
             attributeNewCompound.put("Slot", attributeSlot.getSlot());
         }
@@ -210,7 +211,7 @@ class AttributeExpression implements AttributeLibrary {
 
             return attributeModifyList;
         }
-        int version = Reflect.getServerVersionNumber();
+        boolean slotSupport = MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9); // 服务器 MC 版本是在 1.9 或之后则支持 slot 标签
 
         for(final Object attributeObject : attributeModifiers) {
 
@@ -223,7 +224,7 @@ class AttributeExpression implements AttributeLibrary {
 
                     AttributeModify.Slot attributeSlot = null;
 
-                    if(version >= 9) {
+                    if(slotSupport) {
 
                         attributeSlot = AttributeModify.Slot.fromType(attributeCompound.getString("Slot"));
                     }

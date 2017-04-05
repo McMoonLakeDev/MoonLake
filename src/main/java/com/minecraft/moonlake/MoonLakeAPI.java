@@ -51,6 +51,8 @@ import com.minecraft.moonlake.api.player.depend.DependEconomy;
 import com.minecraft.moonlake.api.player.depend.DependEconomyVault;
 import com.minecraft.moonlake.api.player.depend.DependPermissionsEx;
 import com.minecraft.moonlake.api.player.depend.DependWorldEdit;
+import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.event.EventHelper;
 import com.minecraft.moonlake.exception.CannotDependException;
 import com.minecraft.moonlake.exception.MoonLakeException;
@@ -64,7 +66,6 @@ import com.minecraft.moonlake.nms.packet.Packet;
 import com.minecraft.moonlake.nms.packet.PacketFactory;
 import com.minecraft.moonlake.particle.ParticleEffect;
 import com.minecraft.moonlake.particle.ParticleException;
-import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.task.MoonLakeRunnable;
 import com.minecraft.moonlake.task.TaskHelper;
 import com.minecraft.moonlake.util.StringUtil;
@@ -242,22 +243,129 @@ public final class MoonLakeAPI {
      * 获取 Bukkit 服务器的版本
      *
      * @return 版本
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #currentBukkitVersionString()}
      */
+    @Deprecated
     public static String getBukkitVersion() {
 
         //return moonlake.getBukkitVersion();
-        return Reflect.getServerVersion();
+        //return Reflect.getServerVersion();
+        return currentBukkitVersionString();
     }
 
     /**
      * 获取 Bukkit 服务器的版本号
      *
      * @return 版本号
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #currentBukkitVersionRelease()}
      */
+    @Deprecated
     public static int getReleaseNumber() {
 
         //return moonlake.getReleaseNumber();
-        return Reflect.getServerVersionNumber();
+        //return Reflect.getServerVersionNumber();
+        return currentBukkitVersionRelease();
+    }
+
+    /**
+     * 获取 Minecraft Bukkit 服务器的版本字符串
+     *
+     * @return 版本字符串
+     */
+    public static String currentBukkitVersionString() {
+
+        return currentBukkitVersion().getVersion();
+    }
+
+    /**
+     * 获取 Minecraft Bukkit 服务器的版本发行号
+     *
+     * @return 版本发行号
+     */
+    public static int currentBukkitVersionRelease() {
+
+        return currentBukkitVersion().getRelease();
+    }
+
+    /**
+     * 获取此 Minecraft Bukkit 服务器的版本
+     *
+     * @return Bukkit 版本 | {@code null}
+     */
+    public static MinecraftBukkitVersion currentBukkitVersion() {
+
+        return MinecraftBukkitVersion.getCurrentVersion();
+    }
+
+    /**
+     * 获取此 Minecraft 服务器的版本
+     *
+     * @return MC 版本 | {@code null}
+     */
+    public static MinecraftVersion currentMCVersion() {
+
+        return MinecraftVersion.getCurrentVersion();
+    }
+
+    /**
+     * 获取此 Minecraft Bukkit 服务器的版本是否符合目标版本
+     *
+     * @param target 目标版本
+     * @return 是否符合目标版本
+     */
+    public static boolean currentBukkitVersionIs(MinecraftBukkitVersion target) {
+
+        return currentBukkitVersion().equals(target);
+    }
+
+    /**
+     * 获取此 Minecraft Bukkit 服务器的版本是否在目标版本之后
+     *
+     * @param target 目标版本
+     * @return 是否在目标版本之后
+     * @see MinecraftBukkitVersion#isLater(MinecraftBukkitVersion)
+     */
+    public static boolean currentBukkitVersionIsLater(MinecraftBukkitVersion target) {
+
+        return currentBukkitVersion().isLater(target);
+    }
+
+    /**
+     * 获取此 Minecraft Bukkit 服务器的版本是否在目标版本或之后
+     *
+     * @param target 目标版本
+     * @return 是否在目标版本或之后
+     * @see MinecraftBukkitVersion#isOrLater(MinecraftBukkitVersion)
+     */
+    public static boolean currentBukkitVersionIsOrLater(MinecraftBukkitVersion target) {
+
+        return currentBukkitVersion().isOrLater(target);
+    }
+
+    /**
+     * 获取此 Minecraft Bukkit 服务器的版本是否在参数 {@code min} 版本和参数 {@code max} 范围
+     *
+     * @param min 最小版本
+     * @param max 最大版本
+     * @return 是否在参数 {@code min} 版本和参数 {@code max} 范围
+     * @see MinecraftBukkitVersion#isRange(MinecraftBukkitVersion, MinecraftBukkitVersion)
+     */
+    public static boolean currentBukkitVersionIsRange(MinecraftBukkitVersion min, MinecraftBukkitVersion max) {
+
+        return currentBukkitVersion().isRange(min, max);
+    }
+
+    /**
+     * 获取此 Minecraft Bukkit 服务器的版本是否在参数 {@code min} 版本和参数 {@code max} 范围或
+     *
+     * @param min 最小版本
+     * @param max 最大版本
+     * @return 是否在参数 {@code min} 版本和参数 {@code max} 范围或
+     * @see MinecraftBukkitVersion#isOrRange(MinecraftBukkitVersion, MinecraftBukkitVersion)
+     */
+    public static boolean currentBukkitVersionIsOrRange(MinecraftBukkitVersion min, MinecraftBukkitVersion max) {
+
+        return currentBukkitVersion().isOrRange(min, max);
     }
 
     /**

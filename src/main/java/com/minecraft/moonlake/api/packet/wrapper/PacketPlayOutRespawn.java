@@ -18,10 +18,12 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
@@ -62,7 +64,7 @@ public class PacketPlayOutRespawn extends PacketPlayOutBukkitAbstract {
             CLASS_PACKETPLAYOUTRESPAWN = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutRespawn");
             CLASS_WORLDTYPE = PackageType.MINECRAFT_SERVER.getClass("WorldType");
             CLASS_ENUMDIFFICULTY = PackageType.MINECRAFT_SERVER.getClass("EnumDifficulty");
-            CLASS_ENUMGAMEMODE = PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") || getServerVersionNumber() >= 10 ? "EnumGamemode" : "WorldSettings$EnumGamemode");
+            CLASS_ENUMGAMEMODE = PackageType.MINECRAFT_SERVER.getClass(MoonLakeAPI.currentBukkitVersionIs(MinecraftBukkitVersion.V1_8_R1) || MoonLakeAPI.currentBukkitVersionIsOrLater(MinecraftBukkitVersion.V1_10_R1) ? "EnumGamemode" : "WorldSettings$EnumGamemode");
             METHOD_GETBYID0 = getMethod(CLASS_ENUMDIFFICULTY, "getById", int.class);
             METHOD_GETBYID1 = getMethod(CLASS_ENUMGAMEMODE, "getById", int.class);
             METHOD_GETTYPE = getMethod(CLASS_WORLDTYPE, "getType", String.class);

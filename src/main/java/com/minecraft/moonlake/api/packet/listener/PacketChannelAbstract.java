@@ -18,10 +18,12 @@
 
 package com.minecraft.moonlake.api.packet.listener;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.nms.exception.NMSException;
 import com.minecraft.moonlake.api.packet.exception.PacketException;
 import com.minecraft.moonlake.api.packet.listener.channel.PacketChannel;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 
@@ -40,7 +42,7 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  * <h1>PacketChannelAbstract</h1>
  * 数据包通道接口抽象类（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 abstract class PacketChannelAbstract implements PacketChannel {
@@ -89,8 +91,8 @@ abstract class PacketChannelAbstract implements PacketChannel {
 
             try {
 
-                FIELD_SERVERCONNECTION_TEMP = getField(CLASS_MINECRAFTSERVER, true, getServerVersionNumber() <= 8 ? "q" : "p");
-                FIELD_NETWORKMANAGERLIST_TEMP = getField(CLASS_SERVERCONNECTION, true, getServerVersionNumber() <= 8 ? "g" : "h");
+                FIELD_SERVERCONNECTION_TEMP = getField(CLASS_MINECRAFTSERVER, true, !MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9) ? "q" : "p");
+                FIELD_NETWORKMANAGERLIST_TEMP = getField(CLASS_SERVERCONNECTION, true, !MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9) ? "g" : "h");
             }
             catch (Exception e) {
             }

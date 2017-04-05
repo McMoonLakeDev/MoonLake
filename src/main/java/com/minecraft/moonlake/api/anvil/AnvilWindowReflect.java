@@ -18,6 +18,7 @@
  
 package com.minecraft.moonlake.api.anvil;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.nms.exception.NMSException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
@@ -71,7 +72,7 @@ class AnvilWindowReflect {
 
         try {
 
-            CLASS_ANVILWINDOW = Class.forName(AnvilWindowExpression.class.getName() + "_" + getServerVersion());
+            CLASS_ANVILWINDOW = Class.forName(AnvilWindowExpression.class.getName() + "_" + MoonLakeAPI.currentBukkitVersionString());
             CLASS_CRAFTPLAYER = PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
             CLASS_ENTITYPLAYER = PackageType.MINECRAFT_SERVER.getClass("EntityPlayer");
             CLASS_ENTITYHUMAN = PackageType.MINECRAFT_SERVER.getClass("EntityHuman");

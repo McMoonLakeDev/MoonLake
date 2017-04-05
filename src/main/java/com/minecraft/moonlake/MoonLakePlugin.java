@@ -19,6 +19,8 @@
 package com.minecraft.moonlake;
 
 import com.minecraft.moonlake.api.MoonLake;
+import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -209,19 +211,30 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     }
 
     @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public String getBukkitVersion() {
 
-        String packageName = getServer().getClass().getPackage().getName();
-        String[] packageSplit = packageName.split("\\.");
-        return packageSplit[packageSplit.length - 1];
+        return MoonLakeAPI.currentBukkitVersionString();
     }
 
     @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public int getReleaseNumber() {
 
-        String version = getBukkitVersion();
-        String[] versionSplit = version.split("_");
-        String releaseVersion = versionSplit[1];
-        return Integer.parseInt(releaseVersion);
+        return MoonLakeAPI.currentBukkitVersionRelease();
+    }
+
+    @Override
+    public MinecraftBukkitVersion currentBukkitVersion() {
+
+        return MoonLakeAPI.currentBukkitVersion();
+    }
+
+    @Override
+    public MinecraftVersion currentMCVersion() {
+
+        return MoonLakeAPI.currentMCVersion();
     }
 }

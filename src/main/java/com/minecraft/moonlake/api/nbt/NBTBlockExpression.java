@@ -18,6 +18,8 @@
  
 package com.minecraft.moonlake.api.nbt;
 
+import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import com.minecraft.moonlake.nbt.exception.NBTInitializeException;
 import com.minecraft.moonlake.nms.packet.PacketFactory;
@@ -36,7 +38,7 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  * <h1>NBTBlockExpression</h1>
  * NBT 方块接口实现类
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 class NBTBlockExpression implements NBTBlock {
@@ -70,7 +72,7 @@ class NBTBlockExpression implements NBTBlock {
             METHOD_GETHANDLE = getMethod(CLASS_CRAFTWORLD, "getHandle");
             METHOD_GETTILEENTITY = getMethod(CLASS_WORLD, "getTileEntity", CLASS_BLOCKPOSITION);
             METHOD_GETUPDATEPACKET = getMethod(CLASS_TILEENTITY, "getUpdatePacket");
-            METHOD_READ = getMethod(CLASS_TILEENTITY, getServerVersionNumber() <= 8 ? "b" : "save", CLASS_NBTTAGCOMPOUND);
+            METHOD_READ = getMethod(CLASS_TILEENTITY, !MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9) ? "b" : "save", CLASS_NBTTAGCOMPOUND);
             METHOD_WRITE = getMethod(CLASS_TILEENTITY, "a", CLASS_NBTTAGCOMPOUND);
         }
         catch (Exception e) {

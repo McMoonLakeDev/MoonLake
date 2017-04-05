@@ -18,11 +18,13 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
 import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
@@ -62,9 +64,9 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
         try {
 
             CLASS_PACKETPLAYOUTPLAYERINFO = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPlayerInfo");
-            CLASS_PACKETPLAYOUTPLAYERINFO_PLAYERINFODATA = PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") ? "PlayerInfoData" : "PacketPlayOutPlayerInfo$PlayerInfoData");
-            CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION = PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") ? "EnumPlayerInfoAction" : "PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
-            CLASS_ENUMGAMEMODE = PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") || getServerVersionNumber() >= 10 ? "EnumGamemode" : "WorldSettings$EnumGamemode");
+            CLASS_PACKETPLAYOUTPLAYERINFO_PLAYERINFODATA = PackageType.MINECRAFT_SERVER.getClass(MoonLakeAPI.currentBukkitVersionIs(MinecraftBukkitVersion.V1_8_R1) ? "PlayerInfoData" : "PacketPlayOutPlayerInfo$PlayerInfoData");
+            CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION = PackageType.MINECRAFT_SERVER.getClass(MoonLakeAPI.currentBukkitVersionIs(MinecraftBukkitVersion.V1_8_R1) ? "EnumPlayerInfoAction" : "PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
+            CLASS_ENUMGAMEMODE = PackageType.MINECRAFT_SERVER.getClass(MoonLakeAPI.currentBukkitVersionIs(MinecraftBukkitVersion.V1_8_R1) || MoonLakeAPI.currentBukkitVersionIsOrLater(MinecraftBukkitVersion.V1_10_R1) ? "EnumGamemode" : "WorldSettings$EnumGamemode");
             METHOD_VALUEOF = getMethod(CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION, "valueOf", String.class);
             METHOD_GETBYID = getMethod(CLASS_ENUMGAMEMODE, "getById", int.class);
         }

@@ -18,10 +18,13 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.property.*;
 import org.bukkit.entity.Player;
 
@@ -37,7 +40,7 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  * <h1>PacketPlayOutPosition</h1>
  * 数据包输出位置（详细doc待补充...）
  *
- * @version 2.0
+ * @version 2.0.1
  * @author Month_Light
  * @see Packet
  * @see PacketPlayOut
@@ -54,7 +57,7 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
         try {
 
             CLASS_PACKETPLAYOUTPOSITION = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPosition");
-            CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS = PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") ? "EnumPlayerTeleportFlags" : "PacketPlayOutPosition$EnumPlayerTeleportFlags");
+            CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS = PackageType.MINECRAFT_SERVER.getClass(MoonLakeAPI.currentBukkitVersionIs(MinecraftBukkitVersion.V1_8_R1) ? "EnumPlayerTeleportFlags" : "PacketPlayOutPosition$EnumPlayerTeleportFlags");
             METHOD_VALUEOF = getMethod(CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS, "valueOf", String.class);
         }
         catch (Exception e) {
@@ -256,7 +259,7 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
             for(PlayerTeleportFlag flag : flagList)
                 nmsFlagSet.add(METHOD_VALUEOF.invoke(null, flag.name()));
 
-            if(getServerVersionNumber() <= 8) {
+            if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                 // 1.8 版本少一个 int 参数
                 Object packet = instantiateObject(CLASS_PACKETPLAYOUTPOSITION, x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet);
                 sendPacket(players, packet);
@@ -278,7 +281,7 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
                 for(PlayerTeleportFlag flag : flagList)
                     nmsFlagSet.add(METHOD_VALUEOF.invoke(null, flag.name()));
 
-                if(getServerVersionNumber() <= 8) {
+                if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                     Object[] values = { x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet };
                     setFieldAccessibleAndValueSend(players, 6, CLASS_PACKETPLAYOUTPOSITION, packet, values);
                 } else {

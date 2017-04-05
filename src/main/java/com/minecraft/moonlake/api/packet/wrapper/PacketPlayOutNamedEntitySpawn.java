@@ -18,10 +18,12 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
 import com.minecraft.moonlake.validate.Validate;
@@ -36,7 +38,7 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  * <h1>PacketPlayOutNamedEntitySpawn</h1>
  * 数据包输出名称实体生成（详细doc待补充...）
  *
- * @version 2.0
+ * @version 2.0.1
  * @author Month_Light
  * @see Packet
  * @see PacketPlayOut
@@ -120,7 +122,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
                 Object packet = instantiateObject(CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN);
                 Object dataWatcher = METHOD_GETDATAWATCHER.invoke(getNMSPlayer(player));
 
-                if(getServerVersionNumber() <= 8) {
+                if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                     Object[] values = {
                             player.getEntityId(),
                             player.getUniqueId(),

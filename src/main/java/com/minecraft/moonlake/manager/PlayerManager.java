@@ -20,9 +20,10 @@ package com.minecraft.moonlake.manager;
 
 import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.player.*;
+import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.MoonLakeException;
-import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
@@ -34,7 +35,10 @@ import org.bukkit.plugin.Plugin;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.UUID;
 
 import static com.minecraft.moonlake.reflect.Reflect.*;
 
@@ -42,7 +46,7 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  * <h1>PlayerManager</h1>
  * 玩家管理实现类
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 public class PlayerManager extends MoonLakeManager {
@@ -68,23 +72,20 @@ public class PlayerManager extends MoonLakeManager {
 
         try {
 
-            switch (getServerVersionNumber()) {
+            MinecraftVersion mcVersion = MoonLakeAPI.currentMCVersion();
 
-                case 8:     // Bukkit 1.8
-                    CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_8.class;
-                    break;
-                case 9:     // Bukkit 1.9
-                    CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_9.class;
-                    break;
-                case 10:    // Bukkit 1.10
-                    CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_10.class;
-                    break;
-                case 11:    // Bukkit 1.11
-                    CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_11.class;
-                    break;
-                default:    // Not Support
-                    CLASS_SIMPLEMOONLAKEPLAYER = null;
-            }
+            if(mcVersion == null) // Not Support
+                CLASS_SIMPLEMOONLAKEPLAYER = null;
+            else if(mcVersion.equals(MinecraftVersion.V1_8)) // Bukkit 1.8
+                CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_8.class;
+            else if(mcVersion.equals(MinecraftVersion.V1_9)) // Bukkit 1.9
+                CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_9.class;
+            else if(mcVersion.equals(MinecraftVersion.V1_10)) // Bukkit 1.10
+                CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_10.class;
+            else if(mcVersion.equals(MinecraftVersion.V1_11)) // Bukkit 1.11
+                CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_11.class;
+            else // Not Support
+                CLASS_SIMPLEMOONLAKEPLAYER = null;
 
             if(CLASS_SIMPLEMOONLAKEPLAYER != null)
                 CONSTRUCTOR_SIMPLEMOONLAKEPLAYER = CLASS_SIMPLEMOONLAKEPLAYER.getConstructor(Player.class);
@@ -99,12 +100,12 @@ public class PlayerManager extends MoonLakeManager {
             FIELD_LOCALE = getField(CLASS_ENTITYPLAYER, true, "locale");
             FIELD_PING = getField(CLASS_ENTITYPLAYER, true, "ping");
 
-            if(getServerVersionNumber() >= 9) {
+            if(MoonLakeAPI.currentBukkitVersionIsOrLater(MinecraftBukkitVersion.V1_9_R1)) {
 
                 String name = null;
 
                 // TODO 函数名十分不固定, 以后可以用模糊反射来获取
-                switch (getServerVersion()) {
+                switch (MoonLakeAPI.currentBukkitVersionString()) {
                     case "v1_9_R1":
                         name = "da"; break;
                     case "v1_9_R2":
@@ -523,7 +524,7 @@ public class PlayerManager extends MoonLakeManager {
         Validate.notNull(plugin, "The plugin object is null");
         Validate.notNull(player, "The player object is null.");
 
-        if(Reflect.getServerVersionNumber() <= 8) {
+        if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
 
             MoonLakeAPI.runTaskLaterAsync(plugin, new Runnable() {
 
@@ -552,7 +553,7 @@ public class PlayerManager extends MoonLakeManager {
      */
     public static void setItemCoolDown(Player player, Material material, int tick) throws IllegalBukkitVersionException {
 
-        if(Reflect.getServerVersionNumber() <= 8)
+        if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9))
             throw new IllegalBukkitVersionException("The item cool down not support 1.8 or old bukkit version.");
 
         Validate.notNull(player, "The player object is null.");
@@ -582,7 +583,7 @@ public class PlayerManager extends MoonLakeManager {
      */
     public static boolean hasItemCoolDown(Player player, Material material) throws IllegalBukkitVersionException {
 
-        if(Reflect.getServerVersionNumber() <= 8)
+        if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9))
             throw new IllegalBukkitVersionException("The item cool down not support 1.8 or old bukkit version.");
 
         Validate.notNull(player, "The player object is null.");

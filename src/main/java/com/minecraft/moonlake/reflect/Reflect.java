@@ -18,7 +18,7 @@
  
 package com.minecraft.moonlake.reflect;
 
-import com.minecraft.moonlake.MoonLakePlugin;
+import com.minecraft.moonlake.MoonLakeAPI;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -37,33 +37,28 @@ import java.util.Map;
 @SuppressWarnings("deprecation")
 public class Reflect {
 
-    private final static String SERVER_VERSION;
-    private final static int SERVER_VERSION_NUMBER;
-
-    static {
-
-        SERVER_VERSION = MoonLakePlugin.getInstances().getBukkitVersion();
-        SERVER_VERSION_NUMBER = MoonLakePlugin.getInstances().getReleaseNumber();
-    }
-
     /**
      * 获取 Bukkit 的服务端版本
      *
      * @return 版本 v1_10_R1
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MoonLakeAPI#currentBukkitVersionString()}
      */
+    @Deprecated
     public static String getServerVersion() {
 
-        return SERVER_VERSION;
+        return MoonLakeAPI.currentBukkitVersionString();
     }
 
     /**
      * 获取 Bukkit 的服务端版本号
      *
      * @return 版本号 10
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MoonLakeAPI#currentBukkitVersionRelease()}
      */
+    @Deprecated
     public static int getServerVersionNumber() {
 
-        return SERVER_VERSION_NUMBER;
+        return MoonLakeAPI.currentBukkitVersionRelease();
     }
 
     /**
@@ -436,8 +431,8 @@ public class Reflect {
 
     public enum PackageType {
 
-        MINECRAFT_SERVER("net.minecraft.server." + getServerVersion()),
-        CRAFTBUKKIT("org.bukkit.craftbukkit." + getServerVersion()),
+        MINECRAFT_SERVER("net.minecraft.server." + MoonLakeAPI.currentBukkitVersionString()),
+        CRAFTBUKKIT("org.bukkit.craftbukkit." + MoonLakeAPI.currentBukkitVersionString()),
         CRAFTBUKKIT_BLOCK(CRAFTBUKKIT, "block"),
         CRAFTBUKKIT_CHUNKIO(CRAFTBUKKIT, "chunkio"),
         CRAFTBUKKIT_COMMAND(CRAFTBUKKIT, "command"),
