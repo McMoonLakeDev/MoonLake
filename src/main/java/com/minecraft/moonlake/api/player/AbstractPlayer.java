@@ -754,7 +754,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void createExplosion(float power, boolean setFire, boolean breakBlock) {
 
-        getWorld().createExplosion(getX(), getY(), getZ(), power, setFire, breakBlock);
+        getWorld().createExplosion(getDoubleX(), getDoubleY(), getDoubleZ(), power, setFire, breakBlock);
     }
 
     @Override
