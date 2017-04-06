@@ -104,7 +104,7 @@ class NMSPlayerExpression implements NMSPlayerLibrary {
         Validate.notNull(player, "The player string object is null.");
         Validate.notNull(message, "The message string object is null.");
 
-        new PacketPlayOutChat(message, PacketPlayOutChat.Mode.HOTBAR).send(player);
+        new PacketPlayOutChat(message, PacketPlayOutChat.Mode.ACTIONBAR).send(player);
     }
 
     @Override

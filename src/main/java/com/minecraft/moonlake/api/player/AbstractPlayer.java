@@ -1274,7 +1274,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         Validate.notNull(message, "The message object is null.");
 
-        new PacketPlayOutChat(StringUtil.toColor(message), PacketPlayOutChat.Mode.HOTBAR).send(getBukkitPlayer());
+        new PacketPlayOutChat(StringUtil.toColor(message), PacketPlayOutChat.Mode.ACTIONBAR).send(getBukkitPlayer());
     }
 
     @Override

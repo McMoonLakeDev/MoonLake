@@ -196,8 +196,16 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
         SYSTEM((byte) 1),
         /**
          * 快捷栏: 快捷栏上面位置
+         *
+         * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #ACTIONBAR}
+         * @see #ACTIONBAR
          */
+        @Deprecated
         HOTBAR((byte) 2),
+        /**
+         * 交互栏: 交互栏位置
+         */
+        ACTIONBAR((byte) 2),
         ;
 
         private byte mode;
