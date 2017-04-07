@@ -24,7 +24,9 @@ package com.minecraft.moonlake.data;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除.
  */
+@Deprecated
 public abstract class ConversionDataExpression implements ConversionData {
 
     protected final Object obj;

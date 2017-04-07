@@ -26,7 +26,9 @@ import com.minecraft.moonlake.validate.Validate;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除.
  */
+@Deprecated
 public final class Conversions {
 
     private Conversions() {
