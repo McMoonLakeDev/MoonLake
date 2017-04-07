@@ -20,6 +20,11 @@ package com.minecraft.moonlake.api.packet.wrapper;
 
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayIn;
+import com.minecraft.moonlake.api.packet.exception.PacketException;
+import com.minecraft.moonlake.api.player.MoonLakePlayer;
+import com.minecraft.moonlake.manager.PlayerManager;
+import com.minecraft.moonlake.validate.Validate;
+import org.bukkit.entity.Player;
 
 /**
  * <h1>PacketPlayInAbstract</h1>
@@ -41,5 +46,42 @@ public abstract class PacketPlayInAbstract implements PacketPlayIn {
     protected boolean fireEvent(PacketPlayIn packet) {
 
         return false;
+    }
+
+    @Override
+    public String getPacketName() {
+
+        return null;
+    }
+
+    @Override
+    public Class<?> getPacketClass() {
+
+        return null;
+    }
+
+    @Override
+    public abstract void execute(Player... players) throws PacketException;
+
+    @Override
+    public void execute(MoonLakePlayer... players) throws PacketException {
+
+        Validate.notNull(players, "The player object is null.");
+
+        execute(PlayerManager.adapter(players));
+    }
+
+    @Override
+    public void execute(String... players) throws PacketException {
+
+        Validate.notNull(players, "The player object is null.");
+
+        execute(PlayerManager.adapter(players));
+    }
+
+    @Override
+    public void executeAll() throws PacketException {
+
+        execute(PlayerManager.getOnlines());
     }
 }

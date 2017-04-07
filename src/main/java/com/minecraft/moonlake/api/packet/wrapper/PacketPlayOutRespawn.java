@@ -156,6 +156,12 @@ public class PacketPlayOutRespawn extends PacketPlayOutBukkitAbstract {
     }
 
     @Override
+    public Class<?> getPacketClass() {
+
+        return CLASS_PACKETPLAYOUTRESPAWN;
+    }
+
+    @Override
     @SuppressWarnings("deprecation")
     protected boolean sendPacket(Player... players) throws Exception {
 

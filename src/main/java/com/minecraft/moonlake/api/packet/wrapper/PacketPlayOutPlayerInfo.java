@@ -144,6 +144,12 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
     }
 
     @Override
+    public Class<?> getPacketClass() {
+
+        return CLASS_PACKETPLAYOUTPLAYERINFO;
+    }
+
+    @Override
     @SuppressWarnings({ "deprecation", "unchecked" })
     protected boolean sendPacket(Player... players) throws Exception {
 

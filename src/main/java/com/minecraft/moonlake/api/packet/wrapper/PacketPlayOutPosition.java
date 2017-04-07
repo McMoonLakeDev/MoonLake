@@ -243,6 +243,11 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
         return value;
     }
 
+    public static Class<?> getClassPacketplayoutposition() {
+
+        return CLASS_PACKETPLAYOUTPOSITION;
+    }
+
     @Override
     protected boolean sendPacket(Player... players) throws Exception {
 

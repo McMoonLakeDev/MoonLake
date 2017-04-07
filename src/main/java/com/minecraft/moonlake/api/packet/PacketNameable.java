@@ -18,15 +18,29 @@
 
 package com.minecraft.moonlake.api.packet;
 
+import javax.annotation.Nullable;
+
 /**
- * <h1>PacketPlayIn</h1>
- * Minecraft 数据包输入
+ * <h1>PacketNameable</h1>
+ * Minecraft 数据包有名的接口
  *
- * @version 1.0.1
+ * @version 1.0
  * @author Month_Light
- * @see Packet
- * @see PacketNameable
- * @see PacketPlayInExecutor
  */
-public interface PacketPlayIn extends Packet, PacketNameable, PacketPlayInExecutor {
+public interface PacketNameable {
+
+    /**
+     * 获取此 Minecraft 数据包的名称
+     *
+     * @return 数据包名称
+     */
+    String getPacketName();
+
+    /**
+     * 获取此 Minecraft 数据包的类
+     *
+     * @return 类
+     */
+    @Nullable
+    Class<?> getPacketClass();
 }

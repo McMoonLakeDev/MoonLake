@@ -173,6 +173,19 @@ public abstract class PacketPlayOutBukkitAbstract extends PacketPlayOutAbstract 
     }
 
     @Override
+    public String getPacketName() {
+
+        return getClass().getSimpleName();
+    }
+
+    @Override
+    @Nullable
+    public Class<?> getPacketClass() {
+
+        return null;
+    }
+
+    @Override
     public void send(Player... players) throws PacketException {
 
         try {

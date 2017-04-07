@@ -93,6 +93,12 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
     }
 
     @Override
+    public Class<?> getPacketClass() {
+
+        return CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN;
+    }
+
+    @Override
     @SuppressWarnings("deprecation")
     protected boolean sendPacket(Player... players) throws Exception {
 

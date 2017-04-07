@@ -142,6 +142,11 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
         return itemStack;
     }
 
+    public static Class<?> getClassCraftitemstack() {
+
+        return CLASS_PACKETPLAYOUTENTITYEQUIPMENT;
+    }
+
     @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
