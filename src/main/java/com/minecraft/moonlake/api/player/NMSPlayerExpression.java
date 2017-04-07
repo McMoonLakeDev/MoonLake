@@ -35,7 +35,7 @@ import org.bukkit.entity.Player;
  * @deprecated 已过时, 将于 v2.0 删除.
  */
 @Deprecated
-class NMSPlayerExpression implements NMSPlayerLibrary {
+class NMSPlayerExpression implements NMSPlayerLibrary { // TODO 2.0
 
     /**
      * 玩家 NMS 接口实现类构造函数

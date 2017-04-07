@@ -27,5 +27,5 @@ package com.minecraft.moonlake.api.player.ability;
  * @deprecated 已过时, 将于 v2.0 删除.
  */
 @Deprecated
-public interface AbilityLibrary extends ItemCooldown {
+public interface AbilityLibrary extends ItemCooldown { // TODO 2.0
 }

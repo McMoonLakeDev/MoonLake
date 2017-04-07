@@ -34,7 +34,7 @@ public interface MoonLakeCore {
      * @deprecated 已过时, 将于 v2.0 去除. 请使用 {@link #getMoonLake()}
      */
     @Deprecated
-    MoonLake getInstance();
+    MoonLake getInstance(); // TODO 2.0
 
     /**
      * 获取月色之湖核心API插件实例对象

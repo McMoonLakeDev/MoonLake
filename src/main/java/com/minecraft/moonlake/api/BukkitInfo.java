@@ -37,7 +37,7 @@ public interface BukkitInfo {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #currentBukkitVersion()}
      */
     @Deprecated
-    String getBukkitVersion();
+    String getBukkitVersion(); // TODO 2.0
 
     /**
      * 获取 Bukkit 服务器的版本号
@@ -46,7 +46,7 @@ public interface BukkitInfo {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #currentBukkitVersion()}
      */
     @Deprecated
-    int getReleaseNumber();
+    int getReleaseNumber(); // TODO 2.0
 
     /**
      * 获取此 Minecraft Bukkit 服务器的版本

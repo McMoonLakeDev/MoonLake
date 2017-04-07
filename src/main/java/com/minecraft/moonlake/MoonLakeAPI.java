@@ -246,7 +246,7 @@ public final class MoonLakeAPI {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #currentBukkitVersionString()}
      */
     @Deprecated
-    public static String getBukkitVersion() {
+    public static String getBukkitVersion() { // TODO 2.0
 
         //return moonlake.getBukkitVersion();
         //return Reflect.getServerVersion();
@@ -260,7 +260,7 @@ public final class MoonLakeAPI {
      * @deprecated 已过时, 将于 v2.0 删除.
      */
     @Deprecated
-    public static int getReleaseNumber() {
+    public static int getReleaseNumber() { // TODO 2.0
 
         //return moonlake.getReleaseNumber();
         //return Reflect.getServerVersionNumber();
@@ -887,7 +887,7 @@ public final class MoonLakeAPI {
      */
     @Deprecated
     @SuppressWarnings("deprecation")
-    public static <T extends Packet> T newPacket(Class<T> packet) throws PacketException {
+    public static <T extends Packet> T newPacket(Class<T> packet) throws PacketException { // TODO 2.0
 
         return PacketFactory.get().instance(packet);
     }
@@ -904,7 +904,7 @@ public final class MoonLakeAPI {
      */
     @Deprecated
     @SuppressWarnings("deprecation")
-    public static <T extends Packet> T newPacket(Class<T> packet, Object... args) throws PacketException {
+    public static <T extends Packet> T newPacket(Class<T> packet, Object... args) throws PacketException { // TODO 2.0
 
         return PacketFactory.get().instance(packet, args);
     }

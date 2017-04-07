@@ -35,7 +35,7 @@ import java.util.UUID;
  * @deprecated 已过时, 将于 v2.0 删除.
  */
 @Deprecated
-abstract class PlayerExpression implements PlayerLibrary {
+abstract class PlayerExpression implements PlayerLibrary { // TODO 2.0
 
     /**
      * 玩家支持库抽象实现类构造函数

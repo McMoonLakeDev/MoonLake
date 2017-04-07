@@ -48,7 +48,7 @@ public interface NMSPlayer {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #sendPacket(PacketPlayOutBukkit)}
      */
     @Deprecated
-    void sendPacket(com.minecraft.moonlake.nms.packet.Packet<?> packet);
+    void sendPacket(com.minecraft.moonlake.nms.packet.Packet<?> packet); // TODO 2.0
 
     /**
      * 给此玩家发送数据包

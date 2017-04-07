@@ -35,7 +35,7 @@ import org.bukkit.event.HandlerList;
  * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MoonLakePacketOutEvent}
  */
 @Deprecated
-public class MoonLakePacketDispatchEvent extends MoonLakePacketEvent implements Cancellable {
+public class MoonLakePacketDispatchEvent extends MoonLakePacketEvent implements Cancellable { // TODO 2.0
 
     private final static HandlerList handlerList = new HandlerList();
     private final Player[] players;

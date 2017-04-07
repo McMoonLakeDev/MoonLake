@@ -26,7 +26,7 @@ import org.bukkit.Material;
  * @deprecated 已过时, 将于 v2.0 删除.
  */
 @Deprecated
-class PlayerExpressionWrapped extends PlayerExpression {
+class PlayerExpressionWrapped extends PlayerExpression { // TODO 2.0
 
     private NMSPlayerExpression nmsPlayerExpression;
     private ItemCooldownExpression itemCooldownExpression;

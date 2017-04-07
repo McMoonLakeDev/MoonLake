@@ -209,7 +209,7 @@ public abstract class PotionEffectType {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getRequiredMCVersion()}
      */
     @Deprecated
-    public int getRequiredVersion() {
+    public int getRequiredVersion() { // TODO 2.0
 
         return requiredVersion != null ? requiredVersion.getMinor() : -1;
     }

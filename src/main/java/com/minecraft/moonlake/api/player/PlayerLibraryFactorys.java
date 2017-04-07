@@ -29,7 +29,7 @@ import com.minecraft.moonlake.exception.CannotDependException;
  * @deprecated 已过时, 将于 v2.0 删除.
  */
 @Deprecated
-public class PlayerLibraryFactorys {
+public class PlayerLibraryFactorys { // TODO 2.0
 
     @Deprecated
     private static PlayerLibrary playerLibraryInstance;

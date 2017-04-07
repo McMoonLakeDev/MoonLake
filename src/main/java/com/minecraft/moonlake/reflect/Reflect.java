@@ -44,7 +44,7 @@ public class Reflect {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MoonLakeAPI#currentBukkitVersionString()}
      */
     @Deprecated
-    public static String getServerVersion() {
+    public static String getServerVersion() { // TODO 2.0
 
         return MoonLakeAPI.currentBukkitVersionString();
     }
@@ -56,7 +56,7 @@ public class Reflect {
      * @deprecated 已过时, 将于 v2.0 删除.
      */
     @Deprecated
-    public static int getServerVersionNumber() {
+    public static int getServerVersionNumber() { // TODO 2.0
 
         return MoonLakeAPI.getReleaseNumber(); // 等到 v2.0 一起删除
     }
