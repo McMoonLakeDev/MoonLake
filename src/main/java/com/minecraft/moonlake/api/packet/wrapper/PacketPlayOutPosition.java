@@ -243,7 +243,8 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
         return value;
     }
 
-    public static Class<?> getClassPacketplayoutposition() {
+    @Override
+    public Class<?> getPacketClass() {
 
         return CLASS_PACKETPLAYOUTPOSITION;
     }

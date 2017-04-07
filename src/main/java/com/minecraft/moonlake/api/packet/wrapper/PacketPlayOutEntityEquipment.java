@@ -142,7 +142,8 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
         return itemStack;
     }
 
-    public static Class<?> getClassCraftitemstack() {
+    @Override
+    public Class<?> getPacketClass() {
 
         return CLASS_PACKETPLAYOUTENTITYEQUIPMENT;
     }
