@@ -76,13 +76,13 @@ public class PlayerManager extends MoonLakeManager {
 
             if(mcVersion == null) // Not Support
                 CLASS_SIMPLEMOONLAKEPLAYER = null;
-            else if(mcVersion.equals(MinecraftVersion.V1_8)) // Bukkit 1.8
+            else if(mcVersion.equalsMinor(MinecraftVersion.V1_8)) // Bukkit 1.8
                 CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_8.class;
-            else if(mcVersion.equals(MinecraftVersion.V1_9)) // Bukkit 1.9
+            else if(mcVersion.equalsMinor(MinecraftVersion.V1_9)) // Bukkit 1.9
                 CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_9.class;
-            else if(mcVersion.equals(MinecraftVersion.V1_10)) // Bukkit 1.10
+            else if(mcVersion.equalsMinor(MinecraftVersion.V1_10)) // Bukkit 1.10
                 CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_10.class;
-            else if(mcVersion.equals(MinecraftVersion.V1_11)) // Bukkit 1.11
+            else if(mcVersion.equalsMinor(MinecraftVersion.V1_11)) // Bukkit 1.11
                 CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_11.class;
             else // Not Support
                 CLASS_SIMPLEMOONLAKEPLAYER = null;

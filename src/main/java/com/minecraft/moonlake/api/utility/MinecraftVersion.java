@@ -256,6 +256,22 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
         return other != null && compareTo(other) >= 0;
     }
 
+    /**
+     * <h1>判断当前版本是否符合指定 Minecraft 版本的主和次版本号</h1>
+     *
+     * <p>
+     *     {@code if(other ==} {@link #V1_10}{@code )}
+     *     then {@link #getCurrentVersion()} {@code == 1.10.x} {@code = true}
+     * </p>
+     *
+     * @param other 其他版本
+     * @return 是否符合主和次版本号
+     */
+    public boolean equalsMinor(MinecraftVersion other) {
+
+        return other != null && major == other.major && minor == other.minor;
+    }
+
     @Override
     public int compareTo(MinecraftVersion o) {
 
