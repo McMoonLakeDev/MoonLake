@@ -25,6 +25,8 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.metadata.Metadatable;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -41,11 +43,11 @@ import java.util.UUID;
  * <h1>AbilityPlayer</h1>
  * 玩家能力接口（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  * @see BasePlayer
  */
-public interface AbilityPlayer extends BasePlayer, AnimalTamer, CommandSender {
+public interface AbilityPlayer extends BasePlayer, AnimalTamer, CommandSender, Metadatable {
 
     /**
      * 获取此玩家的名称
@@ -854,4 +856,46 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer, CommandSender {
      * @return 实体类对象列表
      */
     <T extends Entity> List<T> getNearbyEntities(Set<Class<? extends Entity>> ignoreEntity, double x, double y, double z);
+
+    /**
+     *  设置此玩家指定键的元数据值
+     *
+     * @param key 键
+     * @param value 元数据值
+     * @throws IllegalArgumentException 如果键对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果值对象为 {@code null} 则抛出异常
+     */
+    @Override
+    void setMetadata(String key, MetadataValue value);
+
+    /**
+     * 获取此玩家指定键的元数据值列表
+     *
+     * @param key 键
+     * @return {@code List<MetadataValue> | null}
+     * @throws IllegalArgumentException 如果键对象为 {@code null} 则抛出异常
+     */
+    @Override
+    List<MetadataValue> getMetadata(String key);
+
+    /**
+     * 获取此玩家是否拥有指定键的元数据值
+     *
+     * @param key 键
+     * @return 是否拥有指定键的元数据值
+     * @throws IllegalArgumentException 如果键对象为 {@code null} 则抛出异常
+     */
+    @Override
+    boolean hasMetadata(String key);
+
+    /**
+     * 删除此玩家指定键的元数据值
+     *
+     * @param key 键
+     * @param plugin 插件
+     * @throws IllegalArgumentException 如果键对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     */
+    @Override
+    void removeMetadata(String key, Plugin plugin);
 }

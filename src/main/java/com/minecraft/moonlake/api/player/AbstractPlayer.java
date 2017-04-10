@@ -51,6 +51,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -69,11 +70,11 @@ import java.util.*;
  * <hr />
  * <div>
  *     <h1>Minecraft MoonLake Player Wrapped Abstract</h1>
- *     <p>By Month_Light Ver: 1.7</p>
+ *     <p>By Month_Light Ver: 1.7.1</p>
  * </div>
  * <hr />
  *
- * @version 1.7
+ * @version 1.7.1
  * @author Month_Light
  * @see MoonLakePlayer
  */
@@ -1205,6 +1206,40 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
                 entityList.add((T) entity); // @SuppressWarnings("unchecked")
 
         return entityList;
+    }
+
+    @Override
+    public void setMetadata(String key, MetadataValue value) {
+
+        Validate.notNull(key, "The metadata key object is null.");
+        Validate.notNull(value, "The metadata value object is null.");
+
+        getBukkitPlayer().setMetadata(key, value);
+    }
+
+    @Override
+    public List<MetadataValue> getMetadata(String key) {
+
+        Validate.notNull(key, "The metadata key object is null.");
+
+        return getBukkitPlayer().getMetadata(key);
+    }
+
+    @Override
+    public boolean hasMetadata(String key) {
+
+        Validate.notNull(key, "The metadata key object is null.");
+
+        return getBukkitPlayer().hasMetadata(key);
+    }
+
+    @Override
+    public void removeMetadata(String key, Plugin plugin) {
+
+        Validate.notNull(key, "The metadata key object is null.");
+        Validate.notNull(plugin, "The plugin object is null.");
+
+        getBukkitPlayer().removeMetadata(key, plugin);
     }
 
     @Override
