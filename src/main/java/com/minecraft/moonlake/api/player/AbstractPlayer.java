@@ -132,6 +132,12 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    public int getEntityId() {
+
+        return getBukkitPlayer().getEntityId();
+    }
+
+    @Override
     public GameProfile getProfile() {
 
         return PlayerManager.getProfile(getBukkitPlayer());
@@ -342,6 +348,12 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     public PlayerInventory getInventory() {
 
         return getBukkitPlayer().getInventory();
+    }
+
+    @Override
+    public Inventory getEnderChest() {
+
+        return getBukkitPlayer().getEnderChest();
     }
 
     @Override
@@ -924,6 +936,18 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    public double getEyeHeight() {
+
+        return getEyeHeight(false);
+    }
+
+    @Override
+    public double getEyeHeight(boolean ignoreSneaking) {
+
+        return getBukkitPlayer().getEyeHeight(ignoreSneaking);
+    }
+
+    @Override
     public Location getEyeLocation() {
 
         return getBukkitPlayer().getEyeLocation();
@@ -1100,9 +1124,87 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    public void setCompassTarget(Location target) {
+
+        Validate.notNull(target, "The target location object is null.");
+
+        getBukkitPlayer().setCompassTarget(target);
+    }
+
+    @Override
+    public Location getCompassTarget() {
+
+        return getBukkitPlayer().getCompassTarget();
+    }
+
+    @Override
+    public void setBedSpawnLocation(Location target) {
+
+        setBedSpawnLocation(target, false);
+    }
+
+    @Override
+    public void setBedSpawnLocation(Location target, boolean force) {
+
+        getBukkitPlayer().setBedSpawnLocation(target, force);
+    }
+
+    @Override
+    public Location getBedSpawnLocation() {
+
+        return getBukkitPlayer().getBedSpawnLocation();
+    }
+
+    @Override
     public InetSocketAddress getAddress() {
 
         return getBukkitPlayer().getAddress();
+    }
+
+    @Override
+    public List<Entity> getNearbyEntities(double x, double y, double z) {
+
+        return getBukkitPlayer().getNearbyEntities(x, y, z);
+    }
+
+    @Override
+    public List<LivingEntity> getNearbyLivingEntities(double x, double y, double z) {
+
+        return getNearbyEntities(LivingEntity.class, x, y, z);
+    }
+
+    @Override
+    public List<Player> getNearbyPlayers(double x, double y, double z) {
+
+        return getNearbyEntities(Player.class, x, y, z);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends Entity> List<T> getNearbyEntities(Class<T> entityClass, double x, double y, double z) {
+
+        Validate.notNull(entityClass, "The entity class object is null.");
+
+        List<T> entityList = new ArrayList<>();
+
+        for(Entity entity : getNearbyEntities(x, y, z))
+            if(entityClass.isInstance(entity))
+                entityList.add((T) entity); // @SuppressWarnings("unchecked")
+
+        return entityList;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends Entity> List<T> getNearbyEntities(Set<Class<? extends Entity>> ignoreEntity, double x, double y, double z) {
+
+        List<T> entityList = new ArrayList<>();
+
+        for(Entity entity : getNearbyEntities(x, y, z))
+            if(ignoreEntity != null && !ignoreEntity.contains(entity.getClass()))
+                entityList.add((T) entity); // @SuppressWarnings("unchecked")
+
+        return entityList;
     }
 
     @Override

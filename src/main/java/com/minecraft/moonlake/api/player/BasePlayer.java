@@ -54,6 +54,13 @@ public interface BasePlayer {
     UUID getUniqueId();
 
     /**
+     * 获取此玩家的实体 Id
+     *
+     * @return 实体 Id
+     */
+    int getEntityId();
+
+    /**
      * 获取此玩家的游戏简介
      *
      * @return 游戏简介
@@ -320,6 +327,21 @@ public interface BasePlayer {
      * 重置此玩家的客户端时间
      */
     void resetTime();
+
+    /**
+     * 获取此玩家眼睛的高度位置
+     *
+     * @return 高度位置
+     */
+    double getEyeHeight();
+
+    /**
+     * 获取此玩家眼睛的高度位置
+     *
+     * @param ignoreSneaking 是否无视潜行的影响效果
+     * @return 高度位置
+     */
+    double getEyeHeight(boolean ignoreSneaking);
 
     /**
      * 获取此玩家的眼部位置
