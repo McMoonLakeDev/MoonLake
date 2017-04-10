@@ -23,10 +23,8 @@ import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
-import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutBungeeConnect;
-import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutChat;
-import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutPlayerListHeaderFooter;
-import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutTitle;
+import com.minecraft.moonlake.api.packet.exception.PacketException;
+import com.minecraft.moonlake.api.packet.wrapper.*;
 import com.minecraft.moonlake.api.player.depend.EconomyPlayerData;
 import com.minecraft.moonlake.api.player.depend.EconomyVaultPlayerResponse;
 import com.minecraft.moonlake.api.player.depend.WorldEditSelection;
@@ -1441,6 +1439,12 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     public boolean hasItemCooldown(Material type) {
 
         return PlayerManager.hasItemCoolDown(getBukkitPlayer(), type);
+    }
+
+    @Override
+    public void playHurtAnimation() throws PacketException {
+
+        new PacketPlayOutAnimation(getEntityId(), PacketPlayOutAnimation.Type.HURT_EFFECT).sendAll();
     }
 
     @Override

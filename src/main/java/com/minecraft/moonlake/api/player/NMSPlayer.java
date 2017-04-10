@@ -19,6 +19,8 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
+import com.minecraft.moonlake.api.packet.exception.PacketException;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutAnimation;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import org.bukkit.Material;
@@ -27,7 +29,7 @@ import org.bukkit.Material;
  * <h1>NMSPlayer</h1>
  * 玩家 NMS 接口（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 public interface NMSPlayer {
@@ -145,4 +147,13 @@ public interface NMSPlayer {
      * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
      */
     boolean hasItemCooldown(Material material);
+
+    /**
+     * 将此玩家播放受伤动画效果
+     *
+     * @throws PacketException 如果发送时错误则抛出异常
+     * @see PacketPlayOutAnimation
+     * @see PacketPlayOutAnimation.Type#HURT_EFFECT
+     */
+    void playHurtAnimation() throws PacketException;
 }
