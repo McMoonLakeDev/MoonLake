@@ -24,29 +24,22 @@ import java.util.Map;
 public abstract class ClassSource {
 
     public static ClassSource fromClassLoader() {
-
         return fromClassLoader(ClassSource.class.getClassLoader());
     }
 
     public static ClassSource fromClassLoader(ClassLoader classLoader) {
-
         return new ClassSource() {
-
             @Override
             public Class<?> loadClass(String name) throws ClassNotFoundException {
-
                 return classLoader.loadClass(name);
             }
         };
     }
 
     public static ClassSource fromMap(Map<String, Class<?>> map) {
-
         return new ClassSource() {
-
             @Override
             public Class<?> loadClass(String name) throws ClassNotFoundException {
-
                 Class<?> loaded = map == null ? null : map.get(name);
                 if(loaded == null)
                     throw new ClassNotFoundException("The specified class could not be found by this ClassLoader.");
@@ -56,7 +49,6 @@ public abstract class ClassSource {
     }
 
     public static ClassSource empty() {
-
         return fromMap(Collections.emptyMap());
     }
 
