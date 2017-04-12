@@ -23,6 +23,7 @@ import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
@@ -370,7 +371,7 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
 
             try {
 
-                Object nmsPlayer = getNMSPlayer(player);
+                Object nmsPlayer = MinecraftReflection.getNMSPlayer(player);
                 Object abilities = FIELD_ABILITIES.get(nmsPlayer);
 
                 this.isInvulnerable = new SimpleBooleanProperty((Boolean) FIELD_ISINVULNERABLE.get(abilities));

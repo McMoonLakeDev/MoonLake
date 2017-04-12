@@ -59,9 +59,9 @@ public class ExactReflect {
     private Method getMethod(Class<?> instanceClass, String methodName, Class<?>... params) {
         Class<?>[] primitiveTypes = Reflect.DataType.getPrimitive(params);
         for(Method method : instanceClass.getDeclaredMethods()) {
-            if((this.forceAccess || Modifier.isPublic(method.getModifiers()) &&
-                    (methodName == null || method.getName().equals(methodName) &&
-                            Reflect.DataType.compare(method.getParameterTypes(), primitiveTypes)))) {
+            if((this.forceAccess || Modifier.isPublic(method.getModifiers())) &&
+                    (methodName == null || method.getName().equals(methodName)) &&
+                            Reflect.DataType.compare(method.getParameterTypes(), primitiveTypes)) {
                 method.setAccessible(this.forceAccess);
                 return method;
             }

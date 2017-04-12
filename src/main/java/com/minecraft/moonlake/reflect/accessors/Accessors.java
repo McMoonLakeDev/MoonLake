@@ -50,7 +50,7 @@ public final class Accessors {
         return new SimpleFieldAccessor(field);
     }
 
-    public static FieldAccessor getFieldAccess(Class<?> instanceClass, String fieldName, boolean forceAccess) {
+    public static FieldAccessor getFieldAccessor(Class<?> instanceClass, String fieldName, boolean forceAccess) {
         return getFieldAccessor(ExactReflect.fromClass(instanceClass, forceAccess).getField(fieldName));
     }
 
@@ -92,7 +92,7 @@ public final class Accessors {
 
     public static FieldAccessor getFieldAccessorOrNull(Class<?> clazz, String fieldName, Class<?> fieldType) {
         try {
-            FieldAccessor accessor = getFieldAccess(clazz, fieldName, true);
+            FieldAccessor accessor = getFieldAccessor(clazz, fieldName, true);
             if(fieldType.isAssignableFrom(accessor.getField().getType()))
                 return accessor;
             return null;

@@ -18,9 +18,13 @@
 
 package com.minecraft.moonlake.api.utility;
 
+import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
+import com.minecraft.moonlake.validate.Validate;
+import org.bukkit.entity.Player;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -34,7 +38,11 @@ public class MinecraftReflection {
     private static CachedPackage minecraftPackage;
     private static CachedPackage craftBukkitPackage;
     private static ClassSource source;
-    private static MethodAccessor enumConstantDirectory;
+    private static volatile MethodAccessor enumConstantDirectoryMethod;
+    private static volatile MethodAccessor entityPlayerHandleMethod;
+    private static volatile MethodAccessor sendPacketMethod;
+    private static volatile FieldAccessor playerConnectionField;
+    private static volatile FieldAccessor networkManagerField;
 
     static {
     }
@@ -45,17 +53,17 @@ public class MinecraftReflection {
 
     public static String getMinecraftFullPackage() {
         if(MINECRAFT_FULL_PACKAGE == null)
-            MINECRAFT_FULL_PACKAGE = "net.minecraft.server." + getCraftbukkitNMSVersion();
+            MINECRAFT_FULL_PACKAGE = "net.minecraft.server." + getCraftBukkitNMSVersion();
         return MINECRAFT_FULL_PACKAGE;
     }
 
     public static String getCraftBukkitFullPackage() {
         if(CRAFTBUKKIT_FULL_PACKAGE == null)
-            CRAFTBUKKIT_FULL_PACKAGE = "org.bukkit.craftbukkit." + getCraftbukkitNMSVersion();
+            CRAFTBUKKIT_FULL_PACKAGE = "org.bukkit.craftbukkit." + getCraftBukkitNMSVersion();
         return CRAFTBUKKIT_FULL_PACKAGE;
     }
 
-    public static String getCraftbukkitNMSVersion() {
+    public static String getCraftBukkitNMSVersion() {
         if(CRAFTBUKKIT_NMS_VERSION == null)
             CRAFTBUKKIT_NMS_VERSION = MinecraftBukkitVersion.getCurrentVersion().getVersion();
         return CRAFTBUKKIT_NMS_VERSION;
@@ -65,7 +73,7 @@ public class MinecraftReflection {
         try {
             return MinecraftReflection.class.getClassLoader().loadClass(className);
         } catch (ClassNotFoundException e) {
-            throw new MoonLakeException("", e);
+            throw new MoonLakeException("Cannot find class " + className, e);
         }
     }
 
@@ -234,15 +242,83 @@ public class MinecraftReflection {
         return getMinecraftClass("Packet");
     }
 
+    public static Object getNMSPlayer(Player player) {
+        Validate.notNull(player, "The player object is null.");
+        if(entityPlayerHandleMethod == null)
+            entityPlayerHandleMethod = Accessors.getMethodAccessor(getCraftPlayerClass(), "getHandle");
+        return entityPlayerHandleMethod.invoke(player);
+    }
+
+    public static Object getNetworkManager(MoonLakePlayer player) {
+        Validate.notNull(player, "The player object is null.");
+        return getNetworkManager(player.getBukkitPlayer());
+    }
+
+    public static Object getPlayerConnection(MoonLakePlayer player) {
+        Validate.notNull(player, "The player object is null.");
+        return getPlayerConnection(player.getBukkitPlayer());
+    }
+
+    public static Object getNetworkManager(Player player) {
+        Validate.notNull(player, "The player object is null.");
+        return getNetworkManager(getNMSPlayer(player));
+    }
+
+    public static Object getNetworkManager(Object nmsPlayer) {
+        Validate.notNull(nmsPlayer, "The nms player object is null.");
+        if(networkManagerField == null)
+            networkManagerField = Accessors.getFieldAccessor(getPlayerConnectionClass(), getNetworkManagerClass(), true);
+        return networkManagerField.get(getPlayerConnection(nmsPlayer));
+    }
+
+    public static Object getPlayerConnection(Player player) {
+        Object nmsPlayer = getNMSPlayer(player);
+        return getPlayerConnection(nmsPlayer);
+    }
+
+    public static Object getPlayerConnection(Object nmsPlayer) {
+        Validate.notNull(nmsPlayer, "The nms player object is null.");
+        if(playerConnectionField == null)
+            playerConnectionField = Accessors.getFieldAccessor(getMinecraftEntityPlayerClass(), getPlayerConnectionClass(), true);
+        return playerConnectionField.get(nmsPlayer);
+    }
+
+    public static void sendPacket(Player[] players, Object nmsPacket) {
+        Validate.notNull(players, "The players object is null.");
+        for(Player player : players)
+            sendPacket(getNMSPlayer(player), nmsPacket);
+    }
+
+    public static void sendPacket(Player player, Object nmsPacket) {
+        Validate.notNull(player, "The player object is null.");
+        sendPacket(getNMSPlayer(player), nmsPacket);
+    }
+
+    public static void sendPacket(Object nmsPlayer, Object nmsPacket) {
+        Validate.notNull(nmsPlayer, "The nms player object is null.");
+        Validate.notNull(nmsPacket, "The nms packet object is null.");
+        if(sendPacketMethod == null)
+            sendPacketMethod = Accessors.getMethodAccessor(getPlayerConnectionClass(), "sendPacket", getPacketClass());
+        sendPacketMethod.invoke(getPlayerConnection(nmsPlayer), nmsPacket);
+    }
+
     public static boolean is(Class<?> clazz, Object obj) {
         return !(clazz == null || obj == null) && clazz.isAssignableFrom(obj.getClass());
     }
 
+    public static boolean isEntityPlayer(Object obj) {
+        return is(getMinecraftEntityPlayerClass(), obj);
+    }
+
+    public static boolean isPacket(Object obj) {
+        return is(getPacketClass(), obj);
+    }
+
     @SuppressWarnings("unchecked")
     public static Object enumValueOf(Class<? extends Enum<?>> enumClass, String name) {
-        if(enumConstantDirectory == null)
-            enumConstantDirectory = Accessors.getMethodAccessor(Class.class, "enumConstantDirectory");
-        Object obj = ((Map<String, ?>) enumConstantDirectory.invoke(enumClass)).get(name);
+        if(enumConstantDirectoryMethod == null)
+            enumConstantDirectoryMethod = Accessors.getMethodAccessor(Class.class, "enumConstantDirectoryMethod");
+        Object obj = ((Map<String, ?>) enumConstantDirectoryMethod.invoke(enumClass)).get(name);
         if(obj != null)
             return obj;
         if(name == null)
