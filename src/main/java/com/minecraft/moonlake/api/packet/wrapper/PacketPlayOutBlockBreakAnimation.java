@@ -23,6 +23,7 @@ import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
 import com.minecraft.moonlake.validate.Validate;
@@ -156,7 +157,7 @@ public class PacketPlayOutBlockBreakAnimation extends PacketPlayOutBukkitAbstrac
             // 先用调用 NMS 的 PacketPlayOutBlockBreakAnimation 构造函数, 参数 int, BlockPosition, int
             // 进行反射实例发送
             Object packet = instantiateObject(CLASS_PACKETPLAYOUTBLOCKBREAKANIMATION, entityId.get(), blockPosition.asNMS(), value.get());
-            sendPacket(players, packet);
+            MinecraftReflection.sendPacket(players, packet);
             return true;
 
         } catch (Exception e) {

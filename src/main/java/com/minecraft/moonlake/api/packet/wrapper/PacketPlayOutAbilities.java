@@ -172,7 +172,7 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
             FIELD_MAYBUILD.set(nmsAbilities, playerAbilities.mayBuild.get());
             FIELD_FLYSPEED.set(nmsAbilities, playerAbilities.flySpeed.get());
             FIELD_WALKSPEED.set(nmsAbilities, playerAbilities.walkSpeed.get());
-            sendPacket(players, instantiateObject(CLASS_PACKETPLAYOUTABILITIES, nmsAbilities));
+            MinecraftReflection.sendPacket(players, instantiateObject(CLASS_PACKETPLAYOUTABILITIES, nmsAbilities));
             return true;
 
         } catch (Exception e) {
@@ -371,7 +371,7 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
 
             try {
 
-                Object nmsPlayer = MinecraftReflection.getNMSPlayer(player);
+                Object nmsPlayer = MinecraftReflection.getEntityPlayer(player);
                 Object abilities = FIELD_ABILITIES.get(nmsPlayer);
 
                 this.isInvulnerable = new SimpleBooleanProperty((Boolean) FIELD_ISINVULNERABLE.get(abilities));

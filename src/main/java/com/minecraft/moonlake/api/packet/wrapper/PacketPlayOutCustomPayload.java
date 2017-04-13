@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.property.StringProperty;
 import com.minecraft.moonlake.validate.Validate;
@@ -131,7 +132,7 @@ public class PacketPlayOutCustomPayload extends PacketPlayOutBukkitAbstract {
         try {
             // 先用调用 NMS 的 PacketPlayOutCustomPayload 构造函数, 参数 String, PacketDataSerializer
             // 进行反射实例发送
-            sendPacket(players, instantiateObject(CLASS_PACKETPLAYOUTCUSTOMPAYLOAD, channel, dataSerializer.asNMS()));
+            MinecraftReflection.sendPacket(players, instantiateObject(CLASS_PACKETPLAYOUTCUSTOMPAYLOAD, channel, dataSerializer.asNMS()));
             return true;
 
         } catch (Exception e) {

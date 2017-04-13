@@ -86,7 +86,6 @@ public class MinecraftReflection {
     public static Class<?> getMinecraftClass(String className, String... aliases) {
         try {
             return getMinecraftClass(className);
-
         } catch (MoonLakeException e) {
             Class<?> success = null;
             for(String alias : aliases) try {
@@ -171,23 +170,15 @@ public class MinecraftReflection {
     }
 
     public static Class<?> getMinecraftVec3DClass() {
-        try {
-            return getMinecraftClass("Vec3D");
-        } catch (MoonLakeException e) {
-        }
-        return null;
+        return getMinecraftClass("Vec3D");
     }
 
     public static Class<?> getMinecraftWorldType() { // TODO FuzzyReflect
         return getMinecraftClass("WorldType");
     }
 
-    public static Class<?> getIChatBaseComponentClass() { // TODO FuzzyReflect
-        try {
-            return getMinecraftClass("IChatBaseComponent");
-        } catch (MoonLakeException e) {
-        }
-        return null;
+    public static Class<?> getIChatBaseComponentClass() {
+        return getMinecraftClass("IChatBaseComponent");
     }
 
     public static Class<?> getChatMessageClass() {
@@ -198,24 +189,18 @@ public class MinecraftReflection {
         return getCraftBukkitClass("util.CraftChatMessage");
     }
 
-    public static Class<?> getChatComponentTextClass() { // TODO FuzzyReflect
-        try {
-            return getMinecraftClass("ChatComponentText");
-        } catch (MoonLakeException e) {
-            try {
-
-            } catch (MoonLakeException e1) {
-            }
-        }
-        throw new IllegalStateException("Cannot find ChatComponentText class.");
+    public static Class<?> getChatComponentTextClass() {
+        return getMinecraftClass("ChatComponentText");
     }
 
     public static Class<?> getChatSerializerClass() {
         try {
-            return getMinecraftClass("ChatSerializer", "IChatBaseComponent$ChatSerializer");
-        } catch (MoonLakeException e) {
-            throw new IllegalStateException("Could not find ChatSerializer class.");
+            // v1_8_R2 以上的版本是这个类
+            getMinecraftClass("IChatBaseComponent$ChatSerializer");
+        } catch (Exception e) {
         }
+        // 否则上面的异常则获取这个
+        return getMinecraftClass("ChatSerializer");
     }
 
     public static Class<?> getNBTTagCompoundClass() {
@@ -242,7 +227,7 @@ public class MinecraftReflection {
         return getMinecraftClass("Packet");
     }
 
-    public static Object getNMSPlayer(Player player) {
+    public static Object getEntityPlayer(Player player) {
         Validate.notNull(player, "The player object is null.");
         if(entityPlayerHandleMethod == null)
             entityPlayerHandleMethod = Accessors.getMethodAccessor(getCraftPlayerClass(), "getHandle");
@@ -261,7 +246,7 @@ public class MinecraftReflection {
 
     public static Object getNetworkManager(Player player) {
         Validate.notNull(player, "The player object is null.");
-        return getNetworkManager(getNMSPlayer(player));
+        return getNetworkManager(getEntityPlayer(player));
     }
 
     public static Object getNetworkManager(Object nmsPlayer) {
@@ -272,7 +257,7 @@ public class MinecraftReflection {
     }
 
     public static Object getPlayerConnection(Player player) {
-        Object nmsPlayer = getNMSPlayer(player);
+        Object nmsPlayer = getEntityPlayer(player);
         return getPlayerConnection(nmsPlayer);
     }
 
@@ -286,12 +271,12 @@ public class MinecraftReflection {
     public static void sendPacket(Player[] players, Object nmsPacket) {
         Validate.notNull(players, "The players object is null.");
         for(Player player : players)
-            sendPacket(getNMSPlayer(player), nmsPacket);
+            sendPacket(getEntityPlayer(player), nmsPacket);
     }
 
     public static void sendPacket(Player player, Object nmsPacket) {
         Validate.notNull(player, "The player object is null.");
-        sendPacket(getNMSPlayer(player), nmsPacket);
+        sendPacket(getEntityPlayer(player), nmsPacket);
     }
 
     public static void sendPacket(Object nmsPlayer, Object nmsPacket) {
@@ -314,23 +299,30 @@ public class MinecraftReflection {
         return is(getPacketClass(), obj);
     }
 
+    public static boolean isBlockPosition(Object obj) {
+        return is(getMinecraftBlockPositionClass(), obj);
+    }
+
     @SuppressWarnings("unchecked")
     public static Object enumValueOf(Class<? extends Enum<?>> enumClass, String name) {
+        Validate.notNull(enumClass, "The enum class object is null.");
+        Validate.notNull(name, "The name object is null.");
         if(enumConstantDirectoryMethod == null)
             enumConstantDirectoryMethod = Accessors.getMethodAccessor(Class.class, "enumConstantDirectoryMethod");
         Object obj = ((Map<String, ?>) enumConstantDirectoryMethod.invoke(enumClass)).get(name);
         if(obj != null)
             return obj;
-        if(name == null)
-            throw new NullPointerException("Name is null.");
         throw new IllegalArgumentException("No enum constant " + enumClass.getCanonicalName() + "." + name);
     }
 
     public static <T extends Enum<T>> T enumValueOfType(Class<T> enumClass, String name) {
+        Validate.notNull(enumClass, "The enum class object is null.");
+        Validate.notNull(name, "The name object is null.");
         return Enum.valueOf(enumClass, name);
     }
 
     public static Class<?> getArrayClass(Class<?> type) {
+        Validate.notNull(type, "The class type object is null.");
         return Array.newInstance(type, 0).getClass();
     }
 

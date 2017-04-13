@@ -19,8 +19,10 @@
 package com.minecraft.moonlake.api.packet.wrapper;
 
 import com.minecraft.moonlake.api.nms.exception.NMSException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.ObjectPropertyBase;
-import com.minecraft.moonlake.reflect.Reflect;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
@@ -28,23 +30,17 @@ import io.netty.buffer.Unpooled;
  * <h1>PacketDataSerializer</h1>
  * 数据包数据串行器包装类（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public class PacketDataSerializer {
 
-    private final static Class<?> CLASS_PACKETDATASERIALIZER;
+    private static volatile ConstructorAccessor packetDataSerializerConstructor;
 
     static {
 
-        try {
-
-            CLASS_PACKETDATASERIALIZER = Reflect.PackageType.MINECRAFT_SERVER.getClass("PacketDataSerializer");
-        }
-        catch (Exception e) {
-
-            throw new NMSException("The packet data serializer initialize exception.", e);
-        }
+        Class<?> packetDataSerializer = MinecraftReflection.getPacketDataSerializerClass();
+        packetDataSerializerConstructor = Accessors.getConstructorAccessor(packetDataSerializer, ByteBuf.class);
     }
 
     private ByteBufProperty byteBuf;
@@ -118,6 +114,22 @@ public class PacketDataSerializer {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof PacketDataSerializer) {
+            PacketDataSerializer other = (PacketDataSerializer) obj;
+            return getByteBuf().equals(other.getByteBuf());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return byteBuf != null ? byteBuf.hashCode() : 0;
+    }
+
+    @Override
     public String toString() {
         return "PacketDataSerializer{" +
                 "byteBuf=" + byteBuf.get() +
@@ -134,11 +146,11 @@ public class PacketDataSerializer {
 
         try {
 
-            return Reflect.instantiateObject(CLASS_PACKETDATASERIALIZER, getByteBuf());
+            return packetDataSerializerConstructor.invoke(getByteBuf());
         }
         catch (Exception e) {
 
-            throw new NMSException();
+            throw new NMSException("The as nms packet data serializer exception.", e);
         }
     }
 

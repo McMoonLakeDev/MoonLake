@@ -113,9 +113,9 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
         try {
             // 先用调用 NMS 的 PacketPlayOutNamedEntitySpawn 构造函数, 参数 EntityHuman
             // 进行反射实例发送
-            Object nmsPlayer = MinecraftReflection.getNMSPlayer(player);
+            Object nmsPlayer = MinecraftReflection.getEntityPlayer(player);
             Object packet = instantiateObject(CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN, nmsPlayer);
-            sendPacket(players, packet);
+            MinecraftReflection.sendPacket(players, packet);
             return true;
 
         } catch (Exception e) {
@@ -127,7 +127,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
                 // 其中这些字段中最后一个 List 可以为 null 的
                 Location location = player.getLocation();
                 Object packet = instantiateObject(CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN);
-                Object dataWatcher = METHOD_GETDATAWATCHER.invoke(MinecraftReflection.getNMSPlayer(player));
+                Object dataWatcher = METHOD_GETDATAWATCHER.invoke(MinecraftReflection.getEntityPlayer(player));
 
                 if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                     Object[] values = {

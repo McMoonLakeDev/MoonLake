@@ -19,46 +19,38 @@
 package com.minecraft.moonlake.api.packet.wrapper;
 
 import com.minecraft.moonlake.api.nms.exception.NMSException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.ObjectPropertyBase;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
+import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-
-import java.lang.reflect.Method;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>BlockPosition</h1>
  * 方块位置封装类（详细doc待补充...）
  *
- * @version 1.1
+ * @version 1.2
  * @author Month_Light
  */
 public class BlockPosition {
 
-    private final static Class<?> CLASS_BLOCKPOSITION;
-    private final static Class<?> CLASS_BASEBLOCKPOSITION;
-    private final static Method METHOD_GETX;
-    private final static Method METHOD_GETY;
-    private final static Method METHOD_GETZ;
+    private static volatile ConstructorAccessor blockPositionConstructor;
+    private static volatile MethodAccessor blockPositionGetXMethod;
+    private static volatile MethodAccessor blockPositionGetYMethod;
+    private static volatile MethodAccessor blockPositionGetZMethod;
 
     static {
 
-        try {
-
-            CLASS_BLOCKPOSITION = PackageType.MINECRAFT_SERVER.getClass("BlockPosition");
-            CLASS_BASEBLOCKPOSITION = PackageType.MINECRAFT_SERVER.getClass("BaseBlockPosition");
-            METHOD_GETX = getMethod(CLASS_BASEBLOCKPOSITION, "getX");
-            METHOD_GETY = getMethod(CLASS_BASEBLOCKPOSITION, "getY");
-            METHOD_GETZ = getMethod(CLASS_BASEBLOCKPOSITION, "getZ");
-        }
-        catch (Exception e) {
-
-            throw new NMSException("The nms block position initialize exception.", e);
-        }
+        Class<?> blockPositionClass = MinecraftReflection.getMinecraftBlockPositionClass();
+        blockPositionConstructor = Accessors.getConstructorAccessor(blockPositionClass, int.class, int.class, int.class);
+        blockPositionGetXMethod = Accessors.getMethodAccessor(blockPositionClass, "getX");
+        blockPositionGetYMethod = Accessors.getMethodAccessor(blockPositionClass, "getY");
+        blockPositionGetZMethod = Accessors.getMethodAccessor(blockPositionClass, "getZ");
     }
 
     /**
@@ -147,8 +139,26 @@ public class BlockPosition {
     }
 
     @Override
-    public String toString() {
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof BlockPosition) {
+            BlockPosition other = (BlockPosition) obj;
+            return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
+        }
+        return false;
+    }
 
+    @Override
+    public int hashCode() {
+        int result = x.hashCode();
+        result = 31 * result + y.hashCode();
+        result = 31 * result + z.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
         return "BlockPosition{" +
                 "x=" + getX() +
                 ", y=" + getY() +
@@ -166,11 +176,11 @@ public class BlockPosition {
 
         try {
 
-            return instantiateObject(CLASS_BLOCKPOSITION, getX(),getY(), getZ());
+            return blockPositionConstructor.invoke(getX(), getY(), getZ());
         }
         catch (Exception e) {
 
-            throw new NMSException();
+            throw new NMSException("The as nms block position exception.", e);
         }
     }
 
@@ -185,18 +195,18 @@ public class BlockPosition {
     public static BlockPosition fromNMS(Object nmsBlockPosition) throws NMSException {
 
         Validate.notNull(nmsBlockPosition, "The nms block position object is null.");
-        Validate.isTrue(CLASS_BASEBLOCKPOSITION.isInstance(nmsBlockPosition), "The nms block position object is not instance.");
+        Validate.isTrue(MinecraftReflection.isBlockPosition(nmsBlockPosition), "The nms block position object is not instance.");
 
         try {
 
-            int x = (int) METHOD_GETX.invoke(nmsBlockPosition);
-            int y = (int) METHOD_GETY.invoke(nmsBlockPosition);
-            int z = (int) METHOD_GETZ.invoke(nmsBlockPosition);
+            int x = (int) blockPositionGetXMethod.invoke(nmsBlockPosition);
+            int y = (int) blockPositionGetYMethod.invoke(nmsBlockPosition);
+            int z = (int) blockPositionGetZMethod.invoke(nmsBlockPosition);
             return new BlockPosition(x, y, z);
         }
         catch (Exception e) {
 
-            throw new NMSException();
+            throw new NMSException("The from nms block position exception.", e);
         }
     }
 

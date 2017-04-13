@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
 import com.minecraft.moonlake.validate.Validate;
@@ -121,7 +122,7 @@ public class PacketPlayOutEntityDestroy extends PacketPlayOutBukkitAbstract {
         try {
             // 先用调用 NMS 的 PacketPlayOutEntityDestroy 构造函数, 参数 int[]
             // 进行反射实例发送
-            sendPacket(players, instantiateObject(CLASS_PACKETPLAYOUTENTITYDESTROY, entityIds));
+            MinecraftReflection.sendPacket(players, instantiateObject(CLASS_PACKETPLAYOUTENTITYDESTROY, entityIds));
             return true;
 
         } catch (Exception e) {

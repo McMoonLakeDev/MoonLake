@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
 import org.bukkit.entity.Player;
@@ -100,7 +101,7 @@ public class PacketPlayOutCloseWindow extends PacketPlayOutBukkitAbstract {
         try {
             // 先用调用 NMS 的 PacketPlayOutCloseWindow 构造函数, 参数 int
             // 进行反射实例发送
-            sendPacket(players, instantiateObject(CLASS_PACKETPLAYOUTCLOSEWINDOW, windowId.get()));
+            MinecraftReflection.sendPacket(players, instantiateObject(CLASS_PACKETPLAYOUTCLOSEWINDOW, windowId.get()));
             return true;
 
         } catch (Exception e) {

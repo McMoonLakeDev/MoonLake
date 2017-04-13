@@ -24,6 +24,7 @@ import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.property.*;
 import org.bukkit.entity.Player;
@@ -268,11 +269,11 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
             if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                 // 1.8 版本少一个 int 参数
                 Object packet = instantiateObject(CLASS_PACKETPLAYOUTPOSITION, x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet);
-                sendPacket(players, packet);
+                MinecraftReflection.sendPacket(players, packet);
             } else {
                 // 1.9 以及更高的版本有 int 参数
                 Object packet = instantiateObject(CLASS_PACKETPLAYOUTPOSITION, x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet, value.get());
-                sendPacket(players, packet);
+                MinecraftReflection.sendPacket(players, packet);
             }
             return true;
 

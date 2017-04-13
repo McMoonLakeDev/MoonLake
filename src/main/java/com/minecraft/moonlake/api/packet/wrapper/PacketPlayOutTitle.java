@@ -23,6 +23,7 @@ import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
@@ -101,7 +102,7 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
 
             try {
                 Object packet = getConstructor0().newInstance(METHOD_ENUMTITLEACTION_A.invoke(null, enumTitleActionName), null);
-                sendPacket(players, packet);
+                MinecraftReflection.sendPacket(players, packet);
                 return true;
 
             } catch (Exception e) {
@@ -290,10 +291,10 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
             Object packet0 = instantiateObject(CLASS_PACKETPLAYOUTTITLE, fadeIn.get(), stay.get(), fadeOut.get()); // TIMES Packet
             Object packet1 = instantiateObject(CLASS_PACKETPLAYOUTTITLE, METHOD_ENUMTITLEACTION_A.invoke(null, "TITLE"), nmsTitle); // Title Packet
             Object packet2 = nmsSubTitle != null ?  instantiateObject(CLASS_PACKETPLAYOUTTITLE, METHOD_ENUMTITLEACTION_A.invoke(null, "SUBTITLE"), nmsSubTitle) : null; // SubTitle Packet
-            sendPacket(players, packet0); // 发送标题的时间数据包
-            sendPacket(players, packet1); // 发送标题的主标题数据包
+            MinecraftReflection.sendPacket(players, packet0); // 发送标题的时间数据包
+            MinecraftReflection.sendPacket(players, packet1); // 发送标题的主标题数据包
             if(packet2 != null)
-                sendPacket(players, packet2); // 发送标题的副标题数据包
+                MinecraftReflection.sendPacket(players, packet2); // 发送标题的副标题数据包
             return true;
 
         } catch (Exception e) {

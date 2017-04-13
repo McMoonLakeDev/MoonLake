@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
 import com.minecraft.moonlake.validate.Validate;
@@ -112,7 +113,7 @@ public class PacketPlayOutBlockChange extends PacketPlayOutBukkitAbstract {
             // 进行反射实例发送
             Object nmsWorld = METHOD_GETHANDLER.invoke(world.get());
             Object packet = instantiateObject(CLASS_PACKETPLAYOUTBLOCKCHANGE, nmsWorld, blockPosition.get().asNMS());
-            sendPacket(players, packet);
+            MinecraftReflection.sendPacket(players, packet);
             return true;
 
         } catch (Exception e) {

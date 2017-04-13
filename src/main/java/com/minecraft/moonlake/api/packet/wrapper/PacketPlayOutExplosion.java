@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Location;
@@ -231,7 +232,7 @@ public class PacketPlayOutExplosion extends PacketPlayOutBukkitAbstract {
             // 实例化其他参数值
             Object nmsVec3D = instantiateObject(CLASS_VEC3D, vector.getX(), vector.getY(), vector.getZ());
             Object packet = instantiateObject(CLASS_PACKETPLAYOUTEXPLOSION, x.get(), y.get(), z.get(), radius.get(), nmsBlockPositionList, nmsVec3D);
-            sendPacket(players, packet);
+            MinecraftReflection.sendPacket(players, packet);
             return true;
 
         } catch (Exception e) {

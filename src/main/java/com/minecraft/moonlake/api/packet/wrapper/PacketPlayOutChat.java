@@ -24,6 +24,7 @@ import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -158,7 +159,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
             Object nmsChat = ChatSerializer.fromJson(isFancyMessage == null ? ("{\"text\":\"" + message + "\"}") : message);
             if(nmsChat == null) ChatSerializer.fromJson("{\"text\":\"" + message + "\"}"); // 如果为 null 的话再调用一次进行格式化
             Object packet = instantiateObject(CLASS_PACKETPLAYOUTCHAT, nmsChat, mode.get() == null ? (byte) 1 : mode.get().getMode());
-            sendPacket(players, packet);
+            MinecraftReflection.sendPacket(players, packet);
             return true;
 
         } catch (Exception e) {

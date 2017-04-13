@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
@@ -194,7 +195,7 @@ public class PacketPlayOutOpenWindow extends PacketPlayOutBukkitAbstract {
             else
                 packet = instantiateObject(CLASS_PACKETPLAYOUTOPENWINDOW, windowId.get(), windowType.toString(), nmsTitle, slotCount.get());
 
-            sendPacket(players, packet);
+            MinecraftReflection.sendPacket(players, packet);
             return true;
 
         } catch (Exception e) {

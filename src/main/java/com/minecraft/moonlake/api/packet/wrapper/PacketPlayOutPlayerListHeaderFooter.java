@@ -23,6 +23,7 @@ import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.property.StringProperty;
 import com.minecraft.moonlake.validate.Validate;
@@ -136,7 +137,7 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbst
             if(nmsFooter != null)
                 setFieldAccessibleAndValueSend(players, 1, 2, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, nmsFooter);
             else
-                sendPacket(players, packet);
+                MinecraftReflection.sendPacket(players, packet);
             return true;
 
         } catch (Exception e) {

@@ -23,6 +23,7 @@ import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.ObjectProperty;
@@ -171,7 +172,7 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
                 Object nmsItemStack = METHOD_ASNMSCOPY.invoke(null, itemStack);
                 Constructor<?> packetConstructor = getConstructor(CLASS_PACKETPLAYOUTENTITYEQUIPMENT, int.class, CLASS_ENUMITEMSLOT, CLASS_ITEMSTACK);
                 Object packet = packetConstructor.newInstance(entityId.get(), enumItemSlot, nmsItemStack);
-                sendPacket(players, packet);
+                MinecraftReflection.sendPacket(players, packet);
                 return true;
 
             } else {
@@ -182,7 +183,7 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
                 // 1.8 版本第二个参数是 int 类型, 装备槽位的 Id
                 Constructor<?> packetConstructor = getConstructor(CLASS_PACKETPLAYOUTENTITYEQUIPMENT, int.class, int.class, CLASS_ITEMSTACK);
                 Object packet = packetConstructor.newInstance(entityId.get(), slot.getId(), nmsItemStack);
-                sendPacket(players, packet);
+                MinecraftReflection.sendPacket(players, packet);
                 return true;
             }
 

@@ -24,6 +24,7 @@ import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
@@ -183,7 +184,7 @@ public class PacketPlayOutRespawn extends PacketPlayOutBukkitAbstract {
             Object nmsDifficulty = METHOD_GETBYID0.invoke(null, worldDifficulty.getId());
             Object nmsGameMode = METHOD_GETBYID1.invoke(null, worldGameMode.getValue());
             Object packet = instantiateObject(CLASS_PACKETPLAYOUTRESPAWN, worldDimensionId.get(), nmsDifficulty, nmsType, nmsGameMode);
-            sendPacket(players, packet);
+            MinecraftReflection.sendPacket(players, packet);
             return true;
 
         } catch (Exception e) {
