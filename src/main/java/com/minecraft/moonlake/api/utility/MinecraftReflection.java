@@ -145,6 +145,10 @@ public class MinecraftReflection {
         return getMinecraftClass("EntityPlayer");
     }
 
+    public static Class<?> getMinecraftPlayerAbilitiesClass() {
+        return getMinecraftClass("PlayerAbilities");
+    }
+
     public static Class<?> getCraftPlayerClass() {
         return getCraftBukkitClass("entity.CraftPlayer");
     }

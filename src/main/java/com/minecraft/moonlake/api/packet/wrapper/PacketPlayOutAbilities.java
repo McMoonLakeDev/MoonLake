@@ -21,17 +21,15 @@ package com.minecraft.moonlake.api.packet.wrapper;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.property.*;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
+import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
-
-import java.lang.reflect.Field;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutAbilities</h1>
@@ -46,37 +44,34 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTABILITIES;
-    private final static Class<?> CLASS_PLAYERABILITIES;
-    private final static Class<?> CLASS_ENTITYHUMAN;
-    private final static Field FIELD_ABILITIES;
-    private final static Field FIELD_ISINVULNERABLE;
-    private final static Field FIELD_ISFLYING;
-    private final static Field FIELD_CANFLY;
-    private final static Field FIELD_CANINSTANTLYBUILD;
-    private final static Field FIELD_MAYBUILD;
-    private final static Field FIELD_FLYSPEED;
-    private final static Field FIELD_WALKSPEED;
+    private static volatile ConstructorAccessor packetPlayOutAbilitiesVoidConstructor;
+    private static volatile ConstructorAccessor packetPlayOutAbilitiesConstructor;
+    private static volatile ConstructorAccessor playerAbilitiesConstructor;
+    private static volatile FieldAccessor entityHumanPlayerAbilitiesField;
+    private static volatile FieldAccessor playerAbilitiesIsInvulnerableField;
+    private static volatile FieldAccessor playerAbilitiesIsFlyingField;
+    private static volatile FieldAccessor playerAbilitiesCanFlyField;
+    private static volatile FieldAccessor playerAbilitiesCanInstantlyBuildField;
+    private static volatile FieldAccessor playerAbilitiesMayBuildField;
+    private static volatile FieldAccessor playerAbilitiesFlySpeedField;
+    private static volatile FieldAccessor playerAbilitiesWalkSpeedField;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTABILITIES = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutAbilities");
-            CLASS_PLAYERABILITIES = PackageType.MINECRAFT_SERVER.getClass("PlayerAbilities");
-            CLASS_ENTITYHUMAN = PackageType.MINECRAFT_SERVER.getClass("EntityHuman");
-            FIELD_ABILITIES = getField(CLASS_ENTITYHUMAN, true, "abilities");
-            FIELD_ISINVULNERABLE = getField(CLASS_PLAYERABILITIES, true, "isInvulnerable");
-            FIELD_ISFLYING = getField(CLASS_PLAYERABILITIES, true, "isFlying");
-            FIELD_CANFLY = getField(CLASS_PLAYERABILITIES, true, "canFly");
-            FIELD_CANINSTANTLYBUILD = getField(CLASS_PLAYERABILITIES, true, "canInstantlyBuild");
-            FIELD_MAYBUILD = getField(CLASS_PLAYERABILITIES, true, "mayBuild");
-            FIELD_FLYSPEED = getField(CLASS_PLAYERABILITIES, true, "flySpeed");
-            FIELD_WALKSPEED = getField(CLASS_PLAYERABILITIES, true, "walkSpeed");
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The nms packet play out abilities reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTABILITIES = MinecraftReflection.getMinecraftClass("PacketPlayOutAbilities");
+        Class<?> entityHumanClass = MinecraftReflection.getMinecraftEntityHumanClass();
+        Class<?> playerAbilitiesClass = MinecraftReflection.getMinecraftPlayerAbilitiesClass();
+        packetPlayOutAbilitiesVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTABILITIES);
+        packetPlayOutAbilitiesConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTABILITIES, playerAbilitiesClass);
+        playerAbilitiesConstructor = Accessors.getConstructorAccessor(playerAbilitiesClass);
+        entityHumanPlayerAbilitiesField = Accessors.getFieldAccessor(entityHumanClass, playerAbilitiesClass, true);
+        playerAbilitiesIsInvulnerableField = Accessors.getFieldAccessor(playerAbilitiesClass, "isInvulnerable", true);
+        playerAbilitiesIsFlyingField = Accessors.getFieldAccessor(playerAbilitiesClass, "isFlying", true);
+        playerAbilitiesCanFlyField = Accessors.getFieldAccessor(playerAbilitiesClass, "canFly", true);
+        playerAbilitiesCanInstantlyBuildField = Accessors.getFieldAccessor(playerAbilitiesClass, "canInstantlyBuild", true);
+        playerAbilitiesMayBuildField = Accessors.getFieldAccessor(playerAbilitiesClass, "mayBuild", true);
+        playerAbilitiesFlySpeedField = Accessors.getFieldAccessor(playerAbilitiesClass, "flySpeed", true);
+        playerAbilitiesWalkSpeedField = Accessors.getFieldAccessor(playerAbilitiesClass, "walkSpeed", true);
     }
 
     private final PlayerAbilitiesProperty playerAbilities;
@@ -164,15 +159,15 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
         try {
             // 先用调用 NMS 的 PacketPlayOutAbilities 构造函数, 参数 PlayerAbilities
             // 进行反射实例发送
-            Object nmsAbilities = instantiateObject(CLASS_PLAYERABILITIES);
-            FIELD_ISINVULNERABLE.set(nmsAbilities, playerAbilities.isInvulnerable.get());
-            FIELD_ISFLYING.set(nmsAbilities, playerAbilities.isFlying.get());
-            FIELD_CANFLY.set(nmsAbilities, playerAbilities.canFly.get());
-            FIELD_CANINSTANTLYBUILD.set(nmsAbilities, playerAbilities.canInstantlyBuild.get());
-            FIELD_MAYBUILD.set(nmsAbilities, playerAbilities.mayBuild.get());
-            FIELD_FLYSPEED.set(nmsAbilities, playerAbilities.flySpeed.get());
-            FIELD_WALKSPEED.set(nmsAbilities, playerAbilities.walkSpeed.get());
-            MinecraftReflection.sendPacket(players, instantiateObject(CLASS_PACKETPLAYOUTABILITIES, nmsAbilities));
+            Object nmsPlayerAbilities = playerAbilitiesConstructor.invoke();
+            playerAbilitiesIsInvulnerableField.set(nmsPlayerAbilities, playerAbilities.isInvulnerable.get());
+            playerAbilitiesIsFlyingField.set(nmsPlayerAbilities, playerAbilities.isFlying.get());
+            playerAbilitiesCanFlyField.set(nmsPlayerAbilities, playerAbilities.canFly.get());
+            playerAbilitiesCanInstantlyBuildField.set(nmsPlayerAbilities, playerAbilities.canInstantlyBuild.get());
+            playerAbilitiesMayBuildField.set(nmsPlayerAbilities, playerAbilities.mayBuild.get());
+            playerAbilitiesFlySpeedField.set(nmsPlayerAbilities, playerAbilities.flySpeed.get());
+            playerAbilitiesWalkSpeedField.set(nmsPlayerAbilities, playerAbilities.walkSpeed.get());
+            MinecraftReflection.sendPacket(players, packetPlayOutAbilitiesConstructor.invoke(nmsPlayerAbilities));
             return true;
 
         } catch (Exception e) {
@@ -181,7 +176,7 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
             try {
                 // 判断字段数量等于 6 个的话就是有此方式
                 // 这六个字段分别对应 PlayerAbilities 的 6 个属性
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTABILITIES);
+                Object packet = packetPlayOutAbilitiesVoidConstructor.invoke();
                 Object[] values = {
                         playerAbilities.isInvulnerable.get(),
                         playerAbilities.isFlying.get(),
@@ -197,9 +192,9 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
 
             try {
                 // 否则只有 1 个字段的话并且字段类型为 PlayerAbilities 的方式
-                Object nmsAbilities = instantiateObject(CLASS_PLAYERABILITIES);
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTABILITIES);
-                setFieldAccessibleAndValueSend(players, 1, CLASS_PACKETPLAYOUTABILITIES, packet, nmsAbilities);
+                Object nmsPlayerAbilities = playerAbilitiesConstructor.invoke();
+                Object packet = packetPlayOutAbilitiesVoidConstructor.invoke(nmsPlayerAbilities);
+                setFieldAccessibleAndValueSend(players, 1, CLASS_PACKETPLAYOUTABILITIES, packet, nmsPlayerAbilities);
                 return true;
 
             } catch (Exception e1) {
@@ -371,16 +366,16 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
 
             try {
 
-                Object nmsPlayer = MinecraftReflection.getEntityPlayer(player);
-                Object abilities = FIELD_ABILITIES.get(nmsPlayer);
+                Object entityPlayer = MinecraftReflection.getEntityPlayer(player);
+                Object playerAbilities = entityHumanPlayerAbilitiesField.get(entityPlayer);
 
-                this.isInvulnerable = new SimpleBooleanProperty((Boolean) FIELD_ISINVULNERABLE.get(abilities));
-                this.isFlying = new SimpleBooleanProperty((Boolean) FIELD_ISFLYING.get(abilities));
-                this.canFly = new SimpleBooleanProperty((Boolean) FIELD_CANFLY.get(abilities));
-                this.canInstantlyBuild = new SimpleBooleanProperty((Boolean) FIELD_CANINSTANTLYBUILD.get(abilities));
-                this.mayBuild = new SimpleBooleanProperty((Boolean) FIELD_MAYBUILD.get(abilities));
-                this.flySpeed = new SimpleFloatProperty((Float) FIELD_FLYSPEED.get(abilities));
-                this.walkSpeed = new SimpleFloatProperty((Float) FIELD_WALKSPEED.get(abilities));
+                this.isInvulnerable = new SimpleBooleanProperty((Boolean) playerAbilitiesIsInvulnerableField.get(playerAbilities));
+                this.isFlying = new SimpleBooleanProperty((Boolean) playerAbilitiesIsFlyingField.get(playerAbilities));
+                this.canFly = new SimpleBooleanProperty((Boolean) playerAbilitiesCanFlyField.get(playerAbilities));
+                this.canInstantlyBuild = new SimpleBooleanProperty((Boolean) playerAbilitiesCanInstantlyBuildField.get(playerAbilities));
+                this.mayBuild = new SimpleBooleanProperty((Boolean) playerAbilitiesMayBuildField.get(playerAbilities));
+                this.flySpeed = new SimpleFloatProperty((Float) playerAbilitiesFlySpeedField.get(playerAbilities));
+                this.walkSpeed = new SimpleFloatProperty((Float) playerAbilitiesWalkSpeedField.get(playerAbilities));
             }
             catch (Exception e) {
 
