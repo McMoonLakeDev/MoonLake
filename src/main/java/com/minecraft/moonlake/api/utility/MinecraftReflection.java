@@ -18,14 +18,17 @@
 
 package com.minecraft.moonlake.api.utility;
 
+import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Map;
@@ -40,6 +43,7 @@ public class MinecraftReflection {
     private static ClassSource source;
     private static volatile MethodAccessor enumConstantDirectoryMethod;
     private static volatile MethodAccessor entityPlayerHandleMethod;
+    private static volatile MethodAccessor worldServerHandleMethod;
     private static volatile MethodAccessor sendPacketMethod;
     private static volatile FieldAccessor playerConnectionField;
     private static volatile FieldAccessor networkManagerField;
@@ -200,7 +204,7 @@ public class MinecraftReflection {
     public static Class<?> getChatSerializerClass() {
         try {
             // v1_8_R2 以上的版本是这个类
-            getMinecraftClass("IChatBaseComponent$ChatSerializer");
+            return getMinecraftClass("IChatBaseComponent$ChatSerializer");
         } catch (Exception e) {
         }
         // 否则上面的异常则获取这个
@@ -229,6 +233,31 @@ public class MinecraftReflection {
 
     public static Class<?> getPacketClass() {
         return getMinecraftClass("Packet");
+    }
+
+    @Nullable
+    public static <T extends PacketPlayOutBukkit> Class<?> getPacketClassFromPacketWrapper(Class<T> packetWrapper) {
+        try {
+            return getMinecraftClass(packetWrapper.getSimpleName());
+        } catch (Exception e) {
+        }
+        try {
+            return (Class<?>) Accessors.getFieldAccessor(packetWrapper, Class.class, true).get(null);
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    @Nullable
+    public static <T extends PacketPlayOutBukkit> Class<?> getPacketClassFromPacketWrapper(T packetWrapper) {
+        return packetWrapper.getPacketClass();
+    }
+
+    public static Object getWorldServer(World world) {
+        Validate.notNull(world, "The player object is null.");
+        if(worldServerHandleMethod == null)
+            worldServerHandleMethod = Accessors.getMethodAccessor(getCraftWorldClass(), "getHandle");
+        return worldServerHandleMethod.invoke(world);
     }
 
     public static Object getEntityPlayer(Player player) {

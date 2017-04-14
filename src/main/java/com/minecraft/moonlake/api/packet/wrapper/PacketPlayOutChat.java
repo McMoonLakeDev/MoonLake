@@ -23,15 +23,13 @@ import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.*;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.entity.Player;
-
-import static com.minecraft.moonlake.reflect.Reflect.PackageType;
-import static com.minecraft.moonlake.reflect.Reflect.instantiateObject;
 
 /**
  * <h1>PacketPlayOutChat</h1>
@@ -46,17 +44,15 @@ import static com.minecraft.moonlake.reflect.Reflect.instantiateObject;
 public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTCHAT;
+    private static volatile ConstructorAccessor packetPlayOutChatVoidConstructor;
+    private static volatile ConstructorAccessor packetPlayOutChatConstructor;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTCHAT = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutChat");
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The net.minecraft.server packet play out chat reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTCHAT = MinecraftReflection.getMinecraftClass("PacketPlayOutChat");
+        Class<?> iChatBaseComponentClass = MinecraftReflection.getIChatBaseComponentClass();
+        packetPlayOutChatVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTCHAT);
+        packetPlayOutChatConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTCHAT, iChatBaseComponentClass, byte.class);
     }
 
     private StringProperty message;
@@ -158,7 +154,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
             // 进行反射实例发送
             Object nmsChat = ChatSerializer.fromJson(isFancyMessage == null ? ("{\"text\":\"" + message + "\"}") : message);
             if(nmsChat == null) ChatSerializer.fromJson("{\"text\":\"" + message + "\"}"); // 如果为 null 的话再调用一次进行格式化
-            Object packet = instantiateObject(CLASS_PACKETPLAYOUTCHAT, nmsChat, mode.get() == null ? (byte) 1 : mode.get().getMode());
+            Object packet = packetPlayOutChatConstructor.invoke(nmsChat, mode.get() == null ? (byte) 1 : mode.get().getMode());
             MinecraftReflection.sendPacket(players, packet);
             return true;
 
@@ -169,7 +165,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
                 // 判断字段数量大于等于 2 个的话就是有此方式
                 // 这两个字段分别对应 IChatBaseComponent, byte 的 2 个属性
                 // 貌似 PacketPlayOutChat 有一个 md_5 包的 BaseComponent 类数组字段需要忽略
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTCHAT);
+                Object packet = packetPlayOutChatVoidConstructor.invoke();
                 Object nmsChat = ChatSerializer.fromJson(isFancyMessage == null ? ("{\"text\":\"" + message + "\"}") : message);
                 if(nmsChat == null) throw new IllegalArgumentException("The message object is illegal value: " + message);
                 Object[] values = { nmsChat, mode.get().getMode() };

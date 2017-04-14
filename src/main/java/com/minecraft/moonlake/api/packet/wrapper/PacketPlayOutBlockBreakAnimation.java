@@ -21,15 +21,14 @@ package com.minecraft.moonlake.api.packet.wrapper;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutBlockBreakAnimation</h1>
@@ -44,17 +43,15 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 public class PacketPlayOutBlockBreakAnimation extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTBLOCKBREAKANIMATION;
+    private static volatile ConstructorAccessor packetPlayOutBlockBreakAnimationVoidConstructor;
+    private static volatile ConstructorAccessor packetPlayOutBlockBreakAnimationConstructor;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTBLOCKBREAKANIMATION = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutBlockBreakAnimation");
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The net.minecraft.server packet play out block break animation reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTBLOCKBREAKANIMATION = MinecraftReflection.getMinecraftClass("PacketPlayOutBlockBreakAnimation");
+        Class<?> blockPositionClass = MinecraftReflection.getMinecraftBlockPositionClass();
+        packetPlayOutBlockBreakAnimationVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTBLOCKBREAKANIMATION);
+        packetPlayOutBlockBreakAnimationConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTBLOCKBREAKANIMATION, int.class, blockPositionClass, int.class);
     }
 
     private IntegerProperty entityId;
@@ -156,7 +153,7 @@ public class PacketPlayOutBlockBreakAnimation extends PacketPlayOutBukkitAbstrac
         try {
             // 先用调用 NMS 的 PacketPlayOutBlockBreakAnimation 构造函数, 参数 int, BlockPosition, int
             // 进行反射实例发送
-            Object packet = instantiateObject(CLASS_PACKETPLAYOUTBLOCKBREAKANIMATION, entityId.get(), blockPosition.asNMS(), value.get());
+            Object packet = packetPlayOutBlockBreakAnimationConstructor.invoke(entityId.get(), blockPosition.asNMS(), value.get());
             MinecraftReflection.sendPacket(players, packet);
             return true;
 
@@ -166,7 +163,7 @@ public class PacketPlayOutBlockBreakAnimation extends PacketPlayOutBukkitAbstrac
             try {
                 // 判断字段数量等于 3 个的话就是有此方式
                 // 这字段分别对应 int, BlockPosition, int 属性
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTBLOCKBREAKANIMATION);
+                Object packet = packetPlayOutBlockBreakAnimationVoidConstructor.invoke();
                 Object[] values = { entityId.get(), blockPosition.asNMS(), value.get() };
                 setFieldAccessibleAndValueSend(players, 3, CLASS_PACKETPLAYOUTBLOCKBREAKANIMATION, packet, values);
                 return true;
