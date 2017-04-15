@@ -21,13 +21,12 @@ package com.minecraft.moonlake.api.packet.wrapper;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import org.bukkit.entity.Player;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutCloseWindow</h1>
@@ -42,17 +41,14 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 public class PacketPlayOutCloseWindow extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTCLOSEWINDOW;
+    private static volatile ConstructorAccessor packetPlayOutCloseWindowVoidConstructor;
+    private static volatile ConstructorAccessor packetPlayOutCloseWindowConstructor;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTCLOSEWINDOW = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutCloseWindow");
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The net.minecraft.server packet play out close window reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTCLOSEWINDOW = MinecraftReflection.getMinecraftClass("PacketPlayOutCloseWindow");
+        packetPlayOutCloseWindowVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTCLOSEWINDOW);
+        packetPlayOutCloseWindowConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTCLOSEWINDOW, int.class);
     }
 
     private IntegerProperty windowId;
@@ -101,7 +97,7 @@ public class PacketPlayOutCloseWindow extends PacketPlayOutBukkitAbstract {
         try {
             // 先用调用 NMS 的 PacketPlayOutCloseWindow 构造函数, 参数 int
             // 进行反射实例发送
-            MinecraftReflection.sendPacket(players, instantiateObject(CLASS_PACKETPLAYOUTCLOSEWINDOW, windowId.get()));
+            MinecraftReflection.sendPacket(players, packetPlayOutCloseWindowConstructor.invoke(windowId.get()));
             return true;
 
         } catch (Exception e) {
@@ -110,7 +106,7 @@ public class PacketPlayOutCloseWindow extends PacketPlayOutBukkitAbstract {
             try {
                 // 判断字段数量等于 1 个的话就是有此方式
                 // 这个字段对应 int 属性
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTCLOSEWINDOW);
+                Object packet = packetPlayOutCloseWindowVoidConstructor.invoke();
                 Object[] values = { windowId.get() };
                 setFieldAccessibleAndValueSend(players, 1, CLASS_PACKETPLAYOUTCLOSEWINDOW, packet, values);
                 return true;

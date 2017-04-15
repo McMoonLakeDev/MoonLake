@@ -21,14 +21,13 @@ package com.minecraft.moonlake.api.packet.wrapper;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.property.StringProperty;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutCustomPayload</h1>
@@ -43,17 +42,15 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 public class PacketPlayOutCustomPayload extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTCUSTOMPAYLOAD;
+    private static volatile ConstructorAccessor packetPlayOutCustomPayloadVoidConstructor;
+    private static volatile ConstructorAccessor packetPlayOutCustomPayloadConstructor;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTCUSTOMPAYLOAD = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutCustomPayload");
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The net.minecraft.server packet play custom pay load reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTCUSTOMPAYLOAD = MinecraftReflection.getMinecraftClass("PacketPlayOutCustomPayload");
+        Class<?> packetDataSerializer = MinecraftReflection.getPacketDataSerializerClass();
+        packetPlayOutCustomPayloadVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTCUSTOMPAYLOAD);
+        packetPlayOutCustomPayloadConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTCUSTOMPAYLOAD, String.class, packetDataSerializer);
     }
 
     private StringProperty channel;
@@ -132,7 +129,7 @@ public class PacketPlayOutCustomPayload extends PacketPlayOutBukkitAbstract {
         try {
             // 先用调用 NMS 的 PacketPlayOutCustomPayload 构造函数, 参数 String, PacketDataSerializer
             // 进行反射实例发送
-            MinecraftReflection.sendPacket(players, instantiateObject(CLASS_PACKETPLAYOUTCUSTOMPAYLOAD, channel, dataSerializer.asNMS()));
+            MinecraftReflection.sendPacket(players, packetPlayOutCustomPayloadConstructor.invoke(channel, dataSerializer.asNMS()));
             return true;
 
         } catch (Exception e) {
@@ -141,7 +138,7 @@ public class PacketPlayOutCustomPayload extends PacketPlayOutBukkitAbstract {
             try {
                 // 判断字段数量大于等于 2 个的话就是有此方式
                 // 这两个字段分别对应 String, PacketDataSerializer 的 2 个属性
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTCUSTOMPAYLOAD);
+                Object packet = packetPlayOutCustomPayloadVoidConstructor.invoke();
                 Object[] values = { channel, dataSerializer.asNMS() };
                 setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTCUSTOMPAYLOAD, packet, values);
                 return true;

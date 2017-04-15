@@ -18,6 +18,7 @@
 
 package com.minecraft.moonlake.api.utility;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.exception.MoonLakeException;
@@ -27,6 +28,7 @@ import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Array;
@@ -41,6 +43,7 @@ public class MinecraftReflection {
     private static CachedPackage minecraftPackage;
     private static CachedPackage craftBukkitPackage;
     private static ClassSource source;
+    private static volatile MethodAccessor craftItemStackAsNMSCopyMethod;
     private static volatile MethodAccessor enumConstantDirectoryMethod;
     private static volatile MethodAccessor entityPlayerHandleMethod;
     private static volatile MethodAccessor worldServerHandleMethod;
@@ -85,6 +88,18 @@ public class MinecraftReflection {
         if(minecraftPackage == null)
             minecraftPackage = new CachedPackage(getMinecraftFullPackage(), getClassSource());
         return minecraftPackage.getPackageClass(className);
+    }
+
+    public static Class<?> getMinecraftClassLater(MinecraftVersion mcVer, String className) {
+        if(MoonLakeAPI.currentMCVersion().isLater(mcVer))
+            return getMinecraftClass(className);
+        return null;
+    }
+
+    public static Class<?> getMinecraftClassOrLater(MinecraftVersion mcVer, String className) {
+        if(MoonLakeAPI.currentMCVersion().isOrLater(mcVer))
+            return getMinecraftClass(className);
+        return null;
     }
 
     public static Class<?> getMinecraftClass(String className, String... aliases) {
@@ -253,6 +268,13 @@ public class MinecraftReflection {
         return packetWrapper.getPacketClass();
     }
 
+    public static Object asNMSCopy(ItemStack itemStack) {
+        Validate.notNull(itemStack, "The itemstack object is null.");
+        if(craftItemStackAsNMSCopyMethod == null)
+            craftItemStackAsNMSCopyMethod = Accessors.getMethodAccessor(getCraftItemStackClass(), "asNMSCopy", ItemStack.class);
+        return craftItemStackAsNMSCopyMethod.invoke(null, itemStack);
+    }
+
     public static Object getWorldServer(World world) {
         Validate.notNull(world, "The player object is null.");
         if(worldServerHandleMethod == null)
@@ -337,7 +359,15 @@ public class MinecraftReflection {
     }
 
     @SuppressWarnings("unchecked")
-    public static Object enumValueOf(Class<? extends Enum<?>> enumClass, String name) {
+    public static Object enumValueOfClass(Class<?> enumClass, String name) {
+        Validate.notNull(enumClass, "The enum class object is null.");
+        Validate.notNull(name, "The name object is null.");
+        Validate.isTrue(enumClass.isEnum(), "The enum class not is enum type.");
+        return enumValueOfEnumClass((Class<? extends Enum<?>>) enumClass, name);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Object enumValueOfEnumClass(Class<? extends Enum<?>> enumClass, String name) {
         Validate.notNull(enumClass, "The enum class object is null.");
         Validate.notNull(name, "The name object is null.");
         if(enumConstantDirectoryMethod == null)

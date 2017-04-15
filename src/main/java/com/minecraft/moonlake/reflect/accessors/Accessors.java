@@ -18,6 +18,9 @@
 
 package com.minecraft.moonlake.reflect.accessors;
 
+import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
+import com.minecraft.moonlake.builder.SingleParamBuilder;
 import com.minecraft.moonlake.reflect.ExactReflect;
 import com.minecraft.moonlake.reflect.FuzzyReflect;
 import com.minecraft.moonlake.validate.Validate;
@@ -84,6 +87,10 @@ public final class Accessors {
         } catch (SecurityException e) {
             throw new IllegalStateException("Cannot access constructors.", e);
         }
+    }
+
+    public static ConstructorAccessor getConstructorAccessorBuilder(SingleParamBuilder<ConstructorAccessor, MinecraftVersion> paramBuilder) {
+        return Validate.checkNotNull(paramBuilder).build(MoonLakeAPI.currentMCVersion());
     }
 
     public static ConstructorAccessor getConstructorAccessor(Constructor<?> constructor) {
