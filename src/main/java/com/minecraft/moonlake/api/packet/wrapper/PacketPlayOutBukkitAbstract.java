@@ -45,20 +45,6 @@ import java.lang.reflect.Field;
  */
 public abstract class PacketPlayOutBukkitAbstract extends PacketPlayOutAbstract implements PacketPlayOutBukkit {
 
-    /**
-     * 将指定数据包对象发送到给玩家
-     *
-     * @param players 玩家
-     * @param packet 数据包
-     * @throws PacketException 如果发送错误则抛出异常
-     * @deprecated {@link MinecraftReflection#sendPacket(Player[], Object)}
-     */
-    @Deprecated
-    protected static void sendPacket(Player[] players, Object packet) {
-
-        MinecraftReflection.sendPacket(players, packet);
-    }
-
     protected static void setFieldAccessibleAndValueSend(Player[] players, int dest, Class<?> packetClass, Object packet, Object... values) throws Exception {
 
         setFieldAccessibleAndValueSend(players, 0, dest, packetClass, packet, values);

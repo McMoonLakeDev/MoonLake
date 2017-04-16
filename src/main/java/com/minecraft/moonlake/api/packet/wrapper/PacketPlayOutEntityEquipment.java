@@ -58,7 +58,7 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
         CLASS_PACKETPLAYOUTENTITYEQUIPMENT = MinecraftReflection.getMinecraftClass("PacketPlayOutEntityEquipment");
         CLASS_ENUMITEMSLOT = MinecraftReflection.getMinecraftClassOrLater(MinecraftVersion.V1_9, "EnumItemSlot"); // 1.9+ 才有这个类
         packetPlayOutEntityEquipmentVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTENTITYEQUIPMENT);
-        packetPlayOutEntityEquipmentConstructor = Accessors.getConstructorAccessorBuilder(new SingleParamBuilder<ConstructorAccessor, MinecraftVersion>() {
+        packetPlayOutEntityEquipmentConstructor = Accessors.getConstructorAccessorBuilderMCVer(new SingleParamBuilder<ConstructorAccessor, MinecraftVersion>() {
             @Override
             public ConstructorAccessor build(MinecraftVersion param) {
                 Class<?> itemStackClass = MinecraftReflection.getMinecraftItemStackClass();

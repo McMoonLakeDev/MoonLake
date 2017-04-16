@@ -22,15 +22,13 @@ import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.property.StringProperty;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
-
-import static com.minecraft.moonlake.reflect.Reflect.PackageType;
-import static com.minecraft.moonlake.reflect.Reflect.instantiateObject;
 
 /**
  * <h1>PacketPlayOutPlayerListHeaderFooter</h1>
@@ -45,17 +43,15 @@ import static com.minecraft.moonlake.reflect.Reflect.instantiateObject;
 public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER;
+    private static volatile ConstructorAccessor packetPlayOutPlayerListHeaderFooterVoidConstructor;
+    private static volatile ConstructorAccessor packetPlayOutPlayerListHeaderFooterConstructor;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPlayerListHeaderFooter");
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The net.minecraft.server packet play out player list header footer reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER = MinecraftReflection.getMinecraftClass("PacketPlayOutPlayerListHeaderFooter");
+        Class<?> iChatBaseComponentClass = MinecraftReflection.getIChatBaseComponentClass();
+        packetPlayOutPlayerListHeaderFooterVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER);
+        packetPlayOutPlayerListHeaderFooterConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, iChatBaseComponentClass);
     }
 
     private StringProperty header;
@@ -133,7 +129,7 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbst
             // 进行反射实例发送
             Object nmsHeader = ChatSerializer.fromJson("{\"text\":\"" + header + "\"}");
             Object nmsFooter = footer != null ? ChatSerializer.fromJson("{\"text\":\"" + footer + "\"}") : null;
-            Object packet = instantiateObject(CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, nmsHeader);
+            Object packet = packetPlayOutPlayerListHeaderFooterConstructor.invoke(nmsHeader);
             if(nmsFooter != null)
                 setFieldAccessibleAndValueSend(players, 1, 2, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, nmsFooter);
             else
@@ -148,7 +144,7 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbst
                 // 这两个字段分别对应 IChatBaseComponent, IChatBaseComponent 的 2 个属性
                 Object nmsHeader = ChatSerializer.fromJson("{\"text\":\"" + header + "\"}");
                 Object nmsFooter = footer != null ? ChatSerializer.fromJson("{\"text\":\"" + footer + "\"}") : null;
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER);
+                Object packet = packetPlayOutPlayerListHeaderFooterVoidConstructor.invoke();
                 if(nmsFooter != null)
                     setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, nmsHeader, nmsFooter);
                 else

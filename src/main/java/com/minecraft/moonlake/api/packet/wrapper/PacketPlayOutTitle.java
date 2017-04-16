@@ -22,16 +22,17 @@ import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
-import com.minecraft.moonlake.property.*;
+import com.minecraft.moonlake.builder.SingleParamBuilder;
+import com.minecraft.moonlake.property.IntegerProperty;
+import com.minecraft.moonlake.property.SimpleIntegerProperty;
+import com.minecraft.moonlake.property.SimpleStringProperty;
+import com.minecraft.moonlake.property.StringProperty;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutTitle</h1>
@@ -47,7 +48,9 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTTITLE;
     private final static Class<?> CLASS_ENUMTITLEACTION;
-    private final static Method METHOD_ENUMTITLEACTION_A;
+    private static volatile ConstructorAccessor packetPlayOutTitleVoidConstuctor;
+    private static volatile ConstructorAccessor packetPlayOutTitleActionConstuctor;
+    private static volatile ConstructorAccessor packetPlayOutTitleTimesConstuctor;
 
     /**
      * <h1>PacketPlayOutTitleSpecial</h1>
@@ -59,7 +62,6 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
      */
     private static class PacketPlayOutTitleSpecial extends PacketPlayOutTitle {
 
-        private static Constructor<?> CONSTRUCTOR;
         private String enumTitleActionName;
 
         /**
@@ -72,19 +74,6 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
             super(null, null, -1, -1, -1);
 
             this.enumTitleActionName = enumTitleActionName;
-        }
-
-        private Constructor<?> getConstructor0() {
-
-            if(CONSTRUCTOR == null) {
-
-                try {
-                    CONSTRUCTOR = getConstructor(CLASS_PACKETPLAYOUTTITLE, CLASS_ENUMTITLEACTION, ChatSerializer.getIChatBaseComponent());
-                } catch (Exception e) {
-                    throw new UnsupportedOperationException(e);
-                }
-            }
-            return CONSTRUCTOR;
         }
 
         @Override
@@ -101,7 +90,7 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
                 return true;
 
             try {
-                Object packet = getConstructor0().newInstance(METHOD_ENUMTITLEACTION_A.invoke(null, enumTitleActionName), null);
+                Object packet = packetPlayOutTitleActionConstuctor.invoke(getEnumTitleAction("SUBTITLE"), null);
                 MinecraftReflection.sendPacket(players, packet);
                 return true;
 
@@ -124,16 +113,19 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTTITLE = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutTitle");
-            CLASS_ENUMTITLEACTION = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutTitle$EnumTitleAction");
-            METHOD_ENUMTITLEACTION_A = getMethod(CLASS_ENUMTITLEACTION, "a", String.class);
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The net.minecraft.server packet play out title reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTTITLE = MinecraftReflection.getMinecraftClass("PacketPlayOutTitle");
+        CLASS_ENUMTITLEACTION = MinecraftReflection.getMinecraftClassBuilder(new SingleParamBuilder<Class<?>, MinecraftBukkitVersion>() {
+            @Override
+            public Class<?> build(MinecraftBukkitVersion param) {
+                if(param.equals(MinecraftBukkitVersion.V1_8_R1))
+                    return MinecraftReflection.getMinecraftClass("EnumTitleAction");
+                return MinecraftReflection.getMinecraftClass("PacketPlayOutTitle$EnumTitleAction");
+            }
+        });
+        Class<?> iChatBaseComponentClass = MinecraftReflection.getIChatBaseComponentClass();
+        packetPlayOutTitleVoidConstuctor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTTITLE);
+        packetPlayOutTitleActionConstuctor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTTITLE, CLASS_ENUMTITLEACTION, iChatBaseComponentClass);
+        packetPlayOutTitleTimesConstuctor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTTITLE, int.class, int.class, int.class);
     }
 
     private StringProperty title;
@@ -288,9 +280,9 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
             // 进行反射实例发送
             Object nmsTitle = ChatSerializer.fromJson("{\"text\":\"" + title + "\"}");
             Object nmsSubTitle = subTitle != null ? ChatSerializer.fromJson("{\"text\":\"" + subTitle + "\"}") : null;
-            Object packet0 = instantiateObject(CLASS_PACKETPLAYOUTTITLE, fadeIn.get(), stay.get(), fadeOut.get()); // TIMES Packet
-            Object packet1 = instantiateObject(CLASS_PACKETPLAYOUTTITLE, METHOD_ENUMTITLEACTION_A.invoke(null, "TITLE"), nmsTitle); // Title Packet
-            Object packet2 = nmsSubTitle != null ?  instantiateObject(CLASS_PACKETPLAYOUTTITLE, METHOD_ENUMTITLEACTION_A.invoke(null, "SUBTITLE"), nmsSubTitle) : null; // SubTitle Packet
+            Object packet0 = packetPlayOutTitleTimesConstuctor.invoke(fadeIn.get(), stay.get(), fadeOut.get()); // TIMES Packet
+            Object packet1 = packetPlayOutTitleActionConstuctor.invoke(getEnumTitleAction("TITLE"), nmsTitle); // Title Packet
+            Object packet2 = nmsSubTitle != null ?  packetPlayOutTitleActionConstuctor.invoke(getEnumTitleAction("SUBTITLE"), nmsSubTitle) : null; // SubTitle Packet
             MinecraftReflection.sendPacket(players, packet0); // 发送标题的时间数据包
             MinecraftReflection.sendPacket(players, packet1); // 发送标题的主标题数据包
             if(packet2 != null)
@@ -303,20 +295,20 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
             try {
                 // 判断字段数量等于 5 个的话就是有此方式
                 // 这两个字段分别对应 EnumTitleAction, IChatBaseComponent, int, int, int 的 5 个属性
-                Object packet0 = instantiateObject(CLASS_PACKETPLAYOUTTITLE); // 先设置并发送 TIMES 的标题数据包
-                Object[] values0 = {  METHOD_ENUMTITLEACTION_A.invoke(null, "TIMES"), fadeIn.get(), stay.get(), fadeOut.get() };
+                Object packet0 = packetPlayOutTitleVoidConstuctor.invoke(); // 先设置并发送 TIMES 的标题数据包
+                Object[] values0 = { getEnumTitleAction("TIMES"), fadeIn.get(), stay.get(), fadeOut.get() };
                 setFieldAccessibleAndValueSend(players, 2, 5, CLASS_PACKETPLAYOUTTITLE, packet0, values0);
 
                 Object nmsTitle = ChatSerializer.fromJson("{\"text\":\"" + title + "\"}");
-                Object packet1 = instantiateObject(CLASS_PACKETPLAYOUTTITLE); // 再设置并发送 TITLE 的标题数据包
-                Object[] values1 = { METHOD_ENUMTITLEACTION_A.invoke(null, "TITLE"), nmsTitle };
+                Object packet1 = packetPlayOutTitleVoidConstuctor.invoke(); // 再设置并发送 TITLE 的标题数据包
+                Object[] values1 = { getEnumTitleAction("TITLE"), nmsTitle };
                 setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTTITLE, packet1, values1);
 
                 Object nmsSubTitle = subTitle != null ? ChatSerializer.fromJson("{\"text\":\"" + subTitle + "\"}") : null;
                 if(nmsSubTitle != null) {
                     // 如果副标题不为 null 则进行设置并发送
-                    Object packet2 = instantiateObject(CLASS_PACKETPLAYOUTTITLE); // 最后设置并发送 SUBTITLE 的标题数据包
-                    Object[] values2 = { METHOD_ENUMTITLEACTION_A.invoke(null, "SUBTITLE"), nmsSubTitle };
+                    Object packet2 = packetPlayOutTitleVoidConstuctor.invoke(); // 最后设置并发送 SUBTITLE 的标题数据包
+                    Object[] values2 = { getEnumTitleAction("SUBTITLE"), nmsSubTitle };
                     setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTTITLE, packet2, values2);
                 }
                 return true;
@@ -326,5 +318,9 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
         }
         // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
         return false;
+    }
+
+    private static Object getEnumTitleAction(String name) {
+        return MinecraftReflection.enumValueOfClass(CLASS_ENUMTITLEACTION, name);
     }
 }

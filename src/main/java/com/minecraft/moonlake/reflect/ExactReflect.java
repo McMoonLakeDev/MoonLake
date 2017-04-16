@@ -75,6 +75,12 @@ public class ExactReflect {
         return getField(this.source, fieldName);
     }
 
+    public Field getFieldByIndex(int index) {
+        Field field = this.source.getDeclaredFields()[index];
+        field.setAccessible(this.forceAccess);
+        return field;
+    }
+
     private Field getField(Class<?> instanceClass, String fieldName) {
         for(Field field : instanceClass.getDeclaredFields()) {
             if(field.getName().equals(fieldName)) {

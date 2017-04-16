@@ -21,8 +21,10 @@ package com.minecraft.moonlake.api.utility;
 import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
+import com.minecraft.moonlake.builder.SingleParamBuilder;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
@@ -43,8 +45,11 @@ public class MinecraftReflection {
     private static CachedPackage minecraftPackage;
     private static CachedPackage craftBukkitPackage;
     private static ClassSource source;
+    private static volatile ConstructorAccessor chatMessageConstructor;
     private static volatile MethodAccessor craftItemStackAsNMSCopyMethod;
+    private static volatile MethodAccessor enumGamemodeGetByIdMethod;
     private static volatile MethodAccessor enumConstantDirectoryMethod;
+    private static volatile MethodAccessor worldTypeGetByTypeMethod;
     private static volatile MethodAccessor entityPlayerHandleMethod;
     private static volatile MethodAccessor worldServerHandleMethod;
     private static volatile MethodAccessor sendPacketMethod;
@@ -98,6 +103,22 @@ public class MinecraftReflection {
 
     public static Class<?> getMinecraftClassOrLater(MinecraftVersion mcVer, String className) {
         if(MoonLakeAPI.currentMCVersion().isOrLater(mcVer))
+            return getMinecraftClass(className);
+        return null;
+    }
+
+    public static Class<?> getMinecraftClassBuilder(SingleParamBuilder<Class<?>, MinecraftBukkitVersion> paramBuilder) {
+        return Validate.checkNotNull(paramBuilder).build(MoonLakeAPI.currentBukkitVersion());
+    }
+
+    public static Class<?> getMinecraftClassLater(MinecraftBukkitVersion bukkitVer, String className) {
+        if(MoonLakeAPI.currentBukkitVersion().isLater(bukkitVer))
+            return getMinecraftClass(className);
+        return null;
+    }
+
+    public static Class<?> getMinecraftClassOrLater(MinecraftBukkitVersion bukkitVer, String className) {
+        if(MoonLakeAPI.currentBukkitVersion().isOrLater(bukkitVer))
             return getMinecraftClass(className);
         return null;
     }
@@ -226,6 +247,14 @@ public class MinecraftReflection {
         return getMinecraftClass("ChatSerializer");
     }
 
+    public static Class<?> getEnumGamemodeClass() {
+        try {
+            return getMinecraftClass("WorldSettings$EnumGamemode");
+        } catch (Exception e) {
+        }
+        return getMinecraftClass("EnumGamemode");
+    }
+
     public static Class<?> getNBTTagCompoundClass() {
         return getMinecraftClass("NBTTagCompound");
     }
@@ -266,6 +295,26 @@ public class MinecraftReflection {
     @Nullable
     public static <T extends PacketPlayOutBukkit> Class<?> getPacketClassFromPacketWrapper(T packetWrapper) {
         return packetWrapper.getPacketClass();
+    }
+
+    public static Object worldTypeGetByType(String type) {
+        Validate.notNull(type, "The type object is null.");
+        if(worldTypeGetByTypeMethod == null)
+            worldTypeGetByTypeMethod = Accessors.getMethodAccessor(getMinecraftWorldType(), "getType", String.class);
+        return worldTypeGetByTypeMethod.invoke(null, type);
+    }
+
+    public static Object enumGamemodeGetById(int id) {
+        if(enumGamemodeGetByIdMethod == null)
+            enumGamemodeGetByIdMethod = Accessors.getMethodAccessor(getEnumGamemodeClass(), "getById", int.class);
+        return enumGamemodeGetByIdMethod.invoke(null, id);
+    }
+
+    public static Object getChatMessage(String text, Object... params) {
+        Validate.notNull(text, "The text object is null.");
+        if(chatMessageConstructor == null)
+            chatMessageConstructor = Accessors.getConstructorAccessor(getChatMessageClass(), String.class, Object[].class);
+        return chatMessageConstructor.invoke(text, params);
     }
 
     public static Object asNMSCopy(ItemStack itemStack) {

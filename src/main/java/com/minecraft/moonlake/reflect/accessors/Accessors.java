@@ -19,7 +19,9 @@
 package com.minecraft.moonlake.reflect.accessors;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
+import com.minecraft.moonlake.builder.Builder;
 import com.minecraft.moonlake.builder.SingleParamBuilder;
 import com.minecraft.moonlake.reflect.ExactReflect;
 import com.minecraft.moonlake.reflect.FuzzyReflect;
@@ -57,6 +59,10 @@ public final class Accessors {
         return getFieldAccessor(ExactReflect.fromClass(instanceClass, forceAccess).getField(fieldName));
     }
 
+    public static FieldAccessor getFieldAccessor(Class<?> instanceClass, int index, boolean forceAccess) {
+        return getFieldAccessor(ExactReflect.fromClass(instanceClass, forceAccess).getFieldByIndex(index));
+    }
+
     public static FieldAccessor getFieldAccessor(Field field) {
         return getFieldAccessor(field, true);
     }
@@ -89,8 +95,16 @@ public final class Accessors {
         }
     }
 
-    public static ConstructorAccessor getConstructorAccessorBuilder(SingleParamBuilder<ConstructorAccessor, MinecraftVersion> paramBuilder) {
+    public static ConstructorAccessor getConstructorAccessorBuilder(Builder<ConstructorAccessor> paramBuilder) {
+        return Validate.checkNotNull(paramBuilder).build();
+    }
+
+    public static ConstructorAccessor getConstructorAccessorBuilderMCVer(SingleParamBuilder<ConstructorAccessor, MinecraftVersion> paramBuilder) {
         return Validate.checkNotNull(paramBuilder).build(MoonLakeAPI.currentMCVersion());
+    }
+
+    public static ConstructorAccessor getConstructorAccessorBuilderBukkitVer(SingleParamBuilder<ConstructorAccessor, MinecraftBukkitVersion> paramBuilder) {
+        return Validate.checkNotNull(paramBuilder).build(MoonLakeAPI.currentBukkitVersion());
     }
 
     public static ConstructorAccessor getConstructorAccessor(Constructor<?> constructor) {

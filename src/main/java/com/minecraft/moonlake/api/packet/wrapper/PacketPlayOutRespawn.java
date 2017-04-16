@@ -18,25 +18,21 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
-import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
-import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
+import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-
-import java.lang.reflect.Method;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutRespawn</h1>
@@ -51,29 +47,20 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 public class PacketPlayOutRespawn extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTRESPAWN;
-    private final static Class<?> CLASS_WORLDTYPE;
     private final static Class<?> CLASS_ENUMDIFFICULTY;
-    private final static Class<?> CLASS_ENUMGAMEMODE;
-    private final static Method METHOD_GETBYID0;
-    private final static Method METHOD_GETBYID1;
-    private final static Method METHOD_GETTYPE;
+    private static volatile ConstructorAccessor packetPlayOutRespawnVoidConstructor;
+    private static volatile ConstructorAccessor packetPlayOutRespawnConstructor;
+    private static volatile MethodAccessor enumDifficultyGetByIdMethod;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTRESPAWN = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutRespawn");
-            CLASS_WORLDTYPE = PackageType.MINECRAFT_SERVER.getClass("WorldType");
-            CLASS_ENUMDIFFICULTY = PackageType.MINECRAFT_SERVER.getClass("EnumDifficulty");
-            CLASS_ENUMGAMEMODE = PackageType.MINECRAFT_SERVER.getClass(MoonLakeAPI.currentBukkitVersionIs(MinecraftBukkitVersion.V1_8_R1) || MoonLakeAPI.currentBukkitVersionIsOrLater(MinecraftBukkitVersion.V1_10_R1) ? "EnumGamemode" : "WorldSettings$EnumGamemode");
-            METHOD_GETBYID0 = getMethod(CLASS_ENUMDIFFICULTY, "getById", int.class);
-            METHOD_GETBYID1 = getMethod(CLASS_ENUMGAMEMODE, "getById", int.class);
-            METHOD_GETTYPE = getMethod(CLASS_WORLDTYPE, "getType", String.class);
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The net.minecraft.server packet play out respawn reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTRESPAWN = MinecraftReflection.getMinecraftClass("PacketPlayOutRespawn");
+        CLASS_ENUMDIFFICULTY = MinecraftReflection.getMinecraftClass("EnumDifficulty");
+        Class<?> worldTypeClass = MinecraftReflection.getMinecraftWorldType();
+        Class<?> enumGamemodeClass = MinecraftReflection.getEnumGamemodeClass();
+        packetPlayOutRespawnVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTRESPAWN);
+        packetPlayOutRespawnConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTRESPAWN, int.class, CLASS_ENUMDIFFICULTY, worldTypeClass, enumGamemodeClass);
+        enumDifficultyGetByIdMethod = Accessors.getMethodAccessor(CLASS_ENUMDIFFICULTY, "getById", int.class);
     }
 
     private IntegerProperty worldDimensionId;
@@ -180,10 +167,10 @@ public class PacketPlayOutRespawn extends PacketPlayOutBukkitAbstract {
         try {
             // 先用调用 NMS 的 PacketPlayOutRespawn 构造函数, 参数 int, EnumDifficulty, WorldType, EnumGamemode
             // 进行反射实例发送
-            Object nmsType = METHOD_GETTYPE.invoke(null, worldType.getName());
-            Object nmsDifficulty = METHOD_GETBYID0.invoke(null, worldDifficulty.getId());
-            Object nmsGameMode = METHOD_GETBYID1.invoke(null, worldGameMode.getValue());
-            Object packet = instantiateObject(CLASS_PACKETPLAYOUTRESPAWN, worldDimensionId.get(), nmsDifficulty, nmsType, nmsGameMode);
+            Object nmsType = MinecraftReflection.worldTypeGetByType(worldType.getName());
+            Object nmsDifficulty = enumDifficultyGetByIdMethod.invoke(null, worldDifficulty.getId());
+            Object nmsGameMode = MinecraftReflection.enumGamemodeGetById(worldGameMode.getValue());
+            Object packet = packetPlayOutRespawnConstructor.invoke(worldDimensionId.get(), nmsDifficulty, nmsType, nmsGameMode);
             MinecraftReflection.sendPacket(players, packet);
             return true;
 
@@ -193,10 +180,10 @@ public class PacketPlayOutRespawn extends PacketPlayOutBukkitAbstract {
             try {
                 // 判断字段数量等于 4 个的话就是有此方式
                 // 这个字段对应 int, EnumDifficulty, WorldType, EnumGamemode 属性
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTRESPAWN);
-                Object nmsType = METHOD_GETTYPE.invoke(null, worldType.getName());
-                Object nmsDifficulty = METHOD_GETBYID0.invoke(null, worldDifficulty.getId());
-                Object nmsGameMode = METHOD_GETBYID1.invoke(null, worldGameMode.getValue());
+                Object packet = packetPlayOutRespawnVoidConstructor.invoke();
+                Object nmsType = MinecraftReflection.worldTypeGetByType(worldType.getName());
+                Object nmsDifficulty = enumDifficultyGetByIdMethod.invoke(null, worldDifficulty.getId());
+                Object nmsGameMode = MinecraftReflection.enumGamemodeGetById(worldGameMode.getValue());
                 Object[] values = { worldDimensionId.get(), nmsDifficulty, nmsType, nmsGameMode };
                 setFieldAccessibleAndValueSend(players, 4, CLASS_PACKETPLAYOUTRESPAWN, packet, values);
                 return true;
