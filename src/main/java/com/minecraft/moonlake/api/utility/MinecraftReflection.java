@@ -420,7 +420,7 @@ public class MinecraftReflection {
         Validate.notNull(enumClass, "The enum class object is null.");
         Validate.notNull(name, "The name object is null.");
         if(enumConstantDirectoryMethod == null)
-            enumConstantDirectoryMethod = Accessors.getMethodAccessor(Class.class, "enumConstantDirectoryMethod");
+            enumConstantDirectoryMethod = Accessors.getMethodAccessor(Class.class, "enumConstantDirectory");
         Object obj = ((Map<String, ?>) enumConstantDirectoryMethod.invoke(enumClass)).get(name);
         if(obj != null)
             return obj;

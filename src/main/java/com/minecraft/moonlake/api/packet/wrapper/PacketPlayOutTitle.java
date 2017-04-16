@@ -90,7 +90,7 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
                 return true;
 
             try {
-                Object packet = packetPlayOutTitleActionConstuctor.invoke(getEnumTitleAction("SUBTITLE"), null);
+                Object packet = packetPlayOutTitleActionConstuctor.invoke(getEnumTitleAction(enumTitleActionName), null);
                 MinecraftReflection.sendPacket(players, packet);
                 return true;
 
