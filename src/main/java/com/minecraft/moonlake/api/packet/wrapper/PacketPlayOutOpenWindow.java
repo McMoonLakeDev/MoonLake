@@ -48,10 +48,10 @@ public class PacketPlayOutOpenWindow extends PacketPlayOutBukkitAbstract {
     static {
 
         CLASS_PACKETPLAYOUTOPENWINDOW = MinecraftReflection.getMinecraftClass("PacketPlayOutOpenWindow");
-        Class<?> chatMessageClass = MinecraftReflection.getChatMessageClass();
+        Class<?> iChatBaseComponentClass = MinecraftReflection.getIChatBaseComponentClass();
         packetPlayOutOpenWindowVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTOPENWINDOW);
-        packetPlayOutOpenWindowConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTOPENWINDOW, int.class, String.class, chatMessageClass, int.class);
-        packetPlayOutOpenWindowHorseConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTOPENWINDOW, int.class, String.class, chatMessageClass, int.class, int.class);
+        packetPlayOutOpenWindowConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTOPENWINDOW, int.class, String.class, iChatBaseComponentClass, int.class);
+        packetPlayOutOpenWindowHorseConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTOPENWINDOW, int.class, String.class, iChatBaseComponentClass, int.class, int.class);
     }
 
     private IntegerProperty windowId;
