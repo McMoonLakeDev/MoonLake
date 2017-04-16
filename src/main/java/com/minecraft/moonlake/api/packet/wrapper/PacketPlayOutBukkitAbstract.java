@@ -67,10 +67,8 @@ public abstract class PacketPlayOutBukkitAbstract extends PacketPlayOutAbstract 
             Field field = fields[i];
             if(ignoreFieldTypes != null)
                 for(Class<?> ignoreFieldType : ignoreFieldTypes)
-                    if(ignoreFieldType.isAssignableFrom(field.getType())) {
-                        i--; // 由于字段类型属于忽略类型则让 i 自减
+                    if(ignoreFieldType.isAssignableFrom(field.getType()))
                         continue main;
-                    }
 
             if(!field.isAccessible())
                 field.setAccessible(true);

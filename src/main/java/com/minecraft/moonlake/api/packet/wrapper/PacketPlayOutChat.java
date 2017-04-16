@@ -170,7 +170,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
                 if(nmsChat == null) throw new IllegalArgumentException("The message object is illegal value: " + message);
                 Object[] values = { nmsChat, mode.get().getMode() };
                 Class<?>[] ignoreFieldTypes = { BaseComponent[].class }; // 忽略字段类型为 BaseComponent[] 数组
-                setFieldAccessibleAndValueSend(ignoreFieldTypes, players, 2, CLASS_PACKETPLAYOUTCHAT, packet, values);
+                setFieldAccessibleAndValueSend(ignoreFieldTypes, players, 3, CLASS_PACKETPLAYOUTCHAT, packet, values);
                 return true;
 
             } catch (Exception e1) {
