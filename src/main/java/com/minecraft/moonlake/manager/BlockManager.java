@@ -80,21 +80,6 @@ public class BlockManager extends MoonLakeManager {
         FALLING_BLOCK_IGNORE_SET.add(Material.STATIONARY_LAVA);
         FALLING_BLOCK_IGNORE_SET.add(Material.DOUBLE_STEP);
         FALLING_BLOCK_IGNORE_SET.add(Material.STEP);
-
-        Class<?> worldClass = MinecraftReflection.getMinecraftWorldClass();
-        Class<?> blockClass = MinecraftReflection.getMinecraftBlockClass();
-        Class<?> blockPositionClass = MinecraftReflection.getMinecraftBlockPositionClass();
-
-        worldPlayBlockActionMethod = Accessors.getMethodAccessorOrNull(worldClass, "playBlockAction", blockPositionClass, blockClass, int.class, int.class);
-        tileEntityGetBlockMethod = Accessors.getMethodAccessorBuilderMCVer(new SingleParamBuilder<MethodAccessor, MinecraftVersion>() {
-            @Override
-            public MethodAccessor build(MinecraftVersion param) {
-                Class<?> tileEntityClass = MinecraftReflection.getMinecraftTileEntityClass();
-                if(!param.isOrLater(MinecraftVersion.V1_9))
-                    return Accessors.getMethodAccessorOrNull(tileEntityClass, "w");
-                return Accessors.getMethodAccessorOrNull(tileEntityClass, "getBlock");
-            }
-        });
     }
 
     /**
@@ -227,6 +212,31 @@ public class BlockManager extends MoonLakeManager {
         return blockList;
     }
 
+    private static MethodAccessor getWorldPlayBlockActionMethod() {
+        if(worldPlayBlockActionMethod == null) {
+            Class<?> worldClass = MinecraftReflection.getMinecraftWorldClass();
+            Class<?> blockClass = MinecraftReflection.getMinecraftBlockClass();
+            Class<?> blockPositionClass = MinecraftReflection.getMinecraftBlockPositionClass();
+            worldPlayBlockActionMethod = Accessors.getMethodAccessorOrNull(worldClass, "playBlockAction", blockPositionClass, blockClass, int.class, int.class);
+        }
+        return worldPlayBlockActionMethod;
+    }
+
+    private static MethodAccessor getTileEntityGetBlockMethod() {
+        if(tileEntityGetBlockMethod == null) {
+            tileEntityGetBlockMethod = Accessors.getMethodAccessorBuilderMCVer(new SingleParamBuilder<MethodAccessor, MinecraftVersion>() {
+                @Override
+                public MethodAccessor build(MinecraftVersion param) {
+                    Class<?> tileEntityClass = MinecraftReflection.getMinecraftTileEntityClass();
+                    if(!param.isOrLater(MinecraftVersion.V1_9))
+                        return Accessors.getMethodAccessorOrNull(tileEntityClass, "w");
+                    return Accessors.getMethodAccessorOrNull(tileEntityClass, "getBlock");
+                }
+            });
+        }
+        return tileEntityGetBlockMethod;
+    }
+
     /**
      * 交互指定位置的箱子方块
      *
@@ -262,9 +272,9 @@ public class BlockManager extends MoonLakeManager {
             Object nmsWorld = MinecraftReflection.getWorldServer(block.getWorld());
             Object nmsBlockPosition = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ()).asNMS();
             Object nmsTileEntityChest = MinecraftReflection.getTileEntity(nmsWorld, nmsBlockPosition);
-            Object nmsBlock = tileEntityGetBlockMethod.invoke(nmsTileEntityChest);
+            Object nmsBlock = getTileEntityGetBlockMethod().invoke(nmsTileEntityChest);
 
-            worldPlayBlockActionMethod.invoke(nmsWorld, nmsBlockPosition, nmsBlock, 1, action ? 1 : 0);
+            getWorldPlayBlockActionMethod().invoke(nmsWorld, nmsBlockPosition, nmsBlock, 1, action ? 1 : 0);
         }
         catch (Exception e) {
 
