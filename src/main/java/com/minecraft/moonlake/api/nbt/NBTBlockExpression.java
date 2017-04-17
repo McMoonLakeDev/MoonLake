@@ -18,41 +18,35 @@
  
 package com.minecraft.moonlake.api.nbt;
 
-import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.packet.wrapper.BlockPosition;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
+import com.minecraft.moonlake.builder.SingleParamBuilder;
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import com.minecraft.moonlake.nbt.exception.NBTInitializeException;
-import com.minecraft.moonlake.nms.packet.PacketFactory;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>NBTBlockExpression</h1>
  * NBT 方块接口实现类
  *
- * @version 1.0.1
+ * @version 1.1
  * @author Month_Light
  */
 class NBTBlockExpression implements NBTBlock {
 
-    private Class<?> CLASS_WORLD;
-    private Class<?> CLASS_CRAFTWORLD;
-    private Class<?> CLASS_TILEENTITY;
-    private Class<?> CLASS_BLOCKPOSITION;
-    private Class<?> CLASS_NBTTAGCOMPOUND;
-    private Method METHOD_GETHANDLE;
-    private Method METHOD_GETTILEENTITY;
-    private Method METHOD_GETUPDATEPACKET;
-    private Method METHOD_READ;
-    private Method METHOD_WRITE;
+    private volatile MethodAccessor worldGetTileEntityMethod;
+    private volatile MethodAccessor tileEntityGetUpdatePacketMethod;
+    private volatile MethodAccessor tileEntitySaveMethod;
+    private volatile MethodAccessor tileEntityWriteMethod;
 
     /**
      * NBT 方块接口实现类构造函数
@@ -61,19 +55,24 @@ class NBTBlockExpression implements NBTBlock {
      */
     public NBTBlockExpression() throws NBTInitializeException {
 
+        Class<?> worldClass = MinecraftReflection.getMinecraftWorldClass();
+        Class<?> tileEntityClass = MinecraftReflection.getMinecraftTileEntityClass();
+        Class<?> blockPositionClass = MinecraftReflection.getMinecraftBlockPositionClass();
+        Class<?> nbtTagCompoundClass = MinecraftReflection.getNBTTagCompoundClass();
+
         try {
 
-            CLASS_WORLD = PackageType.MINECRAFT_SERVER.getClass("World");
-            CLASS_CRAFTWORLD = PackageType.CRAFTBUKKIT.getClass("CraftWorld");
-            CLASS_TILEENTITY = PackageType.MINECRAFT_SERVER.getClass("TileEntity");
-            CLASS_BLOCKPOSITION = PackageType.MINECRAFT_SERVER.getClass("BlockPosition");
-            CLASS_NBTTAGCOMPOUND = PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
-
-            METHOD_GETHANDLE = getMethod(CLASS_CRAFTWORLD, "getHandle");
-            METHOD_GETTILEENTITY = getMethod(CLASS_WORLD, "getTileEntity", CLASS_BLOCKPOSITION);
-            METHOD_GETUPDATEPACKET = getMethod(CLASS_TILEENTITY, "getUpdatePacket");
-            METHOD_READ = getMethod(CLASS_TILEENTITY, !MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9) ? "b" : "save", CLASS_NBTTAGCOMPOUND);
-            METHOD_WRITE = getMethod(CLASS_TILEENTITY, "a", CLASS_NBTTAGCOMPOUND);
+            worldGetTileEntityMethod = Accessors.getMethodAccessor(worldClass, "getTileEntity", blockPositionClass);
+            tileEntityGetUpdatePacketMethod = Accessors.getMethodAccessor(tileEntityClass, "getUpdatePacket");
+            tileEntitySaveMethod = Accessors.getMethodAccessorBuilderMCVer(new SingleParamBuilder<MethodAccessor, MinecraftVersion>() {
+                @Override
+                public MethodAccessor build(MinecraftVersion param) {
+                    if(!param.isOrLater(MinecraftVersion.V1_9))
+                        return Accessors.getMethodAccessor(tileEntityClass, "b", nbtTagCompoundClass);
+                    return Accessors.getMethodAccessor(tileEntityClass, "save", nbtTagCompoundClass);
+                }
+            });
+            tileEntityWriteMethod = Accessors.getMethodAccessor(tileEntityClass, "a", nbtTagCompoundClass);
         }
         catch (Exception e) {
 
@@ -93,7 +92,7 @@ class NBTBlockExpression implements NBTBlock {
 
             if(tileEntity != null) {
 
-                METHOD_READ.invoke(tileEntity, nbtTagCompound);
+                tileEntitySaveMethod.invoke(tileEntity, nbtTagCompound);
             }
         }
         catch (Exception e) {
@@ -114,7 +113,7 @@ class NBTBlockExpression implements NBTBlock {
 
             if(tileEntity != null) {
 
-                METHOD_WRITE.invoke(tileEntity, nbtTagCompound);
+                tileEntityWriteMethod.invoke(tileEntity, nbtTagCompound);
             }
         }
         catch (Exception e) {
@@ -134,7 +133,7 @@ class NBTBlockExpression implements NBTBlock {
 
             if(tileEntity != null) {
 
-                Object packet = METHOD_GETUPDATEPACKET.invoke(tileEntity);
+                Object packet = tileEntityGetUpdatePacketMethod.invoke(tileEntity);
 
                 if(packet == null) return;
 
@@ -150,7 +149,7 @@ class NBTBlockExpression implements NBTBlock {
                 }
                 if(target.size() > 0) {
 
-                    PacketFactory.get().sendPacket(target.toArray(new Player[target.size()]), packet);
+                    MinecraftReflection.sendPacket(target.toArray(new Player[target.size()]), packet);
                 }
             }
         }
@@ -167,10 +166,10 @@ class NBTBlockExpression implements NBTBlock {
 
         try {
 
-            Object nmsWorld = METHOD_GETHANDLE.invoke(block.getWorld());
-            Object nmsBlockPosition = instantiateObject(CLASS_BLOCKPOSITION, block.getX(), block.getY(), block.getZ());
+            Object worldServer = MinecraftReflection.getWorldServer(block.getWorld());
+            Object blockPosition = new BlockPosition(block.getX(), block.getY(), block.getZ()).asNMS();
 
-            return METHOD_GETTILEENTITY.invoke(nmsWorld, nmsBlockPosition);
+            return worldGetTileEntityMethod.invoke(worldServer, blockPosition);
         }
         catch (Exception e) {
 

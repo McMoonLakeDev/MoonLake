@@ -85,6 +85,18 @@ public final class Accessors {
         return new SimpleMethodAccessor(method);
     }
 
+    public static MethodAccessor getMethodAccessorBuilder(Builder<MethodAccessor> paramBuilder) {
+        return Validate.checkNotNull(paramBuilder).build();
+    }
+
+    public static MethodAccessor getMethodAccessorBuilderMCVer(SingleParamBuilder<MethodAccessor, MinecraftVersion> paramBuilder) {
+        return Validate.checkNotNull(paramBuilder).build(MoonLakeAPI.currentMCVersion());
+    }
+
+    public static MethodAccessor getMethodAccessorBuilderBukkitVer(SingleParamBuilder<MethodAccessor, MinecraftBukkitVersion> paramBuilder) {
+        return Validate.checkNotNull(paramBuilder).build(MoonLakeAPI.currentBukkitVersion());
+    }
+
     public static ConstructorAccessor getConstructorAccessor(Class<?> instanceClass, Class<?>... params) {
         try {
             return getConstructorAccessor(instanceClass.getConstructor(params));

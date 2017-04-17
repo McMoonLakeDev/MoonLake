@@ -18,38 +18,26 @@
  
 package com.minecraft.moonlake.api.nbt;
 
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import com.minecraft.moonlake.nbt.exception.NBTInitializeException;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>NBTItemStackExpression</h1>
  * NBT 物品栈接口实现类
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 class NBTItemStackExpression implements NBTItemStack {
 
-    private Class<?> CLASS_CRAFTITEMSTACK;
-    private Class<?> CLASS_ITEMSTACK;
-    private Class<?> CLASS_ITEMMETA;
-    private Class<?> CLASS_ITEM;
-    private Constructor<?> CONSTRUCTOR_CRAFTITEMSTACK;
-    private Constructor<?> CONSTRUCTOR_ITEMSTACK;
-    private Method METHOD_ASNMSCOPY;
-    private Method METHOD_ASCRAFTMIRROR;
-    private Method METHOD_GETBYID;
-    private Field FIELD_ITEMHANDLE;
-    private Field FIELD_TAG;
+    private volatile FieldAccessor itemStackTagField;
+    private volatile FieldAccessor craftItemStackHandleField;
 
     /**
      * NBT 物品栈接口实现类构造函数
@@ -58,27 +46,13 @@ class NBTItemStackExpression implements NBTItemStack {
      */
     public NBTItemStackExpression() throws NBTInitializeException {
 
+        Class<?> itemStackClass = MinecraftReflection.getMinecraftItemStackClass();
+        Class<?> craftItemStackClass = MinecraftReflection.getCraftItemStackClass();
+
         try {
 
-            // NBT ItemStack Class
-            CLASS_CRAFTITEMSTACK = PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
-            CLASS_ITEMSTACK = PackageType.MINECRAFT_SERVER.getClass("ItemStack");
-            CLASS_ITEMMETA = Class.forName("org.bukkit.inventory.meta.ItemMeta");
-            CLASS_ITEM = PackageType.MINECRAFT_SERVER.getClass("Item");
-
-            // NBT ItemStack Method
-            METHOD_ASNMSCOPY = getMethod(CLASS_CRAFTITEMSTACK, "asNMSCopy", ItemStack.class);
-            METHOD_ASCRAFTMIRROR = getMethod(CLASS_CRAFTITEMSTACK, "asCraftMirror", CLASS_ITEMSTACK);
-            METHOD_GETBYID = getMethod(CLASS_ITEM, "getById", int.class);
-
-            if(METHOD_ASNMSCOPY == null || METHOD_ASCRAFTMIRROR == null) {
-                // NBT ItemStack Constructor
-                CONSTRUCTOR_CRAFTITEMSTACK = getDeclaredConstructor(CLASS_CRAFTITEMSTACK, CLASS_ITEMSTACK);
-                CONSTRUCTOR_ITEMSTACK = getDeclaredConstructor(CLASS_ITEMSTACK, CLASS_ITEM, int.class, int.class);
-            }
-            // NBT ItemStack Field
-            FIELD_TAG = getField(CLASS_ITEMSTACK, true, "tag");
-            FIELD_ITEMHANDLE = getField(CLASS_CRAFTITEMSTACK, true, "handle");
+            itemStackTagField = Accessors.getFieldAccessor(itemStackClass, "tag", true);
+            craftItemStackHandleField = Accessors.getFieldAccessor(craftItemStackClass, "handle", true);
         }
         catch (Exception e) {
 
@@ -90,7 +64,7 @@ class NBTItemStackExpression implements NBTItemStack {
 
         try {
 
-            return FIELD_TAG.get(nmsItemStack);
+            return itemStackTagField.get(nmsItemStack);
         }
         catch (Exception e) {
 
@@ -102,7 +76,7 @@ class NBTItemStackExpression implements NBTItemStack {
 
         try {
 
-            FIELD_TAG.set(nmsItemStack, nbtTagCompound);
+            itemStackTagField.set(nmsItemStack, nbtTagCompound);
         }
         catch (Exception e) {
 
@@ -118,18 +92,7 @@ class NBTItemStackExpression implements NBTItemStack {
 
         try {
 
-            if (METHOD_ASNMSCOPY != null) {
-
-                return METHOD_ASNMSCOPY.invoke(null, itemStack);
-            }
-            else {
-
-                int amount = itemStack.getAmount();
-                byte data = itemStack.getData().getData();
-                Object ITEM = METHOD_GETBYID.invoke(null, itemStack.getTypeId());
-
-                return CONSTRUCTOR_ITEMSTACK.newInstance(ITEM, amount, (int) data);
-            }
+            return MinecraftReflection.asNMSCopy(itemStack);
         }
         catch (Exception e) {
 
@@ -144,14 +107,7 @@ class NBTItemStackExpression implements NBTItemStack {
 
         try {
 
-            if(METHOD_ASCRAFTMIRROR != null) {
-
-                return (ItemStack) METHOD_ASCRAFTMIRROR.invoke(null, nmsItemStack);
-            }
-            else {
-
-                return (ItemStack) CONSTRUCTOR_CRAFTITEMSTACK.newInstance(nmsItemStack);
-            }
+            return MinecraftReflection.asCraftMirror(nmsItemStack);
         }
         catch (Exception e) {
 
@@ -163,7 +119,7 @@ class NBTItemStackExpression implements NBTItemStack {
 
         try {
 
-            return FIELD_ITEMHANDLE.get(itemStack);
+            return craftItemStackHandleField.get(itemStack);
         }
         catch (Exception e) {
 
@@ -184,11 +140,11 @@ class NBTItemStackExpression implements NBTItemStack {
 
         try {
 
-            if(CLASS_CRAFTITEMSTACK.isInstance(itemStack)) {
+            if(MinecraftReflection.getCraftItemStackClass().isInstance(itemStack)) {
 
                 setTagCraftBukkit(itemStack, nbtTagCompound);
             }
-            else if(CLASS_ITEMMETA != null) {
+            else {
 
                 setTagOrigin(itemStack, nbtTagCompound);
             }
@@ -206,15 +162,14 @@ class NBTItemStackExpression implements NBTItemStack {
 
         try {
 
-            if(CLASS_CRAFTITEMSTACK.isInstance(itemStack)) {
+            if(MinecraftReflection.getCraftItemStackClass().isInstance(itemStack)) {
 
                 return getTagCraftBukkit(itemStack);
             }
-            else if(CLASS_ITEMMETA != null) {
+            else {
 
                 return getTagOrigin(itemStack);
             }
-            return null;
         }
         catch (Exception e) {
 

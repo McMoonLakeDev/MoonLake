@@ -30,7 +30,9 @@ import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
@@ -47,13 +49,18 @@ public class MinecraftReflection {
     private static CachedPackage craftBukkitPackage;
     private static ClassSource source;
     private static volatile ConstructorAccessor chatMessageConstructor;
+    private static volatile MethodAccessor craftItemStackAsCraftMirrorMethod;
     private static volatile MethodAccessor craftItemStackAsNMSCopyMethod;
     private static volatile MethodAccessor enumGamemodeGetByIdMethod;
     private static volatile MethodAccessor enumConstantDirectoryMethod;
     private static volatile MethodAccessor worldTypeGetByTypeMethod;
+    private static volatile MethodAccessor entityGetBukkitEntityMethod;
     private static volatile MethodAccessor entityPlayerHandleMethod;
     private static volatile MethodAccessor worldServerHandleMethod;
+    private static volatile MethodAccessor worldAddEntityMethod;
+    private static volatile MethodAccessor entityHandleMethod;
     private static volatile MethodAccessor sendPacketMethod;
+    private static volatile MethodAccessor itemGetByIdMethod;
     private static volatile FieldAccessor playerConnectionField;
     private static volatile FieldAccessor networkManagerField;
 
@@ -154,6 +161,10 @@ public class MinecraftReflection {
         return clazz;
     }
 
+    public static Class<?> getMinecraftItemClass() {
+        return getMinecraftClass("Item");
+    }
+
     public static Class<?> getMinecraftWorldClass() {
         return getMinecraftClass("World");
     }
@@ -184,6 +195,10 @@ public class MinecraftReflection {
 
     public static Class<?> getMinecraftEntityPlayerClass() {
         return getMinecraftClass("EntityPlayer");
+    }
+
+    public static Class<?> getMinecraftEntityTypesClass() {
+        return getMinecraftClass("EntityTypes");
     }
 
     public static Class<?> getMinecraftPlayerAbilitiesClass() {
@@ -256,12 +271,60 @@ public class MinecraftReflection {
         return getMinecraftClass("EnumGamemode");
     }
 
+    public static Class<?> getNBTBaseClass() {
+        return getMinecraftClass("NBTBase");
+    }
+
+    public static Class<?> getNBTTagByteClass() {
+        return getMinecraftClass("NBTTagByte");
+    }
+
+    public static Class<?> getNBTTagShortClass() {
+        return getMinecraftClass("NBTTagShort");
+    }
+
+    public static Class<?> getNBTTagIntClass() {
+        return getMinecraftClass("NBTTagInt");
+    }
+
+    public static Class<?> getNBTTagLongClass() {
+        return getMinecraftClass("NBTTagLong");
+    }
+
+    public static Class<?> getNBTTagFloatClass() {
+        return getMinecraftClass("NBTTagFloat");
+    }
+
+    public static Class<?> getNBTTagDoubleClass() {
+        return getMinecraftClass("NBTTagDouble");
+    }
+
+    public static Class<?> getNBTTagStringClass() {
+        return getMinecraftClass("NBTTagString");
+    }
+
+    public static Class<?> getNBTTagByteArrayClass() {
+        return getMinecraftClass("NBTTagByteArray");
+    }
+
+    public static Class<?> getNBTTagIntArrayClass() {
+        return getMinecraftClass("NBTTagIntArray");
+    }
+
+    public static Class<?> getNBTTagListClass() {
+        return getMinecraftClass("NBTTagList");
+    }
+
     public static Class<?> getNBTTagCompoundClass() {
         return getMinecraftClass("NBTTagCompound");
     }
 
     public static Class<?> getNBTCompressedStreamToolsClass() { // TODO FuzzyReflect
         return getMinecraftClass("NBTCompressedStreamTools");
+    }
+
+    public static Class<?> getNBTReadLimiterClass() {
+        return getMinecraftClass("NBTReadLimiter");
     }
 
     public static Class<?> getNetworkManagerClass() { // TODO FuzzyReflect
@@ -296,6 +359,30 @@ public class MinecraftReflection {
     @Nullable
     public static <T extends PacketPlayOutBukkit> Class<?> getPacketClassFromPacketWrapper(T packetWrapper) {
         return packetWrapper.getPacketClass();
+    }
+
+    public static Object itemGetById(int id) {
+        if(itemGetByIdMethod == null)
+            itemGetByIdMethod = Accessors.getMethodAccessor(getMinecraftItemClass(), "getById", int.class);
+        return itemGetByIdMethod.invoke(null, id);
+    }
+
+    public static boolean addEntity(Object world, Object entity) {
+        return addEntity(world, entity, null);
+    }
+
+    public static boolean addEntity(Object world, Object entity, CreatureSpawnEvent.SpawnReason spawnReason) {
+        Validate.notNull(entity, "The entity object is null.");
+        if(worldAddEntityMethod == null)
+            worldAddEntityMethod = Accessors.getMethodAccessor(getMinecraftEntityClass(), "addEntity", getMinecraftEntityClass(), CreatureSpawnEvent.SpawnReason.class);
+        return (boolean) worldAddEntityMethod.invoke(world, entity, (spawnReason == null ? CreatureSpawnEvent.SpawnReason.DEFAULT : spawnReason));
+    }
+
+    public static Entity getBukkitEntity(Object entity) {
+        Validate.notNull(entity, "The entity object is null.");
+        if(entityGetBukkitEntityMethod == null)
+            entityGetBukkitEntityMethod = Accessors.getMethodAccessor(getMinecraftEntityClass(), "getBukkitEntity");
+        return (Entity) entityGetBukkitEntityMethod.invoke(entity);
     }
 
     public static Object worldTypeGetByType(String type) {
@@ -334,11 +421,25 @@ public class MinecraftReflection {
         return craftItemStackAsNMSCopyMethod.invoke(null, itemStack);
     }
 
+    public static ItemStack asCraftMirror(Object itemStack) {
+        Validate.notNull(itemStack, "The itemstack object is null.");
+        if(craftItemStackAsCraftMirrorMethod == null)
+            craftItemStackAsCraftMirrorMethod = Accessors.getMethodAccessor(getCraftItemStackClass(), "asCraftMirror", getMinecraftItemStackClass());
+        return (ItemStack) craftItemStackAsCraftMirrorMethod.invoke(null, itemStack);
+    }
+
     public static Object getWorldServer(World world) {
         Validate.notNull(world, "The player object is null.");
         if(worldServerHandleMethod == null)
             worldServerHandleMethod = Accessors.getMethodAccessor(getCraftWorldClass(), "getHandle");
         return worldServerHandleMethod.invoke(world);
+    }
+
+    public static Object getEntity(Entity entity) {
+        Validate.notNull(entity, "The entity object is null.");
+        if(entityHandleMethod == null)
+            entityHandleMethod = Accessors.getMethodAccessor(getCraftEntityClass(), "getHandle");
+        return entityHandleMethod.invoke(entity);
     }
 
     public static Object getEntityPlayer(Player player) {
