@@ -18,7 +18,6 @@
  
 package com.minecraft.moonlake.api.nbt;
 
-import com.minecraft.moonlake.api.packet.wrapper.BlockPosition;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.builder.SingleParamBuilder;
@@ -43,7 +42,6 @@ import java.util.List;
  */
 class NBTBlockExpression implements NBTBlock {
 
-    private volatile MethodAccessor worldGetTileEntityMethod;
     private volatile MethodAccessor tileEntityGetUpdatePacketMethod;
     private volatile MethodAccessor tileEntitySaveMethod;
     private volatile MethodAccessor tileEntityWriteMethod;
@@ -55,14 +53,11 @@ class NBTBlockExpression implements NBTBlock {
      */
     public NBTBlockExpression() throws NBTInitializeException {
 
-        Class<?> worldClass = MinecraftReflection.getMinecraftWorldClass();
         Class<?> tileEntityClass = MinecraftReflection.getMinecraftTileEntityClass();
-        Class<?> blockPositionClass = MinecraftReflection.getMinecraftBlockPositionClass();
         Class<?> nbtTagCompoundClass = MinecraftReflection.getNBTTagCompoundClass();
 
         try {
 
-            worldGetTileEntityMethod = Accessors.getMethodAccessor(worldClass, "getTileEntity", blockPositionClass);
             tileEntityGetUpdatePacketMethod = Accessors.getMethodAccessor(tileEntityClass, "getUpdatePacket");
             tileEntitySaveMethod = Accessors.getMethodAccessorBuilderMCVer(new SingleParamBuilder<MethodAccessor, MinecraftVersion>() {
                 @Override
@@ -166,10 +161,7 @@ class NBTBlockExpression implements NBTBlock {
 
         try {
 
-            Object worldServer = MinecraftReflection.getWorldServer(block.getWorld());
-            Object blockPosition = new BlockPosition(block.getX(), block.getY(), block.getZ()).asNMS();
-
-            return worldGetTileEntityMethod.invoke(worldServer, blockPosition);
+            return MinecraftReflection.getTileEntity(block.getLocation());
         }
         catch (Exception e) {
 

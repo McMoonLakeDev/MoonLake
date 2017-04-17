@@ -134,9 +134,9 @@ public final class Accessors {
         return null;
     }
 
-    public static MethodAccessor getMethodAccessorOrNull(Class<?> clazz, String methodName) {
+    public static MethodAccessor getMethodAccessorOrNull(Class<?> clazz, String methodName, Class<?>... params) {
         try {
-            return getMethodAccessor(clazz, methodName);
+            return getMethodAccessor(clazz, methodName, params);
         } catch (IllegalArgumentException e) {
         }
         return null;

@@ -18,20 +18,20 @@
  
 package com.minecraft.moonlake.manager;
 
-import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.packet.wrapper.BlockPosition;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
-import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
+import com.minecraft.moonlake.builder.SingleParamBuilder;
 import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
-import java.lang.reflect.Method;
 import java.util.*;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>BlockManager</h1>
@@ -47,18 +47,8 @@ public class BlockManager extends MoonLakeManager {
      * 坠落方块无视的方块类型集合
      */
     private final static Set<Material> FALLING_BLOCK_IGNORE_SET;
-
-    private final static Class<?> CLASS_WORLD;
-    private final static Class<?> CLASS_CRAFTWORLD;
-    private final static Class<?> CLASS_BLOCK;
-    private final static Class<?> CLASS_BLOCKPOSITION;
-    private final static Class<?> CLASS_TILEENTITYCHEST;
-    private final static Class<?> CLASS_TILEENTITYENDERCHEST;
-    private final static Method METHOD_GETHANDLE;
-    private final static Method METHOD_PLAYERBLOCKACTION;
-    private final static Method METHOD_GETTILEENTITY;
-    private final static Method METHOD_GETBLOCKCHEST;
-    private final static Method METHOD_GETBLOCKENDERCHEST;
+    private static volatile MethodAccessor worldPlayBlockActionMethod;
+    private static volatile MethodAccessor tileEntityGetBlockMethod;
 
     static {
 
@@ -91,24 +81,20 @@ public class BlockManager extends MoonLakeManager {
         FALLING_BLOCK_IGNORE_SET.add(Material.DOUBLE_STEP);
         FALLING_BLOCK_IGNORE_SET.add(Material.STEP);
 
-        try {
+        Class<?> worldClass = MinecraftReflection.getMinecraftWorldClass();
+        Class<?> blockClass = MinecraftReflection.getMinecraftBlockClass();
+        Class<?> blockPositionClass = MinecraftReflection.getMinecraftBlockPositionClass();
 
-            CLASS_WORLD = PackageType.MINECRAFT_SERVER.getClass("World");
-            CLASS_CRAFTWORLD = PackageType.CRAFTBUKKIT.getClass("CraftWorld");
-            CLASS_BLOCK = PackageType.MINECRAFT_SERVER.getClass("Block");
-            CLASS_BLOCKPOSITION = PackageType.MINECRAFT_SERVER.getClass("BlockPosition");
-            CLASS_TILEENTITYCHEST = PackageType.MINECRAFT_SERVER.getClass("TileEntityChest");
-            CLASS_TILEENTITYENDERCHEST = PackageType.MINECRAFT_SERVER.getClass("TileEntityEnderChest");
-            METHOD_GETHANDLE = getMethod(CLASS_CRAFTWORLD, "getHandle");
-            METHOD_PLAYERBLOCKACTION = getMethod(CLASS_WORLD, "playBlockAction", CLASS_BLOCKPOSITION, CLASS_BLOCK, int.class, int.class);
-            METHOD_GETTILEENTITY = getMethod(CLASS_WORLD, "getTileEntity", CLASS_BLOCKPOSITION);
-            METHOD_GETBLOCKCHEST = getMethod(CLASS_TILEENTITYCHEST, !MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9) ? "w" : "getBlock");
-            METHOD_GETBLOCKENDERCHEST = getMethod(CLASS_TILEENTITYENDERCHEST, !MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9) ? "w" : "getBlock");
-        }
-        catch (Exception e) {
-
-            throw new IllegalBukkitVersionException("The block manager reflect raw exception.", e);
-        }
+        worldPlayBlockActionMethod = Accessors.getMethodAccessorOrNull(worldClass, "playBlockAction", blockPositionClass, blockClass, int.class, int.class);
+        tileEntityGetBlockMethod = Accessors.getMethodAccessorBuilderMCVer(new SingleParamBuilder<MethodAccessor, MinecraftVersion>() {
+            @Override
+            public MethodAccessor build(MinecraftVersion param) {
+                Class<?> tileEntityClass = MinecraftReflection.getMinecraftTileEntityClass();
+                if(!param.isOrLater(MinecraftVersion.V1_9))
+                    return Accessors.getMethodAccessorOrNull(tileEntityClass, "w");
+                return Accessors.getMethodAccessorOrNull(tileEntityClass, "getBlock");
+            }
+        });
     }
 
     /**
@@ -267,18 +253,18 @@ public class BlockManager extends MoonLakeManager {
     public static void actionChest(Block block, boolean action) {
 
         Validate.notNull(block, "The block object is null.");
-        Validate.isTrue(block.getType() == Material.CHEST || block.getType() == Material.ENDER_CHEST, "The block type not is chest or ender chest.");
+        Validate.isTrue(block.getType() == Material.CHEST || block.getType() == Material.TRAPPED_CHEST || block.getType() == Material.ENDER_CHEST, "The block type not is chest or ender chest.");
 
         Location location = block.getLocation();
 
         try {
 
-            Object nmsWorld = METHOD_GETHANDLE.invoke(block.getWorld());
-            Object nmsBlockPosition = instantiateObject(CLASS_BLOCKPOSITION, location.getX(), location.getY(), location.getZ());
-            Object nmsTileEntityChest = METHOD_GETTILEENTITY.invoke(nmsWorld, nmsBlockPosition);
-            Object nmsBlock = block.getType() == Material.CHEST  ? METHOD_GETBLOCKCHEST.invoke(nmsTileEntityChest) : METHOD_GETBLOCKENDERCHEST.invoke(nmsTileEntityChest);
+            Object nmsWorld = MinecraftReflection.getWorldServer(block.getWorld());
+            Object nmsBlockPosition = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ()).asNMS();
+            Object nmsTileEntityChest = MinecraftReflection.getTileEntity(nmsWorld, nmsBlockPosition);
+            Object nmsBlock = tileEntityGetBlockMethod.invoke(nmsTileEntityChest);
 
-            METHOD_PLAYERBLOCKACTION.invoke(nmsWorld, nmsBlockPosition, nmsBlock, 1, action ? 1 : 0);
+            worldPlayBlockActionMethod.invoke(nmsWorld, nmsBlockPosition, nmsBlock, 1, action ? 1 : 0);
         }
         catch (Exception e) {
 

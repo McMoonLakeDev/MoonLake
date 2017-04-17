@@ -21,6 +21,7 @@ package com.minecraft.moonlake.api.utility;
 import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
+import com.minecraft.moonlake.api.packet.wrapper.BlockPosition;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.builder.SingleParamBuilder;
 import com.minecraft.moonlake.exception.MoonLakeException;
@@ -29,6 +30,7 @@ import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -57,6 +59,7 @@ public class MinecraftReflection {
     private static volatile MethodAccessor entityGetBukkitEntityMethod;
     private static volatile MethodAccessor entityPlayerHandleMethod;
     private static volatile MethodAccessor worldServerHandleMethod;
+    private static volatile MethodAccessor worldGetTileEntityMethod;
     private static volatile MethodAccessor worldAddEntityMethod;
     private static volatile MethodAccessor entityHandleMethod;
     private static volatile MethodAccessor sendPacketMethod;
@@ -367,11 +370,27 @@ public class MinecraftReflection {
         return itemGetByIdMethod.invoke(null, id);
     }
 
+    public static Object getTileEntity(Location location) {
+        Validate.notNull(location, "The location object is null.");
+        Object world = getWorldServer(location.getWorld());
+        Object blockPosition = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        return getTileEntity(world, blockPosition);
+    }
+
+    public static Object getTileEntity(Object world, Object blockPosition) {
+        Validate.notNull(world, "The world object is null.");
+        Validate.notNull(blockPosition, "The block position object is null.");
+        if(worldGetTileEntityMethod == null)
+            worldGetTileEntityMethod = Accessors.getMethodAccessor(getMinecraftWorldClass(), "getTileEntity", getMinecraftBlockPositionClass());
+        return worldGetTileEntityMethod.invoke(world, blockPosition);
+    }
+
     public static boolean addEntity(Object world, Object entity) {
         return addEntity(world, entity, null);
     }
 
     public static boolean addEntity(Object world, Object entity, CreatureSpawnEvent.SpawnReason spawnReason) {
+        Validate.notNull(world, "The world object is null.");
         Validate.notNull(entity, "The entity object is null.");
         if(worldAddEntityMethod == null)
             worldAddEntityMethod = Accessors.getMethodAccessor(getMinecraftEntityClass(), "addEntity", getMinecraftEntityClass(), CreatureSpawnEvent.SpawnReason.class);
