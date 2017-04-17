@@ -18,7 +18,6 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
-import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
@@ -278,8 +277,8 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
             // 参数 EnumTitleAction, IChatBaseComponent
             // 参数 int, int, int
             // 进行反射实例发送
-            Object nmsTitle = ChatSerializer.fromJson("{\"text\":\"" + title + "\"}");
-            Object nmsSubTitle = subTitle != null ? ChatSerializer.fromJson("{\"text\":\"" + subTitle + "\"}") : null;
+            Object nmsTitle = MinecraftReflection.getIChatBaseComponentFromString(title);
+            Object nmsSubTitle = subTitle != null ? MinecraftReflection.getIChatBaseComponentFromString(subTitle) : null;
             Object packet0 = packetPlayOutTitleTimesConstuctor.invoke(fadeIn.get(), stay.get(), fadeOut.get()); // TIMES Packet
             Object packet1 = packetPlayOutTitleActionConstuctor.invoke(getEnumTitleAction("TITLE"), nmsTitle); // Title Packet
             Object packet2 = nmsSubTitle != null ?  packetPlayOutTitleActionConstuctor.invoke(getEnumTitleAction("SUBTITLE"), nmsSubTitle) : null; // SubTitle Packet
@@ -299,12 +298,12 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
                 Object[] values0 = { getEnumTitleAction("TIMES"), fadeIn.get(), stay.get(), fadeOut.get() };
                 setFieldAccessibleAndValueSend(players, 2, 5, CLASS_PACKETPLAYOUTTITLE, packet0, values0);
 
-                Object nmsTitle = ChatSerializer.fromJson("{\"text\":\"" + title + "\"}");
+                Object nmsTitle = MinecraftReflection.getIChatBaseComponentFromString(title);
                 Object packet1 = packetPlayOutTitleVoidConstuctor.invoke(); // 再设置并发送 TITLE 的标题数据包
                 Object[] values1 = { getEnumTitleAction("TITLE"), nmsTitle };
                 setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTTITLE, packet1, values1);
 
-                Object nmsSubTitle = subTitle != null ? ChatSerializer.fromJson("{\"text\":\"" + subTitle + "\"}") : null;
+                Object nmsSubTitle = subTitle != null ? MinecraftReflection.getIChatBaseComponentFromString(subTitle) : null;
                 if(nmsSubTitle != null) {
                     // 如果副标题不为 null 则进行设置并发送
                     Object packet2 = packetPlayOutTitleVoidConstuctor.invoke(); // 最后设置并发送 SUBTITLE 的标题数据包

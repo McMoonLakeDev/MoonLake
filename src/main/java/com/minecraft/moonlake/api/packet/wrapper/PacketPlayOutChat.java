@@ -18,7 +18,6 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
-import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
@@ -152,8 +151,8 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
         try {
             // 先用调用 NMS 的 PacketPlayOutChat 构造函数, 参数 IChatBaseComponent, byte
             // 进行反射实例发送
-            Object nmsChat = ChatSerializer.fromJson(isFancyMessage == null ? ("{\"text\":\"" + message + "\"}") : message);
-            if(nmsChat == null) ChatSerializer.fromJson("{\"text\":\"" + message + "\"}"); // 如果为 null 的话再调用一次进行格式化
+            Object nmsChat = isFancyMessage == null ? MinecraftReflection.getIChatBaseComponentFromString(message) : MinecraftReflection.getIChatBaseComponentFromJson(message);
+            if(nmsChat == null) MinecraftReflection.getIChatBaseComponentFromString(message); // 如果为 null 的话再调用一次进行格式化
             Object packet = packetPlayOutChatConstructor.invoke(nmsChat, mode.get() == null ? (byte) 1 : mode.get().getMode());
             MinecraftReflection.sendPacket(players, packet);
             return true;
@@ -166,7 +165,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
                 // 这两个字段分别对应 IChatBaseComponent, byte 的 2 个属性
                 // 貌似 PacketPlayOutChat 有一个 md_5 包的 BaseComponent 类数组字段需要忽略
                 Object packet = packetPlayOutChatVoidConstructor.invoke();
-                Object nmsChat = ChatSerializer.fromJson(isFancyMessage == null ? ("{\"text\":\"" + message + "\"}") : message);
+                Object nmsChat = isFancyMessage == null ? MinecraftReflection.getIChatBaseComponentFromString(message) : MinecraftReflection.getIChatBaseComponentFromJson(message);
                 if(nmsChat == null) throw new IllegalArgumentException("The message object is illegal value: " + message);
                 Object[] values = { nmsChat, mode.get().getMode() };
                 Class<?>[] ignoreFieldTypes = { BaseComponent[].class }; // 忽略字段类型为 BaseComponent[] 数组

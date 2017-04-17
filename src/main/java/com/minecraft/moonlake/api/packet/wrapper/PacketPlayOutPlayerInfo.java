@@ -18,7 +18,6 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
-import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
@@ -190,7 +189,7 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
             // 构造函数的参数为 GameProfile, int, EnumGamemode, IChatBaseComponent
             for(Data data : dataList) {
                 // 循环遍历 Data 列表进行转换到 PlayerInfoData 然后添加到 List 内
-                Object nmsPlayerListName = ChatSerializer.fromJson("{\"text\":\"" + data.playerListName.get() + "\"}");
+                Object nmsPlayerListName = MinecraftReflection.getIChatBaseComponentFromString(data.playerListName.get());
                 Object nmsGamemode = MinecraftReflection.enumGamemodeGetById(data.gameMode.get().getValue()); // @SuppressWarnings("deprecation")
                 Object nmsData = null;
                 // 不是很懂 bukkit，反编译明明是四个参数, 但是传入后说找不到构造函数

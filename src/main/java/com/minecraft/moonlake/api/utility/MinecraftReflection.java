@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api.utility;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.builder.SingleParamBuilder;
@@ -315,6 +316,15 @@ public class MinecraftReflection {
         if(chatMessageConstructor == null)
             chatMessageConstructor = Accessors.getConstructorAccessor(getChatMessageClass(), String.class, Object[].class);
         return chatMessageConstructor.invoke(text, params);
+    }
+
+    public static Object getIChatBaseComponentFromJson(String json) {
+        return ChatSerializer.fromJson(json);
+    }
+
+    public static Object getIChatBaseComponentFromString(String string) {
+        Validate.notNull(string, "The string object is null.");
+        return getIChatBaseComponentFromJson("{\"text\":\"" + string + "\"}");
     }
 
     public static Object asNMSCopy(ItemStack itemStack) {

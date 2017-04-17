@@ -18,7 +18,6 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
-import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
@@ -127,8 +126,8 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbst
         try {
             // 先用调用 NMS 的 PacketPlayOutPlayerListHeaderFooter 构造函数, 参数 IChatBaseComponent
             // 进行反射实例发送
-            Object nmsHeader = ChatSerializer.fromJson("{\"text\":\"" + header + "\"}");
-            Object nmsFooter = footer != null ? ChatSerializer.fromJson("{\"text\":\"" + footer + "\"}") : null;
+            Object nmsHeader = MinecraftReflection.getIChatBaseComponentFromString(header);
+            Object nmsFooter = footer != null ? MinecraftReflection.getIChatBaseComponentFromString(footer) : null;
             Object packet = packetPlayOutPlayerListHeaderFooterConstructor.invoke(nmsHeader);
             if(nmsFooter != null)
                 setFieldAccessibleAndValueSend(players, 1, 2, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, nmsFooter);
@@ -142,8 +141,8 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbst
             try {
                 // 判断字段数量大于等于 2 个的话就是有此方式
                 // 这两个字段分别对应 IChatBaseComponent, IChatBaseComponent 的 2 个属性
-                Object nmsHeader = ChatSerializer.fromJson("{\"text\":\"" + header + "\"}");
-                Object nmsFooter = footer != null ? ChatSerializer.fromJson("{\"text\":\"" + footer + "\"}") : null;
+                Object nmsHeader = MinecraftReflection.getIChatBaseComponentFromString(header);
+                Object nmsFooter = footer != null ? MinecraftReflection.getIChatBaseComponentFromString(footer) : null;
                 Object packet = packetPlayOutPlayerListHeaderFooterVoidConstructor.invoke();
                 if(nmsFooter != null)
                     setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, nmsHeader, nmsFooter);
