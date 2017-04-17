@@ -20,6 +20,7 @@ package com.minecraft.moonlake.api.utility;
 
 import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.chat.ChatSerializer;
+import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.wrapper.BlockPosition;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
@@ -33,6 +34,7 @@ import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -51,8 +53,11 @@ public class MinecraftReflection {
     private static CachedPackage craftBukkitPackage;
     private static ClassSource source;
     private static volatile ConstructorAccessor chatMessageConstructor;
+    private static volatile MethodAccessor entityLivingGetAttributeInstanceMethod;
     private static volatile MethodAccessor craftItemStackAsCraftMirrorMethod;
     private static volatile MethodAccessor craftItemStackAsNMSCopyMethod;
+    private static volatile MethodAccessor attributeInstanceGetValueMethod;
+    private static volatile MethodAccessor attributeInstanceSetValueMethod;
     private static volatile MethodAccessor enumGamemodeGetByIdMethod;
     private static volatile MethodAccessor enumConstantDirectoryMethod;
     private static volatile MethodAccessor worldTypeGetByTypeMethod;
@@ -192,6 +197,10 @@ public class MinecraftReflection {
         return getMinecraftClass("EntityItem");
     }
 
+    public static Class<?> getMinecraftEntityLivingClass() {
+        return getMinecraftClass("EntityLiving");
+    }
+
     public static Class<?> getMinecraftEntityHumanClass() {
         return getMinecraftEntityPlayerClass().getSuperclass();
     }
@@ -202,6 +211,10 @@ public class MinecraftReflection {
 
     public static Class<?> getMinecraftEntityTypesClass() {
         return getMinecraftClass("EntityTypes");
+    }
+
+    public static Class<?> getMinecraftEntityInsentientClass() {
+        return getMinecraftClass("EntityInsentient");
     }
 
     public static Class<?> getMinecraftPlayerAbilitiesClass() {
@@ -238,6 +251,18 @@ public class MinecraftReflection {
 
     public static Class<?> getMinecraftWorldType() { // TODO FuzzyReflect
         return getMinecraftClass("WorldType");
+    }
+
+    public static Class<?> getMinecraftIAttributeClass() {
+        return getMinecraftClass("IAttribute");
+    }
+
+    public static Class<?> getMinecraftAttributeInstanceClass() {
+        return getMinecraftClass("AttributeInstance");
+    }
+
+    public static Class<?> getMinecraftGenericAttributesClass() {
+        return getMinecraftClass("GenericAttributes");
     }
 
     public static Class<?> getIChatBaseComponentClass() {
@@ -346,6 +371,14 @@ public class MinecraftReflection {
         return getMinecraftClass("Packet");
     }
 
+    public static Class<?> getPathfinderGoalSelectorClass() {
+        return getMinecraftClass("PathfinderGoalSelector");
+    }
+
+    public static Class<?> getUnsafeListClass() {
+        return getCraftBukkitClass("util.UnsafeList");
+    }
+
     @Nullable
     public static <T extends PacketPlayOutBukkit> Class<?> getPacketClassFromPacketWrapper(Class<T> packetWrapper) {
         try {
@@ -368,6 +401,35 @@ public class MinecraftReflection {
         if(itemGetByIdMethod == null)
             itemGetByIdMethod = Accessors.getMethodAccessor(getMinecraftItemClass(), "getById", int.class);
         return itemGetByIdMethod.invoke(null, id);
+    }
+
+    public static void setAttributeValue(LivingEntity livingEntity, AttributeType attributeType, double value) {
+        Validate.notNull(livingEntity, "The living entity object is null.");
+        Validate.notNull(attributeType, "The attribute type object is null.");
+        attributeType.isSupported(); // 检测属性类型是否支持服务端版本
+        double finalValue = attributeType.getSafeValue(value);
+        Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttributeField().get(null));
+        if(attributeInstanceSetValueMethod == null)
+            attributeInstanceSetValueMethod = Accessors.getMethodAccessor(getMinecraftAttributeInstanceClass(), "setValue", double.class);
+        attributeInstanceSetValueMethod.invoke(attributeInstance, finalValue);
+    }
+
+    public static double getAttributeValue(LivingEntity livingEntity, AttributeType attributeType) {
+        Validate.notNull(livingEntity, "The living entity object is null.");
+        Validate.notNull(attributeType, "The attribute type object is null.");
+        attributeType.isSupported(); // 检测属性类型是否支持服务端版本
+        Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttributeField().get(null));
+        if(attributeInstanceGetValueMethod == null)
+            attributeInstanceGetValueMethod = Accessors.getMethodAccessor(getMinecraftAttributeInstanceClass(), "getValue");
+        return (double) attributeInstanceGetValueMethod.invoke(attributeInstance);
+    }
+
+    public static Object getAttributeInstance(Object entityLiving, Object iAttribute) {
+        Validate.notNull(entityLiving, "The entity living object is null.");
+        Validate.notNull(iAttribute, "The attribute object is null.");
+        if(entityLivingGetAttributeInstanceMethod == null)
+            entityLivingGetAttributeInstanceMethod = Accessors.getMethodAccessor(getMinecraftEntityLivingClass(), "getAttributeInstance", getMinecraftIAttributeClass());
+        return entityLivingGetAttributeInstanceMethod.invoke(entityLiving, iAttribute);
     }
 
     public static Object getTileEntity(Location location) {
