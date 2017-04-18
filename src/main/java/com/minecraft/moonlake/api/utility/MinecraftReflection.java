@@ -21,11 +21,14 @@ package com.minecraft.moonlake.api.utility;
 import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.entity.AttributeType;
+import com.minecraft.moonlake.api.nbt.NBTCompound;
+import com.minecraft.moonlake.api.nbt.NBTReflect;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.wrapper.BlockPosition;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.builder.SingleParamBuilder;
 import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.reflect.FuzzyReflect;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
@@ -40,6 +43,8 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Map;
@@ -52,20 +57,27 @@ public class MinecraftReflection {
     private static CachedPackage minecraftPackage;
     private static CachedPackage craftBukkitPackage;
     private static ClassSource source;
+    private static volatile ConstructorAccessor itemStackConstructor;
     private static volatile ConstructorAccessor chatMessageConstructor;
+    private static volatile MethodAccessor nbtCompressedStreamToolsWriteMethod;
+    private static volatile MethodAccessor nbtCompressedStreamToolsReadMethod;
     private static volatile MethodAccessor entityLivingGetAttributeInstanceMethod;
+    private static volatile MethodAccessor craftItemStackAsBukkitCopyMethod;
     private static volatile MethodAccessor craftItemStackAsCraftMirrorMethod;
     private static volatile MethodAccessor craftItemStackAsNMSCopyMethod;
     private static volatile MethodAccessor attributeInstanceGetValueMethod;
     private static volatile MethodAccessor attributeInstanceSetValueMethod;
     private static volatile MethodAccessor enumGamemodeGetByIdMethod;
     private static volatile MethodAccessor enumConstantDirectoryMethod;
+    private static volatile MethodAccessor mojangsonParserParserMethod;
     private static volatile MethodAccessor worldTypeGetByTypeMethod;
     private static volatile MethodAccessor entityGetBukkitEntityMethod;
+    private static volatile MethodAccessor itemStackCraftStackMethod;
     private static volatile MethodAccessor entityPlayerHandleMethod;
     private static volatile MethodAccessor worldServerHandleMethod;
     private static volatile MethodAccessor worldGetTileEntityMethod;
     private static volatile MethodAccessor worldAddEntityMethod;
+    private static volatile MethodAccessor itemStackSaveMethod;
     private static volatile MethodAccessor entityHandleMethod;
     private static volatile MethodAccessor sendPacketMethod;
     private static volatile MethodAccessor itemGetByIdMethod;
@@ -493,6 +505,92 @@ public class MinecraftReflection {
     public static Object getIChatBaseComponentFromString(String string) {
         Validate.notNull(string, "The string object is null.");
         return getIChatBaseComponentFromJson("{\"text\":\"" + string + "\"}");
+    }
+
+    public static Object newNBTTagCompound() {
+        return NBTTagReflection.getNBTTagCompoundConstructor().invoke();
+    }
+
+    public static Object parserGsonNBTTag(String nbtTag) {
+        Validate.notNull(nbtTag, "The nbt tag object is null.");
+        if(mojangsonParserParserMethod == null)
+            mojangsonParserParserMethod = Accessors.getMethodAccessor(getMinecraftClass("MojangsonParser"), "parse", String.class);
+        return mojangsonParserParserMethod.invoke(null, nbtTag);
+    }
+
+    public static NBTCompound readInputStreamToNBTCompound(InputStream is) {
+        Object handle = readInputStreamToNBT(is);
+        return handle == null ? null : NBTReflect.fromNBTCompound(handle);
+    }
+
+    public static Object readInputStreamToNBT(InputStream is) {
+        Validate.notNull(is, "The input stream object is null.");
+        if(nbtCompressedStreamToolsReadMethod == null) {
+            nbtCompressedStreamToolsReadMethod = Accessors.getMethodAccessorOrNull(getNBTCompressedStreamToolsClass(), "a", InputStream.class);
+            if(nbtCompressedStreamToolsReadMethod == null)
+                nbtCompressedStreamToolsReadMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getNBTCompressedStreamToolsClass(), true).getMethodByParameters("a", getNBTTagCompoundClass(), InputStream.class));
+        }
+        return nbtCompressedStreamToolsReadMethod.invoke(null, is);
+    }
+
+    public static void writeOutputStreamFromNBTCompound(NBTCompound nbtCompound, OutputStream os) {
+        Validate.notNull(nbtCompound, "The nbt compound object is null.");
+        writeOutputStreamFromNBT(nbtCompound.getHandleCopy(), os);
+    }
+
+    public static void writeOutputStreamFromNBT(Object nbtCompound, OutputStream os) {
+        Validate.notNull(os, "The output stream object is null.");
+        Validate.notNull(nbtCompound, "The nbt compound object is null.");
+        if(nbtCompressedStreamToolsWriteMethod == null) {
+            nbtCompressedStreamToolsWriteMethod = Accessors.getMethodAccessor(getNBTCompressedStreamToolsClass(), "a", getNBTTagCompoundClass(), OutputStream.class);
+            if(nbtCompressedStreamToolsWriteMethod == null)
+                nbtCompressedStreamToolsWriteMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getNBTCompressedStreamToolsClass(), true).getMethodByParameters("a", Void.class, getNBTTagCompoundClass(), OutputStream.class));
+        }
+        nbtCompressedStreamToolsWriteMethod.invoke(null, nbtCompound, os);
+    }
+
+    public static void saveItemStack(ItemStack itemStack, NBTCompound nbtCompound) {
+        Validate.notNull(itemStack, "The itemstack object is null");
+        Validate.notNull(nbtCompound, "The nbt compound object is null.");
+        Object nmsItemStack = asNMSCopy(itemStack);
+        saveItemStack(nmsItemStack, nbtCompound.getHandle()); // getHandle 返回参数 NBTCompound 的 handle 对象而不是 copy 新实例
+    }
+
+    public static void saveItemStack(Object itemStack, Object nbtCompound) {
+        Validate.notNull(itemStack, "The itemstack object is null");
+        Validate.notNull(nbtCompound, "The nbt compound object is null.");
+        if(itemStackSaveMethod == null)
+            itemStackSaveMethod = Accessors.getMethodAccessor(getMinecraftItemStackClass(), "save", getNBTTagCompoundClass());
+        itemStackSaveMethod.invoke(itemStack, nbtCompound);
+    }
+
+    public static ItemStack createStack(NBTCompound nbtCompound) {
+        Validate.notNull(nbtCompound, "The nbt compound object is null.");
+        Object itemStack = createStack(nbtCompound.getHandleCopy()); // getHandleCopy 返回参数 NBTCompound 的 handle 对象新实例而不是同对象
+        return itemStack == null ? null : asBukkitCopy(itemStack);
+    }
+
+    public static Object createStack(Object nbtCompound) {
+        Validate.notNull(nbtCompound, "The nbt compound object is null.");
+        if(MoonLakeAPI.currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_11_R1)) {
+            // 1.11 的版本中底层 ItemStack 类中没有 createStack 函数
+            if(itemStackConstructor == null)
+                itemStackConstructor = Accessors.getConstructorAccessor(getMinecraftItemStackClass(), getNBTTagCompoundClass());
+            return itemStackConstructor.invoke(nbtCompound);
+
+        } else {
+            // 1.10 以及旧版本就调用 createStack 函数进行创建就行了
+            if(itemStackCraftStackMethod == null)
+                itemStackCraftStackMethod = Accessors.getMethodAccessor(getMinecraftItemStackClass(), "createStack", getNBTTagCompoundClass());
+            return itemStackCraftStackMethod.invoke(null, nbtCompound);
+        }
+    }
+
+    public static ItemStack asBukkitCopy(Object itemStack) {
+        Validate.notNull(itemStack, "The itemstack object is null.");
+        if(craftItemStackAsBukkitCopyMethod == null)
+            craftItemStackAsBukkitCopyMethod = Accessors.getMethodAccessor(getCraftItemStackClass(), "asBukkitCopy", getMinecraftItemStackClass());
+        return (ItemStack) craftItemStackAsBukkitCopyMethod.invoke(null, itemStack);
     }
 
     public static Object asNMSCopy(ItemStack itemStack) {

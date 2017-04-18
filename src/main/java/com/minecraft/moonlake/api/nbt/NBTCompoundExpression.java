@@ -726,6 +726,10 @@ class NBTCompoundExpression implements NBTCompound {
 
                     stringBuilder.append("byte[").append(((int[]) obj).length).append(']');
                 }
+                else if(obj instanceof String) {
+                    // name:用户名"特殊包含 --> name:"用户名\"特殊包含"
+                    stringBuilder.append("\"").append(obj.toString().replace("\"", "\\\"")).append("\"");
+                }
                 else {
 
                     stringBuilder.append(obj);

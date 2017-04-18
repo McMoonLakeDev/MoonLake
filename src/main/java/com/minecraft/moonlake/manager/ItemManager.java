@@ -18,12 +18,16 @@
  
 package com.minecraft.moonlake.manager;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.item.AttributeModify;
 import com.minecraft.moonlake.api.item.ItemBuilder;
 import com.minecraft.moonlake.api.item.ItemLibraryFactorys;
 import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.api.nbt.NBTFactory;
+import com.minecraft.moonlake.api.nbt.NBTReflect;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.data.Conversions;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.util.StringUtil;
@@ -37,53 +41,18 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.*;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>ItemManager</h1>
  * 物品栈管理实现类
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public class ItemManager extends MoonLakeManager {
 
-    private final static Class<?> CLASS_ITEMSTACK;
-    private final static Class<?> CLASS_NBTTAGCOMPOUND;
-    private final static Class<?> CLASS_CRAFTITEMSTACK;
-    private final static Class<?> CLASS_NBTCOMPRESSEDSTREAMTOOLS;
-    private final static Constructor<?> CONSTRUCTOR_NBTTAGCOMPOUND;
-    private final static Method METHOD_ASNMSCOPY;
-    private final static Method METHOD_SAVE;
-    private final static Method METHOD_A0;
-    private final static Method METHOD_A1;
-    private final static Method METHOD_CREATESTACK;
-    private final static Method METHOD_ASBUKKITCOPY;
-
     static {
-
-        try {
-
-            CLASS_ITEMSTACK = PackageType.MINECRAFT_SERVER.getClass("ItemStack");
-            CLASS_NBTTAGCOMPOUND = PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
-            CLASS_CRAFTITEMSTACK = PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
-            CLASS_NBTCOMPRESSEDSTREAMTOOLS = PackageType.MINECRAFT_SERVER.getClass("NBTCompressedStreamTools");
-            CONSTRUCTOR_NBTTAGCOMPOUND = getConstructor(CLASS_NBTTAGCOMPOUND);
-            METHOD_ASNMSCOPY = getMethod(CLASS_CRAFTITEMSTACK, "asNMSCopy", ItemStack.class);
-            METHOD_SAVE = getMethod(CLASS_ITEMSTACK, "save", CLASS_NBTTAGCOMPOUND);
-            METHOD_A0 = getMethod(CLASS_NBTCOMPRESSEDSTREAMTOOLS, "a", InputStream.class);
-            METHOD_A1 = getMethod(CLASS_NBTCOMPRESSEDSTREAMTOOLS, "a", CLASS_NBTTAGCOMPOUND, OutputStream.class);
-            METHOD_CREATESTACK = getMethod(CLASS_ITEMSTACK, "createStack", CLASS_NBTTAGCOMPOUND);
-            METHOD_ASBUKKITCOPY = getMethod(CLASS_CRAFTITEMSTACK, "asBukkitCopy", CLASS_ITEMSTACK);
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The item manager reflect raw exception.", e);
-        }
     }
 
     /**
@@ -99,6 +68,7 @@ public class ItemManager extends MoonLakeManager {
      * @param itemStack Bukkit 物品栈
      * @return NMS 物品栈
      * @throws IllegalArgumentException 如果 Bukkit 物品栈对象为 {@code null} 则抛出异常
+     * @see MinecraftReflection#asNMSCopy(ItemStack)
      */
     public static Object asNMSCopy(ItemStack itemStack) {
 
@@ -106,7 +76,7 @@ public class ItemManager extends MoonLakeManager {
 
         try {
 
-            return METHOD_ASNMSCOPY.invoke(null, itemStack);
+            return MinecraftReflection.asNMSCopy(itemStack);
         }
         catch (Exception e) {
 
@@ -120,6 +90,7 @@ public class ItemManager extends MoonLakeManager {
      * @param nmsItemStack NMS 物品栈
      * @return Bukkit 物品栈
      * @throws IllegalArgumentException 如果 NMS 物品栈对象为 {@code null} 则抛出异常
+     * @see MinecraftReflection#asBukkitCopy(Object)
      */
     public static ItemStack asBukkitCopy(Object nmsItemStack) {
 
@@ -127,7 +98,7 @@ public class ItemManager extends MoonLakeManager {
 
         try {
 
-            return (ItemStack) METHOD_ASBUKKITCOPY.invoke(null, nmsItemStack);
+            return MinecraftReflection.asBukkitCopy(nmsItemStack);
         }
         catch (Exception e) {
 
@@ -340,97 +311,74 @@ public class ItemManager extends MoonLakeManager {
         return !isAir(itemStack) && ItemLibraryFactorys.item().isWrittenBook(itemStack);
     }
 
-    /**
-     * 将物品栈对象数据序列化为字符串数据
-     *
-     * @param itemStack 物品栈
-     * @return 物品栈字符串数据 异常返回 null
-     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
-     */
-    public static String serialize(ItemStack itemStack) {
+    public static String serializeToNBT(ItemStack itemStack) {
+        if(isAir(itemStack))
+            return null;
+        NBTCompound nbtCompound = MoonLakeAPI.newNBTCompound();
+        MinecraftReflection.saveItemStack(itemStack, nbtCompound);
+        return nbtCompound.toString();
+    }
 
-        Validate.notNull(itemStack, "The itemstack object is null.");
+    public static ItemStack deserializeFromNBT(String nbt) {
+        Validate.isTrue(!StringUtil.isEmpty(nbt), "The nbt object is null or empty.");
+        try {
+            JsonObject nbtObject = new JsonParser().parse(nbt).getAsJsonObject();
+            Object nbtCompoundObj = MinecraftReflection.parserGsonNBTTag(nbt);
+            NBTCompound nbtCompound = NBTReflect.fromNBTCompound(nbtCompoundObj);
+            nbtCompound.put("id", nbtObject.get("id").getAsString());
+            nbtCompound.put("Count", nbtObject.has("Count") ? nbtObject.get("Count").getAsByte() : (byte) 1);
+            nbtCompound.put("Damage", nbtObject.has("Damage") ? nbtObject.get("Damage").getAsShort() : (short) 0);
+            return MinecraftReflection.createStack(nbtCompound);
 
-        if(!isAir(itemStack)) {
-
-            ByteArrayOutputStream outputStream = null;
-
-            try {
-
-                outputStream = new ByteArrayOutputStream();
-
-                Object NBTTag = CONSTRUCTOR_NBTTAGCOMPOUND.newInstance();
-                Object nmsItemStack = asNMSCopy(itemStack);
-
-                METHOD_SAVE.invoke(nmsItemStack, NBTTag);
-                METHOD_A1.invoke(null, NBTTag, outputStream);
-
-                return Base64.getEncoder().encodeToString(outputStream.toByteArray());
-            }
-            catch (Exception e) {
-
-                throw new MoonLakeException("The itemstack serialize exception.", e);
-            }
-            finally {
-
-                if(outputStream != null) {
-
-                    try {
-
-                        outputStream.close();
-                    }
-                    catch (Exception e) {
-
-                    }
-                }
-            }
+        } catch (Exception e) {
+            throw new MoonLakeException("The deserialize nbt '" + nbt + "' to itemstack exception.", e);
         }
-        return null;
+    }
+
+    public static String serializeToBase64(ItemStack itemStack) {
+        if(isAir(itemStack))
+            return null;
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        Object nbtCompound = MinecraftReflection.newNBTTagCompound();
+        Object nmsItemStack = MinecraftReflection.asNMSCopy(itemStack);
+        MinecraftReflection.saveItemStack(nmsItemStack, nbtCompound);
+        MinecraftReflection.writeOutputStreamFromNBT(nbtCompound, outputStream);
+        return Base64.getEncoder().encodeToString(outputStream.toByteArray());
+    }
+
+    public static ItemStack deserializeFromBase64(String base64) {
+        Validate.isTrue(!StringUtil.isEmpty(base64), "The base64 object is null or empty.");
+        byte[] nbtBytes = Base64.getDecoder().decode(base64);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(nbtBytes);
+        Object nbtCompound = MinecraftReflection.readInputStreamToNBT(inputStream);
+        Object nmsItemStack = nbtCompound == null ? null : MinecraftReflection.createStack(nbtCompound);
+        return nmsItemStack == null ? null : MinecraftReflection.asBukkitCopy(nmsItemStack);
     }
 
     /**
-     * 将字符串数据反序列化为物品栈对象
+     * 将物品栈对象数据序列化为 Base64 加密的字符串数据
      *
-     * @param data 字符串数据
-     * @return 物品栈对象 异常返回 null
-     * @throws IllegalArgumentException 如果字符串数据对象为 {@code null} 则抛出异常
+     * @param itemStack 物品栈
+     * @return 物品栈 Base64 加密字符串数据 异常返回 null
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #serializeToBase64(ItemStack)}
      */
+    @Deprecated
+    public static String serialize(ItemStack itemStack) {
+        return serializeToBase64(itemStack);
+    }
+
+    /**
+     * 将 Base64 加密的字符串数据反序列化为物品栈对象
+     *
+     * @param data Base64 加密字符串数据
+     * @return 物品栈对象 异常返回 null
+     * @throws IllegalArgumentException 如果 Base64 加密字符串数据对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #deserializeFromBase64(String)}
+     */
+    @Deprecated
     public static ItemStack deserialize(String data) {
-
-        Validate.notNull(data, "The string data object is null.");
-
-        if(!data.isEmpty()) {
-
-            ByteArrayInputStream inputStream = null;
-
-            try {
-
-                inputStream = new ByteArrayInputStream(Base64.getDecoder().decode(data));
-
-                Object NBTTag = METHOD_A0.invoke(null, inputStream);
-                Object nmsItemStack = METHOD_CREATESTACK.invoke(null, NBTTag);
-
-                return asBukkitCopy(nmsItemStack);
-            }
-            catch (Exception e) {
-
-                throw new MoonLakeException("The itemstack deserialize exception.", e);
-            }
-            finally {
-
-                if(inputStream != null) {
-
-                    try {
-
-                        inputStream.close();
-                    }
-                    catch (Exception e) {
-
-                    }
-                }
-            }
-        }
-        return null;
+        return deserializeFromBase64(data);
     }
 
     /**
