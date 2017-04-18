@@ -27,6 +27,7 @@ import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.wrapper.BlockPosition;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.builder.SingleParamBuilder;
+import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.reflect.FuzzyReflect;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
@@ -34,9 +35,12 @@ import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
+import com.mojang.authlib.GameProfile;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -70,19 +74,26 @@ public class MinecraftReflection {
     private static volatile MethodAccessor enumGamemodeGetByIdMethod;
     private static volatile MethodAccessor enumConstantDirectoryMethod;
     private static volatile MethodAccessor mojangsonParserParserMethod;
+    private static volatile MethodAccessor entityHumanGetProfileMethod;
     private static volatile MethodAccessor worldTypeGetByTypeMethod;
     private static volatile MethodAccessor entityGetBukkitEntityMethod;
     private static volatile MethodAccessor itemStackCraftStackMethod;
     private static volatile MethodAccessor entityPlayerHandleMethod;
     private static volatile MethodAccessor worldServerHandleMethod;
     private static volatile MethodAccessor worldGetTileEntityMethod;
+    private static volatile MethodAccessor itemCooldownHasMethod;
+    private static volatile MethodAccessor itemCooldownGetMethod;
+    private static volatile MethodAccessor itemCooldownSetMethod;
     private static volatile MethodAccessor worldAddEntityMethod;
     private static volatile MethodAccessor itemStackSaveMethod;
     private static volatile MethodAccessor entityHandleMethod;
     private static volatile MethodAccessor sendPacketMethod;
     private static volatile MethodAccessor itemGetByIdMethod;
-    private static volatile FieldAccessor playerConnectionField;
-    private static volatile FieldAccessor networkManagerField;
+    private static volatile FieldAccessor playerConnectionNetworkManagerField;
+    private static volatile FieldAccessor entityPlayerPlayerConnectionField;
+    private static volatile FieldAccessor entityHumanItemCooldownField;
+    private static volatile FieldAccessor entityPlayerLocaleField;
+    private static volatile FieldAccessor entityPlayerPingField;
 
     static {
     }
@@ -115,6 +126,7 @@ public class MinecraftReflection {
         } catch (ClassNotFoundException e) {
             throw new MoonLakeException("Cannot find class " + className, e);
         }
+
     }
 
     public static Class<?> getMinecraftClass(String className) {
@@ -277,6 +289,12 @@ public class MinecraftReflection {
         return getMinecraftClass("GenericAttributes");
     }
 
+    public static Class<?> getMinecraftItemCooldownClass() throws IllegalBukkitVersionException {
+        if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9))
+            throw new IllegalBukkitVersionException("The item cool down not support 1.8 or old bukkit version.");
+        return getMinecraftClass("ItemCooldown");
+    }
+
     public static Class<?> getIChatBaseComponentClass() {
         return getMinecraftClass("IChatBaseComponent");
     }
@@ -409,10 +427,112 @@ public class MinecraftReflection {
         return packetWrapper.getPacketClass();
     }
 
+    @SuppressWarnings("deprecation")
+    public static Object itemGetByMaterial(Material material) {
+        Validate.notNull(material, "The material object is null.");
+        return itemGetById(material.getId());
+    }
+
     public static Object itemGetById(int id) {
         if(itemGetByIdMethod == null)
             itemGetByIdMethod = Accessors.getMethodAccessor(getMinecraftItemClass(), "getById", int.class);
         return itemGetByIdMethod.invoke(null, id);
+    }
+
+    public static boolean hasItemCooldown(HumanEntity humanEntity, Material type) {
+        Validate.notNull(humanEntity, "The human entity object is null.");
+        Object entityHuman = getEntity(humanEntity);
+        return hasItemCooldown(entityHuman, type);
+    }
+
+    public static boolean hasItemCooldown(Object entityHuman, Material type) {
+        Validate.notNull(type, "The item type object is null.");
+        Object item = itemGetByMaterial(type);
+        Object itemCooldown = getEntityHumanItemCooldown(entityHuman); // 如果不支持直接抛出异常
+        if(itemCooldownHasMethod == null)
+            itemCooldownHasMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getMinecraftItemCooldownClass(), true).getMethodByParameters("a", boolean.class, getMinecraftItemClass()));
+        return (boolean) itemCooldownHasMethod.invoke(itemCooldown, item);
+    }
+
+    public static float getItemCooldown(HumanEntity humanEntity, Material type) {
+        Validate.notNull(humanEntity, "The human entity object is null.");
+        Object entityHuman = getEntity(humanEntity);
+        return getItemCooldown(entityHuman, type);
+    }
+
+    public static float getItemCooldown(Object entityHuman, Material type) {
+        Validate.notNull(type, "The item type object is null.");
+        Object item = itemGetByMaterial(type);
+        Object itemCooldown = getEntityHumanItemCooldown(entityHuman); // 如果不支持直接抛出异常
+        if(itemCooldownGetMethod == null)
+            itemCooldownGetMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getMinecraftItemCooldownClass(), true).getMethodByParameters("a", float.class, getMinecraftItemClass(), float.class));
+        return (float) itemCooldownGetMethod.invoke(itemCooldown, item, 0.0f);
+    }
+
+    public static void setItemCooldown(HumanEntity humanEntity, Material type, int tick) {
+        Validate.notNull(humanEntity, "The human entity object is null.");
+        Object entityHuman = getEntity(humanEntity);
+        setItemCooldown(entityHuman, type, tick);
+    }
+
+    public static void setItemCooldown(Object entityHuman, Material type, int tick) {
+        Validate.notNull(type, "The item type object is null.");
+        Object item = itemGetByMaterial(type);
+        Object itemCooldown = getEntityHumanItemCooldown(entityHuman); // 如果不支持直接抛出异常
+        if(itemCooldownSetMethod == null)
+            itemCooldownSetMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getMinecraftItemCooldownClass(), true).getMethodByParameters("a", Void.class, getMinecraftItemClass(), int.class));
+        itemCooldownSetMethod.invoke(itemCooldown, item, tick);
+    }
+
+    public static Object getEntityHumanItemCooldown(HumanEntity humanEntity) {
+        Validate.notNull(humanEntity, "The human entity object is null.");
+        Object entityHuman = getEntity(humanEntity);
+        return getEntityHumanItemCooldown(entityHuman);
+    }
+
+    public static Object getEntityHumanItemCooldown(Object entityHuman) {
+        Validate.notNull(entityHuman, "The entity human object is null.");
+        Validate.isTrue(MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9), "The item cool down not support 1.8 or old bukkit version.");
+        if(entityHumanItemCooldownField == null)
+            entityHumanItemCooldownField = Accessors.getFieldAccessor(getMinecraftEntityHumanClass(), getMinecraftItemCooldownClass(), true);
+        return entityHumanItemCooldownField.get(entityHuman);
+    }
+
+    public static int getPlayerPing(Player player) {
+        Validate.notNull(player, "The player object is null.");
+        return getPlayerPing(getEntityPlayer(player));
+    }
+
+    public static String getPlayerLocale(Player player) {
+        Validate.notNull(player, "The player object is null.");
+        return getPlayerLocale(getEntityPlayer(player));
+    }
+
+    public static int getPlayerPing(Object nmsPlayer) {
+        Validate.notNull(nmsPlayer, "The nms player object is null.");
+        if(entityPlayerPingField == null)
+            entityPlayerPingField = Accessors.getFieldAccessor(getMinecraftEntityPlayerClass(), "ping", true);
+        return (int) entityPlayerPingField.get(nmsPlayer);
+    }
+
+    public static String getPlayerLocale(Object nmsPlayer) {
+        Validate.notNull(nmsPlayer, "The nms player object is null.");
+        if(entityPlayerLocaleField == null)
+            entityPlayerLocaleField = Accessors.getFieldAccessor(getMinecraftEntityPlayerClass(), "locale", true);
+        return (String) entityPlayerLocaleField.get(nmsPlayer);
+    }
+
+    public static GameProfile getEntityHumanProfile(HumanEntity humanEntity) {
+        Validate.notNull(humanEntity, "The human entity object is null.");
+        Object entityHuman = getEntity(humanEntity);
+        return getEntityHumanProfile(entityHuman);
+    }
+
+    public static GameProfile getEntityHumanProfile(Object entityHuman) {
+        Validate.notNull(entityHuman, "Th entity human object is null.");
+        if(entityHumanGetProfileMethod == null)
+            entityHumanGetProfileMethod = Accessors.getMethodAccessor(getMinecraftEntityHumanClass(), "getProfile");
+        return (GameProfile) entityHumanGetProfileMethod.invoke(entityHuman);
     }
 
     public static void setAttributeValue(LivingEntity livingEntity, AttributeType attributeType, double value) {
@@ -645,9 +765,9 @@ public class MinecraftReflection {
 
     public static Object getNetworkManager(Object nmsPlayer) {
         Validate.notNull(nmsPlayer, "The nms player object is null.");
-        if(networkManagerField == null)
-            networkManagerField = Accessors.getFieldAccessor(getPlayerConnectionClass(), getNetworkManagerClass(), true);
-        return networkManagerField.get(getPlayerConnection(nmsPlayer));
+        if(playerConnectionNetworkManagerField == null)
+            playerConnectionNetworkManagerField = Accessors.getFieldAccessor(getPlayerConnectionClass(), getNetworkManagerClass(), true);
+        return playerConnectionNetworkManagerField.get(getPlayerConnection(nmsPlayer));
     }
 
     public static Object getPlayerConnection(Player player) {
@@ -657,9 +777,9 @@ public class MinecraftReflection {
 
     public static Object getPlayerConnection(Object nmsPlayer) {
         Validate.notNull(nmsPlayer, "The nms player object is null.");
-        if(playerConnectionField == null)
-            playerConnectionField = Accessors.getFieldAccessor(getMinecraftEntityPlayerClass(), getPlayerConnectionClass(), true);
-        return playerConnectionField.get(nmsPlayer);
+        if(entityPlayerPlayerConnectionField == null)
+            entityPlayerPlayerConnectionField = Accessors.getFieldAccessor(getMinecraftEntityPlayerClass(), getPlayerConnectionClass(), true);
+        return entityPlayerPlayerConnectionField.get(nmsPlayer);
     }
 
     public static void sendPacket(Player[] players, Object nmsPacket) {

@@ -19,9 +19,10 @@
 package com.minecraft.moonlake.manager;
 
 import com.minecraft.moonlake.MoonLakeAPI;
-import com.minecraft.moonlake.api.player.*;
-import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
+import com.minecraft.moonlake.api.player.MoonLakePlayer;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
+import com.minecraft.moonlake.api.utility.MoonLakeReflection;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.validate.Validate;
@@ -29,18 +30,14 @@ import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PlayerManager</h1>
@@ -51,94 +48,7 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  */
 public class PlayerManager extends MoonLakeManager {
 
-    private final static Class<? extends SimpleMoonLakePlayer> CLASS_SIMPLEMOONLAKEPLAYER;
-    private final static Class<?> CLASS_CRAFTMAGICNUMBERS;
-    private final static Class<?> CLASS_ITEMCOOLDOWN;
-    private final static Class<?> CLASS_ITEM;
-    private final static Class<?> CLASS_CRAFTPLAYER;
-    private final static Class<?> CLASS_ENTITYHUMAN;
-    private final static Class<?> CLASS_ENTITYPLAYER;
-    private final static Constructor<? extends SimpleMoonLakePlayer> CONSTRUCTOR_SIMPLEMOONLAKEPLAYER;
-    private final static Method METHOD_GETHANDLE;
-    private final static Method METHOD_GETPROFILE;
-    private final static Method METHOD_GETITEM;
-    private final static Method METHOD_TARGET;
-    private final static Method METHOD_A0;
-    private final static Method METHOD_A1;
-    private final static Field FIELD_LOCALE;
-    private final static Field FIELD_PING;
-
     static {
-
-        try {
-
-            MinecraftVersion mcVersion = MoonLakeAPI.currentMCVersion();
-
-            if(mcVersion == null) // Not Support
-                CLASS_SIMPLEMOONLAKEPLAYER = null;
-            else if(mcVersion.equalsMinor(MinecraftVersion.V1_8)) // Bukkit 1.8
-                CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_8.class;
-            else if(mcVersion.equalsMinor(MinecraftVersion.V1_9)) // Bukkit 1.9
-                CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_9.class;
-            else if(mcVersion.equalsMinor(MinecraftVersion.V1_10)) // Bukkit 1.10
-                CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_10.class;
-            else if(mcVersion.equalsMinor(MinecraftVersion.V1_11)) // Bukkit 1.11
-                CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_11.class;
-            else // Not Support
-                CLASS_SIMPLEMOONLAKEPLAYER = null;
-
-            if(CLASS_SIMPLEMOONLAKEPLAYER != null)
-                CONSTRUCTOR_SIMPLEMOONLAKEPLAYER = CLASS_SIMPLEMOONLAKEPLAYER.getConstructor(Player.class);
-            else
-                CONSTRUCTOR_SIMPLEMOONLAKEPLAYER = null;
-
-            CLASS_CRAFTPLAYER = PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
-            CLASS_ENTITYHUMAN = PackageType.MINECRAFT_SERVER.getClass("EntityHuman");
-            CLASS_ENTITYPLAYER = PackageType.MINECRAFT_SERVER.getClass("EntityPlayer");
-            METHOD_GETHANDLE = getMethod(CLASS_CRAFTPLAYER, "getHandle");
-            METHOD_GETPROFILE = getMethod(CLASS_ENTITYHUMAN, "getProfile");
-            FIELD_LOCALE = getField(CLASS_ENTITYPLAYER, true, "locale");
-            FIELD_PING = getField(CLASS_ENTITYPLAYER, true, "ping");
-
-            if(MoonLakeAPI.currentBukkitVersionIsOrLater(MinecraftBukkitVersion.V1_9_R1)) {
-
-                String name = null;
-
-                // TODO 函数名十分不固定, 以后可以用模糊反射来获取
-                switch (MoonLakeAPI.currentBukkitVersionString()) {
-                    case "v1_9_R1":
-                        name = "da"; break;
-                    case "v1_9_R2":
-                        name = "db"; break;
-                    case "v1_10_R1":
-                        name = "df"; break;
-                    case "v1_11_R1":
-                        name = "di"; break;
-                    default:
-                        name = "di"; break;
-                }
-                CLASS_ITEM = PackageType.MINECRAFT_SERVER.getClass("Item");
-                CLASS_ITEMCOOLDOWN = PackageType.MINECRAFT_SERVER.getClass("ItemCooldown");
-                CLASS_CRAFTMAGICNUMBERS = PackageType.CRAFTBUKKIT_UTIL.getClass("CraftMagicNumbers");
-                METHOD_GETITEM = getMethod(CLASS_CRAFTMAGICNUMBERS, "getItem", Material.class);
-                METHOD_TARGET = getMethod(CLASS_ENTITYHUMAN, name);
-                METHOD_A0 = getMethod(CLASS_ITEMCOOLDOWN, "a", CLASS_ITEM, int.class);
-                METHOD_A1 = getMethod(CLASS_ITEMCOOLDOWN, "a", CLASS_ITEM);
-            }
-            else {
-                CLASS_ITEM = null;
-                CLASS_ITEMCOOLDOWN = null;
-                CLASS_CRAFTMAGICNUMBERS = null;
-                METHOD_GETITEM = null;
-                METHOD_TARGET = null;
-                METHOD_A0 = null;
-                METHOD_A1 = null;
-            }
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The player manager reflect raw exception.", e);
-        }
     }
 
     /**
@@ -373,7 +283,7 @@ public class PlayerManager extends MoonLakeManager {
         //
         // 验证类是否为 null 则抛出非法 Bukkit 版本异常
 
-        if(CLASS_SIMPLEMOONLAKEPLAYER == null) {
+        if(MoonLakeReflection.getSimpleMoonLakePlayerClass() == null) {
 
             throw new IllegalBukkitVersionException("The moonlake player class not support bukkit version.");
         }
@@ -386,7 +296,7 @@ public class PlayerManager extends MoonLakeManager {
 
             for(final Player player : players) {
 
-                adapter[index++] = CONSTRUCTOR_SIMPLEMOONLAKEPLAYER.newInstance(player);
+                adapter[index++] = MoonLakeReflection.getSimpleMoonLakePlayerInstance(player);
             }
         }
         catch (Exception e) {
@@ -458,9 +368,7 @@ public class PlayerManager extends MoonLakeManager {
 
         try {
 
-            Object nmsPlayer = METHOD_GETHANDLE.invoke(player);
-
-            return (int) FIELD_PING.get(nmsPlayer);
+            return MinecraftReflection.getPlayerPing(player);
         }
         catch (Exception e) {
 
@@ -474,16 +382,16 @@ public class PlayerManager extends MoonLakeManager {
      * @param player 玩家
      * @return 游戏简介 异常则返回 null
      * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MinecraftReflection#getEntityHumanProfile(HumanEntity)}
      */
+    @Deprecated
     public static GameProfile getProfile(Player player) {
 
         Validate.notNull(player, "The player object is null.");
 
         try {
 
-            Object nmsPlayer = METHOD_GETHANDLE.invoke(player);
-
-            return (GameProfile) METHOD_GETPROFILE.invoke(nmsPlayer);
+            return MinecraftReflection.getEntityHumanProfile(player);
         }
         catch (Exception e) {
 
@@ -497,16 +405,16 @@ public class PlayerManager extends MoonLakeManager {
      * @param player 玩家
      * @return 本地化语言 异常则返回 null
      * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MinecraftReflection#getPlayerLocale(Player)}
      */
+    @Deprecated
     public static String getLanguage(Player player) {
 
         Validate.notNull(player, "The player object is null.");
 
         try {
 
-            Object nmsPlayer = METHOD_GETHANDLE.invoke(player);
-
-            return (String) FIELD_LOCALE.get(nmsPlayer);
+            return MinecraftReflection.getPlayerLocale(player);
         }
         catch (Exception e) {
 
@@ -550,25 +458,10 @@ public class PlayerManager extends MoonLakeManager {
      * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果物品栈类型对象为 {@code null} 则抛出异常
      * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
+     * @see MinecraftReflection#setItemCooldown(HumanEntity, Material, int)
      */
     public static void setItemCoolDown(Player player, Material material, int tick) throws IllegalBukkitVersionException {
-
-        if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9))
-            throw new IllegalBukkitVersionException("The item cool down not support 1.8 or old bukkit version.");
-
-        Validate.notNull(player, "The player object is null.");
-        Validate.notNull(material, "The material object is null.");
-
-        try {
-
-            Object nmsPlayer = METHOD_GETHANDLE.invoke(player);
-            Object nmsItemCooldown = METHOD_TARGET.invoke(nmsPlayer);
-            METHOD_A0.invoke(nmsItemCooldown, METHOD_GETITEM.invoke(null, material), tick);
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The set player '" + player.getName() + "' item cool down exception.", e);
-        }
+        MinecraftReflection.setItemCooldown(player, material, tick);
     }
 
     /**
@@ -580,24 +473,24 @@ public class PlayerManager extends MoonLakeManager {
      * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果物品栈类型对象为 {@code null} 则抛出异常
      * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
+     * @see MinecraftReflection#hasItemCooldown(HumanEntity, Material)
      */
     public static boolean hasItemCoolDown(Player player, Material material) throws IllegalBukkitVersionException {
+        return MinecraftReflection.hasItemCooldown(player, material);
+    }
 
-        if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9))
-            throw new IllegalBukkitVersionException("The item cool down not support 1.8 or old bukkit version.");
-
-        Validate.notNull(player, "The player object is null.");
-        Validate.notNull(material, "The material object is null.");
-
-        try {
-
-            Object nmsPlayer = METHOD_GETHANDLE.invoke(player);
-            Object nmsItemCooldown = METHOD_TARGET.invoke(nmsPlayer);
-            return (boolean) METHOD_A1.invoke(nmsItemCooldown, METHOD_GETITEM.invoke(null, material));
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The get player '" + player.getName() + "' has item cool down exception.", e);
-        }
+    /**
+     * 获取指定玩家物品栈类型拥有的冷却时间
+     *
+     * @param player 玩家名
+     * @param material 物品栈类型
+     * @return 物品栈类型拥有的冷却时间
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果物品栈类型对象为 {@code null} 则抛出异常
+     * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
+     * @see MinecraftReflection#getItemCooldown(HumanEntity, Material)
+     */
+    public static float getItemCoolDown(Player player, Material material) throws IllegalBukkitVersionException {
+        return MinecraftReflection.getItemCooldown(player, material);
     }
 }
