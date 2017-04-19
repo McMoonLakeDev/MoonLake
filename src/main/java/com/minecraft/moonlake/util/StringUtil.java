@@ -62,16 +62,6 @@ public class StringUtil {
     public final static Pattern UNICODE_PATTERN = Pattern.compile("\\\\u[a-zA-Z0-9]{2,4}");
 
     /**
-     * 整型匹配模式对象
-     */
-    public final static Pattern INTEGER_PATTERN = Pattern.compile("^[-+]?[0-9]+$");
-
-    /**
-     * 双精度浮点数匹配模式对象
-     */
-    public final static Pattern DOUBLE_PATTERN = Pattern.compile("^[-+]?[0-9]+|[-+]?[0-9]+\\.[0-9]+$");
-
-    /**
      * 字符串实现类构造函数
      */
     public StringUtil() {
@@ -434,7 +424,12 @@ public class StringUtil {
      */
     public static boolean isInteger(String str) {
 
-        return isNotNull(str) && INTEGER_PATTERN.matcher(str).matches();
+        if(isNotNull(str)) try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+        }
+        return false;
     }
 
     /**
@@ -445,7 +440,12 @@ public class StringUtil {
      */
     public static boolean isDouble(String str) {
 
-        return isNotNull(str) && DOUBLE_PATTERN.matcher(str).matches();
+        if(isNotNull(str)) try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+        }
+        return false;
     }
 
     /**
@@ -497,9 +497,6 @@ public class StringUtil {
         if(obj instanceof String) {
 
             String str = obj.toString();
-
-            if(!isInteger(str))
-                return def;
 
             try {
                 return Integer.parseInt(str);
@@ -670,9 +667,6 @@ public class StringUtil {
         if(obj instanceof String) {
 
             String str = obj.toString();
-
-            if(!isDouble(str))
-                return def;
 
             try {
                 return Double.parseDouble(str);
