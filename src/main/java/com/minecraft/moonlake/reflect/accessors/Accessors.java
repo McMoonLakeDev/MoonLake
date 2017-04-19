@@ -107,18 +107,6 @@ public final class Accessors {
         }
     }
 
-    public static <T> ConstructorAccessor<T> getConstructorTypeAccessorBuilder(Builder<ConstructorAccessor<T>> paramBuilder) {
-        return Validate.checkNotNull(paramBuilder).build();
-    }
-
-    public static <T> ConstructorAccessor<T> getConstructorTypeAccessorBuilderMCVer(SingleParamBuilder<ConstructorAccessor<T>, MinecraftVersion> paramBuilder) {
-        return Validate.checkNotNull(paramBuilder).build(MoonLakeAPI.currentMCVersion());
-    }
-
-    public static <T> ConstructorAccessor<T> getConstructorTypeAccessorBuilderBukkitVer(SingleParamBuilder<ConstructorAccessor<T>, MinecraftBukkitVersion> paramBuilder) {
-        return Validate.checkNotNull(paramBuilder).build(MoonLakeAPI.currentBukkitVersion());
-    }
-
     public static ConstructorAccessor<?> getConstructorAccessorBuilder(Builder<ConstructorAccessor<?>> paramBuilder) {
         return Validate.checkNotNull(paramBuilder).build();
     }
