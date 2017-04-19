@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.annotation.plugin.command.*;
 import com.minecraft.moonlake.api.annotation.plugin.command.exception.*;
 import com.minecraft.moonlake.api.nms.exception.NMSException;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.exception.MoonLakeException;
 import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.validate.Validate;
@@ -31,7 +32,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -56,6 +56,8 @@ class CommandAnnotatedExpression implements CommandAnnotated {
     private final Method commandCompletionMethod;
     private final CommandCompletion commandCompletionAnnotation;
     private final CommandErrorHandler commandErrorHandler;
+    private final Class<?>[] commandMethodParameters;
+    private final Class<?>[] commandCompletionMethodParameters;
     private String name;
     private String[] aliases;
     private String usage;
@@ -84,6 +86,8 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         this.commandPermissionAnnotation = commandPermissionAnnotation;
         this.commandCompletionMethod = commandCompletionMethod;
         this.commandCompletionAnnotation = commandCompletionAnnotation;
+        this.commandMethodParameters = commandMethod.getParameterTypes();
+        this.commandCompletionMethodParameters = commandCompletionMethod.getParameterTypes();
         this.name = commandAnnotation.name().isEmpty() ? commandMethod.getName() : commandAnnotation.name();
         this.aliases = commandAnnotation.aliases();
         this.usage = commandAnnotation.usage();
@@ -216,38 +220,36 @@ class CommandAnnotatedExpression implements CommandAnnotated {
             }
             try {
 
-                Class<?>[] methodParameterTypes = commandMethod.getParameterTypes();
-
-                if(methodParameterTypes.length == 0) {
+                if(commandMethodParameters.length == 0) {
 
                     throw new CommandException("The command method '" + this.commandMethod.getName() + " in " + this.commandClass + " is missing the CommandSender parameter.");
                 }
-                if(!CommandSender.class.isAssignableFrom(methodParameterTypes[0])) {
+                if(!CommandSender.class.isAssignableFrom(commandMethodParameters[0])) {
 
                     throw new CommandException("The first parameter of method '" + this.commandMethod.getName() + " in " + this.commandClass + " is no CommandSender.");
                 }
-                if((Player.class.isAssignableFrom(methodParameterTypes[0]) || MoonLakePlayer.class.isAssignableFrom(methodParameterTypes[0])) && !(sender instanceof Player)) {
+                if((Player.class.isAssignableFrom(commandMethodParameters[0]) || MoonLakePlayer.class.isAssignableFrom(commandMethodParameters[0])) && !(sender instanceof Player)) {
 
                     throw new CommandIllegalSenderException();
                 }
-                if(methodParameterTypes.length - 1 < commandAnnotation.min() || (commandAnnotation.max() != -1 && methodParameterTypes.length - 1 > commandAnnotation.max())) {
+                if(commandMethodParameters.length - 1 < commandAnnotation.min() || (commandAnnotation.max() != -1 && commandMethodParameters.length - 1 > commandAnnotation.max())) {
 
                     throw new CommandException("The parameter length of method '" + this.commandMethod.getName() + " in " + this.commandClass + " is not in the specified argument length range.");
                 }
-                Object[] methodParameterTypeObjects = new Object[methodParameterTypes.length];
+                Object[] methodParameterTypeObjects = new Object[commandMethodParameters.length];
 
                 for(int i = 1; i < args.length + 1; i++) {
 
-                    if(i == methodParameterTypes.length - 1) {
+                    if(i == commandMethodParameters.length - 1) {
 
-                        CommandArgument commandArgument = getMethodParameterAnnotation(commandMethod, methodParameterTypes.length - 1, CommandArgument.class);
+                        CommandArgument commandArgument = getMethodParameterAnnotation(commandMethod, commandMethodParameters.length - 1, CommandArgument.class);
 
                         if(commandArgument != null) {
 
                             methodParameterTypeObjects[methodParameterTypeObjects.length - 1] = commandArguments(args, i - 1, commandArgument.arg());
                             break;
                         }
-                        if(String[].class.isAssignableFrom(methodParameterTypes[methodParameterTypes.length - 1])) {
+                        if(String[].class.isAssignableFrom(commandMethodParameters[commandMethodParameters.length - 1])) {
 
                             methodParameterTypeObjects[methodParameterTypeObjects.length - 1] = getLeftoverArguments(args, i - 1);
                             break;
@@ -257,9 +259,9 @@ class CommandAnnotatedExpression implements CommandAnnotated {
 
                         break;
                     }
-                    methodParameterTypeObjects[i] = parseArgument(methodParameterTypes[i], args[i - 1]);
+                    methodParameterTypeObjects[i] = parseArgument(commandMethodParameters[i], args[i - 1]);
                 }
-                if(MoonLakePlayer.class.isAssignableFrom(methodParameterTypes[0])) {
+                if(MoonLakePlayer.class.isAssignableFrom(commandMethodParameters[0])) {
 
                     methodParameterTypeObjects[0] = PlayerManager.adapter((Player) sender);
                 }
@@ -267,9 +269,9 @@ class CommandAnnotatedExpression implements CommandAnnotated {
 
                     methodParameterTypeObjects[0] = sender;
                 }
-                if(methodParameterTypes.length - 1 > args.length) {
+                if(commandMethodParameters.length - 1 > args.length) {
 
-                    for(int i = args.length; i < methodParameterTypes.length; i++) {
+                    for(int i = args.length; i < commandMethodParameters.length; i++) {
 
                         if(methodParameterTypeObjects[i] == null) {
 
@@ -277,7 +279,7 @@ class CommandAnnotatedExpression implements CommandAnnotated {
 
                             if(commandArgumentOptional != null && !commandArgumentOptional.def().isEmpty()) {
 
-                                methodParameterTypeObjects[i] = parseArgument(methodParameterTypes[i], commandArgumentOptional.def());
+                                methodParameterTypeObjects[i] = parseArgument(commandMethodParameters[i], commandArgumentOptional.def());
                             }
                         }
                     }
@@ -387,41 +389,39 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         }
         try {
 
-            Class<?>[] methodParameterTypes = commandCompletionMethod.getParameterTypes();
-
-            if(methodParameterTypes.length <= 1) {
+            if(commandCompletionMethodParameters.length <= 1) {
 
                 throw new CommandException("The completion method '" + commandCompletionMethod.getName() + " in " + commandClass + " is missing the List or CommandSender parameter");
             }
-            if(!List.class.isAssignableFrom(methodParameterTypes[0])) {
+            if(!List.class.isAssignableFrom(commandCompletionMethodParameters[0])) {
 
                 throw new CommandException("The first parameter of method '" + commandCompletionMethod.getName() + " in " + commandCompletionMethod + " is no List");
             }
-            if(!CommandSender.class.isAssignableFrom(methodParameterTypes[1])) {
+            if(!CommandSender.class.isAssignableFrom(commandCompletionMethodParameters[1])) {
 
                 throw new CommandException("The second parameter of method '" + commandCompletionMethod.getName() + " in " + commandCompletionMethod + " is no CommandSender");
             }
-            if (Player.class.isAssignableFrom(methodParameterTypes[1]) || MoonLakePlayer.class.isAssignableFrom(methodParameterTypes[1])) {
+            if (Player.class.isAssignableFrom(commandCompletionMethodParameters[1]) || MoonLakePlayer.class.isAssignableFrom(commandCompletionMethodParameters[1])) {
 
                 if (!(sender instanceof Player)) {
 
                     return null;
                 }
             }
-            Object[] methodParameterTypeObjects = new Object[methodParameterTypes.length];
+            Object[] methodParameterTypeObjects = new Object[commandCompletionMethodParameters.length];
 
             for(int i = 2; i < args.length + 2; i++) {
 
-                if(i == methodParameterTypes.length - 1) {
+                if(i == commandCompletionMethodParameters.length - 1) {
 
-                    CommandArgument commandArgument = getMethodParameterAnnotation(commandCompletionMethod, methodParameterTypes.length - 1, CommandArgument.class);
+                    CommandArgument commandArgument = getMethodParameterAnnotation(commandCompletionMethod, commandCompletionMethodParameters.length - 1, CommandArgument.class);
 
                     if(commandArgument != null) {
 
                         methodParameterTypeObjects[methodParameterTypeObjects.length - 1] = commandArguments(args, i - 1, commandArgument.arg());
                         break;
                     }
-                    else if(String[].class.isAssignableFrom(methodParameterTypes[methodParameterTypes.length - 1])) {
+                    else if(String[].class.isAssignableFrom(commandCompletionMethodParameters[commandCompletionMethodParameters.length - 1])) {
 
                         methodParameterTypeObjects[methodParameterTypeObjects.length - 1] = getLeftoverArguments(args, i - 1);
                         break;
@@ -439,7 +439,7 @@ class CommandAnnotatedExpression implements CommandAnnotated {
 
                     try {
 
-                        methodParameterTypeObjects[i] = parseArgument(methodParameterTypes[i], args[i - 2]);
+                        methodParameterTypeObjects[i] = parseArgument(commandCompletionMethodParameters[i], args[i - 2]);
                     }
                     catch (Exception e) {
                     }
@@ -448,7 +448,7 @@ class CommandAnnotatedExpression implements CommandAnnotated {
             @SuppressWarnings("unchecked")
             List<String> list = (List<String>) (methodParameterTypeObjects[0] = new ArrayList<String>());
 
-            if(MoonLakePlayer.class.isAssignableFrom(methodParameterTypes[1])) {
+            if(MoonLakePlayer.class.isAssignableFrom(commandCompletionMethodParameters[1])) {
 
                 methodParameterTypeObjects[1] = PlayerManager.adapter((Player) sender);
             }
@@ -625,17 +625,6 @@ class CommandAnnotatedExpression implements CommandAnnotated {
 
                 return argument;
             }
-            try {
-
-                Constructor stringConstructor = parameterType.getConstructor(String.class);
-
-                if(stringConstructor != null) {
-
-                    return stringConstructor.newInstance(argument);
-                }
-            }
-            catch (Exception e) {
-            }
             if(Number.class.isAssignableFrom(parameterType)) {
 
                 String parseName = parameterType.getSimpleName();
@@ -646,9 +635,9 @@ class CommandAnnotatedExpression implements CommandAnnotated {
                 }
                 return parameterType.getDeclaredMethod("parse" + parseName, String.class).invoke(null, argument);
             }
-            if(parameterType.isEnum()) {
+            if(Enum.class.isAssignableFrom(parameterType)) {
 
-                return parameterType.getMethod("valueOf", String.class).invoke(null, argument);
+                return MinecraftReflection.enumValueOfClass(parameterType, argument);
             }
             throw new CommandArgumentParseException("The failed to parse argument '" + argument + "' to " + parameterType, argument, parameterType);
         }
