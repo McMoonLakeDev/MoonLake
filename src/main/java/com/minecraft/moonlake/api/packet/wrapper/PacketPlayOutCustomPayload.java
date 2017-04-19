@@ -42,8 +42,8 @@ import org.bukkit.entity.Player;
 public class PacketPlayOutCustomPayload extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTCUSTOMPAYLOAD;
-    private static volatile ConstructorAccessor packetPlayOutCustomPayloadVoidConstructor;
-    private static volatile ConstructorAccessor packetPlayOutCustomPayloadConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutCustomPayloadVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutCustomPayloadConstructor;
 
     static {
 

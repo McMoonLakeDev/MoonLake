@@ -20,9 +20,9 @@ package com.minecraft.moonlake.reflect.accessors;
 
 import java.lang.reflect.Constructor;
 
-public interface ConstructorAccessor {
+public interface ConstructorAccessor<T> {
 
-    Object invoke(Object... params);
+    T invoke(Object... params);
 
-    Constructor<?> getConstructor();
+    Constructor<T> getConstructor();
 }

@@ -46,8 +46,8 @@ import org.bukkit.entity.Player;
 public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN;
-    private static volatile ConstructorAccessor packetPlayOutNamedEntitySpawnVoidConstructor;
-    private static volatile ConstructorAccessor packetPlayOutNamedEntitySpawnConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutNamedEntitySpawnVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutNamedEntitySpawnConstructor;
     private static volatile MethodAccessor entityGetDataWatcherMethod;
 
     static {

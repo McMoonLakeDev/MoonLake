@@ -50,8 +50,8 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTPOSITION;
     private final static Class<?> CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS;
-    private static volatile ConstructorAccessor packetPlayOutPositionVoidConstructor;
-    private static volatile ConstructorAccessor packetPlayOutPositionConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutPositionVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutPositionConstructor;
 
     static {
 
@@ -65,9 +65,9 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
             }
         });
         packetPlayOutPositionVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTPOSITION);
-        packetPlayOutPositionConstructor = Accessors.getConstructorAccessorBuilderMCVer(new SingleParamBuilder<ConstructorAccessor, MinecraftVersion>() {
+        packetPlayOutPositionConstructor = Accessors.getConstructorAccessorBuilderMCVer(new SingleParamBuilder<ConstructorAccessor<?>, MinecraftVersion>() {
             @Override
-            public ConstructorAccessor build(MinecraftVersion param) {
+            public ConstructorAccessor<?> build(MinecraftVersion param) {
                 if(!param.isOrLater(MinecraftVersion.V1_9))
                     return Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTPOSITION, double.class, double.class, double.class, float.class, float.class, Set.class);
                 return Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTPOSITION, double.class, double.class, double.class, float.class, float.class, Set.class, int.class);

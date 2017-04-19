@@ -35,7 +35,7 @@ import io.netty.buffer.Unpooled;
  */
 public class PacketDataSerializer {
 
-    private static volatile ConstructorAccessor packetDataSerializerConstructor;
+    private static volatile ConstructorAccessor<?> packetDataSerializerConstructor;
 
     static {
 

@@ -51,7 +51,7 @@ import java.util.Set;
  */
 public class EntityManager extends MoonLakeManager {
 
-    private static volatile ConstructorAccessor entityItemConstructor;
+    private static volatile ConstructorAccessor<?> entityItemConstructor;
     private static volatile MethodAccessor entityItemSetCustomNameMethod;
     private static volatile MethodAccessor entityItemSetCustomNameVisibleMethod;
 

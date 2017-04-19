@@ -44,8 +44,8 @@ import org.bukkit.entity.Player;
 public class PacketPlayOutBlockChange extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTBLOCKCHANGE;
-    private static volatile ConstructorAccessor packetPlayOutBlockChangeVoidConstructor;
-    private static volatile ConstructorAccessor packetPlayOutBlockChangeConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutBlockChangeVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutBlockChangeConstructor;
     private static volatile MethodAccessor worldGetTypeMethod;
 
     static {

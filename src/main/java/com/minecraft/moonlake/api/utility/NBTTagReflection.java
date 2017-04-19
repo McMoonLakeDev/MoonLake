@@ -28,18 +28,18 @@ import java.io.DataOutput;
 
 public class NBTTagReflection {
 
-    private static volatile ConstructorAccessor nbtTagByteConstructor;
-    private static volatile ConstructorAccessor nbtTagShortConstructor;
-    private static volatile ConstructorAccessor nbtTagIntConstructor;
-    private static volatile ConstructorAccessor nbtTagLongConstructor;
-    private static volatile ConstructorAccessor nbtTagFloatConstructor;
-    private static volatile ConstructorAccessor nbtTagDoubleConstructor;
-    private static volatile ConstructorAccessor nbtTagStringConstructor;
-    private static volatile ConstructorAccessor nbtTagByteArrayConstructor;
-    private static volatile ConstructorAccessor nbtTagIntArrayConstructor;
-    private static volatile ConstructorAccessor nbtTagListConstructor;
-    private static volatile ConstructorAccessor nbtTagCompoundConstructor;
-    private static volatile ConstructorAccessor nbtReadLimiterConstructor;
+    private static volatile ConstructorAccessor<?> nbtTagByteConstructor;
+    private static volatile ConstructorAccessor<?> nbtTagShortConstructor;
+    private static volatile ConstructorAccessor<?> nbtTagIntConstructor;
+    private static volatile ConstructorAccessor<?> nbtTagLongConstructor;
+    private static volatile ConstructorAccessor<?> nbtTagFloatConstructor;
+    private static volatile ConstructorAccessor<?> nbtTagDoubleConstructor;
+    private static volatile ConstructorAccessor<?> nbtTagStringConstructor;
+    private static volatile ConstructorAccessor<?> nbtTagByteArrayConstructor;
+    private static volatile ConstructorAccessor<?> nbtTagIntArrayConstructor;
+    private static volatile ConstructorAccessor<?> nbtTagListConstructor;
+    private static volatile ConstructorAccessor<?> nbtTagCompoundConstructor;
+    private static volatile ConstructorAccessor<?> nbtReadLimiterConstructor;
     private static volatile MethodAccessor nbtBaseGetTypeIdMethod;
     private static volatile MethodAccessor nbtBaseCreateTagMethod;
     private static volatile MethodAccessor nbtBaseCloneMethod;
@@ -64,73 +64,73 @@ public class NBTTagReflection {
     private NBTTagReflection() {
     }
 
-    public static ConstructorAccessor getNBTTagByteConstructor() {
+    public static ConstructorAccessor<?> getNBTTagByteConstructor() {
         if(nbtTagByteConstructor == null)
             nbtTagByteConstructor = Accessors.getConstructorAccessor(MinecraftReflection.getNBTTagByteClass(), byte.class);
         return nbtTagByteConstructor;
     }
 
-    public static ConstructorAccessor getNBTTagShortConstructor() {
+    public static ConstructorAccessor<?> getNBTTagShortConstructor() {
         if(nbtTagShortConstructor == null)
             nbtTagShortConstructor = Accessors.getConstructorAccessor(MinecraftReflection.getNBTTagShortClass(), short.class);
         return nbtTagShortConstructor;
     }
 
-    public static ConstructorAccessor getNBTTagIntConstructor() {
+    public static ConstructorAccessor<?> getNBTTagIntConstructor() {
         if(nbtTagIntConstructor == null)
             nbtTagIntConstructor = Accessors.getConstructorAccessor(MinecraftReflection.getNBTTagIntClass(), int.class);
         return nbtTagIntConstructor;
     }
 
-    public static ConstructorAccessor getNBTTagLongConstructor() {
+    public static ConstructorAccessor<?> getNBTTagLongConstructor() {
         if(nbtTagLongConstructor == null)
             nbtTagLongConstructor = Accessors.getConstructorAccessor(MinecraftReflection.getNBTTagLongClass(), long.class);
         return nbtTagLongConstructor;
     }
 
-    public static ConstructorAccessor getNBTTagFloatConstructor() {
+    public static ConstructorAccessor<?> getNBTTagFloatConstructor() {
         if(nbtTagFloatConstructor == null)
             nbtTagFloatConstructor = Accessors.getConstructorAccessor(MinecraftReflection.getNBTTagFloatClass(), float.class);
         return nbtTagFloatConstructor;
     }
 
-    public static ConstructorAccessor getNBTTagDoubleConstructor() {
+    public static ConstructorAccessor<?> getNBTTagDoubleConstructor() {
         if(nbtTagDoubleConstructor == null)
             nbtTagDoubleConstructor = Accessors.getConstructorAccessor(MinecraftReflection.getNBTTagDoubleClass(), double.class);
         return nbtTagDoubleConstructor;
     }
 
-    public static ConstructorAccessor getNBTTagStringConstructor() {
+    public static ConstructorAccessor<?> getNBTTagStringConstructor() {
         if(nbtTagStringConstructor == null)
             nbtTagStringConstructor = Accessors.getConstructorAccessor(MinecraftReflection.getNBTTagStringClass(), String.class);
         return nbtTagStringConstructor;
     }
 
-    public static ConstructorAccessor getNBTTagByteArrayConstructor() {
+    public static ConstructorAccessor<?> getNBTTagByteArrayConstructor() {
         if(nbtTagByteArrayConstructor == null)
             nbtTagByteArrayConstructor = Accessors.getConstructorAccessor(MinecraftReflection.getNBTTagByteArrayClass(), byte[].class);
         return nbtTagByteArrayConstructor;
     }
 
-    public static ConstructorAccessor getNBTTagIntArrayConstructor() {
+    public static ConstructorAccessor<?> getNBTTagIntArrayConstructor() {
         if(nbtTagIntArrayConstructor == null)
             nbtTagIntArrayConstructor = Accessors.getConstructorAccessor(MinecraftReflection.getNBTTagIntArrayClass(), int[].class);
         return nbtTagIntArrayConstructor;
     }
 
-    public static ConstructorAccessor getNBTTagListConstructor() {
+    public static ConstructorAccessor<?> getNBTTagListConstructor() {
         if(nbtTagListConstructor == null)
             nbtTagListConstructor = Accessors.getConstructorAccessor(MinecraftReflection.getNBTTagListClass());
         return nbtTagListConstructor;
     }
 
-    public static ConstructorAccessor getNBTTagCompoundConstructor() {
+    public static ConstructorAccessor<?> getNBTTagCompoundConstructor() {
         if(nbtTagCompoundConstructor == null)
             nbtTagCompoundConstructor = Accessors.getConstructorAccessor(MinecraftReflection.getNBTTagCompoundClass());
         return nbtTagCompoundConstructor;
     }
 
-    public static ConstructorAccessor getNBTReadLimiterConstructor() {
+    public static ConstructorAccessor<?> getNBTReadLimiterConstructor() {
         if(nbtReadLimiterConstructor == null)
             nbtReadLimiterConstructor = Accessors.getConstructorAccessor(MinecraftReflection.getNBTReadLimiterClass(), long.class);
         return nbtReadLimiterConstructor;

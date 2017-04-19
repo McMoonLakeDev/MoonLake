@@ -42,8 +42,8 @@ import org.bukkit.entity.Player;
 public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER;
-    private static volatile ConstructorAccessor packetPlayOutPlayerListHeaderFooterVoidConstructor;
-    private static volatile ConstructorAccessor packetPlayOutPlayerListHeaderFooterConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutPlayerListHeaderFooterVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutPlayerListHeaderFooterConstructor;
 
     static {
 

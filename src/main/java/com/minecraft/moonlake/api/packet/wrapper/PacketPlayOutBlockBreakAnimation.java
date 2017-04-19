@@ -43,8 +43,8 @@ import org.bukkit.entity.Player;
 public class PacketPlayOutBlockBreakAnimation extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTBLOCKBREAKANIMATION;
-    private static volatile ConstructorAccessor packetPlayOutBlockBreakAnimationVoidConstructor;
-    private static volatile ConstructorAccessor packetPlayOutBlockBreakAnimationConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutBlockBreakAnimationVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutBlockBreakAnimationConstructor;
 
     static {
 

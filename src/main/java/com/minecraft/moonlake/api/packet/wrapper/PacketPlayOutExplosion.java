@@ -46,9 +46,9 @@ import java.util.List;
 public class PacketPlayOutExplosion extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTEXPLOSION;
-    private static volatile ConstructorAccessor packetPlayOutExplosionVoidConstructor;
-    private static volatile ConstructorAccessor packetPlayOutExplosionConstructor;
-    private static volatile ConstructorAccessor vec3DConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutExplosionVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutExplosionConstructor;
+    private static volatile ConstructorAccessor<?> vec3DConstructor;
 
     static {
 

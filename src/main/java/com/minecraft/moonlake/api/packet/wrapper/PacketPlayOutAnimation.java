@@ -50,7 +50,7 @@ import java.util.Map;
 public class PacketPlayOutAnimation extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTANIMATION;
-    private static volatile ConstructorAccessor packetPlayOutAnimationVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutAnimationVoidConstructor;
 
     static {
 

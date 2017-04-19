@@ -39,7 +39,7 @@ import org.bukkit.block.Block;
  */
 public class BlockPosition {
 
-    private static volatile ConstructorAccessor blockPositionConstructor;
+    private static volatile ConstructorAccessor<?> blockPositionConstructor;
     private static volatile MethodAccessor blockPositionGetXMethod;
     private static volatile MethodAccessor blockPositionGetYMethod;
     private static volatile MethodAccessor blockPositionGetZMethod;

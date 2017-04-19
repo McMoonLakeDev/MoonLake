@@ -47,9 +47,9 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTTITLE;
     private final static Class<?> CLASS_ENUMTITLEACTION;
-    private static volatile ConstructorAccessor packetPlayOutTitleVoidConstuctor;
-    private static volatile ConstructorAccessor packetPlayOutTitleActionConstuctor;
-    private static volatile ConstructorAccessor packetPlayOutTitleTimesConstuctor;
+    private static volatile ConstructorAccessor<?> packetPlayOutTitleVoidConstuctor;
+    private static volatile ConstructorAccessor<?> packetPlayOutTitleActionConstuctor;
+    private static volatile ConstructorAccessor<?> packetPlayOutTitleTimesConstuctor;
 
     /**
      * <h1>PacketPlayOutTitleSpecial</h1>

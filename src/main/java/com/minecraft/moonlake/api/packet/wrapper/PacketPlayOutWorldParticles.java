@@ -28,8 +28,8 @@ import org.bukkit.entity.Player;
 public class PacketPlayOutWorldParticles extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTWORLDPARTICLES;
-    private static volatile ConstructorAccessor packetPlayOutWorldParticlesVoidConstructor;
-    private static volatile ConstructorAccessor packetPlayOutWorldParticlesConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutWorldParticlesVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutWorldParticlesConstructor;
 
     static {
 

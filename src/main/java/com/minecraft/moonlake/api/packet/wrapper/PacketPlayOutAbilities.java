@@ -44,9 +44,9 @@ import org.bukkit.entity.Player;
 public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTABILITIES;
-    private static volatile ConstructorAccessor packetPlayOutAbilitiesVoidConstructor;
-    private static volatile ConstructorAccessor packetPlayOutAbilitiesConstructor;
-    private static volatile ConstructorAccessor playerAbilitiesConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutAbilitiesVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutAbilitiesConstructor;
+    private static volatile ConstructorAccessor<?> playerAbilitiesConstructor;
     private static volatile FieldAccessor entityHumanPlayerAbilitiesField;
     private static volatile FieldAccessor playerAbilitiesIsInvulnerableField;
     private static volatile FieldAccessor playerAbilitiesIsFlyingField;

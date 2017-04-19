@@ -48,8 +48,8 @@ public class PacketPlayOutRespawn extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTRESPAWN;
     private final static Class<?> CLASS_ENUMDIFFICULTY;
-    private static volatile ConstructorAccessor packetPlayOutRespawnVoidConstructor;
-    private static volatile ConstructorAccessor packetPlayOutRespawnConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutRespawnVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutRespawnConstructor;
     private static volatile MethodAccessor enumDifficultyGetByIdMethod;
 
     static {

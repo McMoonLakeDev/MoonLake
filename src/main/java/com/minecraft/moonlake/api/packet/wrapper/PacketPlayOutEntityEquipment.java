@@ -50,17 +50,17 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTENTITYEQUIPMENT;
     private final static Class<?> CLASS_ENUMITEMSLOT;
-    private static volatile ConstructorAccessor packetPlayOutEntityEquipmentVoidConstructor;
-    private static volatile ConstructorAccessor packetPlayOutEntityEquipmentConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutEntityEquipmentVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutEntityEquipmentConstructor;
 
     static {
 
         CLASS_PACKETPLAYOUTENTITYEQUIPMENT = MinecraftReflection.getMinecraftClass("PacketPlayOutEntityEquipment");
         CLASS_ENUMITEMSLOT = MinecraftReflection.getMinecraftClassOrLater(MinecraftVersion.V1_9, "EnumItemSlot"); // 1.9+ 才有这个类
         packetPlayOutEntityEquipmentVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTENTITYEQUIPMENT);
-        packetPlayOutEntityEquipmentConstructor = Accessors.getConstructorAccessorBuilderMCVer(new SingleParamBuilder<ConstructorAccessor, MinecraftVersion>() {
+        packetPlayOutEntityEquipmentConstructor = Accessors.getConstructorAccessorBuilderMCVer(new SingleParamBuilder<ConstructorAccessor<?>, MinecraftVersion>() {
             @Override
-            public ConstructorAccessor build(MinecraftVersion param) {
+            public ConstructorAccessor<?> build(MinecraftVersion param) {
                 Class<?> itemStackClass = MinecraftReflection.getMinecraftItemStackClass();
                 if(param.isOrLater(MinecraftVersion.V1_9))
                     return Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTENTITYEQUIPMENT, int.class, CLASS_ENUMITEMSLOT, itemStackClass);

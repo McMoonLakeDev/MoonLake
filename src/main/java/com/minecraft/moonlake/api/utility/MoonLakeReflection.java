@@ -27,7 +27,7 @@ import org.bukkit.entity.Player;
 public class MoonLakeReflection {
 
     private final static Class<? extends SimpleMoonLakePlayer> CLASS_SIMPLEMOONLAKEPLAYER;
-    private static volatile ConstructorAccessor simpleMoonLakePlayerConstructor;
+    private static volatile ConstructorAccessor<? extends SimpleMoonLakePlayer> simpleMoonLakePlayerConstructor;
 
     static {
 
@@ -54,13 +54,13 @@ public class MoonLakeReflection {
         return CLASS_SIMPLEMOONLAKEPLAYER;
     }
 
-    public static ConstructorAccessor getSimpleMoonLakePlayerConstructor() {
+    public static ConstructorAccessor<? extends SimpleMoonLakePlayer> getSimpleMoonLakePlayerConstructor() {
         if(simpleMoonLakePlayerConstructor == null)
             simpleMoonLakePlayerConstructor = Accessors.getConstructorAccessor(getSimpleMoonLakePlayerClass(), Player.class);
         return simpleMoonLakePlayerConstructor;
     }
 
     public static SimpleMoonLakePlayer getSimpleMoonLakePlayerInstance(Player player) {
-        return (SimpleMoonLakePlayer) getSimpleMoonLakePlayerConstructor().invoke(player);
+        return getSimpleMoonLakePlayerConstructor().invoke(player);
     }
 }

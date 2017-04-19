@@ -41,8 +41,8 @@ import org.bukkit.entity.Player;
 public class PacketPlayOutHeldItemSlot extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTHELDITEMSLOT;
-    private static volatile ConstructorAccessor packetPlayOutHeldItemSlotVoidConstructor;
-    private static volatile ConstructorAccessor packetPlayOutHeldItemSlotConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutHeldItemSlotVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutHeldItemSlotConstructor;
 
     static {
 

@@ -43,8 +43,8 @@ import org.bukkit.entity.Player;
 public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTCHAT;
-    private static volatile ConstructorAccessor packetPlayOutChatVoidConstructor;
-    private static volatile ConstructorAccessor packetPlayOutChatConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutChatVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutChatConstructor;
 
     static {
 

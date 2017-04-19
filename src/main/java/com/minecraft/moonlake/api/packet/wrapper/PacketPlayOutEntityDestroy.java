@@ -43,8 +43,8 @@ import org.bukkit.entity.Player;
 public class PacketPlayOutEntityDestroy extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTENTITYDESTROY;
-    private static volatile ConstructorAccessor packetPlayOutEntityDestroyVoidConstructor;
-    private static volatile ConstructorAccessor packetPlayOutEntityDestroyConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutEntityDestroyVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutEntityDestroyConstructor;
 
     static {
 

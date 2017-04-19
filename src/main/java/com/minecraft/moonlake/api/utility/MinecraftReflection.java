@@ -62,8 +62,8 @@ public class MinecraftReflection {
     private static CachedPackage minecraftPackage;
     private static CachedPackage craftBukkitPackage;
     private static ClassSource source;
-    private static volatile ConstructorAccessor itemStackConstructor;
-    private static volatile ConstructorAccessor chatMessageConstructor;
+    private static volatile ConstructorAccessor<?> itemStackConstructor;
+    private static volatile ConstructorAccessor<?> chatMessageConstructor;
     private static volatile MethodAccessor nbtCompressedStreamToolsWriteMethod;
     private static volatile MethodAccessor nbtCompressedStreamToolsReadMethod;
     private static volatile MethodAccessor entityLivingGetAttributeInstanceMethod;

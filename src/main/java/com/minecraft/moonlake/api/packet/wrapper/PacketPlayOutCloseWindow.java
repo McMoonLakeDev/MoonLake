@@ -41,8 +41,8 @@ import org.bukkit.entity.Player;
 public class PacketPlayOutCloseWindow extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTCLOSEWINDOW;
-    private static volatile ConstructorAccessor packetPlayOutCloseWindowVoidConstructor;
-    private static volatile ConstructorAccessor packetPlayOutCloseWindowConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutCloseWindowVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutCloseWindowConstructor;
 
     static {
 

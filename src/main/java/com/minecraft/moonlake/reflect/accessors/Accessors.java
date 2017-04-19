@@ -97,7 +97,7 @@ public final class Accessors {
         return Validate.checkNotNull(paramBuilder).build(MoonLakeAPI.currentBukkitVersion());
     }
 
-    public static ConstructorAccessor getConstructorAccessor(Class<?> instanceClass, Class<?>... params) {
+    public static <T> ConstructorAccessor<T> getConstructorAccessor(Class<T> instanceClass, Class<?>... params) {
         try {
             return getConstructorAccessor(instanceClass.getConstructor(params));
         } catch (NoSuchMethodException e) {
@@ -107,20 +107,32 @@ public final class Accessors {
         }
     }
 
-    public static ConstructorAccessor getConstructorAccessorBuilder(Builder<ConstructorAccessor> paramBuilder) {
+    public static <T> ConstructorAccessor<T> getConstructorTypeAccessorBuilder(Builder<ConstructorAccessor<T>> paramBuilder) {
         return Validate.checkNotNull(paramBuilder).build();
     }
 
-    public static ConstructorAccessor getConstructorAccessorBuilderMCVer(SingleParamBuilder<ConstructorAccessor, MinecraftVersion> paramBuilder) {
+    public static <T> ConstructorAccessor<T> getConstructorTypeAccessorBuilderMCVer(SingleParamBuilder<ConstructorAccessor<T>, MinecraftVersion> paramBuilder) {
         return Validate.checkNotNull(paramBuilder).build(MoonLakeAPI.currentMCVersion());
     }
 
-    public static ConstructorAccessor getConstructorAccessorBuilderBukkitVer(SingleParamBuilder<ConstructorAccessor, MinecraftBukkitVersion> paramBuilder) {
+    public static <T> ConstructorAccessor<T> getConstructorTypeAccessorBuilderBukkitVer(SingleParamBuilder<ConstructorAccessor<T>, MinecraftBukkitVersion> paramBuilder) {
         return Validate.checkNotNull(paramBuilder).build(MoonLakeAPI.currentBukkitVersion());
     }
 
-    public static ConstructorAccessor getConstructorAccessor(Constructor<?> constructor) {
-        return new SimpleConstructorAccessor(constructor);
+    public static ConstructorAccessor<?> getConstructorAccessorBuilder(Builder<ConstructorAccessor<?>> paramBuilder) {
+        return Validate.checkNotNull(paramBuilder).build();
+    }
+
+    public static ConstructorAccessor<?> getConstructorAccessorBuilderMCVer(SingleParamBuilder<ConstructorAccessor<?>, MinecraftVersion> paramBuilder) {
+        return Validate.checkNotNull(paramBuilder).build(MoonLakeAPI.currentMCVersion());
+    }
+
+    public static ConstructorAccessor<?> getConstructorAccessorBuilderBukkitVer(SingleParamBuilder<ConstructorAccessor<?>, MinecraftBukkitVersion> paramBuilder) {
+        return Validate.checkNotNull(paramBuilder).build(MoonLakeAPI.currentBukkitVersion());
+    }
+
+    public static <T> ConstructorAccessor<T> getConstructorAccessor(Constructor<T> constructor) {
+        return new SimpleConstructorAccessor<>(constructor);
     }
 
     public static FieldAccessor getFieldAccessorOrNull(Class<?> clazz, String fieldName, Class<?> fieldType) {
@@ -142,7 +154,7 @@ public final class Accessors {
         return null;
     }
 
-    public static ConstructorAccessor getConstructorAccessorOrNull(Class<?> clazz, Class<?>... params) {
+    public static ConstructorAccessor<?> getConstructorAccessorOrNull(Class<?> clazz, Class<?>... params) {
         try {
             return getConstructorAccessor(clazz, params);
         } catch (IllegalArgumentException e) {

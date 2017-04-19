@@ -23,16 +23,16 @@ import com.minecraft.moonlake.exception.MoonLakeException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-final class SimpleConstructorAccessor implements ConstructorAccessor {
+final class SimpleConstructorAccessor<T> implements ConstructorAccessor<T> {
 
-    private final Constructor<?> constructor;
+    private final Constructor<T> constructor;
 
-    public SimpleConstructorAccessor(Constructor<?> constructor) {
+    public SimpleConstructorAccessor(Constructor<T> constructor) {
         this.constructor = constructor;
     }
 
     @Override
-    public Object invoke(Object... params) {
+    public T invoke(Object... params) {
         try {
             return this.constructor.newInstance(params);
         } catch (IllegalAccessException e) {
@@ -47,7 +47,7 @@ final class SimpleConstructorAccessor implements ConstructorAccessor {
     }
 
     @Override
-    public Constructor<?> getConstructor() {
+    public Constructor<T> getConstructor() {
         return this.constructor;
     }
 

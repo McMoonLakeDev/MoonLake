@@ -54,8 +54,8 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
     private final static Class<?> CLASS_PACKETPLAYOUTPLAYERINFO;
     private final static Class<?> CLASS_PACKETPLAYOUTPLAYERINFO_PLAYERINFODATA;
     private final static Class<?> CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION;
-    private static volatile ConstructorAccessor packetPlayOutPlayerInfoVoidConstructor;
-    private static volatile ConstructorAccessor playerInfoDataConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutPlayerInfoVoidConstructor;
+    private static volatile ConstructorAccessor<?> playerInfoDataConstructor;
     private static volatile FieldAccessor packetPlayOutPlayerInfoListField;
 
     static {
@@ -78,9 +78,9 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
             }
         });
         packetPlayOutPlayerInfoVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTPLAYERINFO);
-        playerInfoDataConstructor = Accessors.getConstructorAccessorBuilder(new Builder<ConstructorAccessor>() {
+        playerInfoDataConstructor = Accessors.getConstructorAccessorBuilder(new Builder<ConstructorAccessor<?>>() {
             @Override
-            public ConstructorAccessor build() {
+            public ConstructorAccessor<?> build() {
                 Class<?> enumGamemodeClass = MinecraftReflection.getEnumGamemodeClass();
                 Class<?> iChatBaseComponent = MinecraftReflection.getIChatBaseComponentClass();
                 try {
