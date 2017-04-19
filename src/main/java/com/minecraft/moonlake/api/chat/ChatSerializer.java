@@ -57,7 +57,7 @@ public class ChatSerializer {
                 // 判断一下如果上面的获取异常, 那么在使用这个方式
                 // 这个方式就是遍历 ChatSerializer 类的所有公开函数
                 // 然后对比返回值和函数的需要参数, 符合则获取对应函数对象
-                temp = FuzzyReflect.fromClass(chatSerializerClass, true).getMethodByParameters("a", iChatBaseComponentClass, String.class);
+                temp = FuzzyReflect.fromClass(chatSerializerClass, true).getMethodByParameters("a", iChatBaseComponentClass, new Class[] { String.class });
             }
             iChatBaseComponentFormJsonMethod = Accessors.getMethodAccessor(temp);
         }

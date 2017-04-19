@@ -19,8 +19,8 @@
 package com.minecraft.moonlake.particle;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutWorldParticles;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
-import com.minecraft.moonlake.reflect.Reflect;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -29,9 +29,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -39,7 +36,7 @@ import java.util.*;
  * <div>
  *     <h1>Minecraft Particle Effect Library</h1>
  *     <p>By DarkBlade12 Ver: 1.0</p>
- *     <p>By Month_Light Modify Ver: 1.1.1</p>
+ *     <p>By Month_Light Modify Ver: 1.2</p>
  * </div>
  * <hr />
  * <div>
@@ -69,7 +66,7 @@ import java.util.*;
  * </div>
  * <hr />
  *
- * @version 1.1.1
+ * @version 1.2
  * @author DarkBlade12
  * @author Month_Light Modify
  */
@@ -929,12 +926,6 @@ public enum ParticleEffect {
      */
     public final static class ParticlePacket {
 
-        private static Class<?> enumParticle;
-        private static Constructor<?> packetConstructor;
-        private static Method getHandle;
-        private static Field playerConnection;
-        private static Method sendPacket;
-        private static boolean initialized;
         private final ParticleEffect effect;
         private float offsetX;
         private final float offsetY;
@@ -943,7 +934,6 @@ public enum ParticleEffect {
         private final int amount;
         private final boolean longDistance;
         private final ParticleData data;
-        private Object packet;
 
         /**
          * 粒子效果数据包实现类
@@ -959,8 +949,6 @@ public enum ParticleEffect {
          * @throws ParticleException 如果初始化错误则抛出异常
          */
         public ParticlePacket(ParticleEffect effect, float offsetX, float offsetY, float offsetZ, float speed, int amount, boolean longDistance, ParticleData data) throws ParticleException {
-
-            initialize();
 
             if(speed < 0.0f) {
 
@@ -991,8 +979,6 @@ public enum ParticleEffect {
          * @throws ParticleException 如果初始化错误则抛出异常
          */
         public ParticlePacket(ParticleEffect effect, Vector direction, float speed, boolean longDistance, ParticleData data) throws ParticleException {
-
-            initialize();
 
             if(speed < 0.0f) {
 
@@ -1026,37 +1012,6 @@ public enum ParticleEffect {
         }
 
         /**
-         * 初始化粒子效果数据包
-         *
-         * @throws ParticleException 如果初始化错误则抛出异常
-         */
-        public static void initialize() throws ParticleException {
-
-            if(!isInitialized()) {
-
-                try {
-
-                    boolean newParticle = MoonLakeAPI.currentMCVersion().isLater(MinecraftVersion.WORLD_UPDATE);
-
-                    if(newParticle) {
-
-                        enumParticle = Reflect.PackageType.MINECRAFT_SERVER.getClass("EnumParticle");
-                    }
-                    Class<?> exception = Reflect.PackageType.MINECRAFT_SERVER.getClass(!newParticle ? "Packet63WorldParticles" : "PacketPlayOutWorldParticles");
-                    packetConstructor = Reflect.getConstructor(exception);
-                    getHandle = Reflect.getMethod("CraftPlayer", Reflect.PackageType.CRAFTBUKKIT_ENTITY, "getHandle");
-                    playerConnection = Reflect.getField("EntityPlayer", Reflect.PackageType.MINECRAFT_SERVER, false, "playerConnection");
-                    sendPacket = Reflect.getMethod(playerConnection.getType(), "sendPacket", Reflect.PackageType.MINECRAFT_SERVER.getClass("Packet"));
-                }
-                catch (Exception e) {
-
-                    throw new ParticleException("粒子效果初始化时异常: " + e.getMessage());
-                }
-                initialized = true;
-            }
-        }
-
-        /**
          * 获取当前服务端的版本号
          *
          * @return 版本号
@@ -1066,16 +1021,6 @@ public enum ParticleEffect {
         public static int getVersion() {
 
             return MoonLakeAPI.currentMCVersion().getMinor();
-        }
-
-        /**
-         * 获取当前粒子效果数据包是否初始化完毕
-         *
-         * @return true 则初始化完毕
-         */
-        public static boolean isInitialized() {
-
-            return initialized;
         }
 
         /**
@@ -1150,48 +1095,18 @@ public enum ParticleEffect {
          */
         private void sendToWithBukkit(Location center, Player player) {
 
-            if(packet == null) {
-
-                try {
-
-                    packet = packetConstructor.newInstance();
-
-                    if(!MoonLakeAPI.currentMCVersion().isLater(MinecraftVersion.V1_8)) {
-
-                        String name = effect.getName() + (data == null ? "" : data.getPacketDataString());
-                        Reflect.setValue(packet, true, "a", name);
-                    }
-                    else {
-
-                        Reflect.setValue(packet, true, "a", enumParticle.getEnumConstants()[effect.getId()]);
-                        Reflect.setValue(packet, true, "j", longDistance);
-
-                        if(data != null) {
-
-                            int[] packetData = data.getPacketData();
-                            Reflect.setValue(packet, true, "k", effect == ITEM_CRACK ? packetData : new int[] { packetData[0] | (packetData[1] << 12) });
-                        }
-                    }
-                    Reflect.setValue(packet, true, "b", (float)center.getX());
-                    Reflect.setValue(packet, true, "c", (float)center.getY());
-                    Reflect.setValue(packet, true, "d", (float)center.getZ());
-                    Reflect.setValue(packet, true, "e", offsetX);
-                    Reflect.setValue(packet, true, "f", offsetY);
-                    Reflect.setValue(packet, true, "g", offsetZ);
-                    Reflect.setValue(packet, true, "h", speed);
-                    Reflect.setValue(packet, true, "i", amount);
-                }
-                catch (Exception e) {
-
-                    throw new ParticleException("粒子效果数据包实例字段时异常: " + e.getMessage());
-                }
-            }
             try {
 
-                sendPacket.invoke(playerConnection.get(getHandle.invoke(player)), packet);
+                int[] arguments = new int[0];
+
+                if(data != null)
+                    arguments = effect == ITEM_CRACK ? data.getPacketData() : new int[] { data.getPacketData()[0] | data.getPacketData()[1] << 12 };
+
+                new PacketPlayOutWorldParticles(effect, longDistance, center.getX(), center.getY(), center.getZ(), offsetX, offsetY, offsetZ, speed, amount, arguments).send(player);
             }
             catch (Exception e) {
 
+                e.printStackTrace();
                 throw new ParticleException("粒子效果数据包发送时异常: " + e.getMessage());
             }
         }

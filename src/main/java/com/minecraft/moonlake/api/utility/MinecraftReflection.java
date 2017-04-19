@@ -29,6 +29,7 @@ import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.builder.SingleParamBuilder;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.particle.ParticleEffect;
 import com.minecraft.moonlake.reflect.FuzzyReflect;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
@@ -77,6 +78,7 @@ public class MinecraftReflection {
     private static volatile MethodAccessor entityHumanGetProfileMethod;
     private static volatile MethodAccessor worldTypeGetByTypeMethod;
     private static volatile MethodAccessor entityGetBukkitEntityMethod;
+    private static volatile MethodAccessor enumParticleGetByIdMethod;
     private static volatile MethodAccessor itemStackCraftStackMethod;
     private static volatile MethodAccessor entityPlayerHandleMethod;
     private static volatile MethodAccessor worldServerHandleMethod;
@@ -295,6 +297,10 @@ public class MinecraftReflection {
         return getMinecraftClass("ItemCooldown");
     }
 
+    public static Class<?> getMinecraftEnumParticleClass() {
+        return getMinecraftClass("EnumParticle");
+    }
+
     public static Class<?> getIChatBaseComponentClass() {
         return getMinecraftClass("IChatBaseComponent");
     }
@@ -433,6 +439,17 @@ public class MinecraftReflection {
         return itemGetById(material.getId());
     }
 
+    public static Object enumParticleGetByParticle(ParticleEffect particle) {
+        Validate.notNull(particle, "The particle object is null.");
+        return enumParticleGetById(particle.getId());
+    }
+
+    public static Object enumParticleGetById(int id) {
+        if(enumParticleGetByIdMethod == null)
+            enumParticleGetByIdMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getMinecraftEnumParticleClass(), true).getMethodByParameters("a", getMinecraftEnumParticleClass(), new Class[] { int.class }));
+        return enumParticleGetByIdMethod.invoke(null, id);
+    }
+
     public static Object itemGetById(int id) {
         if(itemGetByIdMethod == null)
             itemGetByIdMethod = Accessors.getMethodAccessor(getMinecraftItemClass(), "getById", int.class);
@@ -450,7 +467,7 @@ public class MinecraftReflection {
         Object item = itemGetByMaterial(type);
         Object itemCooldown = getEntityHumanItemCooldown(entityHuman); // 如果不支持直接抛出异常
         if(itemCooldownHasMethod == null)
-            itemCooldownHasMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getMinecraftItemCooldownClass(), true).getMethodByParameters("a", boolean.class, getMinecraftItemClass()));
+            itemCooldownHasMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getMinecraftItemCooldownClass(), true).getMethodByParameters("a", boolean.class, new Class[] { getMinecraftItemClass() }));
         return (boolean) itemCooldownHasMethod.invoke(itemCooldown, item);
     }
 
@@ -465,7 +482,7 @@ public class MinecraftReflection {
         Object item = itemGetByMaterial(type);
         Object itemCooldown = getEntityHumanItemCooldown(entityHuman); // 如果不支持直接抛出异常
         if(itemCooldownGetMethod == null)
-            itemCooldownGetMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getMinecraftItemCooldownClass(), true).getMethodByParameters("a", float.class, getMinecraftItemClass(), float.class));
+            itemCooldownGetMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getMinecraftItemCooldownClass(), true).getMethodByParameters("a", float.class, new Class[] { getMinecraftItemClass(), float.class }));
         return (float) itemCooldownGetMethod.invoke(itemCooldown, item, 0.0f);
     }
 
@@ -480,7 +497,7 @@ public class MinecraftReflection {
         Object item = itemGetByMaterial(type);
         Object itemCooldown = getEntityHumanItemCooldown(entityHuman); // 如果不支持直接抛出异常
         if(itemCooldownSetMethod == null)
-            itemCooldownSetMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getMinecraftItemCooldownClass(), true).getMethodByParameters("a", Void.class, getMinecraftItemClass(), int.class));
+            itemCooldownSetMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getMinecraftItemCooldownClass(), true).getMethodByParameters("a", Void.class, new Class[] { getMinecraftItemClass(), int.class }));
         itemCooldownSetMethod.invoke(itemCooldown, item, tick);
     }
 
@@ -648,7 +665,7 @@ public class MinecraftReflection {
         if(nbtCompressedStreamToolsReadMethod == null) {
             nbtCompressedStreamToolsReadMethod = Accessors.getMethodAccessorOrNull(getNBTCompressedStreamToolsClass(), "a", InputStream.class);
             if(nbtCompressedStreamToolsReadMethod == null)
-                nbtCompressedStreamToolsReadMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getNBTCompressedStreamToolsClass(), true).getMethodByParameters("a", getNBTTagCompoundClass(), InputStream.class));
+                nbtCompressedStreamToolsReadMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getNBTCompressedStreamToolsClass(), true).getMethodByParameters("a", getNBTTagCompoundClass(), new Class[] { InputStream.class }));
         }
         return nbtCompressedStreamToolsReadMethod.invoke(null, is);
     }
@@ -664,7 +681,7 @@ public class MinecraftReflection {
         if(nbtCompressedStreamToolsWriteMethod == null) {
             nbtCompressedStreamToolsWriteMethod = Accessors.getMethodAccessor(getNBTCompressedStreamToolsClass(), "a", getNBTTagCompoundClass(), OutputStream.class);
             if(nbtCompressedStreamToolsWriteMethod == null)
-                nbtCompressedStreamToolsWriteMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getNBTCompressedStreamToolsClass(), true).getMethodByParameters("a", Void.class, getNBTTagCompoundClass(), OutputStream.class));
+                nbtCompressedStreamToolsWriteMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getNBTCompressedStreamToolsClass(), true).getMethodByParameters("a", Void.class, new Class[] { getNBTTagCompoundClass(), OutputStream.class }));
         }
         nbtCompressedStreamToolsWriteMethod.invoke(null, nbtCompound, os);
     }
