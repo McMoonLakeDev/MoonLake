@@ -21,6 +21,7 @@ package com.minecraft.moonlake.api.nbt;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import com.minecraft.moonlake.nbt.exception.NBTInitializeException;
+import com.minecraft.moonlake.reflect.FuzzyReflect;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.validate.Validate;
@@ -50,9 +51,10 @@ class NBTItemStackExpression implements NBTItemStack {
         Class<?> craftItemStackClass = MinecraftReflection.getCraftItemStackClass();
 
         try {
-
-            itemStackTagField = Accessors.getFieldAccessor(itemStackClass, "tag", true);
-            craftItemStackHandleField = Accessors.getFieldAccessor(craftItemStackClass, "handle", true);
+            // 用模糊反射的方式获取里面的指定类型的字段, 而不是通过名称来准确访问
+            // 好处是防止以后字段名称有所改动导致无法获取到
+            itemStackTagField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(itemStackClass, true).getFieldByType("tag", MinecraftReflection.getNBTTagCompoundClass()));
+            craftItemStackHandleField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(craftItemStackClass, true).getFieldByType("handle", itemStackClass));
         }
         catch (Exception e) {
 

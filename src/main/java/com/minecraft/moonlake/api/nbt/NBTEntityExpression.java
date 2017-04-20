@@ -21,6 +21,7 @@ package com.minecraft.moonlake.api.nbt;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import com.minecraft.moonlake.nbt.exception.NBTInitializeException;
+import com.minecraft.moonlake.reflect.FuzzyReflect;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
@@ -57,13 +58,12 @@ class NBTEntityExpression implements NBTEntity {
 
         Class<?> worldClass = MinecraftReflection.getMinecraftWorldClass();
         Class<?> entityClass = MinecraftReflection.getMinecraftEntityClass();
-        Class<?> craftWorldClass = MinecraftReflection.getCraftWorldClass();
         Class<?> entityTypesClass = MinecraftReflection.getMinecraftEntityTypesClass();
         Class<?> nbtTagCompoundClass = MinecraftReflection.getNBTTagCompoundClass();
 
         try {
-
-            entityTypesCreateEntityMethod = Accessors.getMethodAccessor(entityTypesClass, "a", nbtTagCompoundClass, worldClass);
+            // 这个 EntityTypes 类可以用模糊反射, 但是 Entity 类这几个函数都是同样参数同样返回值, 暂时不用
+            entityTypesCreateEntityMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(entityTypesClass, true).getMethodByParameters("a", entityClass, new Class[] { nbtTagCompoundClass, worldClass }));
             entityReadMethod = Accessors.getMethodAccessor(entityClass, "c", nbtTagCompoundClass);
             entityPlayerReadMethod = Accessors.getMethodAccessor(entityClass, "e", nbtTagCompoundClass);
             entityWriteMethod = entityPlayerWriteMethod = Accessors.getMethodAccessor(entityClass, "f", nbtTagCompoundClass);

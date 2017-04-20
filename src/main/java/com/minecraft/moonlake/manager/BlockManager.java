@@ -20,9 +20,8 @@ package com.minecraft.moonlake.manager;
 
 import com.minecraft.moonlake.api.packet.wrapper.BlockPosition;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
-import com.minecraft.moonlake.api.utility.MinecraftVersion;
-import com.minecraft.moonlake.builder.SingleParamBuilder;
 import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.reflect.FuzzyReflect;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
@@ -224,15 +223,9 @@ public class BlockManager extends MoonLakeManager {
 
     private static MethodAccessor getTileEntityGetBlockMethod() {
         if(tileEntityGetBlockMethod == null) {
-            tileEntityGetBlockMethod = Accessors.getMethodAccessorBuilderMCVer(new SingleParamBuilder<MethodAccessor, MinecraftVersion>() {
-                @Override
-                public MethodAccessor build(MinecraftVersion param) {
-                    Class<?> tileEntityClass = MinecraftReflection.getMinecraftTileEntityClass();
-                    if(!param.isOrLater(MinecraftVersion.V1_9))
-                        return Accessors.getMethodAccessorOrNull(tileEntityClass, "w");
-                    return Accessors.getMethodAccessorOrNull(tileEntityClass, "getBlock");
-                }
-            });
+            Class<?> blockClass = MinecraftReflection.getMinecraftBlockClass();
+            Class<?> tileEntityClass = MinecraftReflection.getMinecraftTileEntityClass();
+            tileEntityGetBlockMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(tileEntityClass, true).getMethodByParameters("getBlock", blockClass, new Class[] {}));
         }
         return tileEntityGetBlockMethod;
     }

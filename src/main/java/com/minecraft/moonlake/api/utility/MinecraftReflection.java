@@ -80,7 +80,6 @@ public class MinecraftReflection {
     private static volatile MethodAccessor entityGetBukkitEntityMethod;
     private static volatile MethodAccessor enumParticleGetByIdMethod;
     private static volatile MethodAccessor itemStackCraftStackMethod;
-    private static volatile MethodAccessor entityPlayerHandleMethod;
     private static volatile MethodAccessor worldServerHandleMethod;
     private static volatile MethodAccessor worldGetTileEntityMethod;
     private static volatile MethodAccessor itemCooldownHasMethod;
@@ -679,7 +678,7 @@ public class MinecraftReflection {
         Validate.notNull(os, "The output stream object is null.");
         Validate.notNull(nbtCompound, "The nbt compound object is null.");
         if(nbtCompressedStreamToolsWriteMethod == null) {
-            nbtCompressedStreamToolsWriteMethod = Accessors.getMethodAccessor(getNBTCompressedStreamToolsClass(), "a", getNBTTagCompoundClass(), OutputStream.class);
+            nbtCompressedStreamToolsWriteMethod = Accessors.getMethodAccessorOrNull(getNBTCompressedStreamToolsClass(), "a", getNBTTagCompoundClass(), OutputStream.class);
             if(nbtCompressedStreamToolsWriteMethod == null)
                 nbtCompressedStreamToolsWriteMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getNBTCompressedStreamToolsClass(), true).getMethodByParameters("a", Void.class, new Class[] { getNBTTagCompoundClass(), OutputStream.class }));
         }
@@ -696,8 +695,11 @@ public class MinecraftReflection {
     public static void saveItemStack(Object itemStack, Object nbtCompound) {
         Validate.notNull(itemStack, "The itemstack object is null");
         Validate.notNull(nbtCompound, "The nbt compound object is null.");
-        if(itemStackSaveMethod == null)
-            itemStackSaveMethod = Accessors.getMethodAccessor(getMinecraftItemStackClass(), "save", getNBTTagCompoundClass());
+        if(itemStackSaveMethod == null) {
+            itemStackSaveMethod = Accessors.getMethodAccessorOrNull(getMinecraftItemStackClass(), "save", getNBTTagCompoundClass());
+            if(itemStackSaveMethod == null)
+                itemStackSaveMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getMinecraftItemStackClass(), true).getMethodByParameters("save", getNBTTagCompoundClass(), new Class[] { getNBTTagCompoundClass() }));
+        }
         itemStackSaveMethod.invoke(itemStack, nbtCompound);
     }
 
@@ -759,10 +761,7 @@ public class MinecraftReflection {
     }
 
     public static Object getEntityPlayer(Player player) {
-        Validate.notNull(player, "The player object is null.");
-        if(entityPlayerHandleMethod == null)
-            entityPlayerHandleMethod = Accessors.getMethodAccessor(getCraftPlayerClass(), "getHandle");
-        return entityPlayerHandleMethod.invoke(player);
+        return getEntity(player);
     }
 
     public static Object getNetworkManager(MoonLakePlayer player) {
