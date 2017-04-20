@@ -377,7 +377,7 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
         public void add(Player player) {
 
             int ping = PlayerManager.getPing(player);
-            GameProfile gameProfile = PlayerManager.getProfile(player);
+            GameProfile gameProfile = MinecraftReflection.getEntityHumanProfile(player);
             add(ping, gameProfile, player.getGameMode(), player.getPlayerListName());
         }
 

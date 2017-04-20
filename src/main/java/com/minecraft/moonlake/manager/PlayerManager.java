@@ -385,7 +385,7 @@ public class PlayerManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MinecraftReflection#getEntityHumanProfile(HumanEntity)}
      */
     @Deprecated
-    public static GameProfile getProfile(Player player) {
+    public static GameProfile getProfile(Player player) { // TODO 2.0
 
         Validate.notNull(player, "The player object is null.");
 
@@ -408,7 +408,7 @@ public class PlayerManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MinecraftReflection#getPlayerLocale(Player)}
      */
     @Deprecated
-    public static String getLanguage(Player player) {
+    public static String getLanguage(Player player) { // TODO 2.0
 
         Validate.notNull(player, "The player object is null.");
 

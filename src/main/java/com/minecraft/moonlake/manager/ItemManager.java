@@ -364,7 +364,7 @@ public class ItemManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #serializeToBase64(ItemStack)}
      */
     @Deprecated
-    public static String serialize(ItemStack itemStack) {
+    public static String serialize(ItemStack itemStack) { // TODO 2.0
         return serializeToBase64(itemStack);
     }
 
@@ -377,7 +377,7 @@ public class ItemManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #deserializeFromBase64(String)}
      */
     @Deprecated
-    public static ItemStack deserialize(String data) {
+    public static ItemStack deserialize(String data) { // TODO 2.0
         return deserializeFromBase64(data);
     }
 

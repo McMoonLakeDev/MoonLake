@@ -75,7 +75,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MinecraftReflection#getEntity(Entity)}
      */
     @Deprecated
-    public static Object asNMSEntity(Entity entity) {
+    public static Object asNMSEntity(Entity entity) { // TODO 2.0
 
         return MinecraftReflection.getEntity(entity);
     }
@@ -100,10 +100,12 @@ public class EntityManager extends MoonLakeManager {
      * @return 是否成功
      * @throws IllegalArgumentException 如果 NMS 世界对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果 NMS 实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MinecraftReflection#addEntity(Object, Object)}
      */
-    public static boolean addEntity(Object nmsWorld, Object nmsEntity) {
+    @Deprecated
+    public static boolean addEntity(Object nmsWorld, Object nmsEntity) { // TODO 2.0
 
-        return addEntity(nmsWorld, nmsEntity, null);
+        return MinecraftReflection.addEntity(nmsWorld, nmsEntity);
     }
 
     /**
@@ -115,9 +117,11 @@ public class EntityManager extends MoonLakeManager {
      * @return 是否成功
      * @throws IllegalArgumentException 如果 NMS 世界对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果 NMS 实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MinecraftReflection#addEntity(Object, Object, CreatureSpawnEvent.SpawnReason)}
      * @see MinecraftReflection#addEntity(Object, Object, CreatureSpawnEvent.SpawnReason)
      */
-    public static boolean addEntity(Object nmsWorld, Object nmsEntity, CreatureSpawnEvent.SpawnReason reason) {
+    @Deprecated
+    public static boolean addEntity(Object nmsWorld, Object nmsEntity, CreatureSpawnEvent.SpawnReason reason) { // TODO 2.0
 
         return MinecraftReflection.addEntity(nmsWorld, nmsEntity, reason);
     }
@@ -182,7 +186,7 @@ public class EntityManager extends MoonLakeManager {
         if(!StringUtil.isEmpty(customName))
             entityItemSetCustomNameMethod.invoke(nmsEntityItem, StringUtil.toColor(customName));
         entityItemSetCustomNameVisibleMethod.invoke(nmsEntityItem, customNameVisible);
-        addEntity(nmsWorld, nmsEntityItem, CreatureSpawnEvent.SpawnReason.CUSTOM);
+        MinecraftReflection.addEntity(nmsWorld, nmsEntityItem, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return (Item) getBukkitEntity(nmsEntityItem);
     }
 
@@ -344,7 +348,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeMovementSpeed(LivingEntity, double)}
      */
     @Deprecated
-    public static void setMovementSpeed(Entity entity, double value) {
+    public static void setMovementSpeed(Entity entity, double value) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         setAttributeMovementSpeed((LivingEntity) entity, value);
@@ -363,7 +367,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeMovementSpeed(LivingEntity)}
      */
     @Deprecated
-    public static double getMovementSpeed(Entity entity) {
+    public static double getMovementSpeed(Entity entity) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         return getAttributeMovementSpeed((LivingEntity) entity);
@@ -383,7 +387,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeKnockBackResistance(LivingEntity, double)}
      */
     @Deprecated
-    public static void setKnockBackResistance(Entity entity, double value) {
+    public static void setKnockBackResistance(Entity entity, double value) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         setAttributeKnockBackResistance((LivingEntity) entity, value);
@@ -402,7 +406,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeKnockBackResistance(LivingEntity)}
      */
     @Deprecated
-    public static double getKnockBackResistance(Entity entity) {
+    public static double getKnockBackResistance(Entity entity) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         return getAttributeKnockBackResistance((LivingEntity) entity);
@@ -422,7 +426,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeAttackDamage(LivingEntity, double)}
      */
     @Deprecated
-    public static void setDamage(Entity entity, double value) {
+    public static void setDamage(Entity entity, double value) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         setAttributeAttackDamage((LivingEntity) entity, value);
@@ -441,7 +445,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeAttackDamage(LivingEntity)}
      */
     @Deprecated
-    public static double getDamage(Entity entity) {
+    public static double getDamage(Entity entity) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         return getAttributeAttackDamage((LivingEntity) entity);
@@ -461,7 +465,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeMaxHealth(LivingEntity, double)}
      */
     @Deprecated
-    public static void setMaxHealth(Entity entity, double value) {
+    public static void setMaxHealth(Entity entity, double value) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         setAttributeMaxHealth((LivingEntity) entity, value);
@@ -482,7 +486,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeMaxHealth(LivingEntity, double, boolean)}
      */
     @Deprecated
-    public static void setMaxHealth(Entity entity, double value, boolean regain) {
+    public static void setMaxHealth(Entity entity, double value, boolean regain) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         setAttributeMaxHealth((LivingEntity) entity, value, regain);
@@ -504,7 +508,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeFollowRange(LivingEntity, double)}
      */
     @Deprecated
-    public static void setFollowRange(Entity entity, double value) {
+    public static void setFollowRange(Entity entity, double value) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         setAttributeFollowRange((LivingEntity) entity, value);
@@ -523,7 +527,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeFollowRange(LivingEntity)}
      */
     @Deprecated
-    public static double getFollowRange(Entity entity) {
+    public static double getFollowRange(Entity entity) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         return getAttributeFollowRange((LivingEntity) entity);
@@ -543,7 +547,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeAttackSpeed(LivingEntity, double)}
      */
     @Deprecated
-    public static void setAttackSpeed(Entity entity, double value) {
+    public static void setAttackSpeed(Entity entity, double value) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         setAttributeAttackSpeed((LivingEntity) entity, value);
@@ -562,7 +566,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeAttackSpeed(LivingEntity)}
      */
     @Deprecated
-    public static double getAttackSpeed(Entity entity) {
+    public static double getAttackSpeed(Entity entity) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         return getAttributeAttackSpeed((LivingEntity) entity);
@@ -582,7 +586,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeArmor(LivingEntity, double)}
      */
     @Deprecated
-    public static void setArmor(Entity entity, double value) {
+    public static void setArmor(Entity entity, double value) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         setAttributeArmor((LivingEntity) entity, value);
@@ -601,7 +605,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeArmor(LivingEntity)}
      */
     @Deprecated
-    public static double getArmor(Entity entity) {
+    public static double getArmor(Entity entity) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         return getAttributeArmor((LivingEntity) entity);
@@ -621,7 +625,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeArmorToughness(LivingEntity, double)}
      */
     @Deprecated
-    public static void setArmorToughness(Entity entity, double value) {
+    public static void setArmorToughness(Entity entity, double value) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         setAttributeArmorToughness((LivingEntity) entity, value);
@@ -640,7 +644,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeArmorToughness(LivingEntity)}
      */
     @Deprecated
-    public static double getArmorToughness(Entity entity) {
+    public static double getArmorToughness(Entity entity) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         return getAttributeArmorToughness((LivingEntity) entity);
@@ -660,7 +664,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeLuck(LivingEntity, double)}
      */
     @Deprecated
-    public static void setLuck(Entity entity, double value) {
+    public static void setLuck(Entity entity, double value) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         setAttributeLuck((LivingEntity) entity, value);
@@ -679,7 +683,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeLuck(LivingEntity)}
      */
     @Deprecated
-    public static double getLuck(Entity entity) {
+    public static double getLuck(Entity entity) { // TODO 2.0
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
         return getAttributeLuck((LivingEntity) entity);
@@ -702,7 +706,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeValue(LivingEntity, AttributeType, double)}
      */
     @Deprecated
-    public static void setAttribute(Entity entity, AttributeType type, double value) {
+    public static void setAttribute(Entity entity, AttributeType type, double value) { // TODO 2.0
 
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
@@ -736,7 +740,7 @@ public class EntityManager extends MoonLakeManager {
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeValue(LivingEntity, AttributeType)}
      */
     @Deprecated
-    public static double getAttribute(Entity entity, AttributeType type) {
+    public static double getAttribute(Entity entity, AttributeType type) { // TODO 2.0
 
         if(!(entity instanceof LivingEntity))
             throw new IllegalStateException("The entity object not is LivingEntity instance.");
