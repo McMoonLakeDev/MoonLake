@@ -86,8 +86,8 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         this.commandPermissionAnnotation = commandPermissionAnnotation;
         this.commandCompletionMethod = commandCompletionMethod;
         this.commandCompletionAnnotation = commandCompletionAnnotation;
-        this.commandMethodParameters = commandMethod.getParameterTypes();
-        this.commandCompletionMethodParameters = commandCompletionMethod.getParameterTypes();
+        this.commandMethodParameters = commandMethod != null ? commandMethod.getParameterTypes() : null;
+        this.commandCompletionMethodParameters = commandCompletionMethod != null ? commandCompletionMethod.getParameterTypes() : null;
         this.name = commandAnnotation.name().isEmpty() ? commandMethod.getName() : commandAnnotation.name();
         this.aliases = commandAnnotation.aliases();
         this.usage = commandAnnotation.usage();
@@ -220,7 +220,7 @@ class CommandAnnotatedExpression implements CommandAnnotated {
             }
             try {
 
-                if(commandMethodParameters.length == 0) {
+                if(commandMethodParameters == null || commandMethodParameters.length == 0) {
 
                     throw new CommandException("The command method '" + this.commandMethod.getName() + " in " + this.commandClass + " is missing the CommandSender parameter.");
                 }
@@ -389,7 +389,7 @@ class CommandAnnotatedExpression implements CommandAnnotated {
         }
         try {
 
-            if(commandCompletionMethodParameters.length <= 1) {
+            if(commandCompletionMethodParameters == null || commandCompletionMethodParameters.length <= 1) {
 
                 throw new CommandException("The completion method '" + commandCompletionMethod.getName() + " in " + commandClass + " is missing the List or CommandSender parameter");
             }

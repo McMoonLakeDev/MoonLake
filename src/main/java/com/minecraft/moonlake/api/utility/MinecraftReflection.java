@@ -603,7 +603,7 @@ public class MinecraftReflection {
         Validate.notNull(world, "The world object is null.");
         Validate.notNull(entity, "The entity object is null.");
         if(worldAddEntityMethod == null)
-            worldAddEntityMethod = Accessors.getMethodAccessor(getMinecraftEntityClass(), "addEntity", getMinecraftEntityClass(), CreatureSpawnEvent.SpawnReason.class);
+            worldAddEntityMethod = Accessors.getMethodAccessor(getMinecraftWorldClass(), "addEntity", getMinecraftEntityClass(), CreatureSpawnEvent.SpawnReason.class);
         return (boolean) worldAddEntityMethod.invoke(world, entity, (spawnReason == null ? CreatureSpawnEvent.SpawnReason.DEFAULT : spawnReason));
     }
 

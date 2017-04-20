@@ -236,7 +236,7 @@ public class BlockManager extends MoonLakeManager {
      * @param location 箱子方块位置
      * @param action 交互 true 则打开 else 关闭
      * @throws IllegalArgumentException 如果箱子方块位置对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果箱子方块类型不为 {@code Material.CHEST} 或 {@code Material.ENDER_CHEST} 则抛出异常
+     * @throws IllegalArgumentException 如果箱子方块类型不为 {@code Material.CHEST | TRAPPED_CHEST | ENDER_CHEST} 则抛出异常
      */
     public static void actionChest(Location location, boolean action) {
 
@@ -251,7 +251,7 @@ public class BlockManager extends MoonLakeManager {
      * @param block 箱子方块
      * @param action 交互 true 则打开 else 关闭
      * @throws IllegalArgumentException 如果箱子方块对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果箱子方块类型不为 {@code Material.CHEST} 或 {@code Material.ENDER_CHEST} 则抛出异常
+     * @throws IllegalArgumentException 如果箱子方块类型不为 {@code Material.CHEST | TRAPPED_CHEST | ENDER_CHEST} 则抛出异常
      */
     public static void actionChest(Block block, boolean action) {
 
