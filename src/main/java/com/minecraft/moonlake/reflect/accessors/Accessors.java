@@ -33,6 +33,13 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * <h1>Accessors</h1>
+ * 访问器类 (函数暂时不提供doc文档)
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public final class Accessors {
 
     static {

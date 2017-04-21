@@ -20,9 +20,28 @@ package com.minecraft.moonlake.reflect.accessors;
 
 import java.lang.reflect.Method;
 
+/**
+ * <h1>MethodAccessor</h1>
+ * 函数访问器
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface MethodAccessor {
 
+    /**
+     * 调用此函数并返回函数返回值
+     *
+     * @param instance 实例
+     * @param params 参数
+     * @return 返回值
+     */
     Object invoke(Object instance, Object... params);
 
+    /**
+     * 获取此函数访问器的源函数对象
+     *
+     * @return 源函数对象
+     */
     Method getMethod();
 }

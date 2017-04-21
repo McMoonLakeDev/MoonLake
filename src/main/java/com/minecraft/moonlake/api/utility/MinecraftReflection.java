@@ -54,6 +54,13 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Map;
 
+/**
+ * <h1>MinecraftReflection</h1>
+ * Minecraft 底层反射效用类 (函数暂时不提供doc文档)
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class MinecraftReflection {
 
     private static String MINECRAFT_FULL_PACKAGE = null;

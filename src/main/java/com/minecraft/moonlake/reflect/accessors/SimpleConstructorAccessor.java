@@ -23,10 +23,23 @@ import com.minecraft.moonlake.exception.MoonLakeException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * <h1>SimpleConstructorAccessor</h1>
+ * 简单构造函数访问器类
+ *
+ * @param <T> 类型
+ * @version 1.0
+ * @author Month_Light
+ */
 final class SimpleConstructorAccessor<T> implements ConstructorAccessor<T> {
 
     private final Constructor<T> constructor;
 
+    /**
+     * 简单构造函数访问器类构造函数
+     *
+     * @param constructor 构造函数
+     */
     public SimpleConstructorAccessor(Constructor<T> constructor) {
         this.constructor = constructor;
     }

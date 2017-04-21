@@ -20,9 +20,28 @@ package com.minecraft.moonlake.reflect.accessors;
 
 import java.lang.reflect.Constructor;
 
+/**
+ * <h1>ConstructorAccessor</h1>
+ * 构造函数访问器接口
+ *
+ * @param <T> 类型
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface ConstructorAccessor<T> {
 
+    /**
+     * 调用此构造函数并返回实例
+     *
+     * @param params 参数
+     * @return 实例
+     */
     T invoke(Object... params);
 
+    /**
+     * 获取此构造函数访问器的源构造函数对象
+     *
+     * @return 源构造函数对象
+     */
     Constructor<T> getConstructor();
 }

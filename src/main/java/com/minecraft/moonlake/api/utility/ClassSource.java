@@ -21,12 +21,30 @@ package com.minecraft.moonlake.api.utility;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * <h1>ClassSource</h1>
+ * 类源
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public abstract class ClassSource {
 
+    /**
+     * 从当前类源 ClassSource 的 ClassLoader 获取实例
+     *
+     * @return ClassSource
+     */
     public static ClassSource fromClassLoader() {
         return fromClassLoader(ClassSource.class.getClassLoader());
     }
 
+    /**
+     * 从指定的 ClassLoader 对象获取类源的实例
+     *
+     * @param classLoader 类加载器
+     * @return ClassSource
+     */
     public static ClassSource fromClassLoader(ClassLoader classLoader) {
         return new ClassSource() {
             @Override
@@ -36,6 +54,12 @@ public abstract class ClassSource {
         };
     }
 
+    /**
+     * 从指定 Map 的映射关系获取类源的实例
+     *
+     * @param map Map
+     * @return ClassSource
+     */
     public static ClassSource fromMap(Map<String, Class<?>> map) {
         return new ClassSource() {
             @Override
@@ -48,9 +72,21 @@ public abstract class ClassSource {
         };
     }
 
+    /**
+     * 获取空的类源实例
+     *
+     * @return ClassSource
+     */
     public static ClassSource empty() {
         return fromMap(Collections.emptyMap());
     }
 
+    /**
+     * 加载指定名称的类
+     *
+     * @param name 类名称
+     * @return 类
+     * @throws ClassNotFoundException 如果类不存在则抛出异常
+     */
     public abstract Class<?> loadClass(String name) throws ClassNotFoundException;
 }

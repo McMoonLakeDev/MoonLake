@@ -311,6 +311,13 @@ public class ItemManager extends MoonLakeManager {
         return !isAir(itemStack) && ItemLibraryFactorys.item().isWrittenBook(itemStack);
     }
 
+    /**
+     * 将物品栈对象数据序列化为 NBT 字符串数据
+     *
+     * @param itemStack 物品栈
+     * @return 物品栈 NBT 字符串数据 异常返回 null
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     */
     public static String serializeToNBT(ItemStack itemStack) {
         if(isAir(itemStack))
             return null;
@@ -319,6 +326,13 @@ public class ItemManager extends MoonLakeManager {
         return nbtCompound.toString();
     }
 
+    /**
+     * 将 NBT 字符串数据反序列化为物品栈对象
+     *
+     * @param nbt NBT 字符串数据
+     * @return 物品栈对象 异常返回 null
+     * @throws IllegalArgumentException 如果 NBT 字符串数据对象为 {@code null} 则抛出异常
+     */
     public static ItemStack deserializeFromNBT(String nbt) {
         Validate.isTrue(!StringUtil.isEmpty(nbt), "The nbt object is null or empty.");
         try {
@@ -335,6 +349,13 @@ public class ItemManager extends MoonLakeManager {
         }
     }
 
+    /**
+     * 将物品栈对象数据序列化为 Base64 加密的字符串数据
+     *
+     * @param itemStack 物品栈
+     * @return 物品栈 Base64 加密字符串数据 异常返回 null
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     */
     public static String serializeToBase64(ItemStack itemStack) {
         if(isAir(itemStack))
             return null;
@@ -346,6 +367,13 @@ public class ItemManager extends MoonLakeManager {
         return Base64.getEncoder().encodeToString(outputStream.toByteArray());
     }
 
+    /**
+     * 将 Base64 加密的字符串数据反序列化为物品栈对象
+     *
+     * @param base64 Base64 加密字符串数据
+     * @return 物品栈对象 异常返回 null
+     * @throws IllegalArgumentException 如果 Base64 加密字符串数据对象为 {@code null} 则抛出异常
+     */
     public static ItemStack deserializeFromBase64(String base64) {
         Validate.isTrue(!StringUtil.isEmpty(base64), "The base64 object is null or empty.");
         byte[] nbtBytes = Base64.getDecoder().decode(base64);

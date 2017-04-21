@@ -29,51 +29,106 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+/**
+ * <h1>FuzzyReflect</h1>
+ * 模糊反射类（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class FuzzyReflect {
 
     private Class<?> source;
     private boolean forceAccess;
 
+    /**
+     * 模糊反射类构造函数
+     *
+     * @param source 类源
+     * @param forceAccess 是否强制访问
+     */
     public FuzzyReflect(Class<?> source, boolean forceAccess) {
         super();
         this.source = source;
         this.forceAccess = forceAccess;
     }
 
+    /**
+     * 从指定类源获取模糊反射 FuzzyReflect 实例对象
+     *
+     * @param source 类源
+     * @return FuzzyReflect
+     */
     public static FuzzyReflect fromClass(Class<?> source) {
         return fromClass(source, false);
     }
 
+    /**
+     * 从指定类源获取模糊反射 FuzzyReflect 实例对象
+     *
+     * @param source 类源
+     * @param forceAccess 是否强制访问
+     * @return FuzzyReflect
+     */
     public static FuzzyReflect fromClass(Class<?> source, boolean forceAccess) {
         return new FuzzyReflect(source, forceAccess);
     }
 
+    /**
+     * 从指定对象获取精确反射 FuzzyReflect 实例对象
+     *
+     * @param reference 对象
+     * @return FuzzyReflect
+     */
     public static FuzzyReflect fromObject(Object reference) {
         return fromObject(reference, false);
     }
 
+    /**
+     * 从指定对象获取精确反射 FuzzyReflect 实例对象
+     *
+     * @param reference 对象
+     * @param forceAccess 是否强制访问
+     * @return FuzzyReflect
+     */
     public static FuzzyReflect fromObject(Object reference, boolean forceAccess) {
         return new FuzzyReflect(reference.getClass(), forceAccess);
     }
 
-    public static <T> T getFieldValue(Object instance, Class<T> fieldClass, boolean forceAccess) {
-        @SuppressWarnings("unchecked")
-        T result = (T) Accessors.getFieldAccessor(instance.getClass(), fieldClass, forceAccess).get(instance);
-        return result;
-    }
-
+    /**
+     * 获取此模糊反射的类源对象
+     *
+     * @return 类源对象
+     */
     public Class<?> getSource() {
         return source;
     }
 
+    /**
+     * 获取此模糊反射是否以强制访问模式
+     *
+     * @return 是否强制访问
+     */
     public boolean isForceAccess() {
         return forceAccess;
     }
 
+    /**
+     * 设置此模糊反射是否以强制访问模式
+     *
+     * @param forceAccess 是否强制访问
+     */
     public void setForceAccess(boolean forceAccess) {
         this.forceAccess = forceAccess;
     }
 
+    /**
+     * 获取此模糊反射的类源指定函数对象
+     *
+     * @param nameRegex 函数名称正则表达式
+     * @return 函数对象
+     * @throws IllegalArgumentException 如果未找到匹配函数则抛出异常
+     */
     public Method getMethodByName(String nameRegex) {
         Pattern pattern = Pattern.compile(nameRegex);
         for(Method method : getMethods())
@@ -82,6 +137,14 @@ public class FuzzyReflect {
         throw new IllegalArgumentException("Unable to find a method with the pattern " + nameRegex + " in " + this.source.getName());
     }
 
+    /**
+     * 获取此模糊反射的类源指定函数对象
+     *
+     * @param name 名称 (仅用于异常信息)
+     * @param params 函数参数
+     * @return 函数对象
+     * @throws IllegalArgumentException 如果未找到匹配函数则抛出异常
+     */
     public Method getMethodByParameters(String name, Class<?>... params) {
         Class<?>[] primitiveTypes = Reflect.DataType.getPrimitive(params);
         for(Method method : getMethods())
@@ -90,6 +153,15 @@ public class FuzzyReflect {
         throw new IllegalArgumentException("Unable to find " + name + " in " + this.source.getName());
     }
 
+    /**
+     * 获取此模糊反射的类源指定函数对象
+     *
+     * @param name 名称 (仅用于异常信息)
+     * @param returnType 函数返回类型
+     * @param params 函数参数
+     * @return 函数对象
+     * @throws IllegalArgumentException 如果未找到匹配函数则抛出异常
+     */
     public Method getMethodByParameters(String name, Class<?> returnType, Class<?>[] params) {
         List<Method> methodList = getMethodListByParameters(returnType, params);
         if(methodList.size() > 0)
@@ -97,6 +169,13 @@ public class FuzzyReflect {
         throw new IllegalArgumentException("Unable to find " + name + " in " + this.source.getName());
     }
 
+    /**
+     * 获取此模糊反射的类源指定函数对象列表
+     *
+     * @param returnType 函数返回类型
+     * @param params 函数参数
+     * @return 函数对象列表
+     */
     public List<Method> getMethodListByParameters(Class<?> returnType, Class<?>[] params) {
         List<Method> methodList = new ArrayList<>();
         Class<?>[] primitiveTypes = Reflect.DataType.getPrimitive(params);
@@ -106,6 +185,16 @@ public class FuzzyReflect {
         return methodList;
     }
 
+    /**
+     * 调用此模糊反射的类源指定函数对象
+     *
+     * @param instance 实例
+     * @param name 名称 (仅用于异常信息)
+     * @param returnType 函数返回类型
+     * @param params 函数参数
+     * @return 函数返回值
+     * @throws IllegalArgumentException 如果未找到匹配函数则抛出异常
+     */
     public Object invokeMethod(Object instance, String name, Class<?> returnType, Object... params) {
         Class<?>[] parameters = new Class<?>[params.length];
         for(int i = 0; i < parameters.length; i++)
@@ -113,6 +202,13 @@ public class FuzzyReflect {
         return Accessors.getMethodAccessor(getMethodByParameters(name, returnType, parameters)).invoke(instance, params);
     }
 
+    /**
+     * 获取此模糊反射的类源指定字段对象
+     *
+     * @param nameRegex 字段名称正则表达式
+     * @return 字段对象
+     * @throws IllegalArgumentException 如果未找到匹配字段则抛出异常
+     */
     public Field getFieldByName(String nameRegex) {
         Pattern pattern = Pattern.compile(nameRegex);
         for(Field field : getFields())
@@ -121,6 +217,14 @@ public class FuzzyReflect {
         throw new IllegalArgumentException("Unable to find a field with the pattern " + nameRegex + " in " + this.source.getName());
     }
 
+    /**
+     * 获取此模糊反射的类源指定字段对象
+     *
+     * @param name 名称 (仅用于异常信息)
+     * @param type 字段类型
+     * @return 字段对象
+     * @throws IllegalArgumentException 如果未找到匹配字段则抛出异常
+     */
     public Field getFieldByType(String name, Class<?> type) {
         List<Field> fieldList = getFieldListByType(type);
         if(fieldList.size() > 0)
@@ -128,6 +232,12 @@ public class FuzzyReflect {
         throw new IllegalArgumentException(String.format("Unable to find a field %s with the type %s in %s", name, type.getName(), this.source.getName()));
     }
 
+    /**
+     * 获取此模糊反射的类源指定字段对象列表
+     *
+     * @param type 字段类型
+     * @return 字段对象列表
+     */
     public List<Field> getFieldListByType(Class<?> type) {
         List<Field> fieldList = new ArrayList<>();
         for(Field field : getFields())
@@ -136,18 +246,33 @@ public class FuzzyReflect {
         return fieldList;
     }
 
+    /**
+     * 获取此模糊反射的类源的字段对象集合
+     *
+     * @return 字段对象集合
+     */
     public Set<Field> getFields() {
         if(this.forceAccess)
             return union(this.source.getDeclaredFields(), this.source.getFields());
         return union(this.source.getFields());
     }
 
+    /**
+     * 获取此模糊反射的类源的函数对象集合
+     *
+     * @return 函数对象集合
+     */
     public Set<Method> getMethods() {
         if(this.forceAccess)
             return union(this.source.getDeclaredMethods(), this.source.getMethods());
         return union(this.source.getMethods());
     }
 
+    /**
+     * 获取此模糊反射的类源的构造函数对象集合
+     *
+     * @return 构造函数对象集合
+     */
     public Set<Constructor<?>> getConstructors() {
         if(this.forceAccess)
             return union(this.source.getDeclaredConstructors());

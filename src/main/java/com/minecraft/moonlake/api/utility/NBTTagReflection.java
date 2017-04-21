@@ -26,6 +26,13 @@ import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import java.io.DataInput;
 import java.io.DataOutput;
 
+/**
+ * <h1>NBTTagReflection</h1>
+ * NBT 底层反射效用类 (函数暂时不提供doc文档)
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class NBTTagReflection {
 
     private static volatile ConstructorAccessor<?> nbtTagByteConstructor;

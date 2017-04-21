@@ -20,11 +20,35 @@ package com.minecraft.moonlake.reflect.accessors;
 
 import java.lang.reflect.Field;
 
+/**
+ * <h1>FieldAccessor</h1>
+ * 字段访问器接口
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface FieldAccessor {
 
+    /**
+     * 获取此字段访问器的字段值
+     *
+     * @param instance 实例
+     * @return 字段值
+     */
     Object get(Object instance);
 
+    /**
+     * 设置此字段访问器的字段值
+     *
+     * @param instance 实例
+     * @param value 值
+     */
     void set(Object instance, Object value);
 
+    /**
+     * 获取此字段访问器的源字段对象
+     *
+     * @return 源字段对象
+     */
     Field getField();
 }

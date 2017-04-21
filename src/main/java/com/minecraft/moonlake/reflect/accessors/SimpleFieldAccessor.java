@@ -22,10 +22,22 @@ import com.minecraft.moonlake.exception.MoonLakeException;
 
 import java.lang.reflect.Field;
 
+/**
+ * <h1>SimpleFieldAccessor</h1>
+ * 简单字段访问器类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 final class SimpleFieldAccessor implements FieldAccessor {
 
     private final Field field;
 
+    /**
+     * 简单字段访问器类构造函数
+     *
+     * @param field 字段
+     */
     public SimpleFieldAccessor(Field field) {
         this.field = field;
     }

@@ -23,10 +23,22 @@ import com.minecraft.moonlake.exception.MoonLakeException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+/**
+ * <h1>SimpleMethodAccessor</h1>
+ * 简单函数访问器类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 final class SimpleMethodAccessor implements MethodAccessor {
 
     private final Method method;
 
+    /**
+     * 简单函数访问器类构造函数
+     *
+     * @param method 函数
+     */
     public SimpleMethodAccessor(Method method) {
         this.method = method;
     }

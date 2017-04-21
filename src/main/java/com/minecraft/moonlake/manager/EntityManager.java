@@ -354,6 +354,14 @@ public class EntityManager extends MoonLakeManager {
         setAttributeMovementSpeed((LivingEntity) entity, value);
     }
 
+    /**
+     * 设置指定实体的移动速度值
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#MOVEMENT_SPEED
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static void setAttributeMovementSpeed(LivingEntity livingEntity, double value) {
         setAttributeValue(livingEntity, AttributeType.MOVEMENT_SPEED, value);
     }
@@ -373,6 +381,13 @@ public class EntityManager extends MoonLakeManager {
         return getAttributeMovementSpeed((LivingEntity) entity);
     }
 
+    /**
+     * 获取指定实体的移动速度值
+     *
+     * @param livingEntity 实体
+     * @return 实体的移动速度值
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static double getAttributeMovementSpeed(LivingEntity livingEntity) {
         return getAttributeValue(livingEntity, AttributeType.MOVEMENT_SPEED);
     }
@@ -393,6 +408,14 @@ public class EntityManager extends MoonLakeManager {
         setAttributeKnockBackResistance((LivingEntity) entity, value);
     }
 
+    /**
+     * 设置指定实体的击退抗性值
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#KNOCK_BACK_RESISTANCE
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static void setAttributeKnockBackResistance(LivingEntity livingEntity, double value) {
         setAttributeValue(livingEntity, AttributeType.KNOCK_BACK_RESISTANCE, value);
     }
@@ -412,6 +435,13 @@ public class EntityManager extends MoonLakeManager {
         return getAttributeKnockBackResistance((LivingEntity) entity);
     }
 
+    /**
+     * 获取指定实体的击退抗性值
+     *
+     * @param livingEntity 实体
+     * @return 实体的击退抗性值
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static double getAttributeKnockBackResistance(LivingEntity livingEntity) {
         return getAttributeValue(livingEntity, AttributeType.KNOCK_BACK_RESISTANCE);
     }
@@ -432,6 +462,14 @@ public class EntityManager extends MoonLakeManager {
         setAttributeAttackDamage((LivingEntity) entity, value);
     }
 
+    /**
+     * 设置指定实体的攻击伤害值
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#ATTACK_DAMAGE
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static void setAttributeAttackDamage(LivingEntity livingEntity, double value) {
         setAttributeValue(livingEntity, AttributeType.ATTACK_DAMAGE, value);
     }
@@ -451,6 +489,13 @@ public class EntityManager extends MoonLakeManager {
         return getAttributeAttackDamage((LivingEntity) entity);
     }
 
+    /**
+     * 获取指定实体的攻击伤害值
+     *
+     * @param livingEntity 实体
+     * @return 实体的攻击伤害值
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static double getAttributeAttackDamage(LivingEntity livingEntity) {
         return getAttributeValue(livingEntity, AttributeType.ATTACK_DAMAGE);
     }
@@ -471,6 +516,14 @@ public class EntityManager extends MoonLakeManager {
         setAttributeMaxHealth((LivingEntity) entity, value);
     }
 
+    /**
+     * 设置指定实体的血量上限值
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#MAX_HEALTH
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static void setAttributeMaxHealth(LivingEntity livingEntity, double value) {
         setAttributeMaxHealth(livingEntity, value, true);
     }
@@ -492,6 +545,15 @@ public class EntityManager extends MoonLakeManager {
         setAttributeMaxHealth((LivingEntity) entity, value, regain);
     }
 
+    /**
+     * 设置指定实体的血量上限值
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @param regain 是否恢复
+     * @see AttributeType#MAX_HEALTH
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static void setAttributeMaxHealth(LivingEntity livingEntity, double value, boolean regain) {
         setAttributeValue(livingEntity, AttributeType.MAX_HEALTH, value);
         if(regain)
@@ -514,6 +576,14 @@ public class EntityManager extends MoonLakeManager {
         setAttributeFollowRange((LivingEntity) entity, value);
     }
 
+    /**
+     * 设置指定实体的追踪范围
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#FOLLOW_RANGE
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static void setAttributeFollowRange(LivingEntity livingEntity, double value) {
         setAttributeValue(livingEntity, AttributeType.FOLLOW_RANGE, value);
     }
@@ -533,6 +603,13 @@ public class EntityManager extends MoonLakeManager {
         return getAttributeFollowRange((LivingEntity) entity);
     }
 
+    /**
+     * 获取指定实体的追踪范围
+     *
+     * @param livingEntity 实体
+     * @return 实体的追踪范围
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static double getAttributeFollowRange(LivingEntity livingEntity) {
         return getAttributeValue(livingEntity, AttributeType.FOLLOW_RANGE);
     }
@@ -553,6 +630,14 @@ public class EntityManager extends MoonLakeManager {
         setAttributeAttackSpeed((LivingEntity) entity, value);
     }
 
+    /**
+     * 设置指定实体的攻击速度
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#FOLLOW_RANGE
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static void setAttributeAttackSpeed(LivingEntity livingEntity, double value) {
         setAttributeValue(livingEntity, AttributeType.ATTACK_SPEED, value);
     }
@@ -572,6 +657,13 @@ public class EntityManager extends MoonLakeManager {
         return getAttributeAttackSpeed((LivingEntity) entity);
     }
 
+    /**
+     * 获取指定实体的攻击速度
+     *
+     * @param livingEntity 实体
+     * @return 实体的攻击速度
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static double getAttributeAttackSpeed(LivingEntity livingEntity) {
         return getAttributeValue(livingEntity, AttributeType.ATTACK_SPEED);
     }
@@ -592,6 +684,14 @@ public class EntityManager extends MoonLakeManager {
         setAttributeArmor((LivingEntity) entity, value);
     }
 
+    /**
+     * 设置指定实体的护甲
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#ARMOR
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static void setAttributeArmor(LivingEntity livingEntity, double value) {
         setAttributeValue(livingEntity, AttributeType.ARMOR, value);
     }
@@ -611,6 +711,13 @@ public class EntityManager extends MoonLakeManager {
         return getAttributeArmor((LivingEntity) entity);
     }
 
+    /**
+     * 获取指定实体的护甲
+     *
+     * @param livingEntity 实体
+     * @return 实体的护甲
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static double getAttributeArmor(LivingEntity livingEntity) {
         return getAttributeValue(livingEntity, AttributeType.ARMOR);
     }
@@ -631,6 +738,14 @@ public class EntityManager extends MoonLakeManager {
         setAttributeArmorToughness((LivingEntity) entity, value);
     }
 
+    /**
+     * 设置指定实体的护甲韧性
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#ARMOR_TOUGHNESS
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static void setAttributeArmorToughness(LivingEntity livingEntity, double value) {
         setAttributeValue(livingEntity, AttributeType.ARMOR_TOUGHNESS, value);
     }
@@ -650,6 +765,13 @@ public class EntityManager extends MoonLakeManager {
         return getAttributeArmorToughness((LivingEntity) entity);
     }
 
+    /**
+     * 获取指定实体的护甲韧性
+     *
+     * @param livingEntity 实体
+     * @return 实体的护甲韧性
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static double getAttributeArmorToughness(LivingEntity livingEntity) {
         return getAttributeValue(livingEntity, AttributeType.ARMOR_TOUGHNESS);
     }
@@ -670,6 +792,14 @@ public class EntityManager extends MoonLakeManager {
         setAttributeLuck((LivingEntity) entity, value);
     }
 
+    /**
+     * 设置指定实体的幸运
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#LUCK
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static void setAttributeLuck(LivingEntity livingEntity, double value) {
         setAttributeValue(livingEntity, AttributeType.LUCK, value);
     }
@@ -689,6 +819,13 @@ public class EntityManager extends MoonLakeManager {
         return getAttributeLuck((LivingEntity) entity);
     }
 
+    /**
+     * 获取指定实体的幸运
+     *
+     * @param livingEntity 实体
+     * @return 实体的幸运
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
     public static double getAttributeLuck(LivingEntity livingEntity) {
         return getAttributeValue(livingEntity, AttributeType.LUCK);
     }

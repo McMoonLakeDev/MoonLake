@@ -24,6 +24,13 @@ import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import org.bukkit.entity.Player;
 
+/**
+ * <h1>MoonLakeReflection</h1>
+ * 月色之湖反射效用类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class MoonLakeReflection {
 
     private final static Class<? extends SimpleMoonLakePlayer> CLASS_SIMPLEMOONLAKEPLAYER;
@@ -47,19 +54,38 @@ public class MoonLakeReflection {
             CLASS_SIMPLEMOONLAKEPLAYER = null;
     }
 
+    /**
+     * 月色之湖反射效用类构造函数
+     */
     private MoonLakeReflection() {
     }
 
+    /**
+     * 获取月色之湖对应服务端的 SimpleMoonLakePlayer 类对象
+     *
+     * @return SimpleMoonLakePlayer Class
+     */
     public static Class<? extends SimpleMoonLakePlayer> getSimpleMoonLakePlayerClass() {
         return CLASS_SIMPLEMOONLAKEPLAYER;
     }
 
+    /**
+     * 获取月色之湖对应服务端的 SimpleMoonLakePlayer 类构造对象
+     *
+     * @return SimpleMoonLakePlayer Constructor
+     */
     public static ConstructorAccessor<? extends SimpleMoonLakePlayer> getSimpleMoonLakePlayerConstructor() {
         if(simpleMoonLakePlayerConstructor == null)
             simpleMoonLakePlayerConstructor = Accessors.getConstructorAccessor(getSimpleMoonLakePlayerClass(), Player.class);
         return simpleMoonLakePlayerConstructor;
     }
 
+    /**
+     * 获取月色之湖对应服务端的 SimpleMoonLakePlayer 实例对象
+     *
+     * @param player 玩家
+     * @return SimpleMoonLakePlayer Instance
+     */
     public static SimpleMoonLakePlayer getSimpleMoonLakePlayerInstance(Player player) {
         return getSimpleMoonLakePlayerConstructor().invoke(player);
     }
