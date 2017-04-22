@@ -22,6 +22,7 @@ import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.player.*;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
 /**
@@ -85,8 +86,10 @@ public class MoonLakeReflection {
      *
      * @param player 玩家
      * @return SimpleMoonLakePlayer Instance
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
      */
     public static SimpleMoonLakePlayer getSimpleMoonLakePlayerInstance(Player player) {
+        Validate.notNull(player, "The player object is null.");
         return getSimpleMoonLakePlayerConstructor().invoke(player);
     }
 }

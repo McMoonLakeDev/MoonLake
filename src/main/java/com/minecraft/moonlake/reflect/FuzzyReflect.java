@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.reflect;
 
 import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.validate.Validate;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -46,10 +47,11 @@ public class FuzzyReflect {
      *
      * @param source 类源
      * @param forceAccess 是否强制访问
+     * @throws IllegalArgumentException 如果类源对象为 {@code null} 则抛出异常
      */
     public FuzzyReflect(Class<?> source, boolean forceAccess) {
         super();
-        this.source = source;
+        this.source = Validate.checkNotNull(source);
         this.forceAccess = forceAccess;
     }
 
@@ -58,6 +60,7 @@ public class FuzzyReflect {
      *
      * @param source 类源
      * @return FuzzyReflect
+     * @throws IllegalArgumentException 如果类源对象为 {@code null} 则抛出异常
      */
     public static FuzzyReflect fromClass(Class<?> source) {
         return fromClass(source, false);
@@ -69,6 +72,7 @@ public class FuzzyReflect {
      * @param source 类源
      * @param forceAccess 是否强制访问
      * @return FuzzyReflect
+     * @throws IllegalArgumentException 如果类源对象为 {@code null} 则抛出异常
      */
     public static FuzzyReflect fromClass(Class<?> source, boolean forceAccess) {
         return new FuzzyReflect(source, forceAccess);
@@ -79,6 +83,7 @@ public class FuzzyReflect {
      *
      * @param reference 对象
      * @return FuzzyReflect
+     * @throws IllegalArgumentException 如果对象为 {@code null} 则抛出异常
      */
     public static FuzzyReflect fromObject(Object reference) {
         return fromObject(reference, false);
@@ -90,8 +95,10 @@ public class FuzzyReflect {
      * @param reference 对象
      * @param forceAccess 是否强制访问
      * @return FuzzyReflect
+     * @throws IllegalArgumentException 如果对象为 {@code null} 则抛出异常
      */
     public static FuzzyReflect fromObject(Object reference, boolean forceAccess) {
+        Validate.notNull(reference, "The reference object is null.");
         return new FuzzyReflect(reference.getClass(), forceAccess);
     }
 
@@ -127,9 +134,11 @@ public class FuzzyReflect {
      *
      * @param nameRegex 函数名称正则表达式
      * @return 函数对象
+     * @throws IllegalArgumentException 如果名称正则表达式对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果未找到匹配函数则抛出异常
      */
     public Method getMethodByName(String nameRegex) {
+        Validate.notNull(nameRegex, "The name regex object is null.");
         Pattern pattern = Pattern.compile(nameRegex);
         for(Method method : getMethods())
             if(pattern.matcher(method.getName()).matches())
@@ -160,6 +169,7 @@ public class FuzzyReflect {
      * @param returnType 函数返回类型
      * @param params 函数参数
      * @return 函数对象
+     * @throws IllegalArgumentException 如果返回类型对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果未找到匹配函数则抛出异常
      */
     public Method getMethodByParameters(String name, Class<?> returnType, Class<?>[] params) {
@@ -175,8 +185,10 @@ public class FuzzyReflect {
      * @param returnType 函数返回类型
      * @param params 函数参数
      * @return 函数对象列表
+     * @throws IllegalArgumentException 如果返回类型对象为 {@code null} 则抛出异常
      */
     public List<Method> getMethodListByParameters(Class<?> returnType, Class<?>[] params) {
+        Validate.notNull(returnType, "The return type object is null.");
         List<Method> methodList = new ArrayList<>();
         Class<?>[] primitiveTypes = Reflect.DataType.getPrimitive(params);
         for(Method method : getMethods())
@@ -193,9 +205,11 @@ public class FuzzyReflect {
      * @param returnType 函数返回类型
      * @param params 函数参数
      * @return 函数返回值
+     * @throws IllegalArgumentException 如果返回类型对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果未找到匹配函数则抛出异常
      */
     public Object invokeMethod(Object instance, String name, Class<?> returnType, Object... params) {
+        Validate.notNull(returnType, "The return type object is null.");
         Class<?>[] parameters = new Class<?>[params.length];
         for(int i = 0; i < parameters.length; i++)
             parameters[i] = Reflect.DataType.getPrimitive(params[i].getClass());
@@ -207,6 +221,7 @@ public class FuzzyReflect {
      *
      * @param nameRegex 字段名称正则表达式
      * @return 字段对象
+     * @throws IllegalArgumentException 如果名称正则表达式对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果未找到匹配字段则抛出异常
      */
     public Field getFieldByName(String nameRegex) {
@@ -223,6 +238,7 @@ public class FuzzyReflect {
      * @param name 名称 (仅用于异常信息)
      * @param type 字段类型
      * @return 字段对象
+     * @throws IllegalArgumentException 如果字段类型对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果未找到匹配字段则抛出异常
      */
     public Field getFieldByType(String name, Class<?> type) {
@@ -237,8 +253,10 @@ public class FuzzyReflect {
      *
      * @param type 字段类型
      * @return 字段对象列表
+     * @throws IllegalArgumentException 如果字段类型对象为 {@code null} 则抛出异常
      */
     public List<Field> getFieldListByType(Class<?> type) {
+        Validate.notNull(type, "The field type object is null.");
         List<Field> fieldList = new ArrayList<>();
         for(Field field : getFields())
             if(type.isAssignableFrom(field.getType()))

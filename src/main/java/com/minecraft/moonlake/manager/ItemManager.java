@@ -316,7 +316,6 @@ public class ItemManager extends MoonLakeManager {
      *
      * @param itemStack 物品栈
      * @return 物品栈 NBT 字符串数据 异常返回 null
-     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
     public static String serializeToNBT(ItemStack itemStack) {
         if(isAir(itemStack))
@@ -354,7 +353,6 @@ public class ItemManager extends MoonLakeManager {
      *
      * @param itemStack 物品栈
      * @return 物品栈 Base64 加密字符串数据 异常返回 null
-     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
     public static String serializeToBase64(ItemStack itemStack) {
         if(isAir(itemStack))
@@ -388,7 +386,6 @@ public class ItemManager extends MoonLakeManager {
      *
      * @param itemStack 物品栈
      * @return 物品栈 Base64 加密字符串数据 异常返回 null
-     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #serializeToBase64(ItemStack)}
      */
     @Deprecated

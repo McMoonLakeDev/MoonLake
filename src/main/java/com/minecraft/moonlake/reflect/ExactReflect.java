@@ -42,6 +42,7 @@ public class ExactReflect {
      *
      * @param source 类源
      * @param forceAccess 是否强制访问
+     * @throws IllegalArgumentException 如果类源对象为 {@code null} 则抛出异常
      */
     public ExactReflect(Class<?> source, boolean forceAccess) {
         super();
@@ -54,6 +55,7 @@ public class ExactReflect {
      *
      * @param source 类源
      * @return ExactReflect
+     * @throws IllegalArgumentException 如果类源对象为 {@code null} 则抛出异常
      */
     public static ExactReflect fromClass(Class<?> source) {
         return fromClass(source, false);
@@ -65,6 +67,7 @@ public class ExactReflect {
      * @param source 类源
      * @param forceAccess 是否强制访问
      * @return ExactReflect
+     * @throws IllegalArgumentException 如果类源对象为 {@code null} 则抛出异常
      */
     public static ExactReflect fromClass(Class<?> source, boolean forceAccess) {
         return new ExactReflect(source, forceAccess);
@@ -75,6 +78,7 @@ public class ExactReflect {
      *
      * @param reference 对象
      * @return ExactReflect
+     * @throws IllegalArgumentException 如果对象为 {@code null} 则抛出异常
      */
     public static ExactReflect fromObject(Object reference) {
         return fromObject(reference, false);
@@ -86,8 +90,10 @@ public class ExactReflect {
      * @param reference 对象
      * @param forceAccess 是否强制访问
      * @return ExactReflect
+     * @throws IllegalArgumentException 如果对象为 {@code null} 则抛出异常
      */
     public static ExactReflect fromObject(Object reference, boolean forceAccess) {
+        Validate.notNull(reference, "The reference object is null.");
         return new ExactReflect(reference.getClass(), forceAccess);
     }
 
@@ -97,6 +103,7 @@ public class ExactReflect {
      * @param methodName 函数名
      * @param params 函数参数
      * @return 函数对象
+     * @throws IllegalArgumentException 如果函数名对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果未找到匹配函数则抛出异常
      */
     public Method getMethod(String methodName, Class<?>... params) {
@@ -110,9 +117,13 @@ public class ExactReflect {
      * @param methodName 函数名
      * @param params 函数参数
      * @return 函数对象
+     * @throws IllegalArgumentException 如果实例类对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果函数名对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果未找到匹配函数则抛出异常
      */
     private Method getMethod(Class<?> instanceClass, String methodName, Class<?>... params) {
+        Validate.notNull(instanceClass, "The instance class object is null.");
+        Validate.notNull(methodName, "The method name object is null.");
         Class<?>[] primitiveTypes = Reflect.DataType.getPrimitive(params);
         for(Method method : instanceClass.getDeclaredMethods()) {
             if((this.forceAccess || Modifier.isPublic(method.getModifiers())) &&
@@ -132,6 +143,7 @@ public class ExactReflect {
      *
      * @param fieldName 字段名
      * @return 字段对象
+     * @throws IllegalArgumentException 如果字段名对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果未找到匹配字段则抛出异常
      */
     public Field getField(String fieldName) {
@@ -157,9 +169,13 @@ public class ExactReflect {
      * @param instanceClass 实例类
      * @param fieldName 字段名
      * @return 字段对象
+     * @throws IllegalArgumentException 如果实例类对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果字段名对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果未找到匹配字段则抛出异常
      */
     private Field getField(Class<?> instanceClass, String fieldName) {
+        Validate.notNull(instanceClass, "The instance class object is null.");
+        Validate.notNull(fieldName, "The field name object is null.");
         for(Field field : instanceClass.getDeclaredFields()) {
             if(field.getName().equals(fieldName)) {
                 field.setAccessible(this.forceAccess);
