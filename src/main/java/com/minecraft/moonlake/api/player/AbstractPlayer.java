@@ -28,6 +28,7 @@ import com.minecraft.moonlake.api.packet.wrapper.*;
 import com.minecraft.moonlake.api.player.depend.EconomyPlayerData;
 import com.minecraft.moonlake.api.player.depend.EconomyVaultPlayerResponse;
 import com.minecraft.moonlake.api.player.depend.WorldEditSelection;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.CannotDependException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
@@ -139,13 +140,13 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public GameProfile getProfile() {
 
-        return PlayerManager.getProfile(getBukkitPlayer());
+        return MinecraftReflection.getEntityHumanProfile(getBukkitPlayer());
     }
 
     @Override
     public String getLanguage() {
 
-        return PlayerManager.getLanguage(getBukkitPlayer());
+        return MinecraftReflection.getPlayerLocale(getBukkitPlayer());
     }
 
     @Override

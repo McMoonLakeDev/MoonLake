@@ -21,16 +21,15 @@ package com.minecraft.moonlake.api.packet.wrapper;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
+import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-
-import java.lang.reflect.Method;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutBlockChange</h1>
@@ -45,27 +44,18 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 public class PacketPlayOutBlockChange extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTBLOCKCHANGE;
-    private final static Class<?> CLASS_BLOCKPOSITION;
-    private final static Class<?> CLASS_CRAFTWORLD;
-    private final static Class<?> CLASS_WORLD;
-    private final static Method METHOD_GETHANDLER;
-    private final static Method METHOD_GETTYPE;
+    private static volatile ConstructorAccessor<?> packetPlayOutBlockChangeVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutBlockChangeConstructor;
+    private static volatile MethodAccessor worldGetTypeMethod;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTBLOCKCHANGE = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutBlockChange");
-            CLASS_BLOCKPOSITION = PackageType.MINECRAFT_SERVER.getClass("BlockPosition");
-            CLASS_CRAFTWORLD = PackageType.CRAFTBUKKIT.getClass("CraftWorld");
-            CLASS_WORLD = PackageType.MINECRAFT_SERVER.getClass("World");
-            METHOD_GETHANDLER = getMethod(CLASS_CRAFTWORLD, "getHandle");
-            METHOD_GETTYPE = getMethod(CLASS_WORLD, "getType", CLASS_BLOCKPOSITION);
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The nms packet play out block change reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTBLOCKCHANGE = MinecraftReflection.getMinecraftClass("PacketPlayOutBlockChange");
+        Class<?> worldClass = MinecraftReflection.getMinecraftWorldClass();
+        Class<?> blockPositionClass = MinecraftReflection.getMinecraftBlockPositionClass();
+        packetPlayOutBlockChangeVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTBLOCKCHANGE);
+        packetPlayOutBlockChangeConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTBLOCKCHANGE, worldClass, blockPositionClass);
+        worldGetTypeMethod = Accessors.getMethodAccessor(worldClass, "getType", blockPositionClass);
     }
 
     private ObjectProperty<World> world;
@@ -110,9 +100,9 @@ public class PacketPlayOutBlockChange extends PacketPlayOutBukkitAbstract {
         try {
             // 先用调用 NMS 的 PacketPlayOutBlockChange 构造函数, 参数 World, BlockPosition
             // 进行反射实例发送
-            Object nmsWorld = METHOD_GETHANDLER.invoke(world.get());
-            Object packet = instantiateObject(CLASS_PACKETPLAYOUTBLOCKCHANGE, nmsWorld, blockPosition.get().asNMS());
-            sendPacket(players, packet);
+            Object worldServer = MinecraftReflection.getWorldServer(world.get());
+            Object packet = packetPlayOutBlockChangeConstructor.invoke(worldServer, blockPosition.get().asNMS());
+            MinecraftReflection.sendPacket(players, packet);
             return true;
 
         } catch (Exception e) {
@@ -121,9 +111,10 @@ public class PacketPlayOutBlockChange extends PacketPlayOutBukkitAbstract {
             try {
                 // 判断字段数量等于 2 个的话就是有此方式
                 // 这两个字段分别对应 BlockPosition, IBlockData 的 2 个属性
-                Object blockData = METHOD_GETTYPE.invoke(blockPosition.get());
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTBLOCKCHANGE);
-                Object[] values = { blockPosition.get(), blockData };
+                Object blockPositionObj = blockPosition.get().asNMS();
+                Object blockData = worldGetTypeMethod.invoke(blockPositionObj);
+                Object packet = packetPlayOutBlockChangeVoidConstructor.invoke();
+                Object[] values = { blockPositionObj, blockData };
                 setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTBLOCKCHANGE, packet, values);
                 return true;
 

@@ -22,21 +22,20 @@ import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.minecraft.moonlake.reflect.Reflect.PackageType;
-import static com.minecraft.moonlake.reflect.Reflect.instantiateObject;
 
 /**
  * <h1>PacketPlayOutAnimation</h1>
@@ -51,17 +50,12 @@ import static com.minecraft.moonlake.reflect.Reflect.instantiateObject;
 public class PacketPlayOutAnimation extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTANIMATION;
+    private static volatile ConstructorAccessor<?> packetPlayOutAnimationVoidConstructor;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTANIMATION = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutAnimation");
-
-        } catch (Exception e) {
-
-            throw new PacketInitializeException("The net.minecraft.server packet play out animation reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTANIMATION = MinecraftReflection.getMinecraftClass("PacketPlayOutAnimation");
+        packetPlayOutAnimationVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTANIMATION);
     }
 
     private IntegerProperty entityId;
@@ -151,7 +145,7 @@ public class PacketPlayOutAnimation extends PacketPlayOutBukkitAbstract {
 
         try {
             // 直接使用反射设置字段的方式来发送
-            Object packet = instantiateObject(CLASS_PACKETPLAYOUTANIMATION);
+            Object packet = packetPlayOutAnimationVoidConstructor.invoke();
             Object[] values = { entityId.get(), animationType.getId() };
             setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTANIMATION, packet, values);
             return true;

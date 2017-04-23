@@ -18,14 +18,15 @@
  
 package com.minecraft.moonlake.manager;
 
-import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
-import com.minecraft.moonlake.api.utility.MinecraftVersion;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
-import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.exception.NotImplementedException;
 import com.minecraft.moonlake.executor.Consumer;
-import com.minecraft.moonlake.reflect.Reflect;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
+import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Location;
@@ -36,81 +37,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.*;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * <h1>EntityManager</h1>
  * 实体管理实现类
  *
- * @version 1.0.1
+ * @version 1.1
  * @author Month_Light
  */
 public class EntityManager extends MoonLakeManager {
 
-    private final static Class<?> CLASS_WORLD;
-    private final static Class<?> CLASS_CRAFTWORLD;
-    private final static Class<?> CLASS_CRAFTENTITY;
-    private final static Class<?> CLASS_ENTITYINSENTIENT;
-    private final static Class<?> CLASS_PATHFINDERGOALSELECTOR;
-    private final static Class<?> CLASS_UNSAFELIST;
-    private final static Class<?> CLASS_IATTRIBUTE;
-    private final static Class<?> CLASS_ENTITY;
-    private final static Class<?> CLASS_ENTITYITEM;
-    private final static Class<?> CLASS_ENTITYLIVING;
-    private final static Class<?> CLASS_ATTRIBUTEINSTANCE;
-    private final static Class<?> CLASS_GENERICATTRIBUTES;
-    private final static Method METHOD_GETENTITYHANDLE;
-    private final static Method METHOD_GETWORLDHANDLE;
-    private final static Method METHOD_GETATTRIBUTEINSTANCE;
-    private final static Method METHOD_GETVALUE;
-    private final static Method METHOD_SETVALUE;
-    private final static Method METHOD_SETCUSTOMNAME;
-    private final static Method METHOD_SETCUSTOMNAMEVISIBLE;
-    private final static Method METHOD_ADDENTITY;
-    private final static Method METHOD_GETBUKKITENTITY;
-    private final static Field FIELD_GOALSELECTOR;
-    private final static Field FIELD_TARGETSELECTOR;
-    private final static Field FIELD_PATHFINDERGOALSELECTOR_B;
-    private final static Field FIELD_PATHFINDERGOALSELECTOR_C;
+    private static volatile ConstructorAccessor<?> entityItemConstructor;
+    private static volatile MethodAccessor entityItemSetCustomNameMethod;
+    private static volatile MethodAccessor entityItemSetCustomNameVisibleMethod;
 
     static {
-
-        try {
-
-            CLASS_WORLD = PackageType.MINECRAFT_SERVER.getClass("World");
-            CLASS_CRAFTWORLD = PackageType.CRAFTBUKKIT.getClass("CraftWorld");
-            CLASS_CRAFTENTITY = PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftEntity");
-            CLASS_ENTITYINSENTIENT = PackageType.MINECRAFT_SERVER.getClass("EntityInsentient");
-            CLASS_PATHFINDERGOALSELECTOR = PackageType.MINECRAFT_SERVER.getClass("PathfinderGoalSelector");
-            CLASS_UNSAFELIST = PackageType.CRAFTBUKKIT_UTIL.getClass("UnsafeList");
-            CLASS_IATTRIBUTE = PackageType.MINECRAFT_SERVER.getClass("IAttribute");
-            CLASS_ENTITY = PackageType.MINECRAFT_SERVER.getClass("Entity");
-            CLASS_ENTITYITEM = PackageType.MINECRAFT_SERVER.getClass("EntityItem");
-            CLASS_ENTITYLIVING = PackageType.MINECRAFT_SERVER.getClass("EntityLiving");
-            CLASS_ATTRIBUTEINSTANCE = PackageType.MINECRAFT_SERVER.getClass("AttributeInstance");
-            CLASS_GENERICATTRIBUTES = PackageType.MINECRAFT_SERVER.getClass("GenericAttributes");
-            METHOD_GETENTITYHANDLE = getMethod(CLASS_CRAFTENTITY, "getHandle");
-            METHOD_GETWORLDHANDLE = getMethod(CLASS_CRAFTWORLD, "getHandle");
-            METHOD_GETATTRIBUTEINSTANCE = getMethod(CLASS_ENTITYLIVING, "getAttributeInstance", CLASS_IATTRIBUTE);
-            METHOD_GETVALUE = getMethod(CLASS_ATTRIBUTEINSTANCE, "getValue");
-            METHOD_SETVALUE = getMethod(CLASS_ATTRIBUTEINSTANCE, "setValue", double.class);
-            METHOD_SETCUSTOMNAME = getMethod(CLASS_ENTITYITEM, "setCustomName", String.class);
-            METHOD_SETCUSTOMNAMEVISIBLE = getMethod(CLASS_ENTITYITEM, "setCustomNameVisible", boolean.class);
-            METHOD_ADDENTITY = getMethod(CLASS_WORLD, "addEntity", CLASS_ENTITY, CreatureSpawnEvent.SpawnReason.class);
-            METHOD_GETBUKKITENTITY = getMethod(CLASS_ENTITY, "getBukkitEntity");
-            FIELD_GOALSELECTOR = getField(CLASS_ENTITYINSENTIENT, true, "goalSelector");
-            FIELD_TARGETSELECTOR = getField(CLASS_ENTITYINSENTIENT, true, "targetSelector");
-            FIELD_PATHFINDERGOALSELECTOR_B = getField(CLASS_PATHFINDERGOALSELECTOR, true, "b");
-            FIELD_PATHFINDERGOALSELECTOR_C = getField(CLASS_PATHFINDERGOALSELECTOR, true, "c");
-        }
-        catch (Exception e) {
-
-            throw new IllegalBukkitVersionException("The entity manager reflect raw exception.", e);
-        }
     }
 
     /**
@@ -126,19 +71,13 @@ public class EntityManager extends MoonLakeManager {
      * @param entity Bukkit 实体
      * @return NMS 实体
      * @throws IllegalArgumentException 如果 Bukkit 实体对象为 {@code null} 则抛出异常
+     * @see MinecraftReflection#getEntity(Entity)
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MinecraftReflection#getEntity(Entity)}
      */
-    public static Object asNMSEntity(Entity entity) {
+    @Deprecated
+    public static Object asNMSEntity(Entity entity) { // TODO 2.0
 
-        Validate.notNull(entity, "The entity object is null.");
-
-        try {
-
-            return METHOD_GETENTITYHANDLE.invoke(entity);
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The get entity nms entity exception.", e);
-        }
+        return MinecraftReflection.getEntity(entity);
     }
 
     /**
@@ -150,16 +89,7 @@ public class EntityManager extends MoonLakeManager {
      */
     public static Entity getBukkitEntity(Object nmsEntity) {
 
-        Validate.notNull(nmsEntity, "The nms entity object is null.");
-
-        try {
-
-            return (Entity) METHOD_GETBUKKITENTITY.invoke(nmsEntity);
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The get nms entity bukkit entity exception.", e);
-        }
+        return MinecraftReflection.getBukkitEntity(nmsEntity);
     }
 
     /**
@@ -170,10 +100,12 @@ public class EntityManager extends MoonLakeManager {
      * @return 是否成功
      * @throws IllegalArgumentException 如果 NMS 世界对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果 NMS 实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MinecraftReflection#addEntity(Object, Object)}
      */
-    public static boolean addEntity(Object nmsWorld, Object nmsEntity) {
+    @Deprecated
+    public static boolean addEntity(Object nmsWorld, Object nmsEntity) { // TODO 2.0
 
-        return addEntity(nmsWorld, nmsEntity, null);
+        return MinecraftReflection.addEntity(nmsWorld, nmsEntity);
     }
 
     /**
@@ -185,22 +117,13 @@ public class EntityManager extends MoonLakeManager {
      * @return 是否成功
      * @throws IllegalArgumentException 如果 NMS 世界对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果 NMS 实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link MinecraftReflection#addEntity(Object, Object, CreatureSpawnEvent.SpawnReason)}
+     * @see MinecraftReflection#addEntity(Object, Object, CreatureSpawnEvent.SpawnReason)
      */
-    public static boolean addEntity(Object nmsWorld, Object nmsEntity, CreatureSpawnEvent.SpawnReason reason) {
+    @Deprecated
+    public static boolean addEntity(Object nmsWorld, Object nmsEntity, CreatureSpawnEvent.SpawnReason reason) { // TODO 2.0
 
-        Validate.notNull(nmsWorld, "The nms world object is null.");
-        Validate.notNull(nmsEntity, "The nms entity object is null.");
-
-        try {
-
-            if(reason == null) reason = CreatureSpawnEvent.SpawnReason.DEFAULT;
-
-            return (boolean) METHOD_ADDENTITY.invoke(nmsWorld, nmsEntity, reason);
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The add entity exception.", e);
-        }
+        return MinecraftReflection.addEntity(nmsWorld, nmsEntity, reason);
     }
 
     /**
@@ -248,26 +171,23 @@ public class EntityManager extends MoonLakeManager {
         Validate.notNull(location, "The location object is null.");
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        try {
-
-            Object nmsItemStack = ItemManager.asNMSCopy(itemStack);
-            Object nmsWorld = METHOD_GETWORLDHANDLE.invoke(location.getWorld());
-            Object nmsEntityItem = instantiateObject(CLASS_ENTITYITEM, nmsWorld, location.getX(), location.getY(), location.getZ(), nmsItemStack);
-
-            if(customName != null) {
-
-                METHOD_SETCUSTOMNAME.invoke(nmsEntityItem, StringUtil.toColor(customName));
-            }
-            METHOD_SETCUSTOMNAMEVISIBLE.invoke(nmsEntityItem, customNameVisible);
-
-            addEntity(nmsWorld, nmsEntityItem, CreatureSpawnEvent.SpawnReason.CUSTOM);
-
-            return (Item) getBukkitEntity(nmsEntityItem);
+        if(entityItemConstructor == null) {
+            Class<?> worldClass = MinecraftReflection.getMinecraftWorldClass();
+            Class<?> itemStackClass = MinecraftReflection.getMinecraftItemStackClass();
+            Class<?> entityItemClass = MinecraftReflection.getMinecraftEntityItemClass();
+            entityItemConstructor = Accessors.getConstructorAccessor(entityItemClass, worldClass, double.class, double.class, double.class, itemStackClass);
+            entityItemSetCustomNameMethod = Accessors.getMethodAccessor(entityItemClass, "setCustomName", String.class);
+            entityItemSetCustomNameVisibleMethod = Accessors.getMethodAccessor(entityItemClass, "setCustomNameVisible", boolean.class);
         }
-        catch (Exception e) {
+        Object nmsItemStack = MinecraftReflection.asNMSCopy(itemStack);
+        Object nmsWorld = MinecraftReflection.getWorldServer(location.getWorld());
+        Object nmsEntityItem = entityItemConstructor.invoke(nmsWorld, location.getX(), location.getY(), location.getZ(), nmsItemStack);
 
-            throw new MoonLakeException("The drop itemstack entity exception.", e);
-        }
+        if(!StringUtil.isEmpty(customName))
+            entityItemSetCustomNameMethod.invoke(nmsEntityItem, StringUtil.toColor(customName));
+        entityItemSetCustomNameVisibleMethod.invoke(nmsEntityItem, customNameVisible);
+        MinecraftReflection.addEntity(nmsWorld, nmsEntityItem, CreatureSpawnEvent.SpawnReason.CUSTOM);
+        return (Item) getBukkitEntity(nmsEntityItem);
     }
 
     /**
@@ -275,40 +195,12 @@ public class EntityManager extends MoonLakeManager {
      *
      * @param entity 实体
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已弃用, 将于 v1.9-a5 删除.
      */
+    @Deprecated
     public static void removePathFinders(Entity entity) {
 
-        Validate.notNull(entity, "The entity object is null.");
-
-        try {
-
-            Object nmsEntity = METHOD_GETENTITYHANDLE.invoke(entity);
-
-            if(CLASS_ENTITYINSENTIENT.isInstance(nmsEntity)) {
-
-                Object nmsGoalSelector = FIELD_GOALSELECTOR.get(nmsEntity);
-                Object nmsTargetSelector = FIELD_TARGETSELECTOR.get(nmsEntity);
-
-                if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
-
-                    FIELD_PATHFINDERGOALSELECTOR_B.set(nmsGoalSelector, instantiateObject(CLASS_UNSAFELIST));
-                    FIELD_PATHFINDERGOALSELECTOR_C.set(nmsGoalSelector, instantiateObject(CLASS_UNSAFELIST));
-                    FIELD_PATHFINDERGOALSELECTOR_B.set(nmsTargetSelector, instantiateObject(CLASS_UNSAFELIST));
-                    FIELD_PATHFINDERGOALSELECTOR_C.set(nmsTargetSelector, instantiateObject(CLASS_UNSAFELIST));
-                }
-                else {
-
-                    FIELD_PATHFINDERGOALSELECTOR_B.set(nmsGoalSelector, new LinkedHashSet<>());
-                    FIELD_PATHFINDERGOALSELECTOR_C.set(nmsGoalSelector, new LinkedHashSet<>());
-                    FIELD_PATHFINDERGOALSELECTOR_B.set(nmsTargetSelector, new LinkedHashSet<>());
-                    FIELD_PATHFINDERGOALSELECTOR_C.set(nmsTargetSelector, new LinkedHashSet<>());
-                }
-            }
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The remove entity path finders ai exception.", e);
-        }
+        throw new NotImplementedException();
     }
 
     /**
@@ -453,10 +345,25 @@ public class EntityManager extends MoonLakeManager {
      * @param value 值
      * @see AttributeType#MOVEMENT_SPEED
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeMovementSpeed(LivingEntity, double)}
      */
-    public static void setMovementSpeed(Entity entity, double value) {
+    @Deprecated
+    public static void setMovementSpeed(Entity entity, double value) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        setAttributeMovementSpeed((LivingEntity) entity, value);
+    }
 
-        setAttribute(entity, AttributeType.MOVEMENT_SPEED, value);
+    /**
+     * 设置指定实体的移动速度值
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#MOVEMENT_SPEED
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static void setAttributeMovementSpeed(LivingEntity livingEntity, double value) {
+        setAttributeValue(livingEntity, AttributeType.MOVEMENT_SPEED, value);
     }
 
     /**
@@ -465,10 +372,24 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @return 实体的移动速度值
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeMovementSpeed(LivingEntity)}
      */
-    public static double getMovementSpeed(Entity entity) {
+    @Deprecated
+    public static double getMovementSpeed(Entity entity) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        return getAttributeMovementSpeed((LivingEntity) entity);
+    }
 
-        return getAttribute(entity, AttributeType.MOVEMENT_SPEED);
+    /**
+     * 获取指定实体的移动速度值
+     *
+     * @param livingEntity 实体
+     * @return 实体的移动速度值
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static double getAttributeMovementSpeed(LivingEntity livingEntity) {
+        return getAttributeValue(livingEntity, AttributeType.MOVEMENT_SPEED);
     }
 
     /**
@@ -478,10 +399,25 @@ public class EntityManager extends MoonLakeManager {
      * @param value 值
      * @see AttributeType#KNOCK_BACK_RESISTANCE
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeKnockBackResistance(LivingEntity, double)}
      */
-    public static void setKnockBackResistance(Entity entity, double value) {
+    @Deprecated
+    public static void setKnockBackResistance(Entity entity, double value) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        setAttributeKnockBackResistance((LivingEntity) entity, value);
+    }
 
-        setAttribute(entity, AttributeType.KNOCK_BACK_RESISTANCE, value);
+    /**
+     * 设置指定实体的击退抗性值
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#KNOCK_BACK_RESISTANCE
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static void setAttributeKnockBackResistance(LivingEntity livingEntity, double value) {
+        setAttributeValue(livingEntity, AttributeType.KNOCK_BACK_RESISTANCE, value);
     }
 
     /**
@@ -490,10 +426,24 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @return 实体的击退抗性值
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeKnockBackResistance(LivingEntity)}
      */
-    public static double getKnockBackResistance(Entity entity) {
+    @Deprecated
+    public static double getKnockBackResistance(Entity entity) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        return getAttributeKnockBackResistance((LivingEntity) entity);
+    }
 
-        return getAttribute(entity, AttributeType.KNOCK_BACK_RESISTANCE);
+    /**
+     * 获取指定实体的击退抗性值
+     *
+     * @param livingEntity 实体
+     * @return 实体的击退抗性值
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static double getAttributeKnockBackResistance(LivingEntity livingEntity) {
+        return getAttributeValue(livingEntity, AttributeType.KNOCK_BACK_RESISTANCE);
     }
 
     /**
@@ -503,10 +453,25 @@ public class EntityManager extends MoonLakeManager {
      * @param value 值
      * @see AttributeType#ATTACK_DAMAGE
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeAttackDamage(LivingEntity, double)}
      */
-    public static void setDamage(Entity entity, double value) {
+    @Deprecated
+    public static void setDamage(Entity entity, double value) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        setAttributeAttackDamage((LivingEntity) entity, value);
+    }
 
-        setAttribute(entity, AttributeType.ATTACK_DAMAGE, value);
+    /**
+     * 设置指定实体的攻击伤害值
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#ATTACK_DAMAGE
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static void setAttributeAttackDamage(LivingEntity livingEntity, double value) {
+        setAttributeValue(livingEntity, AttributeType.ATTACK_DAMAGE, value);
     }
 
     /**
@@ -515,10 +480,24 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @return 实体的攻击伤害值
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeAttackDamage(LivingEntity)}
      */
-    public static double getDamage(Entity entity) {
+    @Deprecated
+    public static double getDamage(Entity entity) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        return getAttributeAttackDamage((LivingEntity) entity);
+    }
 
-        return getAttribute(entity, AttributeType.ATTACK_DAMAGE);
+    /**
+     * 获取指定实体的攻击伤害值
+     *
+     * @param livingEntity 实体
+     * @return 实体的攻击伤害值
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static double getAttributeAttackDamage(LivingEntity livingEntity) {
+        return getAttributeValue(livingEntity, AttributeType.ATTACK_DAMAGE);
     }
 
     /**
@@ -528,10 +507,25 @@ public class EntityManager extends MoonLakeManager {
      * @param value 值
      * @see AttributeType#MAX_HEALTH
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeMaxHealth(LivingEntity, double)}
      */
-    public static void setMaxHealth(Entity entity, double value) {
+    @Deprecated
+    public static void setMaxHealth(Entity entity, double value) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        setAttributeMaxHealth((LivingEntity) entity, value);
+    }
 
-        setMaxHealth(entity, value, true);
+    /**
+     * 设置指定实体的血量上限值
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#MAX_HEALTH
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static void setAttributeMaxHealth(LivingEntity livingEntity, double value) {
+        setAttributeMaxHealth(livingEntity, value, true);
     }
 
     /**
@@ -542,15 +536,28 @@ public class EntityManager extends MoonLakeManager {
      * @param regain 是否恢复
      * @see AttributeType#MAX_HEALTH
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeMaxHealth(LivingEntity, double, boolean)}
      */
-    public static void setMaxHealth(Entity entity, double value, boolean regain) {
+    @Deprecated
+    public static void setMaxHealth(Entity entity, double value, boolean regain) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        setAttributeMaxHealth((LivingEntity) entity, value, regain);
+    }
 
-        setAttribute(entity, AttributeType.MAX_HEALTH, value);
-
-        if(regain && entity instanceof LivingEntity) {
-
-            ((LivingEntity)entity).setHealth(value);
-        }
+    /**
+     * 设置指定实体的血量上限值
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @param regain 是否恢复
+     * @see AttributeType#MAX_HEALTH
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static void setAttributeMaxHealth(LivingEntity livingEntity, double value, boolean regain) {
+        setAttributeValue(livingEntity, AttributeType.MAX_HEALTH, value);
+        if(regain)
+            livingEntity.setHealth(value);
     }
 
     /**
@@ -560,10 +567,25 @@ public class EntityManager extends MoonLakeManager {
      * @param value 值
      * @see AttributeType#FOLLOW_RANGE
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeFollowRange(LivingEntity, double)}
      */
-    public static void setFollowRange(Entity entity, double value) {
+    @Deprecated
+    public static void setFollowRange(Entity entity, double value) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        setAttributeFollowRange((LivingEntity) entity, value);
+    }
 
-        setAttribute(entity, AttributeType.FOLLOW_RANGE, value);
+    /**
+     * 设置指定实体的追踪范围
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#FOLLOW_RANGE
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static void setAttributeFollowRange(LivingEntity livingEntity, double value) {
+        setAttributeValue(livingEntity, AttributeType.FOLLOW_RANGE, value);
     }
 
     /**
@@ -572,10 +594,24 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @return 实体的追踪范围
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeFollowRange(LivingEntity)}
      */
-    public static double getFollowRange(Entity entity) {
+    @Deprecated
+    public static double getFollowRange(Entity entity) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        return getAttributeFollowRange((LivingEntity) entity);
+    }
 
-        return getAttribute(entity, AttributeType.FOLLOW_RANGE);
+    /**
+     * 获取指定实体的追踪范围
+     *
+     * @param livingEntity 实体
+     * @return 实体的追踪范围
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static double getAttributeFollowRange(LivingEntity livingEntity) {
+        return getAttributeValue(livingEntity, AttributeType.FOLLOW_RANGE);
     }
 
     /**
@@ -585,10 +621,25 @@ public class EntityManager extends MoonLakeManager {
      * @param value 值
      * @see AttributeType#FOLLOW_RANGE
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeAttackSpeed(LivingEntity, double)}
      */
-    public static void setAttackSpeed(Entity entity, double value) {
+    @Deprecated
+    public static void setAttackSpeed(Entity entity, double value) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        setAttributeAttackSpeed((LivingEntity) entity, value);
+    }
 
-        setAttribute(entity, AttributeType.ATTACK_SPEED, value);
+    /**
+     * 设置指定实体的攻击速度
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#FOLLOW_RANGE
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static void setAttributeAttackSpeed(LivingEntity livingEntity, double value) {
+        setAttributeValue(livingEntity, AttributeType.ATTACK_SPEED, value);
     }
 
     /**
@@ -597,10 +648,24 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @return 实体的攻击速度
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeAttackSpeed(LivingEntity)}
      */
-    public static double getAttackSpeed(Entity entity) {
+    @Deprecated
+    public static double getAttackSpeed(Entity entity) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        return getAttributeAttackSpeed((LivingEntity) entity);
+    }
 
-        return getAttribute(entity, AttributeType.ATTACK_SPEED);
+    /**
+     * 获取指定实体的攻击速度
+     *
+     * @param livingEntity 实体
+     * @return 实体的攻击速度
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static double getAttributeAttackSpeed(LivingEntity livingEntity) {
+        return getAttributeValue(livingEntity, AttributeType.ATTACK_SPEED);
     }
 
     /**
@@ -610,10 +675,25 @@ public class EntityManager extends MoonLakeManager {
      * @param value 值
      * @see AttributeType#ARMOR
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeArmor(LivingEntity, double)}
      */
-    public static void setArmor(Entity entity, double value) {
+    @Deprecated
+    public static void setArmor(Entity entity, double value) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        setAttributeArmor((LivingEntity) entity, value);
+    }
 
-        setAttribute(entity, AttributeType.ARMOR, value);
+    /**
+     * 设置指定实体的护甲
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#ARMOR
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static void setAttributeArmor(LivingEntity livingEntity, double value) {
+        setAttributeValue(livingEntity, AttributeType.ARMOR, value);
     }
 
     /**
@@ -622,10 +702,24 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @return 实体的护甲
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeArmor(LivingEntity)}
      */
-    public static double getArmor(Entity entity) {
+    @Deprecated
+    public static double getArmor(Entity entity) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        return getAttributeArmor((LivingEntity) entity);
+    }
 
-        return getAttribute(entity, AttributeType.ARMOR);
+    /**
+     * 获取指定实体的护甲
+     *
+     * @param livingEntity 实体
+     * @return 实体的护甲
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static double getAttributeArmor(LivingEntity livingEntity) {
+        return getAttributeValue(livingEntity, AttributeType.ARMOR);
     }
 
     /**
@@ -635,10 +729,25 @@ public class EntityManager extends MoonLakeManager {
      * @param value 值
      * @see AttributeType#ARMOR_TOUGHNESS
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeArmorToughness(LivingEntity, double)}
      */
-    public static void setArmorToughness(Entity entity, double value) {
+    @Deprecated
+    public static void setArmorToughness(Entity entity, double value) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        setAttributeArmorToughness((LivingEntity) entity, value);
+    }
 
-        setAttribute(entity, AttributeType.ARMOR_TOUGHNESS, value);
+    /**
+     * 设置指定实体的护甲韧性
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#ARMOR_TOUGHNESS
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static void setAttributeArmorToughness(LivingEntity livingEntity, double value) {
+        setAttributeValue(livingEntity, AttributeType.ARMOR_TOUGHNESS, value);
     }
 
     /**
@@ -647,10 +756,24 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @return 实体的护甲韧性
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeArmorToughness(LivingEntity)}
      */
-    public static double getArmorToughness(Entity entity) {
+    @Deprecated
+    public static double getArmorToughness(Entity entity) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        return getAttributeArmorToughness((LivingEntity) entity);
+    }
 
-        return getAttribute(entity, AttributeType.ARMOR_TOUGHNESS);
+    /**
+     * 获取指定实体的护甲韧性
+     *
+     * @param livingEntity 实体
+     * @return 实体的护甲韧性
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static double getAttributeArmorToughness(LivingEntity livingEntity) {
+        return getAttributeValue(livingEntity, AttributeType.ARMOR_TOUGHNESS);
     }
 
     /**
@@ -660,10 +783,25 @@ public class EntityManager extends MoonLakeManager {
      * @param value 值
      * @see AttributeType#LUCK
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeLuck(LivingEntity, double)}
      */
-    public static void setLuck(Entity entity, double value) {
+    @Deprecated
+    public static void setLuck(Entity entity, double value) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        setAttributeLuck((LivingEntity) entity, value);
+    }
 
-        setAttribute(entity, AttributeType.LUCK, value);
+    /**
+     * 设置指定实体的幸运
+     *
+     * @param livingEntity 实体
+     * @param value 值
+     * @see AttributeType#LUCK
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static void setAttributeLuck(LivingEntity livingEntity, double value) {
+        setAttributeValue(livingEntity, AttributeType.LUCK, value);
     }
 
     /**
@@ -672,10 +810,24 @@ public class EntityManager extends MoonLakeManager {
      * @param entity 实体
      * @return 实体的幸运
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeLuck(LivingEntity)}
      */
-    public static double getLuck(Entity entity) {
+    @Deprecated
+    public static double getLuck(Entity entity) { // TODO 2.0
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        return getAttributeLuck((LivingEntity) entity);
+    }
 
-        return getAttribute(entity, AttributeType.LUCK);
+    /**
+     * 获取指定实体的幸运
+     *
+     * @param livingEntity 实体
+     * @return 实体的幸运
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     */
+    public static double getAttributeLuck(LivingEntity livingEntity) {
+        return getAttributeValue(livingEntity, AttributeType.LUCK);
     }
 
     /**
@@ -688,26 +840,29 @@ public class EntityManager extends MoonLakeManager {
      * @throws IllegalArgumentException 如果属性类型对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果属性类型的值小于或大于限制则抛出异常
      * @throws IllegalBukkitVersionException 如果属性类型不支持服务器版本则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #setAttributeValue(LivingEntity, AttributeType, double)}
      */
-    public static void setAttribute(Entity entity, AttributeType type, double value) {
+    @Deprecated
+    public static void setAttribute(Entity entity, AttributeType type, double value) { // TODO 2.0
 
-        Validate.notNull(entity, "The entity object is null.");
-        Validate.notNull(type, "The attribute type object is null.");
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        setAttributeValue((LivingEntity) entity, type, value);
+    }
 
-        type.isSupported();
-
-        try {
-
-            Object nmsEntity = asNMSEntity(entity);
-
-            Field FIELD = Reflect.getField(CLASS_GENERICATTRIBUTES, true, type.getField());
-
-            METHOD_SETVALUE.invoke(METHOD_GETATTRIBUTEINSTANCE.invoke(nmsEntity, FIELD.get(null)), type.getSafeValue(value));
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The set entity attribute exception.", e);
-        }
+    /**
+     * 设置指定实体的指定属性类型的值
+     *
+     * @param livingEntity 实体
+     * @param type 属性类型
+     * @param value 值
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果属性类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果属性类型的值小于或大于限制则抛出异常
+     * @throws IllegalBukkitVersionException 如果属性类型不支持服务器版本则抛出异常
+     */
+    public static void setAttributeValue(LivingEntity livingEntity, AttributeType type, double value) {
+        MinecraftReflection.setAttributeValue(livingEntity, type, value);
     }
 
     /**
@@ -719,26 +874,28 @@ public class EntityManager extends MoonLakeManager {
      * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果属性类型对象为 {@code null} 则抛出异常
      * @throws IllegalBukkitVersionException 如果属性类型不支持服务器版本则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getAttributeValue(LivingEntity, AttributeType)}
      */
-    public static double getAttribute(Entity entity, AttributeType type) {
+    @Deprecated
+    public static double getAttribute(Entity entity, AttributeType type) { // TODO 2.0
 
-        Validate.notNull(entity, "The entity object is null.");
-        Validate.notNull(type, "The attribute type object is null.");
+        if(!(entity instanceof LivingEntity))
+            throw new IllegalStateException("The entity object not is LivingEntity instance.");
+        return getAttributeValue((LivingEntity) entity, type);
+    }
 
-        type.isSupported();
-
-        try {
-
-            Object nmsEntity = asNMSEntity(entity);
-
-            Field FIELD = Reflect.getField(CLASS_GENERICATTRIBUTES, true, type.getField());
-
-            return (Double) METHOD_GETVALUE.invoke(METHOD_GETATTRIBUTEINSTANCE.invoke(nmsEntity, FIELD.get(null)));
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The get entity attribute exception.", e);
-        }
+    /**
+     * 获取指定实体的指定属性类型的值
+     *
+     * @param livingEntity 实体
+     * @param type 属性类型
+     * @return 属性类型的值 异常返回 -1
+     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果属性类型对象为 {@code null} 则抛出异常
+     * @throws IllegalBukkitVersionException 如果属性类型不支持服务器版本则抛出异常
+     */
+    public static double getAttributeValue(LivingEntity livingEntity, AttributeType type) {
+        return MinecraftReflection.getAttributeValue(livingEntity, type);
     }
 
     /**

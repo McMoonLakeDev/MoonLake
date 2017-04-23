@@ -18,8 +18,12 @@
  
 package com.minecraft.moonlake.api.nbt;
 
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.nbt.exception.NBTException;
 import com.minecraft.moonlake.nbt.exception.NBTInitializeException;
+import com.minecraft.moonlake.reflect.FuzzyReflect;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -27,33 +31,23 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>NBTEntityExpression</h1>
  * NBT 实体接口实现类
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 class NBTEntityExpression implements NBTEntity {
 
-    private Class<?> CLASS_ENTITY;
-    private Class<?> CLASS_ENTITYPLAYER;
-    private Class<?> CLASS_CRAFTENTITY;
-    private Method METHOD_GETHANDLEENTITY;
-    private Method METHOD_READENTITY;
-    private Method METHOD_WRITEENTITY;
-    private Method METHOD_READPLAYER;
-    private Method METHOD_WRITEPLAYER;
-    private Method METHOD_CREATEENTITY;
-    private Method METHOD_GETWORLDHANDLE;
-    private Method METHOD_GETBUKKITENTITY;
-    private Method METHOD_ADDENTITYTOWORLD;
+    private volatile MethodAccessor entityReadMethod;
+    private volatile MethodAccessor entityWriteMethod;
+    private volatile MethodAccessor entityPlayerReadMethod;
+    private volatile MethodAccessor entityPlayerWriteMethod;
+    private volatile MethodAccessor entityTypesCreateEntityMethod;
 
     /**
      * NBT 实体接口实现类构造函数
@@ -62,30 +56,17 @@ class NBTEntityExpression implements NBTEntity {
      */
     public NBTEntityExpression() throws NBTInitializeException {
 
+        Class<?> worldClass = MinecraftReflection.getMinecraftWorldClass();
+        Class<?> entityClass = MinecraftReflection.getMinecraftEntityClass();
+        Class<?> entityTypesClass = MinecraftReflection.getMinecraftEntityTypesClass();
+        Class<?> nbtTagCompoundClass = MinecraftReflection.getNBTTagCompoundClass();
+
         try {
-
-            // NBT Tag Entity Class
-            CLASS_ENTITY = PackageType.MINECRAFT_SERVER.getClass("Entity");
-            CLASS_ENTITYPLAYER = PackageType.MINECRAFT_SERVER.getClass("EntityPlayer");
-            CLASS_CRAFTENTITY = PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftEntity");
-
-            // NBT Tag Entity Method
-            METHOD_GETHANDLEENTITY = getMethod(CLASS_CRAFTENTITY, "getHandle");
-
-            Class<?> CLASS_CRAFTWORLD = PackageType.CRAFTBUKKIT.getClass("CraftWorld");
-            Class<?> CLASS_WORLDSERVER = PackageType.MINECRAFT_SERVER.getClass("WorldServer");
-            Class<?> CLASS_WORLD = PackageType.MINECRAFT_SERVER.getClass("World");
-            Class<?> CLASS_NBTTAGCOMPOUND = PackageType.MINECRAFT_SERVER.getClass("NBTTagCompound");
-            Class<?> CLASS_ENTITYTYPES = PackageType.MINECRAFT_SERVER.getClass("EntityTypes");
-
-            METHOD_CREATEENTITY = getMethod(CLASS_ENTITYTYPES, "a", CLASS_NBTTAGCOMPOUND, CLASS_WORLD);
-            METHOD_GETWORLDHANDLE = getMethod(CLASS_CRAFTWORLD, "getHandle");
-            METHOD_GETBUKKITENTITY = getMethod(CLASS_ENTITY, "getBukkitEntity");
-            METHOD_ADDENTITYTOWORLD = getMethod(CLASS_WORLD, "addEntity", CLASS_ENTITY, CreatureSpawnEvent.SpawnReason.class);
-
-            METHOD_WRITEENTITY = METHOD_WRITEPLAYER = getMethod(CLASS_ENTITY, "f", CLASS_NBTTAGCOMPOUND);
-            METHOD_READENTITY = getMethod(CLASS_ENTITY, "c", CLASS_NBTTAGCOMPOUND);
-            METHOD_READPLAYER = getMethod(CLASS_ENTITY, "e", CLASS_NBTTAGCOMPOUND);
+            // 这个 EntityTypes 类可以用模糊反射, 但是 Entity 类这几个函数都是同样参数同样返回值, 暂时不用
+            entityTypesCreateEntityMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(entityTypesClass, true).getMethodByParameters("a", entityClass, new Class[] { nbtTagCompoundClass, worldClass }));
+            entityReadMethod = Accessors.getMethodAccessor(entityClass, "c", nbtTagCompoundClass);
+            entityPlayerReadMethod = Accessors.getMethodAccessor(entityClass, "e", nbtTagCompoundClass);
+            entityWriteMethod = entityPlayerWriteMethod = Accessors.getMethodAccessor(entityClass, "f", nbtTagCompoundClass);
         }
         catch(Exception e) {
 
@@ -101,7 +82,7 @@ class NBTEntityExpression implements NBTEntity {
 
         try {
 
-            return METHOD_GETHANDLEENTITY.invoke(entity);
+            return MinecraftReflection.getEntity(entity);
         }
         catch (Exception e) {
 
@@ -119,13 +100,13 @@ class NBTEntityExpression implements NBTEntity {
 
         try {
 
-            if(CLASS_ENTITYPLAYER.isInstance(nmsEntity)) {
+            if(MinecraftReflection.getMinecraftEntityPlayerClass().isInstance(nmsEntity)) {
 
-                METHOD_READPLAYER.invoke(nmsEntity, nbtTagCompound);
+                entityPlayerReadMethod.invoke(nmsEntity, nbtTagCompound);
             }
             else {
 
-                METHOD_READENTITY.invoke(nmsEntity, nbtTagCompound);
+                entityReadMethod.invoke(nmsEntity, nbtTagCompound);
             }
         }
         catch (Exception e) {
@@ -146,11 +127,11 @@ class NBTEntityExpression implements NBTEntity {
 
             if(entity.getType() == EntityType.PLAYER) {
 
-                METHOD_WRITEPLAYER.invoke(nmsEntity, nbtTagCompound);
+                entityPlayerWriteMethod.invoke(nmsEntity, nbtTagCompound);
             }
             else {
 
-                METHOD_WRITEENTITY.invoke(nmsEntity, nbtTagCompound);
+                entityWriteMethod.invoke(nmsEntity, nbtTagCompound);
             }
         }
         catch (Exception e) {
@@ -168,15 +149,15 @@ class NBTEntityExpression implements NBTEntity {
         try {
 
             nbtTagCompound = NBTReflect.getHandle().cloneTag(nbtTagCompound);
-            Object nmsWorld = METHOD_GETWORLDHANDLE.invoke(world);
-            Object nmsEntity = METHOD_CREATEENTITY.invoke(null, nbtTagCompound, nmsWorld);
+            Object nmsWorld = MinecraftReflection.getWorldServer(world);
+            Object nmsEntity = entityTypesCreateEntityMethod.invoke(null, nbtTagCompound, nmsWorld);
 
             if(nmsEntity == null) {
 
                 return null;
             }
-            METHOD_ADDENTITYTOWORLD.invoke(nmsWorld, nmsEntity, CreatureSpawnEvent.SpawnReason.CUSTOM);
-            Entity entity = (Entity) METHOD_GETBUKKITENTITY.invoke(nmsEntity);
+            MinecraftReflection.addEntity(nmsWorld, nmsEntity, CreatureSpawnEvent.SpawnReason.CUSTOM);
+            Entity entity = MinecraftReflection.getBukkitEntity(nmsEntity);
             Location location = entity.getLocation();
             Object tagPos = NBTReflect.getHandle().createTagList();
             NBTReflect.getHandle().setNBTTagListType(tagPos, (byte) 6);
@@ -197,14 +178,14 @@ class NBTEntityExpression implements NBTEntity {
                 }
                 Map<String, Object> ridingMap = NBTReflect.getHandle().getHandleMap(nbtTagCompound);
                 ridingMap.put("Pos", NBTReflect.getHandle().cloneTag(tagPos));
-                Object nmsRiding = METHOD_CREATEENTITY.invoke(null, nbtTagCompound, nmsWorld);
+                Object nmsRiding = entityTypesCreateEntityMethod.invoke(null, nbtTagCompound, nmsWorld);
 
                 if(nmsRiding == null) {
 
                     break;
                 }
-                METHOD_ADDENTITYTOWORLD.invoke(nmsWorld, nmsRiding);
-                Entity riding = (Entity) METHOD_GETBUKKITENTITY.invoke(nmsRiding);
+                MinecraftReflection.addEntity(nmsWorld, nmsRiding);
+                Entity riding = MinecraftReflection.getBukkitEntity(nmsRiding);
                 riding.setPassenger(currentEntity);
                 currentEntity = riding;
             }

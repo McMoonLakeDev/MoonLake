@@ -19,10 +19,16 @@
 package com.minecraft.moonlake.api.entity;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.spigotmc.SpigotConfig;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <hr />
@@ -95,6 +101,7 @@ public enum AttributeType {
     private double def;
     private double min;
     private double max;
+    private final static Map<AttributeType, FieldAccessor> MAPPING = new HashMap<>();
 
     /**
      * 实体属性类型构造函数
@@ -210,5 +217,14 @@ public enum AttributeType {
             throw new IllegalBukkitVersionException("The entity attribute type not support bukkit version.");
         }
         return true;
+    }
+
+    public FieldAccessor getIAttributeField() {
+        FieldAccessor CACHE =  MAPPING.get(this);
+        if(CACHE == null) {
+            CACHE = Accessors.getFieldAccessor(MinecraftReflection.getMinecraftGenericAttributesClass(), field, true);
+            MAPPING.put(this, CACHE);
+        }
+        return CACHE;
     }
 }

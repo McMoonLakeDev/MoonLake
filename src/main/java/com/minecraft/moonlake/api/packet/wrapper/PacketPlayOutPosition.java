@@ -22,19 +22,19 @@ import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
 import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
+import com.minecraft.moonlake.builder.SingleParamBuilder;
 import com.minecraft.moonlake.property.*;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutPosition</h1>
@@ -50,20 +50,29 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTPOSITION;
     private final static Class<?> CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS;
-    private final static Method METHOD_VALUEOF;
+    private static volatile ConstructorAccessor<?> packetPlayOutPositionVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutPositionConstructor;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTPOSITION = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPosition");
-            CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS = PackageType.MINECRAFT_SERVER.getClass(MoonLakeAPI.currentBukkitVersionIs(MinecraftBukkitVersion.V1_8_R1) ? "EnumPlayerTeleportFlags" : "PacketPlayOutPosition$EnumPlayerTeleportFlags");
-            METHOD_VALUEOF = getMethod(CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS, "valueOf", String.class);
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The net.minecraft.server packet play out position reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTPOSITION = MinecraftReflection.getMinecraftClass("PacketPlayOutPosition");
+        CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS = MinecraftReflection.getMinecraftClassBuilder(new SingleParamBuilder<Class<?>, MinecraftBukkitVersion>() {
+            @Override
+            public Class<?> build(MinecraftBukkitVersion param) {
+                if(param.equals(MinecraftBukkitVersion.V1_8_R1))
+                    return MinecraftReflection.getMinecraftClass("EnumPlayerTeleportFlags");
+                return MinecraftReflection.getMinecraftClass("PacketPlayOutPosition$EnumPlayerTeleportFlags");
+            }
+        });
+        packetPlayOutPositionVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTPOSITION);
+        packetPlayOutPositionConstructor = Accessors.getConstructorAccessorBuilderMCVer(new SingleParamBuilder<ConstructorAccessor<?>, MinecraftVersion>() {
+            @Override
+            public ConstructorAccessor<?> build(MinecraftVersion param) {
+                if(!param.isOrLater(MinecraftVersion.V1_9))
+                    return Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTPOSITION, double.class, double.class, double.class, float.class, float.class, Set.class);
+                return Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTPOSITION, double.class, double.class, double.class, float.class, float.class, Set.class, int.class);
+            }
+        });
     }
 
     private DoubleProperty x;
@@ -263,16 +272,16 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
             // 进行反射实例发送
             Set<Object> nmsFlagSet = new HashSet<>();
             for(PlayerTeleportFlag flag : flagList)
-                nmsFlagSet.add(METHOD_VALUEOF.invoke(null, flag.name()));
+                nmsFlagSet.add(MinecraftReflection.enumValueOfClass(CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS, flag.name()));
 
             if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                 // 1.8 版本少一个 int 参数
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTPOSITION, x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet);
-                sendPacket(players, packet);
+                Object packet = packetPlayOutPositionConstructor.invoke(x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet);
+                MinecraftReflection.sendPacket(players, packet);
             } else {
                 // 1.9 以及更高的版本有 int 参数
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTPOSITION, x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet, value.get());
-                sendPacket(players, packet);
+                Object packet = packetPlayOutPositionConstructor.invoke(x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet, value.get());
+                MinecraftReflection.sendPacket(players, packet);
             }
             return true;
 
@@ -283,9 +292,9 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
                 // 貌似 1.8 版本总共有 6 个字段 double, double, double, float, float, Set
                 // 而 1.9 以及更高的版本有 7 个字段  double, double, double, float, float, Set, int
                 Set<Object> nmsFlagSet = new HashSet<>();
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTPOSITION);
+                Object packet = packetPlayOutPositionVoidConstructor.invoke();
                 for(PlayerTeleportFlag flag : flagList)
-                    nmsFlagSet.add(METHOD_VALUEOF.invoke(null, flag.name()));
+                    nmsFlagSet.add(MinecraftReflection.enumValueOfClass(CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS, flag.name()));
 
                 if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                     Object[] values = { x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet };

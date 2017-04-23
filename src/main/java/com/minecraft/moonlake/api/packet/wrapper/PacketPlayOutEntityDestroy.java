@@ -21,14 +21,14 @@ package com.minecraft.moonlake.api.packet.wrapper;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutEntityDestroy</h1>
@@ -43,17 +43,14 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 public class PacketPlayOutEntityDestroy extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTENTITYDESTROY;
+    private static volatile ConstructorAccessor<?> packetPlayOutEntityDestroyVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutEntityDestroyConstructor;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTENTITYDESTROY = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutEntityDestroy");
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The net.minecraft.server packet play out entity destroy reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTENTITYDESTROY = MinecraftReflection.getMinecraftClass("PacketPlayOutEntityDestroy");
+        packetPlayOutEntityDestroyVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTENTITYDESTROY);
+        packetPlayOutEntityDestroyConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTENTITYDESTROY, int[].class);
     }
 
     private ObjectProperty<int[]> entityIds;
@@ -121,7 +118,7 @@ public class PacketPlayOutEntityDestroy extends PacketPlayOutBukkitAbstract {
         try {
             // 先用调用 NMS 的 PacketPlayOutEntityDestroy 构造函数, 参数 int[]
             // 进行反射实例发送
-            sendPacket(players, instantiateObject(CLASS_PACKETPLAYOUTENTITYDESTROY, entityIds));
+            MinecraftReflection.sendPacket(players, packetPlayOutEntityDestroyConstructor.invoke(entityIds));
             return true;
 
         } catch (Exception e) {
@@ -130,7 +127,7 @@ public class PacketPlayOutEntityDestroy extends PacketPlayOutBukkitAbstract {
             try {
                 // 判断字段数量等于 1 个的话就是有此方式
                 // 这个字段对应 int[] 属性
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTENTITYDESTROY);
+                Object packet = packetPlayOutEntityDestroyVoidConstructor.invoke();
                 Object[] values = { entityIds };
                 setFieldAccessibleAndValueSend(players, 1, CLASS_PACKETPLAYOUTENTITYDESTROY, packet, values);
                 return true;
