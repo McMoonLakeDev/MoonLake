@@ -19,6 +19,8 @@
 package com.minecraft.moonlake;
 
 import com.minecraft.moonlake.api.MoonLake;
+import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,7 +32,7 @@ import java.util.logging.Level;
  * <hr />
  * <div>
  *     <h1>Minecraft MoonLake Core API Plugin</h1>
- *     <p>By Month_Light Ver: 1.9-a3.1</p>
+ *     <p>By Month_Light Ver: 1.9-a4</p>
  *     <p>Website: <a href="http://www.mcyszh.com" target="_blank" style="text-decoration: none;">MoonLake Website</a></p>
  *     <p>QQ Group: 377607025 -> <a href="http://jq.qq.com/?_wv=1027&k=2IfPFrH" target="_blank">Jump</a></p>
  *     <hr />
@@ -65,7 +67,7 @@ import java.util.logging.Level;
  *     <h1>修改操作请您遵守 <a href="https://github.com/u2g/MoonLake/blob/master/LICENSE" target="_blank">GPLv3</a> 协议，您必须公开修改过的所有代码！</h1>
  * </div>
  *
- * @version 1.9-a3.1
+ * @version 1.9-a4
  * @author Month_Light
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
@@ -94,6 +96,9 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         this.configuration = new MoonLakePluginConfig(this);
         this.configuration.reload();
 
+        // log mc and bukkit version info
+        this.logServerVersion();
+
         // load library class
         this.loadLibraryClass();
 
@@ -121,6 +126,11 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
 
             this.getLogger().log(Level.WARNING, "The load moonlake library class exception.", e);
         }
+    }
+
+    private void logServerVersion() {
+        // log mc and bukkit version info
+        this.getLogger().log(Level.INFO, "服务器 {0} NMS: {1}", new Object[] { currentMCVersion(), currentBukkitVersion().getVersion() });
     }
 
     @Deprecated
@@ -209,19 +219,30 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     }
 
     @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public String getBukkitVersion() {
 
-        String packageName = getServer().getClass().getPackage().getName();
-        String[] packageSplit = packageName.split("\\.");
-        return packageSplit[packageSplit.length - 1];
+        return MoonLakeAPI.currentBukkitVersionString();
     }
 
     @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public int getReleaseNumber() {
 
-        String version = getBukkitVersion();
-        String[] versionSplit = version.split("_");
-        String releaseVersion = versionSplit[1];
-        return Integer.parseInt(releaseVersion);
+        return MoonLakeAPI.getReleaseNumber();
+    }
+
+    @Override
+    public MinecraftBukkitVersion currentBukkitVersion() {
+
+        return MoonLakeAPI.currentBukkitVersion();
+    }
+
+    @Override
+    public MinecraftVersion currentMCVersion() {
+
+        return MoonLakeAPI.currentMCVersion();
     }
 }

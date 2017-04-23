@@ -23,13 +23,13 @@ import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
-import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutBungeeConnect;
-import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutChat;
-import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutPlayerListHeaderFooter;
-import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutTitle;
+import com.minecraft.moonlake.api.packet.exception.PacketException;
+import com.minecraft.moonlake.api.packet.wrapper.*;
 import com.minecraft.moonlake.api.player.depend.EconomyPlayerData;
 import com.minecraft.moonlake.api.player.depend.EconomyVaultPlayerResponse;
 import com.minecraft.moonlake.api.player.depend.WorldEditSelection;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.CannotDependException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.manager.PlayerManager;
@@ -37,7 +37,6 @@ import com.minecraft.moonlake.property.ReadOnlyObjectProperty;
 import com.minecraft.moonlake.property.ReadOnlyStringProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
 import com.minecraft.moonlake.property.SimpleStringProperty;
-import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
@@ -51,6 +50,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -69,11 +69,11 @@ import java.util.*;
  * <hr />
  * <div>
  *     <h1>Minecraft MoonLake Player Wrapped Abstract</h1>
- *     <p>By Month_Light Ver: 1.7</p>
+ *     <p>By Month_Light Ver: 1.7.1</p>
  * </div>
  * <hr />
  *
- * @version 1.7
+ * @version 1.7.1
  * @author Month_Light
  * @see MoonLakePlayer
  */
@@ -132,15 +132,21 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    public int getEntityId() {
+
+        return getBukkitPlayer().getEntityId();
+    }
+
+    @Override
     public GameProfile getProfile() {
 
-        return PlayerManager.getProfile(getBukkitPlayer());
+        return MinecraftReflection.getEntityHumanProfile(getBukkitPlayer());
     }
 
     @Override
     public String getLanguage() {
 
-        return PlayerManager.getLanguage(getBukkitPlayer());
+        return MinecraftReflection.getPlayerLocale(getBukkitPlayer());
     }
 
     @Override
@@ -345,6 +351,12 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    public Inventory getEnderChest() {
+
+        return getBukkitPlayer().getEnderChest();
+    }
+
+    @Override
     public boolean hasBeforePlayed() {
 
         return getBukkitPlayer().hasPlayedBefore();
@@ -384,7 +396,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void updateInventory() {
 
-        if(Reflect.getServerVersionNumber() <= 8) {
+        if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
             // 服务端版本低于 1.8 或为 1.8
             MoonLakeAPI.runTaskLaterAsync(MoonLakeAPI.getMoonLake(), new Runnable() {
                 @Override
@@ -754,7 +766,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     @Override
     public void createExplosion(float power, boolean setFire, boolean breakBlock) {
 
-        getWorld().createExplosion(getX(), getY(), getZ(), power, setFire, breakBlock);
+        getWorld().createExplosion(getDoubleX(), getDoubleY(), getDoubleZ(), power, setFire, breakBlock);
     }
 
     @Override
@@ -921,6 +933,18 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
                 }
             }
         }
+    }
+
+    @Override
+    public double getEyeHeight() {
+
+        return getEyeHeight(false);
+    }
+
+    @Override
+    public double getEyeHeight(boolean ignoreSneaking) {
+
+        return getBukkitPlayer().getEyeHeight(ignoreSneaking);
     }
 
     @Override
@@ -1100,9 +1124,121 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    public void setCompassTarget(Location target) {
+
+        Validate.notNull(target, "The target location object is null.");
+
+        getBukkitPlayer().setCompassTarget(target);
+    }
+
+    @Override
+    public Location getCompassTarget() {
+
+        return getBukkitPlayer().getCompassTarget();
+    }
+
+    @Override
+    public void setBedSpawnLocation(Location target) {
+
+        setBedSpawnLocation(target, false);
+    }
+
+    @Override
+    public void setBedSpawnLocation(Location target, boolean force) {
+
+        getBukkitPlayer().setBedSpawnLocation(target, force);
+    }
+
+    @Override
+    public Location getBedSpawnLocation() {
+
+        return getBukkitPlayer().getBedSpawnLocation();
+    }
+
+    @Override
     public InetSocketAddress getAddress() {
 
         return getBukkitPlayer().getAddress();
+    }
+
+    @Override
+    public List<Entity> getNearbyEntities(double x, double y, double z) {
+
+        return getBukkitPlayer().getNearbyEntities(x, y, z);
+    }
+
+    @Override
+    public List<LivingEntity> getNearbyLivingEntities(double x, double y, double z) {
+
+        return getNearbyEntities(LivingEntity.class, x, y, z);
+    }
+
+    @Override
+    public List<Player> getNearbyPlayers(double x, double y, double z) {
+
+        return getNearbyEntities(Player.class, x, y, z);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends Entity> List<T> getNearbyEntities(Class<T> entityClass, double x, double y, double z) {
+
+        Validate.notNull(entityClass, "The entity class object is null.");
+
+        List<T> entityList = new ArrayList<>();
+
+        for(Entity entity : getNearbyEntities(x, y, z))
+            if(entityClass.isInstance(entity))
+                entityList.add((T) entity); // @SuppressWarnings("unchecked")
+
+        return entityList;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends Entity> List<T> getNearbyEntities(Set<Class<? extends Entity>> ignoreEntity, double x, double y, double z) {
+
+        List<T> entityList = new ArrayList<>();
+
+        for(Entity entity : getNearbyEntities(x, y, z))
+            if(ignoreEntity != null && !ignoreEntity.contains(entity.getClass()))
+                entityList.add((T) entity); // @SuppressWarnings("unchecked")
+
+        return entityList;
+    }
+
+    @Override
+    public void setMetadata(String key, MetadataValue value) {
+
+        Validate.notNull(key, "The metadata key object is null.");
+        Validate.notNull(value, "The metadata value object is null.");
+
+        getBukkitPlayer().setMetadata(key, value);
+    }
+
+    @Override
+    public List<MetadataValue> getMetadata(String key) {
+
+        Validate.notNull(key, "The metadata key object is null.");
+
+        return getBukkitPlayer().getMetadata(key);
+    }
+
+    @Override
+    public boolean hasMetadata(String key) {
+
+        Validate.notNull(key, "The metadata key object is null.");
+
+        return getBukkitPlayer().hasMetadata(key);
+    }
+
+    @Override
+    public void removeMetadata(String key, Plugin plugin) {
+
+        Validate.notNull(key, "The metadata key object is null.");
+        Validate.notNull(plugin, "The plugin object is null.");
+
+        getBukkitPlayer().removeMetadata(key, plugin);
     }
 
     @Override
@@ -1274,7 +1410,7 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
         Validate.notNull(message, "The message object is null.");
 
-        new PacketPlayOutChat(StringUtil.toColor(message), PacketPlayOutChat.Mode.HOTBAR).send(getBukkitPlayer());
+        new PacketPlayOutChat(StringUtil.toColor(message), PacketPlayOutChat.Mode.ACTIONBAR).send(getBukkitPlayer());
     }
 
     @Override
@@ -1304,6 +1440,12 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     public boolean hasItemCooldown(Material type) {
 
         return PlayerManager.hasItemCoolDown(getBukkitPlayer(), type);
+    }
+
+    @Override
+    public void playHurtAnimation() throws PacketException {
+
+        new PacketPlayOutAnimation(getEntityId(), PacketPlayOutAnimation.Type.HURT_EFFECT).sendAll();
     }
 
     @Override

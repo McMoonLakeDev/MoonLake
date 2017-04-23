@@ -35,7 +35,7 @@ import org.bukkit.entity.Player;
  * @deprecated 已过时, 将于 v2.0 删除.
  */
 @Deprecated
-class NMSPlayerExpression implements NMSPlayerLibrary {
+class NMSPlayerExpression implements NMSPlayerLibrary { // TODO 2.0
 
     /**
      * 玩家 NMS 接口实现类构造函数
@@ -104,7 +104,7 @@ class NMSPlayerExpression implements NMSPlayerLibrary {
         Validate.notNull(player, "The player string object is null.");
         Validate.notNull(message, "The message string object is null.");
 
-        new PacketPlayOutChat(message, PacketPlayOutChat.Mode.HOTBAR).send(player);
+        new PacketPlayOutChat(message, PacketPlayOutChat.Mode.ACTIONBAR).send(player);
     }
 
     @Override

@@ -23,12 +23,12 @@ import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.property.BooleanProperty;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleBooleanProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
-import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -37,7 +37,7 @@ import org.bukkit.inventory.ItemStack;
  * <h1>PacketPlayOutBookOpen</h1>
  * 数据包输出书本打开（详细doc待补充...）
  *
- * @version 2.0
+ * @version 2.0.1
  * @author Month_Light
  * @see Packet
  * @see PacketPlayOut
@@ -100,6 +100,12 @@ public class PacketPlayOutBookOpen extends PacketPlayOutBukkitAbstract {
     }
 
     @Override
+    public Class<?> getPacketClass() {
+
+        return super.getPacketClass();
+    }
+
+    @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
         // 触发事件判断如果为 true 则阻止发送
@@ -114,7 +120,7 @@ public class PacketPlayOutBookOpen extends PacketPlayOutBukkitAbstract {
         PacketPlayOutCustomPayload ppocp = new PacketPlayOutCustomPayload();
         ppocp.channelProperty().set(CHANNEL);
 
-        if(Reflect.getServerVersionNumber() >= 9)
+        if(MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9))
             // 处理 1.9+ 版本打开书本需要枚举手的数据
             // 0 为 MAIN_HAND, 1 为 OFF_HAND
             ppocp.dataProperty().byteBufProperty().get().writeByte(0);

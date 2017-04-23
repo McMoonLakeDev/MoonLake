@@ -26,12 +26,13 @@ import org.bukkit.entity.Player;
  * <h1>PacketPlayOutBukkit</h1>
  * Minecraft 数据包输出 Bukkit
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  * @see Packet
  * @see PacketPlayOut
+ * @see PacketNameable
  */
-public interface PacketPlayOutBukkit extends PacketPlayOut {
+public interface PacketPlayOutBukkit extends PacketPlayOut, PacketNameable {
 
     /**
      * 将此数据包发送到指定玩家

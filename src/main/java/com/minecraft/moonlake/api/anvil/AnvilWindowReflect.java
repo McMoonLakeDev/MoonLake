@@ -18,47 +18,39 @@
  
 package com.minecraft.moonlake.api.anvil;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.nms.exception.NMSException;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutOpenWindow;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
+import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>AnvilWindowReflect</h1>
  * 铁砧窗口反射实现类
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 class AnvilWindowReflect {
 
-    private Class<?> CLASS_ANVILWINDOW;
-    private Class<?> CLASS_CRAFTPLAYER;
-    private Class<?> CLASS_ENTITYPLAYER;
-    private Class<?> CLASS_ENTITYHUMAN;
-    private Class<?> CLASS_CRAFTINVENTORYVIEW;
-    private Class<?> CLASS_PACKET;
-    private Class<?> CLASS_CHATMESSAGE;
-    private Class<?> CLASS_PLAYERCONNECTION;
-    private Class<?> CLASS_PACKETPLAYOUTOPENWINDOW;
-    private Class<?> CLASS_CONTAINER;
-    private Class<?> CLASS_ICRAFTING;
-    private Constructor<?> CONSTRUCTOR_ANVILWINDOW;
-    private Method METHOD_GETHANDLE;
-    private Method METHOD_GETBUKKITVIEW;
-    private Method METHOD_GETTOPINVENTORY;
-    private Method METHOD_NEXTCONTAINERCOUNTER;
-    private Method METHOD_SENDPACKET;
-    private Method METHOD_ADDSLOTLISTENER;
-    private Field FIELD_PLAYERCONNECTION;
-    private Field FIELD_ACTIVECONTAINER;
-    private Field FIELD_WINDOWID;
+    private volatile Class<?> CLASS_ANVILWINDOW;
+    private volatile Class<?> CLASS_CRAFTINVENTORYVIEW;
+    private volatile Class<?> CLASS_CONTAINER;
+    private volatile Class<?> CLASS_ICRAFTING;
+    private volatile Constructor<?> anvilWindowConstructor;
+    private volatile MethodAccessor anvilWindowGetBukkitViewMethod;
+    private volatile MethodAccessor craftInventoryViewGetTopInventoryMethod;
+    private volatile MethodAccessor entityPlayerNextContainerCounterMethod;
+    private volatile MethodAccessor anvilWindowAddSlotListenerMethod;
+    private volatile FieldAccessor entityHumanActiveContainerField;
+    private volatile FieldAccessor containerWindowIdField;
 
     private static AnvilWindowReflect anvilWindowReflectInstance;
 
@@ -70,36 +62,22 @@ class AnvilWindowReflect {
     private AnvilWindowReflect() throws NMSException {
 
         try {
-
-            CLASS_ANVILWINDOW = Class.forName(AnvilWindowExpression.class.getName() + "_" + getServerVersion());
-            CLASS_CRAFTPLAYER = PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer");
-            CLASS_ENTITYPLAYER = PackageType.MINECRAFT_SERVER.getClass("EntityPlayer");
-            CLASS_ENTITYHUMAN = PackageType.MINECRAFT_SERVER.getClass("EntityHuman");
-            CLASS_CRAFTINVENTORYVIEW = PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftInventoryView");
-            CLASS_PACKET = PackageType.MINECRAFT_SERVER.getClass("Packet");
-            CLASS_CHATMESSAGE = PackageType.MINECRAFT_SERVER.getClass("ChatMessage");
-            CLASS_PLAYERCONNECTION = PackageType.MINECRAFT_SERVER.getClass("PlayerConnection");
-            CLASS_PACKETPLAYOUTOPENWINDOW = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutOpenWindow");
-            CLASS_CONTAINER = PackageType.MINECRAFT_SERVER.getClass("Container");
-            CLASS_ICRAFTING = PackageType.MINECRAFT_SERVER.getClass("ICrafting");
-
-            CONSTRUCTOR_ANVILWINDOW = CLASS_ANVILWINDOW.getConstructor(Player.class, AnvilWindowExpression.class);
-
-            METHOD_GETHANDLE = getMethod(CLASS_CRAFTPLAYER, "getHandle");
-            METHOD_GETBUKKITVIEW = getMethod(CLASS_ANVILWINDOW, "getBukkitView");
-            METHOD_GETTOPINVENTORY = getMethod(CLASS_CRAFTINVENTORYVIEW, "getTopInventory");
-            METHOD_NEXTCONTAINERCOUNTER = getMethod(CLASS_ENTITYPLAYER, "nextContainerCounter");
-            METHOD_SENDPACKET = getMethod(CLASS_PLAYERCONNECTION, "sendPacket", CLASS_PACKET);
-            METHOD_ADDSLOTLISTENER = getMethod(CLASS_ANVILWINDOW, "addSlotListener", CLASS_ICRAFTING);
-
-            FIELD_PLAYERCONNECTION = getField(CLASS_ENTITYPLAYER, true, "playerConnection");
-            FIELD_ACTIVECONTAINER = getField(CLASS_ENTITYHUMAN, true, "activeContainer");
-            FIELD_WINDOWID = getField(CLASS_CONTAINER, true, "windowId");
-        }
-        catch (Exception e) {
-
+            CLASS_ANVILWINDOW = Class.forName(AnvilWindowExpression.class.getName() + "_" + MoonLakeAPI.currentBukkitVersionString());
+            anvilWindowConstructor = CLASS_ANVILWINDOW.getConstructor(Player.class, AnvilWindowExpression.class);
+        } catch (Exception e) {
             throw new NMSException("The nms anvil window reflect raw initialize exception.", e);
         }
+        CLASS_CRAFTINVENTORYVIEW = MinecraftReflection.getCraftBukkitClass("inventory.CraftInventoryView");
+        CLASS_CONTAINER = MinecraftReflection.getMinecraftClass("Container");
+        CLASS_ICRAFTING = MinecraftReflection.getMinecraftClass("ICrafting");
+        Class<?> entityPlayerClass = MinecraftReflection.getMinecraftEntityPlayerClass();
+        Class<?> entityHumanClass = MinecraftReflection.getMinecraftEntityHumanClass();
+        anvilWindowGetBukkitViewMethod = Accessors.getMethodAccessor(CLASS_ANVILWINDOW, "getBukkitView");
+        craftInventoryViewGetTopInventoryMethod = Accessors.getMethodAccessor(CLASS_CRAFTINVENTORYVIEW, "getTopInventory");
+        entityPlayerNextContainerCounterMethod = Accessors.getMethodAccessor(entityPlayerClass, "nextContainerCounter");
+        anvilWindowAddSlotListenerMethod = Accessors.getMethodAccessor(CLASS_ANVILWINDOW, "addSlotListener", CLASS_ICRAFTING);
+        entityHumanActiveContainerField = Accessors.getFieldAccessor(entityHumanClass, "activeContainer", true);
+        containerWindowIdField = Accessors.getFieldAccessor(CLASS_CONTAINER, "windowId", true);
     }
 
     /**
@@ -132,24 +110,22 @@ class AnvilWindowReflect {
 
         try {
 
-            Object nmsPlayer = METHOD_GETHANDLE.invoke(player);
+            Object entityPlayer = MinecraftReflection.getEntityPlayer(player);
 
             if(anvilWindow.anvilInventory == null) {
 
-                Object nmsAnvil = CONSTRUCTOR_ANVILWINDOW.newInstance(player, anvilWindow);
-                Object cbBukkitView = METHOD_GETBUKKITVIEW.invoke(nmsAnvil);
-                anvilWindow.anvilInventory = (Inventory) METHOD_GETTOPINVENTORY.invoke(cbBukkitView);
+                Object nmsAnvil = anvilWindowConstructor.newInstance(player, anvilWindow);
+                Object cbBukkitView = anvilWindowGetBukkitViewMethod.invoke(nmsAnvil);
+                anvilWindow.anvilInventory = (Inventory) craftInventoryViewGetTopInventoryMethod.invoke(cbBukkitView);
                 anvilWindow.anvilInventoryHandle = nmsAnvil;
             }
             Object nmsAnvil = anvilWindow.anvilInventoryHandle;
-            int id = (int) METHOD_NEXTCONTAINERCOUNTER.invoke(nmsPlayer);
-            Object nmsChatMessage = instantiateObject(CLASS_CHATMESSAGE, "Repairing", new Object[] { });
-            Object nmsPacket = instantiateObject(CLASS_PACKETPLAYOUTOPENWINDOW, id, "minecraft:anvil", nmsChatMessage, 0);
+            int id = (int) entityPlayerNextContainerCounterMethod.invoke(entityPlayer);
+            new PacketPlayOutOpenWindow(id, PacketPlayOutOpenWindow.WindowType.ANVIL, "Repairing", 0).send(player);
 
-            METHOD_SENDPACKET.invoke(FIELD_PLAYERCONNECTION.get(nmsPlayer), nmsPacket);
-            FIELD_ACTIVECONTAINER.set(nmsPlayer, nmsAnvil);
-            FIELD_WINDOWID.set(FIELD_ACTIVECONTAINER.get(nmsPlayer), id);
-            METHOD_ADDSLOTLISTENER.invoke(FIELD_ACTIVECONTAINER.get(nmsPlayer), nmsPlayer);
+            entityHumanActiveContainerField.set(entityPlayer, nmsAnvil);
+            containerWindowIdField.set(entityHumanActiveContainerField.get(entityPlayer), id);
+            anvilWindowAddSlotListenerMethod.invoke(entityHumanActiveContainerField.get(entityPlayer), entityPlayer);
         }
         catch (Exception e) {
 

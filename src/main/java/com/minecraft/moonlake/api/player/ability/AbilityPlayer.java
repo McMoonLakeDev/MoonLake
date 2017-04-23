@@ -24,10 +24,9 @@ import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.metadata.Metadatable;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -36,6 +35,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -43,11 +43,11 @@ import java.util.UUID;
  * <h1>AbilityPlayer</h1>
  * 玩家能力接口（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  * @see BasePlayer
  */
-public interface AbilityPlayer extends BasePlayer, AnimalTamer, CommandSender {
+public interface AbilityPlayer extends BasePlayer, AnimalTamer, CommandSender, Metadatable {
 
     /**
      * 获取此玩家的名称
@@ -764,4 +764,138 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer, CommandSender {
      */
     @Override
     void setOp(boolean value);
+
+    /**
+     * 设置此玩家的指南针位置目标
+     *
+     * @param target 位置目标
+     * @throws IllegalArgumentException 如果位置目标对象为 {@code null} 则抛出异常
+     */
+    void setCompassTarget(Location target);
+
+    /**
+     * 获取此玩家的指南针位置目标
+     *
+     * @return 位置目标
+     */
+    Location getCompassTarget();
+
+    /**
+     * 设置此玩家在指定床重生位置目标
+     *
+     * @param target 位置目标
+     */
+    void setBedSpawnLocation(Location target);
+
+    /**
+     * 设置此玩家在指定床重生位置目标
+     *
+     * @param target 位置目标
+     * @param force 强制设置重生位置, 即使不存在有效的床
+     */
+    void setBedSpawnLocation(Location target, boolean force);
+
+    /**
+     * 获取此玩家的床重生位置目标
+     *
+     * @return 床重生位置目标
+     */
+    Location getBedSpawnLocation();
+
+    /**
+     * 获取此玩家附近指定半径内的实体列表
+     *
+     * @param x X 半径
+     * @param y Y 半径
+     * @param z Z 半径
+     * @return 实体列表
+     */
+    List<Entity> getNearbyEntities(double x, double y, double z);
+
+    /**
+     * 获取此玩家附近指定半径内的活着实体列表
+     *
+     * @param x X 半径
+     * @param y Y 半径
+     * @param z Z 半径
+     * @return 活着实体列表
+     */
+    List<LivingEntity> getNearbyLivingEntities(double x, double y, double z);
+
+    /**
+     * 获取此玩家附近指定半径内的玩家实体列表
+     *
+     * @param x X 半径
+     * @param y Y 半径
+     * @param z Z 半径
+     * @return 玩家列表
+     */
+    List<Player> getNearbyPlayers(double x, double y, double z);
+
+    /**
+     * 获取此玩家附近指定半径内指定类型的实体列表
+     *
+     * @param entityClass 实体类
+     * @param x X 半径
+     * @param y Y 半径
+     * @param z Z 半径
+     * @param <T> 实体类
+     * @return 实体类对象列表
+     * @throws IllegalArgumentException 如果实体类对象为 {@code null} 则抛出异常
+     */
+    <T extends Entity> List<T> getNearbyEntities(Class<T> entityClass, double x, double y, double z);
+
+    /**
+     * 获取此玩家附近指定半径内指定非忽略类型的实体列表
+     *
+     * @param ignoreEntity 忽略类型实体
+     * @param x X 半径
+     * @param y Y 半径
+     * @param z Z 半径
+     * @param <T> 实体类
+     * @return 实体类对象列表
+     */
+    <T extends Entity> List<T> getNearbyEntities(Set<Class<? extends Entity>> ignoreEntity, double x, double y, double z);
+
+    /**
+     *  设置此玩家指定键的元数据值
+     *
+     * @param key 键
+     * @param value 元数据值
+     * @throws IllegalArgumentException 如果键对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果值对象为 {@code null} 则抛出异常
+     */
+    @Override
+    void setMetadata(String key, MetadataValue value);
+
+    /**
+     * 获取此玩家指定键的元数据值列表
+     *
+     * @param key 键
+     * @return {@code List<MetadataValue> | null}
+     * @throws IllegalArgumentException 如果键对象为 {@code null} 则抛出异常
+     */
+    @Override
+    List<MetadataValue> getMetadata(String key);
+
+    /**
+     * 获取此玩家是否拥有指定键的元数据值
+     *
+     * @param key 键
+     * @return 是否拥有指定键的元数据值
+     * @throws IllegalArgumentException 如果键对象为 {@code null} 则抛出异常
+     */
+    @Override
+    boolean hasMetadata(String key);
+
+    /**
+     * 删除此玩家指定键的元数据值
+     *
+     * @param key 键
+     * @param plugin 插件
+     * @throws IllegalArgumentException 如果键对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     */
+    @Override
+    void removeMetadata(String key, Plugin plugin);
 }

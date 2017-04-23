@@ -19,8 +19,11 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.player.depend.DependEconomyVault;
+import com.minecraft.moonlake.api.player.depend.DependPluginPlayerAbstract;
 import com.minecraft.moonlake.api.player.depend.EconomyVaultPlayerResponse;
 import com.minecraft.moonlake.exception.CannotDependException;
+import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -34,7 +37,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
  * @version 1.0
  * @author Month_Light
  */
-class DependEconomyVaultPlayer {
+class DependEconomyVaultPlayer extends DependPluginPlayerAbstract<Vault> implements DependEconomyVault {
 
     private Economy economy;
 
@@ -45,7 +48,9 @@ class DependEconomyVaultPlayer {
      */
     public DependEconomyVaultPlayer() throws CannotDependException {
 
-        if(Bukkit.getServer().getPluginManager().getPlugin("Vault") == null) {
+        super((Vault) Bukkit.getServer().getPluginManager().getPlugin("Vault"));
+
+        if(getOwn() == null) {
 
             throw new CannotDependException("The cannot depend 'Vault' plugin exception.");
         }
@@ -65,72 +70,37 @@ class DependEconomyVaultPlayer {
         MoonLakeAPI.getLogger().info("Success hook 'Vault' plugin 'Economy' service provider, 'EconomyVaultPlayer' interface be use.");
     }
 
-    /**
-     * 获取指定玩家的 Vault 经济是否拥有账户
-     *
-     * @param player 玩家
-     * @return 是否拥有账户
-     */
+    @Override
     public boolean hasAccount(OfflinePlayer player) {
 
         return economy.hasAccount(player);
     }
 
-    /**
-     * 获取指定玩家在指定世界的 Vault 经济是否拥有账户
-     *
-     * @param player 玩家
-     * @param worldName 世界名
-     * @return 是否在指定世界拥有账户
-     */
+    @Override
     public boolean hasAccount(OfflinePlayer player, String worldName) {
 
         return economy.hasAccount(player, worldName);
     }
 
-    /**
-     * 获取指定玩家的 Vault 经济账户余额
-     *
-     * @param player 玩家
-     * @return 余额
-     */
+    @Override
     public double getBalance(OfflinePlayer player) {
 
         return economy.getBalance(player);
     }
 
-    /**
-     * 获取指定玩家在指定世界的 Vault 经济账户余额
-     *
-     * @param player 玩家
-     * @param worldName 世界名
-     * @return 余额
-     */
+    @Override
     public double getBalance(OfflinePlayer player, String worldName) {
 
         return economy.getBalance(player, worldName);
     }
 
-    /**
-     * 获取指定玩家的 Vault 经济账户是否拥有指定数量余额
-     *
-     * @param player 玩家
-     * @param amount 数量
-     * @return 是否拥有指定数量余额
-     */
+    @Override
     public boolean hasBalance(OfflinePlayer player, double amount) {
 
         return economy.has(player, amount);
     }
 
-    /**
-     * 获取指定玩家在指定世界的 Vault 经济账户是否拥有指定数量余额
-     *
-     * @param player 玩家
-     * @param amount 数量
-     * @param worldName 世界名
-     * @return 是否拥有指定数量余额
-     */
+    @Override
     public boolean hasBalance(OfflinePlayer player, double amount, String worldName) {
 
         return economy.has(player, worldName, amount);
@@ -151,74 +121,37 @@ class DependEconomyVaultPlayer {
         return new EconomyVaultPlayerResponse(response.amount, response.balance, EconomyVaultPlayerResponse.ResponseType.valueOf(response.type.name()), response.errorMessage);
     }
 
-    /**
-     * 将指定玩家的 Vault 经济账户拿走指定数量的余额
-     *
-     * @param player 玩家
-     * @param amount 数量
-     * @return 经济回应
-     */
+    @Override
     public EconomyVaultPlayerResponse withdrawBalance(OfflinePlayer player, double amount) {
 
         return convert(economy.withdrawPlayer(player, amount));
     }
 
-    /**
-     * 将指定玩家在指定世界的 Vault 经济账户拿走指定数量的余额
-     *
-     * @param player 玩家
-     * @param amount 数量
-     * @param worldName 世界名
-     * @return 经济回应
-     */
+    @Override
     public EconomyVaultPlayerResponse withdrawBalance(OfflinePlayer player, double amount, String worldName) {
 
         return convert(economy.withdrawPlayer(player, worldName, amount));
     }
 
-    /**
-     * 将指定玩家的 Vault 经济账户存入指定数量的余额
-     *
-     * @param player 玩家
-     * @param amount 数量
-     * @return 经济回应
-     */
+    @Override
     public EconomyVaultPlayerResponse depositBalance(OfflinePlayer player, double amount) {
 
         return convert(economy.depositPlayer(player, amount));
     }
 
-    /**
-     * 将指定玩家在指定世界的 Vault 经济账户存入指定数量的余额
-     *
-     * @param player 玩家
-     * @param amount 数量
-     * @param worldName 世界名
-     * @return 经济回应
-     */
+    @Override
     public EconomyVaultPlayerResponse depositBalance(OfflinePlayer player, double amount, String worldName) {
 
         return convert(economy.depositPlayer(player, worldName, amount));
     }
 
-    /**
-     * 将指定玩家的 Vault 经济账户进行创建
-     *
-     * @param player 玩家
-     * @return 是否创建成功
-     */
+    @Override
     public boolean createAccount(OfflinePlayer player) {
 
         return economy.createPlayerAccount(player);
     }
 
-    /**
-     * 将指定玩家在指定世界的 Vault 经济账户进行创建
-     *
-     * @param player 玩家
-     * @param worldName 世界名
-     * @return 是否创建成功
-     */
+    @Override
     public boolean createAccount(OfflinePlayer player, String worldName) {
 
         return economy.createPlayerAccount(player, worldName);

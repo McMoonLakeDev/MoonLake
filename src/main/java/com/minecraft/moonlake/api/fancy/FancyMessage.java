@@ -215,7 +215,7 @@ public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable
      * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link #then(String)}. 如果忘记设置这个花式消息对象的消息接下来的操作可能会抛出异常
      */
     @Deprecated
-    FancyMessage then();
+    FancyMessage then(); // TODO v1.9-a5
 
     /**
      * 初始化设置下一个花式消息对象

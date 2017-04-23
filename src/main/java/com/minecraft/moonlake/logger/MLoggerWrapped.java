@@ -34,7 +34,7 @@ import java.util.logging.Logger;
  */
 @Deprecated
 @SuppressWarnings("deprecation")
-public final class MLoggerWrapped implements MLogger {
+public final class MLoggerWrapped implements MLogger { // TODO 2.0
 
     private final ReadOnlyStringProperty prefixProperty;
     private final Logger logger;

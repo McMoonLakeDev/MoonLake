@@ -22,9 +22,11 @@ package com.minecraft.moonlake.api.packet;
  * <h1>PacketPlayIn</h1>
  * Minecraft 数据包输入
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  * @see Packet
+ * @see PacketNameable
+ * @see PacketPlayInExecutor
  */
-public interface PacketPlayIn extends Packet {
+public interface PacketPlayIn extends Packet, PacketNameable, PacketPlayInExecutor {
 }

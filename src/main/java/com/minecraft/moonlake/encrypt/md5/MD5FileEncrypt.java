@@ -36,7 +36,9 @@ import java.security.MessageDigest;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除.
  */
+@Deprecated
 public class MD5FileEncrypt implements Encrypt {
 
     private ObjectProperty<File> file;

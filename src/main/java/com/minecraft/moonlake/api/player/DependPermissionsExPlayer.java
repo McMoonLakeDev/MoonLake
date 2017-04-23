@@ -19,11 +19,12 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.player.depend.DependPermissionsEx;
+import com.minecraft.moonlake.api.player.depend.DependPluginPlayerAbstract;
 import com.minecraft.moonlake.exception.CannotDependException;
 import com.minecraft.moonlake.exception.CannotDependVersionException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.PermissionUser;
@@ -39,7 +40,7 @@ import java.util.List;
  * @version 1.0
  * @author Month_Light
  */
-class DependPermissionsExPlayer {
+class DependPermissionsExPlayer extends DependPluginPlayerAbstract<PermissionsEx> implements DependPermissionsEx {
 
     private PermissionManager permissionManager;
 
@@ -51,20 +52,20 @@ class DependPermissionsExPlayer {
      */
     public DependPermissionsExPlayer() throws CannotDependException, CannotDependVersionException {
 
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("PermissionsEx");
+        super((PermissionsEx) Bukkit.getServer().getPluginManager().getPlugin("PermissionsEx"));
 
-        if(plugin == null) {
+        if(getOwn() == null) {
 
             throw new CannotDependException("The cannot depend 'PermissionsEx' plugin exception.");
         }
         // 检查 PermissionsEx 插件版本, 本依赖最低需要 1.23 版本
-        String version = plugin.getDescription().getVersion();
+        String version = getPluginVersion();
 
         if(version.compareTo("1.23") < 0) {
             // 服务端加载的 PermissionsEx 插件版本小于 1.23 则抛出异常
             throw new CannotDependVersionException("The depend 'PermissionsEx' plugin, but version less than 1.23 exception.");
         }
-        this.permissionManager = ((PermissionsEx) plugin).getPermissionsManager();
+        this.permissionManager = getOwn().getPermissionsManager();
 
         MoonLakeAPI.getLogger().info("Success hook 'PermissionsEx' plugin, 'PermissionsExPlayer' interface be use.");
     }

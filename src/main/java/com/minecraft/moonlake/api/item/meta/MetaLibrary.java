@@ -108,7 +108,7 @@ public interface MetaLibrary extends AttributeLibrary {
      * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link #getLore(ItemStack)}
      */
     @Deprecated
-    Set<String> getLores(ItemStack itemStack);
+    Set<String> getLores(ItemStack itemStack); // TODO v1.9-a5
 
     /**
      * 获取物品栈的标签信息 (警告: 入门时犯错使用了无序集合)
@@ -119,7 +119,7 @@ public interface MetaLibrary extends AttributeLibrary {
      * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link #getLore(ItemStack, boolean)}
      */
     @Deprecated
-    Set<String> getLores(ItemStack itemStack, boolean ignoreColor);
+    Set<String> getLores(ItemStack itemStack, boolean ignoreColor); // TODO v1.9-a5
 
     /**
      * 获取物品栈的标签信息

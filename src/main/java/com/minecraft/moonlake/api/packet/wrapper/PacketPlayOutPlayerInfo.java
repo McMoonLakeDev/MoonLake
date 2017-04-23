@@ -18,25 +18,26 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
-import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
+import com.minecraft.moonlake.builder.Builder;
+import com.minecraft.moonlake.builder.SingleParamBuilder;
 import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.property.*;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
+import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutPlayerInfo</h1>
@@ -53,25 +54,43 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
     private final static Class<?> CLASS_PACKETPLAYOUTPLAYERINFO;
     private final static Class<?> CLASS_PACKETPLAYOUTPLAYERINFO_PLAYERINFODATA;
     private final static Class<?> CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION;
-    private final static Class<?> CLASS_ENUMGAMEMODE;
-    private final static Method METHOD_GETBYID;
-    private final static Method METHOD_VALUEOF;
+    private static volatile ConstructorAccessor<?> packetPlayOutPlayerInfoVoidConstructor;
+    private static volatile ConstructorAccessor<?> playerInfoDataConstructor;
+    private static volatile FieldAccessor packetPlayOutPlayerInfoListField;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTPLAYERINFO = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutPlayerInfo");
-            CLASS_PACKETPLAYOUTPLAYERINFO_PLAYERINFODATA = PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") ? "PlayerInfoData" : "PacketPlayOutPlayerInfo$PlayerInfoData");
-            CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION = PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") ? "EnumPlayerInfoAction" : "PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
-            CLASS_ENUMGAMEMODE = PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") || getServerVersionNumber() >= 10 ? "EnumGamemode" : "WorldSettings$EnumGamemode");
-            METHOD_VALUEOF = getMethod(CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION, "valueOf", String.class);
-            METHOD_GETBYID = getMethod(CLASS_ENUMGAMEMODE, "getById", int.class);
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The net.minecraft.server packet play out player info reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTPLAYERINFO = MinecraftReflection.getMinecraftClass("PacketPlayOutPlayerInfo");
+        CLASS_PACKETPLAYOUTPLAYERINFO_PLAYERINFODATA = MinecraftReflection.getMinecraftClassBuilder(new SingleParamBuilder<Class<?>, MinecraftBukkitVersion>() {
+            @Override
+            public Class<?> build(MinecraftBukkitVersion param) {
+                if(param.equals(MinecraftBukkitVersion.V1_8_R1))
+                    return MinecraftReflection.getMinecraftClass("PlayerInfoData");
+                return MinecraftReflection.getMinecraftClass("PacketPlayOutPlayerInfo$PlayerInfoData");
+            }
+        });
+        CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION = MinecraftReflection.getMinecraftClassBuilder(new SingleParamBuilder<Class<?>, MinecraftBukkitVersion>() {
+            @Override
+            public Class<?> build(MinecraftBukkitVersion param) {
+                if(param.equals(MinecraftBukkitVersion.V1_8_R1))
+                    return MinecraftReflection.getMinecraftClass("EnumPlayerInfoAction");
+                return MinecraftReflection.getMinecraftClass("PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
+            }
+        });
+        packetPlayOutPlayerInfoVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTPLAYERINFO);
+        playerInfoDataConstructor = Accessors.getConstructorAccessorBuilder(new Builder<ConstructorAccessor<?>>() {
+            @Override
+            public ConstructorAccessor<?> build() {
+                Class<?> enumGamemodeClass = MinecraftReflection.getEnumGamemodeClass();
+                Class<?> iChatBaseComponent = MinecraftReflection.getIChatBaseComponentClass();
+                try {
+                    return Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTPLAYERINFO_PLAYERINFODATA, GameProfile.class, int.class, enumGamemodeClass, iChatBaseComponent);
+                } catch (Exception e) {
+                    return Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTPLAYERINFO_PLAYERINFODATA, CLASS_PACKETPLAYOUTPLAYERINFO, GameProfile.class, int.class, enumGamemodeClass, iChatBaseComponent);
+                }
+            }
+        });
+        packetPlayOutPlayerInfoListField = Accessors.getFieldAccessor(CLASS_PACKETPLAYOUTPLAYERINFO, 1, true);
     }
 
     private ObjectProperty<Action> action;
@@ -142,6 +161,12 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
     }
 
     @Override
+    public Class<?> getPacketClass() {
+
+        return CLASS_PACKETPLAYOUTPLAYERINFO;
+    }
+
+    @Override
     @SuppressWarnings({ "deprecation", "unchecked" })
     protected boolean sendPacket(Player... players) throws Exception {
 
@@ -156,18 +181,16 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
 
         try {
             // 直接用反射设置字段方式发送, 字段 EnumPlayerInfoAction, List
-            Object packet = instantiateObject(CLASS_PACKETPLAYOUTPLAYERINFO);
-            Object nmsAction = METHOD_VALUEOF.invoke(null, action.name());
+            Object packet = packetPlayOutPlayerInfoVoidConstructor.invoke();
+            Object enumAction = MinecraftReflection.enumValueOfClass(CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION, action.name());
             // 貌似第二个字段 List 是终态, 所以获取到后只能进行 add 操作
-            Field field = CLASS_PACKETPLAYOUTPLAYERINFO.getDeclaredFields()[1];
-            field.setAccessible(true);
-            List list = (List) field.get(packet);
+            List list = (List) packetPlayOutPlayerInfoListField.get(packet);
             // 然后将 Data 数据转换为 PlayerInfoData 并添加到 List 内
             // 构造函数的参数为 GameProfile, int, EnumGamemode, IChatBaseComponent
             for(Data data : dataList) {
                 // 循环遍历 Data 列表进行转换到 PlayerInfoData 然后添加到 List 内
-                Object nmsPlayerListName = ChatSerializer.fromJson("{\"text\":\"" + data.playerListName.get() + "\"}");
-                Object nmsGamemode = METHOD_GETBYID.invoke(null, data.gameMode.get().getValue()); // @SuppressWarnings("deprecation")
+                Object nmsPlayerListName = MinecraftReflection.getIChatBaseComponentFromString(data.playerListName.get());
+                Object nmsGamemode = MinecraftReflection.enumGamemodeGetById(data.gameMode.get().getValue()); // @SuppressWarnings("deprecation")
                 Object nmsData = null;
                 // 不是很懂 bukkit，反编译明明是四个参数, 但是传入后说找不到构造函数
                 // 打印 PlayerInfoData 类的构造函数后发现多出了个 PacketPlayOutPlayerInfo 参数
@@ -175,16 +198,16 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
                 try {
                     // 先使用四个参数的方式
                     Object[] values = { data.gameProfile.get(), data.ping.get(), nmsGamemode, nmsPlayerListName };
-                    nmsData = instantiateObject(CLASS_PACKETPLAYOUTPLAYERINFO_PLAYERINFODATA, values);
+                    nmsData = playerInfoDataConstructor.invoke(values);
                 } catch (Exception e1) {
                     // 如果异常说明需要五个参数, 那么使用此方式
                     Object[] values = { packet, data.gameProfile.get(), data.ping.get(), nmsGamemode, nmsPlayerListName };
-                    nmsData = instantiateObject(CLASS_PACKETPLAYOUTPLAYERINFO_PLAYERINFODATA, values);
+                    nmsData = playerInfoDataConstructor.invoke(values);
                 }
                 list.add(nmsData);
             }
             // 之后设置第一个字段的 Action 值就行了, List 已经 add 了
-            setFieldAccessibleAndValueSend(players, 1, CLASS_PACKETPLAYOUTPLAYERINFO, packet, nmsAction);
+            setFieldAccessibleAndValueSend(players, 1, CLASS_PACKETPLAYOUTPLAYERINFO, packet, enumAction);
             return true;
 
         } catch (Exception e) {
@@ -354,7 +377,7 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
         public void add(Player player) {
 
             int ping = PlayerManager.getPing(player);
-            GameProfile gameProfile = PlayerManager.getProfile(player);
+            GameProfile gameProfile = MinecraftReflection.getEntityHumanProfile(player);
             add(ping, gameProfile, player.getGameMode(), player.getPlayerListName());
         }
 

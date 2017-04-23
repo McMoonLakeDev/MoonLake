@@ -33,7 +33,7 @@ import org.bukkit.entity.Player;
  * @deprecated 已过时, 将于 v2.0 删除.
  */
 @Deprecated
-public interface ItemCooldown {
+public interface ItemCooldown { // TODO 2.0
 
     /**
      * 给指定玩家设置物品栈冷却时间

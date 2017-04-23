@@ -43,6 +43,13 @@ public interface InventoryPlayer extends InventoryHolder {
     PlayerInventory getInventory();
 
     /**
+     * 获取此玩家的末影箱物品栏
+     *
+     * @return 末影箱物品栏
+     */
+    Inventory getEnderChest();
+
+    /**
      * 更新此玩家的物品栏背包
      */
     void updateInventory();

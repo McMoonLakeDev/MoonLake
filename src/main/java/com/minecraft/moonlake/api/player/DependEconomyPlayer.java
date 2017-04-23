@@ -19,14 +19,17 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.player.depend.DependEconomy;
+import com.minecraft.moonlake.api.player.depend.DependPluginPlayerAbstract;
 import com.minecraft.moonlake.api.player.depend.EconomyPlayerData;
 import com.minecraft.moonlake.economy.EconomyPlugin;
 import com.minecraft.moonlake.economy.api.MoonLakeEconomy;
 import com.minecraft.moonlake.economy.api.PlayerEconomy;
 import com.minecraft.moonlake.exception.CannotDependException;
+import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.entity.Player;
 
 /**
  * <h1>DependEconomyPlayer</h1>
@@ -35,7 +38,7 @@ import org.bukkit.plugin.Plugin;
  * @version 1.0
  * @author Month_Light
  */
-class DependEconomyPlayer {
+class DependEconomyPlayer extends DependPluginPlayerAbstract<EconomyPlugin> implements DependEconomy {
 
     private MoonLakeEconomy moonLakeEconomy;
 
@@ -46,114 +49,60 @@ class DependEconomyPlayer {
      */
     public DependEconomyPlayer() throws CannotDependException {
 
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("MoonLakeEconomy");
+        super((EconomyPlugin) Bukkit.getServer().getPluginManager().getPlugin("MoonLakeEconomy"));
 
-        if(plugin == null) {
+        if(getOwn() == null) {
 
             throw new CannotDependException("The cannot depend 'MoonLakeEconomy' plugin exception.");
         }
-        this.moonLakeEconomy = ((EconomyPlugin) plugin).getEconomy();
+        this.moonLakeEconomy = getOwn().getEconomy();
 
         MoonLakeAPI.getLogger().info("Success hook 'MoonLakeEconomy' plugin, 'EconomyPlayer' interface be use.");
     }
 
-    /**
-     * 获取指定玩家的金币数据
-     *
-     * @param name 玩家名
-     * @return 金币
-     * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
-     */
+    @Override
     public double getMoney(String name) {
 
         return moonLakeEconomy.getMoney(name);
     }
 
-    /**
-     * 获取指定玩家的点券数据
-     *
-     * @param name 玩家名
-     * @return 点券
-     * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
-     */
+    @Override
     public int getPoint(String name) {
 
         return moonLakeEconomy.getPoint(name);
     }
 
-    /**
-     * 设置指定玩家的金币数据
-     *
-     * @param name 玩家名
-     * @param money 金币
-     * @return 是否成功
-     * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
-     */
+    @Override
     public boolean setMoney(String name, double money) {
 
         return moonLakeEconomy.setMoney(name, money);
     }
 
-    /**
-     * 设置指定玩家的点券数据
-     *
-     * @param name 玩家名
-     * @param point 点券
-     * @return 是否成功
-     * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
-     */
+    @Override
     public boolean setPoint(String name, int point) {
 
         return moonLakeEconomy.setPoint(name, point);
     }
 
-    /**
-     * 给予指定玩家金币数据
-     *
-     * @param name 玩家名
-     * @param money 金币
-     * @return 是否成功
-     * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
-     */
+    @Override
     public boolean giveMoney(String name, double money) {
 
         return moonLakeEconomy.giveMoney(name, money);
     }
 
-    /**
-     * 给予指定玩家点券数据
-     *
-     * @param name 玩家名
-     * @param point 点券
-     * @return 是否成功
-     * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
-     */
+    @Override
     public boolean givePoint(String name, int point) {
 
         return moonLakeEconomy.givePoint(name, point);
     }
 
-    /**
-     * 减少指定玩家的金币数据
-     *
-     * @param name 玩家名
-     * @param money 金币
-     * @return 是否成功
-     * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
-     */
+    @Override
     public boolean takeMoney(String name, double money) {
 
         return moonLakeEconomy.takeMoney(name, money);
     }
 
-    /**
-     * 减少指定玩家的点券数据
-     *
-     * @param name 玩家名
-     * @param point 点券
-     * @return 是否成功
-     * @throws IllegalArgumentException 如果玩家名对象为 {@code null} 则抛出异常
-     */
+    @Override
     public boolean takePoint(String name, int point) {
 
         return moonLakeEconomy.takePoint(name, point);
@@ -171,13 +120,16 @@ class DependEconomyPlayer {
         return moonLakeEconomy.getData(name);
     }
 
-    /**
-     * 获取指定玩家的经济数据并转换到 MoonLake 包的类对象
-     *
-     * @param moonLakePlayer 月色之湖玩家
-     * @return 经济数据
-     * @throws IllegalArgumentException 如果月色之湖玩家对象为 {@code null} 则抛出异常
-     */
+    @Override
+    public EconomyPlayerData getData(Player player) {
+
+        Validate.notNull(player, "The player object is null.");
+
+        PlayerEconomy playerEconomy = getEconomy(player.getName());
+        return new EconomyPlayerData(PlayerManager.adapter(player), playerEconomy.getMoney(), playerEconomy.getPoint());
+    }
+
+    @Override
     public EconomyPlayerData getData(MoonLakePlayer moonLakePlayer) {
 
         Validate.notNull(moonLakePlayer, "The moonlake player object is null.");

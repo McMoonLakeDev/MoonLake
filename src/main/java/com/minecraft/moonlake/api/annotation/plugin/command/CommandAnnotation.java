@@ -73,7 +73,7 @@ public interface CommandAnnotation extends PluginAnnotation {
      * @see #registerCommand(Plugin, MoonLakeCommand)
      */
     @Deprecated
-    Set<CommandAnnotated> registerCommand(Plugin plugin, Object obj) throws MoonLakeException;
+    Set<CommandAnnotated> registerCommand(Plugin plugin, Object obj) throws MoonLakeException; // TODO v2.0
 
     /**
      * 将指定插件的指定对象注册命令

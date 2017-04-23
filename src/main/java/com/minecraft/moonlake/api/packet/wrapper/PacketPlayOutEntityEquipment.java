@@ -18,29 +18,29 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
+import com.minecraft.moonlake.builder.SingleParamBuilder;
 import com.minecraft.moonlake.property.IntegerProperty;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleIntegerProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
-
 /**
  * <h1>PacketPlayOutEntityEquipment</h1>
  * 数据包输出实体装备（详细doc待补充...）
  *
- * @version 2.0
+ * @version 2.0.1
  * @author Month_Light
  * @see Packet
  * @see PacketPlayOut
@@ -49,27 +49,24 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTENTITYEQUIPMENT;
-    private final static Class<?> CLASS_CRAFTITEMSTACK;
     private final static Class<?> CLASS_ENUMITEMSLOT;
-    private final static Class<?> CLASS_ITEMSTACK;
-    private final static Method METHOD_ASNMSCOPY;
-    private final static Method METHOD_VALUEOF;
+    private static volatile ConstructorAccessor<?> packetPlayOutEntityEquipmentVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutEntityEquipmentConstructor;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTENTITYEQUIPMENT = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutEntityEquipment");
-            CLASS_CRAFTITEMSTACK = PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftItemStack");
-            CLASS_ENUMITEMSLOT = getServerVersionNumber() >= 9 ? PackageType.MINECRAFT_SERVER.getClass("EnumItemSlot") : null; // 1.8 没有这个类
-            CLASS_ITEMSTACK = PackageType.MINECRAFT_SERVER.getClass("ItemStack");
-            METHOD_ASNMSCOPY = getMethod(CLASS_CRAFTITEMSTACK, "asNMSCopy", ItemStack.class);
-            METHOD_VALUEOF = CLASS_ENUMITEMSLOT != null ? getMethod(CLASS_ENUMITEMSLOT, "valueOf", String.class) : null;
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The net.minecraft.server packet play out entity equipment reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTENTITYEQUIPMENT = MinecraftReflection.getMinecraftClass("PacketPlayOutEntityEquipment");
+        CLASS_ENUMITEMSLOT = MinecraftReflection.getMinecraftClassOrLater(MinecraftVersion.V1_9, "EnumItemSlot"); // 1.9+ 才有这个类
+        packetPlayOutEntityEquipmentVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTENTITYEQUIPMENT);
+        packetPlayOutEntityEquipmentConstructor = Accessors.getConstructorAccessorBuilderMCVer(new SingleParamBuilder<ConstructorAccessor<?>, MinecraftVersion>() {
+            @Override
+            public ConstructorAccessor<?> build(MinecraftVersion param) {
+                Class<?> itemStackClass = MinecraftReflection.getMinecraftItemStackClass();
+                if(param.isOrLater(MinecraftVersion.V1_9))
+                    return Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTENTITYEQUIPMENT, int.class, CLASS_ENUMITEMSLOT, itemStackClass);
+                return Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTENTITYEQUIPMENT, int.class, int.class, itemStackClass);
+            }
+        });
     }
 
     private IntegerProperty entityId;
@@ -141,6 +138,12 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
     }
 
     @Override
+    public Class<?> getPacketClass() {
+
+        return CLASS_PACKETPLAYOUTENTITYEQUIPMENT;
+    }
+
+    @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
         // 触发事件判断如果为 true 则阻止发送
@@ -157,24 +160,22 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
             // 1.8 参数 int, int, ItemStack
             // 1.9+ 参数 int, EquipmentSlot, ItemStack
             // 进行反射实例发送
-            if(getServerVersionNumber() >= 9) {
+            if(MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                 // 1.9+ 版本的发送方式
-                Object enumItemSlot = METHOD_VALUEOF.invoke(null, slot.name());
-                Object nmsItemStack = METHOD_ASNMSCOPY.invoke(null, itemStack);
-                Constructor<?> packetConstructor = getConstructor(CLASS_PACKETPLAYOUTENTITYEQUIPMENT, int.class, CLASS_ENUMITEMSLOT, CLASS_ITEMSTACK);
-                Object packet = packetConstructor.newInstance(entityId.get(), enumItemSlot, nmsItemStack);
-                sendPacket(players, packet);
+                Object enumItemSlot = MinecraftReflection.enumValueOfClass(CLASS_ENUMITEMSLOT, slot.name());
+                Object nmsItemStack = MinecraftReflection.asNMSCopy(itemStack);
+                Object packet = packetPlayOutEntityEquipmentConstructor.invoke(entityId.get(), enumItemSlot, nmsItemStack);
+                MinecraftReflection.sendPacket(players, packet);
                 return true;
 
             } else {
                 // 1.8 版本的发送方式
                 // 由于 1.8 是没有 EnumItemSlot 的所以不处理主副手
                 if(slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND) return true;
-                Object nmsItemStack = METHOD_ASNMSCOPY.invoke(null, itemStack);
+                Object nmsItemStack = MinecraftReflection.asNMSCopy(itemStack);
                 // 1.8 版本第二个参数是 int 类型, 装备槽位的 Id
-                Constructor<?> packetConstructor = getConstructor(CLASS_PACKETPLAYOUTENTITYEQUIPMENT, int.class, int.class, CLASS_ITEMSTACK);
-                Object packet = packetConstructor.newInstance(entityId.get(), slot.getId(), nmsItemStack);
-                sendPacket(players, packet);
+                Object packet = packetPlayOutEntityEquipmentConstructor.invoke(entityId.get(), slot.getId(), nmsItemStack);
+                MinecraftReflection.sendPacket(players, packet);
                 return true;
             }
 
@@ -182,12 +183,12 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
             // 如果异常了说明 NMS 的 PacketPlayOutEntityEquipment 构造函数不存在这个参数类型
             // 那么用反射直接设置字段值方式来发送
             try {
-                if(getServerVersionNumber() >= 9) {
+                if(MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                     // 1.9+ 版本的发送方式
-                    Object enumItemSlot = METHOD_VALUEOF.invoke(null, slot.name());
-                    Object nmsItemStack = METHOD_ASNMSCOPY.invoke(null, itemStack);
+                    Object enumItemSlot = MinecraftReflection.enumValueOfClass(CLASS_ENUMITEMSLOT, slot.name());
+                    Object nmsItemStack = MinecraftReflection.asNMSCopy(itemStack);
                     Object[] values = { entityId.get(), enumItemSlot, nmsItemStack };
-                    Object packet = instantiateObject(CLASS_PACKETPLAYOUTENTITYEQUIPMENT);
+                    Object packet = packetPlayOutEntityEquipmentVoidConstructor.invoke();
                     setFieldAccessibleAndValueSend(players, 3, CLASS_PACKETPLAYOUTENTITYEQUIPMENT, packet, values);
                     return true;
 
@@ -195,9 +196,9 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
                     // 1.8 版本的发送方式
                     // 由于 1.8 是没有 EnumItemSlot 的所以不处理主副手
                     if(slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND) return true;
-                    Object nmsItemStack = METHOD_ASNMSCOPY.invoke(null, itemStack);
+                    Object nmsItemStack = MinecraftReflection.asNMSCopy(itemStack);
                     Object[] values = { entityId.get(), slot.getId(), nmsItemStack };
-                    Object packet = instantiateObject(CLASS_PACKETPLAYOUTENTITYEQUIPMENT);
+                    Object packet = packetPlayOutEntityEquipmentVoidConstructor.invoke();
                     setFieldAccessibleAndValueSend(players, 3, CLASS_PACKETPLAYOUTENTITYEQUIPMENT, packet, values);
                     return true;
                 }

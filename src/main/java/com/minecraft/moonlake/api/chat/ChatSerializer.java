@@ -19,11 +19,14 @@
 package com.minecraft.moonlake.api.chat;
 
 import com.minecraft.moonlake.api.nms.exception.NMSException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
+import com.minecraft.moonlake.reflect.ExactReflect;
+import com.minecraft.moonlake.reflect.FuzzyReflect;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
 
 import java.lang.reflect.Method;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>ChatSerializer</h1>
@@ -34,39 +37,29 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
  */
 public class ChatSerializer {
 
-    private final static Class<?> CLASS_ICHATBASECOMPONENT;
-    private final static Class<?> CLASS_CHARSERIALIZER;
-    private final static Method METHOD_JSONTOICBC;
+    private static volatile MethodAccessor iChatBaseComponentFormJsonMethod;
 
     static {
 
-        try {
-            CLASS_ICHATBASECOMPONENT = PackageType.MINECRAFT_SERVER.getClass("IChatBaseComponent");
-            CLASS_CHARSERIALIZER = PackageType.MINECRAFT_SERVER.getClass(getServerVersion().equals("v1_8_R1") ? "ChatSerializer" : "IChatBaseComponent$ChatSerializer");
+        Class<?> chatSerializerClass = MinecraftReflection.getChatSerializerClass();
+        Class<?> iChatBaseComponentClass = MinecraftReflection.getIChatBaseComponentClass();
 
-            Method JSONTOICBC_TEMP = null;
+        try {
+
+            Method temp = null;
 
             try {
                 // 先直接获取 ChatSerializer 类的 a 函数, 这个函数也就是将 json 转换为 ICBC 对象
-                JSONTOICBC_TEMP = getMethod(CLASS_CHARSERIALIZER, "a", String.class);
+                temp = ExactReflect.fromClass(chatSerializerClass, true).getMethod("a", String.class);
             } catch (Exception e) {
             }
-            if(JSONTOICBC_TEMP == null) {
+            if(temp == null) {
                 // 判断一下如果上面的获取异常, 那么在使用这个方式
                 // 这个方式就是遍历 ChatSerializer 类的所有公开函数
                 // 然后对比返回值和函数的需要参数, 符合则获取对应函数对象
-                try {
-                    Class<?>[] parameArray = { String.class };
-                    Method[] methods = CLASS_CHARSERIALIZER.getMethods();
-                    for(Method method : methods)
-                        if(CLASS_ICHATBASECOMPONENT.isAssignableFrom(method.getReturnType()) && DataType.compare(method.getParameterTypes(), parameArray)) {
-                            JSONTOICBC_TEMP = method;
-                            break;
-                        }
-                } catch (Exception e) {
-                }
+                temp = FuzzyReflect.fromClass(chatSerializerClass, true).getMethodByParameters("a", iChatBaseComponentClass, new Class[] { String.class });
             }
-            METHOD_JSONTOICBC = JSONTOICBC_TEMP;
+            iChatBaseComponentFormJsonMethod = Accessors.getMethodAccessor(temp);
         }
         catch (Exception e) {
 
@@ -75,6 +68,17 @@ public class ChatSerializer {
     }
 
     private ChatSerializer() {
+    }
+
+    /**
+     * 获取 IChatBaseComponent 的 NMS 类对象
+     *
+     * @return IChatBaseComponent Class
+     * @see MinecraftReflection#getIChatBaseComponentClass()
+     */
+    public static Class<?> getIChatBaseComponent() {
+
+        return MinecraftReflection.getIChatBaseComponentClass();
     }
 
     /**
@@ -88,7 +92,7 @@ public class ChatSerializer {
         Validate.notNull(json, "The json object is null.");
 
         try {
-            return METHOD_JSONTOICBC.invoke(null, json);
+            return iChatBaseComponentFormJsonMethod.invoke(null, json);
         }
         catch (Exception e) {
         }

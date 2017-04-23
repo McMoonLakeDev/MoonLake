@@ -62,12 +62,12 @@ class AttributeExpression implements Attribute {
     @Override
     public double getValue() {
 
-        return EntityManager.getAttribute(player, type);
+        return EntityManager.getAttributeValue(player, type);
     }
 
     @Override
     public void setValue(double value) {
 
-        EntityManager.setAttribute(player, type, value);
+        EntityManager.setAttributeValue(player, type, value);
     }
 }

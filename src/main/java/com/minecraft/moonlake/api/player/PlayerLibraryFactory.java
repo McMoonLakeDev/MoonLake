@@ -27,7 +27,7 @@ package com.minecraft.moonlake.api.player;
  * @deprecated 已过时, 将于 v2.0 删除.
  */
 @Deprecated
-public class PlayerLibraryFactory {
+public class PlayerLibraryFactory { // TODO 2.0
 
     /**
      * 静态 PlayerLibraryFactory 实例对象

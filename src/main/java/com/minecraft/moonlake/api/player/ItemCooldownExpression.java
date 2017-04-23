@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
  * @deprecated 已过时, 将于 v2.0 删除.
  */
 @Deprecated
-class ItemCooldownExpression implements ItemCooldown {
+class ItemCooldownExpression implements ItemCooldown { // TODO 2.0
 
     /**
      * 玩家物品栈冷却能力接口实现类构造函数

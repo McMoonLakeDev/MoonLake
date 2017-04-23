@@ -45,6 +45,12 @@ public class PacketPlayOutCrashClient extends PacketPlayOutBukkitAbstract {
     }
 
     @Override
+    public Class<?> getPacketClass() {
+
+        return super.getPacketClass();
+    }
+
+    @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
         // 触发事件判断如果为 true 则阻止发送

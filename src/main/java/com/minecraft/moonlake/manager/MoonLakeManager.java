@@ -47,7 +47,7 @@ public abstract class MoonLakeManager implements MoonLakeCore {
      */
     @Override
     @Deprecated
-    public MoonLake getInstance() {
+    public MoonLake getInstance() { // TODO 2.0
 
         return MAIN;
     }
@@ -65,7 +65,7 @@ public abstract class MoonLakeManager implements MoonLakeCore {
      * @deprecated 已过时, 将于 v2.0 去除. 请使用 {@link #getMoonLakes()}
      */
     @Deprecated
-    protected static MoonLake getMain() {
+    protected static MoonLake getMain() { // TODO 2.0
 
         return MAIN;
     }

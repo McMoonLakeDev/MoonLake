@@ -27,7 +27,7 @@ package com.minecraft.moonlake.logger;
  * @deprecated 已过时, 将于 v2.0 删除.
  */
 @Deprecated
-public interface MLogger {
+public interface MLogger { // TODO 2.0
 
     /**
      * 获取此控制台日志对象的前缀属性

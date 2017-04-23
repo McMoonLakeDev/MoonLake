@@ -18,24 +18,25 @@
  
 package com.minecraft.moonlake.manager;
 
-import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
+import com.minecraft.moonlake.api.packet.wrapper.BlockPosition;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.reflect.FuzzyReflect;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
-import java.lang.reflect.Method;
 import java.util.*;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>BlockManager</h1>
  * 方块管理实现类
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 @SuppressWarnings("deprecation")
@@ -45,18 +46,8 @@ public class BlockManager extends MoonLakeManager {
      * 坠落方块无视的方块类型集合
      */
     private final static Set<Material> FALLING_BLOCK_IGNORE_SET;
-
-    private final static Class<?> CLASS_WORLD;
-    private final static Class<?> CLASS_CRAFTWORLD;
-    private final static Class<?> CLASS_BLOCK;
-    private final static Class<?> CLASS_BLOCKPOSITION;
-    private final static Class<?> CLASS_TILEENTITYCHEST;
-    private final static Class<?> CLASS_TILEENTITYENDERCHEST;
-    private final static Method METHOD_GETHANDLE;
-    private final static Method METHOD_PLAYERBLOCKACTION;
-    private final static Method METHOD_GETTILEENTITY;
-    private final static Method METHOD_GETBLOCKCHEST;
-    private final static Method METHOD_GETBLOCKENDERCHEST;
+    private static volatile MethodAccessor worldPlayBlockActionMethod;
+    private static volatile MethodAccessor tileEntityGetBlockMethod;
 
     static {
 
@@ -88,25 +79,6 @@ public class BlockManager extends MoonLakeManager {
         FALLING_BLOCK_IGNORE_SET.add(Material.STATIONARY_LAVA);
         FALLING_BLOCK_IGNORE_SET.add(Material.DOUBLE_STEP);
         FALLING_BLOCK_IGNORE_SET.add(Material.STEP);
-
-        try {
-
-            CLASS_WORLD = PackageType.MINECRAFT_SERVER.getClass("World");
-            CLASS_CRAFTWORLD = PackageType.CRAFTBUKKIT.getClass("CraftWorld");
-            CLASS_BLOCK = PackageType.MINECRAFT_SERVER.getClass("Block");
-            CLASS_BLOCKPOSITION = PackageType.MINECRAFT_SERVER.getClass("BlockPosition");
-            CLASS_TILEENTITYCHEST = PackageType.MINECRAFT_SERVER.getClass("TileEntityChest");
-            CLASS_TILEENTITYENDERCHEST = PackageType.MINECRAFT_SERVER.getClass("TileEntityEnderChest");
-            METHOD_GETHANDLE = getMethod(CLASS_CRAFTWORLD, "getHandle");
-            METHOD_PLAYERBLOCKACTION = getMethod(CLASS_WORLD, "playBlockAction", CLASS_BLOCKPOSITION, CLASS_BLOCK, int.class, int.class);
-            METHOD_GETTILEENTITY = getMethod(CLASS_WORLD, "getTileEntity", CLASS_BLOCKPOSITION);
-            METHOD_GETBLOCKCHEST = getMethod(CLASS_TILEENTITYCHEST, getServerVersionNumber() <= 8 ? "w" : "getBlock");
-            METHOD_GETBLOCKENDERCHEST = getMethod(CLASS_TILEENTITYENDERCHEST, getServerVersionNumber() <= 8 ? "w" : "getBlock");
-        }
-        catch (Exception e) {
-
-            throw new IllegalBukkitVersionException("The block manager reflect raw exception.", e);
-        }
     }
 
     /**
@@ -239,13 +211,32 @@ public class BlockManager extends MoonLakeManager {
         return blockList;
     }
 
+    private static MethodAccessor getWorldPlayBlockActionMethod() {
+        if(worldPlayBlockActionMethod == null) {
+            Class<?> worldClass = MinecraftReflection.getMinecraftWorldClass();
+            Class<?> blockClass = MinecraftReflection.getMinecraftBlockClass();
+            Class<?> blockPositionClass = MinecraftReflection.getMinecraftBlockPositionClass();
+            worldPlayBlockActionMethod = Accessors.getMethodAccessorOrNull(worldClass, "playBlockAction", blockPositionClass, blockClass, int.class, int.class);
+        }
+        return worldPlayBlockActionMethod;
+    }
+
+    private static MethodAccessor getTileEntityGetBlockMethod() {
+        if(tileEntityGetBlockMethod == null) {
+            Class<?> blockClass = MinecraftReflection.getMinecraftBlockClass();
+            Class<?> tileEntityClass = MinecraftReflection.getMinecraftTileEntityClass();
+            tileEntityGetBlockMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(tileEntityClass, true).getMethodByParameters("getBlock", blockClass, new Class[] {}));
+        }
+        return tileEntityGetBlockMethod;
+    }
+
     /**
      * 交互指定位置的箱子方块
      *
      * @param location 箱子方块位置
      * @param action 交互 true 则打开 else 关闭
      * @throws IllegalArgumentException 如果箱子方块位置对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果箱子方块类型不为 {@code Material.CHEST} 或 {@code Material.ENDER_CHEST} 则抛出异常
+     * @throws IllegalArgumentException 如果箱子方块类型不为 {@code Material.CHEST | TRAPPED_CHEST | ENDER_CHEST} 则抛出异常
      */
     public static void actionChest(Location location, boolean action) {
 
@@ -260,23 +251,23 @@ public class BlockManager extends MoonLakeManager {
      * @param block 箱子方块
      * @param action 交互 true 则打开 else 关闭
      * @throws IllegalArgumentException 如果箱子方块对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果箱子方块类型不为 {@code Material.CHEST} 或 {@code Material.ENDER_CHEST} 则抛出异常
+     * @throws IllegalArgumentException 如果箱子方块类型不为 {@code Material.CHEST | TRAPPED_CHEST | ENDER_CHEST} 则抛出异常
      */
     public static void actionChest(Block block, boolean action) {
 
         Validate.notNull(block, "The block object is null.");
-        Validate.isTrue(block.getType() == Material.CHEST || block.getType() == Material.ENDER_CHEST, "The block type not is chest or ender chest.");
+        Validate.isTrue(block.getType() == Material.CHEST || block.getType() == Material.TRAPPED_CHEST || block.getType() == Material.ENDER_CHEST, "The block type not is chest or ender chest.");
 
         Location location = block.getLocation();
 
         try {
 
-            Object nmsWorld = METHOD_GETHANDLE.invoke(block.getWorld());
-            Object nmsBlockPosition = instantiateObject(CLASS_BLOCKPOSITION, location.getX(), location.getY(), location.getZ());
-            Object nmsTileEntityChest = METHOD_GETTILEENTITY.invoke(nmsWorld, nmsBlockPosition);
-            Object nmsBlock = block.getType() == Material.CHEST  ? METHOD_GETBLOCKCHEST.invoke(nmsTileEntityChest) : METHOD_GETBLOCKENDERCHEST.invoke(nmsTileEntityChest);
+            Object nmsWorld = MinecraftReflection.getWorldServer(block.getWorld());
+            Object nmsBlockPosition = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ()).asNMS();
+            Object nmsTileEntityChest = MinecraftReflection.getTileEntity(nmsWorld, nmsBlockPosition);
+            Object nmsBlock = getTileEntityGetBlockMethod().invoke(nmsTileEntityChest);
 
-            METHOD_PLAYERBLOCKACTION.invoke(nmsWorld, nmsBlockPosition, nmsBlock, 1, action ? 1 : 0);
+            getWorldPlayBlockActionMethod().invoke(nmsWorld, nmsBlockPosition, nmsBlock, 1, action ? 1 : 0);
         }
         catch (Exception e) {
 

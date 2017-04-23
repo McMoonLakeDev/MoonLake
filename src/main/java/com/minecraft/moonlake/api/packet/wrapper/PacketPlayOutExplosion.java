@@ -21,8 +21,10 @@ package com.minecraft.moonlake.api.packet.wrapper;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.*;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -30,8 +32,6 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutExplosion</h1>
@@ -46,19 +46,17 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 public class PacketPlayOutExplosion extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTEXPLOSION;
-    private final static Class<?> CLASS_VEC3D;
+    private static volatile ConstructorAccessor<?> packetPlayOutExplosionVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutExplosionConstructor;
+    private static volatile ConstructorAccessor<?> vec3DConstructor;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTEXPLOSION = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutExplosion");
-            CLASS_VEC3D = PackageType.MINECRAFT_SERVER.getClass("Vec3D");
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The net.minecraft.server packet play out explosion reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTEXPLOSION = MinecraftReflection.getMinecraftClass("PacketPlayOutExplosion");
+        Class<?> vec3DClass = MinecraftReflection.getMinecraftVec3DClass();
+        packetPlayOutExplosionVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTEXPLOSION);
+        packetPlayOutExplosionConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTEXPLOSION, double.class, double.class, double.class, float.class, List.class, vec3DClass);
+        vec3DConstructor = Accessors.getConstructorAccessor(vec3DClass, double.class, double.class, double.class);
     }
 
     private DoubleProperty x;
@@ -206,6 +204,12 @@ public class PacketPlayOutExplosion extends PacketPlayOutBukkitAbstract {
     }
 
     @Override
+    public Class<?> getPacketClass() {
+
+        return CLASS_PACKETPLAYOUTEXPLOSION;
+    }
+
+    @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
         // 触发事件判断如果为 true 则阻止发送
@@ -223,9 +227,9 @@ public class PacketPlayOutExplosion extends PacketPlayOutBukkitAbstract {
                 for(BlockPosition blockPosition : records)
                     nmsBlockPositionList.add(blockPosition.asNMS());
             // 实例化其他参数值
-            Object nmsVec3D = instantiateObject(CLASS_VEC3D, vector.getX(), vector.getY(), vector.getZ());
-            Object packet = instantiateObject(CLASS_PACKETPLAYOUTEXPLOSION, x.get(), y.get(), z.get(), radius.get(), nmsBlockPositionList, nmsVec3D);
-            sendPacket(players, packet);
+            Object nmsVec3D = vec3DConstructor.invoke(vector.getX(), vector.getY(), vector.getZ());
+            Object packet = packetPlayOutExplosionConstructor.invoke(x.get(), y.get(), z.get(), radius.get(), nmsBlockPositionList, nmsVec3D);
+            MinecraftReflection.sendPacket(players, packet);
             return true;
 
         } catch (Exception e) {
@@ -239,7 +243,7 @@ public class PacketPlayOutExplosion extends PacketPlayOutBukkitAbstract {
                     for(BlockPosition blockPosition : records)
                         nmsBlockPositionList.add(blockPosition.asNMS());
 
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTEXPLOSION);
+                Object packet = packetPlayOutExplosionVoidConstructor.invoke();
                 Object[] values = { x.get(), y.get(), z.get(), radius.get(), nmsBlockPositionList, vector.getX(), vector.getY(), vector.getZ()};
                 setFieldAccessibleAndValueSend(players, 8, CLASS_PACKETPLAYOUTEXPLOSION, packet, values);
                 return true;

@@ -35,7 +35,7 @@ import java.util.UUID;
  * @deprecated 已过时, 将于 v2.0 删除.
  */
 @Deprecated
-public interface PlayerLibrary extends NMSPlayerLibrary, AbilityLibrary {
+public interface PlayerLibrary extends NMSPlayerLibrary, AbilityLibrary { // TODO 2.0
 
     /**
      * 获取 Player 对象从名称

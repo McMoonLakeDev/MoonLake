@@ -18,14 +18,17 @@
 
 package com.minecraft.moonlake.enums;
 
+import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
-import com.minecraft.moonlake.reflect.Reflect;
+
+import javax.annotation.Nullable;
 
 /**
  * <h1>Enchantment</h1>
  * 附魔类型中文汉化版（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 public abstract class Enchantment {
@@ -143,27 +146,27 @@ public abstract class Enchantment {
     /**
      * 附魔类型: 冰霜行者
      */
-    public final static Enchantment 冰霜行者 = new Enchantment(9, "FROST_WALKER", 9) {};
+    public final static Enchantment 冰霜行者 = new Enchantment(9, "FROST_WALKER", MinecraftVersion.V1_9) {};
     /**
      * 附魔类型: 经验修补
      */
-    public final static Enchantment 经验修补 = new Enchantment(70, "MENDING", 9) {};
+    public final static Enchantment 经验修补 = new Enchantment(70, "MENDING", MinecraftVersion.V1_9) {};
     ///
 
     // 1.11 增加的新附魔（不兼容 1.10 以下
     /**
      * 附魔类型: 绑定诅咒
      */
-    public final static Enchantment 绑定诅咒 = new Enchantment(10, "BINDING_CURSE", 11) {};
+    public final static Enchantment 绑定诅咒 = new Enchantment(10, "BINDING_CURSE", MinecraftVersion.V1_11) {};
     /**
      * 附魔类型: 消失诅咒
      */
-    public final static Enchantment 消失诅咒 = new Enchantment(71, "VANISHING_CURSE", 11) {};
+    public final static Enchantment 消失诅咒 = new Enchantment(71, "VANISHING_CURSE", MinecraftVersion.V1_11) {};
     ///
 
     private final int id;
     private final String name;
-    private final int requiredVersion;
+    private final MinecraftVersion requiredVersion;
 
     /**
      * 附魔类型类构造函数
@@ -173,7 +176,7 @@ public abstract class Enchantment {
      */
     private Enchantment(int id, String name) {
 
-        this(id, name, -1);
+        this(id, name, null);
     }
 
     /**
@@ -183,7 +186,7 @@ public abstract class Enchantment {
      * @param name 附魔名称
      * @param requiredVersion 需求版本
      */
-    private Enchantment(int id, String name, int requiredVersion) {
+    private Enchantment(int id, String name, MinecraftVersion requiredVersion) {
 
         this.id = id;
         this.name = name;
@@ -213,11 +216,24 @@ public abstract class Enchantment {
     }
 
     /**
+     * 获取此附魔类型需求的次版本号
+     *
+     * @return 次版本号
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getRequiredMCVersion()}
+     */
+    @Deprecated
+    public int getRequiredVersion() { // TODO 2.0
+
+        return requiredVersion != null ? requiredVersion.getMinor() : -1;
+    }
+
+    /**
      * 获取此附魔类型需求的版本
      *
      * @return 版本
      */
-    public int getRequiredVersion() {
+    @Nullable
+    public MinecraftVersion getRequiredMCVersion() {
 
         return requiredVersion;
     }
@@ -231,14 +247,9 @@ public abstract class Enchantment {
     @SuppressWarnings("deprecation")
     public org.bukkit.enchantments.Enchantment as() {
 
-        if(requiredVersion != -1) {
+        if(requiredVersion != null && !MoonLakeAPI.currentMCVersion().isLater(requiredVersion)) {
 
-            int version = Reflect.getServerVersionNumber();
-
-            if(version < requiredVersion) {
-
-                throw new IllegalBukkitVersionException("The bukkit version not support enchantment: " + id);
-            }
+            throw new IllegalBukkitVersionException("The bukkit version not support enchantment: " + id);
         }
         //return org.bukkit.enchantments.Enchantment.getById(id);
         return org.bukkit.enchantments.Enchantment.getByName(name);

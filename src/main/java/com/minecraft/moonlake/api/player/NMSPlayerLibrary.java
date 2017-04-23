@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
  * @deprecated 已过时, 将于 v2.0 删除.
  */
 @Deprecated
-public interface NMSPlayerLibrary {
+public interface NMSPlayerLibrary { // TODO 2.0
 
     /**
      * 获取指定玩家的网络 Ping 值

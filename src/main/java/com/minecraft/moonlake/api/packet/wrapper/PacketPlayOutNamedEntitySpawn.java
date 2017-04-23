@@ -18,25 +18,26 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.property.ObjectProperty;
 import com.minecraft.moonlake.property.SimpleObjectProperty;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
+import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-
-import java.lang.reflect.Method;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutNamedEntitySpawn</h1>
  * 数据包输出名称实体生成（详细doc待补充...）
  *
- * @version 2.0
+ * @version 2.0.1
  * @author Month_Light
  * @see Packet
  * @see PacketPlayOut
@@ -45,19 +46,18 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN;
-    private final static Method METHOD_GETDATAWATCHER;
+    private static volatile ConstructorAccessor<?> packetPlayOutNamedEntitySpawnVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutNamedEntitySpawnConstructor;
+    private static volatile MethodAccessor entityGetDataWatcherMethod;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutNamedEntitySpawn");
-            METHOD_GETDATAWATCHER = getMethod("Entity", PackageType.MINECRAFT_SERVER, "getDataWatcher");
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The net.minecraft.server packet play out named entity spawn reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN = MinecraftReflection.getMinecraftClass("PacketPlayOutNamedEntitySpawn");
+        Class<?> entityClass = MinecraftReflection.getMinecraftEntityClass();
+        Class<?> entityHumanClass = MinecraftReflection.getMinecraftEntityHumanClass();
+        packetPlayOutNamedEntitySpawnVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN);
+        packetPlayOutNamedEntitySpawnConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN, entityHumanClass);
+        entityGetDataWatcherMethod = Accessors.getMethodAccessor(entityClass, "getDataWatcher");
     }
 
     private ObjectProperty<Player> entity;
@@ -91,6 +91,12 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
     }
 
     @Override
+    public Class<?> getPacketClass() {
+
+        return CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN;
+    }
+
+    @Override
     @SuppressWarnings("deprecation")
     protected boolean sendPacket(Player... players) throws Exception {
 
@@ -104,9 +110,9 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
         try {
             // 先用调用 NMS 的 PacketPlayOutNamedEntitySpawn 构造函数, 参数 EntityHuman
             // 进行反射实例发送
-            Object nmsPlayer = getNMSPlayer(player);
-            Object packet = instantiateObject(CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN, nmsPlayer);
-            sendPacket(players, packet);
+            Object entityPlayer = MinecraftReflection.getEntityPlayer(player);
+            Object packet = packetPlayOutNamedEntitySpawnConstructor.invoke(entityPlayer);
+            MinecraftReflection.sendPacket(players, packet);
             return true;
 
         } catch (Exception e) {
@@ -117,10 +123,10 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
                 // 而 1.9 以及更高的版本有 9 个字段  int, UUID, double, double, double, byte, byte, DataWatcher, List
                 // 其中这些字段中最后一个 List 可以为 null 的
                 Location location = player.getLocation();
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN);
-                Object dataWatcher = METHOD_GETDATAWATCHER.invoke(getNMSPlayer(player));
+                Object packet = packetPlayOutNamedEntitySpawnVoidConstructor.invoke();
+                Object dataWatcher = entityGetDataWatcherMethod.invoke(MinecraftReflection.getEntityPlayer(player));
 
-                if(getServerVersionNumber() <= 8) {
+                if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                     Object[] values = {
                             player.getEntityId(),
                             player.getUniqueId(),

@@ -420,7 +420,7 @@ class NBTListExpression implements NBTList {
                 Object obj = itr.next();
                 if(obj instanceof String) {
                     stringBuilder.append("\"");
-                    stringBuilder.append(obj);
+                    stringBuilder.append(obj.toString().replace("\"", "\\\"")); // escape char: " --> \"
                     stringBuilder.append("\"");
                 }
                 else {

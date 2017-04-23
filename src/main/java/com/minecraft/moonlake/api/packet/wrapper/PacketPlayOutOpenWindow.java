@@ -21,12 +21,12 @@ package com.minecraft.moonlake.api.packet.wrapper;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
-import com.minecraft.moonlake.api.packet.exception.PacketInitializeException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.*;
+import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
-
-import static com.minecraft.moonlake.reflect.Reflect.*;
 
 /**
  * <h1>PacketPlayOutOpenWindow</h1>
@@ -41,19 +41,17 @@ import static com.minecraft.moonlake.reflect.Reflect.*;
 public class PacketPlayOutOpenWindow extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTOPENWINDOW;
-    private final static Class<?> CLASS_CHATMESSAGE;
+    private static volatile ConstructorAccessor<?> packetPlayOutOpenWindowVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutOpenWindowHorseConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutOpenWindowConstructor;
 
     static {
 
-        try {
-
-            CLASS_PACKETPLAYOUTOPENWINDOW = PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutOpenWindow");
-            CLASS_CHATMESSAGE = PackageType.MINECRAFT_SERVER.getClass("ChatMessage");
-        }
-        catch (Exception e) {
-
-            throw new PacketInitializeException("The net.minecraft.server packet play out open window reflect raw initialize exception.", e);
-        }
+        CLASS_PACKETPLAYOUTOPENWINDOW = MinecraftReflection.getMinecraftClass("PacketPlayOutOpenWindow");
+        Class<?> iChatBaseComponentClass = MinecraftReflection.getIChatBaseComponentClass();
+        packetPlayOutOpenWindowVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTOPENWINDOW);
+        packetPlayOutOpenWindowConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTOPENWINDOW, int.class, String.class, iChatBaseComponentClass, int.class);
+        packetPlayOutOpenWindowHorseConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTOPENWINDOW, int.class, String.class, iChatBaseComponentClass, int.class, int.class);
     }
 
     private IntegerProperty windowId;
@@ -164,6 +162,12 @@ public class PacketPlayOutOpenWindow extends PacketPlayOutBukkitAbstract {
     }
 
     @Override
+    public Class<?> getPacketClass() {
+
+        return CLASS_PACKETPLAYOUTOPENWINDOW;
+    }
+
+    @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
         // 触发事件判断如果为 true 则阻止发送
@@ -180,15 +184,15 @@ public class PacketPlayOutOpenWindow extends PacketPlayOutBukkitAbstract {
             // 参数 int, String, IChatBaseComponent, int
             // 参数 int, String, IChatBaseComponent, int, int 窗口类型为实体马
             // 进行反射实例发送
-            Object nmsTitle = instantiateObject(CLASS_CHATMESSAGE, windowTitle);
+            Object title = MinecraftReflection.getChatMessage(windowTitle);
             Object packet;
 
             if(windowType == WindowType.ENTITY_HORSE)
-                packet = instantiateObject(CLASS_PACKETPLAYOUTOPENWINDOW, windowId.get(), windowType.toString(), nmsTitle, slotCount.get(), entityHorseId.get());
+                packet = packetPlayOutOpenWindowHorseConstructor.invoke(windowId.get(), windowType.toString(), title, slotCount.get(), entityHorseId.get());
             else
-                packet = instantiateObject(CLASS_PACKETPLAYOUTOPENWINDOW, windowId.get(), windowType.toString(), nmsTitle, slotCount.get());
+                packet = packetPlayOutOpenWindowConstructor.invoke(windowId.get(), windowType.toString(), title, slotCount.get());
 
-            sendPacket(players, packet);
+            MinecraftReflection.sendPacket(players, packet);
             return true;
 
         } catch (Exception e) {
@@ -197,15 +201,15 @@ public class PacketPlayOutOpenWindow extends PacketPlayOutBukkitAbstract {
             try {
                 // 判断字段数量等于 5 个的话就是有此方式
                 // 这两个字段分别对应 int, String, IChatBaseComponent, int, int 的 5 个属性
-                Object nmsTitle = instantiateObject(CLASS_CHATMESSAGE, windowTitle);
-                Object packet = instantiateObject(CLASS_PACKETPLAYOUTOPENWINDOW);
+                Object title = MinecraftReflection.getChatMessage(windowTitle);
+                Object packet = packetPlayOutOpenWindowVoidConstructor.invoke();
 
                 if(windowType == WindowType.ENTITY_HORSE) {
-                    Object[] values = { windowId.get(), windowType.toString(), nmsTitle, slotCount.get(), entityHorseId.get() };
+                    Object[] values = { windowId.get(), windowType.toString(), title, slotCount.get(), entityHorseId.get() };
                     setFieldAccessibleAndValueSend(players, 5, CLASS_PACKETPLAYOUTOPENWINDOW, packet, values);
                 } else {
-                    Object[] values = { windowId.get(), windowType.toString(), nmsTitle, slotCount.get() };
-                    setFieldAccessibleAndValueSend(players, 5, CLASS_PACKETPLAYOUTOPENWINDOW, packet, values);
+                    Object[] values = { windowId.get(), windowType.toString(), title, slotCount.get() };
+                    setFieldAccessibleAndValueSend(players, 4, CLASS_PACKETPLAYOUTOPENWINDOW, packet, values);
                 }
                 return true;
 

@@ -24,6 +24,8 @@ package com.minecraft.moonlake.encrypt;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除.
  */
+@Deprecated
 public interface EncryptData {
 }
