@@ -82,7 +82,7 @@ class PacketINCChannel extends PacketChannelAbstract {
 
                     try {
 
-                        if(channel.pipeline().get(KEY_PLAYER) == null) {
+                        if(channel.pipeline().get(KEY_HANDLER) != null) {
 
                             channel.pipeline().addBefore(KEY_HANDLER, KEY_PLAYER, new ChannelHandler(player));
                         }
