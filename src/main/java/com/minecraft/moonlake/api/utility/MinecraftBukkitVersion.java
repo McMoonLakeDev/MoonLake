@@ -75,6 +75,11 @@ public class MinecraftBukkitVersion implements Comparable<MinecraftBukkitVersion
     public final static MinecraftBukkitVersion V1_11_R1 = new MinecraftBukkitVersion("v1_11_R1");
 
     /**
+     * Minecraft Bukkit v1_12_R1 版本 (MC: 1.12.0 - 未知) // 当前最新版本为 1.12-pre3
+     */
+    public final static MinecraftBukkitVersion V1_12_R1 = new MinecraftBukkitVersion("v1_12_R1");
+
+    /**
      * Minecraft Bukkit 未知版本
      */
     public final static MinecraftBukkitVersion UNKNOWN = new MinecraftBukkitVersion(-1, -1, -1);
@@ -125,6 +130,10 @@ public class MinecraftBukkitVersion implements Comparable<MinecraftBukkitVersion
                 new MinecraftVersion(1, 11, 2),
                 // ---> net.minecraft.server.v1_11_R1
         }, V1_11_R1);
+        map.put(new MinecraftVersion[] {
+                new MinecraftVersion(1, 12, 0),
+                // ---> net.minecraft.server.v1_12_R1
+        }, V1_12_R1);
         return map;
     }
 

@@ -35,6 +35,16 @@ import java.util.regex.Pattern;
 public class MinecraftVersion implements Comparable<MinecraftVersion> {
 
     /**
+     * Minecraft 1.12 : 多彩世界更新
+     */
+    public final static MinecraftVersion WORLD_COLOR_UPDATE = new MinecraftVersion("1.12");
+
+    /**
+     * Minecraft 1.12 : 多彩世界更新
+     */
+    public final static MinecraftVersion V1_12 = WORLD_COLOR_UPDATE;
+
+    /**
      * Minecraft 1.11 : 探险更新
      */
     public final static MinecraftVersion EXPLORATION_UPDATE = new MinecraftVersion("1.11");

@@ -38,6 +38,13 @@
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
+            <artifactId>Spigot-1.12-pre2</artifactId>
+            <version>1.12-pre2</version>
+            <scope>system</scope>
+            <systemPath>${libraries}/Spigot-1.12-pre2.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
             <artifactId>Spigot-1.11.2-R0.1</artifactId>
             <version>1.11.2</version>
             <scope>system</scope>
@@ -59,10 +66,10 @@
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>Spigot-1.9-R0.1</artifactId>
-            <version>1.9</version>
+            <artifactId>Spigot-1.9.2-R0.1</artifactId>
+            <version>1.9.2</version>
             <scope>system</scope>
-            <systemPath>${libraries}/Spigot-1.9-R0.1.jar</systemPath>
+            <systemPath>${libraries}/Spigot-1.9.2-R0.1.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
