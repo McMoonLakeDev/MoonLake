@@ -149,6 +149,16 @@ public interface NMSPlayer {
     boolean hasItemCooldown(Material material);
 
     /**
+     * 获取此玩家物品栈类型的冷却时间
+     *
+     * @param material 物品栈类型
+     * @return 冷却时间
+     * @throws IllegalArgumentException 如果物品栈类型对象为 {@code null} 则抛出异常
+     * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
+     */
+    int getItemCooldown(Material material);
+
+    /**
      * 将此玩家播放受伤动画效果
      *
      * @throws PacketException 如果发送时错误则抛出异常

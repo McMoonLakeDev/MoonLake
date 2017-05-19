@@ -490,7 +490,7 @@ public class PlayerManager extends MoonLakeManager {
      * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
      * @see MinecraftReflection#getItemCooldown(HumanEntity, Material)
      */
-    public static float getItemCoolDown(Player player, Material material) throws IllegalBukkitVersionException {
+    public static int getItemCoolDown(Player player, Material material) throws IllegalBukkitVersionException {
         return MinecraftReflection.getItemCooldown(player, material);
     }
 }

@@ -59,6 +59,7 @@ public final class Accessors {
 
     public static FieldAccessor getFieldAccessor(Class<?> instanceClass, Class<?> fieldClass, boolean forceAccess) {
         Field field = FuzzyReflect.fromClass(instanceClass, forceAccess).getFieldByType(null, fieldClass);
+        field.setAccessible(forceAccess);
         return new SimpleFieldAccessor(field);
     }
 

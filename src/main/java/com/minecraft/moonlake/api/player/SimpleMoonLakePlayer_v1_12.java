@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -53,4 +54,21 @@ public class SimpleMoonLakePlayer_v1_12 extends SimpleMoonLakePlayer_v1_11 {
 
         super(player);
     }
+
+    //
+    // 其实这两个函数从 1.11.2 版本都添加上了
+    // 但是我的 v1_11 月色之湖玩家实现类并不想重写
+    // 因为可能会有 1.11 的服务端进行使用本插件
+    // 所以就只在 v1_12 版本及以后的版本存在
+
+    @Override
+    public void setItemCooldown(Material type, int tick) {
+        getBukkitPlayer().setCooldown(type, tick);
+    }
+
+    @Override
+    public boolean hasItemCooldown(Material type) {
+        return getBukkitPlayer().hasCooldown(type);
+    }
+    ///
 }

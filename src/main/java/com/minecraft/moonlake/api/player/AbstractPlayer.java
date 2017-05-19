@@ -1443,6 +1443,12 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    public int getItemCooldown(Material type) {
+
+        return PlayerManager.getItemCoolDown(getBukkitPlayer(), type);
+    }
+
+    @Override
     public void playHurtAnimation() throws PacketException {
 
         new PacketPlayOutAnimation(getEntityId(), PacketPlayOutAnimation.Type.HURT_EFFECT).sendAll();
@@ -2076,4 +2082,6 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
             throw new CannotDependException("The call 'WorldEdit plugin method 'getWorldEditSelection' exception.", e);
         }
     }
+
+
 }

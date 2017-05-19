@@ -90,7 +90,6 @@ public class MinecraftReflection {
     private static volatile MethodAccessor worldServerHandleMethod;
     private static volatile MethodAccessor worldGetTileEntityMethod;
     private static volatile MethodAccessor itemCooldownHasMethod;
-    private static volatile MethodAccessor itemCooldownGetMethod;
     private static volatile MethodAccessor itemCooldownSetMethod;
     private static volatile MethodAccessor worldAddEntityMethod;
     private static volatile MethodAccessor itemStackSaveMethod;
@@ -100,6 +99,9 @@ public class MinecraftReflection {
     private static volatile FieldAccessor playerConnectionNetworkManagerField;
     private static volatile FieldAccessor entityPlayerPlayerConnectionField;
     private static volatile FieldAccessor entityHumanItemCooldownField;
+    private static volatile FieldAccessor itemCooldownInfoTickField;
+    private static volatile FieldAccessor itemCooldownMapField;
+    private static volatile FieldAccessor itemCooldownTickField;
     private static volatile FieldAccessor entityPlayerLocaleField;
     private static volatile FieldAccessor entityPlayerPingField;
 
@@ -303,6 +305,12 @@ public class MinecraftReflection {
         return getMinecraftClass("ItemCooldown");
     }
 
+    public static Class<?> getMinecraftItemCooldownInfoClass() throws IllegalBukkitVersionException {
+        if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9))
+            throw new IllegalBukkitVersionException("The item cool down not support 1.8 or old bukkit version.");
+        return getMinecraftClass("ItemCooldown$Info");
+    }
+
     public static Class<?> getMinecraftEnumParticleClass() {
         return getMinecraftClass("EnumParticle");
     }
@@ -477,19 +485,30 @@ public class MinecraftReflection {
         return (boolean) itemCooldownHasMethod.invoke(itemCooldown, item);
     }
 
-    public static float getItemCooldown(HumanEntity humanEntity, Material type) {
+    public static int getItemCooldown(HumanEntity humanEntity, Material type) {
         Validate.notNull(humanEntity, "The human entity object is null.");
         Object entityHuman = getEntity(humanEntity);
         return getItemCooldown(entityHuman, type);
     }
 
-    public static float getItemCooldown(Object entityHuman, Material type) {
+    @SuppressWarnings("unchecked")
+    public static int getItemCooldown(Object entityHuman, Material type) {
         Validate.notNull(type, "The item type object is null.");
         Object item = itemGetByMaterial(type);
         Object itemCooldown = getEntityHumanItemCooldown(entityHuman); // 如果不支持直接抛出异常
-        if(itemCooldownGetMethod == null)
-            itemCooldownGetMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getMinecraftItemCooldownClass(), true).getMethodByParameters("a", float.class, new Class[] { getMinecraftItemClass(), float.class }));
-        return (float) itemCooldownGetMethod.invoke(itemCooldown, item, 0.0f);
+        if(itemCooldownTickField == null)
+            itemCooldownTickField = Accessors.getFieldAccessor(getMinecraftItemCooldownClass(), int.class, true);
+        if(itemCooldownMapField == null)
+            itemCooldownMapField = Accessors.getFieldAccessor(getMinecraftItemCooldownClass(), Map.class, true);
+        if(itemCooldownInfoTickField == null)
+            itemCooldownInfoTickField = Accessors.getFieldAccessor(getMinecraftItemCooldownInfoClass(), 1, true); // 第二个字段 b
+        // 算法摘自 https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/commits/be9ef980b9aa272acf298a337da8157c6a620e95#src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+        Object info = ((Map) itemCooldownMapField.get(itemCooldown)).get(item);
+        if(info == null)
+            return 0;
+        int infoTick = (int) itemCooldownInfoTickField.get(info);
+        int tick = (int) itemCooldownTickField.get(itemCooldown);
+        return Math.max(0, infoTick - tick);
     }
 
     public static void setItemCooldown(HumanEntity humanEntity, Material type, int tick) {
