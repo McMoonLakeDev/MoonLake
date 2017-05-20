@@ -128,9 +128,21 @@ public class ItemManager extends MoonLakeManager {
      */
     public static String getDisplayName(ItemStack itemStack) {
 
+        return getDisplayName(itemStack, itemStack.getType().name());
+    }
+
+    /**
+     * 获取指定物品栈的显示名称
+     *
+     * @param itemStack 物品栈
+     * @return 物品栈的显示名 | def
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     */
+    public static String getDisplayName(ItemStack itemStack, String def) {
+
         Validate.notNull(itemStack, "The itemstack object is null.");
 
-        return itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName() ? itemStack.getItemMeta().getDisplayName() : itemStack.getType().name();
+        return itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName() ? itemStack.getItemMeta().getDisplayName() : def;
     }
 
     /**
