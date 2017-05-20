@@ -87,6 +87,7 @@ public class MinecraftReflection {
     private static volatile MethodAccessor entityGetBukkitEntityMethod;
     private static volatile MethodAccessor enumParticleGetByIdMethod;
     private static volatile MethodAccessor itemStackCraftStackMethod;
+    private static volatile MethodAccessor iAttributeGetNameMethod;
     private static volatile MethodAccessor worldServerHandleMethod;
     private static volatile MethodAccessor worldGetTileEntityMethod;
     private static volatile MethodAccessor itemCooldownHasMethod;
@@ -577,12 +578,26 @@ public class MinecraftReflection {
         return (GameProfile) entityHumanGetProfileMethod.invoke(entityHuman);
     }
 
+    public static Object getGenericAttributes(AttributeType type) {
+        Validate.notNull(type, "The attribute type object is null.");
+        Class<?> iAttributeClass = getMinecraftIAttributeClass();
+        if(iAttributeGetNameMethod == null)
+            iAttributeGetNameMethod = Accessors.getMethodAccessor(iAttributeClass, "getName");
+        FieldAccessor[] array = Accessors.getFieldAccessorArray(getMinecraftGenericAttributesClass(), iAttributeClass, true);
+        for(FieldAccessor field : array) {
+            Object iAttribute = field.get(null);
+            if(type.getName().equals(iAttributeGetNameMethod.invoke(iAttribute)))
+                return iAttribute;
+        }
+        throw new UnsupportedOperationException("The attribute type not support bukkit version: " + type.getName());
+    }
+
     public static void setAttributeValue(LivingEntity livingEntity, AttributeType attributeType, double value) {
         Validate.notNull(livingEntity, "The living entity object is null.");
         Validate.notNull(attributeType, "The attribute type object is null.");
         attributeType.isSupported(); // 检测属性类型是否支持服务端版本
         double finalValue = attributeType.getSafeValue(value);
-        Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttributeField().get(null));
+        Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttribute());
         if(attributeInstanceSetValueMethod == null)
             attributeInstanceSetValueMethod = Accessors.getMethodAccessor(getMinecraftAttributeInstanceClass(), "setValue", double.class);
         attributeInstanceSetValueMethod.invoke(attributeInstance, finalValue);
@@ -592,7 +607,7 @@ public class MinecraftReflection {
         Validate.notNull(livingEntity, "The living entity object is null.");
         Validate.notNull(attributeType, "The attribute type object is null.");
         attributeType.isSupported(); // 检测属性类型是否支持服务端版本
-        Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttributeField().get(null));
+        Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttribute());
         if(attributeInstanceGetValueMethod == null)
             attributeInstanceGetValueMethod = Accessors.getMethodAccessor(getMinecraftAttributeInstanceClass(), "getValue");
         return (double) attributeInstanceGetValueMethod.invoke(attributeInstance);

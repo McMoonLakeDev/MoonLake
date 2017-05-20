@@ -2083,5 +2083,8 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
         }
     }
 
-
+    @Override
+    public Spigot spigot() {
+        throw new UnsupportedOperationException();
+    }
 }
