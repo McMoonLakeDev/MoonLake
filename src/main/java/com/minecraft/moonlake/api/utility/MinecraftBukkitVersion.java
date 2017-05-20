@@ -75,7 +75,7 @@ public class MinecraftBukkitVersion implements Comparable<MinecraftBukkitVersion
     public final static MinecraftBukkitVersion V1_11_R1 = new MinecraftBukkitVersion("v1_11_R1");
 
     /**
-     * Minecraft Bukkit v1_12_R1 版本 (MC: 1.12.0 - 未知) // 当前最新版本为 1.12-pre3
+     * Minecraft Bukkit v1_12_R1 版本 (MC: 1.12.0 - 未知) // 当前最新版本为 1.12-pre5
      */
     public final static MinecraftBukkitVersion V1_12_R1 = new MinecraftBukkitVersion("v1_12_R1");
 
