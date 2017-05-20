@@ -1355,14 +1355,6 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void sendPacket(com.minecraft.moonlake.nms.packet.Packet<?> packet) {
-
-        Validate.notNull(packet, "The packet object is null.");
-
-        packet.send(getBukkitPlayer());
-    }
-
-    @Override
     @SuppressWarnings("SpellCheckingInspection")
     public void sendPacket(PacketPlayOutBukkit packet) {
 

@@ -695,18 +695,6 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
-    public Set<String> getLores(ItemStack itemStack) {
-
-        return base.getLores(itemStack);
-    }
-
-    @Override
-    public Set<String> getLores(ItemStack itemStack, boolean ignoreColor) {
-
-        return base.getLores(itemStack, ignoreColor);
-    }
-
-    @Override
     public List<String> getLore(ItemStack itemStack) {
 
         return base.getLore(itemStack);

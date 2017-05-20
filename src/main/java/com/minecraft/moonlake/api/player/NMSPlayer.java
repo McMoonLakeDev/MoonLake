@@ -22,7 +22,6 @@ import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketException;
 import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutAnimation;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
-import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import org.bukkit.Material;
 
 /**
@@ -40,17 +39,6 @@ public interface NMSPlayer {
      * @return Ping 值
      */
     int getPing();
-
-    /**
-     * 给此玩家发送数据包
-     * 
-     * @param packet 数据包
-     * @throws IllegalArgumentException 如果数据包对象为 {@code null} 则抛出异常
-     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
-     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #sendPacket(PacketPlayOutBukkit)}
-     */
-    @Deprecated
-    void sendPacket(com.minecraft.moonlake.nms.packet.Packet<?> packet); // TODO 2.0
 
     /**
      * 给此玩家发送数据包

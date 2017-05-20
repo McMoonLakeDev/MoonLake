@@ -62,8 +62,6 @@ import com.minecraft.moonlake.mysql.MySQLConnection;
 import com.minecraft.moonlake.mysql.MySQLFactory;
 import com.minecraft.moonlake.mysql.exception.MySQLInitializeException;
 import com.minecraft.moonlake.nbt.exception.NBTException;
-import com.minecraft.moonlake.nms.packet.Packet;
-import com.minecraft.moonlake.nms.packet.PacketFactory;
 import com.minecraft.moonlake.particle.ParticleEffect;
 import com.minecraft.moonlake.particle.ParticleException;
 import com.minecraft.moonlake.task.MoonLakeRunnable;
@@ -873,40 +871,6 @@ public final class MoonLakeAPI {
     public static MySQLConnection newMySQLConnection(String host, int port, @Nullable String username, @Nullable String password, Charset charset) throws MySQLInitializeException {
 
         return MySQLFactory.connection(host, port, username, password, charset);
-    }
-
-    /**
-     * 获取指定 Packet 的实例对象
-     *
-     * @param packet Packet
-     * @param <T> Packet
-     * @return Packet 实例对象
-     * @throws PacketException 如果获取错误则抛出异常
-     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #newPacketPlayOutBukkit(Class)}
-     * @see #newPacket(Class, Object...)
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public static <T extends Packet> T newPacket(Class<T> packet) throws PacketException { // TODO 2.0
-
-        return PacketFactory.get().instance(packet);
-    }
-
-    /**
-     * 获取指定 Packet 的实例对象
-     *
-     * @param packet Packet
-     * @param args Packet 构造参数
-     * @param <T> Packet
-     * @return Packet 实例对象
-     * @throws PacketException 如果获取错误则抛出异常
-     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #newPacketPlayOutBukkit(Class)}
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public static <T extends Packet> T newPacket(Class<T> packet, Object... args) throws PacketException { // TODO 2.0
-
-        return PacketFactory.get().instance(packet, args);
     }
 
     /**

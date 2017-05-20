@@ -114,34 +114,6 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
     }
 
     @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public Set<String> getLores(ItemStack itemStack) {
-
-        return getLores(itemStack, false);
-    }
-
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public Set<String> getLores(ItemStack itemStack, boolean ignoreColor) {
-
-        Validate.notNull(itemStack, "The itemstack object is null.");
-
-        ItemMeta itemMeta = itemStack.getItemMeta();
-
-        if(itemMeta == null || !itemMeta.hasLore()) {
-
-            return null;
-        }
-        if(!ignoreColor) {
-
-            return new HashSet<>(itemMeta.getLore());
-        }
-        return new HashSet<>(StringUtil.stripColor(itemMeta.getLore()));
-    }
-
-    @Override
     public List<String> getLore(ItemStack itemStack) {
 
         return getLore(itemStack, false);
