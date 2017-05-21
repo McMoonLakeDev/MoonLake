@@ -24,10 +24,12 @@ import com.minecraft.moonlake.exception.MoonLakeException;
  * <h1>ParticleException</h1>
  * 粒子效果异常类（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public class ParticleException extends MoonLakeException {
+
+    private static final long serialVersionUID = 885601937060886278L;
 
     /**
      * 粒子效果异常类构造函数
@@ -56,5 +58,15 @@ public class ParticleException extends MoonLakeException {
     public ParticleException(String message, Throwable cause) {
 
         super(message, cause);
+    }
+
+    /**
+     * 粒子效果异常类构造函数
+     *
+     * @param cause 异常原因
+     */
+    public ParticleException(Throwable cause) {
+
+        super(cause);
     }
 }

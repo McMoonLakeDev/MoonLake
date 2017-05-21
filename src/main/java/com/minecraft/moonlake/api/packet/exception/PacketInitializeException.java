@@ -22,10 +22,12 @@ package com.minecraft.moonlake.api.packet.exception;
  * <h1>PacketInitializeException</h1>
  * 数据包初始化异常类（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public class PacketInitializeException extends PacketException {
+
+    private static final long serialVersionUID = 3697658606889239095L;
 
     /**
      * 数据包初始化异常类构造函数
@@ -54,5 +56,15 @@ public class PacketInitializeException extends PacketException {
     public PacketInitializeException(String message, Throwable cause) {
 
         super(message, cause);
+    }
+
+    /**
+     * 数据包初始化异常类构造函数
+     *
+     * @param cause 异常原因
+     */
+    public PacketInitializeException(Throwable cause) {
+
+        super(cause);
     }
 }
