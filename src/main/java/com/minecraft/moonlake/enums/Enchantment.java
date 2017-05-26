@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
  * <h1>Enchantment</h1>
  * 附魔类型中文汉化版（详细doc待补充...）
  *
- * @version 1.0.1
+ * @version 1.1
  * @author Month_Light
  */
 public abstract class Enchantment {
@@ -40,128 +40,128 @@ public abstract class Enchantment {
     /**
      * 附魔类型: 保护
      */
-    public final static Enchantment 保护 = new Enchantment(0, "PROTECTION_ENVIRONMENTAL") {};
+    public final static Enchantment 保护 = new EnchantmentWrapped(0, "PROTECTION_ENVIRONMENTAL");
     /**
      * 附魔类型: 火焰保护
      */
-    public final static Enchantment 火焰保护 = new Enchantment(1, "PROTECTION_FIRE") {};
+    public final static Enchantment 火焰保护 = new EnchantmentWrapped(1, "PROTECTION_FIRE");
     /**
      * 附魔类型: 摔落保护
      */
-    public final static Enchantment 摔落保护 = new Enchantment(2, "PROTECTION_FALL") {};
+    public final static Enchantment 摔落保护 = new EnchantmentWrapped(2, "PROTECTION_FALL");
     /**
      * 附魔类型: 爆炸保护
      */
-    public final static Enchantment 爆炸保护 = new Enchantment(3, "PROTECTION_EXPLOSIONS") {};
+    public final static Enchantment 爆炸保护 = new EnchantmentWrapped(3, "PROTECTION_EXPLOSIONS");
     /**
      * 附魔类型: 弹射物保护
      */
-    public final static Enchantment 弹射物保护 = new Enchantment(4, "PROTECTION_PROJECTILE") {};
+    public final static Enchantment 弹射物保护 = new EnchantmentWrapped(4, "PROTECTION_PROJECTILE");
     /**
      * 附魔类型: 水下呼吸
      */
-    public final static Enchantment 水下呼吸 = new Enchantment(5, "OXYGEN") {};
+    public final static Enchantment 水下呼吸 = new EnchantmentWrapped(5, "OXYGEN");
     /**
      * 附魔类型: 水下速掘
      */
-    public final static Enchantment 水下速掘 = new Enchantment(6, "WATER_WORKER") {};
+    public final static Enchantment 水下速掘 = new EnchantmentWrapped(6, "WATER_WORKER");
     /**
      * 附魔类型: 荆棘
      */
-    public final static Enchantment 荆棘 = new Enchantment(7, "THORNS") {};
+    public final static Enchantment 荆棘 = new EnchantmentWrapped(7, "THORNS");
     /**
      * 附魔类型: 深海探索者
      */
-    public final static Enchantment 深海探索者 = new Enchantment(8, "DEPTH_STRIDER") {};
+    public final static Enchantment 深海探索者 = new EnchantmentWrapped(8, "DEPTH_STRIDER");
 
     /**
      * 附魔类型: 锋利
      */
-    public final static Enchantment 锋利 = new Enchantment(16, "DAMAGE_ALL") {};
+    public final static Enchantment 锋利 = new EnchantmentWrapped(16, "DAMAGE_ALL");
     /**
      * 附魔类型: 亡灵杀手
      */
-    public final static Enchantment 亡灵杀手 = new Enchantment(17, "DAMAGE_UNDEAD") {};
+    public final static Enchantment 亡灵杀手 = new EnchantmentWrapped(17, "DAMAGE_UNDEAD");
     /**
      * 附魔类型: 节肢杀手
      */
-    public final static Enchantment 节肢杀手 = new Enchantment(18, "DAMAGE_ARTHROPODS") {};
+    public final static Enchantment 节肢杀手 = new EnchantmentWrapped(18, "DAMAGE_ARTHROPODS");
     /**
      * 附魔类型: 击退
      */
-    public final static Enchantment 击退 = new Enchantment(19, "KNOCKBACK") {};
+    public final static Enchantment 击退 = new EnchantmentWrapped(19, "KNOCKBACK");
     /**
      * 附魔类型: 火焰附加
      */
-    public final static Enchantment 火焰附加 = new Enchantment(20, "FIRE_ASPECT") {};
+    public final static Enchantment 火焰附加 = new EnchantmentWrapped(20, "FIRE_ASPECT");
     /**
      * 附魔类型: 抢夺
      */
-    public final static Enchantment 抢夺 = new Enchantment(21, "LOOT_BONUS_MOBS") {};
+    public final static Enchantment 抢夺 = new EnchantmentWrapped(21, "LOOT_BONUS_MOBS");
 
     /**
      * 附魔类型: 效率
      */
-    public final static Enchantment 效率 = new Enchantment(32, "DIG_SPEED") {};
+    public final static Enchantment 效率 = new EnchantmentWrapped(32, "DIG_SPEED");
     /**
      * 附魔类型: 精准采集
      */
-    public final static Enchantment 精准采集 = new Enchantment(33, "SILK_TOUCH") {};
+    public final static Enchantment 精准采集 = new EnchantmentWrapped(33, "SILK_TOUCH");
     /**
      * 附魔类型: 耐久
      */
-    public final static Enchantment 耐久 = new Enchantment(34, "DURABILITY") {};
+    public final static Enchantment 耐久 = new EnchantmentWrapped(34, "DURABILITY");
     /**
      * 附魔类型: 时运
      */
-    public final static Enchantment 时运 = new Enchantment(35, "LOOT_BONUS_BLOCKS") {};
+    public final static Enchantment 时运 = new EnchantmentWrapped(35, "LOOT_BONUS_BLOCKS");
 
     /**
      * 附魔类型: 力量
      */
-    public final static Enchantment 力量 = new Enchantment(48, "ARROW_DAMAGE") {};
+    public final static Enchantment 力量 = new EnchantmentWrapped(48, "ARROW_DAMAGE");
     /**
      * 附魔类型: 冲击
      */
-    public final static Enchantment 冲击 = new Enchantment(49, "ARROW_KNOCKBACK") {};
+    public final static Enchantment 冲击 = new EnchantmentWrapped(49, "ARROW_KNOCKBACK");
     /**
      * 附魔类型: 火矢
      */
-    public final static Enchantment 火矢 = new Enchantment(50, "ARROW_FIRE") {};
+    public final static Enchantment 火矢 = new EnchantmentWrapped(50, "ARROW_FIRE");
     /**
      * 附魔类型: 无限
      */
-    public final static Enchantment 无限 = new Enchantment(51, "ARROW_INFINITE") {};
+    public final static Enchantment 无限 = new EnchantmentWrapped(51, "ARROW_INFINITE");
 
     /**
      * 附魔类型: 海之眷顾
      */
-    public final static Enchantment 海之眷顾 = new Enchantment(61, "LUCK") {};
+    public final static Enchantment 海之眷顾 = new EnchantmentWrapped(61, "LUCK");
     /**
      * 附魔类型: 饵钓
      */
-    public final static Enchantment 饵钓 = new Enchantment(62, "LURE") {};
+    public final static Enchantment 饵钓 = new EnchantmentWrapped(62, "LURE");
 
     // 1.9 增加的新附魔（不兼容 1.8 以下
     /**
      * 附魔类型: 冰霜行者
      */
-    public final static Enchantment 冰霜行者 = new Enchantment(9, "FROST_WALKER", MinecraftVersion.V1_9) {};
+    public final static Enchantment 冰霜行者 = new EnchantmentWrapped(9, "FROST_WALKER", MinecraftVersion.V1_9);
     /**
      * 附魔类型: 经验修补
      */
-    public final static Enchantment 经验修补 = new Enchantment(70, "MENDING", MinecraftVersion.V1_9) {};
+    public final static Enchantment 经验修补 = new EnchantmentWrapped(70, "MENDING", MinecraftVersion.V1_9);
     ///
 
     // 1.11 增加的新附魔（不兼容 1.10 以下
     /**
      * 附魔类型: 绑定诅咒
      */
-    public final static Enchantment 绑定诅咒 = new Enchantment(10, "BINDING_CURSE", MinecraftVersion.V1_11) {};
+    public final static Enchantment 绑定诅咒 = new EnchantmentWrapped(10, "BINDING_CURSE", MinecraftVersion.V1_11);
     /**
      * 附魔类型: 消失诅咒
      */
-    public final static Enchantment 消失诅咒 = new Enchantment(71, "VANISHING_CURSE", MinecraftVersion.V1_11) {};
+    public final static Enchantment 消失诅咒 = new EnchantmentWrapped(71, "VANISHING_CURSE", MinecraftVersion.V1_11);
     ///
 
     private final int id;
@@ -244,7 +244,6 @@ public abstract class Enchantment {
      * @return Enchantment
      * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本不支持附魔则抛出异常
      */
-    @SuppressWarnings("deprecation")
     public org.bukkit.enchantments.Enchantment as() {
 
         if(requiredVersion != null && !MoonLakeAPI.currentMCVersion().isLater(requiredVersion)) {
@@ -253,5 +252,16 @@ public abstract class Enchantment {
         }
         //return org.bukkit.enchantments.Enchantment.getById(id);
         return org.bukkit.enchantments.Enchantment.getByName(name);
+    }
+
+    private final static class EnchantmentWrapped extends Enchantment {
+
+        private EnchantmentWrapped(int id, String name) {
+            super(id, name);
+        }
+
+        private EnchantmentWrapped(int id, String name, MinecraftVersion requiredVersion) {
+            super(id, name, requiredVersion);
+        }
     }
 }
