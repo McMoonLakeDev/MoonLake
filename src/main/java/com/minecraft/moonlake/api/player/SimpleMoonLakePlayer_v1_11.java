@@ -18,6 +18,7 @@
 
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import org.bukkit.entity.Player;
 
@@ -52,5 +53,11 @@ public class SimpleMoonLakePlayer_v1_11 extends SimpleMoonLakePlayer_v1_10 {
     public SimpleMoonLakePlayer_v1_11(Player player) throws IllegalArgumentException, PlayerNotOnlineException {
 
         super(player);
+    }
+
+    @Override
+    public MinecraftVersion mcVersion() {
+
+        return MinecraftVersion.V1_11;
     }
 }

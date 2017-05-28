@@ -20,6 +20,7 @@ package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.player.attribute.Attribute;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.validate.Validate;
@@ -200,5 +201,11 @@ public class SimpleMoonLakePlayer_v1_9 extends SimpleMoonLakePlayer_v1_8 {
         Validate.notNull(type, "The attribute type object is null.");
 
         return new AttributeExpression_v1_9_Plus(getBukkitPlayer(), type);
+    }
+
+    @Override
+    public MinecraftVersion mcVersion() {
+
+        return MinecraftVersion.V1_9;
     }
 }

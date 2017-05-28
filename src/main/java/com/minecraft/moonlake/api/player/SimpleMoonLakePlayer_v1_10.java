@@ -18,6 +18,7 @@
 
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Color;
@@ -111,4 +112,11 @@ public class SimpleMoonLakePlayer_v1_10 extends SimpleMoonLakePlayer_v1_9 {
     }
 
     ///
+
+
+    @Override
+    public MinecraftVersion mcVersion() {
+
+        return MinecraftVersion.V1_10;
+    }
 }

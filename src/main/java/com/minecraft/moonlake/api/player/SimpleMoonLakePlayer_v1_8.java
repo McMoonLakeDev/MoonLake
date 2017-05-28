@@ -18,6 +18,7 @@
 
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.validate.Validate;
@@ -196,4 +197,11 @@ public class SimpleMoonLakePlayer_v1_8 extends SimpleMoonLakePlayer {
     }
 
     ///
+
+
+    @Override
+    public MinecraftVersion mcVersion() {
+
+        return MinecraftVersion.V1_8;
+    }
 }
