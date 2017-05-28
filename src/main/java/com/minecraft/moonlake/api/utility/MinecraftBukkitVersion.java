@@ -317,7 +317,7 @@ public class MinecraftBukkitVersion implements Comparable<MinecraftBukkitVersion
     /**
      * <h1>获取当前 Minecraft Bukkit 版本是否在参数 {@code min} 版本和参数 {@code max} 范围</h1>
      *
-     * <p>举一个简单的例子: {@link #getCurrentVersion()}.isOrRange({@link #V1_8_R1}, {@link #V1_10_R1})</p>
+     * <p>举一个简单的例子: {@link #getCurrentVersion()}.isRange({@link #V1_8_R1}, {@link #V1_10_R1})</p>
      * <p>当你服务端为 {@link #V1_8_R3} 那么结果为 {@code true}, 如为 {@link #V1_8_R1}、{@link #V1_10_R1} 结果为 {@code false}</p>
      *
      * @param min 最小版本
