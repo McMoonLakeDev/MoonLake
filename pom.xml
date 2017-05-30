@@ -38,10 +38,10 @@
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>Spigot-1.12-pre5</artifactId>
-            <version>1.12-pre5</version>
+            <artifactId>Spigot-1.12-pre6</artifactId>
+            <version>1.12-pre6</version>
             <scope>system</scope>
-            <systemPath>${libraries}/Spigot-1.12-pre5.jar</systemPath>
+            <systemPath>${libraries}/Spigot-1.12-pre6.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
