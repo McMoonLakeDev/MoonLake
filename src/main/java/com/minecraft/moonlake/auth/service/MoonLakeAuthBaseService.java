@@ -79,11 +79,7 @@ public abstract class MoonLakeAuthBaseService implements MoonLakeAuthService {
         this.proxy = proxy;
     }
 
-    /**
-     * 获取此月色之湖认证服务的代理对象
-     *
-     * @return 代理
-     */
+    @Override
     public Proxy getProxy() {
         return proxy;
     }
@@ -324,5 +320,15 @@ public abstract class MoonLakeAuthBaseService implements MoonLakeAuthService {
                 throw new MoonLakeInvalidCredentialsException(response.getErrorMessage());
         }
         return (T) response;
+    }
+
+    /**
+     * 开始运行指定 Runnable 对象
+     *
+     * @param runnable Runnable
+     * @param async 异步
+     */
+    protected void start(final Runnable runnable, final boolean async) {
+
     }
 }

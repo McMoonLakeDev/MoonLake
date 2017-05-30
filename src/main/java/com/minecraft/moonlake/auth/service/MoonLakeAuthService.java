@@ -18,6 +18,8 @@
 
 package com.minecraft.moonlake.auth.service;
 
+import java.net.Proxy;
+
 /**
  * <h1>MoonLakeAuthService</h1>
  * 月色之湖认证服务接口
@@ -32,4 +34,11 @@ public interface MoonLakeAuthService {
     // http://wiki.vg/Mojang_API
     // http://wiki.vg/Authentication
     ///
+
+    /**
+     * 获取此月色之湖认证服务的代理对象
+     *
+     * @return 代理
+     */
+    Proxy getProxy();
 }

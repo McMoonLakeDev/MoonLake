@@ -1121,13 +1121,8 @@ public class ProfileAuthService extends MoonLakeAuthBaseService {
         return resizeImage(skinModel2DImage, zoom);
     }
 
-    /**
-     * 开始运行指定 Runnable 对象
-     *
-     * @param runnable Runnable
-     * @param async 异步
-     */
-    private static void start(final Runnable runnable, boolean async) {
+    @Override
+    protected void start(final Runnable runnable, final boolean async) {
         if(async)
             new Thread(runnable, "ProfileAuthService").start();
         else

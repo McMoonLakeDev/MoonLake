@@ -327,6 +327,11 @@ public class UserAuthService extends MoonLakeAuthBaseService {
     }
 
     @Override
+    protected final void start(final Runnable runnable, final boolean async) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public String toString() {
         return "UserAuthService{" +
                 "username='" + username + '\'' +

@@ -232,6 +232,11 @@ public class MinecraftAuthService extends MoonLakeAuthBaseService {
         return textures;
     }
 
+    @Override
+    protected final void start(final Runnable runnable, final boolean async) {
+        throw new UnsupportedOperationException();
+    }
+
     /**
      * 加入服务器请求实体类
      */
