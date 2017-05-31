@@ -74,6 +74,7 @@ public class MinecraftReflection {
     private static volatile MethodAccessor nbtCompressedStreamToolsWriteMethod;
     private static volatile MethodAccessor nbtCompressedStreamToolsReadMethod;
     private static volatile MethodAccessor entityLivingGetAttributeInstanceMethod;
+    private static volatile MethodAccessor playerConnectionSendPacketMethod;
     private static volatile MethodAccessor craftItemStackAsBukkitCopyMethod;
     private static volatile MethodAccessor craftItemStackAsCraftMirrorMethod;
     private static volatile MethodAccessor craftItemStackAsNMSCopyMethod;
@@ -95,7 +96,6 @@ public class MinecraftReflection {
     private static volatile MethodAccessor worldAddEntityMethod;
     private static volatile MethodAccessor itemStackSaveMethod;
     private static volatile MethodAccessor entityHandleMethod;
-    private static volatile MethodAccessor sendPacketMethod;
     private static volatile MethodAccessor itemGetByIdMethod;
     private static volatile FieldAccessor playerConnectionNetworkManagerField;
     private static volatile FieldAccessor entityPlayerPlayerConnectionField;
@@ -853,9 +853,9 @@ public class MinecraftReflection {
     public static void sendPacket(Object nmsPlayer, Object nmsPacket) {
         Validate.notNull(nmsPlayer, "The nms player object is null.");
         Validate.notNull(nmsPacket, "The nms packet object is null.");
-        if(sendPacketMethod == null)
-            sendPacketMethod = Accessors.getMethodAccessor(getPlayerConnectionClass(), "sendPacket", getPacketClass());
-        sendPacketMethod.invoke(getPlayerConnection(nmsPlayer), nmsPacket);
+        if(playerConnectionSendPacketMethod == null)
+            playerConnectionSendPacketMethod = Accessors.getMethodAccessor(getPlayerConnectionClass(), "sendPacket", getPacketClass());
+        playerConnectionSendPacketMethod.invoke(getPlayerConnection(nmsPlayer), nmsPacket);
     }
 
     public static boolean is(Class<?> clazz, Object obj) {
