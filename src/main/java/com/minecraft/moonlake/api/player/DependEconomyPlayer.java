@@ -35,7 +35,7 @@ import org.bukkit.entity.Player;
  * <h1>DependEconomyPlayer</h1>
  * 依赖经济插件玩家实现类 # 依赖 <a href="https://www.github.com/u2g/MoonLakeEconomy" target="_blank">MoonLakeEconomy</a> 插件
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 class DependEconomyPlayer extends DependPluginPlayerAbstract<EconomyPlugin> implements DependEconomy {
@@ -126,7 +126,7 @@ class DependEconomyPlayer extends DependPluginPlayerAbstract<EconomyPlugin> impl
         Validate.notNull(player, "The player object is null.");
 
         PlayerEconomy playerEconomy = getEconomy(player.getName());
-        return new EconomyPlayerData(PlayerManager.adapter(player), playerEconomy.getMoney(), playerEconomy.getPoint());
+        return new EconomyPlayerData(PlayerManager.getCache(player), playerEconomy.getMoney(), playerEconomy.getPoint());
     }
 
     @Override

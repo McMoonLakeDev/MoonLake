@@ -19,6 +19,7 @@
 package com.minecraft.moonlake;
 
 import com.minecraft.moonlake.api.MoonLake;
+import com.minecraft.moonlake.api.player.CachedMoonLakePlayer;
 import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -103,6 +104,12 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         this.loadLibraryClass();
 
         this.getLogger().info("月色之湖核心 API 插件 v" + getPluginVersion() + " 成功加载.");
+    }
+
+    @Override
+    public void onDisable() {
+        // clear moonlake player cached
+        CachedMoonLakePlayer.getInstance().clearCache();
     }
 
     private void loadLibraryClass() {
