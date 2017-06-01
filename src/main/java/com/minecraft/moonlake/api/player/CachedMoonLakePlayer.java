@@ -23,36 +23,27 @@ import com.minecraft.moonlake.api.event.MoonLakeListener;
 import com.minecraft.moonlake.api.utility.MoonLakeReflection;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.manager.PlayerManager;
+import com.minecraft.moonlake.ref.cached.CachedWeakReference;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.lang.ref.ReferenceQueue;
-import java.lang.ref.WeakReference;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * <h1>CachedMoonLakePlayer</h1>
  * 缓存月色之湖玩家缓存器类
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
- * @see WeakReference
- * @see ReferenceQueue
  * @see MoonLakePlayer
+ * @see CachedWeakReference
  */
-public final class CachedMoonLakePlayer {
+public final class CachedMoonLakePlayer extends CachedWeakReference<String, MoonLakePlayer> {
 
     private static CachedMoonLakePlayer instance;
-    private ReferenceQueue<MoonLakePlayer> queue;
-    private Map<String, WeakMoonLakePlayer> cacheMap;
-
-    static {
-    }
 
     /**
      * 获取此缓存月色之湖玩家的缓冲器对象
@@ -69,8 +60,7 @@ public final class CachedMoonLakePlayer {
      * 缓存月色之湖玩家缓存器类构造函数
      */
     private CachedMoonLakePlayer() {
-        this.queue = new ReferenceQueue<>();
-        this.cacheMap = new HashMap<>();
+        super();
         this.registerEventListener();
     }
 
@@ -82,6 +72,7 @@ public final class CachedMoonLakePlayer {
      * @throws PlayerNotOnlineException 如果玩家没有在线则抛出异常
      * @see #getCache(Player)
      */
+    @Override
     public MoonLakePlayer getCache(String name) {
         Validate.notNull(name, "The name object is null.");
         Player player = PlayerManager.fromName(name);
@@ -98,18 +89,8 @@ public final class CachedMoonLakePlayer {
      * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
      */
     public MoonLakePlayer getCache(Player player) {
-        final String name = Validate.checkNotNull(player).getName();
-        MoonLakePlayer value = null;
-        if(cacheMap.containsKey(name)) {
-            WeakMoonLakePlayer ref = cacheMap.get(name);
-            value = ref.get();
-        }
-        if(value == null) {
-            value = MoonLakeReflection.getSimpleMoonLakePlayerInstance(player);
-            //MoonLakeAPI.getLogger().info("月色之湖玩家'" + player.getName() + "'的对象已经被创建."); // debug
-            cache(value);
-        }
-        return value;
+        Validate.notNull(player, "The player object is null.");
+        return super.getCache(player.getName());
     }
 
     /**
@@ -127,83 +108,22 @@ public final class CachedMoonLakePlayer {
     }
 
     /**
-     * 将指定月色之湖玩家对象加入到缓冲器内
-     *
-     * @param player 月色之湖玩家
-     */
-    private void cache(MoonLakePlayer player) {
-        cleanCache();
-        WeakMoonLakePlayer ref = new WeakMoonLakePlayer(player, queue);
-        cacheMap.put(player.getName(), ref);
-    }
-
-    /**
-     * 清理已经被加入到引用队列的月色之湖玩家弱引用对象
-     */
-    private void cleanCache() {
-        WeakMoonLakePlayer ref;
-        while ((ref = (WeakMoonLakePlayer) queue.poll()) != null) {
-            cacheMap.remove(ref.key);
-            //MoonLakeAPI.getLogger().info("月色之湖玩家'" + ref.key + "'的对象已被 JVM 回收."); // debug
-        }
-    }
-
-    /**
-     * 清理已经被加入到引用队列的指定月色之湖玩家弱引用对象
-     *
-     * @param name 玩家名
-     */
-    private void cleanCache(String name) {
-        if(cacheMap.containsKey(name))
-            cacheMap.remove(name);
-        cleanCache();
-    }
-
-    /**
      * 注册玩家退出游戏事件监听器并清除缓存
      */
     private void registerEventListener() {
         MoonLakeAPI.registerEvent(new MoonLakeListener() {
             @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
             public void onQuit(PlayerQuitEvent event) {
-                cleanCache(event.getPlayer().getName());
+                removeCache(event.getPlayer().getName());
             }
         }, MoonLakeAPI.getMoonLake());
     }
 
-    /**
-     * 清除此缓冲器的所有缓存数据
-     */
-    public void clearCache() {
-        cleanCache();
-        cacheMap.clear();
-    }
-
-    /**
-     * <h1>WeakMoonLakePlayer</h1>
-     * 弱月色之湖玩家类
-     *
-     * @version 1.0
-     * @author Month_Light
-     * @see WeakReference
-     * @see MoonLakePlayer
-     */
-    private final static class WeakMoonLakePlayer extends WeakReference<MoonLakePlayer> {
-
-        /**
-         * 存储月色之湖玩家引用的玩家名, 在缓存器中用于 Map 的键作用
-         */
-        private String key;
-
-        /**
-         * 弱月色之湖玩家类构造函数
-         *
-         * @param referent 月色之湖玩家引用
-         * @param queue 引用队列
-         */
-        private WeakMoonLakePlayer(MoonLakePlayer referent, ReferenceQueue<? super MoonLakePlayer> queue) {
-            super(referent, queue);
-            this.key = referent.getName();
-        }
+    @Override
+    protected MoonLakePlayer produceValue(String key) {
+        Player player = PlayerManager.fromName(key);
+        if(player == null)
+            throw new PlayerNotOnlineException(key);
+        return MoonLakeReflection.getSimpleMoonLakePlayerInstance(player);
     }
 }

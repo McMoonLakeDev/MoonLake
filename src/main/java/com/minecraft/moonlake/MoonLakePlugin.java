@@ -109,7 +109,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     @Override
     public void onDisable() {
         // clear moonlake player cached
-        CachedMoonLakePlayer.getInstance().clearCache();
+        CachedMoonLakePlayer.getInstance().clear();
     }
 
     private void loadLibraryClass() {
