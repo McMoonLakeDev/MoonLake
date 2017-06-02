@@ -34,7 +34,7 @@ import java.util.ArrayList;
  * <h1>PacketINCChannel</h1>
  * 数据包 INC 通道实现类 ({@code io.netty.channel})
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 class PacketINCChannel extends PacketChannelAbstract {

@@ -33,7 +33,7 @@ import java.util.concurrent.Executors;
  * <h1>PacketChannelAbstract</h1>
  * 数据包通道接口抽象类（详细doc待补充...）
  *
- * @version 1.0.1
+ * @version 1.1
  * @author Month_Light
  */
 abstract class PacketChannelAbstract implements PacketChannel {

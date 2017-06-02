@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
  * <h1>FuzzyReflect</h1>
  * 模糊反射类（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 public class FuzzyReflect {
