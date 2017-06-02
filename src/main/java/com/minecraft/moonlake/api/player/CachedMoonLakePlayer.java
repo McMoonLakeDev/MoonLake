@@ -23,6 +23,8 @@ import com.minecraft.moonlake.api.event.MoonLakeListener;
 import com.minecraft.moonlake.api.utility.MoonLakeReflection;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.manager.PlayerManager;
+import com.minecraft.moonlake.ref.cached.CachedReferenceQueue;
+import com.minecraft.moonlake.ref.cached.CachedWeakRef;
 import com.minecraft.moonlake.ref.cached.CachedWeakReference;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
@@ -36,7 +38,7 @@ import java.util.Collection;
  * <h1>CachedMoonLakePlayer</h1>
  * 缓存月色之湖玩家缓存器类
  *
- * @version 1.1.1
+ * @version 1.1.2
  * @author Month_Light
  * @see MoonLakePlayer
  * @see CachedWeakReference
@@ -127,5 +129,17 @@ public final class CachedMoonLakePlayer extends CachedWeakReference<String, Moon
         if(player == null)
             throw new PlayerNotOnlineException(key);
         return MoonLakeReflection.getSimpleMoonLakePlayerInstance(player);
+    }
+
+    @Override
+    protected CachedWeakMoonLakePlayer produceRef(String key, MoonLakePlayer value, CachedReferenceQueue<MoonLakePlayer> queue) {
+        return new CachedWeakMoonLakePlayer(key, value, queue);
+    }
+
+    private final static class CachedWeakMoonLakePlayer extends CachedWeakRef<String, MoonLakePlayer> {
+
+        private CachedWeakMoonLakePlayer(String key, MoonLakePlayer referent, CachedReferenceQueue<? super MoonLakePlayer> queue) {
+            super(key, referent, queue);
+        }
     }
 }

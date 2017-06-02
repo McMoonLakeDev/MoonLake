@@ -27,7 +27,7 @@ import java.lang.ref.WeakReference;
  * @param <K> 键
  * @param <V> 值
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  * @see CachedRef
  * @see WeakReference
@@ -39,11 +39,13 @@ public class CachedWeakRef<K, V> extends WeakReference<V> implements CachedRef<K
     /**
      * 缓存器弱引用数据类构造函数
      *
+     * @param key 键
      * @param referent 引用
      * @param queue 缓存器引用队列
      */
-    public CachedWeakRef(V referent, CachedReferenceQueue<? super V> queue) {
+    public CachedWeakRef(K key, V referent, CachedReferenceQueue<? super V> queue) {
         super(referent, queue);
+        this.key = key;
     }
 
     @Override

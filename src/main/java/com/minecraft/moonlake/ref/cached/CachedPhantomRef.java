@@ -27,7 +27,7 @@ import java.lang.ref.PhantomReference;
  * @param <K> 键
  * @param <V> 值
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  * @see CachedRef
  * @see PhantomReference
@@ -39,11 +39,13 @@ public class CachedPhantomRef<K, V> extends PhantomReference<V> implements Cache
     /**
      * 缓存器虚引用数据类构造函数
      *
+     * @param key 键
      * @param referent 引用对象
      * @param queue 缓存器引用队列
      */
-    public CachedPhantomRef(V referent, CachedReferenceQueue<? super V> queue) {
+    public CachedPhantomRef(K key, V referent, CachedReferenceQueue<? super V> queue) {
         super(referent, queue);
+        this.key = key;
     }
 
     @Override

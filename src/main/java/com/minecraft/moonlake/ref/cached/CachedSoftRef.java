@@ -27,7 +27,7 @@ import java.lang.ref.SoftReference;
  * @param <K> 键
  * @param <V> 值
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  * @see CachedRef
  * @see SoftReference
@@ -39,11 +39,13 @@ public class CachedSoftRef<K, V> extends SoftReference<V> implements CachedRef<K
     /**
      * 缓存器软引用数据类构造函数
      *
+     * @param key 键
      * @param referent 引用
      * @param queue 缓存器引用队列
      */
-    public CachedSoftRef(V referent, CachedReferenceQueue<? super V> queue) {
+    public CachedSoftRef(K key, V referent, CachedReferenceQueue<? super V> queue) {
         super(referent, queue);
+        this.key = key;
     }
 
     @Override

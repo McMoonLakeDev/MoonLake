@@ -28,6 +28,9 @@ import java.util.Map;
  * @param <K> 键
  * @param <V> 值
  * @param <R> 缓存器引用数据
+ *
+ * @version 1.0.1
+ * @author Month_Light
  */
 public abstract class CachedReferenceBase<K, V, R extends CachedRef<K, V>> implements CachedReference<K, V, R> {
 
@@ -83,11 +86,12 @@ public abstract class CachedReferenceBase<K, V, R extends CachedRef<K, V>> imple
     /**
      * 生产指定值的缓存器引用数据
      *
+     * @param key 键
      * @param value 值
      * @param queue 队列
      * @return 缓存器引用数据
      */
-    protected abstract R produceRef(V value, CachedReferenceQueue<V> queue);
+    protected abstract R produceRef(K key, V value, CachedReferenceQueue<V> queue);
 
     /**
      * 将当前缓存器中已经被添加到队列内的引用数据进行删除
@@ -118,7 +122,7 @@ public abstract class CachedReferenceBase<K, V, R extends CachedRef<K, V>> imple
      */
     private void addCache(K key, V value) {
         this.removeCache();
-        R ref = produceRef(value, queue);
+        R ref = produceRef(key, value, queue);
         cacheMap.put(key, ref);
     }
 }

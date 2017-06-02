@@ -25,7 +25,7 @@ package com.minecraft.moonlake.ref.cached;
  * @param <K> 键
  * @param <V> 值
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  * @see CachedPhantomRef
  * @see CachedReferenceBase
@@ -43,7 +43,7 @@ public abstract class CachedPhantomReference<K, V> extends CachedReferenceBase<K
     protected abstract V produceValue(K key);
 
     @Override
-    protected CachedPhantomRef<K, V> produceRef(V value, CachedReferenceQueue<V> queue) {
-        return new CachedPhantomRef<>(value, queue);
+    protected CachedPhantomRef<K, V> produceRef(K key, V value, CachedReferenceQueue<V> queue) {
+        return new CachedPhantomRef<>(key, value, queue);
     }
 }

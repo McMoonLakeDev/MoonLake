@@ -25,7 +25,7 @@ package com.minecraft.moonlake.ref.cached;
  * @param <K> 键
  * @param <V> 值
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  * @see CachedSoftRef
  * @see CachedReferenceBase
@@ -43,7 +43,7 @@ public abstract class CachedSoftReference<K, V> extends CachedReferenceBase<K, V
     protected abstract V produceValue(K key);
 
     @Override
-    protected CachedSoftRef<K, V> produceRef(V value, CachedReferenceQueue<V> queue) {
-        return new CachedSoftRef<>(value, queue);
+    protected CachedSoftRef<K, V> produceRef(K key, V value, CachedReferenceQueue<V> queue) {
+        return new CachedSoftRef<>(key, value, queue);
     }
 }
