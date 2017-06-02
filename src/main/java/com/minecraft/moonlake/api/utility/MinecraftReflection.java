@@ -37,6 +37,8 @@ import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
+import io.netty.channel.Channel;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -52,6 +54,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -97,12 +100,16 @@ public class MinecraftReflection {
     private static volatile MethodAccessor itemStackSaveMethod;
     private static volatile MethodAccessor entityHandleMethod;
     private static volatile MethodAccessor itemGetByIdMethod;
+    private static volatile FieldAccessor playerConnectionNetworkManagerChannelField;
+    private static volatile FieldAccessor serverConnectionNetworkManagerListField;
     private static volatile FieldAccessor playerConnectionNetworkManagerField;
+    private static volatile FieldAccessor minecraftServerServerConnectionField;
     private static volatile FieldAccessor entityPlayerPlayerConnectionField;
     private static volatile FieldAccessor entityHumanItemCooldownField;
     private static volatile FieldAccessor itemCooldownInfoTickField;
     private static volatile FieldAccessor itemCooldownMapField;
     private static volatile FieldAccessor itemCooldownTickField;
+    private static volatile FieldAccessor craftServerConsoleField;
     private static volatile FieldAccessor entityPlayerLocaleField;
     private static volatile FieldAccessor entityPlayerPingField;
 
@@ -428,6 +435,14 @@ public class MinecraftReflection {
 
     public static Class<?> getUnsafeListClass() {
         return getCraftBukkitClass("util.UnsafeList");
+    }
+
+    public static Class<?> getServerConnectionClass() {
+        return getMinecraftClass("ServerConnection");
+    }
+
+    public static Class<?> getMinecraftServerClass() {
+        return getMinecraftClass("MinecraftServer");
     }
 
     @Nullable
@@ -837,6 +852,59 @@ public class MinecraftReflection {
         if(entityPlayerPlayerConnectionField == null)
             entityPlayerPlayerConnectionField = Accessors.getFieldAccessor(getMinecraftEntityPlayerClass(), getPlayerConnectionClass(), true);
         return entityPlayerPlayerConnectionField.get(nmsPlayer);
+    }
+
+    public static Object getMinecraftServer() {
+        if(craftServerConsoleField == null)
+            craftServerConsoleField = Accessors.getFieldAccessor(Bukkit.getServer().getClass(), getMinecraftServerClass(), true);
+        return craftServerConsoleField.get(Bukkit.getServer());
+    }
+
+    public static Object getMinecraftServerConnection() {
+        if(minecraftServerServerConnectionField == null)
+            minecraftServerServerConnectionField = Accessors.getFieldAccessor(getMinecraftServerClass(), getServerConnectionClass(), true);
+        return minecraftServerServerConnectionField.get(getMinecraftServer());
+    }
+
+    public static Channel getNetworkManagerChannel(Player player) {
+        Validate.notNull(player, "The player object is null.");
+        return getNetworkManagerChannel(getEntityPlayer(player));
+    }
+
+    public static Channel getNetworkManagerChannel(Object nmsPlayer) {
+        Validate.notNull(nmsPlayer, "The nms player object is null.");
+        if(playerConnectionNetworkManagerChannelField == null)
+            playerConnectionNetworkManagerChannelField = Accessors.getFieldAccessor(getNetworkManagerClass(), Channel.class, true);
+        return (Channel) playerConnectionNetworkManagerChannelField.get(getNetworkManager(nmsPlayer));
+    }
+
+    public static Channel getNetworkManagerChannelObj(Object obj) {
+        Validate.notNull(obj, "The object is null.");
+        if(playerConnectionNetworkManagerChannelField == null)
+            playerConnectionNetworkManagerChannelField = Accessors.getFieldAccessor(getNetworkManagerClass(), Channel.class, true);
+        return (Channel) playerConnectionNetworkManagerChannelField.get(obj);
+    }
+
+    public static List getNetworkManagerList() {
+        return getNetworkManagerList(getMinecraftServerConnection());
+    }
+
+    public static List getNetworkManagerList(Object nmsServerConnection) {
+        Validate.notNull(nmsServerConnection, "The nms server connection object is null.");
+        return (List) getServerConnectionNetworkManagerListField().get(nmsServerConnection);
+    }
+
+    public static FieldAccessor getServerConnectionNetworkManagerListField() {
+        if(serverConnectionNetworkManagerListField == null) try {
+            serverConnectionNetworkManagerListField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(getServerConnectionClass(), true).getFieldListByParamType("List<NetworkManager>", getNetworkManagerClass()));
+        } catch (Exception e) {
+        }
+        if(serverConnectionNetworkManagerListField == null) try {
+            serverConnectionNetworkManagerListField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(getServerConnectionClass(), true).getFieldListByType(List.class).get(1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return serverConnectionNetworkManagerListField;
     }
 
     public static void sendPacket(Player[] players, Object nmsPacket) {
