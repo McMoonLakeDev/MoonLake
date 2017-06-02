@@ -36,7 +36,7 @@ import java.util.Collection;
  * <h1>CachedMoonLakePlayer</h1>
  * 缓存月色之湖玩家缓存器类
  *
- * @version 1.1
+ * @version 1.1.1
  * @author Month_Light
  * @see MoonLakePlayer
  * @see CachedWeakReference
@@ -111,12 +111,14 @@ public final class CachedMoonLakePlayer extends CachedWeakReference<String, Moon
      * 注册玩家退出游戏事件监听器并清除缓存
      */
     private void registerEventListener() {
-        MoonLakeAPI.registerEvent(new MoonLakeListener() {
-            @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-            public void onQuit(PlayerQuitEvent event) {
-                removeCache(event.getPlayer().getName());
-            }
-        }, MoonLakeAPI.getMoonLake());
+        if(MoonLakeAPI.getMoonLake().isEnabled()) {
+            MoonLakeAPI.registerEvent(new MoonLakeListener() {
+                @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+                public void onQuit(PlayerQuitEvent event) {
+                    removeCache(event.getPlayer().getName());
+                }
+            }, MoonLakeAPI.getMoonLake());
+        }
     }
 
     @Override
