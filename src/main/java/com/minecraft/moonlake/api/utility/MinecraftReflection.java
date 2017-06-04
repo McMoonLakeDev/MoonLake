@@ -350,7 +350,7 @@ public class MinecraftReflection {
         return getMinecraftClass("ChatSerializer");
     }
 
-    public static Class<?> getChatMessageType() {
+    public static Class<?> getChatMessageTypeClass() {
         // 这个类只有 mc1.12+ 版本才有
         return getMinecraftClass("ChatMessageType");
     }
@@ -708,7 +708,7 @@ public class MinecraftReflection {
     public static Object chatMessageTypeFromByte(byte type) {
         // 这个函数 mc1.12+ 版本才有
         if(chatMessageTypeFormByteMethod == null)
-            chatMessageTypeFormByteMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getChatMessageClass(), true).getMethodByParameters("a", getChatMessageType(), new Class[] { byte.class}));
+            chatMessageTypeFormByteMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getChatMessageTypeClass(), true).getMethodByParameters("a", getChatMessageTypeClass(), new Class[] { byte.class}));
         return chatMessageTypeFormByteMethod.invoke(null, type);
     }
 
