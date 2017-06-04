@@ -19,8 +19,10 @@
 package com.minecraft.moonlake;
 
 import com.minecraft.moonlake.api.MoonLake;
+import com.minecraft.moonlake.api.player.CachedMoonLakePlayer;
 import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
+import com.minecraft.moonlake.manager.ClassManager;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -89,43 +91,31 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
     public void onEnable() {
 
         MAIN = this;
-
         // set MoonLake API Object
         MoonLakeAPI.setMoonlake(this);
-
+        // reload configuration
         this.configuration = new MoonLakePluginConfig(this);
         this.configuration.reload();
-
         // log mc and bukkit version info
         this.logServerVersion();
-
         // load library class
         this.loadLibraryClass();
-
+        // print plugin enabled info
         this.getLogger().info("月色之湖核心 API 插件 v" + getPluginVersion() + " 成功加载.");
     }
 
+    @Override
+    public void onDisable() {
+        // clear moonlake player cached
+        CachedMoonLakePlayer.getInstance().clear();
+    }
+
     private void loadLibraryClass() {
-        // load class
-        try {
-            // load depend player class to register listener
-            Class.forName("com.minecraft.moonlake.api.player.DependPlayerPluginListener");
-        }
-        catch (Exception e) {
-
-            this.getLogger().log(Level.WARNING, "The load depend player plugin listener exception.", e);
-        }
-        try {
-
-            if(getConfiguration().isPacketChannelListener()) {
-                // load PacketListenerFactory class
-                Class.forName("com.minecraft.moonlake.api.packet.listener.PacketListenerFactory");
-            }
-        }
-        catch (Exception e) {
-
-            this.getLogger().log(Level.WARNING, "The load moonlake library class exception.", e);
-        }
+        // load depend player class to register listener
+        ClassManager.forName("com.minecraft.moonlake.api.player.DependPlayerPluginListener", "The load depend player plugin listener exception.");
+        // load PacketListenerFactory class
+        if(getConfiguration().isPacketChannelListener())
+            ClassManager.forName("com.minecraft.moonlake.api.packet.listener.PacketListenerFactory", "The load packet channel listener library class exception.");
     }
 
     private void logServerVersion() {

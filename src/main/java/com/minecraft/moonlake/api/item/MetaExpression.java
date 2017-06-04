@@ -19,6 +19,8 @@
 package com.minecraft.moonlake.api.item;
 
 import com.minecraft.moonlake.api.item.meta.MetaLibrary;
+import com.minecraft.moonlake.api.nbt.NBTCompound;
+import com.minecraft.moonlake.api.nbt.NBTFactory;
 import com.minecraft.moonlake.manager.RandomManager;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
@@ -35,7 +37,7 @@ import java.util.*;
  * <h1>MetaExpression</h1>
  * 物品栈元属性接口实现类
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 class MetaExpression extends AttributeExpression implements MetaLibrary {
@@ -61,6 +63,34 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
             itemStack.setItemMeta(itemMeta);
         }
         return itemStack;
+    }
+
+    @Override
+    public ItemStack setLocalizedName(ItemStack itemStack, String localizedName) {
+
+        Validate.notNull(itemStack, "The itemstack object is null.");
+        Validate.notNull(localizedName, "The itemstack localizedName object is null.");
+
+        NBTCompound nbtCompound = NBTFactory.get().readSafe(itemStack);
+        nbtCompound.put("LocName", localizedName);
+        nbtCompound.write(itemStack);
+
+        return itemStack;
+    }
+
+    @Override
+    public String getLocalizedName(ItemStack itemStack) {
+
+        Validate.notNull(itemStack, "The itemstack object is null.");
+
+        NBTCompound nbtCompound = NBTFactory.get().read(itemStack);
+        return nbtCompound != null ? nbtCompound.getString("LocName") : null;
+    }
+
+    @Override
+    public boolean hasLocalizedName(ItemStack itemStack) {
+
+        return getLocalizedName(itemStack) != null;
     }
 
     @Override
@@ -111,34 +141,6 @@ class MetaExpression extends AttributeExpression implements MetaLibrary {
         Validate.notNull(itemStack, "The itemstack object is null.");
 
         return setDurability(itemStack, itemStack.getDurability() + durability); // set durability add be add durability
-    }
-
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public Set<String> getLores(ItemStack itemStack) {
-
-        return getLores(itemStack, false);
-    }
-
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public Set<String> getLores(ItemStack itemStack, boolean ignoreColor) {
-
-        Validate.notNull(itemStack, "The itemstack object is null.");
-
-        ItemMeta itemMeta = itemStack.getItemMeta();
-
-        if(itemMeta == null || !itemMeta.hasLore()) {
-
-            return null;
-        }
-        if(!ignoreColor) {
-
-            return new HashSet<>(itemMeta.getLore());
-        }
-        return new HashSet<>(StringUtil.stripColor(itemMeta.getLore()));
     }
 
     @Override

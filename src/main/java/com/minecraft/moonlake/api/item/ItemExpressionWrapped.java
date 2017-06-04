@@ -39,7 +39,7 @@ import java.util.Set;
  * <h1>ItemExpressionWrapped</h1>
  * 物品栈接口单实现类
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 class ItemExpressionWrapped extends ItemExpression {
@@ -659,6 +659,24 @@ class ItemExpressionWrapped extends ItemExpression {
     }
 
     @Override
+    public ItemStack setLocalizedName(ItemStack itemStack, String localizedName) {
+
+        return base.setLocalizedName(itemStack, localizedName);
+    }
+
+    @Override
+    public String getLocalizedName(ItemStack itemStack) {
+
+        return base.getLocalizedName(itemStack);
+    }
+
+    @Override
+    public boolean hasLocalizedName(ItemStack itemStack) {
+
+        return base.hasLocalizedName(itemStack);
+    }
+
+    @Override
     public ItemStack setAmount(ItemStack itemStack, int amount) {
 
         return base.setAmount(itemStack, amount);
@@ -692,18 +710,6 @@ class ItemExpressionWrapped extends ItemExpression {
     public ItemStack takeDurability(ItemStack itemStack, int durability) {
 
         return base.takeDurability(itemStack, durability);
-    }
-
-    @Override
-    public Set<String> getLores(ItemStack itemStack) {
-
-        return base.getLores(itemStack);
-    }
-
-    @Override
-    public Set<String> getLores(ItemStack itemStack, boolean ignoreColor) {
-
-        return base.getLores(itemStack, ignoreColor);
     }
 
     @Override

@@ -22,10 +22,12 @@ package com.minecraft.moonlake.nbt.exception;
  * <h1>NBTConvertException</h1>
  * NBT 转换异常（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public class NBTConvertException extends NBTException {
+
+    private static final long serialVersionUID = 9147781132945165939L;
 
     /**
      * NBT 转换异常类构造函数
@@ -54,5 +56,15 @@ public class NBTConvertException extends NBTException {
     public NBTConvertException(String message, Throwable cause) {
 
         super(message, cause);
+    }
+
+    /**
+     * NBT 转换异常类构造函数
+     *
+     * @param cause 异常原因
+     */
+    public NBTConvertException(Throwable cause) {
+
+        super(cause);
     }
 }

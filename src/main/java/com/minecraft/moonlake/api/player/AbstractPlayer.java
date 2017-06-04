@@ -1355,14 +1355,6 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
-    public void sendPacket(com.minecraft.moonlake.nms.packet.Packet<?> packet) {
-
-        Validate.notNull(packet, "The packet object is null.");
-
-        packet.send(getBukkitPlayer());
-    }
-
-    @Override
     @SuppressWarnings("SpellCheckingInspection")
     public void sendPacket(PacketPlayOutBukkit packet) {
 
@@ -1440,6 +1432,12 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     public boolean hasItemCooldown(Material type) {
 
         return PlayerManager.hasItemCoolDown(getBukkitPlayer(), type);
+    }
+
+    @Override
+    public int getItemCooldown(Material type) {
+
+        return PlayerManager.getItemCoolDown(getBukkitPlayer(), type);
     }
 
     @Override
@@ -2075,5 +2073,10 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
             throw new CannotDependException("The call 'WorldEdit plugin method 'getWorldEditSelection' exception.", e);
         }
+    }
+
+    @Override
+    public Spigot spigot() {
+        throw new UnsupportedOperationException();
     }
 }

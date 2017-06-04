@@ -91,7 +91,7 @@ class AttributeExpression_v1_9_Plus extends AttributeExpression {
      *
      * @return Bukkit 的特殊属性 没有返回 null
      */
-    protected final org.bukkit.attribute.Attribute conver() {
+    protected org.bukkit.attribute.Attribute conver() {
 
         switch (type) {
 

@@ -22,11 +22,12 @@ package com.minecraft.moonlake.api.annotation.plugin.command.exception;
  * <h1>CommandInvalidLengthException</h1>
  * 命令错误参数长度异常类
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public class CommandInvalidLengthException extends CommandException {
 
+    private static final long serialVersionUID = -7741012724284893495L;
     private int expected, given;
 
     /**

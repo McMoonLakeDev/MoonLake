@@ -22,7 +22,10 @@ import com.minecraft.moonlake.api.nbt.NBTReflect;
 
 /**
  * Created by MoonLake on 2016/9/21.
+ *
+ * @deprecated 已过时, 将于 v1.9-a6 删除.
  */
+@Deprecated
 public class NBTTagFloat extends NBTTagNumberic<Float> {
 
     public NBTTagFloat() {

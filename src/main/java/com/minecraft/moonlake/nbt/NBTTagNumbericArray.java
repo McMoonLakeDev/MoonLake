@@ -24,7 +24,10 @@ import java.util.*;
 
 /**
  * Created by MoonLake on 2016/9/21.
+ *
+ * @deprecated 已过时, 将于 v1.9-a6 删除.
  */
+@Deprecated
 public abstract class NBTTagNumbericArray<T extends Number> extends NBTTagDatable implements List<T> {
 
     public NBTTagNumbericArray(Object object) {

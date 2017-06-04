@@ -37,6 +37,8 @@ import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
+import io.netty.channel.Channel;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -52,13 +54,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
  * <h1>MinecraftReflection</h1>
  * Minecraft 底层反射效用类 (函数暂时不提供doc文档)
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 public class MinecraftReflection {
@@ -74,9 +77,11 @@ public class MinecraftReflection {
     private static volatile MethodAccessor nbtCompressedStreamToolsWriteMethod;
     private static volatile MethodAccessor nbtCompressedStreamToolsReadMethod;
     private static volatile MethodAccessor entityLivingGetAttributeInstanceMethod;
+    private static volatile MethodAccessor playerConnectionSendPacketMethod;
     private static volatile MethodAccessor craftItemStackAsBukkitCopyMethod;
     private static volatile MethodAccessor craftItemStackAsCraftMirrorMethod;
     private static volatile MethodAccessor craftItemStackAsNMSCopyMethod;
+    private static volatile MethodAccessor chatMessageTypeFormByteMethod;
     private static volatile MethodAccessor attributeInstanceGetValueMethod;
     private static volatile MethodAccessor attributeInstanceSetValueMethod;
     private static volatile MethodAccessor enumGamemodeGetByIdMethod;
@@ -87,19 +92,25 @@ public class MinecraftReflection {
     private static volatile MethodAccessor entityGetBukkitEntityMethod;
     private static volatile MethodAccessor enumParticleGetByIdMethod;
     private static volatile MethodAccessor itemStackCraftStackMethod;
+    private static volatile MethodAccessor iAttributeGetNameMethod;
     private static volatile MethodAccessor worldServerHandleMethod;
     private static volatile MethodAccessor worldGetTileEntityMethod;
     private static volatile MethodAccessor itemCooldownHasMethod;
-    private static volatile MethodAccessor itemCooldownGetMethod;
     private static volatile MethodAccessor itemCooldownSetMethod;
     private static volatile MethodAccessor worldAddEntityMethod;
     private static volatile MethodAccessor itemStackSaveMethod;
     private static volatile MethodAccessor entityHandleMethod;
-    private static volatile MethodAccessor sendPacketMethod;
     private static volatile MethodAccessor itemGetByIdMethod;
+    private static volatile FieldAccessor playerConnectionNetworkManagerChannelField;
+    private static volatile FieldAccessor serverConnectionNetworkManagerListField;
     private static volatile FieldAccessor playerConnectionNetworkManagerField;
+    private static volatile FieldAccessor minecraftServerServerConnectionField;
     private static volatile FieldAccessor entityPlayerPlayerConnectionField;
     private static volatile FieldAccessor entityHumanItemCooldownField;
+    private static volatile FieldAccessor itemCooldownInfoTickField;
+    private static volatile FieldAccessor itemCooldownMapField;
+    private static volatile FieldAccessor itemCooldownTickField;
+    private static volatile FieldAccessor craftServerConsoleField;
     private static volatile FieldAccessor entityPlayerLocaleField;
     private static volatile FieldAccessor entityPlayerPingField;
 
@@ -303,6 +314,12 @@ public class MinecraftReflection {
         return getMinecraftClass("ItemCooldown");
     }
 
+    public static Class<?> getMinecraftItemCooldownInfoClass() throws IllegalBukkitVersionException {
+        if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9))
+            throw new IllegalBukkitVersionException("The item cool down not support 1.8 or old bukkit version.");
+        return getMinecraftClass("ItemCooldown$Info");
+    }
+
     public static Class<?> getMinecraftEnumParticleClass() {
         return getMinecraftClass("EnumParticle");
     }
@@ -331,6 +348,11 @@ public class MinecraftReflection {
         }
         // 否则上面的异常则获取这个
         return getMinecraftClass("ChatSerializer");
+    }
+
+    public static Class<?> getChatMessageTypeClass() {
+        // 这个类只有 mc1.12+ 版本才有
+        return getMinecraftClass("ChatMessageType");
     }
 
     public static Class<?> getEnumGamemodeClass() {
@@ -421,6 +443,14 @@ public class MinecraftReflection {
         return getCraftBukkitClass("util.UnsafeList");
     }
 
+    public static Class<?> getServerConnectionClass() {
+        return getMinecraftClass("ServerConnection");
+    }
+
+    public static Class<?> getMinecraftServerClass() {
+        return getMinecraftClass("MinecraftServer");
+    }
+
     @Nullable
     public static <T extends PacketPlayOutBukkit> Class<?> getPacketClassFromPacketWrapper(Class<T> packetWrapper) {
         try {
@@ -477,19 +507,30 @@ public class MinecraftReflection {
         return (boolean) itemCooldownHasMethod.invoke(itemCooldown, item);
     }
 
-    public static float getItemCooldown(HumanEntity humanEntity, Material type) {
+    public static int getItemCooldown(HumanEntity humanEntity, Material type) {
         Validate.notNull(humanEntity, "The human entity object is null.");
         Object entityHuman = getEntity(humanEntity);
         return getItemCooldown(entityHuman, type);
     }
 
-    public static float getItemCooldown(Object entityHuman, Material type) {
+    @SuppressWarnings("unchecked")
+    public static int getItemCooldown(Object entityHuman, Material type) {
         Validate.notNull(type, "The item type object is null.");
         Object item = itemGetByMaterial(type);
         Object itemCooldown = getEntityHumanItemCooldown(entityHuman); // 如果不支持直接抛出异常
-        if(itemCooldownGetMethod == null)
-            itemCooldownGetMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getMinecraftItemCooldownClass(), true).getMethodByParameters("a", float.class, new Class[] { getMinecraftItemClass(), float.class }));
-        return (float) itemCooldownGetMethod.invoke(itemCooldown, item, 0.0f);
+        if(itemCooldownTickField == null)
+            itemCooldownTickField = Accessors.getFieldAccessor(getMinecraftItemCooldownClass(), int.class, true);
+        if(itemCooldownMapField == null)
+            itemCooldownMapField = Accessors.getFieldAccessor(getMinecraftItemCooldownClass(), Map.class, true);
+        if(itemCooldownInfoTickField == null)
+            itemCooldownInfoTickField = Accessors.getFieldAccessor(getMinecraftItemCooldownInfoClass(), 1, true); // 第二个字段 b
+        // 算法摘自 https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/commits/be9ef980b9aa272acf298a337da8157c6a620e95#src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+        Object info = ((Map) itemCooldownMapField.get(itemCooldown)).get(item);
+        if(info == null)
+            return 0;
+        int infoTick = (int) itemCooldownInfoTickField.get(info);
+        int tick = (int) itemCooldownTickField.get(itemCooldown);
+        return Math.max(0, infoTick - tick);
     }
 
     public static void setItemCooldown(HumanEntity humanEntity, Material type, int tick) {
@@ -558,12 +599,26 @@ public class MinecraftReflection {
         return (GameProfile) entityHumanGetProfileMethod.invoke(entityHuman);
     }
 
+    public static Object getGenericAttributes(AttributeType type) {
+        Validate.notNull(type, "The attribute type object is null.");
+        Class<?> iAttributeClass = getMinecraftIAttributeClass();
+        if(iAttributeGetNameMethod == null)
+            iAttributeGetNameMethod = Accessors.getMethodAccessor(iAttributeClass, "getName");
+        FieldAccessor[] array = Accessors.getFieldAccessorArray(getMinecraftGenericAttributesClass(), iAttributeClass, true);
+        for(FieldAccessor field : array) {
+            Object iAttribute = field.get(null);
+            if(type.getName().equals(iAttributeGetNameMethod.invoke(iAttribute)))
+                return iAttribute;
+        }
+        throw new UnsupportedOperationException("The attribute type not support bukkit version: " + type.getName());
+    }
+
     public static void setAttributeValue(LivingEntity livingEntity, AttributeType attributeType, double value) {
         Validate.notNull(livingEntity, "The living entity object is null.");
         Validate.notNull(attributeType, "The attribute type object is null.");
         attributeType.isSupported(); // 检测属性类型是否支持服务端版本
         double finalValue = attributeType.getSafeValue(value);
-        Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttributeField().get(null));
+        Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttribute());
         if(attributeInstanceSetValueMethod == null)
             attributeInstanceSetValueMethod = Accessors.getMethodAccessor(getMinecraftAttributeInstanceClass(), "setValue", double.class);
         attributeInstanceSetValueMethod.invoke(attributeInstance, finalValue);
@@ -573,7 +628,7 @@ public class MinecraftReflection {
         Validate.notNull(livingEntity, "The living entity object is null.");
         Validate.notNull(attributeType, "The attribute type object is null.");
         attributeType.isSupported(); // 检测属性类型是否支持服务端版本
-        Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttributeField().get(null));
+        Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttribute());
         if(attributeInstanceGetValueMethod == null)
             attributeInstanceGetValueMethod = Accessors.getMethodAccessor(getMinecraftAttributeInstanceClass(), "getValue");
         return (double) attributeInstanceGetValueMethod.invoke(attributeInstance);
@@ -648,6 +703,13 @@ public class MinecraftReflection {
     public static Object getIChatBaseComponentFromString(String string) {
         Validate.notNull(string, "The string object is null.");
         return getIChatBaseComponentFromJson("{\"text\":\"" + string + "\"}");
+    }
+
+    public static Object chatMessageTypeFromByte(byte type) {
+        // 这个函数 mc1.12+ 版本才有
+        if(chatMessageTypeFormByteMethod == null)
+            chatMessageTypeFormByteMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getChatMessageTypeClass(), true).getMethodByParameters("a", getChatMessageTypeClass(), new Class[] { byte.class}));
+        return chatMessageTypeFormByteMethod.invoke(null, type);
     }
 
     public static Object newNBTTagCompound() {
@@ -805,6 +867,59 @@ public class MinecraftReflection {
         return entityPlayerPlayerConnectionField.get(nmsPlayer);
     }
 
+    public static Object getMinecraftServer() {
+        if(craftServerConsoleField == null)
+            craftServerConsoleField = Accessors.getFieldAccessor(Bukkit.getServer().getClass(), getMinecraftServerClass(), true);
+        return craftServerConsoleField.get(Bukkit.getServer());
+    }
+
+    public static Object getMinecraftServerConnection() {
+        if(minecraftServerServerConnectionField == null)
+            minecraftServerServerConnectionField = Accessors.getFieldAccessor(getMinecraftServerClass(), getServerConnectionClass(), true);
+        return minecraftServerServerConnectionField.get(getMinecraftServer());
+    }
+
+    public static Channel getNetworkManagerChannel(Player player) {
+        Validate.notNull(player, "The player object is null.");
+        return getNetworkManagerChannel(getEntityPlayer(player));
+    }
+
+    public static Channel getNetworkManagerChannel(Object nmsPlayer) {
+        Validate.notNull(nmsPlayer, "The nms player object is null.");
+        if(playerConnectionNetworkManagerChannelField == null)
+            playerConnectionNetworkManagerChannelField = Accessors.getFieldAccessor(getNetworkManagerClass(), Channel.class, true);
+        return (Channel) playerConnectionNetworkManagerChannelField.get(getNetworkManager(nmsPlayer));
+    }
+
+    public static Channel getNetworkManagerChannelObj(Object obj) {
+        Validate.notNull(obj, "The object is null.");
+        if(playerConnectionNetworkManagerChannelField == null)
+            playerConnectionNetworkManagerChannelField = Accessors.getFieldAccessor(getNetworkManagerClass(), Channel.class, true);
+        return (Channel) playerConnectionNetworkManagerChannelField.get(obj);
+    }
+
+    public static List getNetworkManagerList() {
+        return getNetworkManagerList(getMinecraftServerConnection());
+    }
+
+    public static List getNetworkManagerList(Object nmsServerConnection) {
+        Validate.notNull(nmsServerConnection, "The nms server connection object is null.");
+        return (List) getServerConnectionNetworkManagerListField().get(nmsServerConnection);
+    }
+
+    public static FieldAccessor getServerConnectionNetworkManagerListField() {
+        if(serverConnectionNetworkManagerListField == null) try {
+            serverConnectionNetworkManagerListField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(getServerConnectionClass(), true).getFieldListByParamType("List<NetworkManager>", getNetworkManagerClass()));
+        } catch (Exception e) {
+        }
+        if(serverConnectionNetworkManagerListField == null) try {
+            serverConnectionNetworkManagerListField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(getServerConnectionClass(), true).getFieldListByType(List.class).get(1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return serverConnectionNetworkManagerListField;
+    }
+
     public static void sendPacket(Player[] players, Object nmsPacket) {
         Validate.notNull(players, "The players object is null.");
         for(Player player : players)
@@ -819,9 +934,9 @@ public class MinecraftReflection {
     public static void sendPacket(Object nmsPlayer, Object nmsPacket) {
         Validate.notNull(nmsPlayer, "The nms player object is null.");
         Validate.notNull(nmsPacket, "The nms packet object is null.");
-        if(sendPacketMethod == null)
-            sendPacketMethod = Accessors.getMethodAccessor(getPlayerConnectionClass(), "sendPacket", getPacketClass());
-        sendPacketMethod.invoke(getPlayerConnection(nmsPlayer), nmsPacket);
+        if(playerConnectionSendPacketMethod == null)
+            playerConnectionSendPacketMethod = Accessors.getMethodAccessor(getPlayerConnectionClass(), "sendPacket", getPacketClass());
+        playerConnectionSendPacketMethod.invoke(getPlayerConnection(nmsPlayer), nmsPacket);
     }
 
     public static boolean is(Class<?> clazz, Object obj) {
