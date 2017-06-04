@@ -164,6 +164,13 @@ public abstract class Enchantment {
     public final static Enchantment 消失诅咒 = new EnchantmentWrapped(71, "VANISHING_CURSE", MinecraftVersion.V1_11);
     ///
 
+    // 1.11.1 增加的新附魔（不兼容 1.11 以下
+    /**
+     * 附魔类型: 横扫之刃
+     */
+    public final static Enchantment 横扫之刃 = new EnchantmentWrapped(22, "SWEEPING_EDGE", new MinecraftVersion(1, 11, 1));
+    ///
+
     private final int id;
     private final String name;
     private final MinecraftVersion requiredVersion;
