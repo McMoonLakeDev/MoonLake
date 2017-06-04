@@ -18,7 +18,11 @@
 
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.player.advancement.Advancement;
+import com.minecraft.moonlake.api.player.advancement.AdvancementKey;
+import com.minecraft.moonlake.api.player.advancement.AdvancementProgress;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
+import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Color;
@@ -119,4 +123,20 @@ public class SimpleMoonLakePlayer_v1_10 extends SimpleMoonLakePlayer_v1_9 {
 
         return MinecraftVersion.V1_10;
     }
+
+    //
+
+    @Override
+    public AdvancementProgress getAdvancementProgress(Advancement advancement) {
+
+        throw new IllegalBukkitVersionException("The method not support 1.10 and old version.");
+    }
+
+    @Override
+    public AdvancementProgress getAdvancementProgress(AdvancementKey key) {
+
+        throw new IllegalBukkitVersionException("The method not support 1.10 and old version.");
+    }
+
+    ///
 }

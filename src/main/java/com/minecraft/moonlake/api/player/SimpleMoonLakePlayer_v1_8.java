@@ -18,6 +18,9 @@
 
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.player.advancement.Advancement;
+import com.minecraft.moonlake.api.player.advancement.AdvancementKey;
+import com.minecraft.moonlake.api.player.advancement.AdvancementProgress;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
@@ -192,6 +195,18 @@ public class SimpleMoonLakePlayer_v1_8 extends SimpleMoonLakePlayer {
 
     @Override
     public void setItemInOffHand(ItemStack itemStack) {
+
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
+    }
+
+    @Override
+    public AdvancementProgress getAdvancementProgress(Advancement advancement) {
+
+        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
+    }
+
+    @Override
+    public AdvancementProgress getAdvancementProgress(AdvancementKey key) {
 
         throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
     }
