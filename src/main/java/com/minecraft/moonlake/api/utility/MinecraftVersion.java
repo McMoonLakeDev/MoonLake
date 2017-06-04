@@ -336,7 +336,7 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
                 .compare(major, o.major)
                 .compare(minor, o.minor)
                 .compare(build, o.build)
-                .compare(pre, o.pre)
+                .compare(isPre() ? pre : -1, o.isPre() ? o.pre : -1)
                 .result();
     }
 
