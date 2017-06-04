@@ -115,7 +115,7 @@ public class MoonLakePlugin extends JavaPlugin implements MoonLake {
         ClassManager.forName("com.minecraft.moonlake.api.player.DependPlayerPluginListener", "The load depend player plugin listener exception.");
         // load PacketListenerFactory class
         if(getConfiguration().isPacketChannelListener())
-            ClassManager.forName("com.minecraft.moonlake.api.packet.listener.PacketListenerFactory", "The load moonlake library class exception.");
+            ClassManager.forName("com.minecraft.moonlake.api.packet.listener.PacketListenerFactory", "The load packet channel listener library class exception.");
     }
 
     private void logServerVersion() {
