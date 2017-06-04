@@ -24,12 +24,10 @@ import com.minecraft.moonlake.exception.MoonLakeException;
  * <h1>NBTException</h1>
  * NBT 异常（详细doc待补充...）
  *
- * @version 1.1
+ * @version 1.0
  * @author Month_Light
  */
 public class NBTException extends MoonLakeException {
-
-    private static final long serialVersionUID = -1574952553046165582L;
 
     /**
      * NBT 异常类构造函数
@@ -58,15 +56,5 @@ public class NBTException extends MoonLakeException {
     public NBTException(String message, Throwable cause) {
 
         super(message, cause);
-    }
-
-    /**
-     * NBT 异常类构造函数
-     *
-     * @param cause 异常原因
-     */
-    public NBTException(Throwable cause) {
-
-        super(cause);
     }
 }

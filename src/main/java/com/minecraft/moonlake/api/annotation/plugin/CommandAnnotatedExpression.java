@@ -44,7 +44,7 @@ import java.util.List;
  * <h1>CommandAnnotatedExpression</h1>
  * 注解命令类接口实现类
  *
- * @version 1.0.1
+ * @version 1.0
  * @author Month_Light
  */
 class CommandAnnotatedExpression implements CommandAnnotated {
@@ -263,7 +263,7 @@ class CommandAnnotatedExpression implements CommandAnnotated {
                 }
                 if(MoonLakePlayer.class.isAssignableFrom(commandMethodParameters[0])) {
 
-                    methodParameterTypeObjects[0] = PlayerManager.getCache((Player) sender);
+                    methodParameterTypeObjects[0] = PlayerManager.adapter((Player) sender);
                 }
                 else {
 
@@ -450,7 +450,7 @@ class CommandAnnotatedExpression implements CommandAnnotated {
 
             if(MoonLakePlayer.class.isAssignableFrom(commandCompletionMethodParameters[1])) {
 
-                methodParameterTypeObjects[1] = PlayerManager.getCache((Player) sender);
+                methodParameterTypeObjects[1] = PlayerManager.adapter((Player) sender);
             }
             else {
 

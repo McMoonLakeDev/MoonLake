@@ -78,7 +78,7 @@ abstract class PlayerExpression implements PlayerLibrary { // TODO 2.0
             throw new PlayerNotOnlineException(name);
         }
         //return new SimpleMoonLakePlayer(target);
-        return PlayerManager.getCache(target);
+        return PlayerManager.adapter(target);
     }
 
     @Override
@@ -91,7 +91,7 @@ abstract class PlayerExpression implements PlayerLibrary { // TODO 2.0
             throw new PlayerNotOnlineException(uuid.toString());
         }
         //return new SimpleMoonLakePlayer(target);
-        return PlayerManager.getCache(target);
+        return PlayerManager.adapter(target);
     }
 
     @Override

@@ -22,12 +22,10 @@ package com.minecraft.moonlake.api.annotation.plugin.command.exception;
  * <h1>CommandIllegalSenderException</h1>
  * 命令非法执行者异常类
  *
- * @version 1.1
+ * @version 1.0
  * @author Month_Light
  */
 public class CommandIllegalSenderException extends CommandException {
-
-    private static final long serialVersionUID = -6463275367691171573L;
 
     /**
      * 命令非法执行者异常类构造函数

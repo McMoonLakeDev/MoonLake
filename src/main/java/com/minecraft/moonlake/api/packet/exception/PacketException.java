@@ -24,12 +24,10 @@ import com.minecraft.moonlake.api.nms.exception.NMSException;
  * <h1>PacketException</h1>
  * 数据包异常类（详细doc待补充...）
  *
- * @version 1.1
+ * @version 1.0
  * @author Month_Light
  */
 public class PacketException extends NMSException {
-
-    private static final long serialVersionUID = 6841113426689130804L;
 
     /**
      * 数据包异常类构造函数
@@ -58,15 +56,5 @@ public class PacketException extends NMSException {
     public PacketException(String message, Throwable cause) {
 
         super(message, cause);
-    }
-
-    /**
-     * 数据包异常类构造函数
-     *
-     * @param cause 异常原因
-     */
-    public PacketException(Throwable cause) {
-
-        super(cause);
     }
 }

@@ -831,29 +831,6 @@ public class EntityManager extends MoonLakeManager {
     }
 
     /**
-     * 设置指定实体的飞行速度
-     *
-     * @param livingEntity 实体
-     * @param value 值
-     * @see AttributeType#FLYING_SPEED
-     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
-     */
-    public static void setAttributeFlyingSpeed(LivingEntity livingEntity, double value) {
-        setAttributeValue(livingEntity, AttributeType.FLYING_SPEED, value);
-    }
-
-    /**
-     * 获取指定实体的飞行速度
-     *
-     * @param livingEntity 实体
-     * @return 实体的飞行速度
-     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
-     */
-    public static double getAttributeFlyingSpeed(LivingEntity livingEntity) {
-        return getAttributeValue(livingEntity, AttributeType.FLYING_SPEED);
-    }
-
-    /**
      * 设置指定实体的指定属性类型的值
      *
      * @param entity 实体

@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketException;
 import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutAnimation;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
+import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import org.bukkit.Material;
 
 /**
@@ -39,6 +40,17 @@ public interface NMSPlayer {
      * @return Ping 值
      */
     int getPing();
+
+    /**
+     * 给此玩家发送数据包
+     * 
+     * @param packet 数据包
+     * @throws IllegalArgumentException 如果数据包对象为 {@code null} 则抛出异常
+     * @throws PlayerNotOnlineException 如果玩家不在线则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #sendPacket(PacketPlayOutBukkit)}
+     */
+    @Deprecated
+    void sendPacket(com.minecraft.moonlake.nms.packet.Packet<?> packet); // TODO 2.0
 
     /**
      * 给此玩家发送数据包
@@ -135,16 +147,6 @@ public interface NMSPlayer {
      * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
      */
     boolean hasItemCooldown(Material material);
-
-    /**
-     * 获取此玩家物品栈类型的冷却时间
-     *
-     * @param material 物品栈类型
-     * @return 冷却时间
-     * @throws IllegalArgumentException 如果物品栈类型对象为 {@code null} 则抛出异常
-     * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
-     */
-    int getItemCooldown(Material material);
 
     /**
      * 将此玩家播放受伤动画效果

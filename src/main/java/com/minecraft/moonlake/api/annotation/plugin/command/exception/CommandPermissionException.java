@@ -22,12 +22,11 @@ package com.minecraft.moonlake.api.annotation.plugin.command.exception;
  * <h1>CommandPermissionException</h1>
  * 命令权限错误异常类
  *
- * @version 1.1
+ * @version 1.0
  * @author Month_Light
  */
 public class CommandPermissionException extends CommandException {
 
-    private static final long serialVersionUID = 19993591275811075L;
     private String permission;
 
     /**

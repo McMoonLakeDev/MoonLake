@@ -22,12 +22,10 @@ package com.minecraft.moonlake.exception;
  * <h1>IllegalBukkitVersionException</h1>
  * 非法 Bukkit 版本异常（详细doc待补充...）
  *
- * @version 1.1
+ * @version 1.0
  * @author Month_Light
  */
 public class IllegalBukkitVersionException extends MoonLakeException {
-
-    private static final long serialVersionUID = -8942367208773219669L;
 
     /**
      * 非法 Bukkit 版本异常类构造函数
@@ -56,15 +54,5 @@ public class IllegalBukkitVersionException extends MoonLakeException {
     public IllegalBukkitVersionException(String message, Throwable cause) {
 
         super(message, cause);
-    }
-
-    /**
-     * 非法 Bukkit 版本异常类构造函数
-     *
-     * @param cause 异常原因
-     */
-    public IllegalBukkitVersionException(Throwable cause) {
-
-        super(cause);
     }
 }

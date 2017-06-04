@@ -22,12 +22,10 @@ package com.minecraft.moonlake.exception;
  * <h1>CannotDependVersionException</h1>
  * 无法依赖版本异常类
  *
- * @version 1.1
+ * @version 1.0
  * @author Month_Light
  */
 public class CannotDependVersionException extends CannotDependException {
-
-    private static final long serialVersionUID = 1970119983604709622L;
 
     /**
      * 无法依赖版本异常类构造函数
@@ -56,15 +54,5 @@ public class CannotDependVersionException extends CannotDependException {
     public CannotDependVersionException(String message, Throwable cause) {
 
         super(message, cause);
-    }
-
-    /**
-     * 无法依赖版本异常类构造函数
-     *
-     * @param cause 异常原因
-     */
-    public CannotDependVersionException(Throwable cause) {
-
-        super(cause);
     }
 }

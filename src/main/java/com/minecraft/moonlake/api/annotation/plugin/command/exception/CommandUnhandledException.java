@@ -22,12 +22,10 @@ package com.minecraft.moonlake.api.annotation.plugin.command.exception;
  * <h1>CommandUnhandledException</h1>
  * 命令未处理异常类
  *
- * @version 1.1
+ * @version 1.0
  * @author Month_Light
  */
 public class CommandUnhandledException extends CommandException {
-
-    private static final long serialVersionUID = 367166525844370485L;
 
     /**
      * 命令未处理异常类构造函数
@@ -56,15 +54,5 @@ public class CommandUnhandledException extends CommandException {
     public CommandUnhandledException(String message, Throwable cause) {
 
         super(message, cause);
-    }
-
-    /**
-     * 命令未处理异常类构造函数
-     *
-     * @param cause 异常原因
-     */
-    public CommandUnhandledException(Throwable cause) {
-
-        super(cause);
     }
 }

@@ -33,7 +33,7 @@ import java.util.Set;
  * <h1>ItemStack MetaLibrary</h1>
  * 物品栈元属性支持库（详细doc待补充...）
  *
- * @version 1.0.1
+ * @version 1.0
  * @author Month_Light
  */
 public interface MetaLibrary extends AttributeLibrary {
@@ -47,34 +47,6 @@ public interface MetaLibrary extends AttributeLibrary {
      * @throws IllegalArgumentException 如果显示名称对象为 {@code null} 则抛出异常
      */
     ItemStack setDisplayName(ItemStack itemStack, String displayName);
-
-    /**
-     * 设置物品栈的本地化名称
-     *
-     * @param itemStack 物品栈
-     * @param localizedName 本地化名称
-     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果本地化名称对象为 {@code null} 则抛出异常
-     */
-    ItemStack setLocalizedName(ItemStack itemStack, String localizedName);
-
-    /**
-     * 获取物品栈的本地化名称
-     *
-     * @param itemStack 物品栈
-     * @return 本地化名称
-     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
-     */
-    String getLocalizedName(ItemStack itemStack);
-
-    /**
-     * 获取物品栈是否拥有本地化名称
-     *
-     * @param itemStack 物品栈
-     * @return 是否拥有本地化名称
-     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
-     */
-    boolean hasLocalizedName(ItemStack itemStack);
 
     /**
      * 设置物品栈的堆叠数量
@@ -127,6 +99,27 @@ public interface MetaLibrary extends AttributeLibrary {
      * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
      */
     ItemStack takeDurability(ItemStack itemStack, int durability);
+
+    /**
+     * 获取物品栈的标签信息 (警告: 入门时犯错使用了无序集合)
+     *
+     * @param itemStack 物品栈
+     * @return 标签信息 没有则返回 null
+     * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link #getLore(ItemStack)}
+     */
+    @Deprecated
+    Set<String> getLores(ItemStack itemStack); // TODO v1.9-a5
+
+    /**
+     * 获取物品栈的标签信息 (警告: 入门时犯错使用了无序集合)
+     *
+     * @param itemStack 物品栈
+     * @param ignoreColor 是否忽略颜色
+     * @return 标签信息 没有则返回 null
+     * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link #getLore(ItemStack, boolean)}
+     */
+    @Deprecated
+    Set<String> getLores(ItemStack itemStack, boolean ignoreColor); // TODO v1.9-a5
 
     /**
      * 获取物品栈的标签信息

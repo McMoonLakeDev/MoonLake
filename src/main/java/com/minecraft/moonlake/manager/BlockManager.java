@@ -36,9 +36,10 @@ import java.util.*;
  * <h1>BlockManager</h1>
  * 方块管理实现类
  *
- * @version 1.0.2
+ * @version 1.0.1
  * @author Month_Light
  */
+@SuppressWarnings("deprecation")
 public class BlockManager extends MoonLakeManager {
 
     /**
@@ -111,7 +112,7 @@ public class BlockManager extends MoonLakeManager {
      */
     public static List<Block> getBlocksInRadius(Location location, int radius, boolean hollow) {
 
-        return getBlocksInRadius(location, radius, hollow, new HashSet<>(Collections.singletonList(Material.AIR)));
+        return getBlocksInRadius(location, radius, hollow, new HashSet<>(Arrays.asList(Material.AIR)));
     }
 
     /**

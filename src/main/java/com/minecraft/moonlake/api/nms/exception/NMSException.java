@@ -24,12 +24,10 @@ import com.minecraft.moonlake.exception.MoonLakeException;
  * <h1>NMSException</h1>
  * NMS 异常类（详细doc待补充...）
  *
- * @version 1.1
+ * @version 1.0
  * @author Month_Light
  */
 public class NMSException extends MoonLakeException {
-
-    private static final long serialVersionUID = -1460825153789702919L;
 
     /**
      * NMS 异常类构造函数
@@ -58,15 +56,5 @@ public class NMSException extends MoonLakeException {
     public NMSException(String message, Throwable cause) {
 
         super(message, cause);
-    }
-
-    /**
-     * NMS 异常类构造函数
-     *
-     * @param cause 异常原因
-     */
-    public NMSException(Throwable cause) {
-
-        super(cause);
     }
 }

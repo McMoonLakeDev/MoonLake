@@ -34,7 +34,7 @@ import java.util.Map;
  * <h1>ItemStack Builder</h1>
  * 物品栈建造（详细doc待补充...）
  *
- * @version 1.0.1
+ * @version 1.0
  * @author Month_Light
  */
 public interface ItemBuilder extends Builder<ItemStack> {
@@ -62,14 +62,6 @@ public interface ItemBuilder extends Builder<ItemStack> {
      * @throws IllegalArgumentException 如果显示名称对象为 {@code null} 则抛出异常
      */
     ItemBuilder setDisplayName(String displayName);
-
-    /**
-     * 设置物品栈的本地化名称
-     *
-     * @param localizedName 本地化名称
-     * @throws IllegalArgumentException 如果本地化名称对象为 {@code null} 则抛出异常
-     */
-    ItemBuilder setLocalizedName(String localizedName);
 
     /**
      * 设置物品栈的堆叠数量

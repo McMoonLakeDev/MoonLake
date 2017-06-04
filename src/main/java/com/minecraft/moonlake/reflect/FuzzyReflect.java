@@ -21,7 +21,9 @@ package com.minecraft.moonlake.reflect;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.validate.Validate;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -32,7 +34,7 @@ import java.util.regex.Pattern;
  * <h1>FuzzyReflect</h1>
  * 模糊反射类（详细doc待补充...）
  *
- * @version 1.0.1
+ * @version 1.0
  * @author Month_Light
  */
 public class FuzzyReflect {
@@ -244,28 +246,6 @@ public class FuzzyReflect {
         if(fieldList.size() > 0)
             return fieldList.get(0);
         throw new IllegalArgumentException(String.format("Unable to find a field %s with the type %s in %s", name, type.getName(), this.source.getName()));
-    }
-
-    /**
-     * 获取此模糊反射的类源 List 的指定参数类型字段对象
-     *
-     * @param name 名称 (仅用于异常信息)
-     * @param paramType 参数字段类型
-     * @return 字段对象
-     * @throws IllegalArgumentException 如果参数字段类型对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果未找到匹配字段则抛出异常
-     */
-    public Field getFieldListByParamType(String name, Class<?> paramType) {
-        Validate.notNull(paramType, "The list param type object is null.");
-        List<Field> fieldList = getFieldListByType(List.class);
-        for(Field field : fieldList) {
-            ParameterizedType param = (ParameterizedType) field.getGenericType();
-            Type[] typeArr = param.getActualTypeArguments();
-            if(typeArr != null && typeArr.length > 0)
-                if(paramType.getTypeName().equals(typeArr[0].getTypeName()))
-                    return field;
-        }
-        throw new IllegalArgumentException(String.format("Unable to find a field %s with the list type %s in %s", name, paramType.getName(), this.source.getName()));
     }
 
     /**

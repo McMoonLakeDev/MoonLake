@@ -311,6 +311,18 @@ class FancyMessageExpression implements FancyMessage {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
+    public FancyMessage then() {
+
+        Validate.isTrue(getLast().hasText(), "The fancy message part last not has text.");
+
+        partList.add(new FancyMessagePart());
+        dirty.set(true);
+
+        return this;
+    }
+
+    @Override
     public FancyMessage then(String text) {
 
         return then(rawText(text));
