@@ -18,11 +18,14 @@
  
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
+import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
+import com.minecraft.moonlake.builder.SingleParamBuilder;
 import com.minecraft.moonlake.property.*;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
@@ -51,7 +54,14 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
         CLASS_PACKETPLAYOUTCHAT = MinecraftReflection.getMinecraftClass("PacketPlayOutChat");
         Class<?> iChatBaseComponentClass = MinecraftReflection.getIChatBaseComponentClass();
         packetPlayOutChatVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTCHAT);
-        packetPlayOutChatConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTCHAT, iChatBaseComponentClass, byte.class);
+        packetPlayOutChatConstructor = Accessors.getConstructorAccessorBuilderBukkitVer(new SingleParamBuilder<ConstructorAccessor<?>, MinecraftBukkitVersion>() {
+            @Override
+            public ConstructorAccessor<?> build(MinecraftBukkitVersion param) {
+                if(!param.isLater(MinecraftBukkitVersion.V1_11_R1))
+                    return Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTCHAT, iChatBaseComponentClass, byte.class);
+                return Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTCHAT, iChatBaseComponentClass, MinecraftReflection.getChatMessageType());
+            }
+        });
     }
 
     private StringProperty message;
@@ -153,7 +163,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
             // 进行反射实例发送
             Object nmsChat = isFancyMessage == null ? MinecraftReflection.getIChatBaseComponentFromString(message) : MinecraftReflection.getIChatBaseComponentFromJson(message);
             if(nmsChat == null) MinecraftReflection.getIChatBaseComponentFromString(message); // 如果为 null 的话再调用一次进行格式化
-            Object packet = packetPlayOutChatConstructor.invoke(nmsChat, mode.get() == null ? (byte) 1 : mode.get().getMode());
+            Object packet = packetPlayOutChatConstructor.invoke(nmsChat, adapter(mode.get() == null ? (byte) 1 : mode.get().getMode()));
             MinecraftReflection.sendPacket(players, packet);
             return true;
 
@@ -167,7 +177,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
                 Object packet = packetPlayOutChatVoidConstructor.invoke();
                 Object nmsChat = isFancyMessage == null ? MinecraftReflection.getIChatBaseComponentFromString(message) : MinecraftReflection.getIChatBaseComponentFromJson(message);
                 if(nmsChat == null) throw new IllegalArgumentException("The message object is illegal value: " + message);
-                Object[] values = { nmsChat, mode.get().getMode() };
+                Object[] values = { nmsChat, adapter(mode.get().getMode()) };
                 Class<?>[] ignoreFieldTypes = { BaseComponent[].class }; // 忽略字段类型为 BaseComponent[] 数组
                 setFieldAccessibleAndValueSend(ignoreFieldTypes, players, 3, CLASS_PACKETPLAYOUTCHAT, packet, values);
                 return true;
@@ -177,6 +187,13 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
         }
         // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
         return false;
+    }
+
+    private static Object adapter(Object param) {
+        // 版本参数适配器
+        if(MoonLakeAPI.currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_12_R1))
+            return MinecraftReflection.chatMessageTypeFromByte((Byte) param);
+        return param;
     }
 
     /**
