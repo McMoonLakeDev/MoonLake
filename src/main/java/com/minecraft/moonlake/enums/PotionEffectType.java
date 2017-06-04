@@ -134,19 +134,19 @@ public abstract class PotionEffectType {
 
     // 1.9 增加的新药水效果（不兼容 1.8 以下
     /**
-     * 药水效果类型: 发光
+     * 药水效果类型: 发光 (1.9+)
      */
     public final static PotionEffectType 发光 = new PotionEffectTypeWrapped(24, "GLOWING", MinecraftVersion.V1_9);
     /**
-     * 药水效果类型: 漂浮
+     * 药水效果类型: 漂浮 (1.9+)
      */
     public final static PotionEffectType 漂浮 = new PotionEffectTypeWrapped(25, "LEVITATION", MinecraftVersion.V1_9);
     /**
-     * 药水效果类型: 幸运
+     * 药水效果类型: 幸运 (1.9+)
      */
     public final static PotionEffectType 幸运 = new PotionEffectTypeWrapped(26, "LUCK", MinecraftVersion.V1_9);
     /**
-     * 药水效果类型: 霉运
+     * 药水效果类型: 霉运 (1.9+)
      */
     public final static PotionEffectType 霉运 = new PotionEffectTypeWrapped(27, "UNLUCK", MinecraftVersion.V1_9);
     ///

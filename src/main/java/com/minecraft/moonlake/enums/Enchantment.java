@@ -144,29 +144,29 @@ public abstract class Enchantment {
 
     // 1.9 增加的新附魔（不兼容 1.8 以下
     /**
-     * 附魔类型: 冰霜行者
+     * 附魔类型: 冰霜行者 (1.9+)
      */
     public final static Enchantment 冰霜行者 = new EnchantmentWrapped(9, "FROST_WALKER", MinecraftVersion.V1_9);
     /**
-     * 附魔类型: 经验修补
+     * 附魔类型: 经验修补 (1.9+)
      */
     public final static Enchantment 经验修补 = new EnchantmentWrapped(70, "MENDING", MinecraftVersion.V1_9);
     ///
 
     // 1.11 增加的新附魔（不兼容 1.10 以下
     /**
-     * 附魔类型: 绑定诅咒
+     * 附魔类型: 绑定诅咒 (1.11+)
      */
     public final static Enchantment 绑定诅咒 = new EnchantmentWrapped(10, "BINDING_CURSE", MinecraftVersion.V1_11);
     /**
-     * 附魔类型: 消失诅咒
+     * 附魔类型: 消失诅咒 (1.11+)
      */
     public final static Enchantment 消失诅咒 = new EnchantmentWrapped(71, "VANISHING_CURSE", MinecraftVersion.V1_11);
     ///
 
     // 1.11.1 增加的新附魔（不兼容 1.11 以下
     /**
-     * 附魔类型: 横扫之刃
+     * 附魔类型: 横扫之刃 (1.11.1+)
      */
     public final static Enchantment 横扫之刃 = new EnchantmentWrapped(22, "SWEEPING_EDGE", new MinecraftVersion(1, 11, 1));
     ///
