@@ -18,9 +18,26 @@
 
 package com.minecraft.moonlake.api.player.advancement;
 
+/**
+ * <h1>AdvancementKey</h1>
+ * Bukkit 1.12+ 玩家成就键接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface AdvancementKey {
 
+    /**
+     * 获取此成就键的名称空间
+     *
+     * @return 名称空间
+     */
     String getNamespace();
 
+    /**
+     * 获取此成就键的键名称
+     *
+     * @return 键名称
+     */
     String getKey();
 }

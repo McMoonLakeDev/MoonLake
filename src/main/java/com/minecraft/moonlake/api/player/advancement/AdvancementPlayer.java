@@ -18,9 +18,36 @@
 
 package com.minecraft.moonlake.api.player.advancement;
 
+import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
+
+/**
+ * <h1>AdvancementPlayer</h1>
+ * Bukkit 1.12+ 成就玩家接口（详细doc待补充...）
+ *
+ * <p style='color: red;'>注: 此接口的内容只兼容 Bukkit 1.12+ 版本服务端, 其他版本调用将会抛出 {@link IllegalBukkitVersionException} 异常</p>
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface AdvancementPlayer {
 
+    /**
+     * 获取此玩家指定成就对象的成就进度
+     *
+     * @param advancement 成就对象
+     * @return 成就进度
+     * @throws IllegalArgumentException 如果成就对象为 {@code null} 则抛出异常
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.12 则抛出异常
+     */
     AdvancementProgress getAdvancementProgress(Advancement advancement);
 
+    /**
+     * 获取此玩家指定成就键的成就进度
+     *
+     * @param key 成就键
+     * @return 成就进度
+     * @throws IllegalArgumentException 如果成就键对象为 {@code null} 则抛出异常
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.12 则抛出异常
+     */
     AdvancementProgress getAdvancementProgress(AdvancementKey key);
 }

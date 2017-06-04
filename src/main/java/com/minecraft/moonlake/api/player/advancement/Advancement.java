@@ -20,9 +20,26 @@ package com.minecraft.moonlake.api.player.advancement;
 
 import java.util.Collection;
 
+/**
+ * <h1>Advancement</h1>
+ * Bukkit 1.12+ 玩家成就接口（详细doc待补充...）
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface Advancement {
 
+    /**
+     * 获取此成就的成就键对象
+     *
+     * @return 成就键
+     */
     AdvancementKey getKey();
 
+    /**
+     * 获取此成就的准则集合
+     *
+     * @return 准则集合
+     */
     Collection<String> getCriteria();
 }
