@@ -24,11 +24,25 @@ import com.minecraft.moonlake.api.player.advancement.AdvancementProgress;
 import java.util.Collection;
 import java.util.Date;
 
+/**
+ * <h1>AdvancementProgressExpression</h1>
+ * Bukkit 1.12+ 成就进度实现类
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see AdvancementProgress
+ */
 class AdvancementProgressExpression implements AdvancementProgress {
 
     private final Advancement advancement;
     private final org.bukkit.advancement.AdvancementProgress progress;
 
+    /**
+     * Bukkit 1.12+ 成就进度实现类构造函数
+     *
+     * @param advancement 成就对象
+     * @param progress 成就进度
+     */
     public AdvancementProgressExpression(Advancement advancement, org.bukkit.advancement.AdvancementProgress progress) {
         this.advancement = advancement;
         this.progress = progress;

@@ -23,11 +23,25 @@ import com.minecraft.moonlake.api.player.advancement.AdvancementKey;
 
 import java.util.Collection;
 
+/**
+ * <h1>AdvancementExpression</h1>
+ * Bukkit 1.12+ 玩家成就实现类
+ *
+ * @version 1.0
+ * @author Month_Light
+ * @see Advancement
+ */
 class AdvancementExpression implements Advancement {
 
     private final AdvancementKey key;
     private final Collection<String> criteria;
 
+    /**
+     * Bukkit 1.12+ 玩家成就实现类构造函数
+     *
+     * @param key 成就键
+     * @param criteria 准则集合
+     */
     public AdvancementExpression(AdvancementKey key, Collection<String> criteria) {
         this.key = key;
         this.criteria = criteria;
