@@ -282,6 +282,10 @@ public class PacketPlayOutOpenWindow extends PacketPlayOutBukkitAbstract {
          */
         DROPPER,
         /**
+         * 窗口类型: 潜影盒
+         */
+        SHULKER_BOX,
+        /**
          * 窗口类型: 实体马
          */
         ENTITY_HORSE,
