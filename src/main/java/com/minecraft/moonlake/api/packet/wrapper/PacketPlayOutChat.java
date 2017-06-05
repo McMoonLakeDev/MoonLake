@@ -57,7 +57,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
         packetPlayOutChatConstructor = Accessors.getConstructorAccessorBuilderBukkitVer(new SingleParamBuilder<ConstructorAccessor<?>, MinecraftBukkitVersion>() {
             @Override
             public ConstructorAccessor<?> build(MinecraftBukkitVersion param) {
-                if(param.isOrLater(MinecraftBukkitVersion.V1_11_R1))
+                if(param.isOrLater(MinecraftBukkitVersion.V1_12_R1))
                     return Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTCHAT, iChatBaseComponentClass, MinecraftReflection.getChatMessageTypeClass());
                 return Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTCHAT, iChatBaseComponentClass, byte.class);
             }
