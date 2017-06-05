@@ -169,7 +169,7 @@ public class PacketDataSerializer {
      *
      * @param value 字符串值
      * @throws IllegalArgumentException 如果字符串值对象为 {@code null} 则抛出异常
-     * @throws IllegalArgumentException 如果字符串值长度大于 {@code 32767} 则抛出异常
+     * @throws IllegalArgumentException 如果字符串值字节长度大于 {@code 32767} 则抛出异常
      */
     public PacketDataSerializer writeString(String value) {
         Validate.notNull(value, "The value object is null.");
