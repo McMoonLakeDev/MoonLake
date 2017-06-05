@@ -38,10 +38,7 @@ import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
 import io.netty.channel.Channel;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
@@ -88,6 +85,7 @@ public class MinecraftReflection {
     private static volatile MethodAccessor enumConstantDirectoryMethod;
     private static volatile MethodAccessor mojangsonParserParserMethod;
     private static volatile MethodAccessor entityHumanGetProfileMethod;
+    private static volatile MethodAccessor craftSoundGetSoundMethod;
     private static volatile MethodAccessor worldTypeGetByTypeMethod;
     private static volatile MethodAccessor entityGetBukkitEntityMethod;
     private static volatile MethodAccessor enumParticleGetByIdMethod;
@@ -365,6 +363,10 @@ public class MinecraftReflection {
         return getMinecraftClass("EnumGamemode");
     }
 
+    public static Class<?> getCraftSoundClass() {
+        return getCraftBukkitClass("CraftSound");
+    }
+
     public static Class<?> getNBTBaseClass() {
         return getMinecraftClass("NBTBase");
     }
@@ -469,6 +471,18 @@ public class MinecraftReflection {
     @Nullable
     public static <T extends PacketPlayOutBukkit> Class<?> getPacketClassFromPacketWrapper(T packetWrapper) {
         return packetWrapper.getPacketClass();
+    }
+
+    public static String getCraftSoundBySound(Sound sound) {
+        Validate.notNull(sound, "The sound object is null.");
+        if(craftSoundGetSoundMethod == null)
+            craftSoundGetSoundMethod = Accessors.getMethodAccessor(getCraftSoundClass(), "getSound", Sound.class);
+        return (String) craftSoundGetSoundMethod.invoke(null, sound);
+    }
+
+    public static String getCraftSoundByName(String name) {
+        Validate.notNull(name, "The sound name object is null.");
+        return getCraftSoundBySound(Sound.valueOf(name));
     }
 
     @SuppressWarnings("deprecation")

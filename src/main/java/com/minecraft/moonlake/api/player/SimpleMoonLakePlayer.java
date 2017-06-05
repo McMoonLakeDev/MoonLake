@@ -19,10 +19,13 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.entity.AttributeType;
+import com.minecraft.moonlake.api.packet.wrapper.PacketDataSerializer;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutCustomPayload;
 import com.minecraft.moonlake.api.player.advancement.Advancement;
 import com.minecraft.moonlake.api.player.advancement.AdvancementKey;
 import com.minecraft.moonlake.api.player.advancement.AdvancementProgress;
 import com.minecraft.moonlake.api.player.attribute.Attribute;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.validate.Validate;
@@ -74,11 +77,22 @@ public class SimpleMoonLakePlayer extends AbstractPlayer {
     @Override
     public void stopSound(String sound) {
 
+        Validate.notNull(sound, "The sound object is null.");
+
+        PacketDataSerializer packet = new PacketDataSerializer().writeString("").writeString(sound); // 实现摘自 1.10 的 CraftPlayer.stopSound(String);
+        PacketPlayOutCustomPayload ppocp = new PacketPlayOutCustomPayload("MC|StopSound", packet);
+        ppocp.send(getBukkitPlayer());
+
+        // 也就是说这个函数全版本兼容, 但是不一定有效, 因为 MC|StopSound 通道是在 1.9.3-pre2 的时候添加
+        // 详情查看协议历史: http://wiki.vg/Protocol_History#1.9.3-pre2
     }
 
     @Override
     public void stopSound(Sound sound) {
 
+        Validate.notNull(sound, "The sound object is null.");
+
+        stopSound(MinecraftReflection.getCraftSoundBySound(sound));
     }
 
     @Override

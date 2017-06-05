@@ -19,7 +19,6 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.fancy.FancyMessage;
-import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -206,20 +205,22 @@ public interface BasePlayer {
     void playNote(Instrument instrument, Note note);
 
     /**
-     * 将指定音效停止播放给此玩家
+     * 将指定音效停止播放给此玩家 (底层已用 NMS 实现, 如果客户端依然无法停止, 说明不支持 {@code MC|StopSound} 通道)
+     *
+     * <p>详情查看协议历史: <a href='http://wiki.vg/Protocol_History#1.9.3-pre2' target='_blank'>详情</a></p>
      *
      * @param sound 音效名
      * @throws IllegalArgumentException 如果音效名对象为 {@code null} 则抛出异常
-     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.10 则抛出异常
      */
     void stopSound(String sound);
 
     /**
-     * 将指定音效停止播放给此玩家
+     * 将指定音效停止播放给此玩家 (底层已用 NMS 实现, 如果客户端依然无法停止, 说明不支持 {@code MC|StopSound} 通道)
+     *
+     * <p>详情查看协议历史: <a href='http://wiki.vg/Protocol_History#1.9.3-pre2' target='_blank'>详情</a></p>
      *
      * @param sound 音效
      * @throws IllegalArgumentException 如果音效对象为 {@code null} 则抛出异常
-     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.10 则抛出异常
      */
     void stopSound(Sound sound);
 

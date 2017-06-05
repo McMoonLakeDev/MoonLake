@@ -23,8 +23,11 @@ import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.ObjectPropertyBase;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
+import com.minecraft.moonlake.validate.Validate;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+
+import java.nio.charset.Charset;
 
 /**
  * <h1>PacketDataSerializer</h1>
@@ -111,6 +114,71 @@ public class PacketDataSerializer {
     public void setByteBuf(byte[] byteBuf) {
 
         this.byteBuf.set(Unpooled.wrappedBuffer(byteBuf));
+    }
+
+    /**
+     * 将指定字节值写入到此数据包数据串行器
+     *
+     * @param value 值
+     */
+    public PacketDataSerializer writeByte(int value) {
+        byteBuf.get().writeByte(value);
+        return this;
+    }
+
+    /**
+     * 将指定字节数组值写入到此数据包数据串行器
+     *
+     * @param bytes 字节数组
+     * @throws IllegalArgumentException 如果字节数组对象为 {@code null} 则抛出异常
+     */
+    public PacketDataSerializer writeBytes(byte[] bytes) {
+        Validate.notNull(bytes, "The byte[] object is null.");
+        byteBuf.get().writeBytes(bytes);
+        return this;
+    }
+
+    /**
+     * 将指定可变长度整型值写入到此数据包数据串行器
+     *
+     * @param value 可变长度整型值
+     */
+    public PacketDataSerializer writeVarInt(int value) {
+        while((value & -128) != 0) {
+            writeByte(value & 127 | 128);
+            value >>>= 7;
+        }
+        return writeByte(value);
+    }
+
+    /**
+     * 将指定可变长度长整型值写入到此数据包数据串行器
+     *
+     * @param value 可变长度长整型值
+     */
+    public PacketDataSerializer writeVarLong(long value) {
+        while((value & -128) != 0) {
+            writeByte((int) (value & 127L | 128));
+            value >>>= 7;
+        }
+        return writeByte((int) value);
+    }
+
+    /**
+     * 将指定字符串值写入到此数据包数据串行器
+     *
+     * @param value 字符串值
+     * @throws IllegalArgumentException 如果字符串值对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果字符串值长度大于 {@code 32767} 则抛出异常
+     */
+    public PacketDataSerializer writeString(String value) {
+        Validate.notNull(value, "The value object is null.");
+        byte[] bytes = value.getBytes(Charset.forName("utf-8"));
+        if(bytes.length > 32767)
+            throw new IllegalArgumentException("String too big (was " + value.length() + " bytes encoded, max " + 32767 + ")");
+        writeVarInt(bytes.length);
+        writeBytes(bytes);
+        return this;
     }
 
     @Override

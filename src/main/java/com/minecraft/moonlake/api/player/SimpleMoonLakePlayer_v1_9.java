@@ -28,7 +28,6 @@ import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Color;
-import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -69,18 +68,6 @@ public class SimpleMoonLakePlayer_v1_9 extends SimpleMoonLakePlayer_v1_8 {
 
     //
     // 这些函数只有 Bukkit 1.10 版本才拥有
-
-    @Override
-    public void stopSound(String sound) {
-
-        throw new IllegalBukkitVersionException("The method not support 1.9 and old version.");
-    }
-
-    @Override
-    public void stopSound(Sound sound) {
-
-        throw new IllegalBukkitVersionException("The method not support 1.9 and old version.");
-    }
 
     @Override
     public boolean isSilent() {

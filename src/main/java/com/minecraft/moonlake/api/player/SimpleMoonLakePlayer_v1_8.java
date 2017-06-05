@@ -26,7 +26,6 @@ import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Color;
-import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -68,18 +67,6 @@ public class SimpleMoonLakePlayer_v1_8 extends SimpleMoonLakePlayer {
 
     //
     // 这些函数 Bukkit 1.8 均不支持
-
-    @Override
-    public void stopSound(String sound) {
-
-        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
-    }
-
-    @Override
-    public void stopSound(Sound sound) {
-
-        throw new IllegalBukkitVersionException("The method not support 1.8 and old version.");
-    }
 
     @Override
     public boolean isGliding() {
