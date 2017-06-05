@@ -352,6 +352,8 @@ public class MinecraftReflection {
 
     public static Class<?> getChatMessageTypeClass() {
         // 这个类只有 mc1.12+ 版本才有
+        if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_12))
+            throw new IllegalBukkitVersionException("The chat message type not support 1.11 or old bukkit version.");
         return getMinecraftClass("ChatMessageType");
     }
 
@@ -707,6 +709,8 @@ public class MinecraftReflection {
 
     public static Object chatMessageTypeFromByte(byte type) {
         // 这个函数 mc1.12+ 版本才有
+        if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_12))
+            throw new IllegalBukkitVersionException("The chat message type not support 1.11 or old bukkit version.");
         if(chatMessageTypeFormByteMethod == null)
             chatMessageTypeFormByteMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getChatMessageTypeClass(), true).getMethodByParameters("a", getChatMessageTypeClass(), new Class[] { byte.class}));
         return chatMessageTypeFormByteMethod.invoke(null, type);
