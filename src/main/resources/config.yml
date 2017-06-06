@@ -23,6 +23,12 @@
 # 插件版本号: 此项请勿修改!
 version: '${project.version}'
 
+# 是否开启 Debug 功能
+# 当此项值为 true 时将会打印更多的信息
+# 且包括插件异常信息可以及时进行反馈问题
+# 地址: https://github.com/McMoonLakeDev/MoonLake/issues
+Debug: true
+
 # 数据包通道监听器
 # 此项可设置是否开启这个功能
 # 如果关闭则插件中的一些API功能将无法使用

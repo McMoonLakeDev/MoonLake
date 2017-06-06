@@ -18,10 +18,9 @@
 
 package com.minecraft.moonlake.manager;
 
-import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.MoonLakePluginDebug;
 
 import javax.annotation.Nullable;
-import java.util.logging.Level;
 
 /**
  * <h1>ClassManager</h1>
@@ -48,7 +47,7 @@ public class ClassManager {
      * @param ex 异常
      */
     private static void printError(String error, Throwable ex) {
-        MoonLakeAPI.getLogger().log(Level.WARNING, error, ex);
+        MoonLakePluginDebug.debug(error, ex);
     }
 
     /**
