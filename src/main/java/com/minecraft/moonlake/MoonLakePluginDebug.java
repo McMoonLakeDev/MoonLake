@@ -43,6 +43,10 @@ public class MoonLakePluginDebug {
         return debug;
     }
 
+    private static String formatMsg(String msg) {
+        return "[Debug] Exception: " + msg;
+    }
+
     /**
      * 将指定消息和参数 Debug 打印到控制台
      *
@@ -52,7 +56,7 @@ public class MoonLakePluginDebug {
      */
     public static void debug(String msg, Object... params) {
         if(debug)
-            MoonLakeAPI.getLogger().log(Level.WARNING, msg, params);
+            MoonLakeAPI.getLogger().log(Level.WARNING, formatMsg(msg), params);
     }
 
     /**
@@ -64,7 +68,7 @@ public class MoonLakePluginDebug {
      */
     public static void debug(String msg, Throwable e) {
         if(debug)
-            MoonLakeAPI.getLogger().log(Level.WARNING, msg, e);
+            MoonLakeAPI.getLogger().log(Level.WARNING, formatMsg(msg), e);
     }
 
     /**
@@ -74,7 +78,7 @@ public class MoonLakePluginDebug {
      * @see MoonLakePluginConfig#isDebug()
      */
     public static void debug(Throwable... e) {
-        if(debug) for (Throwable t : e)
-            MoonLakeAPI.getLogger().log(Level.WARNING, t.getMessage(), t);
+        if(debug) for (Throwable t : e) if(t != null)
+            MoonLakeAPI.getLogger().log(Level.WARNING, formatMsg(t.getMessage()), t);
     }
 }
