@@ -44,14 +44,14 @@ import java.util.Set;
  */
 class ItemExpressionWrapped extends ItemExpression {
     
-    private final SkullExpression base;
+    private final BaseExpression base;
 
     /**
      * 物品栈接口单实现类构造函数
      */
     public ItemExpressionWrapped() {
         
-        this.base = new SkullExpression();
+        this.base = new BaseExpression();
     }
 
     @Override
