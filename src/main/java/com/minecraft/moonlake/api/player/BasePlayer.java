@@ -387,7 +387,6 @@ public interface BasePlayer {
      * @throws IllegalArgumentException 如果材质包的地址对象为 {@code null} 抛出异常
      * @throws IllegalArgumentException 如果材质包的哈希值对象为 {@code null} 则抛出异常
      * @throws IllegalArgumentException 如果材质包的哈希值长度不为 {@code 20} 则抛出异常
-     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.11 则抛出异常
      */
     void setResourcePack(String url, byte[] hash);
 
