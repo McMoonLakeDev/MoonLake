@@ -24,6 +24,7 @@ import com.minecraft.moonlake.api.player.advancement.AdvancementProgress;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
 /**
@@ -57,6 +58,16 @@ public class SimpleMoonLakePlayer_v1_11 extends SimpleMoonLakePlayer_v1_10 {
     public SimpleMoonLakePlayer_v1_11(Player player) throws IllegalArgumentException, PlayerNotOnlineException {
 
         super(player);
+    }
+
+    @Override
+    public void setResourcePack(String url, byte[] hash) {
+
+        Validate.notNull(url, "The resource pack url string object is null.");
+        Validate.notNull(hash, "The resource pack hash value object is null.");
+        Validate.notNull(hash.length == 20, "The resource pack hash value length is not 20. (length: " + hash.length + ")");
+
+        getBukkitPlayer().setResourcePack(url, hash);
     }
 
     @Override

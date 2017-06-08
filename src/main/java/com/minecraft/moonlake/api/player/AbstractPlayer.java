@@ -1221,6 +1221,13 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    public MetadataValue getMetadataFirst(String key) {
+
+        List<MetadataValue> valueList = getMetadata(key);
+        return valueList != null && valueList.size() > 0 ? valueList.get(0) : null;
+    }
+
+    @Override
     public boolean hasMetadata(String key) {
 
         Validate.notNull(key, "The metadata key object is null.");

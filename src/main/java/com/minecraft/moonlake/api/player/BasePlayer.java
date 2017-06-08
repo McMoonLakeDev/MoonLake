@@ -376,9 +376,20 @@ public interface BasePlayer {
      *
      * @param url 材质包地址
      * @throws IllegalArgumentException 如果材质包的地址对象为 {@code null} 抛出异常
-     * @throws IllegalArgumentException 如果材质包的地址对象长度大于 40 抛出异常
      */
     void setResourcePack(String url);
+
+    /**
+     * 设置此玩家的客户端材质包
+     *
+     * @param url 材质包地址
+     * @param hash 材质包哈希值
+     * @throws IllegalArgumentException 如果材质包的地址对象为 {@code null} 抛出异常
+     * @throws IllegalArgumentException 如果材质包的哈希值对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果材质包的哈希值长度不为 {@code 20} 则抛出异常
+     * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本低于 1.11 则抛出异常
+     */
+    void setResourcePack(String url, byte[] hash);
 
     /**
      * 给此玩家发送消息
