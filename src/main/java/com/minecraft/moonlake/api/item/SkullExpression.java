@@ -19,8 +19,8 @@
 package com.minecraft.moonlake.api.item;
 
 import com.minecraft.moonlake.api.item.skull.SkullLibrary;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.exception.MoonLakeException;
-import com.minecraft.moonlake.reflect.Reflect;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -173,7 +173,8 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
 
         try {
 
-            Reflect.getField("CraftMetaSkull", Reflect.PackageType.CRAFTBUKKIT_INVENTORY, true, "profile").set(skullMeta, createGameProfile(data));
+            //Reflect.getField("CraftMetaSkull", Reflect.PackageType.CRAFTBUKKIT_INVENTORY, true, "profile").set(skullMeta, createGameProfile(data));
+            MinecraftReflection.getCraftMetaSkullProfileField().set(skullMeta, createGameProfile(data));
         }
         catch (Exception e) {
 
@@ -202,7 +203,8 @@ class SkullExpression extends CraftExpression implements SkullLibrary {
 
         try {
 
-            Reflect.getField("CraftMetaSkull", Reflect.PackageType.CRAFTBUKKIT_INVENTORY, true, "profile").set(skullMeta, createGameProfile(value, signature));
+            //Reflect.getField("CraftMetaSkull", Reflect.PackageType.CRAFTBUKKIT_INVENTORY, true, "profile").set(skullMeta, createGameProfile(value, signature));
+            MinecraftReflection.getCraftMetaSkullProfileField().set(skullMeta, createGameProfile(value, signature));
         }
         catch (Exception e) {
 

@@ -107,6 +107,7 @@ public class MinecraftReflection {
     private static volatile FieldAccessor minecraftServerServerConnectionField;
     private static volatile FieldAccessor entityPlayerPlayerConnectionField;
     private static volatile FieldAccessor entityHumanItemCooldownField;
+    private static volatile FieldAccessor craftMetaSkullProfileField;
     private static volatile FieldAccessor itemCooldownInfoTickField;
     private static volatile FieldAccessor itemCooldownMapField;
     private static volatile FieldAccessor itemCooldownTickField;
@@ -288,6 +289,10 @@ public class MinecraftReflection {
         return getCraftBukkitClass("inventory.CraftItemStack");
     }
 
+    public static Class<?> getCraftMetaSkullClass() {
+        return getCraftBukkitClass("inventory.CraftMetaSkull");
+    }
+
     public static Class<?> getMinecraftVec3DClass() {
         return getMinecraftClass("Vec3D");
     }
@@ -467,6 +472,12 @@ public class MinecraftReflection {
     @Nullable
     public static <T extends PacketPlayOutBukkit> Class<?> getPacketClassFromPacketWrapper(T packetWrapper) {
         return packetWrapper.getPacketClass();
+    }
+
+    public static FieldAccessor getCraftMetaSkullProfileField() {
+        if(craftMetaSkullProfileField == null)
+            craftMetaSkullProfileField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(getCraftMetaSkullClass(), true).getFieldByType("profile", GameProfile.class));
+        return craftMetaSkullProfileField;
     }
 
     @SuppressWarnings("deprecation")
