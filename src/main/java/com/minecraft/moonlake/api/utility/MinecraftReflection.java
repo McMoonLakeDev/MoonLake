@@ -630,6 +630,8 @@ public class MinecraftReflection {
         attributeType.isSupported(); // 检测属性类型是否支持服务端版本
         double finalValue = attributeType.getSafeValue(value);
         Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttribute());
+        if(attributeInstance == null) // 实体不存在这个属性
+            throw new IllegalStateException("The living entity not found attribute type: " + attributeType);
         if(attributeInstanceSetValueMethod == null)
             attributeInstanceSetValueMethod = Accessors.getMethodAccessor(getMinecraftAttributeInstanceClass(), "setValue", double.class);
         attributeInstanceSetValueMethod.invoke(attributeInstance, finalValue);
@@ -640,6 +642,8 @@ public class MinecraftReflection {
         Validate.notNull(attributeType, "The attribute type object is null.");
         attributeType.isSupported(); // 检测属性类型是否支持服务端版本
         Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttribute());
+        if(attributeInstance == null) // 实体不存在这个属性
+            throw new IllegalStateException("The living entity not found attribute type: " + attributeType);
         if(attributeInstanceGetValueMethod == null)
             attributeInstanceGetValueMethod = Accessors.getMethodAccessor(getMinecraftAttributeInstanceClass(), "getValue");
         return (double) attributeInstanceGetValueMethod.invoke(attributeInstance);
