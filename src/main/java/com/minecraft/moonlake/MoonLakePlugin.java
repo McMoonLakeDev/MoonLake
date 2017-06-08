@@ -34,16 +34,16 @@ import java.util.logging.Level;
  * <hr />
  * <div>
  *     <h1>Minecraft MoonLake Core API Plugin</h1>
- *     <p>By Month_Light Ver: 1.9-a4.1</p>
+ *     <p>By Month_Light Ver: 1.9-a5</p>
  *     <p>Website: <a href="http://www.mcyszh.com" target="_blank" style="text-decoration: none;">MoonLake Website</a></p>
  *     <p>QQ Group: 377607025 -> <a href="http://jq.qq.com/?_wv=1027&k=2IfPFrH" target="_blank">Jump</a></p>
  *     <hr />
  *     <div>
  *         <h2>目前插件支持的服务端版本有:</h2>
  *         <ul>
- *             <li>Bukkit [1.8.x - 1.11.x] <span style="color: red">✔</span> 不完全支持</li>
- *             <li>Spigot [1.8.x - 1.11.x] <span style="color: rgb(85, 255, 85)">✔</span> 完完全全支持</li>
- *             <li>PaperSpigot [1.8.x - 1.11.x] <span style="color: rgb(85, 255, 85)">✔</span> 完完全全支持</li>
+ *             <li>Bukkit [1.8.x - 1.12.x] <span style="color: red">✔</span> 不完全支持</li>
+ *             <li>Spigot [1.8.x - 1.12.x] <span style="color: rgb(85, 255, 85)">✔</span> 完完全全支持</li>
+ *             <li>PaperSpigot [1.8.x - 1.12.x] <span style="color: rgb(85, 255, 85)">✔</span> 完完全全支持</li>
  *             <li>Cauldron | KCauldron [模组服务端] <span style="color: red">✘</span> 完全不支持</li>
  *         </ul>
  *     </div>
@@ -69,7 +69,7 @@ import java.util.logging.Level;
  *     <h1>修改操作请您遵守 <a href="https://github.com/u2g/MoonLake/blob/master/LICENSE" target="_blank">GPLv3</a> 协议，您必须公开修改过的所有代码！</h1>
  * </div>
  *
- * @version 1.9-a4.1
+ * @version 1.9-a5
  * @author Month_Light
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
