@@ -158,6 +158,17 @@ public final class MoonLakeAPI {
     }
 
     /**
+     * 获取是否开启插件的 Debug 功能
+     *
+     * @return 是否开启
+     * @see MoonLakePluginConfig#isDebug()
+     */
+    public static boolean isDebug() {
+
+        return MoonLakePluginDebug.isDebug();
+    }
+
+    /**
      * 获取插件的称号
      *
      * @return Prefix

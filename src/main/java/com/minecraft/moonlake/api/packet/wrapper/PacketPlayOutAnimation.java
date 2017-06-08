@@ -151,6 +151,7 @@ public class PacketPlayOutAnimation extends PacketPlayOutBukkitAbstract {
             return true;
 
         } catch (Exception e) {
+            printException(e);
         }
         // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
         return false;

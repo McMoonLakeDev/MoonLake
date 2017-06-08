@@ -18,6 +18,7 @@
  
 package com.minecraft.moonlake.api.fancy;
 
+import com.minecraft.moonlake.MoonLakePluginDebug;
 import com.minecraft.moonlake.json.JsonRepresentedObject;
 import com.minecraft.moonlake.json.JsonWrite;
 import com.minecraft.moonlake.property.SimpleStringProperty;
@@ -117,7 +118,7 @@ class FancyMessagePart implements JsonRepresentedObject, Cloneable {
         }
         catch (Exception e) {
 
-            e.printStackTrace();
+            MoonLakePluginDebug.debug(e);
         }
     }
 

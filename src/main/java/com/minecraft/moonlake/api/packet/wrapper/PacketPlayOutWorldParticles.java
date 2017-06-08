@@ -257,7 +257,7 @@ public class PacketPlayOutWorldParticles extends PacketPlayOutBukkitAbstract {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            printException(e);
             // 如果异常了说明 NMS 的 PacketPlayOutWorldParticles 构造函数不存在这个参数类型
             // 那么用反射直接设置字段值方式来发送
             try {
@@ -270,7 +270,7 @@ public class PacketPlayOutWorldParticles extends PacketPlayOutBukkitAbstract {
                 return true;
 
             } catch (Exception e1) {
-                e1.printStackTrace();
+                printException(e1);
             }
         }
         // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常

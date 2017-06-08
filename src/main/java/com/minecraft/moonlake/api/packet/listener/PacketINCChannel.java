@@ -18,6 +18,7 @@
 
 package com.minecraft.moonlake.api.packet.listener;
 
+import com.minecraft.moonlake.MoonLakePluginDebug;
 import com.minecraft.moonlake.api.packet.exception.PacketException;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.validate.Validate;
@@ -176,11 +177,13 @@ class PacketINCChannel extends PacketChannelAbstract {
                             }
                         }
                         catch (Exception ex) {
+                            MoonLakePluginDebug.debug(ex);
                         }
                     }
                 });
             }
             catch (Exception ex) {
+                MoonLakePluginDebug.debug(ex);
             }
             return super.add(e);
         }
@@ -211,11 +214,13 @@ class PacketINCChannel extends PacketChannelAbstract {
                             }
                         }
                         catch (Exception e) {
+                            MoonLakePluginDebug.debug(e);
                         }
                     }
                 });
             }
             catch (Exception e) {
+                MoonLakePluginDebug.debug(e);
             }
             return super.remove(o);
         }
