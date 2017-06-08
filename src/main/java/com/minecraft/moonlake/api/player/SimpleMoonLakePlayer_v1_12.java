@@ -94,6 +94,11 @@ public class SimpleMoonLakePlayer_v1_12 extends SimpleMoonLakePlayer_v1_11 {
     }
 
     @Override
+    public String getLanguage() {
+        return getBukkitPlayer().getLocale();
+    }
+
+    @Override
     public AdvancementProgress getAdvancementProgress(Advancement advancement) {
         Validate.notNull(advancement, "The advancement object is null.");
         return getAdvancementProgress(advancement.getKey());
