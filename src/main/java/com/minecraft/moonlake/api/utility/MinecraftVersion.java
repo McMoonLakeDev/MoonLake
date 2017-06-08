@@ -22,6 +22,7 @@ import com.google.common.collect.ComparisonChain;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Bukkit;
 
+import javax.annotation.Nullable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -120,6 +121,7 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
     private final int major;
     private final int minor;
     private final int build;
+    private final Integer pre;
 
     private static MinecraftVersion currentVersion;
 
@@ -149,13 +151,17 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
 
         String[] section = Validate.checkNotNull(versionOnly).split("-");
         int[] numbers = new int[3];
+        Integer pre0 = null;
 
         try {
-            String[] elements = versionOnly.split("\\.");
+            int index = versionOnly.lastIndexOf("-pre");
+            String[] elements = index == -1 ? versionOnly.split("\\.") : versionOnly.substring(0, index).split("\\.");
             if(elements.length < 1)
                 throw new IllegalStateException("Corrupt MC Version: " + versionOnly);
             for(int i = 0; i < Math.min(numbers.length, elements.length); i++)
                 numbers[i] = Integer.parseInt(elements[i].trim());
+            if(index != -1)
+                pre0 = Integer.parseInt(versionOnly.substring(index + 4)); // +4 = -pre 四个字符的长度
 
         } catch (Exception e) {
             if(e instanceof NumberFormatException)
@@ -166,6 +172,7 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
         this.major = numbers[0];
         this.minor = numbers[1];
         this.build = numbers[2];
+        this.pre = pre0;
     }
 
     /**
@@ -180,6 +187,23 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
         this.major = major;
         this.minor = minor;
         this.build = build;
+        this.pre = null;
+    }
+
+    /**
+     * Minecraft 版本集类构造函数
+     *
+     * @param major 主版本号
+     * @param minor 次版本号
+     * @param build 内部版本
+     * @param pre 预发布版本号
+     */
+    public MinecraftVersion(int major, int minor, int build, @Nullable Integer pre) {
+
+        this.major = major;
+        this.minor = minor;
+        this.build = build;
+        this.pre = pre;
     }
 
     /**
@@ -213,13 +237,34 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
     }
 
     /**
+     * 获取当前 Minecraft 版本的预发布版本
+     *
+     * @return 预发布版本
+     */
+    @Nullable
+    public Integer getPre() {
+
+        return pre;
+    }
+
+    /**
+     * 获取当前 Minecraft 版本是否是预发布版本
+     *
+     * @return 是否为预发布版本
+     */
+    public boolean isPre() {
+
+        return pre != null;
+    }
+
+    /**
      * 获取当前 Minecraft 版本的字符串
      *
      * @return 版本字符串
      */
     public String getVersion() {
 
-        return String.format("%s.%s.%s", major, minor, build);
+        return String.format("%s.%s.%s", major, minor, build) + (isPre() ? "-pre" + pre : "");
     }
 
     /**
@@ -291,6 +336,7 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
                 .compare(major, o.major)
                 .compare(minor, o.minor)
                 .compare(build, o.build)
+                .compare(isPre() ? pre : -1, o.isPre() ? o.pre : -1)
                 .result();
     }
 
@@ -300,7 +346,7 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
             return true;
         if(obj instanceof MinecraftVersion) {
             MinecraftVersion other = (MinecraftVersion) obj;
-            return major == other.major && minor == other.minor && build == other.build;
+            return major == other.major && minor == other.minor && build == other.build && isPre() == other.isPre();
         }
         return false;
     }
@@ -310,6 +356,7 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
         int result = major;
         result = 31 * result + minor;
         result = 31 * result + build;
+        result = 31 * result + (pre != null ? pre.hashCode() : 0);
         return result;
     }
 

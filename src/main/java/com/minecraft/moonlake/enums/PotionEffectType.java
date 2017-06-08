@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
  * <h1>PotionEffectType</h1>
  * 药水效果类型中文汉化版（详细doc待补充...）
  *
- * @version 1.0.1
+ * @version 1.1
  * @author Month_Light
  */
 public abstract class PotionEffectType {
@@ -41,114 +41,114 @@ public abstract class PotionEffectType {
     /**
      * 药水效果类型: 速度
      */
-    public final static PotionEffectType 速度 = new PotionEffectType(1, "SPEED") {};
+    public final static PotionEffectType 速度 = new PotionEffectTypeWrapped(1, "SPEED");
     /**
      * 药水效果类型: 缓慢
      */
-    public final static PotionEffectType 缓慢 = new PotionEffectType(2, "SLOW") {};
+    public final static PotionEffectType 缓慢 = new PotionEffectTypeWrapped(2, "SLOW");
     /**
      * 药水效果类型: 急迫
      */
-    public final static PotionEffectType 急迫 = new PotionEffectType(3, "FAST_DIGGING") {};
+    public final static PotionEffectType 急迫 = new PotionEffectTypeWrapped(3, "FAST_DIGGING");
     /**
      * 药水效果类型: 挖掘疲劳
      */
-    public final static PotionEffectType 挖掘疲劳 = new PotionEffectType(4, "SLOW_DIGGING") {};
+    public final static PotionEffectType 挖掘疲劳 = new PotionEffectTypeWrapped(4, "SLOW_DIGGING");
     /**
      * 药水效果类型: 力量
      */
-    public final static PotionEffectType 力量 = new PotionEffectType(5, "INCREASE_DAMAGE") {};
+    public final static PotionEffectType 力量 = new PotionEffectTypeWrapped(5, "INCREASE_DAMAGE");
     /**
      * 药水效果类型: 瞬间治疗
      */
-    public final static PotionEffectType 瞬间治疗 = new PotionEffectType(6, "HEAL") {};
+    public final static PotionEffectType 瞬间治疗 = new PotionEffectTypeWrapped(6, "HEAL");
     /**
      * 药水效果类型: 瞬间伤害
      */
-    public final static PotionEffectType 瞬间伤害 = new PotionEffectType(7, "HARM") {};
+    public final static PotionEffectType 瞬间伤害 = new PotionEffectTypeWrapped(7, "HARM");
     /**
      * 药水效果类型: 跳跃提升
      */
-    public final static PotionEffectType 跳跃提升 = new PotionEffectType(8, "JUMP") {};
+    public final static PotionEffectType 跳跃提升 = new PotionEffectTypeWrapped(8, "JUMP");
     /**
      * 药水效果类型: 反胃
      */
-    public final static PotionEffectType 反胃 = new PotionEffectType(9, "CONFUSION") {};
+    public final static PotionEffectType 反胃 = new PotionEffectTypeWrapped(9, "CONFUSION");
     /**
      * 药水效果类型: 生命恢复
      */
-    public final static PotionEffectType 生命恢复 = new PotionEffectType(10, "REGENERATION") {};
+    public final static PotionEffectType 生命恢复 = new PotionEffectTypeWrapped(10, "REGENERATION");
     /**
      * 药水效果类型: 抗性提升
      */
-    public final static PotionEffectType 抗性提升 = new PotionEffectType(11, "DAMAGE_RESISTANCE") {};
+    public final static PotionEffectType 抗性提升 = new PotionEffectTypeWrapped(11, "DAMAGE_RESISTANCE");
     /**
      * 药水效果类型: 防火
      */
-    public final static PotionEffectType 防火 = new PotionEffectType(12, "FIRE_RESISTANCE") {};
+    public final static PotionEffectType 防火 = new PotionEffectTypeWrapped(12, "FIRE_RESISTANCE");
     /**
      * 药水效果类型: 水下呼吸
      */
-    public final static PotionEffectType 水下呼吸 = new PotionEffectType(13, "WATER_BREATHING") {};
+    public final static PotionEffectType 水下呼吸 = new PotionEffectTypeWrapped(13, "WATER_BREATHING");
     /**
      * 药水效果类型: 隐身
      */
-    public final static PotionEffectType 隐身 = new PotionEffectType(14, "INVISIBILITY") {};
+    public final static PotionEffectType 隐身 = new PotionEffectTypeWrapped(14, "INVISIBILITY");
     /**
      * 药水效果类型: 失明
      */
-    public final static PotionEffectType 失明 = new PotionEffectType(15, "BLINDNESS") {};
+    public final static PotionEffectType 失明 = new PotionEffectTypeWrapped(15, "BLINDNESS");
     /**
      * 药水效果类型: 夜视
      */
-    public final static PotionEffectType 夜视 = new PotionEffectType(16, "NIGHT_VISION") {};
+    public final static PotionEffectType 夜视 = new PotionEffectTypeWrapped(16, "NIGHT_VISION");
     /**
      * 药水效果类型: 饥饿
      */
-    public final static PotionEffectType 饥饿 = new PotionEffectType(17, "HUNGER") {};
+    public final static PotionEffectType 饥饿 = new PotionEffectTypeWrapped(17, "HUNGER");
     /**
      * 药水效果类型: 虚弱
      */
-    public final static PotionEffectType 虚弱 = new PotionEffectType(18, "WEAKNESS") {};
+    public final static PotionEffectType 虚弱 = new PotionEffectTypeWrapped(18, "WEAKNESS");
     /**
      * 药水效果类型: 中毒
      */
-    public final static PotionEffectType 中毒 = new PotionEffectType(19, "POISON") {};
+    public final static PotionEffectType 中毒 = new PotionEffectTypeWrapped(19, "POISON");
     /**
      * 药水效果类型: 凋零
      */
-    public final static PotionEffectType 凋零 = new PotionEffectType(20, "WITHER") {};
+    public final static PotionEffectType 凋零 = new PotionEffectTypeWrapped(20, "WITHER");
     /**
      * 药水效果类型: 生命提升
      */
-    public final static PotionEffectType 生命提升 = new PotionEffectType(21, "HEALTH_BOOST") {};
+    public final static PotionEffectType 生命提升 = new PotionEffectTypeWrapped(21, "HEALTH_BOOST");
     /**
      * 药水效果类型: 伤害吸收
      */
-    public final static PotionEffectType 伤害吸收 = new PotionEffectType(22, "ABSORPTION") {};
+    public final static PotionEffectType 伤害吸收 = new PotionEffectTypeWrapped(22, "ABSORPTION");
     /**
      * 药水效果类型: 饱和
      */
-    public final static PotionEffectType 饱和 = new PotionEffectType(23, "SATURATION") {};
+    public final static PotionEffectType 饱和 = new PotionEffectTypeWrapped(23, "SATURATION");
 
 
     // 1.9 增加的新药水效果（不兼容 1.8 以下
     /**
-     * 药水效果类型: 发光
+     * 药水效果类型: 发光 (1.9+)
      */
-    public final static PotionEffectType 发光 = new PotionEffectType(24, "GLOWING", MinecraftVersion.V1_9) {};
+    public final static PotionEffectType 发光 = new PotionEffectTypeWrapped(24, "GLOWING", MinecraftVersion.V1_9);
     /**
-     * 药水效果类型: 漂浮
+     * 药水效果类型: 漂浮 (1.9+)
      */
-    public final static PotionEffectType 漂浮 = new PotionEffectType(25, "LEVITATION", MinecraftVersion.V1_9) {};
+    public final static PotionEffectType 漂浮 = new PotionEffectTypeWrapped(25, "LEVITATION", MinecraftVersion.V1_9);
     /**
-     * 药水效果类型: 幸运
+     * 药水效果类型: 幸运 (1.9+)
      */
-    public final static PotionEffectType 幸运 = new PotionEffectType(26, "LUCK", MinecraftVersion.V1_9) {};
+    public final static PotionEffectType 幸运 = new PotionEffectTypeWrapped(26, "LUCK", MinecraftVersion.V1_9);
     /**
-     * 药水效果类型: 霉运
+     * 药水效果类型: 霉运 (1.9+)
      */
-    public final static PotionEffectType 霉运 = new PotionEffectType(27, "UNLUCK", MinecraftVersion.V1_9) {};
+    public final static PotionEffectType 霉运 = new PotionEffectTypeWrapped(27, "UNLUCK", MinecraftVersion.V1_9);
     ///
 
     private final int id;
@@ -231,7 +231,6 @@ public abstract class PotionEffectType {
      * @return PotionEffectType
      * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本不支持药水效果则抛出异常
      */
-    @SuppressWarnings("deprecation")
     public org.bukkit.potion.PotionEffectType as() {
 
         if(requiredVersion != null && !MoonLakeAPI.currentMCVersion().isLater(requiredVersion)) {
@@ -290,5 +289,16 @@ public abstract class PotionEffectType {
     public PotionEffectCustom createCustom(int amplifier, int duration) {
 
         return createCustom(amplifier, duration, false);
+    }
+
+    private final static class PotionEffectTypeWrapped extends PotionEffectType {
+
+        private PotionEffectTypeWrapped(int id, String name) {
+            super(id, name);
+        }
+
+        private PotionEffectTypeWrapped(int id, String name, MinecraftVersion requiredVersion) {
+            super(id, name, requiredVersion);
+        }
     }
 }

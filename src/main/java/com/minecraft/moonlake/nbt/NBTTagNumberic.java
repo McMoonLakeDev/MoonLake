@@ -20,7 +20,10 @@ package com.minecraft.moonlake.nbt;
 
 /**
  * Created by MoonLake on 2016/9/21.
+ *
+ * @deprecated 已过时, 将于 v1.9-a6 删除.
  */
+@Deprecated
 public abstract class NBTTagNumberic<T extends Number> extends NBTTagDatable<T> {
 
     public NBTTagNumberic(Object handle) {

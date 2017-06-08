@@ -22,10 +22,12 @@ package com.minecraft.moonlake.exception;
  * <h1>PlayerNotOnlineException</h1>
  * 玩家未在线异常（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public class PlayerNotOnlineException extends MoonLakeException {
+
+    private static final long serialVersionUID = -8860411433147386980L;
 
     /**
      * 玩家未在线异常类构造函数

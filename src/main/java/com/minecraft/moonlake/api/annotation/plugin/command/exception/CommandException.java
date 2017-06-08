@@ -24,10 +24,12 @@ import com.minecraft.moonlake.exception.MoonLakeException;
  * <h1>CommandException</h1>
  * 命令异常类
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public class CommandException extends MoonLakeException {
+
+    private static final long serialVersionUID = 5505815596429203878L;
 
     /**
      * 命令异常类构造函数
@@ -57,4 +59,15 @@ public class CommandException extends MoonLakeException {
 
         super(message, cause);
     }
+
+    /**
+     * 命令异常类构造函数
+     *
+     * @param cause 异常原因
+     */
+    public CommandException(Throwable cause) {
+
+        super(cause);
+    }
+
 }

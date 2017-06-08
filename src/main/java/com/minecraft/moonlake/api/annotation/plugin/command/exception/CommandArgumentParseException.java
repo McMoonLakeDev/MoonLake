@@ -22,11 +22,12 @@ package com.minecraft.moonlake.api.annotation.plugin.command.exception;
  * <h1>CommandArgumentParseException</h1>
  * 命令参数解析异常类
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public class CommandArgumentParseException extends CommandException {
 
+    private static final long serialVersionUID = 3339840141491833573L;
     private String argument;
     private Class<?> type;
 

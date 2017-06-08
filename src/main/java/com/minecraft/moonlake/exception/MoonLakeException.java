@@ -22,10 +22,12 @@ package com.minecraft.moonlake.exception;
  * <h1>MoonLakeException</h1>
  * 月色之湖异常类
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public class MoonLakeException extends RuntimeException {
+
+    private static final long serialVersionUID = -8313513697542245010L;
 
     /**
      * 月色之湖异常类构造函数
@@ -54,5 +56,15 @@ public class MoonLakeException extends RuntimeException {
     public MoonLakeException(String message, Throwable cause) {
 
         super(message, cause);
+    }
+
+    /**
+     * 月色之湖异常类构造函数
+     *
+     * @param cause 异常原因
+     */
+    public MoonLakeException(Throwable cause) {
+
+        super(cause);
     }
 }

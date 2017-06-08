@@ -207,6 +207,14 @@ class ItemBuilderWrapped implements ItemBuilder {
     }
 
     @Override
+    public ItemBuilder setLocalizedName(String localizedName) {
+
+        update(library().setLocalizedName(get(), localizedName));
+
+        return this;
+    }
+
+    @Override
     public ItemBuilder setAmount(int amount) {
 
         update(library().setAmount(get(), amount));
@@ -541,7 +549,7 @@ class ItemBuilderWrapped implements ItemBuilder {
     @Override
     public ItemStack build() {
 
-        return build(true);
+        return get().clone();
     }
 
     @Override

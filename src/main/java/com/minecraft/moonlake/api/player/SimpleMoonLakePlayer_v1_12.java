@@ -19,10 +19,16 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.api.entity.AttributeType;
+import com.minecraft.moonlake.api.player.advancement.Advancement;
+import com.minecraft.moonlake.api.player.advancement.AdvancementKey;
+import com.minecraft.moonlake.api.player.advancement.AdvancementProgress;
 import com.minecraft.moonlake.api.player.attribute.Attribute;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.validate.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
 /**
@@ -85,5 +91,30 @@ public class SimpleMoonLakePlayer_v1_12 extends SimpleMoonLakePlayer_v1_11 {
     public Attribute getAttribute(AttributeType type) {
         Validate.notNull(type, "The attribute type object is null.");
         return new AttributeExpression_v1_12_Plus(getBukkitPlayer(), type);
+    }
+
+    @Override
+    public String getLanguage() {
+        return getBukkitPlayer().getLocale();
+    }
+
+    @Override
+    public AdvancementProgress getAdvancementProgress(Advancement advancement) {
+        Validate.notNull(advancement, "The advancement object is null.");
+        return getAdvancementProgress(advancement.getKey());
+    }
+
+    @Override
+    public AdvancementProgress getAdvancementProgress(AdvancementKey key) {
+        Validate.notNull(key, "The advancement key object is null.");
+        org.bukkit.advancement.Advancement advancement = Bukkit.getAdvancement(NamespacedKey.minecraft(key.getKey()));
+        org.bukkit.advancement.AdvancementProgress progress = advancement != null ? getBukkitPlayer().getAdvancementProgress(advancement) : null;
+        return progress != null ? new AdvancementProgressExpression(new AdvancementExpression(key, advancement.getCriteria()), progress) : null;
+    }
+
+    @Override
+    public MinecraftVersion mcVersion() {
+
+        return MinecraftVersion.V1_12;
     }
 }

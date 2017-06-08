@@ -33,10 +33,6 @@ import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.CannotDependException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.manager.PlayerManager;
-import com.minecraft.moonlake.property.ReadOnlyObjectProperty;
-import com.minecraft.moonlake.property.ReadOnlyStringProperty;
-import com.minecraft.moonlake.property.SimpleObjectProperty;
-import com.minecraft.moonlake.property.SimpleStringProperty;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
@@ -79,8 +75,8 @@ import java.util.*;
  */
 public abstract class AbstractPlayer implements MoonLakePlayer {
 
-    private final ReadOnlyStringProperty nameProperty;
-    private final ReadOnlyObjectProperty<Player> playerProperty;
+    private final String name;
+    private final Player player;
 
     /**
      * 月色之湖玩家抽象类构造函数
@@ -109,20 +105,20 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
             throw new PlayerNotOnlineException(player.getName());
         }
-        this.nameProperty = new SimpleStringProperty(player.getName());
-        this.playerProperty = new SimpleObjectProperty<>(player);
+        this.name = player.getName();
+        this.player = player;
     }
 
     @Override
-    public Player getBukkitPlayer() {
+    public final Player getBukkitPlayer() {
 
-        return playerProperty.get();
+        return player;
     }
 
     @Override
-    public String getName() {
+    public final String getName() {
 
-        return nameProperty.get();
+        return name;
     }
     
     @Override
@@ -1225,6 +1221,13 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     }
 
     @Override
+    public MetadataValue getMetadataFirst(String key) {
+
+        List<MetadataValue> valueList = getMetadata(key);
+        return valueList != null && valueList.size() > 0 ? valueList.get(0) : null;
+    }
+
+    @Override
     public boolean hasMetadata(String key) {
 
         Validate.notNull(key, "The metadata key object is null.");
@@ -1352,14 +1355,6 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
     public int getPing() {
 
         return PlayerManager.getPing(getBukkitPlayer());
-    }
-
-    @Override
-    public void sendPacket(com.minecraft.moonlake.nms.packet.Packet<?> packet) {
-
-        Validate.notNull(packet, "The packet object is null.");
-
-        packet.send(getBukkitPlayer());
     }
 
     @Override

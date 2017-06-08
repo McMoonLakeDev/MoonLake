@@ -37,7 +37,7 @@ import org.bukkit.inventory.ItemStack;
  * <h1>PacketPlayOutBookOpen</h1>
  * 数据包输出书本打开（详细doc待补充...）
  *
- * @version 2.0.1
+ * @version 2.0.2
  * @author Month_Light
  * @see Packet
  * @see PacketPlayOut
@@ -125,7 +125,7 @@ public class PacketPlayOutBookOpen extends PacketPlayOutBukkitAbstract {
             // 0 为 MAIN_HAND, 1 为 OFF_HAND
             ppocp.dataProperty().byteBufProperty().get().writeByte(0);
 
-        for(MoonLakePlayer moonLakePlayer : PlayerManager.adapter(players)) {
+        for(MoonLakePlayer moonLakePlayer : PlayerManager.getCache(players)) {
             // 将需要发送的玩家转换成 MoonLakePlayer 以更好的操作
             ItemStack handItemStack = moonLakePlayer.getItemInHand();
             moonLakePlayer.setItemInHand(bookItemStack);
