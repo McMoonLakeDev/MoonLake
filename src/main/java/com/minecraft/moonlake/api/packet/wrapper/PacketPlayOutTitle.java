@@ -323,6 +323,6 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
     }
 
     private static Object getEnumTitleAction(String name) {
-        return MinecraftReflection.enumValueOfClass(CLASS_ENUMTITLEACTION, name);
+        return MinecraftReflection.enumOfNameAny(CLASS_ENUMTITLEACTION, name);
     }
 }

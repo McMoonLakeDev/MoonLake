@@ -637,7 +637,7 @@ class CommandAnnotatedExpression implements CommandAnnotated {
             }
             if(Enum.class.isAssignableFrom(parameterType)) {
 
-                return MinecraftReflection.enumValueOfClass(parameterType, argument);
+                return MinecraftReflection.enumOfNameAny(parameterType, argument);
             }
             throw new CommandArgumentParseException("The failed to parse argument '" + argument + "' to " + parameterType, argument, parameterType);
         }
