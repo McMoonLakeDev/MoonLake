@@ -19,6 +19,8 @@
 package com.minecraft.moonlake.api.utility;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.MoonLakePluginDebug;
+import com.minecraft.moonlake.api.Valuable;
 import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.nbt.NBTCompound;
@@ -35,6 +37,7 @@ import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
+import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
 import io.netty.channel.Channel;
@@ -54,6 +57,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -101,6 +105,7 @@ public class MinecraftReflection {
     private static volatile MethodAccessor itemStackSaveMethod;
     private static volatile MethodAccessor entityHandleMethod;
     private static volatile MethodAccessor itemGetByIdMethod;
+    private static volatile MethodAccessor enumOrdinalMethod;
     private static volatile FieldAccessor playerConnectionNetworkManagerChannelField;
     private static volatile FieldAccessor serverConnectionNetworkManagerListField;
     private static volatile FieldAccessor playerConnectionNetworkManagerField;
@@ -970,30 +975,119 @@ public class MinecraftReflection {
         return is(getMinecraftBlockPositionClass(), obj);
     }
 
-    @SuppressWarnings("unchecked")
-    public static Object enumValueOfClass(Class<?> enumClass, String name) {
-        Validate.notNull(enumClass, "The enum class object is null.");
-        Validate.notNull(name, "The name object is null.");
-        Validate.isTrue(enumClass.isEnum(), "The enum class not is enum type.");
-        return enumValueOfEnumClass((Class<? extends Enum<?>>) enumClass, name);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static Object enumValueOfEnumClass(Class<? extends Enum<?>> enumClass, String name) {
-        Validate.notNull(enumClass, "The enum class object is null.");
-        Validate.notNull(name, "The name object is null.");
+    private static MethodAccessor getEnumConstantDirectoryMethod() {
         if(enumConstantDirectoryMethod == null)
             enumConstantDirectoryMethod = Accessors.getMethodAccessor(Class.class, "enumConstantDirectory");
-        Object obj = ((Map<String, ?>) enumConstantDirectoryMethod.invoke(enumClass)).get(name);
-        if(obj != null)
-            return obj;
-        throw new IllegalArgumentException("No enum constant " + enumClass.getCanonicalName() + "." + name);
+        return enumConstantDirectoryMethod;
     }
 
-    public static <T extends Enum<T>> T enumValueOfType(Class<T> enumClass, String name) {
+    @SuppressWarnings("unchecked")
+    public static <T extends Enum<T>> Map<String, T> enumMap(Class<T> enumClass) {
+        Validate.notNull(enumClass, "The enum class object is null.");
+        try {
+            return (Map<String, T>) getEnumConstantDirectoryMethod().invoke(enumClass);
+        } catch (Exception e) {
+            MoonLakePluginDebug.debug(e);
+        }
+        return null;
+    }
+
+    public static <T extends Enum<T>> T enumOfName(Class<T> enumClass, String name) {
+        return enumOfName(enumClass, name, null);
+    }
+
+    public static <T extends Enum<T>> T enumOfName(Class<T> enumClass, String name, T def) {
         Validate.notNull(enumClass, "The enum class object is null.");
         Validate.notNull(name, "The name object is null.");
-        return Enum.valueOf(enumClass, name);
+        try {
+            Map<String, T> enumMap = enumMap(enumClass);
+            if(enumMap == null || enumMap.isEmpty())
+                return def;
+            Iterator<T> iterator = enumMap.values().iterator();
+            while(iterator.hasNext()) {
+                T type = iterator.next();
+                if(StringUtil.isEquals(type.name(), name))
+                    return type;
+            }
+        } catch (Exception e) {
+            MoonLakePluginDebug.debug(e);
+        }
+        return def;
+    }
+
+    public static <T extends Enum<T>> T enumOfNameAny(Class<?> enumClass, String name) {
+        return enumOfNameAny(enumClass, name, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends Enum<T>> T enumOfNameAny(Class<?> enumClass, String name, T def) {
+        return enumOfName((Class<T>) enumClass, name, def);
+    }
+
+    public static <T extends Enum<T>> T enumOfOrigin(Class<T> enumClass, int origin) {
+        return enumOfOrigin(enumClass, origin, null);
+    }
+
+    public static <T extends Enum<T>> T enumOfOrigin(Class<T> enumClass, int origin, T def) {
+        Validate.notNull(enumClass, "The enum class object is null.");
+        try {
+            if(enumOrdinalMethod == null)
+                enumOrdinalMethod = Accessors.getMethodAccessor(Enum.class, "ordinal");
+            Map<String, T> enumMap = enumMap(enumClass);
+            if(enumMap == null || enumMap.isEmpty())
+                return def;
+            Iterator<T> iterator = enumMap.values().iterator();
+            while(iterator.hasNext()) {
+                T value = iterator.next();
+                int valueOrigin = (int) enumOrdinalMethod.invoke(value);
+                if(valueOrigin == origin)
+                    return value;
+            }
+        } catch (Exception e) {
+            MoonLakePluginDebug.debug(e);
+        }
+        return def;
+    }
+
+    public static <T extends Enum<T>> T enumOfOriginAny(Class<?> enumClass, int origin) {
+        return enumOfOriginAny(enumClass, origin, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends Enum<T>> T enumOfOriginAny(Class<?> enumClass, int origin, T def) {
+        return enumOfOrigin((Class<T>) enumClass, origin, def);
+    }
+
+    public static <V, T extends Enum<T> & Valuable<V>> T enumOfValuable(Class<T> enumClass, V value) {
+        return enumOfValuable(enumClass, value, null);
+    }
+
+    public static <V, T extends Enum<T> & Valuable<V>> T enumOfValuable(Class<T> enumClass, V value, T def) {
+        Validate.notNull(enumClass, "The enum class object is null.");
+        Validate.notNull(value, "The value object is null.");
+        try {
+            Map<String, T> enumMap = enumMap(enumClass);
+            if(enumMap == null || enumMap.isEmpty())
+                return def;
+            Iterator<T> iterator = enumMap.values().iterator();
+            while(iterator.hasNext()) {
+                T type = iterator.next();
+                if(StringUtil.isEquals(type.value(), value))
+                    return type;
+            }
+        } catch (Exception e) {
+            MoonLakePluginDebug.debug(e);
+        }
+        return def;
+    }
+
+    public static <V, T extends Enum<T> & Valuable<V>> T enumOfValuableAny(Class<?> enumClass, V value) {
+        return enumOfValuableAny(enumClass, value, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <V, T extends Enum<T> & Valuable<V>> T enumOfValuableAny(Class<?> enumClass, V value, T def) {
+        return enumOfValuable((Class<T>) enumClass, value, def);
     }
 
     public static Class<?> getArrayClass(Class<?> type) {
