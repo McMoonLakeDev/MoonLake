@@ -18,7 +18,13 @@
 
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.player.advancement.Advancement;
+import com.minecraft.moonlake.api.player.advancement.AdvancementKey;
+import com.minecraft.moonlake.api.player.advancement.AdvancementProgress;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
+import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
+import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
 /**
@@ -53,4 +59,36 @@ public class SimpleMoonLakePlayer_v1_11 extends SimpleMoonLakePlayer_v1_10 {
 
         super(player);
     }
+
+    @Override
+    public void setResourcePack(String url, byte[] hash) {
+
+        Validate.notNull(url, "The resource pack url string object is null.");
+        Validate.notNull(hash, "The resource pack hash value object is null.");
+        Validate.notNull(hash.length == 20, "The resource pack hash value length is not 20. (length: " + hash.length + ")");
+
+        getBukkitPlayer().setResourcePack(url, hash);
+    }
+
+    @Override
+    public MinecraftVersion mcVersion() {
+
+        return MinecraftVersion.V1_11;
+    }
+
+    //
+
+    @Override
+    public AdvancementProgress getAdvancementProgress(Advancement advancement) {
+
+        throw new IllegalBukkitVersionException("The method not support 1.11 and old version.");
+    }
+
+    @Override
+    public AdvancementProgress getAdvancementProgress(AdvancementKey key) {
+
+        throw new IllegalBukkitVersionException("The method not support 1.10 and old version.");
+    }
+
+    ///
 }

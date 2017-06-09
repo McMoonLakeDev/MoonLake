@@ -43,6 +43,7 @@ import com.minecraft.moonlake.api.nbt.NBTList;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
 import com.minecraft.moonlake.api.packet.exception.PacketException;
+import com.minecraft.moonlake.api.packet.listener.PacketMessageListener;
 import com.minecraft.moonlake.api.player.DependPlayerFactory;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.api.player.PlayerLibrary;
@@ -62,27 +63,34 @@ import com.minecraft.moonlake.mysql.MySQLConnection;
 import com.minecraft.moonlake.mysql.MySQLFactory;
 import com.minecraft.moonlake.mysql.exception.MySQLInitializeException;
 import com.minecraft.moonlake.nbt.exception.NBTException;
-import com.minecraft.moonlake.nms.packet.Packet;
-import com.minecraft.moonlake.nms.packet.PacketFactory;
 import com.minecraft.moonlake.particle.ParticleEffect;
 import com.minecraft.moonlake.particle.ParticleException;
 import com.minecraft.moonlake.task.MoonLakeRunnable;
 import com.minecraft.moonlake.task.TaskHelper;
 import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.messaging.Messenger;
+import org.bukkit.plugin.messaging.PluginMessageListenerRegistration;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scoreboard.Scoreboard;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -147,6 +155,17 @@ public final class MoonLakeAPI {
     public static MoonLakePluginConfig getConfiguration() {
 
         return moonlake.getConfiguration();
+    }
+
+    /**
+     * 获取是否开启插件的 Debug 功能
+     *
+     * @return 是否开启
+     * @see MoonLakePluginConfig#isDebug()
+     */
+    public static boolean isDebug() {
+
+        return MoonLakePluginDebug.isDebug();
     }
 
     /**
@@ -873,40 +892,6 @@ public final class MoonLakeAPI {
     public static MySQLConnection newMySQLConnection(String host, int port, @Nullable String username, @Nullable String password, Charset charset) throws MySQLInitializeException {
 
         return MySQLFactory.connection(host, port, username, password, charset);
-    }
-
-    /**
-     * 获取指定 Packet 的实例对象
-     *
-     * @param packet Packet
-     * @param <T> Packet
-     * @return Packet 实例对象
-     * @throws PacketException 如果获取错误则抛出异常
-     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #newPacketPlayOutBukkit(Class)}
-     * @see #newPacket(Class, Object...)
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public static <T extends Packet> T newPacket(Class<T> packet) throws PacketException { // TODO 2.0
-
-        return PacketFactory.get().instance(packet);
-    }
-
-    /**
-     * 获取指定 Packet 的实例对象
-     *
-     * @param packet Packet
-     * @param args Packet 构造参数
-     * @param <T> Packet
-     * @return Packet 实例对象
-     * @throws PacketException 如果获取错误则抛出异常
-     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #newPacketPlayOutBukkit(Class)}
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public static <T extends Packet> T newPacket(Class<T> packet, Object... args) throws PacketException { // TODO 2.0
-
-        return PacketFactory.get().instance(packet, args);
     }
 
     /**
@@ -2398,5 +2383,330 @@ public final class MoonLakeAPI {
     public static DependPermissionsEx getPermissionsExDepend() throws CannotDependException {
 
         return DependPlayerFactory.get().dependPermissionsEx();
+    }
+
+    /**
+     * 创建拥有指定持有者和类型的物品栏
+     *
+     * @param holder 持有者
+     * @param type 类型
+     * @return 物品栏
+     * @see Inventory
+     */
+    public static Inventory createInventory(InventoryHolder holder, InventoryType type) {
+
+        return Bukkit.getServer().createInventory(holder, type);
+    }
+
+    /**
+     * 创建拥有指定持有者和类型的物品栏
+     *
+     * @param holder 持有者
+     * @param type 类型
+     * @param title 标题
+     * @return 物品栏
+     * @see Inventory
+     */
+    public static Inventory createInventory(InventoryHolder holder, InventoryType type, String title) {
+
+        return Bukkit.getServer().createInventory(holder, type, title);
+    }
+
+    /**
+     * 创建拥有指定持有者和大小的物品栏
+     *
+     * @param holder 持有者
+     * @param size 大小 (是 9 的倍数, 且最大为 54)
+     * @return 物品栏
+     * @throws IllegalArgumentException 如果物品栏大小是非法值则抛出异常
+     * @see Inventory
+     */
+    public static Inventory createInventory(InventoryHolder holder, int size) {
+
+        return Bukkit.getServer().createInventory(holder, size);
+    }
+
+    /**
+     * 创建拥有指定持有者和大小的物品栏
+     *
+     * @param holder 持有者
+     * @param size 大小 (是 9 的倍数, 且最大为 54)
+     * @param title 标题
+     * @return 物品栏
+     * @throws IllegalArgumentException 如果物品栏大小是非法值则抛出异常
+     * @see Inventory
+     */
+    public static Inventory createInventory(InventoryHolder holder, int size, String title) {
+
+        return Bukkit.getServer().createInventory(holder, size, title);
+    }
+
+    /**
+     * 获取由服务器控制的主计分板
+     *
+     * @return 计分板
+     * @see Scoreboard
+     */
+    public static Scoreboard getScoreboardMain() {
+
+        return Bukkit.getScoreboardManager().getMainScoreboard();
+    }
+
+    /**
+     * 获取由服务器跟踪的新记分板
+     *
+     * @return 计分板
+     * @see Scoreboard
+     */
+    public static Scoreboard getScoreboardNew() {
+
+        return Bukkit.getScoreboardManager().getNewScoreboard();
+    }
+
+    /**
+     * 将控制台强制执行指定命令行
+     *
+     * @param cmd 命令
+     * @return 是否成功
+     * @throws IllegalArgumentException 如果命令对象为 {@code null} 则抛出异常
+     * @see ConsoleCommandSender
+     */
+    public static boolean dispatchConsoleCmd(String cmd) {
+
+        return Bukkit.dispatchCommand(Bukkit.getConsoleSender(), handleCmd(cmd));
+    }
+
+    /**
+     * 将指定命令执行者强制执行指定命令行
+     *
+     * @param cmd 命令
+     * @return 是否成功
+     * @throws IllegalArgumentException 如果命令对象为 {@code null} 则抛出异常
+     * @see CommandSender
+     */
+    public static boolean dispatchCmd(CommandSender sender, String cmd) {
+
+        return Bukkit.dispatchCommand(sender, handleCmd(cmd));
+    }
+
+    private static String handleCmd(String cmd) {
+
+        Validate.notNull(cmd, "The cmd object is null.");
+        return cmd.charAt(0) == '/' ? cmd.substring(1) : cmd;
+    }
+
+    /**
+     * 获取此服务器的插件通道消息管理者
+     *
+     * @return 消息管理者
+     * @see Messenger
+     */
+    public static Messenger getMessenger() {
+
+        return Bukkit.getMessenger();
+    }
+
+    /**
+     * 将指定插件注册到所请求的传出插件通道, 允许其通过该通道将消息发送到任何客户端
+     *
+     * @param plugin 插件
+     * @param channel 通道
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果通道对象为 {@code null} 或通道长度大于 {@code 20} 则抛出异常
+     */
+    public static void registerOutgoingPluginChannel(Plugin plugin, String channel) {
+
+        Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, channel);
+    }
+
+    /**
+     * 将指定插件注册到用于监听所请求的传入插件通道, 使其能够对任何插件消息执行操作
+     *
+     * @param plugin 插件
+     * @param channel 通道
+     * @param listener 监听器
+     * @return PluginMessageListenerRegistration
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果通道对象为 {@code null} 或通道长度大于 {@code 20} 则抛出异常
+     * @throws IllegalArgumentException 如果监听器对象为 {@code null} 则抛出异常
+     */
+    public static PluginMessageListenerRegistration registerIncomingPluginChannel(Plugin plugin, String channel, PacketMessageListener listener) {
+
+        return Bukkit.getMessenger().registerIncomingPluginChannel(plugin, channel, listener);
+    }
+
+    /**
+     * 将指定插件从所有传出的插件通道中注销, 不再允许它发送任何插件消息到客户端
+     *
+     * @param plugin 插件
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     */
+    public static void unregisterOutgoingPluginChannel(Plugin plugin) {
+
+        Bukkit.getMessenger().unregisterOutgoingPluginChannel(plugin);
+    }
+
+    /**
+     * 将指定插件从指定传出的插件通道中注销, 不再允许它通过此插件通道发送任何插件消息到客户端
+     *
+     * @param plugin 插件
+     * @param channel 通道
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果通道对象为 {@code null} 或通道长度大于 {@code 20} 则抛出异常
+     */
+    public static void unregisterOutgoingPluginChannel(Plugin plugin, String channel) {
+
+        Bukkit.getMessenger().unregisterOutgoingPluginChannel(plugin, channel);
+    }
+
+    /**
+     * 将指定插件的所有插件通道监听器注销
+     *
+     * @param plugin 插件
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     */
+    public static void unregisterIncomingPluginChannel(Plugin plugin) {
+
+        Bukkit.getMessenger().unregisterIncomingPluginChannel(plugin);
+    }
+
+    /**
+     * 将指定插件的指定插件通道监听器注销, 不再允许它对任何插件消息执行操作
+     *
+     * @param plugin 插件
+     * @param channel 通道
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果通道对象为 {@code null} 或通道长度大于 {@code 20} 则抛出异常
+     */
+    public static void unregisterIncomingPluginChannel(Plugin plugin, String channel) {
+
+        Bukkit.getMessenger().unregisterIncomingPluginChannel(plugin, channel);
+    }
+
+    /**
+     * 将指定插件的指定插件通道的指定监听器注销, 不再允许它对任何插件消息执行操作
+     *
+     * @param plugin 插件
+     * @param channel 通道
+     * @param listener 监听器
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果通道对象为 {@code null} 或通道长度大于 {@code 20} 则抛出异常
+     * @throws IllegalArgumentException 如果监听器对象为 {@code null} 则抛出异常
+     */
+    public static void unregisterIncomingPluginChannel(Plugin plugin, String channel, PacketMessageListener listener) {
+
+        Bukkit.getMessenger().unregisterIncomingPluginChannel(plugin, channel, listener);
+    }
+
+    /**
+     * 将指定插件注册到 BungeeCord 通道, 允许其通过该通道将消息发送到 BungeeCord 代理
+     *
+     * @param plugin 插件
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     */
+    public static void registerOutgoingBungeeCordChannel(Plugin plugin) {
+
+        Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, PacketPlayOutBungee.CHANNEL);
+    }
+
+    /**
+     * 将指定插件注册到 BungeeCord 通道, 使其能够对 BungeeCord 代理消息执行操作
+     *
+     * @param plugin 插件
+     * @param listener 监听器
+     * @return PluginMessageListenerRegistration
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果监听器对象为 {@code null} 则抛出异常
+     */
+    public static PluginMessageListenerRegistration registerIncomingBungeeCordChannel(Plugin plugin, PacketMessageListener listener) {
+
+        return Bukkit.getMessenger().registerIncomingPluginChannel(plugin, PacketPlayOutBungee.CHANNEL, listener);
+    }
+
+    /**
+     * 将指定插件从 BungeeCord 通道中注销, 不再允许它发送任何消息到 BungeeCord 代理
+     *
+     * @param plugin 插件
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     */
+    public static void unregisterOutgoingBungeeCordChannel(Plugin plugin) {
+
+        Bukkit.getMessenger().unregisterOutgoingPluginChannel(plugin, PacketPlayOutBungee.CHANNEL);
+    }
+
+    /**
+     * 将指定插件的 BungeeCord 通道监听器注销, 不再允许它对 BungeeCord 代理消息执行操作
+     *
+     * @param plugin 插件
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     */
+    public static void unregisterIncomingBungeeCordChannel(Plugin plugin) {
+
+        Bukkit.getMessenger().unregisterIncomingPluginChannel(plugin, PacketPlayOutBungee.CHANNEL);
+    }
+
+    /**
+     * 将指定插件的 BungeeCord 通道的指定监听器注销, 不再允许它对 BungeeCord 代理消息执行操作
+     *
+     * @param plugin 插件
+     * @param listener 监听器
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果监听器对象为 {@code null} 则抛出异常
+     */
+    public static void unregisterIncomingBungeeCordChannel(Plugin plugin, PacketMessageListener listener) {
+
+        Bukkit.getMessenger().unregisterIncomingPluginChannel(plugin, PacketPlayOutBungee.CHANNEL, listener);
+    }
+
+    /**
+     * 检查指定的插件是否已注册通过请求的通道接收传入的消息
+     *
+     * @param plugin 插件
+     * @param channel 通道
+     * @return 是否已经注册
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果通道对象为 {@code null} 或通道长度大于 {@code 20} 则抛出异常
+     */
+    public static boolean isIncomingChannelRegistered(Plugin plugin, String channel) {
+
+        return Bukkit.getMessenger().isIncomingChannelRegistered(plugin, channel);
+    }
+
+    /**
+     * 检查指定的插件是否已注册通过请求的通道发送传出的消息
+     *
+     * @param plugin 插件
+     * @param channel 通道
+     * @return 是否已经注册
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果通道对象为 {@code null} 或通道长度大于 {@code 20} 则抛出异常
+     */
+    public static boolean isOutgoingChannelRegistered(Plugin plugin, String channel) {
+
+        return Bukkit.getMessenger().isOutgoingChannelRegistered(plugin, channel);
+    }
+
+    /**
+     * 获取指定的插件是否已注册 BungeeCord 通道来接收传入的 BungeeCord 代理消息
+     *
+     * @param plugin 插件
+     * @return 是否已经注册
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     */
+    public static boolean isIncomingBungeeCordChannelRegistered(Plugin plugin) {
+
+        return Bukkit.getMessenger().isIncomingChannelRegistered(plugin, PacketPlayOutBungee.CHANNEL);
+    }
+
+    /**
+     * 获取指定的插件是否已注册 BungeeCord 通道来发送传出的 BungeeCord 代理消息
+     *
+     * @param plugin 插件
+     * @return 是否已经注册
+     * @throws IllegalArgumentException 如果插件对象为 {@code null} 则抛出异常
+     */
+    public static boolean isOutgoingBungeeCordChannelRegistered(Plugin plugin) {
+
+        return Bukkit.getMessenger().isOutgoingChannelRegistered(plugin, PacketPlayOutBungee.CHANNEL);
     }
 }

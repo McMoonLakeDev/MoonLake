@@ -32,7 +32,7 @@ import org.bukkit.inventory.meta.ItemMeta;
  * <h1>NBTItemStackExpression</h1>
  * NBT 物品栈接口实现类
  *
- * @version 1.1
+ * @version 1.1.1
  * @author Month_Light
  */
 class NBTItemStackExpression implements NBTItemStack {
@@ -87,7 +87,6 @@ class NBTItemStackExpression implements NBTItemStack {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public Object createNMSItemStack(ItemStack itemStack) throws NBTException {
 
         Validate.notNull(itemStack, "The itemstack object is null.");

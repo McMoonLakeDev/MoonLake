@@ -392,6 +392,18 @@ public class StringUtil {
     }
 
     /**
+     * 判断指定两个对象是否完全相等
+     *
+     * @param obj1 对象 1
+     * @param obj2 对象 2
+     * @return 完全相等则返回 true
+     */
+    public static boolean isEquals(Object obj1, Object obj2) {
+
+        return (isNull(obj1) && isNull(obj2) || (isNotNull(obj1) && obj1.equals(obj2)));
+    }
+
+    /**
      * 判断指定两个字符串对象是否完全相等 (忽略大小写)
      *
      * @param str1 字符串 1

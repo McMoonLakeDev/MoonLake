@@ -39,6 +39,9 @@ public class MoonLakePluginConfig {
     @ConfigValue(path = "version")
     private String version;
 
+    @ConfigValue(path = "Debug")
+    private boolean debug;
+
     @ConfigValue(path = "PacketChannelListener")
     private boolean packetChannelListener;
 
@@ -119,6 +122,16 @@ public class MoonLakePluginConfig {
     public String getVersion() {
 
         return version;
+    }
+
+    /**
+     * 获取是否开启插件的 Debug 功能
+     *
+     * @return 是否开启
+     */
+    public boolean isDebug() {
+
+        return debug;
     }
 
     /**

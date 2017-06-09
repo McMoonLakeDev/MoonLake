@@ -51,6 +51,8 @@ public class MoonLakeReflection {
             CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_10.class;
         else if(mcVersion.equalsMinor(MinecraftVersion.V1_11)) // Bukkit 1.11
             CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_11.class;
+        else if(mcVersion.equalsMinor(MinecraftVersion.V1_12)) // Bukkit 1.12
+            CLASS_SIMPLEMOONLAKEPLAYER = SimpleMoonLakePlayer_v1_12.class;
         else // Not Support
             CLASS_SIMPLEMOONLAKEPLAYER = null;
     }

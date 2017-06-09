@@ -7,7 +7,7 @@
     <groupId>com.minecraft.moonlake</groupId>
     <artifactId>MoonLake</artifactId>
     <packaging>jar</packaging>
-    <version>1.9-a4.1</version>
+    <version>1.9-a5</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -38,6 +38,13 @@
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
+            <artifactId>Spigot-1.12-R0.1</artifactId>
+            <version>1.12</version>
+            <scope>system</scope>
+            <systemPath>${libraries}/Spigot-1.12-R0.1.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
             <artifactId>Spigot-1.11.2-R0.1</artifactId>
             <version>1.11.2</version>
             <scope>system</scope>
@@ -59,10 +66,10 @@
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>Spigot-1.9-R0.1</artifactId>
-            <version>1.9</version>
+            <artifactId>Spigot-1.9.2-R0.1</artifactId>
+            <version>1.9.2</version>
             <scope>system</scope>
-            <systemPath>${libraries}/Spigot-1.9-R0.1.jar</systemPath>
+            <systemPath>${libraries}/Spigot-1.9.2-R0.1.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -147,6 +154,18 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <!-- 开启资源文件过滤, 禁止让 Maven 修改 der 公钥防止加载时报错 -->
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>der</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
             </plugin>
             <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>

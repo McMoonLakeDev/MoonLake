@@ -162,7 +162,7 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
             // 进行反射实例发送
             if(MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                 // 1.9+ 版本的发送方式
-                Object enumItemSlot = MinecraftReflection.enumValueOfClass(CLASS_ENUMITEMSLOT, slot.name());
+                Object enumItemSlot = MinecraftReflection.enumOfNameAny(CLASS_ENUMITEMSLOT, slot.name());
                 Object nmsItemStack = MinecraftReflection.asNMSCopy(itemStack);
                 Object packet = packetPlayOutEntityEquipmentConstructor.invoke(entityId.get(), enumItemSlot, nmsItemStack);
                 MinecraftReflection.sendPacket(players, packet);
@@ -180,12 +180,13 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
             }
 
         } catch (Exception e) {
+            printException(e);
             // 如果异常了说明 NMS 的 PacketPlayOutEntityEquipment 构造函数不存在这个参数类型
             // 那么用反射直接设置字段值方式来发送
             try {
                 if(MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                     // 1.9+ 版本的发送方式
-                    Object enumItemSlot = MinecraftReflection.enumValueOfClass(CLASS_ENUMITEMSLOT, slot.name());
+                    Object enumItemSlot = MinecraftReflection.enumOfNameAny(CLASS_ENUMITEMSLOT, slot.name());
                     Object nmsItemStack = MinecraftReflection.asNMSCopy(itemStack);
                     Object[] values = { entityId.get(), enumItemSlot, nmsItemStack };
                     Object packet = packetPlayOutEntityEquipmentVoidConstructor.invoke();
@@ -204,6 +205,7 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
                 }
 
             } catch (Exception e1) {
+                printException(e1);
             }
         }
         // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常

@@ -19,6 +19,8 @@
 package com.minecraft.moonlake.api.utility;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.MoonLakePluginDebug;
+import com.minecraft.moonlake.api.Valuable;
 import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.nbt.NBTCompound;
@@ -35,8 +37,11 @@ import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.reflect.accessors.MethodAccessor;
+import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
+import io.netty.channel.Channel;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -52,13 +57,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
  * <h1>MinecraftReflection</h1>
  * Minecraft 底层反射效用类 (函数暂时不提供doc文档)
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 public class MinecraftReflection {
@@ -74,9 +81,11 @@ public class MinecraftReflection {
     private static volatile MethodAccessor nbtCompressedStreamToolsWriteMethod;
     private static volatile MethodAccessor nbtCompressedStreamToolsReadMethod;
     private static volatile MethodAccessor entityLivingGetAttributeInstanceMethod;
+    private static volatile MethodAccessor playerConnectionSendPacketMethod;
     private static volatile MethodAccessor craftItemStackAsBukkitCopyMethod;
     private static volatile MethodAccessor craftItemStackAsCraftMirrorMethod;
     private static volatile MethodAccessor craftItemStackAsNMSCopyMethod;
+    private static volatile MethodAccessor chatMessageTypeFormByteMethod;
     private static volatile MethodAccessor attributeInstanceGetValueMethod;
     private static volatile MethodAccessor attributeInstanceSetValueMethod;
     private static volatile MethodAccessor enumGamemodeGetByIdMethod;
@@ -87,19 +96,27 @@ public class MinecraftReflection {
     private static volatile MethodAccessor entityGetBukkitEntityMethod;
     private static volatile MethodAccessor enumParticleGetByIdMethod;
     private static volatile MethodAccessor itemStackCraftStackMethod;
+    private static volatile MethodAccessor iAttributeGetNameMethod;
     private static volatile MethodAccessor worldServerHandleMethod;
     private static volatile MethodAccessor worldGetTileEntityMethod;
     private static volatile MethodAccessor itemCooldownHasMethod;
-    private static volatile MethodAccessor itemCooldownGetMethod;
     private static volatile MethodAccessor itemCooldownSetMethod;
     private static volatile MethodAccessor worldAddEntityMethod;
     private static volatile MethodAccessor itemStackSaveMethod;
     private static volatile MethodAccessor entityHandleMethod;
-    private static volatile MethodAccessor sendPacketMethod;
     private static volatile MethodAccessor itemGetByIdMethod;
+    private static volatile MethodAccessor enumOrdinalMethod;
+    private static volatile FieldAccessor playerConnectionNetworkManagerChannelField;
+    private static volatile FieldAccessor serverConnectionNetworkManagerListField;
     private static volatile FieldAccessor playerConnectionNetworkManagerField;
+    private static volatile FieldAccessor minecraftServerServerConnectionField;
     private static volatile FieldAccessor entityPlayerPlayerConnectionField;
     private static volatile FieldAccessor entityHumanItemCooldownField;
+    private static volatile FieldAccessor craftMetaSkullProfileField;
+    private static volatile FieldAccessor itemCooldownInfoTickField;
+    private static volatile FieldAccessor itemCooldownMapField;
+    private static volatile FieldAccessor itemCooldownTickField;
+    private static volatile FieldAccessor craftServerConsoleField;
     private static volatile FieldAccessor entityPlayerLocaleField;
     private static volatile FieldAccessor entityPlayerPingField;
 
@@ -277,6 +294,10 @@ public class MinecraftReflection {
         return getCraftBukkitClass("inventory.CraftItemStack");
     }
 
+    public static Class<?> getCraftMetaSkullClass() {
+        return getCraftBukkitClass("inventory.CraftMetaSkull");
+    }
+
     public static Class<?> getMinecraftVec3DClass() {
         return getMinecraftClass("Vec3D");
     }
@@ -301,6 +322,12 @@ public class MinecraftReflection {
         if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9))
             throw new IllegalBukkitVersionException("The item cool down not support 1.8 or old bukkit version.");
         return getMinecraftClass("ItemCooldown");
+    }
+
+    public static Class<?> getMinecraftItemCooldownInfoClass() throws IllegalBukkitVersionException {
+        if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9))
+            throw new IllegalBukkitVersionException("The item cool down not support 1.8 or old bukkit version.");
+        return getMinecraftClass("ItemCooldown$Info");
     }
 
     public static Class<?> getMinecraftEnumParticleClass() {
@@ -331,6 +358,11 @@ public class MinecraftReflection {
         }
         // 否则上面的异常则获取这个
         return getMinecraftClass("ChatSerializer");
+    }
+
+    public static Class<?> getChatMessageTypeClass() {
+        // 这个类只有 mc1.12+ 版本才有
+        return getMinecraftClass("ChatMessageType");
     }
 
     public static Class<?> getEnumGamemodeClass() {
@@ -421,6 +453,14 @@ public class MinecraftReflection {
         return getCraftBukkitClass("util.UnsafeList");
     }
 
+    public static Class<?> getServerConnectionClass() {
+        return getMinecraftClass("ServerConnection");
+    }
+
+    public static Class<?> getMinecraftServerClass() {
+        return getMinecraftClass("MinecraftServer");
+    }
+
     @Nullable
     public static <T extends PacketPlayOutBukkit> Class<?> getPacketClassFromPacketWrapper(Class<T> packetWrapper) {
         try {
@@ -437,6 +477,12 @@ public class MinecraftReflection {
     @Nullable
     public static <T extends PacketPlayOutBukkit> Class<?> getPacketClassFromPacketWrapper(T packetWrapper) {
         return packetWrapper.getPacketClass();
+    }
+
+    public static FieldAccessor getCraftMetaSkullProfileField() {
+        if(craftMetaSkullProfileField == null)
+            craftMetaSkullProfileField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(getCraftMetaSkullClass(), true).getFieldByType("profile", GameProfile.class));
+        return craftMetaSkullProfileField;
     }
 
     @SuppressWarnings("deprecation")
@@ -477,19 +523,30 @@ public class MinecraftReflection {
         return (boolean) itemCooldownHasMethod.invoke(itemCooldown, item);
     }
 
-    public static float getItemCooldown(HumanEntity humanEntity, Material type) {
+    public static int getItemCooldown(HumanEntity humanEntity, Material type) {
         Validate.notNull(humanEntity, "The human entity object is null.");
         Object entityHuman = getEntity(humanEntity);
         return getItemCooldown(entityHuman, type);
     }
 
-    public static float getItemCooldown(Object entityHuman, Material type) {
+    @SuppressWarnings("unchecked")
+    public static int getItemCooldown(Object entityHuman, Material type) {
         Validate.notNull(type, "The item type object is null.");
         Object item = itemGetByMaterial(type);
         Object itemCooldown = getEntityHumanItemCooldown(entityHuman); // 如果不支持直接抛出异常
-        if(itemCooldownGetMethod == null)
-            itemCooldownGetMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getMinecraftItemCooldownClass(), true).getMethodByParameters("a", float.class, new Class[] { getMinecraftItemClass(), float.class }));
-        return (float) itemCooldownGetMethod.invoke(itemCooldown, item, 0.0f);
+        if(itemCooldownTickField == null)
+            itemCooldownTickField = Accessors.getFieldAccessor(getMinecraftItemCooldownClass(), int.class, true);
+        if(itemCooldownMapField == null)
+            itemCooldownMapField = Accessors.getFieldAccessor(getMinecraftItemCooldownClass(), Map.class, true);
+        if(itemCooldownInfoTickField == null)
+            itemCooldownInfoTickField = Accessors.getFieldAccessor(getMinecraftItemCooldownInfoClass(), 1, true); // 第二个字段 b
+        // 算法摘自 https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/commits/be9ef980b9aa272acf298a337da8157c6a620e95#src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+        Object info = ((Map) itemCooldownMapField.get(itemCooldown)).get(item);
+        if(info == null)
+            return 0;
+        int infoTick = (int) itemCooldownInfoTickField.get(info);
+        int tick = (int) itemCooldownTickField.get(itemCooldown);
+        return Math.max(0, infoTick - tick);
     }
 
     public static void setItemCooldown(HumanEntity humanEntity, Material type, int tick) {
@@ -558,12 +615,28 @@ public class MinecraftReflection {
         return (GameProfile) entityHumanGetProfileMethod.invoke(entityHuman);
     }
 
+    public static Object getGenericAttributes(AttributeType type) {
+        Validate.notNull(type, "The attribute type object is null.");
+        Class<?> iAttributeClass = getMinecraftIAttributeClass();
+        if(iAttributeGetNameMethod == null)
+            iAttributeGetNameMethod = Accessors.getMethodAccessor(iAttributeClass, "getName");
+        FieldAccessor[] array = Accessors.getFieldAccessorArray(getMinecraftGenericAttributesClass(), iAttributeClass, true);
+        for(FieldAccessor field : array) {
+            Object iAttribute = field.get(null);
+            if(type.getName().equals(iAttributeGetNameMethod.invoke(iAttribute)))
+                return iAttribute;
+        }
+        throw new UnsupportedOperationException("The attribute type not support bukkit version: " + type.getName());
+    }
+
     public static void setAttributeValue(LivingEntity livingEntity, AttributeType attributeType, double value) {
         Validate.notNull(livingEntity, "The living entity object is null.");
         Validate.notNull(attributeType, "The attribute type object is null.");
         attributeType.isSupported(); // 检测属性类型是否支持服务端版本
         double finalValue = attributeType.getSafeValue(value);
-        Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttributeField().get(null));
+        Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttribute());
+        if(attributeInstance == null) // 实体不存在这个属性
+            throw new IllegalStateException("The living entity not found attribute type: " + attributeType);
         if(attributeInstanceSetValueMethod == null)
             attributeInstanceSetValueMethod = Accessors.getMethodAccessor(getMinecraftAttributeInstanceClass(), "setValue", double.class);
         attributeInstanceSetValueMethod.invoke(attributeInstance, finalValue);
@@ -573,7 +646,9 @@ public class MinecraftReflection {
         Validate.notNull(livingEntity, "The living entity object is null.");
         Validate.notNull(attributeType, "The attribute type object is null.");
         attributeType.isSupported(); // 检测属性类型是否支持服务端版本
-        Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttributeField().get(null));
+        Object attributeInstance =  getAttributeInstance(getEntity(livingEntity), attributeType.getIAttribute());
+        if(attributeInstance == null) // 实体不存在这个属性
+            throw new IllegalStateException("The living entity not found attribute type: " + attributeType);
         if(attributeInstanceGetValueMethod == null)
             attributeInstanceGetValueMethod = Accessors.getMethodAccessor(getMinecraftAttributeInstanceClass(), "getValue");
         return (double) attributeInstanceGetValueMethod.invoke(attributeInstance);
@@ -648,6 +723,13 @@ public class MinecraftReflection {
     public static Object getIChatBaseComponentFromString(String string) {
         Validate.notNull(string, "The string object is null.");
         return getIChatBaseComponentFromJson("{\"text\":\"" + string + "\"}");
+    }
+
+    public static Object chatMessageTypeFromByte(byte type) {
+        // 这个函数 mc1.12+ 版本才有
+        if(chatMessageTypeFormByteMethod == null)
+            chatMessageTypeFormByteMethod = Accessors.getMethodAccessor(FuzzyReflect.fromClass(getChatMessageTypeClass(), true).getMethodByParameters("a", getChatMessageTypeClass(), new Class[] { byte.class}));
+        return chatMessageTypeFormByteMethod.invoke(null, type);
     }
 
     public static Object newNBTTagCompound() {
@@ -805,6 +887,59 @@ public class MinecraftReflection {
         return entityPlayerPlayerConnectionField.get(nmsPlayer);
     }
 
+    public static Object getMinecraftServer() {
+        if(craftServerConsoleField == null)
+            craftServerConsoleField = Accessors.getFieldAccessor(Bukkit.getServer().getClass(), getMinecraftServerClass(), true);
+        return craftServerConsoleField.get(Bukkit.getServer());
+    }
+
+    public static Object getMinecraftServerConnection() {
+        if(minecraftServerServerConnectionField == null)
+            minecraftServerServerConnectionField = Accessors.getFieldAccessor(getMinecraftServerClass(), getServerConnectionClass(), true);
+        return minecraftServerServerConnectionField.get(getMinecraftServer());
+    }
+
+    public static Channel getNetworkManagerChannel(Player player) {
+        Validate.notNull(player, "The player object is null.");
+        return getNetworkManagerChannel(getEntityPlayer(player));
+    }
+
+    public static Channel getNetworkManagerChannel(Object nmsPlayer) {
+        Validate.notNull(nmsPlayer, "The nms player object is null.");
+        if(playerConnectionNetworkManagerChannelField == null)
+            playerConnectionNetworkManagerChannelField = Accessors.getFieldAccessor(getNetworkManagerClass(), Channel.class, true);
+        return (Channel) playerConnectionNetworkManagerChannelField.get(getNetworkManager(nmsPlayer));
+    }
+
+    public static Channel getNetworkManagerChannelObj(Object obj) {
+        Validate.notNull(obj, "The object is null.");
+        if(playerConnectionNetworkManagerChannelField == null)
+            playerConnectionNetworkManagerChannelField = Accessors.getFieldAccessor(getNetworkManagerClass(), Channel.class, true);
+        return (Channel) playerConnectionNetworkManagerChannelField.get(obj);
+    }
+
+    public static List getNetworkManagerList() {
+        return getNetworkManagerList(getMinecraftServerConnection());
+    }
+
+    public static List getNetworkManagerList(Object nmsServerConnection) {
+        Validate.notNull(nmsServerConnection, "The nms server connection object is null.");
+        return (List) getServerConnectionNetworkManagerListField().get(nmsServerConnection);
+    }
+
+    public static FieldAccessor getServerConnectionNetworkManagerListField() {
+        if(serverConnectionNetworkManagerListField == null) try {
+            serverConnectionNetworkManagerListField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(getServerConnectionClass(), true).getFieldListByParamType("List<NetworkManager>", getNetworkManagerClass()));
+        } catch (Exception e) {
+        }
+        if(serverConnectionNetworkManagerListField == null) try {
+            serverConnectionNetworkManagerListField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(getServerConnectionClass(), true).getFieldListByType(List.class).get(1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return serverConnectionNetworkManagerListField;
+    }
+
     public static void sendPacket(Player[] players, Object nmsPacket) {
         Validate.notNull(players, "The players object is null.");
         for(Player player : players)
@@ -819,9 +954,9 @@ public class MinecraftReflection {
     public static void sendPacket(Object nmsPlayer, Object nmsPacket) {
         Validate.notNull(nmsPlayer, "The nms player object is null.");
         Validate.notNull(nmsPacket, "The nms packet object is null.");
-        if(sendPacketMethod == null)
-            sendPacketMethod = Accessors.getMethodAccessor(getPlayerConnectionClass(), "sendPacket", getPacketClass());
-        sendPacketMethod.invoke(getPlayerConnection(nmsPlayer), nmsPacket);
+        if(playerConnectionSendPacketMethod == null)
+            playerConnectionSendPacketMethod = Accessors.getMethodAccessor(getPlayerConnectionClass(), "sendPacket", getPacketClass());
+        playerConnectionSendPacketMethod.invoke(getPlayerConnection(nmsPlayer), nmsPacket);
     }
 
     public static boolean is(Class<?> clazz, Object obj) {
@@ -840,30 +975,119 @@ public class MinecraftReflection {
         return is(getMinecraftBlockPositionClass(), obj);
     }
 
-    @SuppressWarnings("unchecked")
-    public static Object enumValueOfClass(Class<?> enumClass, String name) {
-        Validate.notNull(enumClass, "The enum class object is null.");
-        Validate.notNull(name, "The name object is null.");
-        Validate.isTrue(enumClass.isEnum(), "The enum class not is enum type.");
-        return enumValueOfEnumClass((Class<? extends Enum<?>>) enumClass, name);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static Object enumValueOfEnumClass(Class<? extends Enum<?>> enumClass, String name) {
-        Validate.notNull(enumClass, "The enum class object is null.");
-        Validate.notNull(name, "The name object is null.");
+    private static MethodAccessor getEnumConstantDirectoryMethod() {
         if(enumConstantDirectoryMethod == null)
             enumConstantDirectoryMethod = Accessors.getMethodAccessor(Class.class, "enumConstantDirectory");
-        Object obj = ((Map<String, ?>) enumConstantDirectoryMethod.invoke(enumClass)).get(name);
-        if(obj != null)
-            return obj;
-        throw new IllegalArgumentException("No enum constant " + enumClass.getCanonicalName() + "." + name);
+        return enumConstantDirectoryMethod;
     }
 
-    public static <T extends Enum<T>> T enumValueOfType(Class<T> enumClass, String name) {
+    @SuppressWarnings("unchecked")
+    public static <T extends Enum<T>> Map<String, T> enumMap(Class<T> enumClass) {
+        Validate.notNull(enumClass, "The enum class object is null.");
+        try {
+            return (Map<String, T>) getEnumConstantDirectoryMethod().invoke(enumClass);
+        } catch (Exception e) {
+            MoonLakePluginDebug.debug(e);
+        }
+        return null;
+    }
+
+    public static <T extends Enum<T>> T enumOfName(Class<T> enumClass, String name) {
+        return enumOfName(enumClass, name, null);
+    }
+
+    public static <T extends Enum<T>> T enumOfName(Class<T> enumClass, String name, T def) {
         Validate.notNull(enumClass, "The enum class object is null.");
         Validate.notNull(name, "The name object is null.");
-        return Enum.valueOf(enumClass, name);
+        try {
+            Map<String, T> enumMap = enumMap(enumClass);
+            if(enumMap == null || enumMap.isEmpty())
+                return def;
+            Iterator<T> iterator = enumMap.values().iterator();
+            while(iterator.hasNext()) {
+                T type = iterator.next();
+                if(StringUtil.isEquals(type.name(), name))
+                    return type;
+            }
+        } catch (Exception e) {
+            MoonLakePluginDebug.debug(e);
+        }
+        return def;
+    }
+
+    public static <T extends Enum<T>> T enumOfNameAny(Class<?> enumClass, String name) {
+        return enumOfNameAny(enumClass, name, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends Enum<T>> T enumOfNameAny(Class<?> enumClass, String name, T def) {
+        return enumOfName((Class<T>) enumClass, name, def);
+    }
+
+    public static <T extends Enum<T>> T enumOfOrigin(Class<T> enumClass, int origin) {
+        return enumOfOrigin(enumClass, origin, null);
+    }
+
+    public static <T extends Enum<T>> T enumOfOrigin(Class<T> enumClass, int origin, T def) {
+        Validate.notNull(enumClass, "The enum class object is null.");
+        try {
+            if(enumOrdinalMethod == null)
+                enumOrdinalMethod = Accessors.getMethodAccessor(Enum.class, "ordinal");
+            Map<String, T> enumMap = enumMap(enumClass);
+            if(enumMap == null || enumMap.isEmpty())
+                return def;
+            Iterator<T> iterator = enumMap.values().iterator();
+            while(iterator.hasNext()) {
+                T value = iterator.next();
+                int valueOrigin = (int) enumOrdinalMethod.invoke(value);
+                if(valueOrigin == origin)
+                    return value;
+            }
+        } catch (Exception e) {
+            MoonLakePluginDebug.debug(e);
+        }
+        return def;
+    }
+
+    public static <T extends Enum<T>> T enumOfOriginAny(Class<?> enumClass, int origin) {
+        return enumOfOriginAny(enumClass, origin, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends Enum<T>> T enumOfOriginAny(Class<?> enumClass, int origin, T def) {
+        return enumOfOrigin((Class<T>) enumClass, origin, def);
+    }
+
+    public static <V, T extends Enum<T> & Valuable<V>> T enumOfValuable(Class<T> enumClass, V value) {
+        return enumOfValuable(enumClass, value, null);
+    }
+
+    public static <V, T extends Enum<T> & Valuable<V>> T enumOfValuable(Class<T> enumClass, V value, T def) {
+        Validate.notNull(enumClass, "The enum class object is null.");
+        Validate.notNull(value, "The value object is null.");
+        try {
+            Map<String, T> enumMap = enumMap(enumClass);
+            if(enumMap == null || enumMap.isEmpty())
+                return def;
+            Iterator<T> iterator = enumMap.values().iterator();
+            while(iterator.hasNext()) {
+                T type = iterator.next();
+                if(StringUtil.isEquals(type.value(), value))
+                    return type;
+            }
+        } catch (Exception e) {
+            MoonLakePluginDebug.debug(e);
+        }
+        return def;
+    }
+
+    public static <V, T extends Enum<T> & Valuable<V>> T enumOfValuableAny(Class<?> enumClass, V value) {
+        return enumOfValuableAny(enumClass, value, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <V, T extends Enum<T> & Valuable<V>> T enumOfValuableAny(Class<?> enumClass, V value, T def) {
+        return enumOfValuable((Class<T>) enumClass, value, def);
     }
 
     public static Class<?> getArrayClass(Class<?> type) {

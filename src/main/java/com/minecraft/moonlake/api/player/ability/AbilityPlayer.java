@@ -879,6 +879,15 @@ public interface AbilityPlayer extends BasePlayer, AnimalTamer, CommandSender, M
     List<MetadataValue> getMetadata(String key);
 
     /**
+     * 获取此玩家指定键的第一个元数据值
+     *
+     * @param key 键
+     * @return {@code MetadataValue | null}
+     * @throws IllegalArgumentException 如果键对象为 {@code null} 则抛出异常
+     */
+    MetadataValue getMetadataFirst(String key);
+
+    /**
      * 获取此玩家是否拥有指定键的元数据值
      *
      * @param key 键

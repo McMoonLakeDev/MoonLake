@@ -182,7 +182,7 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
         try {
             // 直接用反射设置字段方式发送, 字段 EnumPlayerInfoAction, List
             Object packet = packetPlayOutPlayerInfoVoidConstructor.invoke();
-            Object enumAction = MinecraftReflection.enumValueOfClass(CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION, action.name());
+            Object enumAction = MinecraftReflection.enumOfNameAny(CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION, action.name());
             // 貌似第二个字段 List 是终态, 所以获取到后只能进行 add 操作
             List list = (List) packetPlayOutPlayerInfoListField.get(packet);
             // 然后将 Data 数据转换为 PlayerInfoData 并添加到 List 内
@@ -211,7 +211,7 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            printException(e);
         }
         // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
         return false;

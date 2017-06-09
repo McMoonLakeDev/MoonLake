@@ -272,7 +272,7 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
             // 进行反射实例发送
             Set<Object> nmsFlagSet = new HashSet<>();
             for(PlayerTeleportFlag flag : flagList)
-                nmsFlagSet.add(MinecraftReflection.enumValueOfClass(CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS, flag.name()));
+                nmsFlagSet.add(MinecraftReflection.enumOfNameAny(CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS, flag.name()));
 
             if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                 // 1.8 版本少一个 int 参数
@@ -286,6 +286,7 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
             return true;
 
         } catch (Exception e) {
+            printException(e);
             // 如果异常了说明 NMS 的 PacketPlayOutPosition 构造函数不存在这个参数类型
             // 那么用反射直接设置字段值方式来发送
             try {
@@ -294,7 +295,7 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
                 Set<Object> nmsFlagSet = new HashSet<>();
                 Object packet = packetPlayOutPositionVoidConstructor.invoke();
                 for(PlayerTeleportFlag flag : flagList)
-                    nmsFlagSet.add(MinecraftReflection.enumValueOfClass(CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS, flag.name()));
+                    nmsFlagSet.add(MinecraftReflection.enumOfNameAny(CLASS_PACKETPLAYOUTPOSITION_ENUMPLAYERTELEPORTFLAGS, flag.name()));
 
                 if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                     Object[] values = { x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet };
@@ -306,6 +307,7 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
                 return true;
 
             } catch (Exception e1) {
+                printException(e1);
             }
         }
         // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常

@@ -22,10 +22,12 @@ package com.minecraft.moonlake.exception;
  * <h1>NotImplementedException</h1>
  * 函数未实现异常（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 public class NotImplementedException extends MoonLakeException {
+
+    private static final long serialVersionUID = 4121564248000086818L;
 
     /**
      * 函数未实现异常类构造函数
@@ -44,4 +46,26 @@ public class NotImplementedException extends MoonLakeException {
 
         super(message);
     }
+
+    /**
+     * 函数未实现异常类构造函数
+     *
+     * @param message 异常消息
+     * @param cause 异常原因
+     */
+    public NotImplementedException(String message, Throwable cause) {
+
+        super(message, cause);
+    }
+
+    /**
+     * 函数未实现异常类构造函数
+     *
+     * @param cause 异常原因
+     */
+    public NotImplementedException(Throwable cause) {
+
+        super(cause);
+    }
+
 }

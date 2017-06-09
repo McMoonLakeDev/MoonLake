@@ -209,17 +209,6 @@ public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable
     /**
      * 初始化设置下一个花式消息对象
      *
-     * @see FancyMessage#text(String)
-     * @see FancyMessage#text(TextualComponent)
-     * @throws IllegalArgumentException 如果最后一个花式消息对象没有文本内容则抛出异常
-     * @deprecated 已过时, 将于 v1.9-a5 删除. 请使用 {@link #then(String)}. 如果忘记设置这个花式消息对象的消息接下来的操作可能会抛出异常
-     */
-    @Deprecated
-    FancyMessage then(); // TODO v1.9-a5
-
-    /**
-     * 初始化设置下一个花式消息对象
-     *
      * @param text 文本
      * @throws IllegalArgumentException 如果最后一个花式消息对象没有文本内容则抛出异常
      * @throws IllegalArgumentException 如果文本字符串对象为 {@code null} 则抛出异常

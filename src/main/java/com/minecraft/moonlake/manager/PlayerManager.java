@@ -19,12 +19,13 @@
 package com.minecraft.moonlake.manager;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.player.CachedMoonLakePlayer;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
-import com.minecraft.moonlake.api.utility.MoonLakeReflection;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.minecraft.moonlake.exception.MoonLakeException;
+import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.validate.Validate;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
@@ -43,7 +44,7 @@ import java.util.UUID;
  * <h1>PlayerManager</h1>
  * 玩家管理实现类
  *
- * @version 1.0.1
+ * @version 1.1
  * @author Month_Light
  */
 public class PlayerManager extends MoonLakeManager {
@@ -139,8 +140,7 @@ public class PlayerManager extends MoonLakeManager {
      */
     public static Collection<? extends MoonLakePlayer> getOnlineMoonLakePlayers() {
 
-        Player[] rawArray = getOnlines();
-        MoonLakePlayer[]  resultArray = adapter(rawArray);
+        MoonLakePlayer[]  resultArray = getCacheOnlines();
         return Arrays.asList(resultArray);
     }
 
@@ -269,41 +269,68 @@ public class PlayerManager extends MoonLakeManager {
     }
 
     /**
+     * 从缓存月色之湖玩家缓冲器内获取指定月色之湖玩家对象
+     *
+     * @param name 玩家名
+     * @return MoonLakePlayer
+     * @throws PlayerNotOnlineException 如果玩家没有在线则抛出异常
+     * @see CachedMoonLakePlayer#getCache(String)
+     */
+    public static MoonLakePlayer getCache(String name) throws PlayerNotOnlineException {
+        return CachedMoonLakePlayer.getInstance().getCache(name);
+    }
+
+    /**
+     * 从缓存月色之湖玩家缓冲器内获取指定月色之湖玩家对象
+     *
+     * @param player 玩家
+     * @return MoonLakePlayer
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     */
+    public static MoonLakePlayer getCache(Player player) {
+        return CachedMoonLakePlayer.getInstance().getCache(player);
+    }
+
+    /**
+     * 从缓存月色之湖玩家缓冲器内获取指定月色之湖玩家对象
+     *
+     * @param players 玩家
+     * @return MoonLakePlayer[]
+     * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
+     */
+    public static MoonLakePlayer[] getCache(Player... players) {
+        MoonLakePlayer[] cache = new MoonLakePlayer[players.length];
+        int index = 0;
+        for(Player player : players)
+            cache[index++] = CachedMoonLakePlayer.getInstance().getCache(player);
+        return cache;
+    }
+
+    /**
+     * 从缓存月色之湖玩家缓冲器内获取在线月色之湖玩家数组对象
+     *
+     * @return MoonLakePlayer[]
+     */
+    public static MoonLakePlayer[] getCacheOnlines() {
+        return CachedMoonLakePlayer.getInstance().getCacheOnlines();
+    }
+
+    /**
      * 将 Bukkit 玩家对象转换到 MoonLake 玩家对象
      *
      * @param players Bukkit 玩家
      * @return MoonLake 玩家
      * @throws IllegalArgumentException 如果 Bukkit 玩家对象为 {@code null} 则抛出异常
      * @throws IllegalBukkitVersionException 如果 Bukkit 服务器版本不支持则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getCache(Player...)}
+     * @see #getCache(Player...)
      */
+    @Deprecated
     public static MoonLakePlayer[] adapter(Player... players) {
 
         Validate.notNull(players, "The player object is null.");
 
-        //
-        // 验证类是否为 null 则抛出非法 Bukkit 版本异常
-
-        if(MoonLakeReflection.getSimpleMoonLakePlayerClass() == null) {
-
-            throw new IllegalBukkitVersionException("The moonlake player class not support bukkit version.");
-        }
-        ///
-
-        int index = 0;
-        MoonLakePlayer[] adapter = new MoonLakePlayer[players.length];
-
-        try {
-
-            for(final Player player : players) {
-
-                adapter[index++] = MoonLakeReflection.getSimpleMoonLakePlayerInstance(player);
-            }
-        }
-        catch (Exception e) {
-
-            throw new MoonLakeException("The adapter player to moonlake player exception.", e);
-        }
-        return adapter;
+        return getCache(players);
     }
 
     /**
@@ -312,12 +339,15 @@ public class PlayerManager extends MoonLakeManager {
      * @param player Bukkit 玩家
      * @return MoonLake 玩家
      * @throws IllegalArgumentException 如果 Bukkit 玩家对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #getCache(Player)}
+     * @see #getCache(Player)
      */
+    @Deprecated
     public static MoonLakePlayer adapter(Player player) {
 
         Validate.notNull(player, "The player object is null.");
 
-        return adapter(new Player[] { player })[0];
+        return getCache(player);
     }
 
     /**
@@ -490,7 +520,7 @@ public class PlayerManager extends MoonLakeManager {
      * @throws IllegalBukkitVersionException 如果服务器 Bukkit 版本不支持则抛出异常
      * @see MinecraftReflection#getItemCooldown(HumanEntity, Material)
      */
-    public static float getItemCoolDown(Player player, Material material) throws IllegalBukkitVersionException {
+    public static int getItemCoolDown(Player player, Material material) throws IllegalBukkitVersionException {
         return MinecraftReflection.getItemCooldown(player, material);
     }
 }

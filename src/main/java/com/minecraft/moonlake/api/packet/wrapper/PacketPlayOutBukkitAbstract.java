@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api.packet.wrapper;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.MoonLakePluginDebug;
 import com.minecraft.moonlake.api.event.core.MoonLakePacketOutBukkitEvent;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
@@ -75,6 +76,12 @@ public abstract class PacketPlayOutBukkitAbstract extends PacketPlayOutAbstract 
             field.set(packet, values[i]);
         }
         MinecraftReflection.sendPacket(players, packet);
+    }
+
+    protected static void printException(Throwable e) {
+        if(e == null)
+            return;
+        MoonLakePluginDebug.debug(e.getMessage(), e);
     }
 
     /**

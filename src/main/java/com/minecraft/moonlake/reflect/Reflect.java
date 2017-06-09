@@ -472,6 +472,7 @@ public class Reflect {
 
     public enum DataType {
 
+        VOID(Void.TYPE, Void.class),
         BYTE(Byte.TYPE, Byte.class),
         SHORT(Short.TYPE, Short.class),
         INTEGER(Integer.TYPE, Integer.class),

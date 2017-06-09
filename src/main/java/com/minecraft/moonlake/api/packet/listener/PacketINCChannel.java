@@ -18,8 +18,9 @@
 
 package com.minecraft.moonlake.api.packet.listener;
 
-import com.minecraft.moonlake.api.nms.exception.NMSException;
+import com.minecraft.moonlake.MoonLakePluginDebug;
 import com.minecraft.moonlake.api.packet.exception.PacketException;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.validate.Validate;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
@@ -27,34 +28,17 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Field;
 import java.net.SocketAddress;
 import java.util.ArrayList;
-
-import static com.minecraft.moonlake.reflect.Reflect.getField;
 
 /**
  * <h1>PacketINCChannel</h1>
  * 数据包 INC 通道实现类 ({@code io.netty.channel})
  *
- * @version 1.0
+ * @version 1.1
  * @author Month_Light
  */
 class PacketINCChannel extends PacketChannelAbstract {
-
-    private final static Field FIELD_CHANNEL;
-
-    static {
-
-        try {
-
-            FIELD_CHANNEL = getField(CLASS_NETWORKMANAGER, true, "channel");
-        }
-        catch (Exception e) {
-
-            throw new NMSException("The packet listener channel reflect raw initialize exception.", e);
-        }
-    }
 
     /**
      * 数据包 INC 通道实现类构造函数
@@ -146,23 +130,10 @@ class PacketINCChannel extends PacketChannelAbstract {
      * @param player 玩家
      * @return Channel
      * @throws IllegalArgumentException 如果玩家对象为 {@code null} 则抛出异常
-     * @throws NMSException 如果获取错误则抛出异常
      */
-    private Channel getChannel(Player player) throws NMSException {
+    private Channel getChannel(Player player) {
 
-        Validate.notNull(player, "The player object is null.");
-
-        try {
-
-            Object nmsPlayer = METHOD_GETHANDLE.invoke(player);
-            Object nmsConnection = FIELD_PLAYERCONNECTION.get(nmsPlayer);
-
-            return (Channel) FIELD_CHANNEL.get(FIELD_NETWORKMANAGER.get(nmsConnection));
-        }
-        catch (Exception e) {
-
-            throw new NMSException("The get player network packet listener channel exception.", e);
-        }
+        return MinecraftReflection.getNetworkManagerChannel(player);
     }
 
     /**
@@ -198,7 +169,7 @@ class PacketINCChannel extends PacketChannelAbstract {
 
                             while(channel == null) {
 
-                                channel = (Channel) FIELD_CHANNEL.get(obj);
+                                channel = MinecraftReflection.getNetworkManagerChannelObj(obj);
                             }
                             if(channel.pipeline().get(KEY_SERVER) == null) {
 
@@ -206,11 +177,13 @@ class PacketINCChannel extends PacketChannelAbstract {
                             }
                         }
                         catch (Exception ex) {
+                            MoonLakePluginDebug.debug(ex);
                         }
                     }
                 });
             }
             catch (Exception ex) {
+                MoonLakePluginDebug.debug(ex);
             }
             return super.add(e);
         }
@@ -233,7 +206,7 @@ class PacketINCChannel extends PacketChannelAbstract {
 
                             while(channel == null) {
 
-                                channel = (Channel) FIELD_CHANNEL.get(obj);
+                                channel = MinecraftReflection.getNetworkManagerChannelObj(obj);
                             }
                             if(channel.pipeline().get(KEY_SERVER) != null) {
 
@@ -241,11 +214,13 @@ class PacketINCChannel extends PacketChannelAbstract {
                             }
                         }
                         catch (Exception e) {
+                            MoonLakePluginDebug.debug(e);
                         }
                     }
                 });
             }
             catch (Exception e) {
+                MoonLakePluginDebug.debug(e);
             }
             return super.remove(o);
         }
@@ -288,7 +263,7 @@ class PacketINCChannel extends PacketChannelAbstract {
             Object packet = o;
             Cancellable cancellable = new Cancellable();
 
-            if(CLASS_PACKET.isAssignableFrom(o.getClass())) {
+            if(MinecraftReflection.getPacketClass().isAssignableFrom(o.getClass())) {
 
                 packet = onPacketSend(owner, o, cancellable);
             }
@@ -305,7 +280,7 @@ class PacketINCChannel extends PacketChannelAbstract {
             Object packet = o;
             Cancellable cancellable = new Cancellable();
 
-            if(CLASS_PACKET.isAssignableFrom(o.getClass())) {
+            if(MinecraftReflection.getPacketClass().isAssignableFrom(o.getClass())) {
 
                 packet = onPacketReceive(owner, o, cancellable);
             }

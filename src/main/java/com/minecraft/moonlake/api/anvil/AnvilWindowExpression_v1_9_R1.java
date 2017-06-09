@@ -18,6 +18,8 @@
  
 package com.minecraft.moonlake.api.anvil;
 
+import com.minecraft.moonlake.api.VersionAdapter;
+import com.minecraft.moonlake.api.utility.MinecraftBukkitVersion;
 import net.minecraft.server.v1_9_R1.BlockPosition;
 import net.minecraft.server.v1_9_R1.ContainerAnvil;
 import net.minecraft.server.v1_9_R1.EntityHuman;
@@ -31,7 +33,7 @@ import org.bukkit.entity.Player;
  * @version 2.0
  * @author Month_Light
  */
-class AnvilWindowExpression_v1_9_R1 extends ContainerAnvil {
+class AnvilWindowExpression_v1_9_R1 extends ContainerAnvil implements VersionAdapter.MinecraftBukkit {
 
     private final Player owner;
     private final AnvilWindowExpression anvilWindow;
@@ -62,5 +64,11 @@ class AnvilWindowExpression_v1_9_R1 extends ContainerAnvil {
         String input = AnvilWindowReflect.get().callAnvilInputEvent(owner, anvilWindow, s);
         if(input != null)
             super.a(input);
+    }
+
+    @Override
+    public MinecraftBukkitVersion mcBukkitVersion() {
+
+        return MinecraftBukkitVersion.V1_9_R1;
     }
 }

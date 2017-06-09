@@ -75,6 +75,11 @@ public class MinecraftBukkitVersion implements Comparable<MinecraftBukkitVersion
     public final static MinecraftBukkitVersion V1_11_R1 = new MinecraftBukkitVersion("v1_11_R1");
 
     /**
+     * Minecraft Bukkit v1_12_R1 版本 (MC: 1.12.0 - 未知) // 当前最新版本为 1.12-pre6
+     */
+    public final static MinecraftBukkitVersion V1_12_R1 = new MinecraftBukkitVersion("v1_12_R1");
+
+    /**
      * Minecraft Bukkit 未知版本
      */
     public final static MinecraftBukkitVersion UNKNOWN = new MinecraftBukkitVersion(-1, -1, -1);
@@ -125,6 +130,10 @@ public class MinecraftBukkitVersion implements Comparable<MinecraftBukkitVersion
                 new MinecraftVersion(1, 11, 2),
                 // ---> net.minecraft.server.v1_11_R1
         }, V1_11_R1);
+        map.put(new MinecraftVersion[] {
+                new MinecraftVersion(1, 12, 0),
+                // ---> net.minecraft.server.v1_12_R1
+        }, V1_12_R1);
         return map;
     }
 
@@ -308,7 +317,7 @@ public class MinecraftBukkitVersion implements Comparable<MinecraftBukkitVersion
     /**
      * <h1>获取当前 Minecraft Bukkit 版本是否在参数 {@code min} 版本和参数 {@code max} 范围</h1>
      *
-     * <p>举一个简单的例子: {@link #getCurrentVersion()}.isOrRange({@link #V1_8_R1}, {@link #V1_10_R1})</p>
+     * <p>举一个简单的例子: {@link #getCurrentVersion()}.isRange({@link #V1_8_R1}, {@link #V1_10_R1})</p>
      * <p>当你服务端为 {@link #V1_8_R3} 那么结果为 {@code true}, 如为 {@link #V1_8_R1}、{@link #V1_10_R1} 结果为 {@code false}</p>
      *
      * @param min 最小版本

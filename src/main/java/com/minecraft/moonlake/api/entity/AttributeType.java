@@ -22,8 +22,6 @@ import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
-import com.minecraft.moonlake.reflect.accessors.Accessors;
-import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.spigotmc.SpigotConfig;
 
@@ -34,7 +32,7 @@ import java.util.Map;
  * <hr />
  * <div>
  *     <h1>Minecraft Entity Attribute Type</h1>
- *     <p>By Month_Light Ver: 1.0.1</p>
+ *     <p>By Month_Light Ver: 1.1</p>
  * </div>
  * <hr />
  * <div>
@@ -43,7 +41,7 @@ import java.util.Map;
  * </div>
  * <hr />
  *
- * @version 1.0.1
+ * @version 1.1
  * @author Month_Light
  */
 public enum AttributeType {
@@ -54,83 +52,87 @@ public enum AttributeType {
      * @see org.spigotmc.SpigotConfig#maxHealth
      * @see "spigot.yml >> settings.attribute.maxHealth.max (def: 2048.0)"
      */
-    MAX_HEALTH("MaxHealth", "maxHealth", 20.0d, 0.0d, SpigotConfig.maxHealth),
+    MAX_HEALTH("MaxHealth", "generic.maxHealth", 20.0d, 0.0d, SpigotConfig.maxHealth),
     /**
      * 实体属性类型: 追踪范围 (def: 32.0, range: 0.0 - 2048.0)
      */
-    FOLLOW_RANGE("FollowRange", "FOLLOW_RANGE", 32.0d, 0.0d, 2048.0d),
+    FOLLOW_RANGE("FollowRange", "generic.followRange", 32.0d, 0.0d, 2048.0d),
     /**
      * 实体属性类型: 抗击退 (def: 0.0, range: 0.0 - 1.0)
      */
-    KNOCK_BACK_RESISTANCE("KnockBackResistance", "c", 0.0d, 0.0d, 1.0d),
+    KNOCK_BACK_RESISTANCE("KnockBackResistance", "generic.knockbackResistance", 0.0d, 0.0d, 1.0d),
     /**
      * 实体属性类型: 移动速度 (def: 0.699999988079071, range: 0.0 - SpigotConfig.movementSpeed)
      *
      * @see org.spigotmc.SpigotConfig#movementSpeed
      * @see "spigot.yml >> settings.attribute.movementSpeed.max (def: 2048.0)"
      */
-    MOVEMENT_SPEED("MovementSpeed", "MOVEMENT_SPEED", 0.699999988079071d, 0.0d, SpigotConfig.movementSpeed),
+    MOVEMENT_SPEED("MovementSpeed", "generic.movementSpeed", 0.699999988079071d, 0.0d, SpigotConfig.movementSpeed),
     /**
      * 实体属性类型: 攻击伤害 (def: 2.0, range: 0.0 - SpigotConfig.attackDamage)
      *
      * @see org.spigotmc.SpigotConfig#attackDamage
      * @see "spigot.yml >> settings.attribute.attackDamage.max (def: 2048.0)"
      */
-    ATTACK_DAMAGE("AttackDamage", "ATTACK_DAMAGE", 2.0d, 0.0d, SpigotConfig.attackDamage),
+    ATTACK_DAMAGE("AttackDamage", "generic.attackDamage", 2.0d, 0.0d, SpigotConfig.attackDamage),
     /**
      * 实体属性类型: 攻击速度 (def: 4.0, range: 0.0 - 1024.0)
      */
-    ATTACK_SPEED("AttackSpeed", "f", MinecraftVersion.V1_9, 4.0d, 0.0d, 1024.0d),
+    ATTACK_SPEED("AttackSpeed", "generic.attackSpeed", MinecraftVersion.V1_9, 4.0d, 0.0d, 1024.0d),
     /**
      * 实体属性类型: 护甲 (def: 0.0, range: 0.0 - 30.0)
      */
-    ARMOR("Armor", "g", MinecraftVersion.V1_9, 0.0d, 0.0d, 30.0d),
+    ARMOR("Armor", "generic.armor", MinecraftVersion.V1_9, 0.0d, 0.0d, 30.0d),
     /**
      * 实体属性类型: 护甲韧性 (def: 0.0, range: 0.0 - 20.0)
      */
-    ARMOR_TOUGHNESS("ArmorToughness", "h", MinecraftVersion.V1_9, 0.0d, 0.0d, 20.0d),
+    ARMOR_TOUGHNESS("ArmorToughness", "generic.armorToughness", MinecraftVersion.V1_9, 0.0d, 0.0d, 20.0d),
     /**
      * 实体属性类型: 幸运 (def: 0.0, range: -1024.0 - 1024.0)
      */
-    LUCK("Luck", "i", MinecraftVersion.V1_9, 0.0d, -1024.0d, 1024.0d),
+    LUCK("Luck", "generic.luck", MinecraftVersion.V1_9, 0.0d, -1024.0d, 1024.0d),
+    /**
+     * 实体属性类型: 飞行速度 (def: 0.4000000059604645, range: 0.0 - 1024.0)
+     */
+    FLYING_SPEED("FlyingSpeed", "generic.flyingSpeed", MinecraftVersion.V1_12, 0.4000000059604645d, 0.0d, 1024.0d);
     ;
 
     private String type;
-    private String field;
+    private String name;
     private MinecraftVersion minimumVersion;
     private double def;
     private double min;
     private double max;
-    private final static Map<AttributeType, FieldAccessor> MAPPING = new HashMap<>();
+    private final static Map<AttributeType, Object> MAPPING = new HashMap<>();
 
     /**
      * 实体属性类型构造函数
      *
      * @param type 类型名
-     * @param field NMS 字段名
+     * @param name 名称
      * @param def 默认值
      * @param min 最小值
      * @param max 最大值
      */
-    AttributeType(String type, String field, double def, double min, double max) {
+    AttributeType(String type, String name, double def, double min, double max) {
 
-        this(type, field, null, def, min, max);
+        this(type, name, null, def, min, max);
     }
 
     /**
      * 实体属性类型构造函数
      *
      * @param type 类型名
-     * @param field NMS 字段名
+     * @param name 名称
      * @param minimumVersion 最低服务端版本
      * @param def 默认值
      * @param min 最小值
      * @param max 最大值
      */
-    AttributeType(String type, String field, MinecraftVersion minimumVersion, double def, double min, double max) {
+    AttributeType(String type, String name, MinecraftVersion minimumVersion, double def, double min, double max) {
 
         this.type = type;
-        this.field = field;
+        this.name = name;
         this.minimumVersion = minimumVersion;
         this.def = def;
         this.min = min;
@@ -148,13 +150,26 @@ public enum AttributeType {
     }
 
     /**
+     * 获取实体属性的名称
+     *
+     * @return 名称
+     */
+    public String getName() {
+
+        return name;
+    }
+
+    /**
      * 获取实体属性类型在 NMS 中的字段名
      *
      * @return 字段名
+     * @deprecated @deprecated 已过时, 将于 v2.0 删除.
+     * @throws UnsupportedOperationException Exception
      */
+    @Deprecated
     public String getField() {
 
-        return field;
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -219,12 +234,12 @@ public enum AttributeType {
         return true;
     }
 
-    public FieldAccessor getIAttributeField() {
-        FieldAccessor CACHE =  MAPPING.get(this);
-        if(CACHE == null) {
-            CACHE = Accessors.getFieldAccessor(MinecraftReflection.getMinecraftGenericAttributesClass(), field, true);
-            MAPPING.put(this, CACHE);
+    public Object getIAttribute() {
+        Object iAttribute = MAPPING.get(this);
+        if(iAttribute == null) {
+            iAttribute = MinecraftReflection.getGenericAttributes(this);
+            MAPPING.put(this, iAttribute);
         }
-        return CACHE;
+        return iAttribute;
     }
 }

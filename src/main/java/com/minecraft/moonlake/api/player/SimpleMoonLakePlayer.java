@@ -18,8 +18,14 @@
  
 package com.minecraft.moonlake.api.player;
 
+import com.google.common.io.BaseEncoding;
 import com.minecraft.moonlake.api.entity.AttributeType;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutResourcePackSend;
+import com.minecraft.moonlake.api.player.advancement.Advancement;
+import com.minecraft.moonlake.api.player.advancement.AdvancementKey;
+import com.minecraft.moonlake.api.player.advancement.AdvancementProgress;
 import com.minecraft.moonlake.api.player.attribute.Attribute;
+import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.exception.PlayerNotOnlineException;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Color;
@@ -187,5 +193,34 @@ public class SimpleMoonLakePlayer extends AbstractPlayer {
         Validate.notNull(type, "The attribute type object is null.");
 
         return new AttributeExpression(getBukkitPlayer(), type);
+    }
+
+    @Override
+    public AdvancementProgress getAdvancementProgress(Advancement advancement) {
+
+        return null;
+    }
+
+    @Override
+    public AdvancementProgress getAdvancementProgress(AdvancementKey key) {
+
+        return null;
+    }
+
+    @Override
+    public void setResourcePack(String url, byte[] hash) {
+
+        Validate.notNull(url, "The resource pack url string object is null.");
+        Validate.notNull(hash, "The resource pack hash value object is null.");
+        Validate.notNull(hash.length == 20, "The resource pack hash value length is not 20. (length: " + hash.length + ")");
+
+        PacketPlayOutResourcePackSend pporps = new PacketPlayOutResourcePackSend(url, BaseEncoding.base16().lowerCase().encode(hash));
+        pporps.send(getBukkitPlayer());
+    }
+
+    @Override
+    public MinecraftVersion mcVersion() {
+
+        return MinecraftVersion.getCurrentVersion();
     }
 }
