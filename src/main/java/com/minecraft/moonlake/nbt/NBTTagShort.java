@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The MoonLake Authors
+ * Copyright (C) 2017 The MoonLake Authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,71 +14,86 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
- 
+
+
 package com.minecraft.moonlake.nbt;
 
-import com.minecraft.moonlake.api.nbt.NBTReflect;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 /**
- * Created by MoonLake on 2016/9/21.
+ * <h1>NBTTagShort</h1>
+ * NBT 标签短整数类型数据
  *
- * @deprecated 已过时, 将于 v1.9-a6 删除.
+ * @version 1.0
+ * @author Month_Light
+ * @see NBTTagNumber
+ * @see Short
  */
-@Deprecated
-public class NBTTagShort extends NBTTagNumberic<Short> {
+public class NBTTagShort extends NBTTagNumber<Short> {
 
+    /**
+     * NBT 标签短整数类型数据构造函数
+     */
     public NBTTagShort() {
-
         this((short) 0);
     }
 
-    public NBTTagShort(short handle) {
-
-        super(handle);
+    /**
+     * NBT 标签短整数类型数据构造函数
+     *
+     * @param value 值
+     */
+    public NBTTagShort(short value) {
+        this("", value);
     }
 
-    public NBTTagShort(boolean ignored, Object tag) {
+    /**
+     * NBT 标签短整数类型数据构造函数
+     *
+     * @param name 特殊名
+     */
+    public NBTTagShort(String name) {
+        this(name, (short) 0);
+    }
 
-        super(tag);
+    /**
+     * NBT 标签短整数类型数据构造函数
+     *
+     * @param name 特殊名
+     * @param value 值
+     */
+    public NBTTagShort(String name, Short value) {
+        super(name, value);
+    }
 
-        if(NBTReflect.getHandle().getTagType(tag) != 2) {
-
-            throw new IllegalArgumentException("The nbt tag not is nbt tag short object.");
-        }
+    /**
+     * 设置此 NBT 标签短整数数据的值
+     *
+     * @param value 新值
+     */
+    public void set(short value) {
+        super.value = value;
     }
 
     @Override
-    public void setNumber(Number number) {
-
-        set(number.shortValue());
+    public NBTType getType() {
+        return NBTType.SHORT;
     }
 
     @Override
-    public byte getTypeId() {
-
-        return 2;
+    public void read(DataInput input) throws IOException {
+        super.value = input.readShort();
     }
 
     @Override
-    public Short get() {
-
-        return super.get();
+    public void write(DataOutput output) throws IOException {
+        output.writeShort(value);
     }
 
     @Override
-    public int hashCode() {
-
-        return handle.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-
-        if(obj instanceof NBTBase) {
-
-            obj = ((NBTBase) obj).getHandle();
-        }
-        return handle.equals(obj);
+    public NBTTagShort clone() {
+        return new NBTTagShort(getName(), value);
     }
 }

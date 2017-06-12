@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The MoonLake Authors
+ * Copyright (C) 2017 The MoonLake Authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,663 +14,252 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
- 
+
+
 package com.minecraft.moonlake.nbt;
 
-import com.minecraft.moonlake.api.nbt.NBTReflect;
-
-import java.util.*;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
- * Created by MoonLake on 2016/9/21.
+ * <h1>NBTTagList</h1>
+ * NBT 列表类型数据
  *
- * @deprecated 已过时, 将于 v1.9-a6 删除.
+ * @param <E> 元素类型
+ * @version 1.0
+ * @author Month_Light
+ * @see NBTTagDatable
+ * @see Iterable
  */
-@Deprecated
-public class NBTTagList extends NBTBase implements List<NBTBase> {
+public class NBTTagList<E extends NBTBase> extends NBTTagDatable<List<E>> implements Iterable<E> {
 
+    /**
+     * 表示此列表内唯一元素的类型 Id 值
+     * 由于 NBT 限制, 列表标签只能存储同等类型
+     */
+    private int elementTypeId;
+
+    /**
+     * NBT 列表类型数据构造函数
+     */
     public NBTTagList() {
-
-        this(NBTReflect.getHandle().createTagList());
+        this(new ArrayList<>());
     }
 
-    public NBTTagList(Object handle) {
-
-        super(handle);
+    /**
+     * NBT 列表类型数据构造函数
+     *
+     * @param value 值
+     */
+    public NBTTagList(List<E> value) {
+        this("", value);
     }
 
-    public NBTTagList(boolean ignored, Object tag) {
-
-        super(tag);
-
-        if(NBTReflect.getHandle().getTagType(tag) != 9) {
-
-            throw new IllegalArgumentException("The nbt tag not is nbt tag list object.");
-        }
+    /**
+     * NBT 列表类型数据构造函数
+     *
+     * @param name 特殊名
+     */
+    public NBTTagList(String name) {
+        this(name, new ArrayList<>());
     }
 
-    public List<Object> getHandleList() {
-
-        return NBTReflect.getHandle().getHandleList(handle);
-    }
-
-    public Byte getByte(int index) {
-
-        NBTBase base = get(index);
-        return base instanceof NBTTagByte ? ((NBTTagByte) base).get() : null;
-    }
-
-    public Short getShort(int index) {
-
-        NBTBase base = get(index);
-        return base instanceof NBTTagShort ? ((NBTTagShort) base).get() : null;
-    }
-
-    public Integer getInt(int index) {
-
-        NBTBase base = get(index);
-        return base instanceof NBTTagInt ? ((NBTTagInt) base).get() : null;
-    }
-
-    public Long getLong(int index) {
-
-        NBTBase base = get(index);
-        return base instanceof NBTTagLong ? ((NBTTagLong) base).get() : null;
-    }
-
-    public Float getFloat(int index) {
-
-        NBTBase base = get(index);
-        return base instanceof NBTTagFloat ? ((NBTTagFloat) base).get() : null;
-    }
-
-    public Double getDouble(int index) {
-
-        NBTBase base = get(index);
-        return base instanceof NBTTagDouble ? ((NBTTagDouble) base).get() : null;
-    }
-
-    public Number getNumber(int index) {
-
-        NBTBase base = get(index);
-        return base instanceof NBTTagNumberic ? (Number) ((NBTTagNumberic) base).get() : null;
-    }
-
-    public int[] getIntArray(int index) {
-
-        NBTBase base = get(index);
-        return base instanceof NBTTagIntArray ? ((NBTTagIntArray) base).get() : null;
-    }
-
-    public byte[] getByteArray(int index) {
-
-        NBTBase base = get(index);
-        return base instanceof NBTTagByteArray ? ((NBTTagByteArray) base).get() : null;
-    }
-
-    public NBTTagList getList(int index) {
-
-        NBTBase base = get(index);
-        return base instanceof NBTTagList ? (NBTTagList) base : null;
-    }
-
-    public NBTTagCompound getCompound(int index) {
-
-        NBTBase base = get(index);
-        return base instanceof NBTTagCompound ? (NBTTagCompound) base : null;
-    }
-
-    public NBTTagList compound(int index) {
-
-        NBTBase base = get(index);
-
-        if(base instanceof NBTTagList) {
-
-            return (NBTTagList) base;
-        }
-        else {
-
-            NBTTagList list = new NBTTagList();
-            set(index, list);
-            return list;
-        }
-    }
-
-    public NBTTagList list(int index) {
-
-        NBTBase base = get(index);
-
-        if(base instanceof NBTTagList) {
-
-            return (NBTTagList) base;
-        }
-        else {
-
-            NBTTagList list = new NBTTagList();
-            set(index, list);
-            return list;
-        }
-    }
-
-    public NBTTagList clone() {
-
-        return new NBTTagList(false, cloneHandle());
+    /**
+     * NBT 列表类型数据构造函数
+     *
+     * @param name 特殊名
+     * @param value 值
+     */
+    public NBTTagList(String name, List<E> value) {
+        super(name, value);
+        for(E element : value) // 遍历列表值进行检测
+            checkElementType(element);
     }
 
     @Override
-    public byte getTypeId() {
-
-        return 9;
+    public NBTType getType() {
+        return NBTType.LIST;
     }
 
+    /**
+     * 获取此 NBT 列表标签数据的值
+     *
+     * @return 列表值
+     */
     @Override
+    public List<E> getValue() {
+        // 创建一个新的数组列表并拷贝值, 而不是返回当前 value 引用
+        return new ArrayList<>(value);
+    }
+
+    /**
+     * 检测指定元素和唯一元素类型 Id 是否匹配, 否则抛出异常
+     *
+     * @param element 待检测的元素
+     */
+    protected void checkElementType(E element) {
+        if(elementTypeId == 0) // 如果唯一元素类型 Id 等于 0 说明当前列表没有存在任何元素, 则进行赋值
+            this.elementTypeId = element.getTypeId();
+        else if(element.getTypeId() != elementTypeId) // 否则待检测的元素类型 Id 不等于唯一元素类型 Id 的话抛出异常
+            throw new IllegalArgumentException("列表元素值不符合的类型 Id, 应为: " + elementTypeId + ", 对应类型: " + NBTType.fromTypeId(elementTypeId) + ".");
+    }
+
+    /**
+     * 获取此 NBT 列表标签的唯一元素类型 Id
+     *
+     * @return 唯一元素类型 Id
+     */
+    public int getElementTypeId() {
+        return elementTypeId;
+    }
+
+    /**
+     * 将此 NBT 列表标签添加新的 NBT 元素标签
+     *
+     * @param value 值
+     * @return 是否成功
+     */
+    public boolean add(E value) {
+        checkElementType(value);
+        return super.value.add(value);
+    }
+
+    /**
+     * 将此 NBT 列表标签删除指定 NBT 元素标签
+     *
+     * @param value 值
+     * @return 是否成功
+     */
+    public boolean remove(E value) {
+        return super.value.remove(value);
+    }
+
+    /**
+     * 获取此 NBT 列表标签指定索引的元素标签
+     *
+     * @param index 索引
+     * @return 索引标签值
+     * @throws IndexOutOfBoundsException 如果索引越界则抛出异常
+     */
+    public E get(int index) {
+        return super.value.get(index);
+    }
+
+    /**
+     * 获取此 NBT 列表标签元素标签的数量大小
+     *
+     * @return 数量大小
+     */
     public int size() {
-
-        return getHandleList().size();
+        return super.value.size();
     }
 
-    @Override
+    /**
+     * 获取此 NBT 列表标签元素标签是否为空
+     *
+     * @return 是否为空
+     */
     public boolean isEmpty() {
-
-        return getHandleList().isEmpty();
+        return size() == 0;
     }
 
-    @Override
-    public boolean contains(Object o) {
-
-        return getHandleList().contains(NBTBase.getByValue(o).handle);
-    }
-
-    @Override
-    public Iterator<NBTBase> iterator() {
-
-        return listIterator();
-    }
-
-    @Override
-    public Object[] toArray() {
-
-        List list = getHandleList();
-        NBTBase[] bases = new NBTBase[list.size()];
-        int index = 0; Object tag;
-
-        for(Iterator iterator = list.iterator(); iterator.hasNext(); bases[index++] = NBTBase.wrap(NBTBase.cloneHandle(tag))) {
-
-            tag = iterator.next();
-        }
-        return bases;
-    }
-
-    @Override
-    public <T> T[] toArray(T[] a) {
-
-        List list = getHandleList();
-        int limit = list.size();
-
-        if(a.length < limit) {
-
-            limit = a.length;
-        }
-        for(int i = 0; i < limit; ++i) {
-
-            a[i] = (T) NBTBase.wrap(NBTBase.cloneHandle(list.get(i)));
-        }
-        return a;
-    }
-
-    @Override
-    public boolean add(NBTBase base) {
-
-        byte listType = getSubTypeId();
-
-        if(listType != 0 && listType != base.getTypeId()) {
-
-            throw new IllegalArgumentException("The nbt tag type id is illegal.");
-        }
-        else {
-
-            if(listType == 0) {
-
-                setSubTypeId(base.getTypeId());
-            }
-            return getHandleList().add(base.getHandle());
-        }
-    }
-
-    void addB(NBTBase base) {
-
-        byte listType = getSubTypeId();
-
-        if(listType != 0 && listType != base.getTypeId()) {
-
-            throw new IllegalArgumentException("The nbt tag type id is illegal.");
-        }
-        else {
-
-            if(listType == 0) {
-
-                setSubTypeId(base.getTypeId());
-            }
-        }
-    }
-
-    public boolean addValue(Object value) {
-
-        return add(NBTBase.getByValue(value));
-    }
-
-    public boolean leftShift(Object value) {
-
-        return add(NBTBase.getByValue(value));
-    }
-
-    @Override
-    public boolean remove(Object o) {
-
-        return getHandleList().remove(NBTBase.getByValue(o).getHandle());
-    }
-
-    @Override
-    public boolean containsAll(Collection<?> c) {
-
-        ArrayList<Object> tags = new ArrayList<>();
-        Iterator iterator = c.iterator();
-
-        while(iterator.hasNext()) {
-
-            Object obj = iterator.next();
-            tags.add(NBTBase.getByValue(obj).handle);
-        }
-        return getHandleList().containsAll(tags);
-    }
-
-    public boolean addAllB(Collection<? extends NBTBase> c) {
-
-        List<Object> list = getHandleList();
-        Iterator iterator = c.iterator();
-
-        while(iterator.hasNext()) {
-
-            NBTBase base = (NBTBase) iterator.next();
-            list.add(NBTBase.cloneHandle(base.handle));
-        }
-        return !c.isEmpty();
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends NBTBase> c) {
-
-        List<Object> list = getHandleList();
-        NBTBase base;
-
-        for(Iterator iterator = c.iterator(); iterator.hasNext(); list.add(NBTBase.cloneHandle(base.handle))) {
-
-            base = (NBTBase) iterator.next();
-            byte listType = getSubTypeId();
-
-            if(listType != 0 && listType != base.getTypeId()) {
-
-                throw new IllegalArgumentException("The nbt tag type id is illegal.");
-            }
-            if(listType == 0) {
-
-                setSubTypeId(base.getTypeId());
-            }
-        }
-        return !c.isEmpty();
-    }
-
-    @Override
-    public boolean addAll(int index, Collection<? extends NBTBase> c) {
-
-        List<Object> list = this.getHandleList();
-        Iterator iterator = c.iterator();
-
-        while(iterator.hasNext()) {
-
-            NBTBase base = (NBTBase) iterator.next();
-            list.add(index++, NBTBase.cloneHandle(base.handle));
-        }
-        return !c.isEmpty();
-    }
-
-    public void addValue(int index, Object value) {
-
-        NBTBase base = NBTBase.getByValue(value);
-        byte listType = getSubTypeId();
-
-        if(listType != 0 && listType != base.getTypeId()) {
-
-            throw new IllegalArgumentException("The nbt tag type id is illegal.");
-        }
-        else {
-
-            if (listType == 0) {
-
-                setSubTypeId(base.getTypeId());
-            }
-            NBTBase def = base.getDefault();
-            List<Object> list = this.getHandleList();
-
-            while (this.size() < index) {
-
-                list.add(def);
-            }
-
-            if (this.size() == index) {
-
-                list.add(base.getHandle());
-            }
-            else {
-
-                list.add(index, base.getHandle());
-            }
-        }
-    }
-
-    public byte getSubTypeId() {
-
-        return getHandleList().isEmpty() ? 0 : NBTReflect.getHandle().getNBTTagListType(handle);
-    }
-
-    private void setSubTypeId(byte type) {
-
-        NBTReflect.getHandle().setNBTTagListType(handle, type);
-    }
-
-    public NBTBase getRandom() {
-
-        List<Object> list = getHandleList();
-
-        if(list.isEmpty()) {
-
-            return null;
-        }
-        else {
-
-            Object r = list.get(new Random().nextInt(list.size()));
-            return NBTBase.getByValue(r);
-        }
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-
-        ArrayList<Object> tags = new ArrayList<>();
-        Iterator iterator = c.iterator();
-
-        while(iterator.hasNext()) {
-
-            Object obj = iterator.next();
-            tags.add(NBTBase.getByValue(obj).handle);
-        }
-        return getHandleList().removeAll(tags);
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-
-        ArrayList<Object> tags = new ArrayList<>();
-        Iterator iterator = c.iterator();
-
-        while(iterator.hasNext()) {
-
-            Object obj = iterator.next();
-            tags.add(NBTBase.getByValue(obj).handle);
-        }
-        return getHandleList().retainAll(tags);
-    }
-
-    @Override
+    /**
+     * 移除此 NBT 列表标签的所有元素标签
+     */
     public void clear() {
+        super.value.clear();
+        this.elementTypeId = 0; // 重置元素类型 id
+    }
 
-        getHandleList().clear();
+    /**
+     * 设置此 NBT 列表标签的数据值
+     *
+     * @param value 新值
+     */
+    @Override
+    public void setValue(List<E> value) {
+        for(E element : value)
+            checkElementType(element);
+        super.value = new ArrayList<>(value);
     }
 
     @Override
-    public int hashCode() {
-
-        return handle.hashCode();
-    }
-
-    @Override
-    public NBTBase get(int index) {
-
-        List<Object> list = getHandleList();
-
-        if(index >= 0 && index < list.size()) {
-
-            Object obj = getHandleList().get(index);
-            return NBTBase.wrap(obj);
-        }
-        return null;
-    }
-
-    @Override
-    public NBTBase set(int index, NBTBase element) {
-
-        return setValue(index, element);
-    }
-
-    private NBTBase setValue(int index, Object value) {
-
-        NBTBase base = NBTBase.getByValue(value);
-        byte type = base.getTypeId();
-
-        if(type == 0) {
-
-            throw new IllegalArgumentException("The nbt tag value type id is illegal.");
-        }
-        else {
-
-            List<Object> list = getHandleList();
-            byte listType = getSubTypeId();
-
-            if(listType != 0 && listType != base.getTypeId()) {
-
-                throw new IllegalArgumentException("The nbt tag type id is illegal.");
-            }
-            else {
-
-                if(listType == 0) {
-
-                    setSubTypeId(type);
-                }
-                while (list.size() == index) {
-
-                    list.add(base.getHandle());
-                    return null;
-                }
-                if(list.size() == index) {
-
-                    list.add(base.getHandle());
-                    return null;
-                }
-                else {
-
-                    Object obj = list.set(index, base.getHandle());
-                    return NBTBase.getByValue(obj);
-                }
-            }
+    @SuppressWarnings("all")
+    public void read(DataInput input) throws IOException {
+        int typeId = input.readUnsignedByte();
+        super.value = new ArrayList<>();
+        this.elementTypeId = typeId;
+        int length = input.readInt();
+        for(int i = 0; i < length; i++) {
+            NBTBase nbt = NBTType.createNBTTag(typeId);
+            nbt.read(input);
+            add((E) nbt);
         }
     }
 
     @Override
-    public void add(int index, NBTBase element) {
-
-        byte listType = getSubTypeId();
-
-        if(listType != 0 && listType != element.getTypeId()) {
-
-            throw new IllegalArgumentException("The nbt tag type id is illegal.");
-        }
-        else {
-
-            if(listType == 0) {
-
-                setSubTypeId(element.getTypeId());
-            }
-            getHandleList().add(index, element.getHandle());
-        }
-    }
-
-    public void add(Integer index, Object element) {
-
-        add(index, NBTBase.getByValue(element));
+    public void write(DataOutput output) throws IOException {
+        output.writeByte(isEmpty() ? 0 : elementTypeId);
+        output.writeInt(size());
+        for(E element : getValue())
+            element.write(output);
     }
 
     @Override
-    public NBTBase remove(int index) {
-
-        List<Object> list = getHandleList();
-
-        if(index >= 0 && index < list.size()) {
-
-            Object obj = getHandleList().remove(index);
-            return obj == null ? null : NBTBase.getByValue(obj);
-        }
-        return null;
+    @SuppressWarnings("unchecked")
+    public NBTTagList<E> clone() {
+        List<E> value = new ArrayList<>();
+        for(E element : getValue())
+            value.add((E) element.clone()); // 创建 NBTTag 对象的克隆
+        return new NBTTagList<>(getName(), value);
     }
 
     @Override
-    public int indexOf(Object o) {
-
-        return getHandleList().indexOf(NBTBase.getByValue(o).handle);
-    }
-
-    @Override
-    public int lastIndexOf(Object o) {
-
-        return getHandleList().lastIndexOf(NBTBase.getByValue(o).handle);
-    }
-
-    @Override
-    public ListIterator<NBTBase> listIterator() {
-
-        return listIterator(0);
-    }
-
-    @Override
-    public ListIterator<NBTBase> listIterator(int index) {
-
-        return new ListIteratorWrapped(getHandleList().listIterator(index));
-    }
-
-    @Override
-    public List<NBTBase> subList(int fromIndex, int toIndex) {
-
-        NBTTagList sub = new NBTTagList();
-        Iterator iterator = getHandleList().subList(fromIndex, toIndex).iterator();
-
-        while(iterator.hasNext()) {
-
-            Object tag = iterator.next();
-            sub.add(NBTBase.wrap(NBTBase.cloneHandle(tag)));
-        }
-        return sub;
-    }
-
-    @Override
-    public String toString() {
-
-        Iterator iterator = iterator();
-
-        if(!iterator.hasNext()) {
-
-            return "[]";
-        }
-        else {
-
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append('[');
-
-            while(true) {
-
-                NBTBase base = (NBTBase) iterator.next();
-
-                stringBuilder.append(base instanceof NBTTagString ? "\"" + base + "\"" : base);
-
-                if(!iterator.hasNext()) {
-
-                    return stringBuilder.append(']').toString();
-                }
-                stringBuilder.append(",");
-            }
-        }
+    public Iterator<E> iterator() {
+        return value.iterator();
     }
 
     @Override
     public boolean equals(Object obj) {
-
-        if(obj instanceof NBTBase) {
-
-            obj = ((NBTBase) obj).getHandle();
+        if(super.equals(obj)) {
+            NBTTagList other = (NBTTagList) obj;
+            if(elementTypeId == other.elementTypeId)
+                return value.equals(other.value);
         }
-        return handle.equals(obj);
+        return false;
     }
 
-    private class ListIteratorWrapped implements ListIterator<NBTBase> {
+    @Override
+    public String toString() {
+        return toString(false);
+    }
 
-        public ListIterator<Object> handle;
+    /**
+     * 将此 NBT 列表标签转换为字符串
+     *
+     * @param json 是否 Json 格式
+     * @return 字符串
+     */
+    public String toString(boolean json) {
+        StringBuilder builder = new StringBuilder("[");
+        for(int i = 0; i < size(); i++) {
+            if(i != 0)
+                builder.append(",");
+            if(!json)
+                builder.append(i).append(":");
 
-        public ListIteratorWrapped(ListIterator<Object> handle) {
-
-            this.handle = handle;
+            NBTBase nbt = get(i);
+            if(nbt instanceof NBTTagList)
+                builder.append(((NBTTagList) nbt).toString(json));
+            else if(nbt instanceof NBTTagCompound)
+                builder.append(((NBTTagCompound) nbt).toString(json));
+            else
+                builder.append(nbt);
         }
-
-        @Override
-        public boolean hasNext() {
-
-            return handle.hasNext();
-        }
-
-        @Override
-        public NBTBase next() {
-
-            return NBTBase.wrap(handle.next());
-        }
-
-        @Override
-        public boolean hasPrevious() {
-
-            return handle.hasPrevious();
-        }
-
-        @Override
-        public NBTBase previous() {
-
-            return NBTBase.wrap(handle.previous());
-        }
-
-        @Override
-        public int nextIndex() {
-
-            return handle.nextIndex();
-        }
-
-        @Override
-        public int previousIndex() {
-
-            return handle.previousIndex();
-        }
-
-        @Override
-        public void remove() {
-
-            handle.remove();
-        }
-
-        @Override
-        public void set(NBTBase nbtBase) {
-
-            handle.set(NBTBase.cloneHandle(nbtBase.handle));
-        }
-
-        @Override
-        public void add(NBTBase nbtBase) {
-
-            handle.add(NBTBase.cloneHandle(nbtBase.handle));
-        }
+        return builder.append("]").toString();
     }
 }

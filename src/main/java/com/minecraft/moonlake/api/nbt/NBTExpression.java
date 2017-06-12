@@ -182,6 +182,7 @@ class NBTExpression implements NBTLibrary {
     }
 
     @Override
+    @Deprecated
     public Entity spawnEntity(NBTCompound nbt, World world) throws NBTException {
 
         Validate.notNull(nbt, "The nbt tag object is null.");

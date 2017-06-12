@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The MoonLake Authors
+ * Copyright (C) 2017 The MoonLake Authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,77 +14,86 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
- 
+
+
 package com.minecraft.moonlake.nbt;
 
-import com.minecraft.moonlake.api.nbt.NBTReflect;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 /**
- * Created by MoonLake on 2016/9/21.
+ * <h1>NBTTagLong</h1>
+ * NBT 标签长整数类型数据
  *
- * @deprecated 已过时, 将于 v1.9-a6 删除.
+ * @version 1.0
+ * @author Month_Light
+ * @see NBTTagNumber
+ * @see Long
  */
-@Deprecated
-public class NBTTagLong extends NBTTagNumberic<Long> {
+public class NBTTagLong extends NBTTagNumber<Long> {
 
+    /**
+     * NBT 标签长整数类型数据构造函数
+     */
     public NBTTagLong() {
-
         this(0L);
     }
 
-    public NBTTagLong(long handle) {
-
-        super(handle);
+    /**
+     * NBT 标签长整数类型数据构造函数
+     *
+     * @param value 值
+     */
+    public NBTTagLong(long value) {
+        this("", value);
     }
 
-    public NBTTagLong(boolean ignored, Object tag) {
-
-        super(tag);
-
-        if(NBTReflect.getHandle().getTagType(tag) != 4) {
-
-            throw new IllegalArgumentException("The nbt tag not is nbt tag long object.");
-        }
+    /**
+     * NBT 标签长整数类型数据构造函数
+     *
+     * @param name 特殊名
+     */
+    public NBTTagLong(String name) {
+        this(name, 0L);
     }
 
-    @Override
-    public void setNumber(Number number) {
-
-        set(number.longValue());
+    /**
+     * NBT 标签长整数类型数据构造函数
+     *
+     * @param name 特殊名
+     * @param value 值
+     */
+    public NBTTagLong(String name, Long value) {
+        super(name, value);
     }
 
-    @Override
-    public byte getTypeId() {
-
-        return 4;
-    }
-
-    @Override
-    public Long get() {
-
-        return (Long) NBTReflect.getHandle().getValue(handle);
-    }
-
-    @Override
-    public void set(Long value) {
-
-        NBTReflect.getHandle().setValue(handle, value);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return handle.hashCode();
+    /**
+     * 设置此 NBT 标签长整数数据的值
+     *
+     * @param value 新值
+     */
+    public void set(long value) {
+        super.value = value;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public NBTType getType() {
+        return NBTType.LONG;
+    }
 
-        if(obj instanceof NBTBase) {
+    @Override
+    public void read(DataInput input) throws IOException {
+        super.value = input.readLong();
+    }
 
-            obj = ((NBTBase) obj).getHandle();
-        }
-        return handle.equals(obj);
+    @Override
+    public void write(DataOutput output) throws IOException {
+        output.writeLong(value);
+    }
+
+    @Override
+    public NBTTagLong clone() {
+        return new NBTTagLong(getName(), value);
     }
 }

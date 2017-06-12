@@ -245,6 +245,8 @@ public interface NBTLibrary {
      * @return Entity
      * @throws NBTException 如果生成实体时错误则抛出异常
      * @throws IllegalArgumentException 如果实体对象或目标世界对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v1.9-a6 删除.
      */
+    @Deprecated
     Entity spawnEntity(NBTCompound nbt, World world) throws NBTException;
 }

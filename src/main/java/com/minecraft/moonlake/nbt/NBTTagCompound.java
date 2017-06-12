@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The MoonLake Authors
+ * Copyright (C) 2017 The MoonLake Authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,761 +14,667 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
- 
+
+
 package com.minecraft.moonlake.nbt;
 
-import com.minecraft.moonlake.api.nbt.NBTReflect;
-
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.*;
 
 /**
- * Created by MoonLake on 2016/9/21.
+ * <h1>NBTTagCompound</h1>
+ * NBT 复合类型数据
  *
- * @deprecated 已过时, 将于 v1.9-a6 删除.
+ * @version 1.0
+ * @author Month_Light
+ * @see NBTTagDatable
+ * @see Iterable
  */
-@Deprecated
-public class NBTTagCompound extends NBTBase implements Map<String, NBTBase> {
+public class NBTTagCompound extends NBTTagDatable<Map<String, NBTBase>> implements Iterable<NBTBase> {
 
+    /**
+     * NBT 复合类型数据构造函数
+     */
     public NBTTagCompound() {
-
-        super(NBTReflect.getHandle().createTagCompound());
+        this(new HashMap<>());
     }
 
-    public NBTTagCompound(Object handle) {
-
-        super(handle);
+    /**
+     * NBT 复合类型数据构造函数
+     *
+     * @param value 值
+     */
+    public NBTTagCompound(Map<String, NBTBase> value) {
+        this("", value);
     }
 
-    public NBTTagCompound(boolean ignored, Object tag) {
-
-        super(tag);
-
-        if(NBTReflect.getHandle().getTagType(tag) != 10) {
-
-            throw new IllegalArgumentException("The nbt tag not is nbt tag compound object.");
-        }
+    /**
+     * NBT 复合类型数据构造函数
+     *
+     * @param name 特殊名
+     */
+    public NBTTagCompound(String name) {
+        this(name, new HashMap<>());
     }
 
-    public Map<String, Object> getHandleMap() {
-
-        return NBTReflect.getHandle().getHandleMap(handle);
-    }
-
-    public NBTBase get(String key) {
-
-        Object obj = getHandleMap().get(key);
-        return NBTBase.wrap(obj);
-    }
-
-    public Byte getByte(String key) {
-
-        NBTBase base = get(key);
-        return base instanceof NBTTagByte ? ((NBTTagByte) base).get() : null;
-    }
-
-    public Short getShort(String key) {
-
-        NBTBase base = get(key);
-        return base instanceof NBTTagShort ? ((NBTTagShort) base).get() : null;
-    }
-
-    public Integer getInt(String key) {
-
-        NBTBase base = get(key);
-        return base instanceof NBTTagInt ? ((NBTTagInt) base).get() : null;
-    }
-
-    public Long getLong(String key) {
-
-        NBTBase base = get(key);
-        return base instanceof NBTTagLong ? ((NBTTagLong) base).get() : null;
-    }
-
-    public Float getFloat(String key) {
-
-        NBTBase base = get(key);
-        return base instanceof NBTTagFloat ? ((NBTTagFloat) base).get() : null;
-    }
-
-    public Double getDouble(String key) {
-
-        NBTBase base = get(key);
-        return base instanceof NBTTagDouble ? ((NBTTagDouble) base).get() : null;
-    }
-
-    public Number getNumber(String key) {
-
-        NBTBase base = get(key);
-        return base instanceof NBTTagNumberic ? (Number) ((NBTTagNumberic) base).get() : null;
-    }
-
-    public int[] getIntArray(String key) {
-
-        NBTBase base = get(key);
-        return base instanceof NBTTagIntArray ? ((NBTTagIntArray) base).get() : null;
-    }
-
-    public byte[] getByteArray(String key) {
-
-        NBTBase base = get(key);
-        return base instanceof NBTTagByteArray ? ((NBTTagByteArray) base).get() : null;
-    }
-
-    public NBTTagList getList(String key) {
-
-        NBTBase base = get(key);
-        return base instanceof NBTTagList ? (NBTTagList) base : null;
-    }
-
-    public NBTTagCompound getCompound(String key) {
-
-        NBTBase base = get(key);
-        return base instanceof NBTTagCompound ? (NBTTagCompound) base : null;
-    }
-
-    public boolean getBoolean(String key) {
-
-        Byte byte0 = getByte(key);
-        return byte0 != null && byte0 != 0;
-    }
-
-    public boolean has(String key) {
-
-        return getHandleMap().containsKey(key);
-    }
-
-    @SuppressWarnings("deprecation")
-    public NBTTagCompound nextCompound(String key) {
-
-        NBTBase base = get(key);
-
-        if(base instanceof NBTTagCompound) {
-
-            return (NBTTagCompound) base;
-        }
-        else {
-
-            NBTTagCompound compound = new NBTTagCompound();
-            Object tag = compound.getHandle();
-            NBTReflect.getHandle().setTagName(tag, key);
-            getHandleMap().put(key, tag);
-            return compound;
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    public NBTTagList nextList(String key) {
-
-        NBTBase base = get(key);
-
-        if(base instanceof NBTTagList) {
-
-            return (NBTTagList) base;
-        }
-        else {
-
-            NBTTagList list = new NBTTagList();
-            Object tag = list.getHandle();
-            NBTReflect.getHandle().setTagName(tag, key);
-            getHandleMap().put(key, tag);
-            return list;
-        }
-    }
-
-    public boolean remove(String key) {
-
-        return getHandleMap().remove(key) != null;
-    }
-
-    public void rename(String oldKey, String newKey) {
-
-        Map<String, Object> map = getHandleMap();
-        map.put(newKey, map.remove(oldKey));
+    /**
+     * NBT 复合类型数据构造函数
+     *
+     * @param name 特殊名
+     * @param value 值
+     */
+    public NBTTagCompound(String name, Map<String, NBTBase> value) {
+        super(name, value);
     }
 
     @Override
-    public byte getTypeId() {
-
-        return 10;
+    public NBTType getType() {
+        return NBTType.COMPOUND;
     }
 
+    /**
+     * 设置此 NBT 复合标签的数据值
+     *
+     * @param value 新值
+     */
     @Override
-    public int size() {
-
-        return getHandleMap().size();
+    public void setValue(Map<String, NBTBase> value) {
+        super.value = new HashMap<>(value);
     }
 
+    /**
+     * 获取此 NBT 复合标签的数据值
+     */
     @Override
+    public Map<String, NBTBase> getValue() {
+        // 创建一个新的哈希表并拷贝值, 而不是返回当前 value 引用
+        return new HashMap<>(value);
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的元素值
+     *
+     * @param name 特殊名
+     * @return 对应特殊名的元素值 | null
+     */
+    public NBTBase get(String name) {
+        return value.get(name);
+    }
+
+    /**
+     * 将指定 NBT 标签添加到此 NBT 复合标签内
+     *
+     * @param nbt NBT 标签
+     * @param <T> 类型
+     * @return 之前与特殊名关联的值, 如果没有映射关系则返回 null
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends NBTBase> T put(T nbt) {
+        return (T) value.put(nbt.getName(), nbt);
+    }
+
+    /**
+     * 将此 NBT 复合标签设置指定特殊名和标签值
+     *
+     * @param name 特殊名
+     * @param nbt 标签值
+     */
+    public void set(String name, NBTBase nbt) {
+        this.value.put(name, nbt);
+    }
+
+    /**
+     * 将此 NBT 复合标签设置指定特殊名和字节类型标签值
+     *
+     * @param name 特殊名
+     * @param value 字节类型标签值
+     */
+    public void setByte(String name, byte value) {
+        this.value.put(name, new NBTTagByte(name, value));
+    }
+
+    /**
+     * 将此 NBT 复合标签设置指定特殊名和字节类型标签值
+     *
+     * @param name 特殊名
+     * @param value 字节类型标签值
+     */
+    public void setByte(String name, int value) {
+        setByte(name, (byte) value);
+    }
+
+    /**
+     * 将此 NBT 复合标签设置指定特殊名和短整数类型标签值
+     *
+     * @param name 特殊名
+     * @param value 短整数类型标签值
+     */
+    public void setShort(String name, short value) {
+        this.value.put(name, new NBTTagShort(name, value));
+    }
+
+    /**
+     * 将此 NBT 复合标签设置指定特殊名和短整数类型标签值
+     *
+     * @param name 特殊名
+     * @param value 短整数类型标签值
+     */
+    public void setShort(String name, int value) {
+        setShort(name, (short) value);
+    }
+
+    /**
+     * 将此 NBT 复合标签设置指定特殊名和整数类型标签值
+     *
+     * @param name 特殊名
+     * @param value 整数类型标签值
+     */
+    public void setInteger(String name, int value) {
+        this.value.put(name, new NBTTagInteger(name, value));
+    }
+
+    /**
+     * 将此 NBT 复合标签设置指定特殊名和长整数类型标签值
+     *
+     * @param name 特殊名
+     * @param value 长整数类型标签值
+     */
+    public void setLong(String name, long value) {
+        this.value.put(name, new NBTTagLong(name, value));
+    }
+
+    /**
+     * 将此 NBT 复合标签设置指定特殊名和单精度浮点数类型标签值
+     *
+     * @param name 特殊名
+     * @param value 单精度浮点数类型标签值
+     */
+    public void setFloat(String name, float value) {
+        this.value.put(name, new NBTTagFloat(name, value));
+    }
+
+    /**
+     * 将此 NBT 复合标签设置指定特殊名和双精度浮点数类型标签值
+     *
+     * @param name 特殊名
+     * @param value 双精度浮点数类型标签值
+     */
+    public void setDouble(String name, double value) {
+        this.value.put(name, new NBTTagDouble(name, value));
+    }
+
+    /**
+     * 将此 NBT 复合标签设置指定特殊名和字节数组类型标签值
+     *
+     * @param name 特殊名
+     * @param value 字节数组类型标签值
+     */
+    public void setByteArray(String name, byte[] value) {
+        this.value.put(name, new NBTTagByteArray(name, value));
+    }
+
+    /**
+     * 将此 NBT 复合标签设置指定特殊名和整数数组类型标签值
+     *
+     * @param name 特殊名
+     * @param value 整数数组类型标签值
+     */
+    public void setIntegerArray(String name, int[] value) {
+        this.value.put(name, new NBTTagIntegerArray(name, value));
+    }
+
+    /**
+     * 将此 NBT 复合标签设置指定特殊名和字符串类型标签值
+     *
+     * @param name 特殊名
+     * @param value 字符串类型标签值
+     */
+    public void setString(String name, String value) {
+        this.value.put(name, new NBTTagString(name, value));
+    }
+
+    /**
+     * 将此 NBT 复合标签设置指定特殊名和布尔类型标签值
+     *
+     * @param name 特殊名
+     * @param value 布尔类型标签值
+     * @see #setByte(String, byte)
+     */
+    public void setBoolean(String name, boolean value) {
+        setByte(name, value ? (byte) 1 : 0);
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的数字类型元素值
+     *
+     * @param name 特殊名
+     * @return 数字类型元素值 | null
+     */
+    protected Number getNumber(String name) {
+        NBTBase nbt = get(name);
+        if(nbt != null && nbt instanceof NBTTagNumber)
+            return (Number) nbt.getValue();
+        return null;
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的字节类型元素值
+     *
+     * @param name 特殊名
+     * @return 字节类型元素值 | 0
+     */
+    public byte getByte(String name) {
+        return getByte(name, 0);
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的字节类型元素值
+     *
+     * @param name 特殊名
+     * @param def 如果此特殊名没有关联的值则返回的默认值
+     * @return 字节类型元素值 | def
+     */
+    public byte getByte(String name, int def) {
+        return getByte(name, (byte) def);
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的字节类型元素值
+     *
+     * @param name 特殊名
+     * @param def 如果此特殊名没有关联的值则返回的默认值
+     * @return 字节类型元素值 | def
+     */
+    public byte getByte(String name, byte def) {
+        Number value = getNumber(name);
+        return value != null ? value.byteValue() : def;
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的短整数类型元素值
+     *
+     * @param name 特殊名
+     * @return 短整数类型元素值 | 0
+     */
+    public short getShort(String name) {
+        return getShort(name, 0);
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的短整数类型元素值
+     *
+     * @param name 特殊名
+     * @param def 如果此特殊名没有关联的值则返回的默认值
+     * @return 短整数类型元素值 | def
+     */
+    public short getShort(String name, int def) {
+        return getShort(name, (byte) def);
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的短整数类型元素值
+     *
+     * @param name 特殊名
+     * @param def 如果此特殊名没有关联的值则返回的默认值
+     * @return 短整数类型元素值 | def
+     */
+    public short getShort(String name, short def) {
+        Number value = getNumber(name);
+        return value != null ? value.shortValue() : def;
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的整数类型元素值
+     *
+     * @param name 特殊名
+     * @return 整数类型元素值 | 0
+     */
+    public int getInteger(String name) {
+        return getInteger(name, 0);
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的整数类型元素值
+     *
+     * @param name 特殊名
+     * @param def 如果此特殊名没有关联的值则返回的默认值
+     * @return 整数类型元素值 | def
+     */
+    public int getInteger(String name, int def) {
+        Number value = getNumber(name);
+        return value != null ? value.intValue() : def;
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的长整数类型元素值
+     *
+     * @param name 特殊名
+     * @return 长整数类型元素值 | 0
+     */
+    public long getLong(String name) {
+        return getLong(name, 0);
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的长整数类型元素值
+     *
+     * @param name 特殊名
+     * @param def 如果此特殊名没有关联的值则返回的默认值
+     * @return 长整数类型元素值 | def
+     */
+    public long getLong(String name, long def) {
+        Number value = getNumber(name);
+        return value != null ? value.longValue() : def;
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的单精度浮点数类型元素值
+     *
+     * @param name 特殊名
+     * @return 单精度浮点数类型元素值 | 0
+     */
+    public float getFloat(String name) {
+        return getFloat(name, 0);
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的单精度浮点数类型元素值
+     *
+     * @param name 特殊名
+     * @param def 如果此特殊名没有关联的值则返回的默认值
+     * @return 单精度浮点数类型元素值 | def
+     */
+    public float getFloat(String name, float def) {
+        Number value = getNumber(name);
+        return value != null ? value.floatValue() : def;
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的双精度浮点数类型元素值
+     *
+     * @param name 特殊名
+     * @return 双精度浮点数类型元素值 | 0
+     */
+    public double getDouble(String name) {
+        return getDouble(name, 0);
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的双精度浮点数类型元素值
+     *
+     * @param name 特殊名
+     * @param def 如果此特殊名没有关联的值则返回的默认值
+     * @return 双精度浮点数类型元素值 | def
+     */
+    public double getDouble(String name, double def) {
+        Number value = getNumber(name);
+        return value != null ? value.doubleValue() : def;
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的字节数组类型元素值
+     *
+     * @param name 特殊名
+     * @return 字节数组类型元素值 | null
+     */
+    public byte[] getByteArray(String name) {
+        return getByteArray(name, null);
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的字节数组类型元素值
+     *
+     * @param name 特殊名
+     * @param def 如果此特殊名没有关联的值则返回的默认值
+     * @return 字节数组类型元素值 | def
+     */
+    public byte[] getByteArray(String name, byte[] def) {
+        NBTBase nbt = get(name);
+        return nbt != null && nbt instanceof NBTTagByteArray ? ((NBTTagByteArray) nbt).get() : def;
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的整数数组类型元素值
+     *
+     * @param name 特殊名
+     * @return 整数数组类型元素值 | null
+     */
+    public int[] getIntegerArray(String name) {
+        return getIntegerArray(name, null);
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的整数数组类型元素值
+     *
+     * @param name 特殊名
+     * @param def 如果此特殊名没有关联的值则返回的默认值
+     * @return 整数数组类型元素值 | def
+     */
+    public int[] getIntegerArray(String name, int[] def) {
+        NBTBase nbt = get(name);
+        return nbt != null && nbt instanceof NBTTagIntegerArray ? ((NBTTagIntegerArray) nbt).get() : def;
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的列表类型元素值
+     *
+     * @param name 特殊名
+     * @return 列表类型元素值 | null
+     */
+    public NBTTagList<?> getList(String name) {
+        return getList(name, null);
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的列表类型元素值
+     *
+     * @param name 特殊名
+     * @param def 如果此特殊名没有关联的值则返回的默认值
+     * @return 列表类型元素值 | def
+     */
+    public NBTTagList<?> getList(String name, NBTTagList<?> def) {
+        NBTBase nbt = get(name);
+        if(nbt != null && nbt instanceof NBTTagList)
+            return (NBTTagList<?>) nbt;
+        return def;
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的复合类型元素值
+     *
+     * @param name 特殊名
+     * @return 复合类型元素值 | null
+     */
+    public NBTTagCompound getCompound(String name) {
+        return getCompound(name, null);
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的复合类型元素值
+     *
+     * @param name 特殊名
+     * @param def 如果此特殊名没有关联的值则返回的默认值
+     * @return 复合类型元素值 | def
+     */
+    public NBTTagCompound getCompound(String name, NBTTagCompound def) {
+        NBTBase nbt = get(name);
+        if(nbt != null && nbt instanceof NBTTagCompound)
+            return ((NBTTagCompound) nbt);
+        return def;
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的字符串类型元素值
+     *
+     * @param name 特殊名
+     * @return 字符串类型元素值 | null
+     */
+    public String getString(String name) {
+        return getString(name, null);
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的字符串类型元素值
+     *
+     * @param name 特殊名
+     * @param def 如果此特殊名没有关联的值则返回的默认值
+     * @return 字符串类型元素值 | def
+     */
+    public String getString(String name, String def) {
+        NBTBase nbt = get(name);
+        return nbt != null && nbt instanceof NBTTagString ? ((NBTTagString) nbt).getValue() : def;
+    }
+
+    /**
+     * 获取此 NBT 复合标签指定特殊名的布尔类型元素值
+     *
+     * @param name 特殊名
+     * @return 布尔类型元素值 | false
+     * @see #getByte(String)
+     */
+    public boolean getBoolean(String name) {
+        return getByte(name) != 0;
+    }
+
+    /**
+     * 将指定特殊名从此 NBT 复合标签内删除
+     *
+     * @param name 特殊名
+     * @return 之前与特殊名关联的值, 如果没有映射关系则返回 null
+     */
+    public NBTBase remove(String name) {
+        return value.remove(name);
+    }
+
+    /**
+     * 获取此 NBT 复合标签的元素是否为空
+     *
+     * @return 元素是否为空
+     */
     public boolean isEmpty() {
-
-        return getHandleMap().isEmpty();
+        return value.isEmpty();
     }
 
-    @Override
-    public boolean containsKey(Object key) {
-
-        return getHandleMap().containsKey(key);
+    /**
+     * 获取此 NBT 复合标签是否拥有指定特殊名的元素值
+     *
+     * @param name 特殊名
+     * @return true 则拥有, 否则 false
+     */
+    public boolean contains(String name) {
+        return value.containsKey(name);
     }
 
-    @Override
-    public boolean containsValue(Object value) {
-
-        return getHandleMap().containsValue(value);
+    /**
+     * 获取此 NBT 复合标签的元素数量大小
+     *
+     * @return 数量大小
+     */
+    public int size() {
+        return value.size();
     }
 
-    @Override
-    public NBTBase get(Object key) {
-
-        return NBTBase.wrap(getHandleMap().get(key));
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public NBTBase put(String key, NBTBase value) {
-
-        NBTBase base = NBTBase.wrap(getHandleMap().get(key));
-        Object tag = value.clone().handle;
-        NBTReflect.getHandle().setTagName(tag, key);
-        getHandleMap().put(key, tag);
-        return base;
-    }
-
-    public NBTBase put(String key, Object value) {
-
-        return put(key, NBTBase.getByValue(value));
-    }
-
-    @SuppressWarnings("deprecation")
-    public void putToHandle(String key, NBTBase value) {
-
-        Object tag = value.clone().handle;
-        NBTReflect.getHandle().setTagName(tag, key);
-        getHandleMap().put(key, tag);
-    }
-
-    @Override
-    public NBTBase remove(Object key) {
-
-        NBTBase base = NBTBase.wrap(getHandleMap().get(key));
-        getHandleMap().remove(key);
-        return base;
-    }
-
-    @Override
-    public void putAll(Map<? extends String, ? extends NBTBase> m) {
-
-        Iterator iterator = m.entrySet().iterator();
-
-        while(iterator.hasNext()) {
-
-            Entry entry = (Entry) iterator.next();
-            put((String) entry.getKey(), (NBTBase) entry.getValue());
-        }
-    }
-
-    @Override
+    /**
+     * 移除此 NBT 复合标签的所有元素标签
+     */
     public void clear() {
-
-        getHandleMap().clear();
+        this.value.clear();
     }
 
-    @Override
+    /**
+     * 获取此 NBT 复合标签的特殊名集合
+     *
+     * @return 特殊名集合
+     */
     public Set<String> keySet() {
-
-        return new NBTTagCompound.MapKeySetWrapped(getHandleMap().keySet());
+        return value.keySet();
     }
 
-    @Override
+    /**
+     * 获取此 NBT 复合标签的元素值集合
+     *
+     * @return 元素值集合
+     */
     public Collection<NBTBase> values() {
-
-        return new NBTTagCompound.MapValuesWrapped(getHandleMap().values());
+        return value.values();
     }
 
     @Override
-    public Set<Entry<String, NBTBase>> entrySet() {
-
-        return new NBTTagCompound.EntrySetWrapped(getHandleMap().entrySet());
+    public void read(DataInput input) throws IOException {
+        List<NBTBase> valueList = new ArrayList<>();
+        try {
+            NBTBase nbt;
+            while((nbt = NBTUtil.read(input)) != null)
+                valueList.add(nbt);
+        } catch (Exception e) {
+            throw new IOException("结束 NBTTagEnd 标签不存在.");
+        }
+        for(NBTBase nbt : valueList)
+            put(nbt);
     }
 
     @Override
-    public int hashCode() {
+    public void write(DataOutput output) throws IOException {
+        for(NBTBase nbt : values())
+            NBTUtil.write(output, nbt);
+        output.writeByte(0);
+    }
 
-        return handle.hashCode();
+    @Override
+    public NBTTagCompound clone() {
+        Map<String, NBTBase> value = new HashMap<>();
+        for(Map.Entry<String, NBTBase> entry : super.value.entrySet())
+            value.put(entry.getKey(), entry.getValue());
+        return new NBTTagCompound(getName(), value);
+    }
+
+    @Override
+    public Iterator<NBTBase> iterator() {
+        return values().iterator();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(super.equals(obj)) {
+            NBTTagCompound other = (NBTTagCompound) obj;
+            return value.entrySet().equals(other.value.entrySet());
+        }
+        return false;
     }
 
     @Override
     public String toString() {
-
-        Iterator iterator = this.entrySet().iterator();
-
-        if(!iterator.hasNext()) {
-
-            return "{}";
-        }
-        else {
-
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append('{');
-
-            while(true) {
-
-                Entry e = (Entry)iterator.next();
-                String key = (String)e.getKey();
-                NBTBase value = (NBTBase)e.getValue();
-                stringBuilder.append(key);
-                stringBuilder.append('=');
-
-                if(value == this) {
-
-                    stringBuilder.append("(this Compound)");
-                }
-                else if(value instanceof NBTTagString) {
-
-                    String stringValue = ((NBTTagString)value).get();
-                    stringValue = stringValue.replace("\\", "\\\\");
-                    stringValue = stringValue.replace("\n", "\\n");
-                    stringValue = stringValue.replace("\b", "\\b");
-                    stringValue = stringValue.replace("\r", "\\r");
-                    stringValue = stringValue.replace("\t", "\\t");
-                    stringValue = stringValue.replace("\f", "\\f");
-                    stringValue = stringValue.replace("\"", "\\\"");
-                    stringValue = stringValue.replace("&", "\\&");
-                    stringValue = stringValue.replace(String.valueOf('§'), "&");
-                    stringBuilder.append("\"").append(stringValue).append("\"");
-                }
-                else {
-
-                    stringBuilder.append(value);
-                }
-                if(!iterator.hasNext()) {
-
-                    return stringBuilder.append('}').toString();
-                }
-                stringBuilder.append(",");
-            }
-        }
+        return toString(false);
     }
 
-    private static <T> T[] finishToArray(T[] result, Iterator<?> iterator) {
+    /**
+     * 将此 NBT 复合标签转换为字符串
+     *
+     * @param json 是否 Json 格式
+     * @return 字符串
+     */
+    public String toString(boolean json) {
+        StringBuilder builder = new StringBuilder("{");
+        for(Iterator<String> iterator = value.keySet().iterator(); iterator.hasNext();) {
+            String key = iterator.next();
+            if(builder.length() != 1)
+                builder.append(",");
+            if(json)
+                builder.append("\"").append(key).append("\"");
+            else
+                builder.append(key);
+            builder.append(":");
 
-        int index = 0;
-
-        for(int i = result.length; iterator.hasNext(); result[index++] = (T) iterator.next()) {
-
-            int cap = result.length;
-
-            if(index == cap) {
-
-                int newCap = (cap / 2 + 1) * 3;
-
-                if(newCap <= cap) {
-
-                    if(cap == 2147483647) {
-
-                        throw new OutOfMemoryError("Required array size too large.");
-                    }
-                    newCap = 2147483647;
-                }
-                result = Arrays.copyOf(result, newCap);
-            }
+            NBTBase nbt = value.get(key);
+            if(nbt instanceof NBTTagCompound)
+                builder.append(((NBTTagCompound) nbt).toString(json));
+            else if(nbt instanceof NBTTagList)
+                builder.append(((NBTTagList) nbt).toString(json));
+            else
+                builder.append(nbt);
         }
-        return index == result.length ? result : Arrays.copyOf(result, index);
-    }
-
-    private class EntrySetWrapped extends AbstractSet<Entry<String, NBTBase>> {
-
-        private final Set<Entry<String, Object>> handle;
-
-        public EntrySetWrapped(Set<Entry<String, Object>> handle) {
-
-            this.handle = handle;
-        }
-
-        @Override
-        public Iterator<Entry<String, NBTBase>> iterator() {
-
-            return new NBTTagCompound.EntrySetWrapped.IteratorWrapped(handle.iterator());
-        }
-
-        @Override
-        public int size() {
-
-            return handle.size();
-        }
-
-        @Override
-        public Object[] toArray() {
-
-            Entry[] entries = new Entry[size()];
-            Iterator iterator = iterator();
-
-            for(int i = 0; i < entries.length; ++i) {
-
-                if(!iterator.hasNext()) {
-
-                    return Arrays.copyOf(entries, i);
-                }
-                entries[i] = (Entry) iterator.next();
-            }
-            return iterator.hasNext() ? NBTTagCompound.finishToArray(entries, iterator) : entries;
-        }
-
-        @Override
-        public <T> T[] toArray(T[] a) {
-
-            Entry[] entries = new Entry[size()];
-            Iterator iterator = iterator();
-
-            for(int i = 0; i < entries.length; ++i) {
-
-                if(!iterator.hasNext()) {
-
-                    return (T[]) Arrays.copyOf(entries, i);
-                }
-                entries[i] = (Entry) iterator.next();
-            }
-            return iterator.hasNext() ? NBTTagCompound.finishToArray((T[]) entries, iterator) : (T[]) entries;
-        }
-
-        @Override
-        public boolean remove(Object o) {
-
-            return handle.remove(NBTBase.getByValue(o).handle);
-        }
-
-        @Override
-        public boolean containsAll(Collection<?> c) {
-
-            ArrayList<Object> bases = new ArrayList<>();
-            Iterator iterator = c.iterator();
-
-            while (iterator.hasNext()) {
-
-                Object obj = iterator.next();
-                bases.add(NBTBase.getByValue(obj).handle);
-            }
-            return handle.containsAll(bases);
-        }
-
-        @Override
-        @Deprecated
-        public boolean addAll(Collection<? extends Entry<String, NBTBase>> c) {
-
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        @Deprecated
-        public boolean removeAll(Collection<?> c) {
-
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        @Deprecated
-        public boolean retainAll(Collection<?> c) {
-
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public void clear() {
-
-            handle.clear();
-        }
-
-        private class IteratorWrapped implements Iterator<Entry<String, NBTBase>> {
-
-            Iterator<Entry<String, Object>> handle;
-
-            public IteratorWrapped(Iterator<Entry<String, Object>> handle) {
-
-                this.handle = handle;
-            }
-
-            public boolean hasNext() {
-                return this.handle.hasNext();
-            }
-
-            public Entry<String, NBTBase> next() {
-                return new NBTTagCompound.EntrySetWrapped.IteratorWrapped.EntryWrapped(handle.next());
-            }
-
-            public void remove() {
-
-                this.handle.remove();
-            }
-
-            class EntryWrapped implements Entry<String, NBTBase> {
-
-                Entry<String, Object> handle;
-
-                public EntryWrapped(Entry<String, Object> handle) {
-
-                    this.handle = handle;
-                }
-
-                public String getKey() {
-
-                    return handle.getKey();
-                }
-
-                public NBTBase getValue() {
-
-                    return NBTBase.wrap(handle.getValue());
-                }
-
-                public NBTBase setValue(NBTBase value) {
-
-                    NBTBase result = NBTBase.wrap(handle.getValue());
-                    handle.setValue(value.clone().handle);
-                    return result;
-                }
-            }
-        }
-    }
-
-    private class MapValuesWrapped implements Collection<NBTBase> {
-
-        private Collection<Object> handle;
-
-        public MapValuesWrapped(Collection<Object> handle) {
-
-            this.handle = handle;
-        }
-
-        public int size() {
-            return this.handle.size();
-        }
-
-        public boolean isEmpty() {
-
-            return handle.isEmpty();
-        }
-
-        public boolean contains(Object o) {
-
-            NBTBase base = NBTBase.getByValue(o);
-            return handle.contains(base.handle);
-        }
-
-        public Iterator<NBTBase> iterator() {
-
-            return new NBTTagCompound.MapValuesWrapped.IteritorWrapped(handle.iterator());
-        }
-
-        public NBTBase[] toArray() {
-
-            NBTBase[] base = new NBTBase[handle.size()];
-            int index = 0; Object obj;
-
-            for(Iterator var3 = handle.iterator(); var3.hasNext(); base[index++] = NBTBase.wrap(obj)) {
-                obj = var3.next();
-            }
-            return base;
-        }
-
-        public <T> T[] toArray(T[] a) {
-
-            Object[] array = handle.toArray(a);
-            int limit = array.length;
-
-            if(a.length < limit) {
-
-                limit = a.length;
-            }
-            for(int i = 0; i < limit; ++i) {
-
-                array[i] = NBTBase.wrap(array[i]);
-            }
-            return a;
-        }
-
-        public boolean add(NBTBase nbtBase) {
-
-            return handle.add(nbtBase.handle);
-        }
-
-        public boolean remove(Object o) {
-
-            NBTBase base = NBTBase.getByValue(o);
-            return handle.remove(base.handle);
-        }
-
-        public boolean containsAll(Collection<?> c) {
-
-            Iterator iterator = c.iterator();
-            Object obj;
-
-            do {
-
-                if(!iterator.hasNext()) {
-
-                    return true;
-                }
-                obj = iterator.next();
-            }
-            while(this.contains(obj));
-
-            return false;
-        }
-
-        public boolean addAll(Collection<? extends NBTBase> c) {
-
-            boolean result = false;
-            Iterator iterator = c.iterator();
-
-            while(iterator.hasNext()) {
-
-                NBTBase base = (NBTBase)iterator.next();
-
-                if(this.handle.add(base.handle)) {
-
-                    result = true;
-                }
-            }
-            return result;
-        }
-
-        public boolean removeAll(Collection<?> c) {
-
-            boolean result = false;
-            Iterator iterator = c.iterator();
-
-            while(iterator.hasNext()) {
-
-                Object o = iterator.next();
-                NBTBase base = NBTBase.getByValue(o);
-
-                if(this.handle.remove(base.handle)) {
-
-                    result = true;
-                }
-            }
-            return result;
-        }
-
-        public boolean retainAll(Collection<?> c) {
-
-            ArrayList<Object> bases = new ArrayList<>();
-            Iterator iterator = c.iterator();
-
-            while(iterator.hasNext()) {
-
-                Object obj = iterator.next();
-                NBTBase base = NBTBase.getByValue(obj);
-                bases.add(base.handle);
-            }
-            return handle.retainAll(bases);
-        }
-
-        public void clear() {
-
-            handle.clear();
-        }
-
-        private class IteritorWrapped implements Iterator<NBTBase> {
-
-            Iterator<Object> handle;
-
-            public IteritorWrapped(Iterator<Object> handle) {
-
-                this.handle = handle;
-            }
-
-            @Override
-            public boolean hasNext() {
-
-                return handle.hasNext();
-            }
-
-            @Override
-            public NBTBase next() {
-
-                return NBTBase.wrap(handle.next());
-            }
-
-            @Override
-            public void remove() {
-
-                handle.remove();
-            }
-        }
-    }
-
-    private class MapKeySetWrapped implements Set<String> {
-
-        Set<String> handle;
-
-        public MapKeySetWrapped(Set<String> handle) {
-
-            this.handle = handle;
-        }
-
-        public int size() {
-
-            return handle.size();
-        }
-
-        public boolean isEmpty() {
-
-            return handle.isEmpty();
-        }
-
-        public boolean contains(Object o) {
-
-            return handle.contains(o);
-        }
-
-        public Iterator<String> iterator() {
-
-            return handle.iterator();
-        }
-
-        public Object[] toArray() {
-
-            return handle.toArray();
-        }
-
-        public <T> T[] toArray(T[] a) {
-
-            return handle.toArray(a);
-        }
-
-        public boolean add(String s) {
-
-            return handle.add(s);
-        }
-
-        public boolean remove(Object o) {
-
-            return handle.remove(o);
-        }
-
-        public boolean containsAll(Collection<?> c) {
-
-            return handle.containsAll(c);
-        }
-
-        public boolean addAll(Collection<? extends String> c) {
-
-            return handle.addAll(c);
-        }
-
-        public boolean retainAll(Collection<?> c) {
-
-            return handle.retainAll(c);
-        }
-
-        public boolean removeAll(Collection<?> c) {
-
-            return handle.removeAll(c);
-        }
-
-        public void clear() {
-
-            handle.clear();
-        }
+        return builder.append("}").toString();
     }
 }

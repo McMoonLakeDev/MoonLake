@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The MoonLake Authors
+ * Copyright (C) 2017 The MoonLake Authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,66 +14,73 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
- 
+
+
 package com.minecraft.moonlake.nbt;
 
-import com.minecraft.moonlake.api.nbt.NBTReflect;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 /**
- * Created by MoonLake on 2016/9/21.
+ * <h1>NBTTagString</h1>
+ * NBT 标签字符串类型数据
  *
- * @deprecated 已过时, 将于 v1.9-a6 删除.
+ * @version 1.0
+ * @author Month_Light
+ * @see NBTTagDatable
+ * @see String
  */
-@Deprecated
 public class NBTTagString extends NBTTagDatable<String> {
 
+    /**
+     * NBT 标签字符串类型数据构造函数
+     */
     public NBTTagString() {
-
-        this("");
+        this("", "");
     }
 
-    public NBTTagString(String handle) {
-
-        super(NBTReflect.getHandle().createTag(handle, (byte) 8));
+    /**
+     * NBT 标签字符串类型数据构造函数
+     *
+     * @param name 特殊名
+     */
+    public NBTTagString(String name) {
+        this(name, "");
     }
 
-
-    public NBTTagString(boolean ignored, Object tag) {
-
-        super(tag);
-
-        if(NBTReflect.getHandle().getTagType(tag) != 8) {
-
-            throw new IllegalArgumentException("The nbt tag not is nbt tag string object.");
-        }
-    }
-
-    @Override
-    public byte getTypeId() {
-
-        return 8;
+    /**
+     * NBT 标签字符串类型数据构造函数
+     *
+     * @param name 特殊名
+     * @param value 值
+     */
+    public NBTTagString(String name, String value) {
+        super(name, value);
     }
 
     @Override
-    public int hashCode() {
+    public NBTType getType() {
+        return NBTType.STRING;
+    }
 
-        return handle.hashCode();
+    @Override
+    public void read(DataInput input) throws IOException {
+        super.value = input.readUTF();
+    }
+
+    @Override
+    public void write(DataOutput output) throws IOException {
+        output.writeUTF(value);
     }
 
     @Override
     public String toString() {
-
-        return get();
+        return "\"" + value.replace("\"", "\\\"") + "\"";
     }
 
     @Override
-    public boolean equals(Object obj) {
-
-        if(obj instanceof NBTBase) {
-
-            obj = ((NBTBase) obj).getHandle();
-        }
-        return handle.equals(obj);
+    public NBTTagString clone() {
+        return new NBTTagString(getName(), value);
     }
 }
