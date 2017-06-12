@@ -23,77 +23,47 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 /**
- * <h1>NBTTagByte</h1>
- * NBT 标签字节类型数据
+ * <h1>NBTTagEnd</h1>
+ * NBT 结束标签
  *
  * @version 1.0
  * @author Month_Light
- * @see NBTTagNumber
- * @see Byte
+ * @see NBTBase
  */
-public class NBTTagByte extends NBTTagNumber<Byte> {
+public class NBTTagEnd extends NBTBase {
 
     /**
-     * NBT 标签字节类型数据构造函数
+     * NBT 结束标签构造函数
      */
-    public NBTTagByte() {
-        this((byte) 0);
+    public NBTTagEnd() {
+        super("");
     }
 
-    /**
-     * NBT 标签字节类型数据构造函数
-     *
-     * @param value 值
-     */
-    public NBTTagByte(byte value) {
-        this("", value);
-    }
-
-    /**
-     * NBT 标签字节类型数据构造函数
-     *
-     * @param name 特殊名
-     */
-    public NBTTagByte(String name) {
-        this(name, (byte) 0);
-    }
-
-    /**
-     * NBT 标签字节类型数据构造函数
-     *
-     * @param name 特殊名
-     * @param value 值
-     */
-    public NBTTagByte(String name, Byte value) {
-        super(name, value);
-    }
-
-    /**
-     * 设置此 NBT 标签字节数据的值
-     *
-     * @param value 新值
-     */
-    public void set(byte value) {
-        super.value = value;
+    @Override
+    public Object getValue() {
+        return null;
     }
 
     @Override
     public NBTType getType() {
-        return NBTType.BYTE;
+        return NBTType.END;
     }
 
     @Override
     public void read(DataInput input) throws IOException {
-        super.value = input.readByte();
     }
 
     @Override
     public void write(DataOutput output) throws IOException {
-        output.writeByte(value);
     }
 
     @Override
-    public NBTTagByte clone() {
-        return new NBTTagByte(getName(), value);
+    public String toString() {
+        return "END";
+    }
+
+    @Override
+    public NBTTagEnd clone() {
+        return new NBTTagEnd();
     }
 }

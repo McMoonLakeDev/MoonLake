@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The MoonLake Authors
+ * Copyright (C) 2017 The MoonLake Authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,32 +14,72 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
- 
+
+
 package com.minecraft.moonlake.nbt;
 
-import com.minecraft.moonlake.api.nbt.NBTReflect;
-
 /**
- * Created by MoonLake on 2016/9/21.
+ * <h1>NBTTagDatable</h1>
+ * NBT 标签泛型数据
  *
- * @deprecated 已过时, 将于 v1.9-a6 删除.
+ * @param <T> 值类型
+ * @version 1.0
+ * @author Month_Ligth
+ * @see NBTBase
  */
-@Deprecated
 public abstract class NBTTagDatable<T> extends NBTBase {
 
-    public NBTTagDatable(Object handle) {
+    /**
+     * Type Value
+     */
+    protected T value;
 
-        super(handle);
+    /**
+     * NBT 标签泛型数据构造函数
+     *
+     * @param name 特殊名
+     * @param value 值
+     */
+    public NBTTagDatable(String name, T value) {
+        super(name);
+        this.value = value;
     }
 
-    public T get() {
-
-        return (T) NBTReflect.getHandle().getValue(handle);
+    /**
+     * 获取此 NBT 标签泛型数据的值
+     *
+     * @return 值
+     */
+    @Override
+    public T getValue() {
+        return value;
     }
 
-    public void set(T value) {
+    /**
+     * 设置此 NBT 标签泛型数据的值
+     *
+     * @param value 新值
+     */
+    public void setValue(T value) {
+        this.value = value;
+    }
 
-        NBTReflect.getHandle().setValue(handle, value);
+    @Override
+    public boolean equals(Object obj) {
+        if(super.equals(obj)) {
+            NBTTagDatable other = (NBTTagDatable) obj;
+            return value.equals(other.value);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() ^ value.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return value.toString();
     }
 }

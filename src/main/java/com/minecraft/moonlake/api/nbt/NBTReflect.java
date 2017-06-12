@@ -225,7 +225,7 @@ public abstract class NBTReflect {
 
         Validate.notNull(type, "The nbt tag type object is null.");
 
-        return createTag(convertValue(value, type.getType()));
+        return createTag(convertValue(value, (byte) type.getTypeId()));
     }
 
     /**

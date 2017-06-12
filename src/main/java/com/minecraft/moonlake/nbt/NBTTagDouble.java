@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The MoonLake Authors
+ * Copyright (C) 2017 The MoonLake Authors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,71 +14,86 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
- 
+
+
 package com.minecraft.moonlake.nbt;
 
-import com.minecraft.moonlake.api.nbt.NBTReflect;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 /**
- * Created by MoonLake on 2016/9/21.
+ * <h1>NBTTagDouble</h1>
+ * NBT 标签双精度浮点类型数据
  *
- * @deprecated 已过时, 将于 v1.9-a6 删除.
+ * @version 1.0
+ * @author Month_Light
+ * @see NBTTagNumber
+ * @see Double
  */
-@Deprecated
-public class NBTTagDouble extends NBTTagNumberic<Double> {
+public class NBTTagDouble extends NBTTagNumber<Double> {
 
+    /**
+     * NBT 标签双精度浮点类型数据构造函数
+     */
     public NBTTagDouble() {
-
         this(0d);
     }
 
-    public NBTTagDouble(double handle) {
-
-        super(handle);
+    /**
+     * NBT 标签双精度浮点类型数据构造函数
+     *
+     * @param value 值
+     */
+    public NBTTagDouble(double value) {
+        this("", value);
     }
 
-    public NBTTagDouble(boolean ignored, Object tag) {
+    /**
+     * NBT 标签双精度浮点类型数据构造函数
+     *
+     * @param name 特殊名
+     */
+    public NBTTagDouble(String name) {
+        this(name, 0d);
+    }
 
-        super(tag);
+    /**
+     * NBT 标签双精度浮点类型数据构造函数
+     *
+     * @param name 特殊名
+     * @param value 值
+     */
+    public NBTTagDouble(String name, Double value) {
+        super(name, value);
+    }
 
-        if(NBTReflect.getHandle().getTagType(tag) != 6) {
-
-            throw new IllegalArgumentException("The nbt tag not is nbt tag double object.");
-        }
+    /**
+     * 设置此 NBT 标签双精度浮点数据的值
+     *
+     * @param value 新值
+     */
+    public void set(double value) {
+        super.value = value;
     }
 
     @Override
-    public void setNumber(Number number) {
-
-        set(number.doubleValue());
+    public NBTType getType() {
+        return NBTType.DOUBLE;
     }
 
     @Override
-    public byte getTypeId() {
-
-        return 6;
+    public void read(DataInput input) throws IOException {
+        super.value = input.readDouble();
     }
 
     @Override
-    public Double get() {
-
-        return (Double) NBTReflect.getHandle().getValue(handle);
+    public void write(DataOutput output) throws IOException {
+        output.writeDouble(value);
     }
 
     @Override
-    public int hashCode() {
-
-        return handle.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-
-        if(obj instanceof NBTBase) {
-
-            obj = ((NBTBase) obj).getHandle();
-        }
-        return handle.equals(obj);
+    public NBTTagDouble clone() {
+        return new NBTTagDouble(getName(), value);
     }
 }
