@@ -163,4 +163,13 @@ public class ClassManager {
         }
         return clazz;
     }
+
+    /**
+     * 获取当前类管理器的类加载器
+     *
+     * @return ClassLoader
+     */
+    public static ClassLoader getClassLoader() {
+        return ClassManager.class.getClassLoader();
+    }
 }
