@@ -16,7 +16,27 @@
  */
 
 
-package com.minecraft.moonlake.chat;
+package com.minecraft.moonlake.api.chat.adapter;
 
-public class MoonLakeChat {
+import com.minecraft.moonlake.api.chat.ChatComponent;
+import com.minecraft.moonlake.api.chat.ChatSerializer;
+import com.minecraft.moonlake.validate.Validate;
+
+public class ChatJsonAdapter implements ChatAdapter {
+
+    private final String json;
+
+    public ChatJsonAdapter(String json) {
+        this.json = Validate.checkNotNull(json);
+    }
+
+    @Override
+    public ChatComponent toChatComponent() {
+        return ChatSerializer.fromJson(json);
+    }
+
+    @Override
+    public Object toIChatBaseComponent() {
+        return ChatSerializer.iCBCFromJson(json);
+    }
 }

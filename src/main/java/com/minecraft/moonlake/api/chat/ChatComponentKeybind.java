@@ -16,56 +16,50 @@
  */
 
 
-package com.minecraft.moonlake.chat;
-
-import com.minecraft.moonlake.validate.Validate;
+package com.minecraft.moonlake.api.chat;
 
 /**
- * <h1>ChatComponentText</h1>
- * 聊天文本组件类
+ * <h1>ChatComponentKeybind</h1>
+ * 聊天热键绑定类
  *
  * @version 1.0
  * @author Month_Light
  */
-public class ChatComponentText extends ChatComponentBase {
+public class ChatComponentKeybind extends ChatComponentBase {
 
-    private String text;
+    private String keybind;
 
     /**
-     * 聊天文本组件类构造函数
-     *
-     * @param text 文本
+     * 聊天热键绑定类构造函数
      */
-    public ChatComponentText(String text) {
-        this.text = text;
+    public ChatComponentKeybind() {
     }
 
     /**
-     * 聊天文本组件类构造函数
+     * 聊天热键绑定类构造函数
      *
-     * @param text 文本组件
-     * @throws IllegalArgumentException 如果文本组件对象为 {@code null} 则抛出异常
+     * @param keybind 热键绑定
      */
-    public ChatComponentText(ChatComponentText text) {
-        this.text = Validate.checkNotNull(text).getText();
+    public ChatComponentKeybind(String keybind) {
+        this.keybind = keybind;
     }
 
     /**
-     * 获取此聊天文本组件的文本内容
+     * 获取此聊天热键绑定组件的热键绑定
      *
-     * @return 文本内容
+     * @return 热键绑定
      */
-    public String getText() {
-        return text;
+    public String getKeybind() {
+        return keybind;
     }
 
     /**
-     * 设置此聊天文本组件的文本内容
+     * 设置此聊天热键绑定组件的热键绑定
      *
-     * @param text 文本内容
+     * @param keyBind 热键绑定
      */
-    public ChatComponentText setText(String text) {
-        this.text = text;
+    public ChatComponentKeybind setKeybind(String keyBind) {
+        this.keybind = keyBind;
         return this;
     }
 
@@ -73,9 +67,9 @@ public class ChatComponentText extends ChatComponentBase {
     public boolean equals(Object obj) {
         if(obj == this)
             return true;
-        if(obj instanceof ChatComponentText) {
-            ChatComponentText other = (ChatComponentText) obj;
-            return super.equals(obj) && text != null ? text.equals(other.text) : other.text == null;
+        if(obj instanceof ChatComponentKeybind) {
+            ChatComponentKeybind other = (ChatComponentKeybind) obj;
+            return super.equals(obj) && keybind != null ? keybind.equals(other.keybind) : other.keybind == null;
         }
         return false;
     }
@@ -83,14 +77,14 @@ public class ChatComponentText extends ChatComponentBase {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + (keybind != null ? keybind.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "ChatComponentText{" +
-                "text='" + text + '\'' +
+                "keybind='" + keybind + '\'' +
                 ", style=" + getStyle() +
                 ", extras=" + getExtras() +
                 '}';

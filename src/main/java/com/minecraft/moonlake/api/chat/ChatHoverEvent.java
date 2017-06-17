@@ -16,33 +16,33 @@
  */
 
 
-package com.minecraft.moonlake.chat;
+package com.minecraft.moonlake.api.chat;
 
 /**
- * <h1>ChatClickEvent</h1>
- * 聊天组件点击事件
+ * <h1>ChatHoverEvent</h1>
+ * 聊天组件移动上事件
  *
  * @version 1.0
  * @author Month_Light
  */
-public class ChatClickEvent {
+public class ChatHoverEvent {
 
     private final Action action;
-    private final String value;
+    private final ChatComponent value;
 
     /**
-     * 聊天组件点击事件构造函数
+     * 聊天组件移动上事件构造函数
      *
-     * @param action 交互类型
-     * @param value 值
+     * @param action
+     * @param value
      */
-    public ChatClickEvent(Action action, String value) {
+    public ChatHoverEvent(Action action, ChatComponent value) {
         this.action = action;
         this.value = value;
     }
 
     /**
-     * 获取此聊天组件点击事件的交互类型
+     * 获取此聊天组件移动上事件的交互类型
      *
      * @return 交互类型
      */
@@ -51,11 +51,11 @@ public class ChatClickEvent {
     }
 
     /**
-     * 获取此聊天组件点击事件的值
+     * 获取此聊天组件移动上事件的值
      *
      * @return 值
      */
-    public String getValue() {
+    public ChatComponent getValue() {
         return value;
     }
 
@@ -63,8 +63,8 @@ public class ChatClickEvent {
     public boolean equals(Object obj) {
         if(obj == this)
             return true;
-        if(obj instanceof ChatClickEvent) {
-            ChatClickEvent other = (ChatClickEvent) obj;
+        if(obj instanceof ChatHoverEvent) {
+            ChatHoverEvent other = (ChatHoverEvent) obj;
             return action == other.action && value != null ? value.equals(other.value) : other.value == null;
         }
         return false;
@@ -79,7 +79,7 @@ public class ChatClickEvent {
 
     @Override
     public String toString() {
-        return "ChatClickEvent{" +
+        return "ChatHoverEvent{" +
                 "action=" + action +
                 ", value='" + value + '\'' +
                 '}';
@@ -87,7 +87,7 @@ public class ChatClickEvent {
 
     /**
      * <h1>Action</h1>
-     * 聊天组件点击事件交互类型
+     * 聊天组件移动上事件交互类型
      *
      * @version 1.0
      * @author Month_Light
@@ -95,29 +95,25 @@ public class ChatClickEvent {
     public enum Action {
 
         /**
-         * 交互类型: 打开链接
+         * 交互类型: 显示文本
          */
-        OPEN_URL,
+        SHOW_TEXT,
         /**
-         * 交互类型: 打开文件
+         * 交互类型: 显示成就
          */
-        OPEN_FILE,
+        SHOW_ACHIEVEMENT,
         /**
-         * 交互类型: 执行命令
+         * 交互类型: 显示物品
          */
-        RUN_COMMAND,
+        SHOW_ITEM,
         /**
-         * 交互类型: 替换命令
+         * 交互类型: 显示实体
          */
-        SUGGEST_COMMAND,
-        /**
-         * 交互类型: 改变页面
-         */
-        CHANGE_PAGE,
+        SHOW_ENTITY,
         ;
 
         /**
-         * 从名称返回聊天组件点击事件交互类型
+         * 从名称返回聊天组件移动上事件交互类型
          *
          * @param name 名称
          * @return Action

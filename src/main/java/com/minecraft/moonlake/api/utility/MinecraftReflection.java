@@ -22,6 +22,7 @@ import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.MoonLakePluginDebug;
 import com.minecraft.moonlake.api.Valuable;
 import com.minecraft.moonlake.api.chat.ChatSerializer;
+import com.minecraft.moonlake.api.chat.adapter.ChatAdapter;
 import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.api.nbt.NBTReflect;
@@ -716,8 +717,16 @@ public class MinecraftReflection {
         return chatMessageConstructor.invoke(text, params);
     }
 
+    public static ChatAdapter getJsonAdapter(String json) {
+        return ChatSerializer.jsonAdapter(json);
+    }
+
+    public static ChatAdapter getObjectAdapter(Object obj) {
+        return ChatSerializer.objectAdapter(obj);
+    }
+
     public static Object getIChatBaseComponentFromJson(String json) {
-        return ChatSerializer.fromJson(json);
+        return ChatSerializer.iCBCFromJson(json);
     }
 
     public static Object getIChatBaseComponentFromString(String string) {
@@ -961,6 +970,10 @@ public class MinecraftReflection {
 
     public static boolean is(Class<?> clazz, Object obj) {
         return !(clazz == null || obj == null) && clazz.isAssignableFrom(obj.getClass());
+    }
+
+    public static boolean isICBC(Object obj) {
+        return is(getIChatBaseComponentClass(), obj);
     }
 
     public static boolean isEntityPlayer(Object obj) {
