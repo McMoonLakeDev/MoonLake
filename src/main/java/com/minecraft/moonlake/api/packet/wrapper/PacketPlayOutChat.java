@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api.packet.wrapper;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.chat.ChatComponent;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
@@ -66,7 +67,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
 
     private StringProperty message;
     private ObjectProperty<Mode> mode;
-    private BooleanProperty isFancyMessage;
+    private BooleanProperty isJson;
 
     /**
      * 数据包输出聊天消息构造函数
@@ -95,7 +96,19 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
 
         this.message = new SimpleStringProperty(fancyMessage.toJsonString());
         this.mode = new SimpleObjectProperty<>(Mode.CHAT);
-        this.isFancyMessage = new SimpleBooleanProperty(true);
+        this.isJson = new SimpleBooleanProperty(true);
+    }
+
+    /**
+     * 数据包输出聊天消息构造函数
+     *
+     * @param chatComponent 聊天组件
+     */
+    public PacketPlayOutChat(ChatComponent chatComponent) {
+
+        this.message = new SimpleStringProperty(chatComponent.toJson());
+        this.mode = new SimpleObjectProperty<>(Mode.CHAT);
+        this.isJson = new SimpleBooleanProperty(true);
     }
 
     /**
@@ -108,14 +121,14 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
 
         this.message = new SimpleStringProperty(message);
         this.mode = new SimpleObjectProperty<>(mode);
-        this.isFancyMessage = null;
+        this.isJson = null;
     }
 
     /**
-     * 获取此数据包输出聊天消息的消息属性 (注: 如果是花式消息不建议二次修改值, 非法格式会抛出异常)
+     * 获取此数据包输出聊天消息的消息属性 (注: 如果是 Json 格式不建议二次修改值, 非法格式会抛出异常)
      *
      * @return 消息属性
-     * @see #isFancyMessage()
+     * @see #isJson()
      */
     public StringProperty messageProperty() {
 
@@ -133,13 +146,24 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
     }
 
     /**
+     * 获取此数据包数据聊天消息是否为 Json 格式内容
+     *
+     * @return 是否为 Json 格式内容
+     */
+    public boolean isJson() {
+
+        return isJson != null && isJson.get();
+    }
+
+    /**
      * 获取此数据包输出聊天消息是否为花式消息
      *
      * @return 是否为花式消息
+     * @deprecated @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #isJson()}
      */
     public boolean isFancyMessage() {
 
-        return isFancyMessage != null && isFancyMessage.get();
+        return isJson();
     }
 
     @Override
@@ -161,7 +185,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
         try {
             // 先用调用 NMS 的 PacketPlayOutChat 构造函数, 参数 IChatBaseComponent, byte
             // 进行反射实例发送
-            Object nmsChat = isFancyMessage == null ? MinecraftReflection.getIChatBaseComponentFromString(message) : MinecraftReflection.getIChatBaseComponentFromJson(message);
+            Object nmsChat = isJson == null ? MinecraftReflection.getIChatBaseComponentFromString(message) : MinecraftReflection.getIChatBaseComponentFromJson(message);
             if(nmsChat == null) MinecraftReflection.getIChatBaseComponentFromString(message); // 如果为 null 的话再调用一次进行格式化
             Object packet = packetPlayOutChatConstructor.invoke(nmsChat, adapter(mode.get() == null ? (byte) 1 : mode.get().getMode()));
             MinecraftReflection.sendPacket(players, packet);
@@ -176,7 +200,7 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
                 // 这两个字段分别对应 IChatBaseComponent, byte 的 2 个属性
                 // 貌似 PacketPlayOutChat 有一个 md_5 包的 BaseComponent 类数组字段需要忽略
                 Object packet = packetPlayOutChatVoidConstructor.invoke();
-                Object nmsChat = isFancyMessage == null ? MinecraftReflection.getIChatBaseComponentFromString(message) : MinecraftReflection.getIChatBaseComponentFromJson(message);
+                Object nmsChat = isJson == null ? MinecraftReflection.getIChatBaseComponentFromString(message) : MinecraftReflection.getIChatBaseComponentFromJson(message);
                 if(nmsChat == null) throw new IllegalArgumentException("The message object is illegal value: " + message);
                 Object[] values = { nmsChat, adapter(mode.get().getMode()) };
                 Class<?>[] ignoreFieldTypes = { BaseComponent[].class }; // 忽略字段类型为 BaseComponent[] 数组
