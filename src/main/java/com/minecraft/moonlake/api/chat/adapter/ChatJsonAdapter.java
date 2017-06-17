@@ -22,10 +22,22 @@ import com.minecraft.moonlake.api.chat.ChatComponent;
 import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.validate.Validate;
 
+/**
+ * <h1>ChatJsonAdapter</h1>
+ * 聊天组件 Json 适配器类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class ChatJsonAdapter implements ChatAdapter {
 
     private final String json;
 
+    /**
+     * 聊天组件 Json 适配器类构造函数
+     *
+     * @param json Json
+     */
     public ChatJsonAdapter(String json) {
         this.json = Validate.checkNotNull(json);
     }

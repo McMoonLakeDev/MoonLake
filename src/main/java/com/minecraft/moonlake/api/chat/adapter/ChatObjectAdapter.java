@@ -23,14 +23,32 @@ import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.validate.Validate;
 
+/**
+ * <h1>ChatObjectAdapter</h1>
+ * 聊天组件对象适配器类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public class ChatObjectAdapter implements ChatAdapter {
 
     private final Object obj;
 
+    /**
+     * 聊天组件对象适配器类构造函数
+     *
+     * @param chatComponent 聊天组件对象
+     */
     public ChatObjectAdapter(ChatComponent chatComponent) {
         this.obj = chatComponent;
     }
 
+    /**
+     * 聊天组件对象适配器类构造函数
+     *
+     * @param icbc IChatBaseComponent
+     * @throws IllegalArgumentException 如果对象不是 {@code IChatBaseComponent} 的实例则抛出异常
+     */
     public ChatObjectAdapter(Object icbc) {
         Validate.isTrue(MinecraftReflection.isICBC(icbc), "The object is not IChatBaseComponent instance: " + icbc);
         this.obj = icbc;

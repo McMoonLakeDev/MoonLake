@@ -20,9 +20,26 @@ package com.minecraft.moonlake.api.chat.adapter;
 
 import com.minecraft.moonlake.api.chat.ChatComponent;
 
+/**
+ * <h1>ChatAdapter</h1>
+ * 聊天组件适配器接口
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 public interface ChatAdapter {
 
+    /**
+     * 转换为 ChatComponent 聊天组件对象
+     *
+     * @return ChatComponent
+     */
     ChatComponent toChatComponent();
 
+    /**
+     * 转换为 IChatBaseComponent 对象
+     *
+     * @return IChatBaseComponent
+     */
     Object toIChatBaseComponent();
 }
