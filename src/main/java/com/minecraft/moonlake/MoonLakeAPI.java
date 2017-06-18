@@ -596,11 +596,29 @@ public final class MoonLakeAPI {
         return FancyMessageFactory.get().message(text);
     }
 
+    /**
+     * 将指定聊天花式组件对象发送给命令执行者
+     *
+     * @param componentFancy 聊天花式组件
+     * @param sender 命令执行者
+     * @throws IllegalArgumentException 如果聊天花式组件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果命令执行者对象为 {@code null} 则抛出异常
+     */
     public static void chatComponentSent(ChatComponentFancy componentFancy, CommandSender sender) {
 
         chatComponentSent(componentFancy, PacketPlayOutChat.Mode.CHAT, sender);
     }
 
+    /**
+     * 将指定聊天花式组件对象发送给命令执行者
+     *
+     * @param componentFancy 聊天花式组件
+     * @param mode 聊天模式
+     * @param sender 命令执行者
+     * @throws IllegalArgumentException 如果聊天花式组件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果聊天模式对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果命令执行者对象为 {@code null} 则抛出异常
+     */
     public static void chatComponentSent(ChatComponentFancy componentFancy, PacketPlayOutChat.Mode mode, CommandSender sender) {
 
         Validate.notNull(componentFancy, "The chat component fancy object is null.");
@@ -608,11 +626,29 @@ public final class MoonLakeAPI {
         chatComponentSent(componentFancy.build(), mode, sender);
     }
 
+    /**
+     * 将指定聊天组件对象发送给命令执行者
+     *
+     * @param chatComponent 聊天组件
+     * @param sender 命令执行者
+     * @throws IllegalArgumentException 如果聊天组件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果命令执行者对象为 {@code null} 则抛出异常
+     */
     public static void chatComponentSent(ChatComponent chatComponent, CommandSender sender) {
 
         chatComponentSent(chatComponent, PacketPlayOutChat.Mode.CHAT, sender);
     }
 
+    /**
+     * 将指定聊天组件对象发送给命令执行者
+     *
+     * @param chatComponent 聊天组件
+     * @param mode 聊天模式
+     * @param sender 命令执行者
+     * @throws IllegalArgumentException 如果聊天组件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果聊天模式对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果命令执行者对象为 {@code null} 则抛出异常
+     */
     public static void chatComponentSent(ChatComponent chatComponent, PacketPlayOutChat.Mode mode, CommandSender sender) {
 
         Validate.notNull(chatComponent, "The chat component object is null.");
