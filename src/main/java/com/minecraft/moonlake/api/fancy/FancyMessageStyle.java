@@ -18,13 +18,17 @@
  
 package com.minecraft.moonlake.api.fancy;
 
+import com.minecraft.moonlake.api.chat.ChatColor;
+
 /**
  * <h1>FancyMessageStyle</h1>
  * 花式消息样式
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link ChatColor}
  */
+@Deprecated
 public enum FancyMessageStyle {
 
     /**

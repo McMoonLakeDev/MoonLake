@@ -24,6 +24,7 @@ import com.minecraft.moonlake.api.annotation.plugin.command.CommandAnnotation;
 import com.minecraft.moonlake.api.annotation.plugin.config.ConfigAnnotation;
 import com.minecraft.moonlake.api.anvil.AnvilWindow;
 import com.minecraft.moonlake.api.anvil.AnvilWindowFactory;
+import com.minecraft.moonlake.api.chat.ChatComponentFancy;
 import com.minecraft.moonlake.api.event.MoonLakeEvent;
 import com.minecraft.moonlake.api.event.MoonLakeListener;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
@@ -572,7 +573,9 @@ public final class MoonLakeAPI {
      *
      * @param text 文本
      * @return FancyMessage
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link ChatComponentFancy}
      */
+    @Deprecated
     public static FancyMessage newFancyMessage(String text) {
 
         return FancyMessageFactory.get().message(text);
@@ -583,7 +586,9 @@ public final class MoonLakeAPI {
      *
      * @param text 文本
      * @return FancyMessage
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link ChatComponentFancy}
      */
+    @Deprecated
     public static FancyMessage newFancyMessage(TextualComponent text) {
 
         return FancyMessageFactory.get().message(text);
