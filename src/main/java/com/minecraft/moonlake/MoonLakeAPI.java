@@ -24,6 +24,7 @@ import com.minecraft.moonlake.api.annotation.plugin.command.CommandAnnotation;
 import com.minecraft.moonlake.api.annotation.plugin.config.ConfigAnnotation;
 import com.minecraft.moonlake.api.anvil.AnvilWindow;
 import com.minecraft.moonlake.api.anvil.AnvilWindowFactory;
+import com.minecraft.moonlake.api.chat.ChatComponent;
 import com.minecraft.moonlake.api.chat.ChatComponentFancy;
 import com.minecraft.moonlake.api.event.MoonLakeEvent;
 import com.minecraft.moonlake.api.event.MoonLakeListener;
@@ -45,6 +46,7 @@ import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
 import com.minecraft.moonlake.api.packet.exception.PacketException;
 import com.minecraft.moonlake.api.packet.listener.PacketMessageListener;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutChat;
 import com.minecraft.moonlake.api.player.DependPlayerFactory;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.api.player.PlayerLibrary;
@@ -592,6 +594,38 @@ public final class MoonLakeAPI {
     public static FancyMessage newFancyMessage(TextualComponent text) {
 
         return FancyMessageFactory.get().message(text);
+    }
+
+    public static void chatComponentSent(ChatComponentFancy componentFancy, CommandSender sender) {
+
+        chatComponentSent(componentFancy, PacketPlayOutChat.Mode.CHAT, sender);
+    }
+
+    public static void chatComponentSent(ChatComponentFancy componentFancy, PacketPlayOutChat.Mode mode, CommandSender sender) {
+
+        Validate.notNull(componentFancy, "The chat component fancy object is null.");
+
+        chatComponentSent(componentFancy.build(), mode, sender);
+    }
+
+    public static void chatComponentSent(ChatComponent chatComponent, CommandSender sender) {
+
+        chatComponentSent(chatComponent, PacketPlayOutChat.Mode.CHAT, sender);
+    }
+
+    public static void chatComponentSent(ChatComponent chatComponent, PacketPlayOutChat.Mode mode, CommandSender sender) {
+
+        Validate.notNull(chatComponent, "The chat component object is null.");
+        Validate.notNull(mode, "The mode object is null.");
+        Validate.notNull(sender, "The sender object is null.");
+
+        if(sender instanceof Player) {
+            PacketPlayOutChat ppoc = new PacketPlayOutChat(chatComponent);
+            ppoc.modeProperty().set(mode);
+            ppoc.send((Player) sender);
+        } else {
+            sender.sendMessage(chatComponent.toRaw());
+        }
     }
 
     /**
