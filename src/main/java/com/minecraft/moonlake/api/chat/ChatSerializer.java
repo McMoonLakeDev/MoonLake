@@ -201,13 +201,29 @@ public final class ChatSerializer {
     }
 
     private static void toRaw0(ChatComponent chatComponent, boolean color, StringBuilder builder) {
-        if(chatComponent instanceof ChatComponentText) {
-            if(color && chatComponent.getStyle().getColor() != null)
-                builder.append('\u00A7').append(chatComponent.getStyle().getColor().getCode());
-            builder.append(((ChatComponentText) chatComponent).getText());
+        if(color) {
+            ChatStyle style = chatComponent.getStyle();
+            if(style.color != null)
+                appendColor(builder, style.color);
+            if(style.bold != null && style.bold)
+                appendColor(builder, ChatColor.BOLD);
+            if(style.italic != null && style.italic)
+                appendColor(builder, ChatColor.ITALIC);
+            if(style.strikethrough != null && style.strikethrough)
+                appendColor(builder, ChatColor.STRIKETHROUGH);
+            if(style.underlined != null && style.underlined)
+                appendColor(builder, ChatColor.UNDERLINE);
+            if(style.obfuscated != null && style.obfuscated)
+                appendColor(builder, ChatColor.OBFUSCATED);
         }
+        if(chatComponent instanceof ChatComponentText)
+            builder.append(((ChatComponentText) chatComponent).getText());
         for(ChatComponent extra : chatComponent.getExtras())
             toRaw0(extra, color, builder);
+    }
+
+    private static void appendColor(StringBuilder builder, ChatColor color) {
+        builder.append('\u00A7').append(color.getCode());
     }
 
     /**

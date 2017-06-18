@@ -81,6 +81,76 @@ public class ChatComponentFancy {
     }
 
     /**
+     * 设置当前聊天组件具有加粗属性
+     */
+    public ChatComponentFancy withBold() {
+        getLast().getStyle().setBold(true);
+        return this;
+    }
+
+    /**
+     * 设置当前聊天组件具有斜体属性
+     */
+    public ChatComponentFancy withItalic() {
+        getLast().getStyle().setItalic(true);
+        return this;
+    }
+
+    /**
+     * 设置当前聊天组件具有下划线属性
+     */
+    public ChatComponentFancy withUnderlined() {
+        getLast().getStyle().setUnderlined(true);
+        return this;
+    }
+
+    /**
+     * 设置当前聊天组件具有删除线属性
+     */
+    public ChatComponentFancy withStrikethrough() {
+        getLast().getStyle().setStrikethrough(true);
+        return this;
+    }
+
+    /**
+     * 设置当前聊天组件具有随机字符属性
+     */
+    public ChatComponentFancy withObfuscated() {
+        getLast().getStyle().setObfuscated(true);
+        return this;
+    }
+
+    /**
+     * 设置当前聊天组件具有点击事件属性
+     *
+     * @param action 交互类型
+     * @param value 值
+     * @throws IllegalArgumentException 如果交互类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果值对象为 {@code null} 则抛出异常
+     */
+    public ChatComponentFancy withClickEvent(ChatClickEvent.Action action, String value) {
+        Validate.notNull(action, "The click event action object is null.");
+        Validate.notNull(action, "The click event value object is null.");
+        getLast().getStyle().setClickEvent(new ChatClickEvent(action, value));
+        return this;
+    }
+
+    /**
+     * 设置当前聊天组件具有移动上事件属性
+     *
+     * @param action 交互类型
+     * @param value 值
+     * @throws IllegalArgumentException 如果交互类型对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果值对象为 {@code null} 则抛出异常
+     */
+    public ChatComponentFancy withHoverEvent(ChatHoverEvent.Action action, ChatComponent value) {
+        Validate.notNull(action, "The hover event action object is null.");
+        Validate.notNull(action, "The hover event value object is null.");
+        getLast().getStyle().setHoverEvent(new ChatHoverEvent(action, value));
+        return this;
+    }
+
+    /**
      * 设置当前聊天组件的聊天点击事件打开文件属性
      *
      * @param path 文件路径
