@@ -17,9 +17,11 @@ By Month_Light Ver: 1.9-a5
 * 月色之湖玩家: [点我](/src/main/java/com/minecraft/moonlake/api/player/MoonLakePlayer.java "Player Library")
 * 物品栈支持库: [点我](/src/main/java/com/minecraft/moonlake/api/item "Item Library")
 * 数据库支持库: [点我](/src/main/java/com/minecraft/moonlake/mysql "MySQL Library")
-* 花式消息支持库: [点我](/src/main/java/com/minecraft/moonlake/api/fancy "FancyMessage")
+* ~~花式消息支持库: [点我](/src/main/java/com/minecraft/moonlake/api/fancy "FancyMessage")~~
+* 聊天组件支持库: [点我](/src/main/java/com/minecraft/moonlake/api/chat "ChatComponent")
 * NMS 数据包发送: [点我](/src/main/java/com/minecraft/moonlake/api/packet "NMS Packet")
 * NBT 操作支持库: [点我](/src/main/java/com/minecraft/moonlake/api/nbt "NBT Library")
+* NBT 组件支持库: [点我](/src/main/java/com/minecraft/moonlake/nbt "NBT Component")
 * 插件注解支持库: [点我](/src/main/java/com/minecraft/moonlake/api/annotation/plugin "Plugin Annotation")
 * 数据包通道监听器: [点我](/src/main/java/com/minecraft/moonlake/api/packet/listener "Packet Channel Listener")
 * 蹦极代理数据包支持库: [点我](/src/main/java/com/minecraft/moonlake/api/packet/PacketPlayOutBungee.java "Packet BungeeCord")

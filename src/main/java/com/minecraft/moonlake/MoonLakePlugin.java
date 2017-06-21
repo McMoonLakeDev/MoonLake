@@ -55,9 +55,11 @@ import java.util.logging.Level;
  *          <li>月色之湖玩家 {@link com.minecraft.moonlake.api.player.MoonLakePlayer}</li>
  *          <li>物品栈支持库 {@link com.minecraft.moonlake.api.item.ItemLibrary}</li>
  *          <li>数据库支持库 {@link com.minecraft.moonlake.mysql.MySQLConnection}</li>
- *          <li>花式消息支持库 {@link com.minecraft.moonlake.api.fancy.FancyMessage}</li>
+ *          <li><s>花式消息支持库 {@link com.minecraft.moonlake.api.fancy.FancyMessage}</s></li>
+ *          <li>聊天组件支持库 {@link com.minecraft.moonlake.api.chat.ChatComponent}</li>
  *          <li>NMS 数据包发送 {@link com.minecraft.moonlake.api.packet.Packet}</li>
  *          <li>NBT 操作支持库 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}</li>
+ *          <li>NBT 组件支持库 {@link com.minecraft.moonlake.nbt.NBTTagCompound}</li>
  *          <li>插件注解支持库 {@link com.minecraft.moonlake.api.annotation.plugin.PluginAnnotation}</li>
  *          <li>数据包通道监听器 {@link com.minecraft.moonlake.api.packet.listener.PacketListener}</li>
  *      </ul>
