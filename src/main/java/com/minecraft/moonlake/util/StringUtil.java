@@ -36,10 +36,10 @@ import java.util.regex.Pattern;
  * <h1>StringUtil</h1>
  * 字符串实现类（详细doc待补充...）
  *
- * @version 1.1
+ * @version 1.2
  * @author Month_Light
  */
-public class StringUtil {
+public final class StringUtil {
 
     /**
      * 颜色字符: \u0026
@@ -64,7 +64,7 @@ public class StringUtil {
     /**
      * 字符串实现类构造函数
      */
-    public StringUtil() {
+    private StringUtil() {
 
     }
 
@@ -343,7 +343,7 @@ public class StringUtil {
      */
     public static boolean isNotNull(Object obj) {
 
-        return !isNull(obj);
+        return obj != null;
     }
 
     /**
@@ -506,16 +506,11 @@ public class StringUtil {
         if(obj instanceof Number)
             return ((Number) obj).intValue();
 
-        if(obj instanceof String) {
-
-            String str = obj.toString();
-
-            try {
-                return Integer.parseInt(str);
-            } catch (Exception e) {
-            }
+        try {
+            return Integer.parseInt(obj.toString());
+        } catch (Exception e) {
+            return def;
         }
-        return def;
     }
 
     /**
@@ -564,14 +559,11 @@ public class StringUtil {
         if(obj instanceof Number)
             return ((Number) obj).longValue();
 
-        if(obj instanceof String) {
-
-            try {
-                return Long.parseLong(obj.toString());
-            } catch (Exception e) {
-            }
+        try {
+            return Long.parseLong(obj.toString());
+        } catch (Exception e) {
+            return def;
         }
-        return def;
     }
 
     /**
@@ -620,14 +612,11 @@ public class StringUtil {
         if(obj instanceof Number)
             return ((Number) obj).floatValue();
 
-        if(obj instanceof String) {
-
-            try {
-                return Float.parseFloat(obj.toString());
-            } catch (Exception e) {
-            }
+        try {
+            return Float.parseFloat(obj.toString());
+        } catch (Exception e) {
+            return def;
         }
-        return def;
     }
 
     /**
@@ -676,16 +665,11 @@ public class StringUtil {
         if(obj instanceof Number)
             return ((Number) obj).doubleValue();
 
-        if(obj instanceof String) {
-
-            String str = obj.toString();
-
-            try {
-                return Double.parseDouble(str);
-            } catch (Exception e) {
-            }
+        try {
+            return Double.parseDouble(obj.toString());
+        } catch (Exception e) {
+            return def;
         }
-        return def;
     }
 
     /**
@@ -826,5 +810,35 @@ public class StringUtil {
         } else {
             return def;
         }
+    }
+
+    /**
+     * 判断指定字符串是否为 {@code null | empty} 则返回 {@code null} 否则返回源
+     *
+     * @param string 字符串
+     * @return {@code null | string}
+     */
+    public static String emptyToNull(String string) {
+        return isNullOrEmpty(string) ? null : string;
+    }
+
+    /**
+     * 判断指定字符串是否为 {@code null} 则返回 {@code empty} 否则返回源
+     *
+     * @param string 字符串
+     * @return {@code empty | string}
+     */
+    public static String nullToEmpty(String string) {
+        return isNull(string) ? "" : string;
+    }
+
+    /**
+     * 判断指定字符串是否为 {@code null | empty} 值
+     *
+     * @param string 字符串
+     * @return 是否为 {@code null | empty} 值
+     */
+    public static boolean isNullOrEmpty(String string) {
+        return string == null || string.isEmpty();
     }
 }
