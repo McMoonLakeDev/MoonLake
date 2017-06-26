@@ -107,6 +107,8 @@ public class MinecraftReflection {
     private static volatile MethodAccessor entityHandleMethod;
     private static volatile MethodAccessor itemGetByIdMethod;
     private static volatile MethodAccessor enumOrdinalMethod;
+    private static volatile FieldAccessor packetPlayInCustomPayloadPacketDataSerializerField;
+    private static volatile FieldAccessor packetPlayInCustomPayloadChannelField;
     private static volatile FieldAccessor playerConnectionNetworkManagerChannelField;
     private static volatile FieldAccessor serverConnectionNetworkManagerListField;
     private static volatile FieldAccessor playerConnectionNetworkManagerField;
@@ -478,6 +480,18 @@ public class MinecraftReflection {
     @Nullable
     public static <T extends PacketPlayOutBukkit> Class<?> getPacketClassFromPacketWrapper(T packetWrapper) {
         return packetWrapper.getPacketClass();
+    }
+
+    public static FieldAccessor getPacketPlayInCustomPayloadChannelField() {
+        if(packetPlayInCustomPayloadChannelField == null)
+            packetPlayInCustomPayloadChannelField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(getMinecraftClass("PacketPlayInCustomPayload"), true).getFieldByType("channel", String.class));
+        return packetPlayInCustomPayloadChannelField;
+    }
+
+    public static FieldAccessor getPacketPlayInCustomPayloadPacketDataSerializerField() {
+        if(packetPlayInCustomPayloadPacketDataSerializerField == null)
+            packetPlayInCustomPayloadPacketDataSerializerField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(getMinecraftClass("PacketPlayInCustomPayload"), true).getFieldByType("data", getPacketDataSerializerClass()));
+        return packetPlayInCustomPayloadPacketDataSerializerField;
     }
 
     public static FieldAccessor getCraftMetaSkullProfileField() {
