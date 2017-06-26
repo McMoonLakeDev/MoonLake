@@ -24,6 +24,7 @@ import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 /**
@@ -61,5 +62,11 @@ public class PacketPlayOutCrashClient extends PacketPlayOutBukkitAbstract {
             new PacketPlayOutExplosion(player.getLocation(), Float.MAX_VALUE, new ArrayList<>(), new Vector(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE)).send(player);
 
         return true;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+        return null;
     }
 }

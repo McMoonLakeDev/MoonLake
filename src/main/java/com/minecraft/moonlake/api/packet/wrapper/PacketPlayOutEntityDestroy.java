@@ -30,6 +30,8 @@ import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>PacketPlayOutEntityDestroy</h1>
  * 数据包输出实体破坏（详细doc待补充...）
@@ -116,10 +118,26 @@ public class PacketPlayOutEntityDestroy extends PacketPlayOutBukkitAbstract {
         Validate.notNull(entityIds, "The entity id object is null.");
 
         try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        int[] entityIds = entityIdsProperty().get();
+        Validate.notNull(entityIds, "The entity id object is null.");
+
+        try {
             // 先用调用 NMS 的 PacketPlayOutEntityDestroy 构造函数, 参数 int[]
             // 进行反射实例发送
-            MinecraftReflection.sendPacket(players, packetPlayOutEntityDestroyConstructor.invoke(entityIds));
-            return true;
+            return packetPlayOutEntityDestroyConstructor.invoke(entityIds);
 
         } catch (Exception e) {
             printException(e);
@@ -130,14 +148,12 @@ public class PacketPlayOutEntityDestroy extends PacketPlayOutBukkitAbstract {
                 // 这个字段对应 int[] 属性
                 Object packet = packetPlayOutEntityDestroyVoidConstructor.invoke();
                 Object[] values = { entityIds };
-                setFieldAccessibleAndValueSend(players, 1, CLASS_PACKETPLAYOUTENTITYDESTROY, packet, values);
-                return true;
+                return setFieldAccessibleAndValueGet(1, CLASS_PACKETPLAYOUTENTITYDESTROY, packet, values);
 
             } catch (Exception e1) {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 }

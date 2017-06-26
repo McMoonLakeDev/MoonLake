@@ -28,6 +28,8 @@ import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>PacketPlayOutCloseWindow</h1>
  * 数据包输出关闭窗口（详细doc待补充...）
@@ -95,10 +97,23 @@ public class PacketPlayOutCloseWindow extends PacketPlayOutBukkitAbstract {
             return true;
 
         try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        try {
             // 先用调用 NMS 的 PacketPlayOutCloseWindow 构造函数, 参数 int
             // 进行反射实例发送
-            MinecraftReflection.sendPacket(players, packetPlayOutCloseWindowConstructor.invoke(windowId.get()));
-            return true;
+            return packetPlayOutCloseWindowConstructor.invoke(windowId.get());
 
         } catch (Exception e) {
             printException(e);
@@ -109,14 +124,12 @@ public class PacketPlayOutCloseWindow extends PacketPlayOutBukkitAbstract {
                 // 这个字段对应 int 属性
                 Object packet = packetPlayOutCloseWindowVoidConstructor.invoke();
                 Object[] values = { windowId.get() };
-                setFieldAccessibleAndValueSend(players, 1, CLASS_PACKETPLAYOUTCLOSEWINDOW, packet, values);
-                return true;
+                return setFieldAccessibleAndValueGet(1, CLASS_PACKETPLAYOUTCLOSEWINDOW, packet, values);
 
             } catch (Exception e1) {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 }

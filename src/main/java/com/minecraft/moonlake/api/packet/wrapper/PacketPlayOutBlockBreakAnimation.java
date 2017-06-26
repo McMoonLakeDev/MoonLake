@@ -30,6 +30,8 @@ import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>PacketPlayOutBlockBreakAnimation</h1>
  * 数据包输出方块破坏动画（详细doc待补充...）
@@ -151,11 +153,26 @@ public class PacketPlayOutBlockBreakAnimation extends PacketPlayOutBukkitAbstrac
         Validate.notNull(blockPosition, "The block position object is null.");
 
         try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        BlockPosition blockPosition = blockPositionProperty().get();
+        Validate.notNull(blockPosition, "The block position object is null.");
+
+        try {
             // 先用调用 NMS 的 PacketPlayOutBlockBreakAnimation 构造函数, 参数 int, BlockPosition, int
             // 进行反射实例发送
-            Object packet = packetPlayOutBlockBreakAnimationConstructor.invoke(entityId.get(), blockPosition.asNMS(), value.get());
-            MinecraftReflection.sendPacket(players, packet);
-            return true;
+            return packetPlayOutBlockBreakAnimationConstructor.invoke(entityId.get(), blockPosition.asNMS(), value.get());
 
         } catch (Exception e) {
             printException(e);
@@ -166,14 +183,12 @@ public class PacketPlayOutBlockBreakAnimation extends PacketPlayOutBukkitAbstrac
                 // 这字段分别对应 int, BlockPosition, int 属性
                 Object packet = packetPlayOutBlockBreakAnimationVoidConstructor.invoke();
                 Object[] values = { entityId.get(), blockPosition.asNMS(), value.get() };
-                setFieldAccessibleAndValueSend(players, 3, CLASS_PACKETPLAYOUTBLOCKBREAKANIMATION, packet, values);
-                return true;
+                return setFieldAccessibleAndValueGet(3, CLASS_PACKETPLAYOUTBLOCKBREAKANIMATION, packet, values);
 
             } catch (Exception e1) {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 }

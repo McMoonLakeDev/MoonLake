@@ -21,10 +21,15 @@ package com.minecraft.moonlake.api.packet.wrapper;
 import com.minecraft.moonlake.api.nms.exception.NMSException;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.ObjectPropertyBase;
+import com.minecraft.moonlake.reflect.FuzzyReflect;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
+import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
+import com.minecraft.moonlake.validate.Validate;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+
+import java.nio.charset.Charset;
 
 /**
  * <h1>PacketDataSerializer</h1>
@@ -36,11 +41,13 @@ import io.netty.buffer.Unpooled;
 public class PacketDataSerializer {
 
     private static volatile ConstructorAccessor<?> packetDataSerializerConstructor;
+    private static volatile FieldAccessor packetDataSerializerByteBufField;
 
     static {
 
         Class<?> packetDataSerializer = MinecraftReflection.getPacketDataSerializerClass();
         packetDataSerializerConstructor = Accessors.getConstructorAccessor(packetDataSerializer, ByteBuf.class);
+        packetDataSerializerByteBufField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(packetDataSerializer, true).getFieldByType("byteBuf", ByteBuf.class));
     }
 
     private ByteBufProperty byteBuf;
@@ -152,6 +159,112 @@ public class PacketDataSerializer {
 
             throw new NMSException("The as nms packet data serializer exception.", e);
         }
+    }
+
+    public static PacketDataSerializer fromNMS(Object nms) throws NMSException {
+
+        Validate.notNull(nms, "The nms packet data serializer object is null.");
+        Validate.isTrue(MinecraftReflection.is(MinecraftReflection.getPacketDataSerializerClass(), nms), "The nms packet data serializer object is not instance.");
+
+        try {
+
+            ByteBuf wrapped = Unpooled.wrappedBuffer((ByteBuf) packetDataSerializerByteBufField.get(nms));
+            return new PacketDataSerializer(wrapped);
+
+        } catch (Exception e) {
+
+            throw new NMSException("The from nms packet data serializer exception.", e);
+        }
+    }
+
+    public PacketDataSerializer writeVarInt(int value) {
+        // 详情查看 http://wiki.vg/Protocol#VarInt_and_VarLong
+        while((value & ~0x7F) != 0) {
+            writeByte((value & 0x7F) | 0x80);
+            value >>>= 7;
+        }
+        return writeByte(value);
+    }
+
+    public PacketDataSerializer writeVarLong(long value) {
+        // 详情查看 http://wiki.vg/Protocol#VarInt_and_VarLong
+        while((value & ~0x7F) != 0) {
+            writeByte((int) (value & 0x7F) | 0x80);
+            value >>>= 7;
+        }
+        return writeByte((int) value);
+    }
+
+    public PacketDataSerializer writeBytes(byte[] value) {
+        getByteBuf().writeBytes(value);
+        return this;
+    }
+
+    public PacketDataSerializer writeByte(int value) {
+        getByteBuf().writeByte(value);
+        return this;
+    }
+
+    public PacketDataSerializer writeInt(int value) {
+        getByteBuf().writeInt(value);
+        return this;
+    }
+
+    public PacketDataSerializer writeString(String value) {
+        Validate.notNull(value, "The string value object is null.");
+        byte[] bytes = value.getBytes(Charset.forName("utf-8"));
+        if(bytes.length > 32767)
+            throw new IllegalArgumentException("字符串值字节长度太大, 最大只能为 32767.");
+        writeVarInt(bytes.length);
+        writeBytes(bytes);
+        return this;
+    }
+
+    public PacketDataSerializer writeStrings(String[] value) {
+        Validate.notNull(value, "The string[] value object is null.");
+        for(String str : value)
+            writeString(str);
+        return this;
+    }
+
+    public byte[] readBytes(int length) {
+        Validate.isTrue(length >= 0, "待读取的数组长度不能小于 0.");
+        byte[] bytes = new byte[length];
+        getByteBuf().readBytes(bytes);
+        return bytes;
+    }
+
+    public byte readByte() {
+        return getByteBuf().readByte();
+    }
+
+    public int readVarInt() {
+        // 详情查看 http://wiki.vg/Protocol#VarInt_and_VarLong
+        int value = 0, size = 0, b;
+        while(((b = readByte()) & 0x80) == 0x80) {
+            value |= (b & 0x7F) << (size++ * 7);
+            if(size > 5)
+                throw new IllegalStateException("VarInt 值数据太大, 长度必须小于或等于 5.");
+        }
+        return value | ((b & 0x7F) << (size * 7));
+    }
+
+    public long readVarLong() {
+        // 详情查看 http://wiki.vg/Protocol#VarInt_and_VarLong
+        long value = 0;
+        int size = 0, b;
+        while(((b = readByte()) & 0x80) == 0x80) {
+            value |= (long) (b & 0x7F) << (size++ * 7);
+            if(size > 10)
+                throw new IllegalStateException("VarLong 值数据太大, 长度必须小于或等于 10.");
+        }
+        return value | ((long) (b & 0x7F) << (size * 7));
+    }
+
+    public String readString() {
+        int length = readVarInt();
+        byte[] bytes = readBytes(length);
+        return new String(bytes, Charset.forName("utf-8"));
     }
 
     /**

@@ -34,6 +34,8 @@ import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>PacketPlayOutRespawn</h1>
  * 数据包输出重生（详细doc待补充...）
@@ -165,14 +167,33 @@ public class PacketPlayOutRespawn extends PacketPlayOutBukkitAbstract {
         Validate.notNull(worldGameMode, "The world game mode object is null.");
 
         try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        WorldType worldType = worldTypeProperty().get();
+        WorldDifficulty worldDifficulty = worldDifficultyProperty().get();
+        GameMode worldGameMode = worldGameModeProperty().get();
+        Validate.notNull(worldType, "The world type object is null.");
+        Validate.notNull(worldDifficulty, "The world difficulty object is null");
+        Validate.notNull(worldGameMode, "The world game mode object is null.");
+
+        try {
             // 先用调用 NMS 的 PacketPlayOutRespawn 构造函数, 参数 int, EnumDifficulty, WorldType, EnumGamemode
             // 进行反射实例发送
             Object nmsType = MinecraftReflection.worldTypeGetByType(worldType.getName());
             Object nmsDifficulty = enumDifficultyGetByIdMethod.invoke(null, worldDifficulty.getId());
             Object nmsGameMode = MinecraftReflection.enumGamemodeGetById(worldGameMode.getValue());
-            Object packet = packetPlayOutRespawnConstructor.invoke(worldDimensionId.get(), nmsDifficulty, nmsType, nmsGameMode);
-            MinecraftReflection.sendPacket(players, packet);
-            return true;
+            return packetPlayOutRespawnConstructor.invoke(worldDimensionId.get(), nmsDifficulty, nmsType, nmsGameMode);
 
         } catch (Exception e) {
             printException(e);
@@ -186,15 +207,13 @@ public class PacketPlayOutRespawn extends PacketPlayOutBukkitAbstract {
                 Object nmsDifficulty = enumDifficultyGetByIdMethod.invoke(null, worldDifficulty.getId());
                 Object nmsGameMode = MinecraftReflection.enumGamemodeGetById(worldGameMode.getValue());
                 Object[] values = { worldDimensionId.get(), nmsDifficulty, nmsType, nmsGameMode };
-                setFieldAccessibleAndValueSend(players, 4, CLASS_PACKETPLAYOUTRESPAWN, packet, values);
-                return true;
+                return setFieldAccessibleAndValueGet(4, CLASS_PACKETPLAYOUTRESPAWN, packet, values);
 
             } catch (Exception e1) {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 
     /**

@@ -28,6 +28,8 @@ import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>PacketPlayOutWorldParticles</h1>
  * 数据包输出世界粒子效果（详细doc待补充...）
@@ -243,6 +245,20 @@ public class PacketPlayOutWorldParticles extends PacketPlayOutBukkitAbstract {
         if(super.fireEvent(this, players))
             return true;
 
+        try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
         ParticleEffect particle = particleProperty().get();
         if(particle == null)
             particle = ParticleEffect.BARRIER;
@@ -252,9 +268,7 @@ public class PacketPlayOutWorldParticles extends PacketPlayOutBukkitAbstract {
             // 参数 EnumParticles, boolean, float, float, float, float, float, float, float, int, int[]
             // 进行反射实例发送
             Object enumParticles = MinecraftReflection.enumParticleGetByParticle(particle);
-            Object packet = packetPlayOutWorldParticlesConstructor.invoke(enumParticles, longDistance.get(), x.get(), y.get(), z.get(), xOffset.get(), yOffset.get(), zOffset.get(), speed.get(), count.get(), arguments);
-            MinecraftReflection.sendPacket(players, packet);
-            return true;
+            return packetPlayOutWorldParticlesConstructor.invoke(enumParticles, longDistance.get(), x.get(), y.get(), z.get(), xOffset.get(), yOffset.get(), zOffset.get(), speed.get(), count.get(), arguments);
 
         } catch (Exception e) {
             printException(e);
@@ -266,14 +280,12 @@ public class PacketPlayOutWorldParticles extends PacketPlayOutBukkitAbstract {
                 Object packet = packetPlayOutWorldParticlesVoidConstructor.invoke();
                 Object enumParticles = MinecraftReflection.enumParticleGetByParticle(particle);
                 Object[] values = { enumParticles, longDistance.get(), x.get(), y.get(), z.get(), xOffset.get(), yOffset.get(), zOffset.get(), speed.get(), count.get(), arguments };
-                setFieldAccessibleAndValueSend(players, 11, CLASS_PACKETPLAYOUTWORLDPARTICLES, packet, values);
-                return true;
+                return setFieldAccessibleAndValueGet(11, CLASS_PACKETPLAYOUTWORLDPARTICLES, packet, values);
 
             } catch (Exception e1) {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 }

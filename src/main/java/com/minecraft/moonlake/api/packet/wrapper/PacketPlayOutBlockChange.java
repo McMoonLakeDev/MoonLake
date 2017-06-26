@@ -31,6 +31,8 @@ import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>PacketPlayOutBlockChange</h1>
  * 数据包输出方块改变（详细doc待补充...）
@@ -98,12 +100,27 @@ public class PacketPlayOutBlockChange extends PacketPlayOutBukkitAbstract {
         Validate.notNull(blockPosition.get(), "The block position object is null.");
 
         try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        Validate.notNull(world.get(), "The world object is null.");
+        Validate.notNull(blockPosition.get(), "The block position object is null.");
+
+        try {
             // 先用调用 NMS 的 PacketPlayOutBlockChange 构造函数, 参数 World, BlockPosition
             // 进行反射实例发送
             Object worldServer = MinecraftReflection.getWorldServer(world.get());
-            Object packet = packetPlayOutBlockChangeConstructor.invoke(worldServer, blockPosition.get().asNMS());
-            MinecraftReflection.sendPacket(players, packet);
-            return true;
+            return packetPlayOutBlockChangeConstructor.invoke(worldServer, blockPosition.get().asNMS());
 
         } catch (Exception e) {
             printException(e);
@@ -116,14 +133,12 @@ public class PacketPlayOutBlockChange extends PacketPlayOutBukkitAbstract {
                 Object blockData = worldGetTypeMethod.invoke(blockPositionObj);
                 Object packet = packetPlayOutBlockChangeVoidConstructor.invoke();
                 Object[] values = { blockPositionObj, blockData };
-                setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTBLOCKCHANGE, packet, values);
-                return true;
+                return setFieldAccessibleAndValueGet(2, CLASS_PACKETPLAYOUTBLOCKCHANGE, packet, values);
 
             } catch (Exception e1) {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 }

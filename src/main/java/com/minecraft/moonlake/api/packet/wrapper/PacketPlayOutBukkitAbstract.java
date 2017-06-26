@@ -26,7 +26,6 @@ import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.exception.PacketException;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
-import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
@@ -46,22 +45,22 @@ import java.lang.reflect.Field;
  */
 public abstract class PacketPlayOutBukkitAbstract extends PacketPlayOutAbstract implements PacketPlayOutBukkit {
 
-    protected static void setFieldAccessibleAndValueSend(Player[] players, int dest, Class<?> packetClass, Object packet, Object... values) throws Exception {
+    protected static Object setFieldAccessibleAndValueGet(int dest, Class<?> packetClass, Object packet, Object... values) throws Exception {
 
-        setFieldAccessibleAndValueSend(players, 0, dest, packetClass, packet, values);
+        return setFieldAccessibleAndValueGet(0, dest, packetClass, packet, values);
     }
 
-    protected static void setFieldAccessibleAndValueSend(Player[] players, int pos, int dest, Class<?> packetClass, Object packet, Object... values) throws Exception {
+    protected static Object setFieldAccessibleAndValueGet(int pos, int dest, Class<?> packetClass, Object packet, Object... values) throws Exception {
 
-        setFieldAccessibleAndValueSend(null, players, pos, dest, packetClass, packet, values);
+        return setFieldAccessibleAndValueGet(null, pos, dest, packetClass, packet, values);
     }
 
-    protected static void setFieldAccessibleAndValueSend(@Nullable Class<?>[] ignoreFieldTypes, Player[] players, int dest, Class<?> packetClass, Object packet, Object... values) throws Exception {
+    protected static Object setFieldAccessibleAndValueGet(@Nullable Class<?>[] ignoreFieldTypes, int dest, Class<?> packetClass, Object packet, Object... values) throws Exception {
 
-        setFieldAccessibleAndValueSend(ignoreFieldTypes, players, 0, dest, packetClass, packet, values);
+        return setFieldAccessibleAndValueGet(ignoreFieldTypes, 0, dest, packetClass, packet, values);
     }
 
-    protected static void setFieldAccessibleAndValueSend(@Nullable Class<?>[] ignoreFieldTypes, Player[] players, int pos, int dest, Class<?> packetClass, Object packet, Object... values) throws Exception {
+    protected static Object setFieldAccessibleAndValueGet(@Nullable Class<?>[] ignoreFieldTypes, int pos, int dest, Class<?> packetClass, Object packet, Object... values) throws Exception {
 
         Field[] fields = packetClass.getDeclaredFields();
         main:for(int i = pos; i < dest; i++) {
@@ -75,7 +74,7 @@ public abstract class PacketPlayOutBukkitAbstract extends PacketPlayOutAbstract 
                 field.setAccessible(true);
             field.set(packet, values[i]);
         }
-        MinecraftReflection.sendPacket(players, packet);
+        return packet;
     }
 
     protected static void printException(Throwable e) {

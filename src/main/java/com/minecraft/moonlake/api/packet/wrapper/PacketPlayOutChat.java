@@ -34,6 +34,8 @@ import com.minecraft.moonlake.validate.Validate;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>PacketPlayOutChat</h1>
  * 数据包输出聊天消息（详细doc待补充...）
@@ -183,13 +185,28 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
         Validate.notNull(message, "The message object is null.");
 
         try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        String message = messageProperty().get();
+        Validate.notNull(message, "The message object is null.");
+
+        try {
             // 先用调用 NMS 的 PacketPlayOutChat 构造函数, 参数 IChatBaseComponent, byte
             // 进行反射实例发送
             Object nmsChat = isJson == null ? MinecraftReflection.getIChatBaseComponentFromString(message) : MinecraftReflection.getIChatBaseComponentFromJson(message);
             if(nmsChat == null) MinecraftReflection.getIChatBaseComponentFromString(message); // 如果为 null 的话再调用一次进行格式化
-            Object packet = packetPlayOutChatConstructor.invoke(nmsChat, adapter(mode.get() == null ? (byte) 1 : mode.get().getMode()));
-            MinecraftReflection.sendPacket(players, packet);
-            return true;
+            return packetPlayOutChatConstructor.invoke(nmsChat, adapter(mode.get() == null ? (byte) 1 : mode.get().getMode()));
 
         } catch (Exception e) {
             printException(e);
@@ -204,15 +221,13 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
                 if(nmsChat == null) throw new IllegalArgumentException("The message object is illegal value: " + message);
                 Object[] values = { nmsChat, adapter(mode.get().getMode()) };
                 Class<?>[] ignoreFieldTypes = { BaseComponent[].class }; // 忽略字段类型为 BaseComponent[] 数组
-                setFieldAccessibleAndValueSend(ignoreFieldTypes, players, 3, CLASS_PACKETPLAYOUTCHAT, packet, values);
-                return true;
+                return setFieldAccessibleAndValueGet(ignoreFieldTypes, 3, CLASS_PACKETPLAYOUTCHAT, packet, values);
 
             } catch (Exception e1) {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 
     private static Object adapter(Object param) {

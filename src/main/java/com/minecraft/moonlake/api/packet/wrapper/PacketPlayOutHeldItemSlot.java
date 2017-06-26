@@ -28,6 +28,8 @@ import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>PacketPlayOutHeldItemSlot</h1>
  * 数据包输出手持物品槽位（详细doc待补充...）
@@ -105,10 +107,23 @@ public class PacketPlayOutHeldItemSlot extends PacketPlayOutBukkitAbstract {
             return true;
 
         try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        try {
             // 先用调用 NMS 的 PacketPlayOutHeldItemSlot 构造函数, 参数 int
             // 进行反射实例发送
-            MinecraftReflection.sendPacket(players, packetPlayOutHeldItemSlotConstructor.invoke(heldItemSlot.get()));
-            return true;
+            return packetPlayOutHeldItemSlotConstructor.invoke(heldItemSlot.get());
 
         } catch (Exception e) {
             printException(e);
@@ -119,14 +134,12 @@ public class PacketPlayOutHeldItemSlot extends PacketPlayOutBukkitAbstract {
                 // 这个字段对应 int 属性
                 Object packet = packetPlayOutHeldItemSlotVoidConstructor.invoke();
                 Object[] values = { heldItemSlot.get() };
-                setFieldAccessibleAndValueSend(players, 1, CLASS_PACKETPLAYOUTHELDITEMSLOT, packet, values);
-                return true;
+                return setFieldAccessibleAndValueGet(1, CLASS_PACKETPLAYOUTHELDITEMSLOT, packet, values);
 
             } catch (Exception e1) {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 }

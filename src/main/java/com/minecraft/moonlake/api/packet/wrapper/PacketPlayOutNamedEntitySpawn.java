@@ -33,6 +33,8 @@ import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>PacketPlayOutNamedEntitySpawn</h1>
  * 数据包输出名称实体生成（详细doc待补充...）
@@ -97,7 +99,6 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected boolean sendPacket(Player... players) throws Exception {
 
         // 触发事件判断如果为 true 则阻止发送
@@ -108,12 +109,28 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
         Validate.notNull(player, "The player object is null.");
 
         try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    @SuppressWarnings("deprecation")
+    public Object packet() {
+
+        Player player = entityProperty().get();
+        Validate.notNull(player, "The player object is null.");
+
+        try {
             // 先用调用 NMS 的 PacketPlayOutNamedEntitySpawn 构造函数, 参数 EntityHuman
             // 进行反射实例发送
             Object entityPlayer = MinecraftReflection.getEntityPlayer(player);
-            Object packet = packetPlayOutNamedEntitySpawnConstructor.invoke(entityPlayer);
-            MinecraftReflection.sendPacket(players, packet);
-            return true;
+            return packetPlayOutNamedEntitySpawnConstructor.invoke(entityPlayer);
 
         } catch (Exception e) {
             printException(e);
@@ -139,7 +156,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
                             player.getItemInHand().getTypeId(), // @SuppressWarnings("deprecation")
                             dataWatcher
                     };
-                    setFieldAccessibleAndValueSend(players, 9, CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN, packet, values);
+                    return setFieldAccessibleAndValueGet(9, CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN, packet, values);
 
                 } else {
                     Object[] values = {
@@ -152,15 +169,12 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutBukkitAbstract {
                             (byte) (int) (location.getPitch() * 256f / 320f),
                             dataWatcher
                     };
-                    setFieldAccessibleAndValueSend(players, 8, CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN, packet, values);
+                    return setFieldAccessibleAndValueGet(8, CLASS_PACKETPLAYOUTNAMEDENTITYSPAWN, packet, values);
                 }
-                return true;
-
             } catch (Exception e1) {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 }

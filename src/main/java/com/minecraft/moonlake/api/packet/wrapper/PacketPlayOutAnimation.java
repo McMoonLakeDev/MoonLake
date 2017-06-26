@@ -34,6 +34,7 @@ import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -144,17 +145,35 @@ public class PacketPlayOutAnimation extends PacketPlayOutBukkitAbstract {
                 return true; // 因为 1.8 及以下版本不支持副手功能
 
         try {
-            // 直接使用反射设置字段的方式来发送
-            Object packet = packetPlayOutAnimationVoidConstructor.invoke();
-            Object[] values = { entityId.get(), animationType.getId() };
-            setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTANIMATION, packet, values);
+            MinecraftReflection.sendPacket(players, packet());
             return true;
-
         } catch (Exception e) {
             printException(e);
         }
         // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
         return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        Type animationType = typeProperty().get();
+        Validate.notNull(animationType, "The animation type object is null.");
+
+        if(animationType == Type.SWING_OFFHAND_ARM)
+            if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9))
+                return null; // 因为 1.8 及以下版本不支持副手功能
+
+        try {
+            // 直接使用反射设置字段的方式来发送
+            Object packet = packetPlayOutAnimationVoidConstructor.invoke();
+            Object[] values = { entityId.get(), animationType.getId() };
+            return setFieldAccessibleAndValueGet(2, CLASS_PACKETPLAYOUTANIMATION, packet, values);
+        } catch (Exception e) {
+            printException(e);
+        }
+        return null;
     }
 
     /**

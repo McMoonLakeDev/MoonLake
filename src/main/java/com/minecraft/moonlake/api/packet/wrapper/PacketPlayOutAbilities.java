@@ -31,6 +31,8 @@ import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>PacketPlayOutAbilities</h1>
  * 数据包输出玩家能力（详细doc待补充...）
@@ -157,6 +159,23 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
         Validate.notNull(playerAbilities, "The player playerAbilities object is null.");
 
         try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        PlayerAbilities playerAbilities = playerAbilitiesProperty().getValue();
+        Validate.notNull(playerAbilities, "The player playerAbilities object is null.");
+
+        try {
             // 先用调用 NMS 的 PacketPlayOutAbilities 构造函数, 参数 PlayerAbilities
             // 进行反射实例发送
             Object nmsPlayerAbilities = playerAbilitiesConstructor.invoke();
@@ -167,8 +186,7 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
             playerAbilitiesMayBuildField.set(nmsPlayerAbilities, playerAbilities.mayBuild.get());
             playerAbilitiesFlySpeedField.set(nmsPlayerAbilities, playerAbilities.flySpeed.get());
             playerAbilitiesWalkSpeedField.set(nmsPlayerAbilities, playerAbilities.walkSpeed.get());
-            MinecraftReflection.sendPacket(players, packetPlayOutAbilitiesConstructor.invoke(nmsPlayerAbilities));
-            return true;
+            return packetPlayOutAbilitiesConstructor.invoke(nmsPlayerAbilities);
 
         } catch (Exception e) {
             printException(e);
@@ -185,8 +203,7 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
                         playerAbilities.canInstantlyBuild.get(),
                         playerAbilities.flySpeed.get(),
                         playerAbilities.walkSpeed.get()};
-                setFieldAccessibleAndValueSend(players, 6, CLASS_PACKETPLAYOUTABILITIES, packet, values);
-                return true;
+                return setFieldAccessibleAndValueGet(6, CLASS_PACKETPLAYOUTABILITIES, packet, values);
 
             } catch (Exception e1) {
                 printException(e1);
@@ -196,15 +213,13 @@ public class PacketPlayOutAbilities extends PacketPlayOutBukkitAbstract {
                 // 否则只有 1 个字段的话并且字段类型为 PlayerAbilities 的方式
                 Object nmsPlayerAbilities = playerAbilitiesConstructor.invoke();
                 Object packet = packetPlayOutAbilitiesVoidConstructor.invoke(nmsPlayerAbilities);
-                setFieldAccessibleAndValueSend(players, 1, CLASS_PACKETPLAYOUTABILITIES, packet, nmsPlayerAbilities);
-                return true;
+                return setFieldAccessibleAndValueGet(1, CLASS_PACKETPLAYOUTABILITIES, packet, nmsPlayerAbilities);
 
             } catch (Exception e1) {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 
     /**
