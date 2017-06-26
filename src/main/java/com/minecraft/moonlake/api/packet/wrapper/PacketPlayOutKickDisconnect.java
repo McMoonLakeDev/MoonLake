@@ -84,6 +84,12 @@ public class PacketPlayOutKickDisconnect extends PacketPlayOutBukkitAbstract {
     }
 
     @Override
+    public Class<?> getPacketClass() {
+
+        return CLASS_PACKETPLAYOUTKICKDISCONNECT;
+    }
+
+    @Override
     protected boolean sendPacket(Player... players) throws Exception {
 
         // 触发事件判断如果为 true 则阻止发送
