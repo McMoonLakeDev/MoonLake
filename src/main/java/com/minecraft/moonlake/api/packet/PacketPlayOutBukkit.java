@@ -22,6 +22,8 @@ import com.minecraft.moonlake.api.packet.exception.PacketException;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>PacketPlayOutBukkit</h1>
  * Minecraft 数据包输出 Bukkit
@@ -67,4 +69,12 @@ public interface PacketPlayOutBukkit extends PacketPlayOut, PacketNameable {
      * @throws PacketException 如果发送错误则抛出异常
      */
     void sendAll() throws PacketException;
+
+    /**
+     * 创建此数据包输出 Bukkit 对应的 NMS 数据包实例对象
+     *
+     * @return NMS Packet
+     */
+    @Nullable
+    Object packet();
 }
