@@ -18,6 +18,8 @@
 
 package com.minecraft.moonlake.api.packet.wrapper;
 
+import com.minecraft.moonlake.api.chat.ChatComponent;
+import com.minecraft.moonlake.api.chat.ChatSerializer;
 import com.minecraft.moonlake.api.nms.exception.NMSException;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.property.ObjectPropertyBase;
@@ -25,17 +27,18 @@ import com.minecraft.moonlake.reflect.FuzzyReflect;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.reflect.accessors.FieldAccessor;
+import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-import java.nio.charset.Charset;
+import java.util.UUID;
 
 /**
  * <h1>PacketDataSerializer</h1>
  * 数据包数据串行器包装类（详细doc待补充...）
  *
- * @version 1.1
+ * @version 1.2
  * @author Month_Light
  */
 public class PacketDataSerializer {
@@ -161,14 +164,22 @@ public class PacketDataSerializer {
         }
     }
 
-    public static PacketDataSerializer fromNMS(Object nms) throws NMSException {
+    /**
+     * 将指定 NMS 的 PacketDataSerializer 对象转换到此 PacketDataSerializer 对象
+     *
+     * @param nmsPacketDataSerializer NMS PacketDataSerializer
+     * @return PacketDataSerializer
+     * @throws IllegalArgumentException 如果 NMS PacketDataSerializer 对象为 {@code null} 或不是实例则抛出异常
+     * @throws NMSException 如果转换错误则抛出异常
+     */
+    public static PacketDataSerializer fromNMS(Object nmsPacketDataSerializer) throws NMSException {
 
-        Validate.notNull(nms, "The nms packet data serializer object is null.");
-        Validate.isTrue(MinecraftReflection.is(MinecraftReflection.getPacketDataSerializerClass(), nms), "The nms packet data serializer object is not instance.");
+        Validate.notNull(nmsPacketDataSerializer, "The nms packet data serializer object is null.");
+        Validate.isTrue(MinecraftReflection.is(MinecraftReflection.getPacketDataSerializerClass(), nmsPacketDataSerializer), "The nms packet data serializer object is not instance.");
 
         try {
 
-            ByteBuf wrapped = Unpooled.wrappedBuffer((ByteBuf) packetDataSerializerByteBufField.get(nms));
+            ByteBuf wrapped = Unpooled.wrappedBuffer((ByteBuf) packetDataSerializerByteBufField.get(nmsPacketDataSerializer));
             return new PacketDataSerializer(wrapped);
 
         } catch (Exception e) {
@@ -177,6 +188,11 @@ public class PacketDataSerializer {
         }
     }
 
+    /**
+     * 将指定可变长度整数写入到此数据包数据串行器
+     *
+     * @param value 值
+     */
     public PacketDataSerializer writeVarInt(int value) {
         // 详情查看 http://wiki.vg/Protocol#VarInt_and_VarLong
         while((value & ~0x7F) != 0) {
@@ -186,6 +202,11 @@ public class PacketDataSerializer {
         return writeByte(value);
     }
 
+    /**
+     * 将指定可变长度长整数写入到此数据包数据串行器
+     *
+     * @param value 值
+     */
     public PacketDataSerializer writeVarLong(long value) {
         // 详情查看 http://wiki.vg/Protocol#VarInt_and_VarLong
         while((value & ~0x7F) != 0) {
@@ -195,24 +216,86 @@ public class PacketDataSerializer {
         return writeByte((int) value);
     }
 
+    /**
+     * 将指定字节数组写入到此数据包数据串行器
+     *
+     * @param value 值
+     */
     public PacketDataSerializer writeBytes(byte[] value) {
+        Validate.notNull(value, "The byte[] object is null.");
         getByteBuf().writeBytes(value);
         return this;
     }
 
+    /**
+     * 将指定字节写入到此数据包数据串行器
+     *
+     * @param value 值
+     */
     public PacketDataSerializer writeByte(int value) {
         getByteBuf().writeByte(value);
         return this;
     }
 
+    /**
+     * 将指定短整数写入到此数据包数据串行器
+     *
+     * @param value 值
+     */
+    public PacketDataSerializer writeShort(int value) {
+        getByteBuf().writeShort(value);
+        return this;
+    }
+
+    /**
+     * 将指定整数写入到此数据包数据串行器
+     *
+     * @param value 值
+     */
     public PacketDataSerializer writeInt(int value) {
         getByteBuf().writeInt(value);
         return this;
     }
 
+    /**
+     * 将指定长整数写入到此数据包数据串行器
+     *
+     * @param value 值
+     */
+    public PacketDataSerializer writeLong(long value) {
+        getByteBuf().writeLong(value);
+        return this;
+    }
+
+    /**
+     * 将指定单精度浮点数写入到此数据包数据串行器
+     *
+     * @param value 值
+     */
+    public PacketDataSerializer writeFloat(float value) {
+        getByteBuf().writeFloat(value);
+        return this;
+    }
+
+    /**
+     * 将指定双精度浮点数写入到此数据包数据串行器
+     *
+     * @param value 值
+     */
+    public PacketDataSerializer writeDouble(double value) {
+        getByteBuf().writeDouble(value);
+        return this;
+    }
+
+    /**
+     * 将指定字符串写入到此数据包数据串行器
+     *
+     * @param value 值
+     * @throws IllegalArgumentException 如果字符串字节长度 {@code > 32767} 则抛出异常
+     */
     public PacketDataSerializer writeString(String value) {
         Validate.notNull(value, "The string value object is null.");
-        byte[] bytes = value.getBytes(Charset.forName("utf-8"));
+        byte[] bytes = value.getBytes(StringUtil.UTF_8);
         if(bytes.length > 32767)
             throw new IllegalArgumentException("字符串值字节长度太大, 最大只能为 32767.");
         writeVarInt(bytes.length);
@@ -220,6 +303,11 @@ public class PacketDataSerializer {
         return this;
     }
 
+    /**
+     * 将指定字符串数组写入到此数据包数据串行器
+     *
+     * @param value 值
+     */
     public PacketDataSerializer writeStrings(String[] value) {
         Validate.notNull(value, "The string[] value object is null.");
         for(String str : value)
@@ -227,6 +315,33 @@ public class PacketDataSerializer {
         return this;
     }
 
+    /**
+     * 将指定 UUID 写入到此数据包数据串行器
+     *
+     * @param value 值
+     */
+    public PacketDataSerializer writeUUID(UUID value) {
+        writeLong(value.getMostSignificantBits());
+        writeLong(value.getLeastSignificantBits());
+        return this;
+    }
+
+    /**
+     * 将指定聊天组件写入到此数据包数据串行器
+     *
+     * @param value 值
+     */
+    public PacketDataSerializer writeChatComponent(ChatComponent value) {
+        return writeString(value.toJson());
+    }
+
+    /**
+     * 从此数据包数据串行器读取指定长度的字节数组
+     *
+     * @param length 长度
+     * @return 读取到的字节数组
+     * @throws IllegalArgumentException 如果待读取的长度 {@code < 0} 则抛出异常
+     */
     public byte[] readBytes(int length) {
         Validate.isTrue(length >= 0, "待读取的数组长度不能小于 0.");
         byte[] bytes = new byte[length];
@@ -234,10 +349,39 @@ public class PacketDataSerializer {
         return bytes;
     }
 
+    /**
+     * 从此数据包数据串行器读取字节值
+     *
+     * @return 值
+     */
     public byte readByte() {
         return getByteBuf().readByte();
     }
 
+    /**
+     * 从此数据包数据串行器读取短整数值
+     *
+     * @return 值
+     */
+    public short readShort() {
+        return getByteBuf().readShort();
+    }
+
+    /**
+     * 从此数据包数据串行器读取整数值
+     *
+     * @return 值
+     */
+    public int readInt() {
+        return getByteBuf().readInt();
+    }
+
+    /**
+     * 从此数据包数据串行器读取可变长度整数值
+     *
+     * @return 值
+     * @throws IllegalArgumentException 如果值数据的长度 {@code > 5} 则抛出异常
+     */
     public int readVarInt() {
         // 详情查看 http://wiki.vg/Protocol#VarInt_and_VarLong
         int value = 0, size = 0, b;
@@ -249,6 +393,21 @@ public class PacketDataSerializer {
         return value | ((b & 0x7F) << (size * 7));
     }
 
+    /**
+     * 从此数据包数据串行器读取长整数值
+     *
+     * @return 值
+     */
+    public long readLong() {
+        return getByteBuf().readLong();
+    }
+
+    /**
+     * 从此数据包数据串行器读取可变长度长整数值
+     *
+     * @return 值
+     * @throws IllegalArgumentException 如果值数据的长度 {@code > 10} 则抛出异常
+     */
     public long readVarLong() {
         // 详情查看 http://wiki.vg/Protocol#VarInt_and_VarLong
         long value = 0;
@@ -261,10 +420,51 @@ public class PacketDataSerializer {
         return value | ((long) (b & 0x7F) << (size * 7));
     }
 
+    /**
+     * 从此数据包数据串行器读取单精度浮点数值
+     *
+     * @return 值
+     */
+    public float readFloat() {
+        return getByteBuf().readFloat();
+    }
+
+    /**
+     * 从此数据包数据串行器读取双精度浮点数值
+     *
+     * @return 值
+     */
+    public double readDouble() {
+        return getByteBuf().readDouble();
+    }
+
+    /**
+     * 从此数据包数据串行器读取字符串值
+     *
+     * @return 值
+     */
     public String readString() {
         int length = readVarInt();
         byte[] bytes = readBytes(length);
-        return new String(bytes, Charset.forName("utf-8"));
+        return new String(bytes, StringUtil.UTF_8);
+    }
+
+    /**
+     * 从此数据包数据串行器读取 UUID 值
+     *
+     * @return 值
+     */
+    public UUID readUUID() {
+        return new UUID(readLong(), readLong());
+    }
+
+    /**
+     * 从此数据包数据串行器读取聊天组件值
+     *
+     * @return 值
+     */
+    public ChatComponent readChatComponent() {
+        return ChatSerializer.fromJson(readString());
     }
 
     /**
