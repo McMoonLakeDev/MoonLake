@@ -26,6 +26,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -60,6 +61,11 @@ public final class StringUtil {
      * Unicode 码匹配模式对象
      */
     public final static Pattern UNICODE_PATTERN = Pattern.compile("\\\\u[a-zA-Z0-9]{2,4}");
+
+    /**
+     * 字符编码: UTF-8
+     */
+    public final static Charset UTF_8 = Charset.forName("UTF-8");
 
     /**
      * 字符串实现类构造函数

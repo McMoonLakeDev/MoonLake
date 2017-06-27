@@ -43,7 +43,7 @@ public class IoManager extends MoonLakeManager {
     /**
      * UTF-8 Charset
      */
-    public final static Charset UTF_8 = Charset.forName("UTF-8");
+    public final static Charset UTF_8 = StringUtil.UTF_8;
 
     /**
      * 输入输出流管理实现类构造函数
