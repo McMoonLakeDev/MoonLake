@@ -29,6 +29,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 
 import java.util.*;
 
@@ -36,7 +37,7 @@ import java.util.*;
  * <h1>BlockManager</h1>
  * 方块管理实现类
  *
- * @version 1.0.2
+ * @version 1.0.3
  * @author Month_Light
  */
 public class BlockManager extends MoonLakeManager {
@@ -272,5 +273,43 @@ public class BlockManager extends MoonLakeManager {
 
             throw new MoonLakeException("The action block chest exception.", e);
         }
+    }
+
+    /**
+     * 获取指定方块是否为方块实体 (详情: <a href='http://minecraft-zh.gamepedia.com/%E6%96%B9%E5%9D%97%E5%AE%9E%E4%BD%93%E5%80%BC' target='_blank'>方块实体</a>)
+     *
+     * @param block 方块
+     * @return 是否为方块实体
+     * @throws IllegalArgumentException 如果方块对象为 {@code null} 则抛出异常
+     */
+    public static boolean isTileEntity(Block block) {
+        Validate.notNull(block, "The block object is null.");
+        return block.getType() != Material.AIR && isTileEntity(block.getLocation());
+    }
+
+    /**
+     * 获取指定位置的方块是否为方块实体 (详情: <a href='http://minecraft-zh.gamepedia.com/%E6%96%B9%E5%9D%97%E5%AE%9E%E4%BD%93%E5%80%BC' target='_blank'>方块实体</a>)
+     *
+     * @param location 位置
+     * @return 位置的方块是否为方块实体
+     * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
+     */
+    public static boolean isTileEntity(Location location) {
+        return MinecraftReflection.getTileEntity(location) != null;
+    }
+
+    /**
+     * 获取指定位置指定类型的方块实体对象 (详情: <a href='http://minecraft-zh.gamepedia.com/%E6%96%B9%E5%9D%97%E5%AE%9E%E4%BD%93%E5%80%BC' target='_blank'>方块实体</a>)
+     *
+     * @param location 位置
+     * @param clazz 方块实体类型
+     * @param <T> 方块实体类型
+     * @return 对应类型的方块实体对象 | null
+     */
+    public static <T extends BlockState> T getTileEntity(Location location, Class<T> clazz) {
+        Validate.notNull(location, "The location object is null.");
+        Validate.notNull(clazz, "The block state class object is null.");
+        BlockState blockState = location.getBlock().getState();
+        return blockState != null && clazz.isInstance(blockState) ? clazz.cast(blockState) : null;
     }
 }
