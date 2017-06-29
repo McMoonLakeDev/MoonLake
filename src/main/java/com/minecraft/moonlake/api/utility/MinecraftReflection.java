@@ -680,8 +680,8 @@ public class MinecraftReflection {
     public static Object getTileEntity(Location location) {
         Validate.notNull(location, "The location object is null.");
         Object world = getWorldServer(location.getWorld());
-        Object blockPosition = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
-        return getTileEntity(world, blockPosition);
+        BlockPosition blockPosition = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        return getTileEntity(world, blockPosition.asNMS());
     }
 
     public static Object getTileEntity(Object world, Object blockPosition) {
