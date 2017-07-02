@@ -33,6 +33,11 @@ import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * <h1>PacketPlayOutTitle</h1>
  * 数据包输出标题（详细doc待补充...）
@@ -47,9 +52,9 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
 
     private final static Class<?> CLASS_PACKETPLAYOUTTITLE;
     private final static Class<?> CLASS_ENUMTITLEACTION;
-    private static volatile ConstructorAccessor<?> packetPlayOutTitleVoidConstuctor;
-    private static volatile ConstructorAccessor<?> packetPlayOutTitleActionConstuctor;
-    private static volatile ConstructorAccessor<?> packetPlayOutTitleTimesConstuctor;
+    private static volatile ConstructorAccessor<?> packetPlayOutTitleVoidConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutTitleActionConstructor;
+    private static volatile ConstructorAccessor<?> packetPlayOutTitleTimesConstructor;
 
     /**
      * <h1>PacketPlayOutTitleSpecial</h1>
@@ -89,8 +94,8 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
                 return true;
 
             try {
-                Object packet = packetPlayOutTitleActionConstuctor.invoke(getEnumTitleAction(enumTitleActionName), null);
-                MinecraftReflection.sendPacket(players, packet);
+                List packets = (List) packet();
+                MinecraftReflection.sendPacket(players, packets.get(0));
                 return true;
 
             } catch (Exception e) {
@@ -98,6 +103,17 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
             }
             // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
             throw new UnsupportedOperationException();
+        }
+
+        @Nullable
+        @Override
+        public Object packet() {
+            try {
+                return Arrays.asList(new Object[] { packetPlayOutTitleActionConstructor.invoke(getEnumTitleAction(enumTitleActionName), null) });
+            } catch (Exception e) {
+                printException(e);
+            }
+            return null;
         }
     }
 
@@ -123,9 +139,9 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
             }
         });
         Class<?> iChatBaseComponentClass = MinecraftReflection.getIChatBaseComponentClass();
-        packetPlayOutTitleVoidConstuctor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTTITLE);
-        packetPlayOutTitleActionConstuctor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTTITLE, CLASS_ENUMTITLEACTION, iChatBaseComponentClass);
-        packetPlayOutTitleTimesConstuctor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTTITLE, int.class, int.class, int.class);
+        packetPlayOutTitleVoidConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTTITLE);
+        packetPlayOutTitleActionConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTTITLE, CLASS_ENUMTITLEACTION, iChatBaseComponentClass);
+        packetPlayOutTitleTimesConstructor = Accessors.getConstructorAccessor(CLASS_PACKETPLAYOUTTITLE, int.class, int.class, int.class);
     }
 
     private StringProperty title;
@@ -270,8 +286,29 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
             return true;
 
         String title = titleProperty().get();
+        Validate.notNull(title, "The title object is null.");
+
+        try {
+            List packets = (List) packet();
+            for(Object packet : packets)
+                MinecraftReflection.sendPacket(players, packet);
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        String title = titleProperty().get();
         String subTitle = subTitleProperty().get();
         Validate.notNull(title, "The title object is null.");
+
+        List<Object> packets = new ArrayList<>();
 
         try {
             // 先用调用 NMS 的 PacketPlayOutTitle 构造函数,
@@ -280,46 +317,44 @@ public class PacketPlayOutTitle extends PacketPlayOutBukkitAbstract {
             // 进行反射实例发送
             Object nmsTitle = MinecraftReflection.getIChatBaseComponentFromString(title);
             Object nmsSubTitle = subTitle != null ? MinecraftReflection.getIChatBaseComponentFromString(subTitle) : null;
-            Object packet0 = packetPlayOutTitleTimesConstuctor.invoke(fadeIn.get(), stay.get(), fadeOut.get()); // TIMES Packet
-            Object packet1 = packetPlayOutTitleActionConstuctor.invoke(getEnumTitleAction("TITLE"), nmsTitle); // Title Packet
-            Object packet2 = nmsSubTitle != null ?  packetPlayOutTitleActionConstuctor.invoke(getEnumTitleAction("SUBTITLE"), nmsSubTitle) : null; // SubTitle Packet
-            MinecraftReflection.sendPacket(players, packet0); // 发送标题的时间数据包
-            MinecraftReflection.sendPacket(players, packet1); // 发送标题的主标题数据包
+            packets.add(packetPlayOutTitleTimesConstructor.invoke(fadeIn.get(), stay.get(), fadeOut.get())); // TIMES Packet
+            packets.add(packetPlayOutTitleActionConstructor.invoke(getEnumTitleAction("TITLE"), nmsTitle)); // Title Packet
+            Object packet2 = nmsSubTitle != null ?  packetPlayOutTitleActionConstructor.invoke(getEnumTitleAction("SUBTITLE"), nmsSubTitle) : null; // SubTitle Packet
             if(packet2 != null)
-                MinecraftReflection.sendPacket(players, packet2); // 发送标题的副标题数据包
-            return true;
+                packets.add(packet2);
+            return packets;
 
         } catch (Exception e) {
             printException(e);
             // 如果异常了说明 NMS 的 PacketPlayOutTitle 构造函数不存在这个参数类型
             // 那么用反射直接设置字段值方式来发送
             try {
+                packets.clear();
                 // 判断字段数量等于 5 个的话就是有此方式
                 // 这两个字段分别对应 EnumTitleAction, IChatBaseComponent, int, int, int 的 5 个属性
-                Object packet0 = packetPlayOutTitleVoidConstuctor.invoke(); // 先设置并发送 TIMES 的标题数据包
+                Object packet0 = packetPlayOutTitleVoidConstructor.invoke(); // 先设置并发送 TIMES 的标题数据包
                 Object[] values0 = { getEnumTitleAction("TIMES"), fadeIn.get(), stay.get(), fadeOut.get() };
-                setFieldAccessibleAndValueSend(players, 2, 5, CLASS_PACKETPLAYOUTTITLE, packet0, values0);
+                packets.add(setFieldAccessibleAndValueGet(2, 5, CLASS_PACKETPLAYOUTTITLE, packet0, values0));
 
                 Object nmsTitle = MinecraftReflection.getIChatBaseComponentFromString(title);
-                Object packet1 = packetPlayOutTitleVoidConstuctor.invoke(); // 再设置并发送 TITLE 的标题数据包
+                Object packet1 = packetPlayOutTitleVoidConstructor.invoke(); // 再设置并发送 TITLE 的标题数据包
                 Object[] values1 = { getEnumTitleAction("TITLE"), nmsTitle };
-                setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTTITLE, packet1, values1);
+                packets.add(setFieldAccessibleAndValueGet(2, CLASS_PACKETPLAYOUTTITLE, packet1, values1));
 
                 Object nmsSubTitle = subTitle != null ? MinecraftReflection.getIChatBaseComponentFromString(subTitle) : null;
                 if(nmsSubTitle != null) {
                     // 如果副标题不为 null 则进行设置并发送
-                    Object packet2 = packetPlayOutTitleVoidConstuctor.invoke(); // 最后设置并发送 SUBTITLE 的标题数据包
+                    Object packet2 = packetPlayOutTitleVoidConstructor.invoke(); // 最后设置并发送 SUBTITLE 的标题数据包
                     Object[] values2 = { getEnumTitleAction("SUBTITLE"), nmsSubTitle };
-                    setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTTITLE, packet2, values2);
+                    packets.add(setFieldAccessibleAndValueGet(2, CLASS_PACKETPLAYOUTTITLE, packet2, values2));
                 }
-                return true;
+                return packets;
 
             } catch (Exception e1) {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 
     private static Object getEnumTitleAction(String name) {

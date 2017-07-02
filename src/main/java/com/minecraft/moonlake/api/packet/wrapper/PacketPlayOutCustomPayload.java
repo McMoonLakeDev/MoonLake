@@ -29,6 +29,8 @@ import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>PacketPlayOutCustomPayload</h1>
  * 数据包输出自定义通道数据（详细doc待补充...）
@@ -127,10 +129,29 @@ public class PacketPlayOutCustomPayload extends PacketPlayOutBukkitAbstract {
         Validate.isTrue(dataSerializer.getByteBuf().writerIndex() <= 1048576, "The packet data larger than 1048576 bytes.");
 
         try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        String channel = channelProperty().get();
+        PacketDataSerializer dataSerializer = dataProperty().get();
+        Validate.notNull(channel, "The channel object is null.");
+        Validate.notNull(dataSerializer, "The packet data serializer object is null.");
+        Validate.isTrue(dataSerializer.getByteBuf().writerIndex() <= 1048576, "The packet data larger than 1048576 bytes.");
+
+        try {
             // 先用调用 NMS 的 PacketPlayOutCustomPayload 构造函数, 参数 String, PacketDataSerializer
             // 进行反射实例发送
-            MinecraftReflection.sendPacket(players, packetPlayOutCustomPayloadConstructor.invoke(channel, dataSerializer.asNMS()));
-            return true;
+            return packetPlayOutCustomPayloadConstructor.invoke(channel, dataSerializer.asNMS());
 
         } catch (Exception e) {
             printException(e);
@@ -141,14 +162,12 @@ public class PacketPlayOutCustomPayload extends PacketPlayOutBukkitAbstract {
                 // 这两个字段分别对应 String, PacketDataSerializer 的 2 个属性
                 Object packet = packetPlayOutCustomPayloadVoidConstructor.invoke();
                 Object[] values = { channel, dataSerializer.asNMS() };
-                setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTCUSTOMPAYLOAD, packet, values);
-                return true;
+                return setFieldAccessibleAndValueGet(2, CLASS_PACKETPLAYOUTCUSTOMPAYLOAD, packet, values);
 
             } catch (Exception e1) {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 }

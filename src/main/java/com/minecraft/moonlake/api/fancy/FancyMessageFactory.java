@@ -18,13 +18,17 @@
  
 package com.minecraft.moonlake.api.fancy;
 
+import com.minecraft.moonlake.api.chat.ChatComponentFancy;
+
 /**
  * <h1>FancyMessageFactory</h1>
  * 花式消息工厂类
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link ChatComponentFancy}
  */
+@Deprecated
 public class FancyMessageFactory {
 
     /**

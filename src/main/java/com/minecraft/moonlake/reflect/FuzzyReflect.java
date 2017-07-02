@@ -19,6 +19,8 @@
 package com.minecraft.moonlake.reflect;
 
 import com.minecraft.moonlake.reflect.accessors.Accessors;
+import com.minecraft.moonlake.reflect.matcher.FuzzyFieldMatcher;
+import com.minecraft.moonlake.reflect.matcher.FuzzyMethodMatcher;
 import com.minecraft.moonlake.validate.Validate;
 
 import java.lang.reflect.*;
@@ -32,7 +34,7 @@ import java.util.regex.Pattern;
  * <h1>FuzzyReflect</h1>
  * 模糊反射类（详细doc待补充...）
  *
- * @version 1.0.1
+ * @version 1.0.2
  * @author Month_Light
  */
 public class FuzzyReflect {
@@ -196,6 +198,33 @@ public class FuzzyReflect {
     }
 
     /**
+     * 从指定模糊函数匹配获取指定函数对象
+     *
+     * @param matcher 模糊函数匹配
+     * @return 函数对象
+     * @throws IllegalArgumentException 如果模糊函数匹配对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果未找到匹配函数则抛出异常
+     */
+    public Method getMethodByMatcher(FuzzyMethodMatcher matcher) {
+        List<Method> methodList = getMethodListByMatcher(matcher);
+        if(methodList.size() > 0)
+            return methodList.get(0);
+        throw new IllegalArgumentException("Unable to find " + matcher + " in " + this.source.getName());
+    }
+
+    /**
+     * 从指定模糊函数匹配获取指定函数对象列表
+     *
+     * @param matcher 模糊函数匹配
+     * @return 函数对象列表
+     * @throws IllegalArgumentException 如果模糊函数匹配对象为 {@code null} 则抛出异常
+     */
+    public List<Method> getMethodListByMatcher(FuzzyMethodMatcher matcher) {
+        Validate.notNull(matcher, "The fuzzy method matcher is null.");
+        return matcher.find(this);
+    }
+
+    /**
      * 调用此模糊反射的类源指定函数对象
      *
      * @param instance 实例
@@ -282,6 +311,33 @@ public class FuzzyReflect {
             if(type.isAssignableFrom(field.getType()))
                 fieldList.add(field);
         return fieldList;
+    }
+
+    /**
+     * 从指定模糊字段匹配获取指定字段对象
+     *
+     * @param matcher 模糊字段匹配
+     * @return 字段对象
+     * @throws IllegalArgumentException 如果模糊字段匹配对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果未找到匹配字段则抛出异常
+     */
+    public Field getFieldByMatcher(FuzzyFieldMatcher matcher) {
+        List<Field> methodList = getFieldListByMatcher(matcher);
+        if(methodList.size() > 0)
+            return methodList.get(0);
+        throw new IllegalArgumentException("Unable to find a field with the " + matcher + " in " + this.source.getName());
+    }
+
+    /**
+     * 从指定模糊自字段匹配获取指定字段对象列表
+     *
+     * @param matcher 模糊字段匹配
+     * @return 字段对象列表
+     * @throws IllegalArgumentException 如果模糊字段匹配对象为 {@code null} 则抛出异常
+     */
+    public List<Field> getFieldListByMatcher(FuzzyFieldMatcher matcher) {
+        Validate.notNull(matcher, "The fuzzy field matcher is null.");
+        return matcher.find(this);
     }
 
     /**

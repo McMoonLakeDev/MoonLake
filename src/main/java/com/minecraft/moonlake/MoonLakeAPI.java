@@ -24,6 +24,8 @@ import com.minecraft.moonlake.api.annotation.plugin.command.CommandAnnotation;
 import com.minecraft.moonlake.api.annotation.plugin.config.ConfigAnnotation;
 import com.minecraft.moonlake.api.anvil.AnvilWindow;
 import com.minecraft.moonlake.api.anvil.AnvilWindowFactory;
+import com.minecraft.moonlake.api.chat.ChatComponent;
+import com.minecraft.moonlake.api.chat.ChatComponentFancy;
 import com.minecraft.moonlake.api.event.MoonLakeEvent;
 import com.minecraft.moonlake.api.event.MoonLakeListener;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
@@ -44,6 +46,7 @@ import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBungee;
 import com.minecraft.moonlake.api.packet.exception.PacketException;
 import com.minecraft.moonlake.api.packet.listener.PacketMessageListener;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutChat;
 import com.minecraft.moonlake.api.player.DependPlayerFactory;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.api.player.PlayerLibrary;
@@ -572,7 +575,9 @@ public final class MoonLakeAPI {
      *
      * @param text 文本
      * @return FancyMessage
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link ChatComponentFancy}
      */
+    @Deprecated
     public static FancyMessage newFancyMessage(String text) {
 
         return FancyMessageFactory.get().message(text);
@@ -583,10 +588,80 @@ public final class MoonLakeAPI {
      *
      * @param text 文本
      * @return FancyMessage
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link ChatComponentFancy}
      */
+    @Deprecated
     public static FancyMessage newFancyMessage(TextualComponent text) {
 
         return FancyMessageFactory.get().message(text);
+    }
+
+    /**
+     * 将指定聊天花式组件对象发送给命令执行者
+     *
+     * @param componentFancy 聊天花式组件
+     * @param sender 命令执行者
+     * @throws IllegalArgumentException 如果聊天花式组件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果命令执行者对象为 {@code null} 则抛出异常
+     */
+    public static void chatComponentSent(ChatComponentFancy componentFancy, CommandSender sender) {
+
+        chatComponentSent(componentFancy, PacketPlayOutChat.Mode.CHAT, sender);
+    }
+
+    /**
+     * 将指定聊天花式组件对象发送给命令执行者
+     *
+     * @param componentFancy 聊天花式组件
+     * @param mode 聊天模式
+     * @param sender 命令执行者
+     * @throws IllegalArgumentException 如果聊天花式组件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果聊天模式对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果命令执行者对象为 {@code null} 则抛出异常
+     */
+    public static void chatComponentSent(ChatComponentFancy componentFancy, PacketPlayOutChat.Mode mode, CommandSender sender) {
+
+        Validate.notNull(componentFancy, "The chat component fancy object is null.");
+
+        chatComponentSent(componentFancy.build(), mode, sender);
+    }
+
+    /**
+     * 将指定聊天组件对象发送给命令执行者
+     *
+     * @param chatComponent 聊天组件
+     * @param sender 命令执行者
+     * @throws IllegalArgumentException 如果聊天组件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果命令执行者对象为 {@code null} 则抛出异常
+     */
+    public static void chatComponentSent(ChatComponent chatComponent, CommandSender sender) {
+
+        chatComponentSent(chatComponent, PacketPlayOutChat.Mode.CHAT, sender);
+    }
+
+    /**
+     * 将指定聊天组件对象发送给命令执行者
+     *
+     * @param chatComponent 聊天组件
+     * @param mode 聊天模式
+     * @param sender 命令执行者
+     * @throws IllegalArgumentException 如果聊天组件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果聊天模式对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果命令执行者对象为 {@code null} 则抛出异常
+     */
+    public static void chatComponentSent(ChatComponent chatComponent, PacketPlayOutChat.Mode mode, CommandSender sender) {
+
+        Validate.notNull(chatComponent, "The chat component object is null.");
+        Validate.notNull(mode, "The mode object is null.");
+        Validate.notNull(sender, "The sender object is null.");
+
+        if(sender instanceof Player) {
+            PacketPlayOutChat ppoc = new PacketPlayOutChat(chatComponent);
+            ppoc.modeProperty().set(mode);
+            ppoc.send((Player) sender);
+        } else {
+            sender.sendMessage(chatComponent.toRaw());
+        }
     }
 
     /**

@@ -29,6 +29,8 @@ import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>PacketPlayOutPlayerListHeaderFooter</h1>
  * 数据包输出玩家列表头脚文本（详细doc待补充...）
@@ -120,12 +122,29 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbst
             return true;
 
         String header = headerProperty().get();
+        Validate.notNull(header, "The header object is null.");
+
+        try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        String header = headerProperty().get();
         String footer = footerProperty().get();
         Validate.notNull(header, "The header object is null.");
 
-        if(packetPlayOutPlayerListHeaderFooterConstructor == null && sendVoid(players, header, footer))
+        if(packetPlayOutPlayerListHeaderFooterConstructor == null)
             // 貌似 mc1.12 版本去除了一个参数的构造函数, 所以判断如果这个构造为 null 则直接修改字段发送
-            return true;
+            return getVoid(header, footer);
 
         try {
             // 先用调用 NMS 的 PacketPlayOutPlayerListHeaderFooter 构造函数, 参数 IChatBaseComponent
@@ -134,23 +153,19 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbst
             Object nmsFooter = footer != null ? MinecraftReflection.getIChatBaseComponentFromString(footer) : null;
             Object packet = packetPlayOutPlayerListHeaderFooterConstructor.invoke(nmsHeader);
             if(nmsFooter != null)
-                setFieldAccessibleAndValueSend(players, 1, 2, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, nmsFooter);
+                return setFieldAccessibleAndValueGet(1, 2, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, nmsFooter);
             else
-                MinecraftReflection.sendPacket(players, packet);
-            return true;
+                return packet;
 
         } catch (Exception e) {
             printException(e);
             // 如果异常了说明 NMS 的 PacketPlayOutPlayerListHeaderFooter 构造函数不存在这个参数类型
             // 那么用反射直接设置字段值方式来发送
-            if(sendVoid(players, header, footer))
-                return true;
+            return getVoid(header, footer);
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
     }
 
-    private boolean sendVoid(Player[] players, String header, String footer) {
+    private Object getVoid(String header, String footer) {
         try {
             // 判断字段数量大于等于 2 个的话就是有此方式
             // 这两个字段分别对应 IChatBaseComponent, IChatBaseComponent 的 2 个属性
@@ -158,14 +173,13 @@ public class PacketPlayOutPlayerListHeaderFooter extends PacketPlayOutBukkitAbst
             Object nmsFooter = footer != null ? MinecraftReflection.getIChatBaseComponentFromString(footer) : null;
             Object packet = packetPlayOutPlayerListHeaderFooterVoidConstructor.invoke();
             if(nmsFooter != null)
-                setFieldAccessibleAndValueSend(players, 2, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, nmsHeader, nmsFooter);
+                return setFieldAccessibleAndValueGet(2, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, nmsHeader, nmsFooter);
             else
-                setFieldAccessibleAndValueSend(players, 1, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, nmsHeader);
-            return true;
+                return setFieldAccessibleAndValueGet(1, CLASS_PACKETPLAYOUTPLAYERLISTHEADERFOOTER, packet, nmsHeader);
 
         } catch (Exception e1) {
             printException(e1);
         }
-        return false;
+        return null;
     }
 }

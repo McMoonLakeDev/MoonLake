@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api.fancy;
 
 import com.google.common.collect.ImmutableMap;
+import com.minecraft.moonlake.api.chat.ChatComponent;
 import com.minecraft.moonlake.json.JsonWrite;
 import com.minecraft.moonlake.property.*;
 
@@ -31,7 +32,9 @@ import java.util.Map;
  *
  * @version 1.0
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link ChatComponent}
  */
+@Deprecated
 public abstract class TextualComponent implements Cloneable {
 
     /**

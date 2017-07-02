@@ -18,6 +18,7 @@
  
 package com.minecraft.moonlake.api.fancy;
 
+import com.minecraft.moonlake.api.chat.ChatComponentFancy;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.builder.Builder;
 import com.minecraft.moonlake.json.JsonRepresentedObject;
@@ -66,7 +67,9 @@ import java.util.Iterator;
  * @author Month_Light
  * @see TextualComponent
  * @see FancyMessageFactory
+ * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link ChatComponentFancy}
  */
+@Deprecated
 public interface FancyMessage extends JsonRepresentedObject, Cloneable, Iterable<FancyMessagePart>, Builder<FancyMessage> {
 
     /**

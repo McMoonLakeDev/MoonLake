@@ -28,6 +28,8 @@ import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>PacketPlayOutOpenWindow</h1>
  * 数据包输出打开窗口（详细doc待补充...）
@@ -180,20 +182,35 @@ public class PacketPlayOutOpenWindow extends PacketPlayOutBukkitAbstract {
         Validate.notNull(windowType, "The window type object is null.");
 
         try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        String windowTitle = windowTitleProperty().get();
+        WindowType windowType = windowTypeProperty().get();
+        Validate.notNull(windowTitle, "The window title object is null.");
+        Validate.notNull(windowType, "The window type object is null.");
+
+        try {
             // 先用调用 NMS 的 PacketPlayOutOpenWindow 构造函数
             // 参数 int, String, IChatBaseComponent, int
             // 参数 int, String, IChatBaseComponent, int, int 窗口类型为实体马
             // 进行反射实例发送
             Object title = MinecraftReflection.getChatMessage(windowTitle);
-            Object packet;
 
             if(windowType == WindowType.ENTITY_HORSE)
-                packet = packetPlayOutOpenWindowHorseConstructor.invoke(windowId.get(), windowType.toString(), title, slotCount.get(), entityHorseId.get());
+                return packetPlayOutOpenWindowHorseConstructor.invoke(windowId.get(), windowType.toString(), title, slotCount.get(), entityHorseId.get());
             else
-                packet = packetPlayOutOpenWindowConstructor.invoke(windowId.get(), windowType.toString(), title, slotCount.get());
-
-            MinecraftReflection.sendPacket(players, packet);
-            return true;
+                return packetPlayOutOpenWindowConstructor.invoke(windowId.get(), windowType.toString(), title, slotCount.get());
 
         } catch (Exception e) {
             printException(e);
@@ -207,19 +224,16 @@ public class PacketPlayOutOpenWindow extends PacketPlayOutBukkitAbstract {
 
                 if(windowType == WindowType.ENTITY_HORSE) {
                     Object[] values = { windowId.get(), windowType.toString(), title, slotCount.get(), entityHorseId.get() };
-                    setFieldAccessibleAndValueSend(players, 5, CLASS_PACKETPLAYOUTOPENWINDOW, packet, values);
+                    return setFieldAccessibleAndValueGet(5, CLASS_PACKETPLAYOUTOPENWINDOW, packet, values);
                 } else {
                     Object[] values = { windowId.get(), windowType.toString(), title, slotCount.get() };
-                    setFieldAccessibleAndValueSend(players, 4, CLASS_PACKETPLAYOUTOPENWINDOW, packet, values);
+                    return setFieldAccessibleAndValueGet(4, CLASS_PACKETPLAYOUTOPENWINDOW, packet, values);
                 }
-                return true;
-
             } catch (Exception e1) {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 
     /**

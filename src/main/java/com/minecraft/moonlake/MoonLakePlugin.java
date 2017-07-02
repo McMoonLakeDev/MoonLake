@@ -34,7 +34,7 @@ import java.util.logging.Level;
  * <hr />
  * <div>
  *     <h1>Minecraft MoonLake Core API Plugin</h1>
- *     <p>By Month_Light Ver: 1.9-a5.1</p>
+ *     <p>By Month_Light Ver: 1.9-a5.2</p>
  *     <p>Website: <a href="http://www.mcyszh.com" target="_blank" style="text-decoration: none;">MoonLake Website</a></p>
  *     <p>QQ Group: 377607025 -> <a href="http://jq.qq.com/?_wv=1027&k=2IfPFrH" target="_blank">Jump</a></p>
  *     <hr />
@@ -55,9 +55,11 @@ import java.util.logging.Level;
  *          <li>月色之湖玩家 {@link com.minecraft.moonlake.api.player.MoonLakePlayer}</li>
  *          <li>物品栈支持库 {@link com.minecraft.moonlake.api.item.ItemLibrary}</li>
  *          <li>数据库支持库 {@link com.minecraft.moonlake.mysql.MySQLConnection}</li>
- *          <li>花式消息支持库 {@link com.minecraft.moonlake.api.fancy.FancyMessage}</li>
+ *          <li><s>花式消息支持库 {@link com.minecraft.moonlake.api.fancy.FancyMessage}</s></li>
+ *          <li>聊天组件支持库 {@link com.minecraft.moonlake.api.chat.ChatComponent}</li>
  *          <li>NMS 数据包发送 {@link com.minecraft.moonlake.api.packet.Packet}</li>
  *          <li>NBT 操作支持库 {@link com.minecraft.moonlake.api.nbt.NBTLibrary}</li>
+ *          <li>NBT 组件支持库 {@link com.minecraft.moonlake.nbt.NBTTagCompound}</li>
  *          <li>插件注解支持库 {@link com.minecraft.moonlake.api.annotation.plugin.PluginAnnotation}</li>
  *          <li>数据包通道监听器 {@link com.minecraft.moonlake.api.packet.listener.PacketListener}</li>
  *      </ul>
@@ -69,7 +71,7 @@ import java.util.logging.Level;
  *     <h1>修改操作请您遵守 <a href="https://github.com/u2g/MoonLake/blob/master/LICENSE" target="_blank">GPLv3</a> 协议，您必须公开修改过的所有代码！</h1>
  * </div>
  *
- * @version 1.9-a5.1
+ * @version 1.9-a5.2
  * @author Month_Light
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {

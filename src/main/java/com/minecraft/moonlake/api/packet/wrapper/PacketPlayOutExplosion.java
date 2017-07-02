@@ -30,6 +30,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -220,6 +221,23 @@ public class PacketPlayOutExplosion extends PacketPlayOutBukkitAbstract {
         Validate.notNull(vector, "The vector object is null.");
 
         try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        Vector vector = vectorProperty().get();
+        Validate.notNull(vector, "The vector object is null.");
+
+        try {
             // 先用调用 NMS 的 PacketPlayOutExplosion 构造函数, 参数 double, double, double, float, List, Vec3D
             // 进行反射实例发送
             List<Object> nmsBlockPositionList = new ArrayList<>();
@@ -228,9 +246,7 @@ public class PacketPlayOutExplosion extends PacketPlayOutBukkitAbstract {
                     nmsBlockPositionList.add(blockPosition.asNMS());
             // 实例化其他参数值
             Object nmsVec3D = vec3DConstructor.invoke(vector.getX(), vector.getY(), vector.getZ());
-            Object packet = packetPlayOutExplosionConstructor.invoke(x.get(), y.get(), z.get(), radius.get(), nmsBlockPositionList, nmsVec3D);
-            MinecraftReflection.sendPacket(players, packet);
-            return true;
+            return packetPlayOutExplosionConstructor.invoke(x.get(), y.get(), z.get(), radius.get(), nmsBlockPositionList, nmsVec3D);
 
         } catch (Exception e) {
             printException(e);
@@ -246,14 +262,12 @@ public class PacketPlayOutExplosion extends PacketPlayOutBukkitAbstract {
 
                 Object packet = packetPlayOutExplosionVoidConstructor.invoke();
                 Object[] values = { x.get(), y.get(), z.get(), radius.get(), nmsBlockPositionList, vector.getX(), vector.getY(), vector.getZ()};
-                setFieldAccessibleAndValueSend(players, 8, CLASS_PACKETPLAYOUTEXPLOSION, packet, values);
-                return true;
+                return setFieldAccessibleAndValueGet(8, CLASS_PACKETPLAYOUTEXPLOSION, packet, values);
 
             } catch (Exception e1) {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 }

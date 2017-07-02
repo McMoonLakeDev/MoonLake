@@ -43,7 +43,9 @@ import static com.minecraft.moonlake.api.fancy.TextualComponent.rawText;
  *
  * @version 1.2
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除.
  */
+@Deprecated
 class FancyMessageExpression implements FancyMessage {
 
     private BooleanProperty dirty;

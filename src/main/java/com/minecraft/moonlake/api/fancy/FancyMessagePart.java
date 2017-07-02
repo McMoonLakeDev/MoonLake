@@ -34,7 +34,9 @@ import java.util.List;
  *
  * @version 1.1
  * @author Month_Light
+ * @deprecated 已过时, 将于 v2.0 删除.
  */
+@Deprecated
 class FancyMessagePart implements JsonRepresentedObject, Cloneable {
 
     ChatColor color;

@@ -36,6 +36,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>PacketPlayOutEntityEquipment</h1>
  * 数据包输出实体装备（详细doc待补充...）
@@ -156,6 +158,25 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
         Validate.notNull(itemStack, "The itemstack object is null.");
 
         try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        EquipmentSlot slot = equipmentSlotProperty().get();
+        ItemStack itemStack = itemStackProperty().get();
+        Validate.notNull(slot, "The equipment slot object is null.");
+        Validate.notNull(itemStack, "The itemstack object is null.");
+
+        try {
             // 先用调用 NMS 的 PacketPlayOutEntityEquipment 构造函数
             // 1.8 参数 int, int, ItemStack
             // 1.9+ 参数 int, EquipmentSlot, ItemStack
@@ -164,9 +185,7 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
                 // 1.9+ 版本的发送方式
                 Object enumItemSlot = MinecraftReflection.enumOfNameAny(CLASS_ENUMITEMSLOT, slot.name());
                 Object nmsItemStack = MinecraftReflection.asNMSCopy(itemStack);
-                Object packet = packetPlayOutEntityEquipmentConstructor.invoke(entityId.get(), enumItemSlot, nmsItemStack);
-                MinecraftReflection.sendPacket(players, packet);
-                return true;
+                return packetPlayOutEntityEquipmentConstructor.invoke(entityId.get(), enumItemSlot, nmsItemStack);
 
             } else {
                 // 1.8 版本的发送方式
@@ -174,9 +193,7 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
                 if(slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND) return true;
                 Object nmsItemStack = MinecraftReflection.asNMSCopy(itemStack);
                 // 1.8 版本第二个参数是 int 类型, 装备槽位的 Id
-                Object packet = packetPlayOutEntityEquipmentConstructor.invoke(entityId.get(), slot.getId(), nmsItemStack);
-                MinecraftReflection.sendPacket(players, packet);
-                return true;
+                return packetPlayOutEntityEquipmentConstructor.invoke(entityId.get(), slot.getId(), nmsItemStack);
             }
 
         } catch (Exception e) {
@@ -190,7 +207,7 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
                     Object nmsItemStack = MinecraftReflection.asNMSCopy(itemStack);
                     Object[] values = { entityId.get(), enumItemSlot, nmsItemStack };
                     Object packet = packetPlayOutEntityEquipmentVoidConstructor.invoke();
-                    setFieldAccessibleAndValueSend(players, 3, CLASS_PACKETPLAYOUTENTITYEQUIPMENT, packet, values);
+                    setFieldAccessibleAndValueGet(3, CLASS_PACKETPLAYOUTENTITYEQUIPMENT, packet, values);
                     return true;
 
                 } else {
@@ -200,7 +217,7 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
                     Object nmsItemStack = MinecraftReflection.asNMSCopy(itemStack);
                     Object[] values = { entityId.get(), slot.getId(), nmsItemStack };
                     Object packet = packetPlayOutEntityEquipmentVoidConstructor.invoke();
-                    setFieldAccessibleAndValueSend(players, 3, CLASS_PACKETPLAYOUTENTITYEQUIPMENT, packet, values);
+                    setFieldAccessibleAndValueGet(3, CLASS_PACKETPLAYOUTENTITYEQUIPMENT, packet, values);
                     return true;
                 }
 
@@ -208,8 +225,7 @@ public class PacketPlayOutEntityEquipment extends PacketPlayOutBukkitAbstract {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 
     /**

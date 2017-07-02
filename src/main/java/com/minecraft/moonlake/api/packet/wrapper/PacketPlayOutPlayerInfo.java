@@ -35,6 +35,7 @@ import com.mojang.authlib.GameProfile;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -180,6 +181,25 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
         Validate.notNull(dataList, "The data list object is null.");
 
         try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        Action action = actionProperty().get();
+        List<Data> dataList = dataListProperty().get();
+        Validate.notNull(action, "The action object is null.");
+        Validate.notNull(dataList, "The data list object is null.");
+
+        try {
             // 直接用反射设置字段方式发送, 字段 EnumPlayerInfoAction, List
             Object packet = packetPlayOutPlayerInfoVoidConstructor.invoke();
             Object enumAction = MinecraftReflection.enumOfNameAny(CLASS_PACKETPLAYOUTPLAYERINFO_ENUMPLAYERINFOACTION, action.name());
@@ -207,14 +227,12 @@ public class PacketPlayOutPlayerInfo extends PacketPlayOutBukkitAbstract {
                 list.add(nmsData);
             }
             // 之后设置第一个字段的 Action 值就行了, List 已经 add 了
-            setFieldAccessibleAndValueSend(players, 1, CLASS_PACKETPLAYOUTPLAYERINFO, packet, enumAction);
-            return true;
+            return setFieldAccessibleAndValueGet(1, CLASS_PACKETPLAYOUTPLAYERINFO, packet, enumAction);
 
         } catch (Exception e) {
             printException(e);
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 
     /**

@@ -22,7 +22,6 @@ import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
 import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
-import com.minecraft.moonlake.exception.NotImplementedException;
 import com.minecraft.moonlake.executor.Consumer;
 import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
@@ -188,19 +187,6 @@ public class EntityManager extends MoonLakeManager {
         entityItemSetCustomNameVisibleMethod.invoke(nmsEntityItem, customNameVisible);
         MinecraftReflection.addEntity(nmsWorld, nmsEntityItem, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return (Item) getBukkitEntity(nmsEntityItem);
-    }
-
-    /**
-     * 清除实体的路径发现者 AI
-     *
-     * @param entity 实体
-     * @throws IllegalArgumentException 如果实体对象为 {@code null} 则抛出异常
-     * @deprecated 已弃用, 将于 v1.9-a5 删除.
-     */
-    @Deprecated
-    public static void removePathFinders(Entity entity) {
-
-        throw new NotImplementedException();
     }
 
     /**

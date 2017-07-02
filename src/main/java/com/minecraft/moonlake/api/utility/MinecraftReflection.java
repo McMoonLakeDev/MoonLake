@@ -22,6 +22,7 @@ import com.minecraft.moonlake.MoonLakeAPI;
 import com.minecraft.moonlake.MoonLakePluginDebug;
 import com.minecraft.moonlake.api.Valuable;
 import com.minecraft.moonlake.api.chat.ChatSerializer;
+import com.minecraft.moonlake.api.chat.adapter.ChatAdapter;
 import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.nbt.NBTCompound;
 import com.minecraft.moonlake.api.nbt.NBTReflect;
@@ -106,6 +107,8 @@ public class MinecraftReflection {
     private static volatile MethodAccessor entityHandleMethod;
     private static volatile MethodAccessor itemGetByIdMethod;
     private static volatile MethodAccessor enumOrdinalMethod;
+    private static volatile FieldAccessor packetPlayInCustomPayloadPacketDataSerializerField;
+    private static volatile FieldAccessor packetPlayInCustomPayloadChannelField;
     private static volatile FieldAccessor playerConnectionNetworkManagerChannelField;
     private static volatile FieldAccessor serverConnectionNetworkManagerListField;
     private static volatile FieldAccessor playerConnectionNetworkManagerField;
@@ -479,6 +482,18 @@ public class MinecraftReflection {
         return packetWrapper.getPacketClass();
     }
 
+    public static FieldAccessor getPacketPlayInCustomPayloadChannelField() {
+        if(packetPlayInCustomPayloadChannelField == null)
+            packetPlayInCustomPayloadChannelField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(getMinecraftClass("PacketPlayInCustomPayload"), true).getFieldByType("channel", String.class));
+        return packetPlayInCustomPayloadChannelField;
+    }
+
+    public static FieldAccessor getPacketPlayInCustomPayloadPacketDataSerializerField() {
+        if(packetPlayInCustomPayloadPacketDataSerializerField == null)
+            packetPlayInCustomPayloadPacketDataSerializerField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(getMinecraftClass("PacketPlayInCustomPayload"), true).getFieldByType("data", getPacketDataSerializerClass()));
+        return packetPlayInCustomPayloadPacketDataSerializerField;
+    }
+
     public static FieldAccessor getCraftMetaSkullProfileField() {
         if(craftMetaSkullProfileField == null)
             craftMetaSkullProfileField = Accessors.getFieldAccessor(FuzzyReflect.fromClass(getCraftMetaSkullClass(), true).getFieldByType("profile", GameProfile.class));
@@ -665,8 +680,8 @@ public class MinecraftReflection {
     public static Object getTileEntity(Location location) {
         Validate.notNull(location, "The location object is null.");
         Object world = getWorldServer(location.getWorld());
-        Object blockPosition = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
-        return getTileEntity(world, blockPosition);
+        BlockPosition blockPosition = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        return getTileEntity(world, blockPosition.asNMS());
     }
 
     public static Object getTileEntity(Object world, Object blockPosition) {
@@ -716,8 +731,16 @@ public class MinecraftReflection {
         return chatMessageConstructor.invoke(text, params);
     }
 
+    public static ChatAdapter getJsonAdapter(String json) {
+        return ChatSerializer.jsonAdapter(json);
+    }
+
+    public static ChatAdapter getObjectAdapter(Object obj) {
+        return ChatSerializer.objectAdapter(obj);
+    }
+
     public static Object getIChatBaseComponentFromJson(String json) {
-        return ChatSerializer.fromJson(json);
+        return ChatSerializer.iCBCFromJson(json);
     }
 
     public static Object getIChatBaseComponentFromString(String string) {
@@ -961,6 +984,10 @@ public class MinecraftReflection {
 
     public static boolean is(Class<?> clazz, Object obj) {
         return !(clazz == null || obj == null) && clazz.isAssignableFrom(obj.getClass());
+    }
+
+    public static boolean isICBC(Object obj) {
+        return is(getIChatBaseComponentClass(), obj);
     }
 
     public static boolean isEntityPlayer(Object obj) {

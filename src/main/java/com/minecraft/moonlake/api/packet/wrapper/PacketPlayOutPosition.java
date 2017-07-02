@@ -31,6 +31,7 @@ import com.minecraft.moonlake.reflect.accessors.Accessors;
 import com.minecraft.moonlake.reflect.accessors.ConstructorAccessor;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -266,6 +267,20 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
             return true;
 
         try {
+            MinecraftReflection.sendPacket(players, packet());
+            return true;
+        } catch (Exception e) {
+            printException(e);
+        }
+        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        try {
             // 先用调用 NMS 的 PacketPlayOutPosition 构造函数
             // 参数 double, double, double, float, float, Set
             // 参数 double, double, double, float, float, Set, int
@@ -276,15 +291,11 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
 
             if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                 // 1.8 版本少一个 int 参数
-                Object packet = packetPlayOutPositionConstructor.invoke(x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet);
-                MinecraftReflection.sendPacket(players, packet);
+                return packetPlayOutPositionConstructor.invoke(x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet);
             } else {
                 // 1.9 以及更高的版本有 int 参数
-                Object packet = packetPlayOutPositionConstructor.invoke(x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet, value.get());
-                MinecraftReflection.sendPacket(players, packet);
+                return packetPlayOutPositionConstructor.invoke(x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet, value.get());
             }
-            return true;
-
         } catch (Exception e) {
             printException(e);
             // 如果异常了说明 NMS 的 PacketPlayOutPosition 构造函数不存在这个参数类型
@@ -299,19 +310,16 @@ public class PacketPlayOutPosition extends PacketPlayOutBukkitAbstract {
 
                 if(!MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9)) {
                     Object[] values = { x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet };
-                    setFieldAccessibleAndValueSend(players, 6, CLASS_PACKETPLAYOUTPOSITION, packet, values);
+                    return setFieldAccessibleAndValueGet(6, CLASS_PACKETPLAYOUTPOSITION, packet, values);
                 } else {
                     Object[] values = { x.get(), y.get(), z.get(), yaw.get(), pitch.get(), nmsFlagSet, value.get() };
-                    setFieldAccessibleAndValueSend(players, 7, CLASS_PACKETPLAYOUTPOSITION, packet, values);
+                    return setFieldAccessibleAndValueGet(7, CLASS_PACKETPLAYOUTPOSITION, packet, values);
                 }
-                return true;
-
             } catch (Exception e1) {
                 printException(e1);
             }
         }
-        // 否则前面的方式均不支持则返回 false 并抛出不支持运算异常
-        return false;
+        return null;
     }
 
     /**

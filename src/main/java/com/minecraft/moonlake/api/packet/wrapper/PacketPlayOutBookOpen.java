@@ -23,6 +23,7 @@ import com.minecraft.moonlake.api.packet.Packet;
 import com.minecraft.moonlake.api.packet.PacketPlayOut;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
 import com.minecraft.moonlake.api.player.MoonLakePlayer;
+import com.minecraft.moonlake.api.utility.MinecraftReflection;
 import com.minecraft.moonlake.api.utility.MinecraftVersion;
 import com.minecraft.moonlake.manager.PlayerManager;
 import com.minecraft.moonlake.property.BooleanProperty;
@@ -32,6 +33,8 @@ import com.minecraft.moonlake.property.SimpleObjectProperty;
 import com.minecraft.moonlake.validate.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import javax.annotation.Nullable;
 
 /**
  * <h1>PacketPlayOutBookOpen</h1>
@@ -117,20 +120,14 @@ public class PacketPlayOutBookOpen extends PacketPlayOutBukkitAbstract {
         Validate.notNull(bookItemStack, "The itemstack object is null.");
         Validate.isTrue(MoonLakeAPI.getItemLibrary().isWrittenBook(bookItemStack), "The itemstack type not is 'WRITTEN_BOOK'.");
 
-        PacketPlayOutCustomPayload ppocp = new PacketPlayOutCustomPayload();
-        ppocp.channelProperty().set(CHANNEL);
-
-        if(MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9))
-            // 处理 1.9+ 版本打开书本需要枚举手的数据
-            // 0 为 MAIN_HAND, 1 为 OFF_HAND
-            ppocp.dataProperty().byteBufProperty().get().writeByte(0);
+        Object packet = packet();
 
         for(MoonLakePlayer moonLakePlayer : PlayerManager.getCache(players)) {
             // 将需要发送的玩家转换成 MoonLakePlayer 以更好的操作
             ItemStack handItemStack = moonLakePlayer.getItemInHand();
             moonLakePlayer.setItemInHand(bookItemStack);
             // 发送数据包
-            ppocp.send(moonLakePlayer.getBukkitPlayer());
+            MinecraftReflection.sendPacket(moonLakePlayer.getBukkitPlayer(), packet);
             // 判断是否需要恢复原来的手中物品
             if(onlyPacket) moonLakePlayer.setItemInHand(handItemStack);
             // 更新玩家的背包
@@ -138,5 +135,24 @@ public class PacketPlayOutBookOpen extends PacketPlayOutBukkitAbstract {
         }
 
         return true;
+    }
+
+    @Nullable
+    @Override
+    public Object packet() {
+
+        ItemStack bookItemStack = bookProperty().get();
+        Validate.notNull(bookItemStack, "The itemstack object is null.");
+        Validate.isTrue(MoonLakeAPI.getItemLibrary().isWrittenBook(bookItemStack), "The itemstack type not is 'WRITTEN_BOOK'.");
+
+        PacketPlayOutCustomPayload ppocp = new PacketPlayOutCustomPayload();
+        ppocp.channelProperty().set(CHANNEL);
+
+        if(MoonLakeAPI.currentMCVersion().isOrLater(MinecraftVersion.V1_9))
+            // 处理 1.9+ 版本打开书本需要枚举手的数据
+            // 0 为 MAIN_HAND, 1 为 OFF_HAND
+            ppocp.dataProperty().get().writeByte(0);
+
+        return ppocp.packet();
     }
 }
