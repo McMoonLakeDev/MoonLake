@@ -34,7 +34,7 @@ import java.util.logging.Level;
  * <hr />
  * <div>
  *     <h1>Minecraft MoonLake Core API Plugin</h1>
- *     <p>By Month_Light Ver: 1.9-a5.2</p>
+ *     <p>By Month_Light Ver: 1.9-a5.2.1</p>
  *     <p>Website: <a href="http://www.mcyszh.com" target="_blank" style="text-decoration: none;">MoonLake Website</a></p>
  *     <p>QQ Group: 377607025 -> <a href="http://jq.qq.com/?_wv=1027&k=2IfPFrH" target="_blank">Jump</a></p>
  *     <hr />
@@ -71,7 +71,7 @@ import java.util.logging.Level;
  *     <h1>修改操作请您遵守 <a href="https://github.com/u2g/MoonLake/blob/master/LICENSE" target="_blank">GPLv3</a> 协议，您必须公开修改过的所有代码！</h1>
  * </div>
  *
- * @version 1.9-a5.2
+ * @version 1.9-a5.2.1
  * @author Month_Light
  */
 public class MoonLakePlugin extends JavaPlugin implements MoonLake {
