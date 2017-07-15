@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
  * <h1>PacketPlayOutChat</h1>
  * 数据包输出聊天消息（详细doc待补充...）
  *
- * @version 2.0
+ * @version 2.0.1
  * @author Month_Light
  * @see Packet
  * @see PacketPlayOut
@@ -93,7 +93,9 @@ public class PacketPlayOutChat extends PacketPlayOutBukkitAbstract {
      * 数据包输出聊天消息构造函数
      *
      * @param fancyMessage 花式消息
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #PacketPlayOutChat(ChatComponent)}
      */
+    @Deprecated
     public PacketPlayOutChat(FancyMessage fancyMessage) {
 
         this.message = new SimpleStringProperty(fancyMessage.toJsonString());
