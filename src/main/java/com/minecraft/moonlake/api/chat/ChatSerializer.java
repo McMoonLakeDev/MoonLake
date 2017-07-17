@@ -344,7 +344,10 @@ public final class ChatSerializer {
             if(src.hoverEvent != null) {
                 JsonObject jsonObjectHoverEvent = new JsonObject();
                 jsonObjectHoverEvent.addProperty("action", src.hoverEvent.getAction().toString().toLowerCase());
-                jsonObjectHoverEvent.add("value", context.serialize(src.hoverEvent.getValue()));
+                if(src.hoverEvent.getValue() instanceof ChatComponentRaw)
+                    jsonObjectHoverEvent.addProperty("value", ((ChatComponentRaw) src.hoverEvent.getValue()).getRaw());
+                else
+                    jsonObjectHoverEvent.add("value", context.serialize(src.hoverEvent.getValue()));
                 jsonObject.add("hoverEvent", jsonObjectHoverEvent);
             }
             return jsonObject;

@@ -18,7 +18,11 @@
 
 package com.minecraft.moonlake.api.chat;
 
+import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.nbt.NBTCompound;
+import com.minecraft.moonlake.util.StringUtil;
 import com.minecraft.moonlake.validate.Validate;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,7 +32,7 @@ import java.util.List;
  * <h1>ChatComponentFancy</h1>
  * 聊天花式组件类
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 public class ChatComponentFancy {
@@ -253,13 +257,31 @@ public class ChatComponentFancy {
     /**
      * 设置当前聊天组件的聊天移动上事件显示物品
      *
-     * @param item 物品 NBT 数据
+     * @param item 物品 NBT Json 数据 - {"id":"minecraft:iron_sword","Damage":0,"Count":1,"tag":{...}}
      * @throws IllegalArgumentException 如果物品 {@code NBT} 数据对象为 {@code null} 则抛出异常
+     * @see #tooltipItem(ItemStack)
      */
     public ChatComponentFancy tooltipItem(String item) {
         Validate.notNull(item, "The item object is null.");
-        getLast().getStyle().setHoverEvent(new ChatHoverEvent(ChatHoverEvent.Action.SHOW_ITEM, new ChatComponentText(item)));
+        getLast().getStyle().setHoverEvent(new ChatHoverEvent(ChatHoverEvent.Action.SHOW_ITEM, new ChatComponentRaw(item)));
         return this;
+    }
+
+    /**
+     * 设置当前聊天组件的聊天移动上事件显示物品
+     *
+     * @param itemStack 物品栈
+     * @throws IllegalArgumentException 如果物品栈对象为 {@code null} 则抛出异常
+     */
+    public ChatComponentFancy tooltipItem(ItemStack itemStack) {
+        Validate.notNull(itemStack, "The item stack object is null.");
+        NBTCompound tag = MoonLakeAPI.readNBT(itemStack);
+        String itemNBT = StringUtil.format("{\"id\":\"minecraft:%1$s\",\"Damage\":%2$s,\"Count\":%3$s,\"tag\":%4$s}",
+                itemStack.getType().name().toLowerCase(),
+                itemStack.getDurability(),
+                itemStack.getAmount(),
+                tag == null ? "{}" : tag.toString());
+        return tooltipItem(itemNBT);
     }
 
     /**
