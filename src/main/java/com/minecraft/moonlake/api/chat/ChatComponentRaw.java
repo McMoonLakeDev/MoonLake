@@ -17,6 +17,13 @@
 
 package com.minecraft.moonlake.api.chat;
 
+/**
+ * <h1>ChatComponentRaw</h1>
+ * 聊天文本源组件类
+ *
+ * @version 1.0
+ * @author Month_Light
+ */
 class ChatComponentRaw extends ChatComponentBase {
 
     private final String raw;
