@@ -59,6 +59,6 @@ public void onEnable() {
 * `MoonLakeSkinme` 玩家皮肤披风操作插件 :point_right:[GO](http://github.com/u2g/MoonLakeSkinme "MoonLake Skinme Plugin")
 * `MoonLakeEconomy` 基于 `MySQL` 的经济插件 :point_right:[GO](http://github.com/u2g/MoonLakeEconomy "MoonLake Economy Plugin")
 
-Website: [MoonLake](http://www.mcyszh.com "MoonLake Website")<br />
+Website: [MoonLake](http://www.mcmoonlake.com "MoonLake Website")<br />
 Minecraft MoonLake Core API Plugin
 By Month_Light

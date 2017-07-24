@@ -35,7 +35,7 @@ import java.util.logging.Level;
  * <div>
  *     <h1>Minecraft MoonLake Core API Plugin</h1>
  *     <p>By Month_Light Ver: 1.9-a5.2.1</p>
- *     <p>Website: <a href="http://www.mcyszh.com" target="_blank" style="text-decoration: none;">MoonLake Website</a></p>
+ *     <p>Website: <a href="http://www.mcmoonlake.com" target="_blank" style="text-decoration: none;">MoonLake Website</a></p>
  *     <p>QQ Group: 377607025 -> <a href="http://jq.qq.com/?_wv=1027&k=2IfPFrH" target="_blank">Jump</a></p>
  *     <hr />
  *     <div>
