@@ -46,6 +46,8 @@ import org.bukkit.potion.PotionEffectType;
  * @see SimpleMoonLakePlayer_v1_8
  * @see SimpleMoonLakePlayer_v1_9
  * @see SimpleMoonLakePlayer_v1_10
+ * @see SimpleMoonLakePlayer_v1_11
+ * @see SimpleMoonLakePlayer_v1_12
  */
 public class SimpleMoonLakePlayer extends AbstractPlayer {
 
