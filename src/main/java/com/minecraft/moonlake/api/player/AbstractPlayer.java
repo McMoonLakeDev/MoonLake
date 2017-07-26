@@ -66,7 +66,7 @@ import java.util.*;
  * <hr />
  * <div>
  *     <h1>Minecraft MoonLake Player Wrapped Abstract</h1>
- *     <p>By Month_Light Ver: 1.7.1</p>
+ *     <p>By Month_Light Ver: 1.7.2</p>
  * </div>
  * <hr />
  *
