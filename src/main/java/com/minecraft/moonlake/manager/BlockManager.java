@@ -44,7 +44,10 @@ public class BlockManager extends MoonLakeManager {
 
     /**
      * 坠落方块无视的方块类型集合
+     *
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
+    @Deprecated
     private final static Set<Material> FALLING_BLOCK_IGNORE_SET;
     private static volatile MethodAccessor worldPlayBlockActionMethod;
     private static volatile MethodAccessor tileEntityGetBlockMethod;
@@ -164,7 +167,9 @@ public class BlockManager extends MoonLakeManager {
      * @param radius 半径
      * @return 坠落方块类型方块集合
      * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
+    @Deprecated
     public static List<Block> getFallingBlocksInRadius(Location location, int radius) {
 
         return getFallingBlocksInRadius(location, radius, true);
@@ -178,7 +183,9 @@ public class BlockManager extends MoonLakeManager {
      * @param hollow 是否空洞
      * @return 坠落方块类型方块集合
      * @throws IllegalArgumentException 如果位置对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除.
      */
+    @Deprecated
     public static List<Block> getFallingBlocksInRadius(Location location, int radius, boolean hollow) {
 
         Validate.notNull(location, "The localtion object is null.");

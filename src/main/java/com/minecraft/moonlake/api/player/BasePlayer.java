@@ -18,7 +18,9 @@
  
 package com.minecraft.moonlake.api.player;
 
+import com.minecraft.moonlake.api.chat.ChatComponent;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
+import com.minecraft.moonlake.api.packet.wrapper.PacketPlayOutChat;
 import com.minecraft.moonlake.exception.IllegalBukkitVersionException;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.*;
@@ -34,7 +36,7 @@ import java.util.UUID;
  * <h1>BasePlayer</h1>
  * 玩家基础接口（详细doc待补充...）
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 public interface BasePlayer {
@@ -411,7 +413,9 @@ public interface BasePlayer {
      *
      * @param fancyMessage 花式消息
      * @throws IllegalArgumentException 如果发送的花式消息对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #send(ChatComponent)}
      */
+    @Deprecated
     void send(FancyMessage fancyMessage);
 
     /**
@@ -419,8 +423,36 @@ public interface BasePlayer {
      *
      * @param fancyMessages 花式消息
      * @throws IllegalArgumentException 如果发送的花式消息对象为 {@code null} 则抛出异常
+     * @deprecated 已过时, 将于 v2.0 删除. 请使用 {@link #send(ChatComponent...)}
      */
+    @Deprecated
     void send(FancyMessage... fancyMessages);
+
+    /**
+     * 给此玩家发送聊天组件消息
+     *
+     * @param chatComponent 聊天组件
+     * @throws IllegalArgumentException 如果发送的聊天组件对象为 {@code null} 则抛出异常
+     */
+    void send(ChatComponent chatComponent);
+
+    /**
+     * 给此玩家发送聊天组件消息
+     *
+     * @param chatComponents 聊天组件
+     * @throws IllegalArgumentException 如果发送的聊天组件对象为 {@code null} 则抛出异常
+     */
+    void send(ChatComponent... chatComponents);
+
+    /**
+     * 给此玩家发送聊天组件消息
+     *
+     * @param chatComponent 聊天组件
+     * @param mode 聊天模式
+     * @throws IllegalArgumentException 如果发送的聊天组件对象为 {@code null} 则抛出异常
+     * @throws IllegalArgumentException 如果聊天模式对象为 {@code null} 则抛出异常
+     */
+    void send(ChatComponent chatComponent, PacketPlayOutChat.Mode mode);
 
     /**
      * 将此玩家进行踢出服务器

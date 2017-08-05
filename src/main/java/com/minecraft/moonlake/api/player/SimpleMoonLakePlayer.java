@@ -39,13 +39,15 @@ import org.bukkit.potion.PotionEffectType;
  * <h1>SimpleMoonLakePlayer</h1>
  * 月色之湖玩家接口单包装类
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  * @see MoonLakePlayer
  * @see AbstractPlayer
  * @see SimpleMoonLakePlayer_v1_8
  * @see SimpleMoonLakePlayer_v1_9
  * @see SimpleMoonLakePlayer_v1_10
+ * @see SimpleMoonLakePlayer_v1_11
+ * @see SimpleMoonLakePlayer_v1_12
  */
 public class SimpleMoonLakePlayer extends AbstractPlayer {
 

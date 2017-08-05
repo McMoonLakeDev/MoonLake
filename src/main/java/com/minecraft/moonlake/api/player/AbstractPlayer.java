@@ -19,6 +19,7 @@
 package com.minecraft.moonlake.api.player;
 
 import com.minecraft.moonlake.MoonLakeAPI;
+import com.minecraft.moonlake.api.chat.ChatComponent;
 import com.minecraft.moonlake.api.entity.AttributeType;
 import com.minecraft.moonlake.api.fancy.FancyMessage;
 import com.minecraft.moonlake.api.packet.PacketPlayOutBukkit;
@@ -65,11 +66,11 @@ import java.util.*;
  * <hr />
  * <div>
  *     <h1>Minecraft MoonLake Player Wrapped Abstract</h1>
- *     <p>By Month_Light Ver: 1.7.1</p>
+ *     <p>By Month_Light Ver: 1.7.2</p>
  * </div>
  * <hr />
  *
- * @version 1.7.1
+ * @version 1.7.2
  * @author Month_Light
  * @see MoonLakePlayer
  */
@@ -206,6 +207,34 @@ public abstract class AbstractPlayer implements MoonLakePlayer {
 
             send(fancyMessage);
         }
+    }
+
+    @Override
+    public void send(ChatComponent chatComponent) {
+
+        send(chatComponent, PacketPlayOutChat.Mode.CHAT);
+    }
+
+    @Override
+    public void send(ChatComponent... chatComponents) {
+
+        Validate.notNull(chatComponents, "The chat component object is null.");
+
+        for(ChatComponent chatComponent : chatComponents) {
+
+            send(chatComponent);
+        }
+    }
+
+    @Override
+    public void send(ChatComponent chatComponent, PacketPlayOutChat.Mode mode) {
+
+        Validate.notNull(chatComponent, "The chat component object is null.");
+        Validate.notNull(mode, "The mode object is null.");
+
+        PacketPlayOutChat ppoc = new PacketPlayOutChat(chatComponent);
+        ppoc.modeProperty().set(mode);
+        ppoc.send(getBukkitPlayer());
     }
 
     @Override
