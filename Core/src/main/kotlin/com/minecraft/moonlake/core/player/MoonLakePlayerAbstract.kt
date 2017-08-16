@@ -17,12 +17,18 @@
 
 package com.minecraft.moonlake.core.player
 
+import com.minecraft.moonlake.api.notNull
 import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
 import com.minecraft.moonlake.api.player.MoonLakePlayer
+import com.minecraft.moonlake.api.toBukkitWorld
+import com.minecraft.moonlake.api.toColor
 import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.metadata.MetadataValue
 import org.bukkit.permissions.Permission
@@ -47,9 +53,12 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
 
     @Throws(IllegalOfflinePlayerException::class)
     constructor(player: Player) {
-        if(player == null || !player.isOnline)
-            throw IllegalOfflinePlayerException(player.name)
-        this.player = player
+        this.player = (!player.isOnline).let {
+            when(it) {
+                true -> throw IllegalOfflinePlayerException(player.name)
+                else -> player
+            }
+        }
     }
 
     /** function */
@@ -233,6 +242,218 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
 
     override fun onEject(): Boolean
             = getBukkitPlayer().eject()
+
+    override fun createExplosion(power: Float)
+            = createExplosion(power, true)
+
+    override fun createExplosion(power: Float, fire: Boolean)
+            = createExplosion(power, fire, true)
+
+    override fun createExplosion(power: Float, fire: Boolean, breakBlock: Boolean)
+            { getWorld().createExplosion(getX(), getY(), getZ(), power, fire, breakBlock) }
+
+    override fun getTime(): Long
+            = getBukkitPlayer().playerTime
+
+    override fun setTime(time: Long)
+            = setTime(time, true)
+
+    override fun setTime(time: Long, relative: Boolean)
+            = getBukkitPlayer().setPlayerTime(time, relative)
+
+    override fun getWeather(): WeatherType
+            = getBukkitPlayer().playerWeather
+
+    override fun setWeather(type: WeatherType)
+            { getBukkitPlayer().playerWeather = type }
+
+    override fun resetTime()
+            = getBukkitPlayer().resetPlayerTime()
+
+    override fun resetWeather()
+            = getBukkitPlayer().resetPlayerWeather()
+
+    override fun getDirection(): Vector
+            = getLocation().direction
+
+    override fun getLastDamage(): Double
+            = getBukkitPlayer().lastDamage
+
+    override fun getLastDamageCause(): EntityDamageEvent
+            = getBukkitPlayer().lastDamageCause
+
+    override fun chat(message: String)
+            = getBukkitPlayer().chat(message)
+
+    override fun send(message: String)
+            = getBukkitPlayer().sendMessage(message.toColor())
+
+    override fun send(vararg messages: String)
+            = getBukkitPlayer().sendMessage(messages.toColor())
+
+    override fun send(message: String, vararg args: Any)
+            = getBukkitPlayer().sendMessage(message.format(args).toColor())
+
+    override fun onKick()
+            = onKick("None")
+
+    override fun onKick(reason: String)
+            = getBukkitPlayer().kickPlayer(reason)
+
+    override fun getHealth(): Double
+            = getBukkitPlayer().health
+
+    override fun setHealth(health: Double)
+            { getBukkitPlayer().health = health }
+
+    override fun giveHealth(value: Double) = (getHealth() + value >= getMaxHealth()).let {
+        when(it) {
+            true -> setHealth(getMaxHealth())
+            else -> setHealth(getHealth() + value)
+        }
+    }
+
+    override fun takeHealth(value: Double) = (getHealth() - value <= .0).let {
+        when(it) {
+            true -> setHealth(.0)
+            else -> setHealth(getHealth() - value)
+        }
+    }
+
+    override fun getMaxHealth(): Double
+            = getBukkitPlayer().maxHealth
+
+    override fun setMaxHealth(maxHealth: Double)
+            { getBukkitPlayer().maxHealth = maxHealth }
+
+    override fun resetMaxHealth()
+            = getBukkitPlayer().resetMaxHealth()
+
+    override fun getExp(): Float
+            = getBukkitPlayer().exp
+
+    override fun setExp(exp: Float)
+            { getBukkitPlayer().exp = exp }
+
+    override fun giveExp(value: Float)
+            = setExp(getExp() + value)
+
+    override fun takeExp(value: Float)
+            = setExp(getExp() - value)
+
+    override fun getLevel(): Int
+            = getBukkitPlayer().level
+
+    override fun setLevel(level: Int)
+            { getBukkitPlayer().level = level }
+
+    override fun giveLevel(value: Int)
+            = setLevel(getLevel() + value)
+
+    override fun takeLevel(value: Int)
+            = setLevel(getLevel() - value)
+
+    override fun getFlySpeed(): Float
+            = getBukkitPlayer().flySpeed
+
+    override fun setFlySpeed(flySpeed: Float)
+            { getBukkitPlayer().flySpeed = flySpeed }
+
+    override fun getWalkSpeed(): Float
+            = getBukkitPlayer().walkSpeed
+
+    override fun setWalkSpeed(walkSpeed: Float)
+            { getBukkitPlayer().walkSpeed = walkSpeed }
+
+    override fun getFoodLevel(): Int
+            = getBukkitPlayer().foodLevel
+
+    override fun setFoodLevel(foodLevel: Int)
+            { getBukkitPlayer().foodLevel = foodLevel }
+
+    override fun isFlying(): Boolean
+            = getBukkitPlayer().isFlying
+
+    override fun isAllowFly(): Boolean
+            = getBukkitPlayer().allowFlight
+
+    override fun setAllowFly(allowFly: Boolean)
+            { getBukkitPlayer().allowFlight = allowFly }
+
+    override fun damage(value: Double)
+            = getBukkitPlayer().damage(value)
+
+    override fun damage(value: Double, damager: LivingEntity)
+            = getBukkitPlayer().damage(value, damager)
+
+    override fun teleport(location: Location): Boolean
+            = getBukkitPlayer().teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN)
+
+    override fun teleport(player: Player): Boolean
+            = teleport(player.location)
+
+    override fun teleport(player: MoonLakePlayer): Boolean
+            = teleport(player.getLocation())
+
+    override fun teleport(x: Double, y: Double, z: Double): Boolean
+            = teleport(x, y, z, getYaw(), getPitch())
+
+    override fun teleport(x: Double, y: Double, z: Double, yaw: Float, pitch: Float): Boolean
+            = teleport(getWorld(), x, y, z, yaw, pitch)
+
+    override fun teleport(world: World, x: Double, y: Double, z: Double): Boolean
+            = teleport(world, x, y, z, getYaw(), getPitch())
+
+    override fun teleport(world: World, x: Double, y: Double, z: Double, yaw: Float, pitch: Float): Boolean
+            = teleport(Location(world, x, y, z, yaw, pitch))
+
+    override fun teleport(world: String, x: Double, y: Double, z: Double): Boolean
+            = world.toBukkitWorld().notNull().let { teleport(it, x, y, z) }
+
+    override fun teleport(world: String, x: Double, y: Double, z: Double, yaw: Float, pitch: Float): Boolean
+            = world.toBukkitWorld().notNull().let { teleport(it, x, y, z, yaw, pitch) }
+
+    override fun teleportSpawn(world: World): Boolean
+            = teleport(world.spawnLocation)
+
+    override fun teleportSpawn(world: String): Boolean
+            = world.toBukkitWorld().notNull().let { teleport(it.spawnLocation) }
+
+    override fun isCanPickupItems(): Boolean
+            = getBukkitPlayer().canPickupItems
+
+    override fun setCanPickupItems(canPickupItems: Boolean)
+            { getBukkitPlayer().canPickupItems = canPickupItems }
+
+    override fun getFallDistance(): Float
+            = getBukkitPlayer().fallDistance
+
+    override fun setFallDistance(fallDistance: Float)
+            { getBukkitPlayer().fallDistance = fallDistance }
+
+    override fun getGameMode(): GameMode
+            = getBukkitPlayer().gameMode
+
+    override fun setGameMode(gameMode: GameMode)
+            { getBukkitPlayer().gameMode = gameMode }
+
+    override fun isSneaking(): Boolean
+            = getBukkitPlayer().isSneaking
+
+    override fun isSprinting(): Boolean
+            = getBukkitPlayer().isSprinting
+
+    override fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration: Int): Boolean
+            = addPotionEffect(type, amplifier, duration, false, false)
+
+    override fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration: Int, ambient: Boolean): Boolean
+            = addPotionEffect(type, amplifier, duration, ambient, false)
+
+    override fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration: Int, ambient: Boolean, particles: Boolean): Boolean
+            = getBukkitPlayer().addPotionEffect(PotionEffect(type, duration, amplifier, ambient, particles))
+
+    override fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration: Int, ambient: Boolean, particles: Boolean, color: Color): Boolean
+            = getBukkitPlayer().addPotionEffect(PotionEffect(type, duration, amplifier, ambient, particles))
 
     override fun compareTo(other: MoonLakePlayer): Int
             = name.compareTo(other.name)

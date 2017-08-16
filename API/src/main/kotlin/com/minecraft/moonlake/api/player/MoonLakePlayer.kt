@@ -22,7 +22,9 @@ import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.AnimalTamer
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.metadata.Metadatable
 import org.bukkit.potion.PotionEffect
@@ -30,6 +32,8 @@ import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 
 interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, Metadatable, InventoryHolder, Comparable<MoonLakePlayer> {
+
+    /** Base Function */
 
     fun getBukkitPlayer(): Player
 
@@ -85,10 +89,6 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, Metadatable
 
     fun playNote(instrument: Instrument, note: Note)
 
-    fun stopSound(sound: Sound) // TODO 1.10
-
-    fun stopSound(sound: String) // TODO 1.10
-
     fun getActivePotionEffects(): Collection<PotionEffect>
 
     fun hasPotionEffect(type: PotionEffectType): Boolean
@@ -106,4 +106,171 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, Metadatable
     fun setNoDamageTicks(ticks: Int)
 
     fun onEject(): Boolean
+
+    fun createExplosion(power: Float)
+
+    fun createExplosion(power: Float, fire: Boolean)
+
+    fun createExplosion(power: Float, fire: Boolean, breakBlock: Boolean)
+
+    fun getTime(): Long
+
+    fun setTime(time: Long)
+
+    fun setTime(time: Long, relative: Boolean)
+
+    fun getWeather(): WeatherType
+
+    fun setWeather(type: WeatherType)
+
+    fun resetTime()
+
+    fun resetWeather()
+
+    fun getDirection(): Vector
+
+    fun getLastDamage(): Double
+
+    fun getLastDamageCause(): EntityDamageEvent
+
+    fun chat(message: String)
+
+    fun send(message: String)
+
+    fun send(vararg messages: String)
+
+    fun send(message: String, vararg args: Any)
+
+    fun onKick()
+
+    fun onKick(reason: String)
+
+    fun getHealth(): Double
+
+    fun setHealth(health: Double)
+
+    fun giveHealth(value: Double)
+
+    fun takeHealth(value: Double)
+
+    fun getMaxHealth(): Double
+
+    fun setMaxHealth(maxHealth: Double)
+
+    fun resetMaxHealth()
+
+    fun getExp(): Float
+
+    fun setExp(exp: Float)
+
+    fun giveExp(value: Float)
+
+    fun takeExp(value: Float)
+
+    fun getLevel(): Int
+
+    fun setLevel(level: Int)
+
+    fun giveLevel(value: Int)
+
+    fun takeLevel(value: Int)
+
+    fun getFlySpeed(): Float
+
+    fun setFlySpeed(flySpeed: Float)
+
+    fun getWalkSpeed(): Float
+
+    fun setWalkSpeed(walkSpeed: Float)
+
+    fun getFoodLevel(): Int
+
+    fun setFoodLevel(foodLevel: Int)
+
+    fun isFlying(): Boolean
+
+    fun isAllowFly(): Boolean
+
+    fun setAllowFly(allowFly: Boolean)
+
+    fun damage(value: Double)
+
+    fun damage(value: Double, damager: LivingEntity)
+
+    fun teleport(location: Location): Boolean
+
+    fun teleport(player: Player): Boolean
+
+    fun teleport(player: MoonLakePlayer): Boolean
+
+    fun teleport(x: Double, y: Double, z: Double): Boolean
+
+    fun teleport(x: Double, y: Double, z: Double, yaw: Float, pitch: Float): Boolean
+
+    fun teleport(world: World, x: Double, y: Double, z: Double): Boolean
+
+    fun teleport(world: World, x: Double, y: Double, z: Double, yaw: Float, pitch: Float): Boolean
+
+    fun teleport(world: String, x: Double, y: Double, z: Double): Boolean
+
+    fun teleport(world: String, x: Double, y: Double, z: Double, yaw: Float, pitch: Float): Boolean
+
+    fun teleportSpawn(world: World): Boolean
+
+    fun teleportSpawn(world: String): Boolean
+
+    fun isCanPickupItems(): Boolean
+
+    fun setCanPickupItems(canPickupItems: Boolean)
+
+    fun getFallDistance(): Float
+
+    fun setFallDistance(fallDistance: Float)
+
+    fun getGameMode(): GameMode
+
+    fun setGameMode(gameMode: GameMode)
+
+    fun isSneaking(): Boolean
+
+    fun isSprinting(): Boolean
+
+    fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration : Int): Boolean
+
+    fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration : Int, ambient: Boolean): Boolean
+
+    fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration : Int, ambient: Boolean, particles: Boolean): Boolean
+
+    /** Color Parameter Only Support 1.9+  */
+    fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration : Int, ambient: Boolean, particles: Boolean, color: Color): Boolean
+
+    /** Need Version Adapter Function */
+
+    // TODO 1.9
+
+    fun isInvulnerable(): Boolean
+
+    fun setInvulnerable(invulnerable: Boolean)
+
+    fun isGlowing(): Boolean
+
+    fun setGlowing(glowing: Boolean)
+
+    fun isGliding(): Boolean
+
+    fun setGliding(gliding: Boolean)
+
+    fun isSilent(): Boolean
+
+    fun setSilent(silent: Boolean)
+
+    // TODO 1.10
+
+    fun hasGravity(): Boolean
+
+    fun setGravity(gravity: Boolean)
+
+    fun stopSound(sound: Sound)
+
+    fun stopSound(sound: String)
 }

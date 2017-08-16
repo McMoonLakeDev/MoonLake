@@ -36,12 +36,55 @@ class MoonLakePlayerBase : MoonLakePlayerAbstract {
 
     /** function */
 
-    override fun getAttribute(type: AttributeType): Attribute
-            = throw UnsupportedOperationException()
+    override fun isInvulnerable(): Boolean {
+        throw UnsupportedOperationException()
+    }
 
-    override fun stopSound(sound: Sound)
-            = throw UnsupportedOperationException()
+    override fun setInvulnerable(invulnerable: Boolean) {
+        throw UnsupportedOperationException()
+    }
 
-    override fun stopSound(sound: String)
-            = throw UnsupportedOperationException()
+    override fun isGlowing(): Boolean {
+        throw UnsupportedOperationException()
+    }
+
+    override fun setGlowing(glowing: Boolean) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun isGliding(): Boolean {
+        throw UnsupportedOperationException()
+    }
+
+    override fun setGliding(gliding: Boolean) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun isSilent(): Boolean {
+        throw UnsupportedOperationException()
+    }
+
+    override fun setSilent(silent: Boolean) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun hasGravity(): Boolean {
+        throw UnsupportedOperationException()
+    }
+
+    override fun setGravity(gravity: Boolean) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun stopSound(sound: Sound) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun stopSound(sound: String) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun getAttribute(type: AttributeType): Attribute {
+        throw UnsupportedOperationException()
+    }
 }
