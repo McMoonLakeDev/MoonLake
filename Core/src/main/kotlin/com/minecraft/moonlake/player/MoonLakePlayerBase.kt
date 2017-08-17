@@ -15,16 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.core.player
+package com.minecraft.moonlake.player
 
 import com.minecraft.moonlake.api.attribute.Attribute
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
 import org.bukkit.Sound
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import java.util.*
 
-class MoonLakePlayerBase : MoonLakePlayerAbstract {
+open class MoonLakePlayerBase : MoonLakePlayerAbstract {
 
     /** constructor */
 
@@ -68,11 +70,31 @@ class MoonLakePlayerBase : MoonLakePlayerAbstract {
         throw UnsupportedOperationException()
     }
 
-    override fun hasGravity(): Boolean {
+    override fun getAttribute(type: AttributeType): Attribute {
         throw UnsupportedOperationException()
     }
 
-    override fun setGravity(gravity: Boolean) {
+    override fun getSpectatorTarget(): Entity {
+        throw UnsupportedOperationException()
+    }
+
+    override fun setSpectatorTarget(target: Entity) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun getItemInMainHand(): ItemStack {
+        throw UnsupportedOperationException()
+    }
+
+    override fun setItemInMainHand(itemStack: ItemStack?) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun getItemInOffHand(): ItemStack {
+        throw UnsupportedOperationException()
+    }
+
+    override fun setItemInOffHand(itemStack: ItemStack?) {
         throw UnsupportedOperationException()
     }
 
@@ -81,10 +103,6 @@ class MoonLakePlayerBase : MoonLakePlayerAbstract {
     }
 
     override fun stopSound(sound: String) {
-        throw UnsupportedOperationException()
-    }
-
-    override fun getAttribute(type: AttributeType): Attribute {
         throw UnsupportedOperationException()
     }
 }

@@ -19,9 +19,11 @@
 
 package com.minecraft.moonlake.api
 
+import com.minecraft.moonlake.api.player.MoonLakePlayer
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.World
+import org.bukkit.entity.Player
 
 /** MoonLake API Extended Function */
 
@@ -46,3 +48,5 @@ fun Array<out String>.toColor(altColorChar: Char): Array<out String>
 fun String.toBukkitWorld(): World?
         = Bukkit.getWorld(this)
 
+fun Player.toMoonLakePlayer(): MoonLakePlayer
+        = throw UnsupportedOperationException() // TODO

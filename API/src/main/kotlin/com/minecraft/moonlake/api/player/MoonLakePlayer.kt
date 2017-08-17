@@ -21,15 +21,16 @@ import com.minecraft.moonlake.api.attribute.Attributable
 import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.AnimalTamer
-import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
+import org.bukkit.entity.*
 import org.bukkit.event.entity.EntityDamageEvent
-import org.bukkit.inventory.InventoryHolder
+import org.bukkit.inventory.*
+import org.bukkit.metadata.MetadataValue
 import org.bukkit.metadata.Metadatable
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.util.Vector
+import java.net.InetSocketAddress
 
 interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, Metadatable, InventoryHolder, Comparable<MoonLakePlayer> {
 
@@ -231,6 +232,14 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, Metadatable
 
     fun setGameMode(gameMode: GameMode)
 
+    fun isSurvivalMode(): Boolean
+
+    fun isCreativeMode(): Boolean
+
+    fun isSpectatorMode(): Boolean
+
+    fun isAdventureMode(): Boolean
+
     fun isSneaking(): Boolean
 
     fun isSprinting(): Boolean
@@ -243,6 +252,82 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, Metadatable
 
     /** Color Parameter Only Support 1.9+  */
     fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration : Int, ambient: Boolean, particles: Boolean, color: Color): Boolean
+
+    fun getScoreboard(): Scoreboard
+
+    fun setScoreboard(scoreboard: Scoreboard)
+
+    fun <T: Projectile> launchProjectile(projectile: Class<T>): T
+
+    fun <T: Projectile> launchProjectile(projectile: Class<T>, vector: Vector): T
+
+    fun performCommand(command: String): Boolean
+
+    fun getCompassTarget(): Location
+
+    fun setCompassTarget(target: Location)
+
+    fun getBedSpawnLocation(): Location
+
+    fun setBedSpawnLocation(target: Location, force: Boolean = false)
+
+    fun getNearbyEntities(radius: Double): List<Entity>
+
+    fun getNearbyLivingEntities(radius: Double): List<LivingEntity>
+
+    fun getNearbyPlayers(radius: Double): List<MoonLakePlayer>
+
+    fun getNearbyEntities(x: Double, y: Double, z: Double): List<Entity>
+
+    fun getNearbyLivingEntities(x: Double, y: Double, z: Double): List<LivingEntity>
+
+    fun getNearbyPlayers(x: Double, y: Double, z: Double): List<MoonLakePlayer>
+
+    fun <T: Entity> getNearbyEntities(entityClass: Class<T>, radius: Double): List<T>
+
+    fun <T: Entity> getNearbyEntities(entityClass: Class<T>, x: Double, y: Double, z: Double): List<T>
+
+    fun getMetadataFirst(key: String): MetadataValue?
+
+    fun getMetadataLast(key: String): MetadataValue?
+
+    fun getPing(): Int
+
+    fun getIp(): String
+
+    fun getPort(): Int
+
+    fun getAddress(): InetSocketAddress
+
+    override fun getInventory(): PlayerInventory
+
+    fun getEnderChest(): Inventory
+
+    fun updateInventory()
+
+    fun closeInventory()
+
+    fun clearInventory()
+
+    fun getItemInHand(): ItemStack
+
+    fun setItemInHand(itemStack: ItemStack?)
+
+    fun getItemOnCursor(): ItemStack
+
+    fun setItemOnCursor(itemStack: ItemStack?)
+
+    fun getOpenInventory(): InventoryView
+
+    fun openInventory(inventory: Inventory): InventoryView
+
+    fun addItems(vararg itemStacks: ItemStack): Map<Int, ItemStack>
+
+    fun removeItems(vararg itemStacks: ItemStack): Map<Int, ItemStack>
+
+    fun hasGravity(): Boolean
+
+    fun setGravity(gravity: Boolean)
 
     /** Need Version Adapter Function */
 
@@ -264,11 +349,19 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, Metadatable
 
     fun setSilent(silent: Boolean)
 
+    fun getSpectatorTarget(): Entity
+
+    fun setSpectatorTarget(target: Entity)
+
+    fun getItemInMainHand(): ItemStack
+
+    fun setItemInMainHand(itemStack: ItemStack?)
+
+    fun getItemInOffHand(): ItemStack
+
+    fun setItemInOffHand(itemStack: ItemStack?)
+
     // TODO 1.10
-
-    fun hasGravity(): Boolean
-
-    fun setGravity(gravity: Boolean)
 
     fun stopSound(sound: Sound)
 

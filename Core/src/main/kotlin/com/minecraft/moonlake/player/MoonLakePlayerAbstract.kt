@@ -15,21 +15,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.core.player
+package com.minecraft.moonlake.player
 
 import com.minecraft.moonlake.api.notNull
 import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
 import com.minecraft.moonlake.api.player.MoonLakePlayer
 import com.minecraft.moonlake.api.toBukkitWorld
 import com.minecraft.moonlake.api.toColor
+import com.minecraft.moonlake.api.toMoonLakePlayer
 import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.entity.Projectile
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryView
+import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.PlayerInventory
 import org.bukkit.metadata.MetadataValue
 import org.bukkit.permissions.Permission
 import org.bukkit.permissions.PermissionAttachment
@@ -37,7 +43,9 @@ import org.bukkit.permissions.PermissionAttachmentInfo
 import org.bukkit.plugin.Plugin
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.util.Vector
+import java.net.InetSocketAddress
 import java.util.*
 
 abstract class MoonLakePlayerAbstract : MoonLakePlayer {
@@ -66,6 +74,9 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
     override final fun getBukkitPlayer(): Player
             = player
 
+    override final fun spigot(): CommandSender.Spigot
+            = throw UnsupportedOperationException()
+
     override fun getName(): String
             = getBukkitPlayer().name
 
@@ -77,9 +88,6 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
 
     override fun sendMessage(messages: Array<out String>)
             = getBukkitPlayer().sendMessage(messages)
-
-    override fun spigot(): CommandSender.Spigot
-            = throw UnsupportedOperationException()
 
     override fun isPermissionSet(permission: String): Boolean
             = getBukkitPlayer().isPermissionSet(permission)
@@ -135,7 +143,7 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
     override fun setMetadata(key: String, value: MetadataValue)
             = getBukkitPlayer().setMetadata(key, value)
 
-    override fun getInventory(): Inventory
+    override fun getInventory(): PlayerInventory
             = getBukkitPlayer().inventory
 
     override fun getEntityId(): Int
@@ -437,6 +445,18 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
     override fun setGameMode(gameMode: GameMode)
             { getBukkitPlayer().gameMode = gameMode }
 
+    override fun isSurvivalMode(): Boolean
+            = getGameMode() == GameMode.SURVIVAL
+
+    override fun isCreativeMode(): Boolean
+            = getGameMode() == GameMode.CREATIVE
+
+    override fun isSpectatorMode(): Boolean
+            = getGameMode() == GameMode.SPECTATOR
+
+    override fun isAdventureMode(): Boolean
+            = getGameMode() == GameMode.ADVENTURE
+
     override fun isSneaking(): Boolean
             = getBukkitPlayer().isSneaking
 
@@ -454,6 +474,137 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
 
     override fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration: Int, ambient: Boolean, particles: Boolean, color: Color): Boolean
             = getBukkitPlayer().addPotionEffect(PotionEffect(type, duration, amplifier, ambient, particles))
+
+    override fun getScoreboard(): Scoreboard
+            = getBukkitPlayer().scoreboard
+
+    override fun setScoreboard(scoreboard: Scoreboard)
+            { getBukkitPlayer().scoreboard = scoreboard }
+
+    override fun <T : Projectile> launchProjectile(projectile: Class<T>): T
+            = getBukkitPlayer().launchProjectile(projectile)
+
+    override fun <T : Projectile> launchProjectile(projectile: Class<T>, vector: Vector): T
+            = getBukkitPlayer().launchProjectile(projectile, vector)
+
+    override fun performCommand(command: String): Boolean = command.let {
+        when(it[0] == '/') {
+            true -> getBukkitPlayer().performCommand(it.substring(1))
+            else -> getBukkitPlayer().performCommand(it)
+        }
+    }
+
+    override fun getCompassTarget(): Location
+            = getBukkitPlayer().compassTarget
+
+    override fun setCompassTarget(target: Location)
+            { getBukkitPlayer().compassTarget = target }
+
+    override fun getBedSpawnLocation(): Location
+            = getBukkitPlayer().bedSpawnLocation
+
+    override fun setBedSpawnLocation(target: Location, force: Boolean)
+            = getBukkitPlayer().setBedSpawnLocation(target, force)
+
+    override fun getNearbyEntities(radius: Double): List<Entity>
+            = getNearbyEntities(radius, radius, radius)
+
+    override fun getNearbyLivingEntities(radius: Double): List<LivingEntity>
+            = getNearbyLivingEntities(radius, radius, radius)
+
+    override fun getNearbyPlayers(radius: Double): List<MoonLakePlayer>
+            = getNearbyPlayers(radius, radius, radius)
+
+    override fun getNearbyEntities(x: Double, y: Double, z: Double): List<Entity>
+            = getBukkitPlayer().getNearbyEntities(x, y, z)
+
+    override fun getNearbyLivingEntities(x: Double, y: Double, z: Double): List<LivingEntity>
+            = getNearbyEntities(x, y, z).filter { it is LivingEntity }.map { it as LivingEntity }
+
+    override fun getNearbyPlayers(x: Double, y: Double, z: Double): List<MoonLakePlayer>
+            = getNearbyEntities(x, y, z).filter { it is Player }.map { (it as Player).toMoonLakePlayer() }
+
+    override fun <T : Entity> getNearbyEntities(entityClass: Class<T>, radius: Double): List<T>
+            = getNearbyEntities(entityClass, radius, radius, radius)
+
+    override fun <T : Entity> getNearbyEntities(entityClass: Class<T>, x: Double, y: Double, z: Double): List<T>
+            = getNearbyEntities(x, y, z).filter { entityClass.isInstance(it) }.map { entityClass.cast(it) }
+
+    override fun getMetadataFirst(key: String): MetadataValue? = getMetadata(key).let {
+        when(it.isEmpty()) {
+            true -> null
+            else -> it.first()
+        }
+    }
+
+    override fun getMetadataLast(key: String): MetadataValue? = getMetadata(key).let {
+        when(it.isEmpty()) {
+            true -> null
+            else -> it.last()
+        }
+    }
+
+    override fun getPing(): Int
+            = -1 // TODO
+
+    override fun getIp(): String = getAddress().address.let {
+        when(it == null) {
+            true -> "127.0.0.1"
+            else -> it.hostName
+        }
+    }
+
+    override fun getPort(): Int
+            = getAddress().port
+
+    override fun getAddress(): InetSocketAddress
+            = getBukkitPlayer().address
+
+    override fun getEnderChest(): Inventory
+            = getBukkitPlayer().enderChest
+
+    override fun updateInventory()
+            = getBukkitPlayer().updateInventory()
+
+    override fun closeInventory()
+            = getBukkitPlayer().closeInventory()
+
+    override fun clearInventory()
+            = inventory.clear()
+
+    @Suppress("DEPRECATION")
+    override fun getItemInHand(): ItemStack
+            = getBukkitPlayer().itemInHand
+
+    @Suppress("DEPRECATION")
+    override fun setItemInHand(itemStack: ItemStack?)
+            { getBukkitPlayer().itemInHand = itemStack }
+
+    override fun getItemOnCursor(): ItemStack
+            = getBukkitPlayer().itemOnCursor
+
+    override fun setItemOnCursor(itemStack: ItemStack?)
+            { getBukkitPlayer().itemOnCursor = itemStack }
+
+    override fun getOpenInventory(): InventoryView
+            = getBukkitPlayer().openInventory
+
+    override fun openInventory(inventory: Inventory): InventoryView
+            = getBukkitPlayer().openInventory(inventory)
+
+    override fun addItems(vararg itemStacks: ItemStack): Map<Int, ItemStack>
+            = inventory.addItem(*itemStacks)
+
+    override fun removeItems(vararg itemStacks: ItemStack): Map<Int, ItemStack>
+            = inventory.removeItem(*itemStacks)
+
+    override fun hasGravity(): Boolean
+            = getBukkitPlayer().hasGravity()
+
+    override fun setGravity(gravity: Boolean)
+            { getBukkitPlayer().setGravity(gravity) }
+
+    /** significant */
 
     override fun compareTo(other: MoonLakePlayer): Int
             = name.compareTo(other.name)
