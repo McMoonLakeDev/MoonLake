@@ -21,7 +21,7 @@ import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
 import org.bukkit.entity.Player
 import java.util.*
 
-class MoonLakePlayerImpl_v1_8_R1 : MoonLakePlayerBase {
+open class MoonLakePlayerImpl_v1_8_R1 : MoonLakePlayerBase {
 
     /** constructor */
 

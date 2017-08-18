@@ -17,6 +17,7 @@
 
 package com.minecraft.moonlake.player
 
+import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.notNull
 import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
 import com.minecraft.moonlake.api.player.MoonLakePlayer
@@ -329,13 +330,13 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
     }
 
     override fun getMaxHealth(): Double
-            = getBukkitPlayer().maxHealth
+            = getAttribute(AttributeType.MAX_HEALTH).getValue()
 
     override fun setMaxHealth(maxHealth: Double)
-            { getBukkitPlayer().maxHealth = maxHealth }
+            = getAttribute(AttributeType.MAX_HEALTH).setValue(maxHealth)
 
     override fun resetMaxHealth()
-            = getBukkitPlayer().resetMaxHealth()
+            = setMaxHealth(AttributeType.MAX_HEALTH.def)
 
     override fun getExp(): Float
             = getBukkitPlayer().exp

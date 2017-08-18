@@ -20,6 +20,7 @@ package com.minecraft.moonlake.player
 import com.minecraft.moonlake.api.attribute.Attribute
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
+import com.minecraft.moonlake.player.attribute.AttributeBase
 import org.bukkit.Sound
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
@@ -37,6 +38,9 @@ open class MoonLakePlayerBase : MoonLakePlayerAbstract {
     constructor(player: Player) : super(player)
 
     /** function */
+
+    override fun getAttribute(type: AttributeType): Attribute
+            = AttributeBase(this, type)
 
     override fun isInvulnerable(): Boolean {
         throw UnsupportedOperationException()
@@ -67,10 +71,6 @@ open class MoonLakePlayerBase : MoonLakePlayerAbstract {
     }
 
     override fun setSilent(silent: Boolean) {
-        throw UnsupportedOperationException()
-    }
-
-    override fun getAttribute(type: AttributeType): Attribute {
         throw UnsupportedOperationException()
     }
 

@@ -15,19 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.player
+package com.minecraft.moonlake.player.attribute
 
-import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
-import org.bukkit.entity.Player
-import java.util.*
+import com.minecraft.moonlake.api.attribute.AttributeType
+import com.minecraft.moonlake.api.player.MoonLakePlayer
+import org.bukkit.attribute.Attribute
 
-open class MoonLakePlayerImpl_v1_8_R2 : MoonLakePlayerImpl_v1_8_R1 {
+open class AttributeImpl_v1_11_R1(player: MoonLakePlayer, type: AttributeType) : AttributeImpl_v1_9_R1(player, type) {
 
-    /** constructor */
-
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(uuid: UUID) : super(uuid)
-
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(player: Player) : super(player)
+    override fun adapter(): Attribute? = getType().let {
+        when(it == AttributeType.ARMOR_TOUGHNESS) {
+            true -> org.bukkit.attribute.Attribute.GENERIC_ARMOR_TOUGHNESS
+            else -> super.adapter()
+        }
+    }
 }

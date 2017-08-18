@@ -17,19 +17,12 @@
 
 package com.minecraft.moonlake.player
 
-import com.minecraft.moonlake.api.attribute.Attribute
-import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
-import org.bukkit.Color
 import org.bukkit.Sound
-import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
-import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
 import java.util.*
 
-class MoonLakePlayerImpl_v1_10_R1 : MoonLakePlayerBase {
+open class MoonLakePlayerImpl_v1_10_R1 : MoonLakePlayerImpl_v1_9_R2 {
 
     /** constructor */
 
@@ -38,60 +31,6 @@ class MoonLakePlayerImpl_v1_10_R1 : MoonLakePlayerBase {
 
     @Throws(IllegalOfflinePlayerException::class)
     constructor(player: Player) : super(player)
-
-    override fun getAttribute(type: AttributeType): Attribute
-            = throw UnsupportedOperationException() // TODO
-
-    override fun isInvulnerable(): Boolean
-            = getBukkitPlayer().isInvulnerable
-
-    override fun setInvulnerable(invulnerable: Boolean)
-            { getBukkitPlayer().isInvulnerable = invulnerable }
-
-    override fun isGlowing(): Boolean
-            = getBukkitPlayer().isGlowing
-
-    override fun setGlowing(glowing: Boolean)
-            { getBukkitPlayer().isGlowing = glowing }
-
-    override fun isGliding(): Boolean
-            = getBukkitPlayer().isGliding
-
-    override fun setGliding(gliding: Boolean)
-            { getBukkitPlayer().isGliding = gliding }
-
-    override fun isSilent(): Boolean
-            = getBukkitPlayer().isSilent
-
-    override fun setSilent(silent: Boolean)
-            { getBukkitPlayer().isSilent = silent }
-
-    override fun getSpectatorTarget(): Entity
-            = getBukkitPlayer().spectatorTarget
-
-    override fun setSpectatorTarget(target: Entity)
-            { getBukkitPlayer().spectatorTarget = target }
-
-    override fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration: Int, ambient: Boolean, particles: Boolean, color: Color): Boolean
-            = getBukkitPlayer().addPotionEffect(PotionEffect(type, duration, amplifier, ambient, particles, color))
-
-    override fun getItemInHand(): ItemStack
-            = getItemInMainHand()
-
-    override fun setItemInHand(itemStack: ItemStack?)
-            = setItemInMainHand(itemStack)
-
-    override fun getItemInMainHand(): ItemStack
-            = inventory.itemInMainHand
-
-    override fun setItemInMainHand(itemStack: ItemStack?)
-    { inventory.itemInMainHand = itemStack }
-
-    override fun getItemInOffHand(): ItemStack
-            = inventory.itemInOffHand
-
-    override fun setItemInOffHand(itemStack: ItemStack?)
-            { inventory.itemInOffHand = itemStack }
 
     override fun stopSound(sound: Sound)
             = getBukkitPlayer().stopSound(sound)

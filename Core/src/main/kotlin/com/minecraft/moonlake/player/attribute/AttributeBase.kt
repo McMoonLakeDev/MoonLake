@@ -15,19 +15,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.player
+package com.minecraft.moonlake.player.attribute
 
-import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
-import org.bukkit.entity.Player
-import java.util.*
+import com.minecraft.moonlake.api.attribute.Attribute
+import com.minecraft.moonlake.api.attribute.AttributeType
+import com.minecraft.moonlake.api.player.MoonLakePlayer
 
-open class MoonLakePlayerImpl_v1_8_R2 : MoonLakePlayerImpl_v1_8_R1 {
+open class AttributeBase(protected val player: MoonLakePlayer, private val type: AttributeType) : Attribute {
 
-    /** constructor */
+    override final fun getType(): AttributeType
+            = type
 
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(uuid: UUID) : super(uuid)
+    override final fun getDefValue(): Double
+            = type.def
 
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(player: Player) : super(player)
+    override fun getValue(): Double {
+        throw UnsupportedOperationException()
+    }
+
+    override fun setValue(value: Double) {
+        throw UnsupportedOperationException()
+    }
 }

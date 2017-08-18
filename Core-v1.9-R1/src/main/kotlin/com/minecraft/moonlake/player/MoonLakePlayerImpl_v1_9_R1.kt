@@ -20,6 +20,7 @@ package com.minecraft.moonlake.player
 import com.minecraft.moonlake.api.attribute.Attribute
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
+import com.minecraft.moonlake.player.attribute.AttributeImpl_v1_9_R1
 import org.bukkit.Color
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
@@ -28,7 +29,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import java.util.*
 
-class MoonLakePlayerImpl_v1_9_R1 : MoonLakePlayerBase {
+open class MoonLakePlayerImpl_v1_9_R1 :  MoonLakePlayerImpl_v1_8_R3 {
 
     /** constructor */
 
@@ -39,7 +40,7 @@ class MoonLakePlayerImpl_v1_9_R1 : MoonLakePlayerBase {
     constructor(player: Player) : super(player)
 
     override fun getAttribute(type: AttributeType): Attribute
-            = throw UnsupportedOperationException() // TODO
+            = AttributeImpl_v1_9_R1(this, type)
 
     override fun isInvulnerable(): Boolean
             = getBukkitPlayer().isInvulnerable

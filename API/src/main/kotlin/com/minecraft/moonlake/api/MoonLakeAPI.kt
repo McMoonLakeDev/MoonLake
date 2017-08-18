@@ -33,6 +33,18 @@ fun <T> T?.notNull(message: String = "验证的对象值为 null 时异常."): T
     return this
 }
 
+fun <T, C: Comparable<T>> C.isLater(other: T): Boolean
+        = compareTo(other) > 0
+
+fun <T, C: Comparable<T>> C.isOrLater(other: T): Boolean
+        = compareTo(other) >= 0
+
+fun <T, C: Comparable<T>> C.isRange(min: T, max: T): Boolean
+        = compareTo(min) > 0 && compareTo(max) < 0
+
+fun <T, C: Comparable<T>> C.isOrRange(min: T, max: T): Boolean
+        = compareTo(min) >= 0 && compareTo(max) <= 0
+
 fun String.toColor(): String
         = ChatColor.translateAlternateColorCodes('\u0026', this)
 

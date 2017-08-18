@@ -78,6 +78,9 @@ class MinecraftVersion(val major: Int, val minor: Int, val build: Int, private v
     fun getVersion(): String
             = "$major.$minor.$build" + if(pre != null) "-pre$pre" else ""
 
+    fun getBukkitVersion(): MinecraftBukkitVersion
+            = MinecraftBukkitVersion.lookup(this)
+
     /** significant */
 
     override fun compareTo(other: MinecraftVersion): Int {

@@ -38,6 +38,17 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>bukkit-repo</id>
+            <url>http://repo.md-5.net/content/groups/public/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- Kotlin Dependency -->
         <dependency>

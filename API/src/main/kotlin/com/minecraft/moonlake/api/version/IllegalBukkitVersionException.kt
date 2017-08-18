@@ -15,19 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.player
+package com.minecraft.moonlake.api.version
 
-import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
-import org.bukkit.entity.Player
-import java.util.*
+import com.minecraft.moonlake.api.exception.MoonLakeException
 
-open class MoonLakePlayerImpl_v1_8_R2 : MoonLakePlayerImpl_v1_8_R1 {
+class IllegalBukkitVersionException : MoonLakeException {
 
-    /** constructor */
-
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(uuid: UUID) : super(uuid)
-
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(player: Player) : super(player)
+    constructor() : super("当前 Bukkit 版本不支持操作时异常.")
+    constructor(message: String?) : super(message)
 }

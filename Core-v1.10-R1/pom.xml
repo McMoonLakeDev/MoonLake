@@ -26,6 +26,11 @@
             <artifactId>MoonLakeCore</artifactId>
             <version>2.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.minecraft.moonlake</groupId>
+            <artifactId>MoonLakeCore-v1.9-R2</artifactId>
+            <version>2.0</version>
+        </dependency>
         <!-- Spigot Dependency -->
         <dependency>
             <groupId>org.spigotmc</groupId>
