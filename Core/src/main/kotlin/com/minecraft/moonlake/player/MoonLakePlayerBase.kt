@@ -20,6 +20,7 @@ package com.minecraft.moonlake.player
 import com.minecraft.moonlake.api.attribute.Attribute
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
+import com.minecraft.moonlake.api.player.MoonLakePlayerAbstract
 import com.minecraft.moonlake.player.attribute.AttributeBase
 import org.bukkit.Sound
 import org.bukkit.entity.Entity

@@ -250,7 +250,6 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, Metadatable
 
     fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration : Int, ambient: Boolean, particles: Boolean): Boolean
 
-    /** Color Parameter Only Support 1.9+  */
     fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration : Int, ambient: Boolean, particles: Boolean, color: Color): Boolean
 
     fun getScoreboard(): Scoreboard
@@ -329,9 +328,7 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, Metadatable
 
     fun setGravity(gravity: Boolean)
 
-    /** Need Version Adapter Function */
-
-    // TODO 1.9
+    /** 1.9 */
 
     fun isInvulnerable(): Boolean
 
@@ -361,7 +358,7 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, Metadatable
 
     fun setItemInOffHand(itemStack: ItemStack?)
 
-    // TODO 1.10
+    /** 1.10 */
 
     fun stopSound(sound: Sound)
 

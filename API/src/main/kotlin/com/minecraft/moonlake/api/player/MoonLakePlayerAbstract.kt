@@ -15,12 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.player
+package com.minecraft.moonlake.api.player
 
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.notNull
-import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
-import com.minecraft.moonlake.api.player.MoonLakePlayer
 import com.minecraft.moonlake.api.toBukkitWorld
 import com.minecraft.moonlake.api.toColor
 import com.minecraft.moonlake.api.toMoonLakePlayer
