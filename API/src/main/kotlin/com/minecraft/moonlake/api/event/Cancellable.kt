@@ -15,16 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api
+package com.minecraft.moonlake.api.event
 
-import org.bukkit.plugin.Plugin
-
-interface MoonLake : Plugin, PluginInfo {
-
-    /** static */
-
-    companion object {
-
-        const val MAIN = "com.minecraft.moonlake.MoonLakePlugin"
-    }
+interface Cancellable : org.bukkit.event.Cancellable {
 }

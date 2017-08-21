@@ -15,16 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api
+package com.minecraft.moonlake.api.task
 
-import org.bukkit.plugin.Plugin
+import org.bukkit.scheduler.BukkitRunnable
 
-interface MoonLake : Plugin, PluginInfo {
-
-    /** static */
-
-    companion object {
-
-        const val MAIN = "com.minecraft.moonlake.MoonLakePlugin"
-    }
+abstract class MoonLakeRunnable : BukkitRunnable() {
 }

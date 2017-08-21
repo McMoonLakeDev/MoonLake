@@ -15,16 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api
+package com.minecraft.moonlake.api.cached
 
-import org.bukkit.plugin.Plugin
+abstract class CachedSoftRef<K, V> : CachedReferenceAbstract<K, V, CachedSoftReference<K, V>>() {
 
-interface MoonLake : Plugin, PluginInfo {
-
-    /** static */
-
-    companion object {
-
-        const val MAIN = "com.minecraft.moonlake.MoonLakePlugin"
-    }
+    override final fun produceRef(key: K, value: V, queue: CachedReferenceQueue<V>): CachedSoftReference<K, V>
+            = CachedSoftReference(key, value, queue)
 }

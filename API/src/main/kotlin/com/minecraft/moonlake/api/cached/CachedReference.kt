@@ -15,16 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api
+package com.minecraft.moonlake.api.cached
 
-import org.bukkit.plugin.Plugin
+interface CachedReference<K, V, R: CachedRef<K, V>> : Cached {
 
-interface MoonLake : Plugin, PluginInfo {
-
-    /** static */
-
-    companion object {
-
-        const val MAIN = "com.minecraft.moonlake.MoonLakePlugin"
-    }
+    fun getCache(key: K): V
 }

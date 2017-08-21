@@ -15,16 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api
+package com.minecraft.moonlake.api.cached
 
-import org.bukkit.plugin.Plugin
+import java.lang.ref.PhantomReference
+import java.lang.ref.Reference
 
-interface MoonLake : Plugin, PluginInfo {
+open class CachedPhantomReference<out K, V>(private val key: K, referent: V, queue: CachedReferenceQueue<in V>) : PhantomReference<V>(referent, queue), CachedRef<K, V> {
 
-    /** static */
+    override fun reference(): Reference<V>
+            = this
 
-    companion object {
-
-        const val MAIN = "com.minecraft.moonlake.MoonLakePlugin"
-    }
+    override fun key(): K
+            = key
 }

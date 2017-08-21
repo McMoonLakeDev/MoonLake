@@ -15,16 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api
+package com.minecraft.moonlake.api.event
 
-import org.bukkit.plugin.Plugin
+import org.bukkit.event.Event
 
-interface MoonLake : Plugin, PluginInfo {
+abstract class MoonLakeEvent : Event {
 
-    /** static */
+    /** constructor */
 
-    companion object {
-
-        const val MAIN = "com.minecraft.moonlake.MoonLakePlugin"
-    }
+    constructor() : super()
+    constructor(isAsync: Boolean) : super(isAsync)
 }

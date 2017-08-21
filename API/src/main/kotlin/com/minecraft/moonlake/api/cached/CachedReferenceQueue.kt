@@ -15,16 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api
+package com.minecraft.moonlake.api.cached
 
-import org.bukkit.plugin.Plugin
+import java.lang.ref.ReferenceQueue
 
-interface MoonLake : Plugin, PluginInfo {
-
-    /** static */
-
-    companion object {
-
-        const val MAIN = "com.minecraft.moonlake.MoonLakePlugin"
-    }
+open class CachedReferenceQueue<T> : ReferenceQueue<T>() {
 }

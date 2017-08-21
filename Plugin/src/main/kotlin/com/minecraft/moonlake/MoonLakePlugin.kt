@@ -18,6 +18,7 @@
 package com.minecraft.moonlake
 
 import com.minecraft.moonlake.api.MoonLake
+import com.minecraft.moonlake.api.setMoonLake
 import org.bukkit.plugin.java.JavaPlugin
 
 class MoonLakePlugin : JavaPlugin, MoonLake {
@@ -28,6 +29,7 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
     }
 
     override fun onEnable() {
+        setMoonLake(this)
         this.logger.info("月色之湖核心 API 插件 v${getPluginVersion()} 成功加载.")
     }
 
