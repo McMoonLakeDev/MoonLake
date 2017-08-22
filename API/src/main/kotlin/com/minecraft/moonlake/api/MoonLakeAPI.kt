@@ -30,6 +30,8 @@ import com.minecraft.moonlake.api.task.MoonLakeRunnable
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.World
+import org.bukkit.entity.Entity
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.EventPriority
@@ -183,10 +185,10 @@ fun <T> Callable<T>.callSyncConsumer(plugin: Plugin, consumer: Consumer<T>)
 fun <T> Callable<T>.callSyncConsumer(plugin: Plugin, consumer: Consumer<T>, delay: Long)
         = callTaskConsumer(plugin, consumer, delay, false)
 
-fun <T> Callable<T>.callASyncConsumer(plugin: Plugin, consumer: Consumer<T>)
+fun <T> Callable<T>.callAsyncConsumer(plugin: Plugin, consumer: Consumer<T>)
         = callTaskConsumer(plugin, consumer, -1, true)
 
-fun <T> Callable<T>.callASyncConsumer(plugin: Plugin, consumer: Consumer<T>, delay: Long)
+fun <T> Callable<T>.callAsyncConsumer(plugin: Plugin, consumer: Consumer<T>, delay: Long)
         = callTaskConsumer(plugin, consumer, delay, true)
 
 private fun <T> Callable<T>.callTaskConsumer(plugin: Plugin, consumer: Consumer<T>, delay: Long = -1, async: Boolean = false) {
@@ -204,3 +206,86 @@ private fun <T> Callable<T>.callTaskConsumer(plugin: Plugin, consumer: Consumer<
         else -> async.let { if(it) runTaskLaterAsync(plugin, runnable, delay) else runTaskLater(plugin, runnable, delay) }
     }
 }
+
+fun cancelTask(task: BukkitTask?)
+        = task?.cancel()
+
+fun cancelTask(taskId: Int)
+        = Bukkit.getScheduler().cancelTask(taskId)
+
+fun cancelTasks(plugin: Plugin)
+        = Bukkit.getScheduler().cancelTasks(plugin)
+
+fun cancelAllTasks()
+        = Bukkit.getScheduler().cancelAllTasks()
+
+/** target function */
+
+fun isInFront(source: Entity, target: Entity): Boolean {
+    val facing = source.location.direction
+    val relative = target.location.subtract(source.location).toVector().normalize()
+    return facing.dot(relative) >= .0
+}
+
+fun isInFront(source: Entity, target: Entity, angle: Double): Boolean = angle.let {
+    if(angle <= .0) return false
+    if(angle >= 360.0) return true
+    val dotTarget = Math.cos(angle)
+    val facing = source.location.direction
+    val relative = target.location.subtract(source.location).toVector().normalize()
+    return facing.dot(relative) >= dotTarget
+}
+
+fun isBehind(source: Entity, target: Entity, angle: Double): Boolean
+        = !isInFront(source, target, angle)
+
+fun <T: LivingEntity> getLivingTargets(clazz: Class<T>, source: LivingEntity, range: Double, tolerance: Double = 4.0): List<T> {
+    val entityList = source.getNearbyEntities(range, range, range)
+    val targets = ArrayList<T>()
+    val facing = source.location.direction
+    val fLengthSq = facing.lengthSquared()
+    entityList.filter { clazz.isInstance(it) && isInFront(source, it) }.forEach {
+        val  relative = it.location.subtract(source.location).toVector()
+        val dot = relative.dot(facing)
+        val rLengthSq = relative.lengthSquared()
+        val cosSquared = dot * dot / (rLengthSq * fLengthSq)
+        val sinSquared = 1.0 - cosSquared
+        val dSquared = rLengthSq * sinSquared
+        if(dSquared < tolerance)
+            targets.add(clazz.cast(it))
+    }
+    return targets
+}
+
+fun getLivingTargets(source: LivingEntity, range: Double, tolerance: Double = 4.0): List<LivingEntity>
+        = getLivingTargets(LivingEntity::class.java, source, range, tolerance)
+
+fun <T: LivingEntity> getLivingTarget(clazz: Class<T>, source: LivingEntity, range: Double, tolerance: Double = 4.0): T? {
+    val targets = getLivingTargets(clazz, source, range, tolerance)
+    if(targets.isEmpty()) return null
+    var target = targets.first()
+    var minDistance = target.location.distanceSquared(source.location)
+    targets.forEach {
+        val distance = it.location.distanceSquared(source.location)
+        if(distance < minDistance) {
+            minDistance = distance
+            target = it
+        }
+    }
+    return target
+}
+
+fun getLivingTarget(source: LivingEntity, range: Double, tolerance: Double = 4.0): LivingEntity?
+        = getLivingTarget(LivingEntity::class.java, source, range, tolerance)
+
+fun <T: LivingEntity> getLivingTargets(clazz: Class<T>, source: MoonLakePlayer, range: Double, tolerance: Double = 4.0): List<T>
+        = getLivingTargets(clazz, source.getBukkitPlayer(), range, tolerance)
+
+fun getLivingTargets(source: MoonLakePlayer, range: Double, tolerance: Double = 4.0): List<LivingEntity>
+        = getLivingTargets(source.getBukkitPlayer(), range, tolerance)
+
+fun <T: LivingEntity> getLivingTarget(clazz: Class<T>, source: MoonLakePlayer, range: Double, tolerance: Double = 4.0): T?
+        = getLivingTarget(clazz, source.getBukkitPlayer(), range, tolerance)
+
+fun getLivingTarget(source: MoonLakePlayer, range: Double, tolerance: Double = 4.0): LivingEntity?
+        = getLivingTarget(source.getBukkitPlayer(), range, tolerance)
