@@ -27,9 +27,13 @@ import com.minecraft.moonlake.api.player.MoonLakePlayer
 import com.minecraft.moonlake.api.player.MoonLakePlayerCached
 import com.minecraft.moonlake.api.reflect.Reflect
 import com.minecraft.moonlake.api.task.MoonLakeRunnable
+import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
+import com.minecraft.moonlake.api.version.MinecraftVersion
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.World
+import org.bukkit.configuration.Configuration
+import org.bukkit.configuration.serialization.ConfigurationSerializable
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -37,9 +41,16 @@ import org.bukkit.event.Event
 import org.bukkit.event.EventPriority
 import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
+import org.bukkit.event.inventory.InventoryType
+import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryHolder
 import org.bukkit.plugin.EventExecutor
 import org.bukkit.plugin.Plugin
+import org.bukkit.plugin.messaging.Messenger
 import org.bukkit.scheduler.BukkitTask
+import org.bukkit.scoreboard.Scoreboard
+import java.lang.reflect.Modifier
+import java.text.MessageFormat
 import java.util.*
 import java.util.concurrent.Callable
 import java.util.concurrent.Future
@@ -79,6 +90,16 @@ fun <T, C: Comparable<T>> C.isRange(min: T, max: T): Boolean
 fun <T, C: Comparable<T>> C.isOrRange(min: T, max: T): Boolean
         = compareTo(min) >= 0 && compareTo(max) <= 0
 
+/** version function */
+
+fun currentMCVersion(): MinecraftVersion
+        = MinecraftVersion.currentVersion()
+
+fun currentBukkitVersion(): MinecraftBukkitVersion
+        = MinecraftBukkitVersion.currentVersion()
+
+/** util function */
+
 fun String.toColor(): String
         = ChatColor.translateAlternateColorCodes('\u0026', this)
 
@@ -90,6 +111,143 @@ fun Array<out String>.toColor(): Array<out String>
 
 fun Array<out String>.toColor(altColorChar: Char): Array<out String>
         = this.clone().toList().map { it -> it.toColor(altColorChar) }.toTypedArray()
+
+fun Iterable<String>.toColor(): List<String>
+        = this.map { it -> it.toColor() }.let { ArrayList(it) }
+
+fun Iterable<String>.toColor(altColorChar: Char): List<String>
+        = this.map { it -> it.toColor(altColorChar) }
+
+fun String.stripColor(): String
+        = ChatColor.stripColor(this)
+
+fun Array<out String>.stripColor(): Array<out String>
+        = this.clone().toList().map { it -> it.stripColor() }.toTypedArray()
+
+fun Iterable<String>.stripColor(): List<String>
+        = this.map { it -> it.stripColor() }
+
+fun String.messageFormat(vararg args: Any?): String
+        = MessageFormat.format(this, args)
+
+@Throws(MoonLakeException::class)
+fun Throwable.throwMoonLake(): Nothing = let {
+    when(it is MoonLakeException) {
+        true -> throw it
+        else -> throw MoonLakeException(it)
+    }
+}
+
+fun String.isInteger(): Boolean = isNullOrEmpty().let {
+    when(it) {
+        true -> false
+        else -> return try {
+            toInt()
+            true
+        } catch (e: NumberFormatException) {
+            false
+        }
+    }
+}
+
+fun String.isDouble(): Boolean = isNullOrEmpty().let {
+    when(it) {
+        true -> false
+        else -> return try {
+            toDouble()
+            true
+        } catch (e: NumberFormatException) {
+            false
+        }
+    }
+}
+
+fun Any.parseInt(def: Int = 0): Int = (this is Number).let {
+    when(it) {
+        true -> (this as Number).toInt()
+        else -> return try {
+            toString().toInt()
+        } catch (e: NumberFormatException) {
+            def
+        }
+    }
+}
+
+fun Any.parseLong(def: Long = 0L): Long = (this is Number).let {
+    when(it) {
+        true -> (this as Number).toLong()
+        else -> return try {
+            toString().toLong()
+        } catch (e: NumberFormatException) {
+            def
+        }
+    }
+}
+
+fun Any.parseFloat(def: Float = .0f): Float = (this is Number).let {
+    when(it) {
+        true -> (this as Number).toFloat()
+        else -> return try {
+            toString().toFloat()
+        } catch (e: NumberFormatException) {
+            def
+        }
+    }
+}
+
+fun Any.parseDouble(def: Double = .0): Double = (this is Number).let {
+    when(it) {
+        true -> (this as Number).toDouble()
+        else -> return try {
+            toString().toDouble()
+        } catch (e: NumberFormatException) {
+            def
+        }
+    }
+}
+
+@Suppress("UNCHECKED_CAST")
+@Throws(MoonLakeException::class)
+fun <T: ConfigurationSerializable> Class<T>.deserializeConfigurationClass(configuration: Configuration, key: String, def: T? = null): T? = configuration.get(key).let {
+    when(it == null) {
+        true -> def
+        else -> when {
+            isInstance(it) -> cast(it)
+            it is Map<*, *> -> try {
+                var method = getMethod("deserialize")
+                if(method == null) method = getMethod("valueOf")
+                if(method == null || !Modifier.isStatic(method.modifiers)) throw MoonLakeException("值为 Map 实例, 但是序列化类不存在 'deserialize' 或 'valueOf' 静态函数.")
+                method.invoke(null, it) as T
+            } catch (e: Exception) {
+                e.throwMoonLake()
+            }
+            else -> def
+        }
+    }
+}
+
+fun createInventory(holder: InventoryHolder?, type: InventoryType): Inventory
+        = Bukkit.createInventory(holder, type)
+
+fun createInventory(holder: InventoryHolder?, type: InventoryType, title: String): Inventory
+        = Bukkit.createInventory(holder, type, title)
+
+fun createInventory(holder: InventoryHolder?, size: Int): Inventory
+        = Bukkit.createInventory(holder, size)
+
+fun createInventory(holder: InventoryHolder?, size: Int, title: String): Inventory
+        = Bukkit.createInventory(holder, size, title)
+
+fun getScoreboardMain(): Scoreboard
+        = Bukkit.getScoreboardManager().mainScoreboard
+
+fun getScoreboardNew(): Scoreboard
+        = Bukkit.getScoreboardManager().newScoreboard
+
+fun getMessenger(): Messenger
+        = Bukkit.getMessenger()
+
+/** converter function */
 
 fun String.toBukkitWorld(): World?
         = Bukkit.getWorld(this)
