@@ -25,5 +25,5 @@ interface ItemBuilder : Builder<ItemStack>, SingleParamBuilder<ItemStack, Boolea
 
     override fun build(): ItemStack
 
-    override fun build(safeObj: Boolean): ItemStack
+    override fun build(param: Boolean): ItemStack
 }

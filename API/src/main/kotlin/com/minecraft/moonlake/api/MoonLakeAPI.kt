@@ -107,10 +107,10 @@ fun String.toColor(altColorChar: Char): String
         = ChatColor.translateAlternateColorCodes(altColorChar, this)
 
 fun Array<out String>.toColor(): Array<out String>
-        = this.clone().toList().map { it -> it.toColor() }.toTypedArray()
+        = this.toList().map { it -> it.toColor() }.toTypedArray()
 
 fun Array<out String>.toColor(altColorChar: Char): Array<out String>
-        = this.clone().toList().map { it -> it.toColor(altColorChar) }.toTypedArray()
+        = this.toList().map { it -> it.toColor(altColorChar) }.toTypedArray()
 
 fun Iterable<String>.toColor(): List<String>
         = this.map { it -> it.toColor() }.let { ArrayList(it) }
@@ -122,7 +122,7 @@ fun String.stripColor(): String
         = ChatColor.stripColor(this)
 
 fun Array<out String>.stripColor(): Array<out String>
-        = this.clone().toList().map { it -> it.stripColor() }.toTypedArray()
+        = this.toList().map { it -> it.stripColor() }.toTypedArray()
 
 fun Iterable<String>.stripColor(): List<String>
         = this.map { it -> it.stripColor() }
