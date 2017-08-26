@@ -25,7 +25,6 @@ import com.minecraft.moonlake.api.exception.MoonLakeException
 import com.minecraft.moonlake.api.funs.Consumer
 import com.minecraft.moonlake.api.player.MoonLakePlayer
 import com.minecraft.moonlake.api.player.MoonLakePlayerCached
-import com.minecraft.moonlake.api.reflect.Reflect
 import com.minecraft.moonlake.api.task.MoonLakeRunnable
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
@@ -60,10 +59,10 @@ import java.util.concurrent.FutureTask
 
 private var moonlake: MoonLake? = null
 
-@Throws(IllegalStateException::class)
+@Throws(MoonLakeException::class)
 fun setMoonLake(obj: MoonLake) {
-    if(!Reflect.callerClassLastEquals(MoonLake.MAIN))
-        throw IllegalStateException("当前函数只有 '${MoonLake.MAIN}' 类拥有访问权限.")
+    if(moonlake != null)
+        throw MoonLakeException("无法再次设置 MoonLakeAPI 的内部实例.")
     moonlake = obj
 }
 

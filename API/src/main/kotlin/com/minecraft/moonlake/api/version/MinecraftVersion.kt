@@ -50,7 +50,7 @@ class MinecraftVersion(val major: Int, val minor: Int, val build: Int, private v
                     var per: Int? = null
                     try {
                         val index = versionOnly.lastIndexOf("-pre")
-                        val elements = if(index == -1) versionOnly.split("\\.") else versionOnly.substring(0, index).split("\\.")
+                        val elements = if(index == -1) versionOnly.split(Pattern.compile("\\.")) else versionOnly.substring(0, index).split(Pattern.compile("\\."))
                         if(elements.size == -1)
                             throw IllegalStateException("无效的 Bukkit Minecraft 版本号: $versionOnly")
                         for(i in 0 until Math.min(numbers.size, elements.size))
@@ -65,7 +65,7 @@ class MinecraftVersion(val major: Int, val minor: Int, val build: Int, private v
                     }
                     currentVersion = MinecraftVersion(numbers[0], numbers[1], numbers[2], per)
                 }
-                return it.notNull()
+                return currentVersion.notNull()
             }
         }
     }

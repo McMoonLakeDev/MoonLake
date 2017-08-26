@@ -47,13 +47,13 @@ class MinecraftBukkitVersion(val major: Int, val minor: Int, val release: Int) :
         fun currentVersion(): MinecraftBukkitVersion {
             currentVersion.let {
                 if(it == null) {
-                    val packageSplit = Bukkit.getServer().javaClass.`package`.name.split("\\.")
+                    val packageSplit = Bukkit.getServer().javaClass.`package`.name.split(Pattern.compile("\\."))
                     val matcher = VERSION_PATTERN.matcher(packageSplit.last())
                     if(!matcher.matches())
-                        throw IllegalStateException("未成功匹配到的 Bukkit NMS 版本号.")
+                        throw IllegalStateException("未成功匹配到的 Bukkit NMS 版本号: ${packageSplit.last()}")
                     currentVersion = MinecraftBukkitVersion(matcher.group(1).toInt(), matcher.group(2).toInt(), matcher.group(3).toInt())
                 }
-                return it.notNull()
+                return currentVersion.notNull()
             }
         }
 

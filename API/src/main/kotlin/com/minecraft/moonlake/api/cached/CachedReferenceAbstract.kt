@@ -35,6 +35,9 @@ abstract class CachedReferenceAbstract<K, V, R: CachedRef<K, V>> : CachedReferen
         this.queue = CachedReferenceQueue()
     }
 
+    override fun size(): Int
+            = cachedMap.size
+
     override fun getCache(key: K): V {
         var value: V? = null
         if(cachedMap.containsKey(key)) {

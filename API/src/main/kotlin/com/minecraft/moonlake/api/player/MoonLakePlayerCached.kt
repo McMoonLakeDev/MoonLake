@@ -39,6 +39,7 @@ class MoonLakePlayerCached private constructor(): CachedWeakRef<UUID, MoonLakePl
 
         private var instance: MoonLakePlayerCached? = null
         private var constructor: Constructor<MoonLakePlayer>? = null
+        private val IMPLEMENT = "com.minecraft.moonlake.player.MoonLakePlayerImpl_${MinecraftBukkitVersion.currentVersion().getVersion()}"
 
         @JvmStatic
         @JvmName("instance")
@@ -55,10 +56,8 @@ class MoonLakePlayerCached private constructor(): CachedWeakRef<UUID, MoonLakePl
         @Suppress("UNCHECKED_CAST")
         private fun instanceConstructor(): Constructor<MoonLakePlayer> {
             if(constructor == null) synchronized(MoonLakePlayerCached::class) {
-                if(constructor == null) {
-                    val clazz = Class.forName("com.minecraft.moonlake.player.MoonLakePlayerImpl${MinecraftBukkitVersion.currentVersion().getVersion()}")
-                    constructor = (clazz as Class<MoonLakePlayer>).getConstructor(Player::class.java)
-                }
+                if(constructor == null)
+                    constructor = (Class.forName(IMPLEMENT) as Class<MoonLakePlayer>).getConstructor(Player::class.java)
             }
             return constructor.notNull()
         }

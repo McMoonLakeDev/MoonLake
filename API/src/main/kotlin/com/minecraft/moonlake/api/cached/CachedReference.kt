@@ -19,5 +19,7 @@ package com.minecraft.moonlake.api.cached
 
 interface CachedReference<K, V, R: CachedRef<K, V>> : Cached {
 
+    fun size(): Int
+
     fun getCache(key: K): V
 }
