@@ -18,6 +18,7 @@
 package com.minecraft.moonlake.api.player
 
 import com.minecraft.moonlake.api.attribute.Attributable
+import com.minecraft.moonlake.api.version.IllegalBukkitVersionException
 import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.command.CommandSender
@@ -262,11 +263,11 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, Metadatable
 
     fun performCommand(command: String): Boolean
 
-    fun getCompassTarget(): Location
+    fun getCompassTarget(): Location?
 
     fun setCompassTarget(target: Location)
 
-    fun getBedSpawnLocation(): Location
+    fun getBedSpawnLocation(): Location?
 
     fun setBedSpawnLocation(target: Location, force: Boolean = false)
 
@@ -328,39 +329,105 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, Metadatable
 
     fun setGravity(gravity: Boolean)
 
-    /** 1.9 */
+    fun getLocale(): String
 
+    /** Minecraft Bukkit 1.9 */
+
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.9
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun isInvulnerable(): Boolean
 
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.9
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun setInvulnerable(invulnerable: Boolean)
 
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.9
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun isGlowing(): Boolean
 
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.9
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun setGlowing(glowing: Boolean)
 
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.9
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun isGliding(): Boolean
 
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.9
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun setGliding(gliding: Boolean)
 
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.9
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun isSilent(): Boolean
 
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.9
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun setSilent(silent: Boolean)
 
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.9
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun getSpectatorTarget(): Entity
 
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.9
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun setSpectatorTarget(target: Entity)
 
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.9
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun getItemInMainHand(): ItemStack
 
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.9
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun setItemInMainHand(itemStack: ItemStack?)
 
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.9
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun getItemInOffHand(): ItemStack
 
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.9
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun setItemInOffHand(itemStack: ItemStack?)
 
-    /** 1.10 */
+    /** Minecraft Bukkit 1.10 */
 
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.10
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun stopSound(sound: Sound)
 
+    /**
+     * @throws IllegalBukkitVersionException if bukkit version < 1.10
+     */
+    @Throws(IllegalBukkitVersionException::class)
     fun stopSound(sound: String)
 }

@@ -76,10 +76,10 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
     override final fun spigot(): CommandSender.Spigot
             = throw UnsupportedOperationException()
 
-    override fun getName(): String
+    override final fun getName(): String
             = getBukkitPlayer().name
 
-    override fun getUniqueId(): UUID
+    override final fun getUniqueId(): UUID
             = getBukkitPlayer().uniqueId
 
     override fun sendMessage(message: String)
@@ -493,13 +493,13 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
         }
     }
 
-    override fun getCompassTarget(): Location
+    override fun getCompassTarget(): Location?
             = getBukkitPlayer().compassTarget
 
     override fun setCompassTarget(target: Location)
             { getBukkitPlayer().compassTarget = target }
 
-    override fun getBedSpawnLocation(): Location
+    override fun getBedSpawnLocation(): Location?
             = getBukkitPlayer().bedSpawnLocation
 
     override fun setBedSpawnLocation(target: Location, force: Boolean)
@@ -544,7 +544,7 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
     }
 
     override fun getPing(): Int
-            = -1 // TODO
+            = -1 // TODO EntityPlayer.ping
 
     override fun getIp(): String = getAddress().address.let {
         when(it == null) {
@@ -605,13 +605,13 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
 
     /** significant */
 
-    override fun compareTo(other: MoonLakePlayer): Int
+    override final fun compareTo(other: MoonLakePlayer): Int
             = name.compareTo(other.name)
 
-    override fun hashCode(): Int
+    override final fun hashCode(): Int
             = name.hashCode()
 
-    override fun equals(other: Any?): Boolean {
+    override final fun equals(other: Any?): Boolean {
         if(other == this)
             return true
         if(other is MoonLakePlayer)

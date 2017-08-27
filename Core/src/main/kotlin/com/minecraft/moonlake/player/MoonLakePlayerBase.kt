@@ -21,6 +21,7 @@ import com.minecraft.moonlake.api.attribute.Attribute
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
 import com.minecraft.moonlake.api.player.MoonLakePlayerAbstract
+import com.minecraft.moonlake.api.version.IllegalBukkitVersionException
 import com.minecraft.moonlake.player.attribute.AttributeBase
 import org.bukkit.Sound
 import org.bukkit.entity.Entity
@@ -38,72 +39,73 @@ open class MoonLakePlayerBase : MoonLakePlayerAbstract {
     @Throws(IllegalOfflinePlayerException::class)
     constructor(player: Player) : super(player)
 
-    /** function */
+    override fun getLocale(): String
+            = "en_us" // TODO EntityPlayer.locale
 
     override fun getAttribute(type: AttributeType): Attribute
             = AttributeBase(this, type)
 
     override fun isInvulnerable(): Boolean {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 
     override fun setInvulnerable(invulnerable: Boolean) {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 
     override fun isGlowing(): Boolean {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 
     override fun setGlowing(glowing: Boolean) {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 
     override fun isGliding(): Boolean {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 
     override fun setGliding(gliding: Boolean) {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 
     override fun isSilent(): Boolean {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 
     override fun setSilent(silent: Boolean) {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 
     override fun getSpectatorTarget(): Entity {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 
     override fun setSpectatorTarget(target: Entity) {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 
     override fun getItemInMainHand(): ItemStack {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 
     override fun setItemInMainHand(itemStack: ItemStack?) {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 
     override fun getItemInOffHand(): ItemStack {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 
     override fun setItemInOffHand(itemStack: ItemStack?) {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 
     override fun stopSound(sound: Sound) {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 
     override fun stopSound(sound: String) {
-        throw UnsupportedOperationException()
+        throw IllegalBukkitVersionException()
     }
 }
