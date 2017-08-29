@@ -307,8 +307,11 @@ public final class ChatSerializer {
                     JsonObject jsonObjectHoverEvent = jsonObject.getAsJsonObject("hoverEvent");
                     if(jsonObjectHoverEvent != null) {
                         ChatHoverEvent.Action action = ChatHoverEvent.Action.fromName(jsonObjectHoverEvent.get("action").getAsString());
-                        ChatComponent value = context.deserialize(jsonObjectHoverEvent.get("value"), ChatComponent.class);
-                        style.hoverEvent = new ChatHoverEvent(action, value);
+                        JsonElement value = jsonObjectHoverEvent.get("value");
+                        if(value.isJsonPrimitive())
+                            style.hoverEvent = new ChatHoverEvent(action, new ChatComponentText(value.getAsString()));
+                        else
+                            style.hoverEvent = new ChatHoverEvent(action, context.deserialize(value, ChatComponent.class));
                     }
                 }
                 return style;
@@ -344,8 +347,8 @@ public final class ChatSerializer {
             if(src.hoverEvent != null) {
                 JsonObject jsonObjectHoverEvent = new JsonObject();
                 jsonObjectHoverEvent.addProperty("action", src.hoverEvent.getAction().toString().toLowerCase());
-                if(src.hoverEvent.getValue() instanceof ChatComponentRaw)
-                    jsonObjectHoverEvent.addProperty("value", ((ChatComponentRaw) src.hoverEvent.getValue()).getRaw());
+                if(src.hoverEvent.getValue() instanceof ChatComponentText)
+                    jsonObjectHoverEvent.addProperty("value", ((ChatComponentText) src.hoverEvent.getValue()).getText());
                 else
                     jsonObjectHoverEvent.add("value", context.serialize(src.hoverEvent.getValue()));
                 jsonObject.add("hoverEvent", jsonObjectHoverEvent);
@@ -452,7 +455,7 @@ public final class ChatSerializer {
                 ChatComponentScore componentScore = (ChatComponentScore) src;
                 jsonObjectScore.addProperty("name", componentScore.getName());
                 jsonObjectScore.addProperty("objective", componentScore.getObjective());
-                jsonObjectScore.addProperty("value", componentScore.getValue());
+                if(componentScore.getValue() != null) jsonObjectScore.addProperty("value", componentScore.getValue());
                 jsonObject.add("score", jsonObjectScore);
             } else if(src instanceof ChatComponentSelector) {
                 ChatComponentSelector componentSelector = (ChatComponentSelector) src;

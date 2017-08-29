@@ -263,7 +263,7 @@ public class ChatComponentFancy {
      */
     public ChatComponentFancy tooltipItem(String item) {
         Validate.notNull(item, "The item object is null.");
-        getLast().getStyle().setHoverEvent(new ChatHoverEvent(ChatHoverEvent.Action.SHOW_ITEM, new ChatComponentRaw(item)));
+        getLast().getStyle().setHoverEvent(new ChatHoverEvent(ChatHoverEvent.Action.SHOW_ITEM, new ChatComponentText(item)));
         return this;
     }
 
