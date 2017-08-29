@@ -89,6 +89,18 @@ fun <T, C: Comparable<T>> C.isRange(min: T, max: T): Boolean
 fun <T, C: Comparable<T>> C.isOrRange(min: T, max: T): Boolean
         = compareTo(min) >= 0 && compareTo(max) <= 0
 
+inline fun <reified T: Enum<T>> fromName(name: String, def: T): T = try {
+    enumValueOf(name)
+} catch (e: Exception) {
+    def
+}
+
+inline fun <reified T: Enum<T>> fromNameOrNull(name: String, def: T? = null): T? = try {
+    enumValueOf<T>(name)
+} catch (e: Exception) {
+    def
+}
+
 /** version function */
 
 fun currentMCVersion(): MinecraftVersion

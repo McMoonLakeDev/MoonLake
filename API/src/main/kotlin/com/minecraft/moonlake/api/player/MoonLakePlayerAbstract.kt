@@ -612,7 +612,7 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
             = name.hashCode()
 
     override final fun equals(other: Any?): Boolean {
-        if(other == this)
+        if(other === this)
             return true
         if(other is MoonLakePlayer)
             return getBukkitPlayer() == other.getBukkitPlayer()

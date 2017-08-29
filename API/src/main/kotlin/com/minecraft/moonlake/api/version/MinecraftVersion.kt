@@ -101,7 +101,7 @@ class MinecraftVersion(val major: Int, val minor: Int, val build: Int, private v
     }
 
     override fun equals(other: Any?): Boolean {
-        if(other == this)
+        if(other === this)
             return true
         if(other is MinecraftVersion)
             return major == other.major && minor == other.minor && build == other.build && isPre() == other.isPre()

@@ -144,7 +144,7 @@ class MinecraftBukkitVersion(val major: Int, val minor: Int, val release: Int) :
     }
 
     override fun equals(other: Any?): Boolean {
-        if(other == this)
+        if(other === this)
             return true
         if(other is MinecraftBukkitVersion)
             return major == other.major && minor == other.minor && release == other.release
