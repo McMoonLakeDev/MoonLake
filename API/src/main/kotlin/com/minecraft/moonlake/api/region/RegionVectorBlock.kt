@@ -46,7 +46,7 @@ open class RegionVectorBlock : RegionVector {
 
     companion object {
 
-        val ZERO = RegionVectorBlock(.0, .0, .0)
+        @JvmField val ZERO = RegionVectorBlock(.0, .0, .0)
 
         @JvmStatic
         @JvmName("deserialize")

@@ -178,7 +178,7 @@ open class RegionVector2D(
 
     companion object {
 
-        val ZERO = RegionVector2D(.0, .0)
+        @JvmField val ZERO = RegionVector2D(.0, .0)
 
         @JvmStatic
         @JvmName("deserialize")
