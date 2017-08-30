@@ -18,9 +18,11 @@
 package com.minecraft.moonlake
 
 import com.minecraft.moonlake.api.MoonLake
+import com.minecraft.moonlake.api.region.*
 import com.minecraft.moonlake.api.setMoonLake
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
+import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.plugin.java.JavaPlugin
 
 class MoonLakePlugin : JavaPlugin, MoonLake {
@@ -28,6 +30,7 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
     constructor(): super()
 
     override fun onLoad() {
+        registerConfigurationSerializable()
     }
 
     override fun onEnable() {
@@ -37,6 +40,18 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
     }
 
     override fun onDisable() {
+    }
+
+    /** register moonlake wrapped configuration serializable class */
+    private fun registerConfigurationSerializable() {
+        arrayOf(
+                RegionVector::class.java,
+                RegionVector2D::class.java,
+                RegionVectorBlock::class.java,
+                RegionCuboid::class.java,
+                RegionCylinder::class.java,
+                RegionEllipsoid::class.java
+        ).forEach { ConfigurationSerialization.registerClass(it) }
     }
 
     override fun getPluginPrefix(): String
