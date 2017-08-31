@@ -25,12 +25,16 @@ import com.minecraft.moonlake.api.exception.MoonLakeException
 import com.minecraft.moonlake.api.funs.Consumer
 import com.minecraft.moonlake.api.player.MoonLakePlayer
 import com.minecraft.moonlake.api.player.MoonLakePlayerCached
+import com.minecraft.moonlake.api.region.RegionCuboid
+import com.minecraft.moonlake.api.region.RegionVector
+import com.minecraft.moonlake.api.region.RegionVector2D
+import com.minecraft.moonlake.api.region.RegionVectorBlock
 import com.minecraft.moonlake.api.task.MoonLakeRunnable
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
-import org.bukkit.Bukkit
-import org.bukkit.ChatColor
-import org.bukkit.World
+import org.bukkit.*
+import org.bukkit.command.CommandSender
+import org.bukkit.command.PluginCommand
 import org.bukkit.configuration.Configuration
 import org.bukkit.configuration.serialization.ConfigurationSerializable
 import org.bukkit.entity.Entity
@@ -45,7 +49,10 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.plugin.EventExecutor
 import org.bukkit.plugin.Plugin
+import org.bukkit.plugin.PluginManager
+import org.bukkit.plugin.ServicesManager
 import org.bukkit.plugin.messaging.Messenger
+import org.bukkit.scheduler.BukkitScheduler
 import org.bukkit.scheduler.BukkitTask
 import org.bukkit.scoreboard.Scoreboard
 import java.lang.reflect.Modifier
@@ -258,16 +265,69 @@ fun getScoreboardNew(): Scoreboard
 fun getMessenger(): Messenger
         = Bukkit.getMessenger()
 
+fun getServicesManager(): ServicesManager
+        = Bukkit.getServicesManager()
+
+fun getPluginManager(): PluginManager
+        = Bukkit.getPluginManager()
+
+fun getScheduler(): BukkitScheduler
+        = Bukkit.getScheduler()
+
+fun getPluginCommand(name: String): PluginCommand
+        = Bukkit.getPluginCommand(name)
+
+fun dispatchCommand(sender: CommandSender, command: String): Boolean
+        = Bukkit.dispatchCommand(sender, command)
+
+fun dispatchConsoleCmd(command: String): Boolean
+        = Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command)
+
 /** converter function */
+
+fun UUID.toBukkitWorld(): World?
+        = Bukkit.getWorld(this)
 
 fun String.toBukkitWorld(): World?
         = Bukkit.getWorld(this)
 
+fun UUID.toEntity(): Entity?
+        = Bukkit.getEntity(this)
+
 fun UUID.toPlayer(): Player?
         = Bukkit.getPlayer(this)
 
+fun String.toPlayer(): Player?
+        = Bukkit.getPlayer(this)
+
+fun String.toPlayerExact(): Player?
+        = Bukkit.getPlayerExact(this)
+
 fun Player.toMoonLakePlayer(): MoonLakePlayer
         = MoonLakePlayerCached.instance().getCache(this)
+
+fun UUID.toMoonLakePlayer(): MoonLakePlayer? = this.toPlayer().let {
+    when(it == null) {
+        true -> null
+        else -> it.notNull().toMoonLakePlayer()
+    }
+}
+
+fun String.toMoonLakePlayer(): MoonLakePlayer? = this.toPlayer().let {
+    when(it == null) {
+        true -> null
+        else -> it.notNull().toMoonLakePlayer()
+    }
+}
+
+fun Location.toRegionVector(): RegionVector
+        = RegionVector(this.x, this.y, this.z)
+
+fun Location.toRegionVectorBlock(): RegionVectorBlock
+        = RegionVectorBlock(this.x, this.y, this.z)
+
+fun Location.toRegionVector2D(): RegionVector2D
+        = RegionVector2D(this.x, this.z)
 
 /** event function */
 
@@ -458,3 +518,18 @@ fun <T: LivingEntity> getLivingTarget(clazz: Class<T>, source: MoonLakePlayer, r
 
 fun getLivingTarget(source: MoonLakePlayer, range: Double, tolerance: Double = 4.0): LivingEntity?
         = getLivingTarget(source.getBukkitPlayer(), range, tolerance)
+
+/** region function */
+
+fun World.createCuboidRegion(pos1: Location, pos2: Location): RegionCuboid
+        = RegionCuboid(this, pos1.toRegionVector(), pos2.toRegionVector())
+
+fun World.createCuboidRegion(pos1: RegionVector, pos2: RegionVector): RegionCuboid
+        = RegionCuboid(this, pos1, pos2)
+
+fun RegionCuboid.createWorldBorder(): WorldBorder {
+    val worldBorder = getWorld().worldBorder
+    worldBorder.setSize(getLength().toDouble(), 0L)
+    worldBorder.center = getCenter().toLocation(getWorld())
+    return worldBorder
+}
