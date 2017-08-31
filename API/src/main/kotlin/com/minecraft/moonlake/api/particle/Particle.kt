@@ -59,32 +59,32 @@ enum class Particle {
     WATER_SPLASH("splash", 5, ParticleProperty.DIRECTIONAL),
 
     /** 
-     * 粒子效果: [水尾波 ](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#wake) (版本: 全版本 | 需求: 矢量方向)
+     * 粒子效果: [水尾波](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#wake) (版本: 全版本 | 需求: 矢量方向)
      */
     WATER_WAKE("wake", 6, ParticleProperty.DIRECTIONAL),
 
     /**
-     * 粒子效果: [水下颗粒 ](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#suspended) (版本: 全版本 | 需求: 水源)
+     * 粒子效果: [水下颗粒](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#suspended) (版本: 全版本 | 需求: 水源)
      */
     SUSPENDED("suspended", 7, ParticleProperty.REQUIRES_WATER),
 
     /**
-     * 粒子效果: [虚空颗粒 ](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#depthSuspended) (版本: 全版本 | 需求: 矢量方向)
+     * 粒子效果: [虚空颗粒](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#depthSuspended) (版本: 全版本 | 需求: 矢量方向)
      */
     SUSPENDED_DEPTH("depthSuspended", 8, ParticleProperty.DIRECTIONAL),
 
     /** 
-     * 粒子效果: [暴击 ](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#crit) (版本: 全版本 | 需求: 矢量方向)
+     * 粒子效果: [暴击](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#crit) (版本: 全版本 | 需求: 矢量方向)
      */
     CRIT("crit", 9, ParticleProperty.DIRECTIONAL),
 
     /** 
-     * 粒子效果: [魔法暴击 ](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#magicCrit) (版本: 全版本 | 需求: 矢量方向)
+     * 粒子效果: [魔法暴击](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#magicCrit) (版本: 全版本 | 需求: 矢量方向)
      */
     CRIT_MAGIC("magicCrit", 10, ParticleProperty.DIRECTIONAL),
 
     /** 
-     * 粒子效果: [烟雾 ](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#smoke) (版本: 全版本 | 需求: 矢量方向)
+     * 粒子效果: [烟雾](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#smoke) (版本: 全版本 | 需求: 矢量方向)
      */
     SMOKE_NORMAL("smoke", 11, ParticleProperty.DIRECTIONAL),
 
