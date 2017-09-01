@@ -43,8 +43,8 @@ class CachedPackage : Cached {
     @Throws(MoonLakeException::class)
     fun getPackageClass(className: String): Class<*> {
         if(cachedMap.containsKey(className)) {
-            val result = cachedMap[className]!!
-            if(!result.isPresent)
+            val result = cachedMap[className]
+            if(result == null || !result.isPresent)
                 throw MoonLakeException("无法查找到类: $className")
             return result.get()
         }
