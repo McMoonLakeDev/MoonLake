@@ -23,7 +23,7 @@ interface ChatComponent {
 
     fun setStyle(style: ChatStyle?): ChatComponent
 
-    fun getExtras(): List<ChatComponent>
+    fun getExtras(): MutableList<ChatComponent>
 
     fun getExtraSize(): Int
 

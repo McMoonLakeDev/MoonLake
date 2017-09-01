@@ -24,6 +24,7 @@ data class ChatClickEvent(val action: Action, val value: String) {
         OPEN_URL,
         OPEN_FILE,
         SUGGEST_COMMAND,
+        RUN_COMMAND,
         CHANGE_PAGE,
         ;
     }

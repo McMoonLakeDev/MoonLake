@@ -38,7 +38,7 @@ abstract class ChatComponentAbstract : ChatComponent {
         return this
     }
 
-    override final fun getExtras(): List<ChatComponent>
+    override final fun getExtras(): MutableList<ChatComponent>
             = extras
 
     override final fun getExtraSize(): Int
