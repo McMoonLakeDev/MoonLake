@@ -17,7 +17,7 @@
 
 package com.minecraft.moonlake.api.version
 
-import com.minecraft.moonlake.api.ComparisonChain
+import com.minecraft.moonlake.api.util.ComparisonChain
 import com.minecraft.moonlake.api.notNull
 import org.bukkit.Bukkit
 import java.util.regex.Pattern

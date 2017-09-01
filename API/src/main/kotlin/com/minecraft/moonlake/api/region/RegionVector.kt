@@ -17,7 +17,7 @@
 
 package com.minecraft.moonlake.api.region
 
-import com.minecraft.moonlake.api.ComparisonChain
+import com.minecraft.moonlake.api.util.ComparisonChain
 import com.minecraft.moonlake.api.parseDouble
 import org.bukkit.Location
 import org.bukkit.World
