@@ -104,4 +104,10 @@ object MinecraftReflection {
     @JvmName("getCraftPlayerClass")
     fun getCraftPlayerClass(): Class<*>
             = getCraftBukkitClass("entity.CraftPlayer")
+
+    @JvmStatic
+    @JvmName("getEntityHumanClass")
+    @Throws(MoonLakeException::class)
+    fun getEntityHumanClass(): Class<*>
+            = getMinecraftClass("EntityHuman")
 }

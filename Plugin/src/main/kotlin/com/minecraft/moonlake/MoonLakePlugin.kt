@@ -17,7 +17,11 @@
 
 package com.minecraft.moonlake
 
+import com.minecraft.moonlake.anvil.AnvilWindowImpl_v1_12_R1
 import com.minecraft.moonlake.api.MoonLake
+import com.minecraft.moonlake.api.anvil.AnvilWindowEventHandler
+import com.minecraft.moonlake.api.anvil.AnvilWindowInputEvent
+import com.minecraft.moonlake.api.anvil.AnvilWindowOpenEvent
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.region.*
 import com.minecraft.moonlake.api.registerEvent
@@ -27,9 +31,11 @@ import com.minecraft.moonlake.api.utility.MinecraftConverters
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.entity.IronGolem
 import org.bukkit.event.EventHandler
+import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.server.ServerCommandEvent
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -55,6 +61,24 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
                     val nmsEntity = MinecraftConverters.getEntity(IronGolem::class.java).getGeneric(entity)
                     println("entity=$entity")
                     println("nmsEntity=$nmsEntity")
+                }
+            }
+            @EventHandler
+            fun onPlace(event: BlockPlaceEvent) {
+                if(event.block.type == Material.ANVIL) {
+                    val anvilWindow = AnvilWindowImpl_v1_12_R1(this@MoonLakePlugin)
+                    anvilWindow.setOpen(object: AnvilWindowEventHandler<AnvilWindowOpenEvent> {
+                        override fun execute(param: AnvilWindowOpenEvent) {
+                            param.player.sendMessage("open anvil")
+                        }
+                    })
+                    anvilWindow.setInput(object: AnvilWindowEventHandler<AnvilWindowInputEvent> {
+                        override fun execute(param: AnvilWindowInputEvent) {
+                            param.player.sendMessage(param.input ?: "null")
+                        }
+                    })
+                    anvilWindow.open(event.player)
+                    println("anvilWindow=$anvilWindow")
                 }
             }
         }.registerEvent(this)
