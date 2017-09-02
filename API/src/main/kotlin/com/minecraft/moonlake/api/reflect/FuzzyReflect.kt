@@ -90,7 +90,7 @@ class FuzzyReflect(val source: Class<*>, val forceAccess: Boolean) {
      * @param name only for exception info
      */
     @Throws(NoSuchMethodException::class)
-    fun getMethodByParameters(name: String?, returnType: Class<*>, vararg params: Class<*>): Method {
+    fun getMethodByParameters(name: String?, returnType: Class<*>, params: Array<out Class<*>>): Method {
         val methodList = getMethodListByParameters(returnType, params)
         if(methodList.isNotEmpty())
             return methodList.first()

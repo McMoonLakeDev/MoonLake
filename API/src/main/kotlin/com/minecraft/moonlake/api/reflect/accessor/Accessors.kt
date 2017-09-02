@@ -18,6 +18,8 @@
 package com.minecraft.moonlake.api.reflect.accessor
 
 import com.minecraft.moonlake.api.exception.MoonLakeException
+import com.minecraft.moonlake.api.reflect.ExactReflect
+import com.minecraft.moonlake.api.reflect.FuzzyReflect
 import com.minecraft.moonlake.api.throwMoonLake
 import java.lang.reflect.Constructor
 import java.lang.reflect.Field
@@ -36,6 +38,22 @@ object Accessors {
     }
 
     @JvmStatic
+    @JvmName("getAccessorConstructor")
+    @Throws(NoSuchMethodException::class, SecurityException::class)
+    fun <T> getAccessorConstructor(clazz: Class<T>, forceAccess: Boolean = false, vararg params: Class<*>): AccessorConstructor<T> {
+        val constructor = if(forceAccess) clazz.getDeclaredConstructor(*params) else clazz.getConstructor(*params)
+        return getAccessorConstructor(constructor, forceAccess)
+    }
+
+    @JvmStatic
+    @JvmName("getAccessorConstructorOrNull")
+    fun <T> getAccessorConstructorOrNull(clazz: Class<T>, forceAccess: Boolean = false, vararg params: Class<*>): AccessorConstructor<T>? = try {
+        getAccessorConstructor(clazz, forceAccess, *params)
+    } catch(e: Exception) {
+        null
+    }
+
+    @JvmStatic
     @JvmName("getAccessorMethod")
     fun getAccessorMethod(method: Method, forceAccess: Boolean = false): AccessorMethod {
         method.isAccessible = forceAccess
@@ -43,10 +61,81 @@ object Accessors {
     }
 
     @JvmStatic
+    @JvmName("getAccessorMethod")
+    @Throws(NoSuchMethodException::class)
+    fun getAccessorMethod(clazz: Class<*>, name: String, forceAccess: Boolean = false, vararg params: Class<*>): AccessorMethod
+            = getAccessorMethod(ExactReflect.fromClass(clazz, forceAccess).getMethod(name, *params))
+
+    @JvmStatic
+    @JvmName("getAccessorMethodOrNull")
+    fun getAccessorMethodOrNull(clazz: Class<*>, name: String, forceAccess: Boolean = false, vararg params: Class<*>): AccessorMethod? = try {
+        getAccessorMethod(ExactReflect.fromClass(clazz, forceAccess).getMethod(name, *params))
+    } catch(e: Exception) {
+        null
+    }
+
+    @JvmStatic
+    @JvmName("getAccessorMethod")
+    @Throws(NoSuchMethodException::class)
+    fun getAccessorMethod(clazz: Class<*>, returnType: Class<*>, forceAccess: Boolean = false, params: Array<out Class<*>>): AccessorMethod
+            = getAccessorMethod(FuzzyReflect.fromClass(clazz, forceAccess).getMethodByParameters(null, returnType, params))
+
+    @JvmStatic
+    @JvmName("getAccessorMethodOrNull")
+    fun getAccessorMethodOrNull(clazz: Class<*>, returnType: Class<*>, forceAccess: Boolean = false, params: Array<out Class<*>>): AccessorMethod? = try {
+        getAccessorMethod(FuzzyReflect.fromClass(clazz, forceAccess).getMethodByParameters(null, returnType, params))
+    } catch(e: Exception) {
+        null
+    }
+
+    @JvmStatic
     @JvmName("getAccessorField")
     fun getAccessorField(field: Field, forceAccess: Boolean = false): AccessorField {
         field.isAccessible = forceAccess
         return AccessorFieldSimple(field)
+    }
+
+
+    @JvmStatic
+    @JvmName("getAccessorField")
+    @Throws(NoSuchFieldException::class)
+    fun getAccessorField(clazz: Class<*>, type: Class<*>, forceAccess: Boolean = false): AccessorField
+            = getAccessorField(FuzzyReflect.fromClass(clazz, forceAccess).getFieldByType(null, type))
+
+    @JvmStatic
+    @JvmName("getAccessorFieldOrNull")
+    fun getAccessorFieldOrNull(clazz: Class<*>, type: Class<*>, forceAccess: Boolean = false): AccessorField? = try {
+        getAccessorField(FuzzyReflect.fromClass(clazz, forceAccess).getFieldByType(null, type))
+    } catch(e: Exception) {
+        null
+    }
+
+    @JvmStatic
+    @JvmName("getAccessorField")
+    @Throws(NoSuchFieldException::class)
+    fun getAccessorField(clazz: Class<*>, name: String, forceAccess: Boolean = false): AccessorField
+            = getAccessorField(ExactReflect.fromClass(clazz, forceAccess).getField(name))
+
+    @JvmStatic
+    @JvmName("getAccessorFieldOrNull")
+    fun getAccessorFieldOrNull(clazz: Class<*>, name: String, forceAccess: Boolean = false): AccessorField? = try {
+        getAccessorField(ExactReflect.fromClass(clazz, forceAccess).getField(name))
+    } catch(e: Exception) {
+        null
+    }
+
+    @JvmStatic
+    @JvmName("getAccessorField")
+    @Throws(IndexOutOfBoundsException::class)
+    fun getAccessorField(clazz: Class<*>, index: Int, forceAccess: Boolean = false): AccessorField
+            = getAccessorField(FuzzyReflect.fromClass(clazz, forceAccess).getFieldByIndex(index))
+
+    @JvmStatic
+    @JvmName("getAccessorFieldOrNull")
+    fun getAccessorFieldOrNull(clazz: Class<*>, index: Int, forceAccess: Boolean = false): AccessorField? = try {
+        getAccessorField(FuzzyReflect.fromClass(clazz, forceAccess).getFieldByIndex(index))
+    } catch(e: Exception) {
+        null
     }
 
     /** inner class */

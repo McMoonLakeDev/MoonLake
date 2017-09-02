@@ -22,7 +22,6 @@ import com.google.gson.stream.JsonReader
 import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.chat.ChatSerializer
 import com.minecraft.moonlake.api.converter.ConverterEquivalent
-import com.minecraft.moonlake.api.reflect.FuzzyReflect
 import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import java.io.StringReader
@@ -31,10 +30,7 @@ object MinecraftConverters {
 
     @JvmStatic
     private val chatSerializerGson: AccessorField by lazy {
-        Accessors.getAccessorField(
-                FuzzyReflect
-                        .fromClass(MinecraftReflection.getChatSerializerClass(), true)
-                        .getFieldByType("gson", Gson::class.java), true) }
+        Accessors.getAccessorField(MinecraftReflection.getChatSerializerClass(), Gson::class.java, true) }
 
     @JvmStatic
     @JvmName("getChatComponent")
