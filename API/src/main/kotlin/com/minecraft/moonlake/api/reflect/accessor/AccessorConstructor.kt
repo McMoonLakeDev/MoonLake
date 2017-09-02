@@ -23,5 +23,5 @@ import java.lang.reflect.Constructor
 interface AccessorConstructor<T> : Accessor<Constructor<T>> {
 
     @Throws(MoonLakeException::class)
-    fun newInstance(vararg params: Any): T
+    fun newInstance(vararg params: Any?): T
 }

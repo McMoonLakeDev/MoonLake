@@ -18,16 +18,17 @@
 package com.minecraft.moonlake
 
 import com.minecraft.moonlake.api.MoonLake
-import com.minecraft.moonlake.api.chat.ChatColor
-import com.minecraft.moonlake.api.chat.ChatComponentFancy
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.region.*
 import com.minecraft.moonlake.api.registerEvent
 import com.minecraft.moonlake.api.setMoonLake
+import com.minecraft.moonlake.api.toBukkitWorld
 import com.minecraft.moonlake.api.utility.MinecraftConverters
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
+import org.bukkit.Location
 import org.bukkit.configuration.serialization.ConfigurationSerialization
+import org.bukkit.entity.IronGolem
 import org.bukkit.event.EventHandler
 import org.bukkit.event.server.ServerCommandEvent
 import org.bukkit.plugin.java.JavaPlugin
@@ -49,18 +50,11 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
             @EventHandler
             fun onCommand(event: ServerCommandEvent) {
                 if(event.command == "cc") {
-
-                    val chatComponent = ChatComponentFancy("花式聊天组件: ")
-                            .color(ChatColor.AQUA)
-                            .withBold()
-                            .then("[点我]")
-                            .color(ChatColor.BLUE)
-                            .withUnderlined()
-                            .link("http://www.mcmoonlake.com")
-                            .build()
-                    val iChatComponent = MinecraftConverters.getChatComponent().getGeneric(chatComponent)
-                    println("wrapper=$chatComponent")
-                    println("generic=$iChatComponent")
+                    val world = "world".toBukkitWorld()!!
+                    val entity = world.spawn(Location(world, .0, 100.0, .0), IronGolem::class.java)
+                    val nmsEntity = MinecraftConverters.getEntity(IronGolem::class.java).getGeneric(entity)
+                    println("entity=$entity")
+                    println("nmsEntity=$nmsEntity")
                 }
             }
         }.registerEvent(this)

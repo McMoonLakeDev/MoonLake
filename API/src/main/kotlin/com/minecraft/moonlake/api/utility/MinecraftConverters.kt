@@ -23,10 +23,14 @@ import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.chat.ChatSerializer
 import com.minecraft.moonlake.api.converter.ConverterEquivalent
 import com.minecraft.moonlake.api.reflect.accessor.AccessorField
+import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
+import org.bukkit.entity.Entity
 import java.io.StringReader
 
 object MinecraftConverters {
+
+    /** chat component */
 
     @JvmStatic
     private val chatSerializerGson: AccessorField by lazy {
@@ -48,6 +52,29 @@ object MinecraftConverters {
             }
             override fun getSpecificType(): Class<ChatComponent>
                     = ChatComponent::class.java
+        }
+    }
+
+    /** entity */
+
+    @JvmStatic
+    private val craftEntityGetHandle: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(MinecraftReflection.getCraftEntityClass(), "getHandle") }
+    @JvmStatic
+    private val entityGetBukkitEntity: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(MinecraftReflection.getEntityClass(), "getBukkitEntity") }
+
+    @JvmStatic
+    @JvmName("getEntity")
+    @Suppress("UNCHECKED_CAST")
+    fun <T: Entity> getEntity(clazz: Class<T>): ConverterEquivalent<T> {
+        return object: ConverterEquivalent<T> {
+            override fun getGeneric(specific: T): Any
+                    = craftEntityGetHandle.invoke(specific)
+            override fun getSpecific(generic: Any): T
+                    = entityGetBukkitEntity.invoke(generic) as T
+            override fun getSpecificType(): Class<T>
+                    = clazz
         }
     }
 }

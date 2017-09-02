@@ -82,4 +82,26 @@ object MinecraftReflection {
     @Throws(MoonLakeException::class)
     fun getIChatBaseComponentClass(): Class<*>
             = getMinecraftClass("IChatBaseComponent")
+
+    @JvmStatic
+    @JvmName("getEntityClass")
+    @Throws(MoonLakeException::class)
+    fun getEntityClass(): Class<*>
+            = getMinecraftClass("Entity")
+
+    @JvmStatic
+    @JvmName("getCraftEntityClass")
+    fun getCraftEntityClass(): Class<*>
+            = getCraftBukkitClass("entity.CraftEntity")
+
+    @JvmStatic
+    @JvmName("getEntityPlayerClass")
+    @Throws(MoonLakeException::class)
+    fun getEntityPlayerClass(): Class<*>
+            = getMinecraftClass("EntityPlayer")
+
+    @JvmStatic
+    @JvmName("getCraftPlayerClass")
+    fun getCraftPlayerClass(): Class<*>
+            = getCraftBukkitClass("entity.CraftPlayer")
 }

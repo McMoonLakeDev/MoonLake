@@ -141,8 +141,8 @@ object Accessors {
     /** inner class */
 
     private data class AccessorConstructorSimple<T>(private val constructor: Constructor<T>) : AccessorConstructor<T> {
-        override fun newInstance(vararg params: Any): T = try {
-            constructor.newInstance(params)
+        override fun newInstance(vararg params: Any?): T = try {
+            constructor.newInstance(*params)
         } catch(e: Exception) {
             when(e) {
                 is IllegalAccessException -> throw MoonLakeException("无法使用构造函数.", e)
@@ -157,8 +157,8 @@ object Accessors {
     }
 
     private data class AccessorMethodSimple(private val method: Method) : AccessorMethod {
-        override fun invoke(instance: Any?, vararg params: Any): Any = try {
-            method.invoke(instance, params)
+        override fun invoke(instance: Any?, vararg params: Any?): Any = try {
+            method.invoke(instance, *params)
         } catch(e: Exception) {
             when(e) {
                 is IllegalAccessException -> throw MoonLakeException("无法使用反射器.", e)
@@ -182,7 +182,7 @@ object Accessors {
             }
         }
 
-        override fun set(instance: Any?, value: Any) = try {
+        override fun set(instance: Any?, value: Any?) = try {
             field.set(instance, value)
         } catch(e: Exception) {
             when(e) {

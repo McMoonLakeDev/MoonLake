@@ -26,5 +26,5 @@ interface AccessorField : Accessor<Field> {
     fun get(instance: Any?): Any
 
     @Throws(MoonLakeException::class)
-    fun set(instance: Any?, value: Any)
+    fun set(instance: Any?, value: Any?)
 }
