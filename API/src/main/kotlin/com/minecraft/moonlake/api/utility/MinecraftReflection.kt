@@ -17,12 +17,16 @@
 
 package com.minecraft.moonlake.api.utility
 
+import com.minecraft.moonlake.api.anvil.AnvilWindow
 import com.minecraft.moonlake.api.cached.CachedPackage
 import com.minecraft.moonlake.api.currentBukkitVersion
 import com.minecraft.moonlake.api.exception.MoonLakeException
 import com.minecraft.moonlake.api.isOrLater
 import com.minecraft.moonlake.api.reflect.ClassSource
+import com.minecraft.moonlake.api.reflect.accessor.AccessorConstructor
+import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
+import org.bukkit.plugin.Plugin
 
 object MinecraftReflection {
 
@@ -116,4 +120,12 @@ object MinecraftReflection {
     @Throws(MoonLakeException::class)
     fun getItemStackClass(): Class<*>
             = getMinecraftClass("ItemStack")
+
+    /** significant */
+
+    @JvmStatic
+    @Suppress("UNCHECKED_CAST")
+    val anvilWindowConstructor: AccessorConstructor<AnvilWindow> by lazy {
+        val clazz = Class.forName("com.minecraft.moonlake.impl.anvil.AnvilWindowImpl_${currentBukkitVersion().getVersion()}") as Class<AnvilWindow>
+        Accessors.getAccessorConstructor(clazz, false, Plugin::class.java) }
 }

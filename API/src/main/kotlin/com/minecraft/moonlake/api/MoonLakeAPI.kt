@@ -19,6 +19,7 @@
 
 package com.minecraft.moonlake.api
 
+import com.minecraft.moonlake.api.anvil.AnvilWindow
 import com.minecraft.moonlake.api.event.MoonLakeEvent
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.exception.MoonLakeException
@@ -30,6 +31,7 @@ import com.minecraft.moonlake.api.region.RegionVector
 import com.minecraft.moonlake.api.region.RegionVector2D
 import com.minecraft.moonlake.api.region.RegionVectorBlock
 import com.minecraft.moonlake.api.task.MoonLakeRunnable
+import com.minecraft.moonlake.api.utility.MinecraftReflection
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
 import org.bukkit.*
@@ -533,3 +535,8 @@ fun RegionCuboid.createWorldBorder(): WorldBorder {
     worldBorder.center = getCenter().toLocation(getWorld())
     return worldBorder
 }
+
+/** anvil window function */
+
+fun Plugin.newAnvilWindow(): AnvilWindow
+        = MinecraftReflection.anvilWindowConstructor.newInstance(this)
