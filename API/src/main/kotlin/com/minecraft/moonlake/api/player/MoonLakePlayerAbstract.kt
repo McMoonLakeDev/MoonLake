@@ -543,9 +543,6 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
         }
     }
 
-    override fun getPing(): Int
-            = -1 // TODO EntityPlayer.ping
-
     override fun getIp(): String = getAddress().address.let {
         when(it == null) {
             true -> "127.0.0.1"

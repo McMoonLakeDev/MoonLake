@@ -22,10 +22,13 @@ import com.google.gson.stream.JsonReader
 import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.chat.ChatSerializer
 import com.minecraft.moonlake.api.converter.ConverterEquivalent
+import com.minecraft.moonlake.api.player.MoonLakePlayer
 import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
+import com.minecraft.moonlake.api.toMoonLakePlayer
 import org.bukkit.entity.Entity
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.io.StringReader
 
@@ -76,6 +79,21 @@ object MinecraftConverters {
                     = entityGetBukkitEntity.invoke(generic) as T
             override fun getSpecificType(): Class<T>
                     = clazz
+        }
+    }
+
+    @JvmStatic
+    @JvmName("getEntityPlayer")
+    fun getEntityPlayer(): ConverterEquivalent<MoonLakePlayer> {
+        return object: ConverterEquivalent<MoonLakePlayer> {
+            private val playerConverter: ConverterEquivalent<Player> by lazy { getEntity(Player::class.java) }
+
+            override fun getGeneric(specific: MoonLakePlayer): Any
+                    = playerConverter.getGeneric(specific.getBukkitPlayer())
+            override fun getSpecific(generic: Any): MoonLakePlayer
+                    = playerConverter.getSpecific(generic).toMoonLakePlayer()
+            override fun getSpecificType(): Class<MoonLakePlayer>
+                    = MoonLakePlayer::class.java
         }
     }
 

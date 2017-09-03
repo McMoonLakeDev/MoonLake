@@ -21,6 +21,7 @@ import com.minecraft.moonlake.api.attribute.Attribute
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
 import com.minecraft.moonlake.api.player.MoonLakePlayerAbstract
+import com.minecraft.moonlake.api.utility.MinecraftPlayerMembers
 import com.minecraft.moonlake.api.version.IllegalBukkitVersionException
 import com.minecraft.moonlake.impl.player.attribute.AttributeBase
 import org.bukkit.Sound
@@ -39,8 +40,11 @@ open class MoonLakePlayerBase : MoonLakePlayerAbstract {
     @Throws(IllegalOfflinePlayerException::class)
     constructor(player: Player) : super(player)
 
+    override fun getPing(): Int
+            = MinecraftPlayerMembers.PING.get(getBukkitPlayer()) as Int
+
     override fun getLocale(): String
-            = "en_us" // TODO EntityPlayer.locale
+            = MinecraftPlayerMembers.LOCALE.get(getBukkitPlayer()) as String
 
     override fun getAttribute(type: AttributeType): Attribute
             = AttributeBase(this, type)
