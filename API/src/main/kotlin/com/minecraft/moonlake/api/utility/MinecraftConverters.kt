@@ -26,6 +26,7 @@ import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import org.bukkit.entity.Entity
+import org.bukkit.inventory.ItemStack
 import java.io.StringReader
 
 object MinecraftConverters {
@@ -75,6 +76,29 @@ object MinecraftConverters {
                     = entityGetBukkitEntity.invoke(generic) as T
             override fun getSpecificType(): Class<T>
                     = clazz
+        }
+    }
+
+    /** item stack */
+
+    @JvmStatic
+    private val craftItemStackAsNMSCopy: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(MinecraftReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", false, ItemStack::class.java) }
+
+    @JvmStatic
+    private val craftItemStackAsBukkitCopy: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(MinecraftReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asBukkitCopy", false, MinecraftReflection.getItemStackClass()) }
+
+    @JvmStatic
+    @JvmName("getItemStack")
+    fun getItemStack(): ConverterEquivalent<ItemStack> {
+        return object: ConverterEquivalent<ItemStack> {
+            override fun getGeneric(specific: ItemStack): Any
+                    = craftItemStackAsNMSCopy.invoke(null, specific)
+            override fun getSpecific(generic: Any): ItemStack
+                    = craftItemStackAsBukkitCopy.invoke(null, generic) as ItemStack
+            override fun getSpecificType(): Class<ItemStack>
+                    = ItemStack::class.java
         }
     }
 }
