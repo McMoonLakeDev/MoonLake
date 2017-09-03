@@ -15,19 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api.anvil
+@file:JvmName("MoonLakeTest")
 
-import com.minecraft.moonlake.api.event.Cancellable
-import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
-
-class AnvilWindowClickEvent(anvilWindow: AnvilWindow, player: Player, val clickSlot: AnvilWindowSlot, val clickItemStack: ItemStack) : AnvilWindowEvent(anvilWindow, player), Cancellable {
-
-    private var cancel: Boolean = false
-
-    override fun isCancelled(): Boolean
-            = cancel
-
-    override fun setCancelled(cancel: Boolean)
-            { this.cancel = cancel }
+fun main(vararg args: String) {
 }
