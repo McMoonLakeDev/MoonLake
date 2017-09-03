@@ -39,7 +39,7 @@ class MoonLakePlayerCached private constructor(): CachedWeakRef<UUID, MoonLakePl
 
         private var instance: MoonLakePlayerCached? = null
         private var constructor: Constructor<MoonLakePlayer>? = null
-        private val IMPLEMENT = "com.minecraft.moonlake.player.MoonLakePlayerImpl_${MinecraftBukkitVersion.currentVersion().getVersion()}"
+        private val IMPLEMENT = "com.minecraft.moonlake.impl.player.MoonLakePlayerImpl_${MinecraftBukkitVersion.currentVersion().getVersion()}"
 
         @JvmStatic
         @JvmName("instance")

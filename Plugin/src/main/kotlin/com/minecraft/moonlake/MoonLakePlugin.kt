@@ -17,7 +17,6 @@
 
 package com.minecraft.moonlake
 
-import com.minecraft.moonlake.anvil.AnvilWindowImpl_v1_12_R1
 import com.minecraft.moonlake.api.MoonLake
 import com.minecraft.moonlake.api.anvil.AnvilWindowEventHandler
 import com.minecraft.moonlake.api.anvil.AnvilWindowInputEvent
@@ -30,6 +29,7 @@ import com.minecraft.moonlake.api.toBukkitWorld
 import com.minecraft.moonlake.api.utility.MinecraftConverters
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
+import com.minecraft.moonlake.impl.anvil.AnvilWindowImpl_v1_12_R1
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.configuration.serialization.ConfigurationSerialization
