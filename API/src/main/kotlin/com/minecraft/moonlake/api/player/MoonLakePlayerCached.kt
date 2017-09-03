@@ -21,6 +21,8 @@ import com.minecraft.moonlake.api.cached.CachedWeakRef
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.getMoonLake
 import com.minecraft.moonlake.api.notNull
+import com.minecraft.moonlake.api.reflect.accessor.AccessorConstructor
+import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import com.minecraft.moonlake.api.registerEvent
 import com.minecraft.moonlake.api.toPlayer
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
@@ -28,7 +30,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerQuitEvent
-import java.lang.reflect.Constructor
 import java.util.*
 
 class MoonLakePlayerCached private constructor(): CachedWeakRef<UUID, MoonLakePlayer>() {
@@ -38,7 +39,7 @@ class MoonLakePlayerCached private constructor(): CachedWeakRef<UUID, MoonLakePl
     companion object {
 
         private var instance: MoonLakePlayerCached? = null
-        private var constructor: Constructor<MoonLakePlayer>? = null
+        private var constructor: AccessorConstructor<MoonLakePlayer>? = null
         private val IMPLEMENT = "com.minecraft.moonlake.impl.player.MoonLakePlayerImpl_${MinecraftBukkitVersion.currentVersion().getVersion()}"
 
         @JvmStatic
@@ -54,10 +55,10 @@ class MoonLakePlayerCached private constructor(): CachedWeakRef<UUID, MoonLakePl
         @JvmStatic
         @JvmName("instanceConstructor")
         @Suppress("UNCHECKED_CAST")
-        private fun instanceConstructor(): Constructor<MoonLakePlayer> {
+        private fun instanceConstructor(): AccessorConstructor<MoonLakePlayer> {
             if(constructor == null) synchronized(MoonLakePlayerCached::class) {
                 if(constructor == null)
-                    constructor = (Class.forName(IMPLEMENT) as Class<MoonLakePlayer>).getConstructor(Player::class.java)
+                    constructor = Accessors.getAccessorConstructor((Class.forName(IMPLEMENT) as Class<MoonLakePlayer>), false, Player::class.java)
             }
             return constructor.notNull()
         }
