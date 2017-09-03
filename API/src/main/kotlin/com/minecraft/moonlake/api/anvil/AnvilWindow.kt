@@ -20,6 +20,7 @@ package com.minecraft.moonlake.api.anvil
 import com.minecraft.moonlake.api.exception.MoonLakeException
 import com.minecraft.moonlake.api.player.MoonLakePlayer
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
 interface AnvilWindow {
@@ -30,6 +31,14 @@ interface AnvilWindow {
 
     fun setInput(inputHandler: AnvilWindowEventHandler<AnvilWindowInputEvent>?)
 
+    fun setClick(clickHandler: AnvilWindowEventHandler<AnvilWindowClickEvent>?)
+
+    fun setClose(closeHandler: AnvilWindowEventHandler<AnvilWindowCloseEvent>?)
+
+    fun isAllowMove(): Boolean
+
+    fun setAllowMove(allowMove: Boolean)
+
     fun isOpened(): Boolean
 
     @Throws(MoonLakeException::class)
@@ -38,5 +47,11 @@ interface AnvilWindow {
     @Throws(MoonLakeException::class)
     fun open(player: MoonLakePlayer)
 
-    fun release()
+    @Throws(MoonLakeException::class)
+    fun getItem(anvilWindowSlot: AnvilWindowSlot): ItemStack
+
+    @Throws(MoonLakeException::class)
+    fun setItem(anvilWindowSlot: AnvilWindowSlot, itemStack: ItemStack)
+
+    fun clear()
 }

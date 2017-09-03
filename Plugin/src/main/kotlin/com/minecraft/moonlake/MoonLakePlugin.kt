@@ -18,9 +18,7 @@
 package com.minecraft.moonlake
 
 import com.minecraft.moonlake.api.MoonLake
-import com.minecraft.moonlake.api.anvil.AnvilWindowEventHandler
-import com.minecraft.moonlake.api.anvil.AnvilWindowInputEvent
-import com.minecraft.moonlake.api.anvil.AnvilWindowOpenEvent
+import com.minecraft.moonlake.api.anvil.*
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.region.*
 import com.minecraft.moonlake.api.registerEvent
@@ -37,6 +35,7 @@ import org.bukkit.entity.IronGolem
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.server.ServerCommandEvent
+import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 
 class MoonLakePlugin : JavaPlugin, MoonLake {
@@ -69,14 +68,28 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
                     val anvilWindow = AnvilWindowImpl_v1_12_R1(this@MoonLakePlugin)
                     anvilWindow.setOpen(object: AnvilWindowEventHandler<AnvilWindowOpenEvent> {
                         override fun execute(param: AnvilWindowOpenEvent) {
+                            // 在铁砧窗口打开的时候设置左边输入栏的物品为西瓜
                             param.player.sendMessage("open anvil")
+                            param.anvilWindow.setItem(AnvilWindowSlot.INPUT_LEFT, ItemStack(Material.MELON))
                         }
                     })
-                    anvilWindow.setInput(object: AnvilWindowEventHandler<AnvilWindowInputEvent> {
-                        override fun execute(param: AnvilWindowInputEvent) {
-                            param.player.sendMessage(param.input ?: "null")
+                    anvilWindow.setClick(object: AnvilWindowEventHandler<AnvilWindowClickEvent> {
+                        override fun execute(param: AnvilWindowClickEvent) {
+                            // 当点击铁砧窗口输出栏的时候打印物品信息
+                            if(param.clickSlot == AnvilWindowSlot.OUTPUT) {
+                                param.player.sendMessage("output=" + param.clickItemStack)
+                                param.player.closeInventory()
+                            }
                         }
                     })
+                    anvilWindow.setClose(object: AnvilWindowEventHandler<AnvilWindowCloseEvent> {
+                        override fun execute(param: AnvilWindowCloseEvent) {
+                            // 当铁砧窗口关闭的时候发送消息
+                            param.player.sendMessage("close anvil")
+                            param.anvilWindow.clear()
+                        }
+                    })
+                    anvilWindow.setAllowMove(false) // 不允许移动物品
                     anvilWindow.open(event.player)
                     println("anvilWindow=$anvilWindow")
                 }

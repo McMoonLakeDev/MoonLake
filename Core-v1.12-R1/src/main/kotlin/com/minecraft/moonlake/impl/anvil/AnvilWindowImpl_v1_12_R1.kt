@@ -17,21 +17,28 @@
 
 package com.minecraft.moonlake.impl.anvil
 
+import com.minecraft.moonlake.api.anvil.AnvilWindowCloseEvent
 import com.minecraft.moonlake.api.anvil.AnvilWindowInputEvent
 import com.minecraft.moonlake.api.anvil.AnvilWindowOpenEvent
 import com.minecraft.moonlake.api.notNull
 import net.minecraft.server.v1_12_R1.*
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer
 import org.bukkit.entity.Player
+import org.bukkit.inventory.Inventory
 import org.bukkit.plugin.Plugin
 
 open class AnvilWindowImpl_v1_12_R1(plugin: Plugin) : AnvilWindowBase(plugin) {
 
     override fun open(player: Player) {
-        checkOpenState()
+        super.open(player)
         val playerHandle = (player as CraftPlayer).handle
         val anvilTileContainer = AnvilWindowTileEntity(playerHandle.world)
         playerHandle.openTileEntity(anvilTileContainer)
+    }
+
+    override fun getInventory(): Inventory {
+        val containerAnvil = handle as ContainerAnvil
+        return containerAnvil.bukkitView.topInventory
     }
 
     private inner class AnvilWindowTileEntity(world: World) : BlockAnvil.TileEntityContainerAnvil(world, BlockPosition.ZERO) {
@@ -54,8 +61,26 @@ open class AnvilWindowImpl_v1_12_R1(plugin: Plugin) : AnvilWindowBase(plugin) {
                         super.a(value)
                         return
                     }
-                    if(!event.isCancelled && event.input != null)
+                    if(!event.isCancelled)
                         super.a(event.input)
+                }
+
+                override fun b(entityHuman: EntityHuman?) {
+                    if(closeHandler == null) {
+                        release()
+                        super.b(entityHuman)
+                        return
+                    }
+
+                    /** anvil close event handle */
+                    val event = AnvilWindowCloseEvent(this@AnvilWindowImpl_v1_12_R1, getContainerAnvilPlayer())
+                    try {
+                        closeHandler.notNull().execute(event)
+                    } catch(e: Exception) {
+                        handleException(e)
+                    }
+                    release()
+                    super.b(entityHuman)
                 }
             }
             handle = containerAnvil

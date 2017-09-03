@@ -24,6 +24,8 @@ abstract class AnvilWindowAbstract(private val plugin: Plugin) : AnvilWindow {
 
     protected var openHandler: AnvilWindowEventHandler<AnvilWindowOpenEvent>? = null
     protected var inputHandler: AnvilWindowEventHandler<AnvilWindowInputEvent>? = null
+    protected var clickHandler: AnvilWindowEventHandler<AnvilWindowClickEvent>? = null
+    protected var closeHandler: AnvilWindowEventHandler<AnvilWindowCloseEvent>? = null
 
     override final fun getPlugin(): Plugin
             = plugin
@@ -34,11 +36,19 @@ abstract class AnvilWindowAbstract(private val plugin: Plugin) : AnvilWindow {
     override fun setInput(inputHandler: AnvilWindowEventHandler<AnvilWindowInputEvent>?)
             { this.inputHandler = inputHandler }
 
+    override fun setClick(clickHandler: AnvilWindowEventHandler<AnvilWindowClickEvent>?)
+            { this.clickHandler = clickHandler }
+
+    override fun setClose(closeHandler: AnvilWindowEventHandler<AnvilWindowCloseEvent>?)
+            { this.closeHandler = closeHandler }
+
     override fun open(player: MoonLakePlayer)
             = open(player.getBukkitPlayer())
 
-    override fun release() {
+    open protected fun release() {
         openHandler = null
         inputHandler = null
+        clickHandler = null
+        closeHandler = null
     }
 }
