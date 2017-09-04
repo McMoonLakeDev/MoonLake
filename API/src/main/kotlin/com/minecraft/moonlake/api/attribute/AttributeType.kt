@@ -63,6 +63,8 @@ enum class AttributeType(val def: Double, val min: Double, val max: Double, val 
     FLYING_SPEED(0.4000000059604645, .0, 1024.0, MinecraftVersion.V1_12) {
         override fun value(): String
                 = "generic.flyingSpeed"
+        override fun isSupportItemStack(): Boolean
+                = false
     },
     ;
 
@@ -71,4 +73,7 @@ enum class AttributeType(val def: Double, val min: Double, val max: Double, val 
         if(it != null && !MinecraftVersion.currentVersion().isOrLater(it))
             throw IllegalBukkitVersionException("当前 Bukkit 版本不支持此 $this 属性类型.")
     }
+
+    open fun isSupportItemStack()
+            = true
 }

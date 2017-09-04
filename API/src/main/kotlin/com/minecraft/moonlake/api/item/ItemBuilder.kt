@@ -17,13 +17,202 @@
 
 package com.minecraft.moonlake.api.item
 
+import com.minecraft.moonlake.api.attribute.AttributeOperation
+import com.minecraft.moonlake.api.attribute.AttributeSlot
+import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.funs.Builder
-import com.minecraft.moonlake.api.funs.SingleParamBuilder
+import org.bukkit.Color
+import org.bukkit.FireworkEffect
+import org.bukkit.Material
+import org.bukkit.block.banner.Pattern
+import org.bukkit.enchantments.Enchantment
+import org.bukkit.entity.EntityType
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
+import org.bukkit.potion.PotionType
 
-interface ItemBuilder : Builder<ItemStack>, SingleParamBuilder<ItemStack, Boolean> {
+interface ItemBuilder : Builder<ItemStack> {
 
     override fun build(): ItemStack
 
-    override fun build(param: Boolean): ItemStack
+    /**
+     * general meta
+     * @see org.bukkit.inventory.meta.ItemMeta
+     */
+
+    fun setAmount(amount: Int): ItemBuilder
+
+    fun setDurability(durability: Int): ItemBuilder
+
+    fun addDurability(durability: Int): ItemBuilder
+
+    fun takeDurability(durability: Int): ItemBuilder
+
+    fun setDisplayName(displayName: String): ItemBuilder
+
+    fun setLocalizedName(localizedName: String): ItemBuilder
+
+    fun setLore(vararg lore: String): ItemBuilder
+
+    fun setLore(lore: Collection<String>): ItemBuilder
+
+    fun addLore(vararg lore: String): ItemBuilder
+
+    fun addLore(lore: Collection<String>): ItemBuilder
+
+    fun clearLore(): ItemBuilder
+
+    fun addEnchant(enchantment: Enchantment, level: Int): ItemBuilder
+
+    fun addSafeEnchant(enchantment: Enchantment, level: Int): ItemBuilder
+
+    fun removeEnchant(enchantment: Enchantment): ItemBuilder
+
+    fun clearEnchant(): ItemBuilder
+
+    fun addFlag(vararg flag: ItemFlag): ItemBuilder
+
+    fun addFlag(flag: Collection<ItemFlag>): ItemBuilder
+
+    fun removeFlag(vararg flag: ItemFlag): ItemBuilder
+
+    fun removeFlag(flag: Collection<ItemFlag>): ItemBuilder
+
+    fun clearFlag(): ItemBuilder
+
+    fun setUnbreakable(unbreakable: Boolean): ItemBuilder
+
+    fun setAttribute(type: AttributeType, operation: AttributeOperation, amount: Double): ItemBuilder
+
+    fun setAttribute(type: AttributeType, operation: AttributeOperation, slot: AttributeSlot, amount: Double): ItemBuilder
+
+    fun setAge(age: Int): ItemBuilder
+
+    fun setPickupDelay(pickupDelay: Int): ItemBuilder
+
+    fun setCanDestroy(vararg type: Material): ItemBuilder
+
+    fun setCanPlaceOn(vararg type: Material): ItemBuilder
+
+    /**
+     * leather armor meta
+     * @see org.bukkit.inventory.meta.LeatherArmorMeta
+     */
+
+    fun setLeatherColor(color: Color): ItemBuilder
+
+    fun setLeatherColor(red: Int, green: Int, blue: Int): ItemBuilder
+
+    /**
+     * book meta
+     * @see org.bukkit.inventory.meta.BookMeta
+     */
+
+    fun setBookTitle(title: String): ItemBuilder
+
+    fun setBookAuthor(author: String): ItemBuilder
+
+    fun setBookGeneration(generation: String): ItemBuilder
+
+    fun setBookPage(index: Int, page: String): ItemBuilder
+
+    fun setBookPages(vararg pages: String): ItemBuilder
+
+    fun setBookPages(pages: Collection<String>): ItemBuilder
+
+    fun addBookPages(vararg pages: String): ItemBuilder
+
+    fun addBookPages(pages: Collection<String>): ItemBuilder
+
+    /**
+     * enchantment storage meta
+     * @see org.bukkit.inventory.meta.EnchantmentStorageMeta
+     */
+
+    fun addStoredEnchant(enchantment: Enchantment, level: Int): ItemBuilder
+
+    fun addStoredSafeEnchant(enchantment: Enchantment, level: Int): ItemBuilder
+
+    fun removeStoredEnchant(enchantment: Enchantment): ItemBuilder
+
+    fun clearStoredEnchant(): ItemBuilder
+
+    /**
+     * skull meta
+     * @see org.bukkit.inventory.meta.SkullMeta
+     */
+
+    fun setSkullOwner(owner: String): ItemBuilder
+
+    /**
+     * spawn egg meta
+     * @see org.bukkit.inventory.meta.SpawnEggMeta
+     */
+
+    fun setSpawnEggType(type: EntityType): ItemBuilder
+
+    /**
+     * map meta
+     * @see org.bukkit.inventory.meta.MapMeta
+     */
+
+    fun setMapScaling(scaling: Boolean): ItemBuilder
+
+    fun setMapLocationName(locationName: String): ItemBuilder
+
+    fun setMapColor(color: Color): ItemBuilder
+
+    /**
+     * potion meta
+     * @see org.bukkit.inventory.meta.PotionMeta
+     */
+
+    fun setPotionColor(color: Color): ItemBuilder
+
+    fun setPotionBase(type: PotionType): ItemBuilder
+
+    fun addPotionEffect(effect: PotionEffect, overwrite: Boolean = false): ItemBuilder
+
+    fun removePotionEffect(type: PotionEffectType): ItemBuilder
+
+    fun clearPotionEffect(): ItemBuilder
+
+    /**
+     * firework meta
+     * @see org.bukkit.inventory.meta.FireworkMeta
+     */
+
+    fun addFireworkEffect(vararg effect: FireworkEffect): ItemBuilder
+
+    fun addFireworkEffect(effect: Collection<FireworkEffect>): ItemBuilder
+
+    fun clearFireworkEffect(): ItemBuilder
+
+    fun setFireworkPower(power: Int): ItemBuilder
+
+    /**
+     * banner meta
+     * @see org.bukkit.inventory.meta.BannerMeta
+     */
+
+    fun setBannerPattern(index: Int, pattern: Pattern): ItemBuilder
+
+    fun setBannerPattern(pattern: Collection<Pattern>): ItemBuilder
+
+    fun addBannerPattern(pattern: Pattern): ItemBuilder
+
+    fun removeBannerPattern(index: Int): ItemBuilder
+
+    /** static */
+
+    companion object {
+
+        fun of(itemStack: ItemStack): ItemBuilder
+                = object: ItemBuilderAbstract(itemStack.type, itemStack.amount, itemStack.durability.toInt()) {}
+
+        fun of(material: Material, amount: Int = 1, durability: Int = 0): ItemBuilder
+                = object: ItemBuilderAbstract(material, amount, durability) {}
+    }
 }
