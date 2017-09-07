@@ -121,6 +121,18 @@ object MinecraftReflection {
     fun getItemStackClass(): Class<*>
             = getMinecraftClass("ItemStack")
 
+    @JvmStatic
+    @JvmName("getNBTBaseClass")
+    @Throws(MoonLakeException::class)
+    fun getNBTBaseClass(): Class<*>
+            = getMinecraftClass("NBTBase")
+
+    @JvmStatic
+    @JvmName("getNBTTagCompoundClass")
+    @Throws(MoonLakeException::class)
+    fun getNBTTagCompoundClass(): Class<*>
+            = getMinecraftClass("NBTTagCompound")
+
     /** significant */
 
     @JvmStatic

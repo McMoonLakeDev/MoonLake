@@ -21,9 +21,9 @@ import java.util.*
 
 interface ConverterEquivalentOptional<T> : Converter {
 
-    fun getGeneric(specific: T): Optional<Any>
+    fun getGeneric(specific: T?): Optional<Any>
 
-    fun getSpecific(generic: Any): Optional<T>
+    fun getSpecific(generic: Any?): Optional<T>
 
     fun getSpecificType(): Class<T>
 }

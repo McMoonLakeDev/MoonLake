@@ -22,13 +22,13 @@ import com.google.gson.stream.JsonReader
 import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.chat.ChatSerializer
 import com.minecraft.moonlake.api.converter.ConverterEquivalent
-import com.minecraft.moonlake.api.player.MoonLakePlayer
+import com.minecraft.moonlake.api.converter.ConverterEquivalentIgnoreNull
+import com.minecraft.moonlake.api.nbt.NBTBase
+import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
-import com.minecraft.moonlake.api.toMoonLakePlayer
 import org.bukkit.entity.Entity
-import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.io.StringReader
 
@@ -43,13 +43,13 @@ object MinecraftConverters {
     @JvmStatic
     @JvmName("getChatComponent")
     fun getChatComponent(): ConverterEquivalent<ChatComponent> {
-        return object: ConverterEquivalent<ChatComponent> {
-            override fun getGeneric(specific: ChatComponent): Any {
+        return object: ConverterEquivalentIgnoreNull<ChatComponent> {
+            override fun getGenericValue(specific: ChatComponent): Any {
                 val gson = chatSerializerGson.get(null) as Gson
                 val adapter = gson.getAdapter(MinecraftReflection.getIChatBaseComponentClass())
                 return adapter.read(JsonReader(StringReader(specific.toJson())))
             }
-            override fun getSpecific(generic: Any): ChatComponent {
+            override fun getSpecificValue(generic: Any): ChatComponent {
                 val gson = chatSerializerGson.get(null) as Gson
                 val json = gson.toJson(generic)
                 return ChatSerializer.fromJson(json)
@@ -72,28 +72,13 @@ object MinecraftConverters {
     @JvmName("getEntity")
     @Suppress("UNCHECKED_CAST")
     fun <T: Entity> getEntity(clazz: Class<T>): ConverterEquivalent<T> {
-        return object: ConverterEquivalent<T> {
-            override fun getGeneric(specific: T): Any
+        return object: ConverterEquivalentIgnoreNull<T> {
+            override fun getGenericValue(specific: T): Any
                     = craftEntityGetHandle.invoke(specific)
-            override fun getSpecific(generic: Any): T
+            override fun getSpecificValue(generic: Any): T
                     = entityGetBukkitEntity.invoke(generic) as T
             override fun getSpecificType(): Class<T>
                     = clazz
-        }
-    }
-
-    @JvmStatic
-    @JvmName("getEntityPlayer")
-    fun getEntityPlayer(): ConverterEquivalent<MoonLakePlayer> {
-        return object: ConverterEquivalent<MoonLakePlayer> {
-            private val playerConverter: ConverterEquivalent<Player> by lazy { getEntity(Player::class.java) }
-
-            override fun getGeneric(specific: MoonLakePlayer): Any
-                    = playerConverter.getGeneric(specific.getBukkitPlayer())
-            override fun getSpecific(generic: Any): MoonLakePlayer
-                    = playerConverter.getSpecific(generic).toMoonLakePlayer()
-            override fun getSpecificType(): Class<MoonLakePlayer>
-                    = MoonLakePlayer::class.java
         }
     }
 
@@ -110,13 +95,28 @@ object MinecraftConverters {
     @JvmStatic
     @JvmName("getItemStack")
     fun getItemStack(): ConverterEquivalent<ItemStack> {
-        return object: ConverterEquivalent<ItemStack> {
-            override fun getGeneric(specific: ItemStack): Any
+        return object: ConverterEquivalentIgnoreNull<ItemStack> {
+            override fun getGenericValue(specific: ItemStack): Any
                     = craftItemStackAsNMSCopy.invoke(null, specific)
-            override fun getSpecific(generic: Any): ItemStack
+            override fun getSpecificValue(generic: Any): ItemStack
                     = craftItemStackAsBukkitCopy.invoke(null, generic) as ItemStack
             override fun getSpecificType(): Class<ItemStack>
                     = ItemStack::class.java
+        }
+    }
+
+    /** nbt */
+
+    @JvmStatic
+    @JvmName("getNBT")
+    fun getNBT(): ConverterEquivalent<NBTBase<*>> {
+        return object: ConverterEquivalentIgnoreNull<NBTBase<*>> {
+            override fun getGenericValue(specific: NBTBase<*>): Any
+                    = NBTFactory.fromBase(specific).getHandle()
+            override fun getSpecificValue(generic: Any): NBTBase<*>
+                    = NBTFactory.fromNMS<Any>(generic)
+            override fun getSpecificType(): Class<NBTBase<*>>
+                    = NBTBase::class.java
         }
     }
 }

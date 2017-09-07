@@ -24,6 +24,7 @@ import com.minecraft.moonlake.api.event.MoonLakeEvent
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.exception.MoonLakeException
 import com.minecraft.moonlake.api.funs.Consumer
+import com.minecraft.moonlake.api.funs.Function
 import com.minecraft.moonlake.api.player.MoonLakePlayer
 import com.minecraft.moonlake.api.player.MoonLakePlayerCached
 import com.minecraft.moonlake.api.region.RegionCuboid
@@ -330,6 +331,11 @@ fun Location.toRegionVectorBlock(): RegionVectorBlock
 
 fun Location.toRegionVector2D(): RegionVector2D
         = RegionVector2D(this.x, this.z)
+
+fun <T, R> ((_: T) -> R).toFunction(): Function<T, R> = object: Function<T, R> {
+    override fun apply(param: T): R
+            = this@toFunction(param)
+}
 
 /** event function */
 

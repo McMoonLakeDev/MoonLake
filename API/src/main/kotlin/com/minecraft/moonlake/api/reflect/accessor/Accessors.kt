@@ -54,6 +54,14 @@ object Accessors {
     }
 
     @JvmStatic
+    @JvmName("setAccessorConstructor")
+    fun <T> setAccessorConstructor(constructor: Constructor<T>, forceAccess: Boolean = false): Constructor<T> {
+        if(forceAccess && !constructor.isAccessible)
+            constructor.isAccessible = true
+        return constructor
+    }
+
+    @JvmStatic
     @JvmName("getAccessorMethod")
     fun getAccessorMethod(method: Method, forceAccess: Boolean = false): AccessorMethod {
         method.isAccessible = forceAccess
@@ -86,6 +94,14 @@ object Accessors {
         getAccessorMethod(FuzzyReflect.fromClass(clazz, forceAccess).getMethodByParameters(null, returnType, params), forceAccess)
     } catch(e: Exception) {
         null
+    }
+
+    @JvmStatic
+    @JvmName("setAccessorMethod")
+    fun setAccessorMethod(method: Method, forceAccess: Boolean = false): Method {
+        if(forceAccess && !method.isAccessible)
+            method.isAccessible = true
+        return method
     }
 
     @JvmStatic
@@ -135,6 +151,14 @@ object Accessors {
         getAccessorField(FuzzyReflect.fromClass(clazz, forceAccess).getFieldByIndex(index), forceAccess)
     } catch(e: Exception) {
         null
+    }
+
+    @JvmStatic
+    @JvmName("setAccessorField")
+    fun setAccessorField(field: Field, forceAccess: Boolean = false): Field {
+        if(forceAccess && !field.isAccessible)
+            field.isAccessible = true
+        return field
     }
 
     /** inner class */

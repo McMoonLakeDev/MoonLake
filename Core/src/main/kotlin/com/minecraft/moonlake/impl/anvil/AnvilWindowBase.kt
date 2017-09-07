@@ -138,6 +138,6 @@ open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
     protected fun getContainerAnvilPlayer(): Player {
         val entityHuman = containerAnvilEntityHuman.get(handle)
         val converter = MinecraftConverters.getEntity(Player::class.java)
-        return converter.getSpecific(entityHuman)
+        return converter.getSpecific(entityHuman) as Player
     }
 }

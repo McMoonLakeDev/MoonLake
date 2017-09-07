@@ -18,11 +18,18 @@
 package com.minecraft.moonlake
 
 import com.minecraft.moonlake.api.MoonLake
+import com.minecraft.moonlake.api.event.MoonLakeListener
+import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.region.*
+import com.minecraft.moonlake.api.registerEvent
 import com.minecraft.moonlake.api.setMoonLake
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
+import org.bukkit.Material
 import org.bukkit.configuration.serialization.ConfigurationSerialization
+import org.bukkit.event.EventHandler
+import org.bukkit.event.player.PlayerCommandPreprocessEvent
+import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 
 class MoonLakePlugin : JavaPlugin, MoonLake {
@@ -37,6 +44,24 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
         setMoonLake(this)
         this.logger.info("Server ${MinecraftVersion.currentVersion()} NMS: ${MinecraftBukkitVersion.currentVersion().getVersion()}")
         this.logger.info("月色之湖核心 API 插件 v${getPluginVersion()} 成功加载.")
+
+        object: MoonLakeListener {
+            @EventHandler
+            fun onCommand(event: PlayerCommandPreprocessEvent) {
+                if(event.message == "/nbt") {
+                    val itemStack = event.player.itemInHand
+                    val tag = NBTFactory.readStackTag(itemStack)
+                    println(tag)
+                }
+                if(event.message == "/nbt w") {
+                    val itemStack = ItemStack(Material.DIAMOND_SWORD)
+                    val tag = NBTFactory.readStackTag(itemStack)
+                    tag.put("Unbreakable", true) // 不可破坏
+                    tag.put("Age", 200) // 物品掉落后 10 秒消失
+                    event.player.itemInHand = NBTFactory.writeStackTag(itemStack, tag)
+                }
+            }
+        }.registerEvent(this)
     }
 
     override fun onDisable() {

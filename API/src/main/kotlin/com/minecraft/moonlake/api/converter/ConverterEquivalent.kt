@@ -19,9 +19,9 @@ package com.minecraft.moonlake.api.converter
 
 interface ConverterEquivalent<T> : Converter {
 
-    fun getGeneric(specific: T): Any
+    fun getGeneric(specific: T?): Any?
 
-    fun getSpecific(generic: Any): T
+    fun getSpecific(generic: Any?): T?
 
     fun getSpecificType(): Class<T>
 }

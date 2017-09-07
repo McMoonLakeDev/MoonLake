@@ -155,6 +155,19 @@ class FuzzyReflect(val source: Class<*>, val forceAccess: Boolean) {
         else -> union(source.fields)
     }
 
+    fun getDeclaredFields(excludeClass: Class<*>? = null): Set<Field> = when(forceAccess) {
+        true -> {
+            var current: Class<*>? = source
+            val fields: MutableSet<Field> = LinkedHashSet()
+            while(current != null && current != excludeClass) {
+                fields.addAll(current.declaredFields.toList())
+                current = current.superclass
+            }
+            fields
+        }
+        else -> getFields()
+    }
+
     fun forceAccess(): FuzzyReflect
             = FuzzyReflect(source, true)
 }
