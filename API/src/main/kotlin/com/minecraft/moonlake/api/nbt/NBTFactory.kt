@@ -165,13 +165,13 @@ object NBTFactory {
 
     @JvmStatic
     @JvmName("ofCompound")
-    fun ofCompound(name: String): NBTCompound
+    fun ofCompound(name: String = ""): NBTCompound
             = ofWrapper<MutableMap<String, NBTBase<*>>>(NBTType.TAG_COMPOUND, name) as NBTCompound
 
     @JvmStatic
     @JvmName("ofList")
     @Suppress("UNCHECKED_CAST")
-    fun <T> ofList(name: String): NBTList<T>
+    fun <T> ofList(name: String = ""): NBTList<T>
             = ofWrapper<MutableList<NBTBase<T>>>(NBTType.TAG_LIST, name) as NBTList<T>
 
     @JvmStatic
@@ -200,7 +200,7 @@ object NBTFactory {
     @JvmStatic
     @JvmName("createStack")
     fun createStack(type: Material, amount: Int, durability: Int, tag: NBTCompound): ItemStack {
-        val nbt = ofCompound("")
+        val nbt = ofCompound()
         nbt.putString("id", "minecraft:${type.name.toLowerCase()}")
         nbt.putByte("Count", amount)
         nbt.putShort("Damage", durability)

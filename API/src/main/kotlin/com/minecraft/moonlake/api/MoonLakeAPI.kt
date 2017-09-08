@@ -50,6 +50,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.plugin.EventExecutor
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginManager
@@ -150,6 +151,21 @@ fun Iterable<String>.stripColor(): List<String>
 
 fun String.messageFormat(vararg args: Any?): String
         = MessageFormat.format(this, args)
+
+fun ItemFlag.getBitModifier(): Int
+        = 1.shl(ordinal)
+
+fun Array<out ItemFlag>.getAddBitModifier(): Int {
+    var modifier = 0
+    forEach { modifier = modifier or it.getBitModifier() }
+    return modifier
+}
+
+fun Array<out ItemFlag>.getRemoveBitModifier(): Int {
+    var modifier = 0
+    forEach { modifier = modifier xor it.getBitModifier() }
+    return modifier
+}
 
 @Throws(MoonLakeException::class)
 fun Throwable.throwMoonLake(): Nothing = let {

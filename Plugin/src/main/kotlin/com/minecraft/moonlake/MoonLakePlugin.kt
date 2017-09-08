@@ -18,7 +18,11 @@
 package com.minecraft.moonlake
 
 import com.minecraft.moonlake.api.MoonLake
+import com.minecraft.moonlake.api.attribute.AttributeOperation
+import com.minecraft.moonlake.api.attribute.AttributeSlot
+import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.event.MoonLakeListener
+import com.minecraft.moonlake.api.item.ItemBuilder
 import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.region.*
 import com.minecraft.moonlake.api.registerEvent
@@ -27,6 +31,7 @@ import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
 import org.bukkit.Material
 import org.bukkit.configuration.serialization.ConfigurationSerialization
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.inventory.ItemStack
@@ -51,7 +56,7 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
                 if(event.message == "/nbt") {
                     val itemStack = event.player.itemInHand
                     val tag = NBTFactory.readStackTag(itemStack)
-                    println(tag)
+                    event.player.sendMessage(tag.toString())
                 }
                 if(event.message == "/nbt w") {
                     val itemStack = ItemStack(Material.DIAMOND_SWORD)
@@ -59,6 +64,19 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
                     tag.putBoolean("Unbreakable", true) // 不可破坏
                     NBTFactory.writeStackTag(itemStack, tag)
                     event.player.itemInHand = itemStack
+                }
+                if(event.message == "/ib") {
+                    val itemStack = ItemBuilder.of(Material.IRON_SWORD)
+                            .setLocalizedName("inventory.key") // 本地化名称
+                            .setCanDestroy(Material.DIAMOND_ORE) // 只能破坏钻石矿
+                            .setCanPlaceOn(Material.STONE) // 只能放置在石头上
+                            .addEnchant(Enchantment.DAMAGE_ALL, 5) // 附魔锋利5
+                            .setUnbreakable(true) // 不可破坏
+                            .setAttribute(AttributeType.ATTACK_DAMAGE, AttributeOperation.MULTIPLY, AttributeSlot.MAIN_HAND, .05) // 攻击增加 5%
+                            .setAttribute(AttributeType.ATTACK_SPEED, AttributeOperation.MULTIPLY, AttributeSlot.MAIN_HAND, .1) // 攻击速度增加 10%
+                            .addLore("标签属性", "标签属性") // 标签属性
+                            .build()
+                    event.player.inventory.addItem(itemStack)
                 }
             }
         }.registerEvent(this)

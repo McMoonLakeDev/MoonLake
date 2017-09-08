@@ -158,6 +158,10 @@ class NBTWrappedList<T>(handle: Any, name: String) : NBTWrapper<MutableList<NBTB
     override fun addBoolean(value: Boolean)
             = addByte((if(value) 1 else 0).toByte())
 
+    @Suppress("UNCHECKED_CAST")
+    override fun addCompound(value: NBTCompound)
+            = add(NBTFactory.ofWrapper(NBTType.TAG_COMPOUND, "", value.getValue()) as NBTBase<T>)
+
     override fun remove(value: Any)
             { getValue().remove(value) }
 
@@ -166,6 +170,9 @@ class NBTWrappedList<T>(handle: Any, name: String) : NBTWrapper<MutableList<NBTB
 
     override fun size(): Int
             = getValue().size
+
+    override fun clear()
+            = getValue().clear()
 
     override fun iterator(): Iterator<T>
             = Iterables.transform(getValue(), { input -> input?.getValue() }).iterator()

@@ -66,9 +66,13 @@ interface NBTList<T> : NBTBase<MutableList<NBTBase<T>>>, Iterable<T> {
 
     fun addBoolean(value: Boolean)
 
+    fun addCompound(value: NBTCompound)
+
     fun remove(value: Any)
 
     fun getValue(index: Int): T
 
     fun size(): Int
+
+    fun clear()
 }

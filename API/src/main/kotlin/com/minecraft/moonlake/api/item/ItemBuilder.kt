@@ -31,7 +31,6 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import org.bukkit.potion.PotionType
 
 interface ItemBuilder : Builder<ItemStack> {
 
@@ -41,14 +40,6 @@ interface ItemBuilder : Builder<ItemStack> {
      * general meta
      * @see org.bukkit.inventory.meta.ItemMeta
      */
-
-    fun setAmount(amount: Int): ItemBuilder
-
-    fun setDurability(durability: Int): ItemBuilder
-
-    fun addDurability(durability: Int): ItemBuilder
-
-    fun takeDurability(durability: Int): ItemBuilder
 
     fun setDisplayName(displayName: String): ItemBuilder
 
@@ -86,11 +77,7 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setAttribute(type: AttributeType, operation: AttributeOperation, amount: Double): ItemBuilder
 
-    fun setAttribute(type: AttributeType, operation: AttributeOperation, slot: AttributeSlot, amount: Double): ItemBuilder
-
-    fun setAge(age: Int): ItemBuilder
-
-    fun setPickupDelay(pickupDelay: Int): ItemBuilder
+    fun setAttribute(type: AttributeType, operation: AttributeOperation, slot: AttributeSlot?, amount: Double): ItemBuilder
 
     fun setCanDestroy(vararg type: Material): ItemBuilder
 
@@ -114,7 +101,7 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setBookAuthor(author: String): ItemBuilder
 
-    fun setBookGeneration(generation: String): ItemBuilder
+    fun setBookGeneration(generation: BookGeneration): ItemBuilder
 
     fun setBookPage(index: Int, page: String): ItemBuilder
 
@@ -171,7 +158,7 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setPotionColor(color: Color): ItemBuilder
 
-    fun setPotionBase(type: PotionType): ItemBuilder
+    fun setPotionBase(type: String): ItemBuilder // TODO PotionBaseWrapper
 
     fun addPotionEffect(effect: PotionEffect, overwrite: Boolean = false): ItemBuilder
 

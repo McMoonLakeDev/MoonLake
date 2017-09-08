@@ -87,7 +87,7 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getValue(key: String): NBTBase<T>?
-            = getValue()[key] as NBTBase<T>
+            = getValue()[key] as NBTBase<T>?
 
     private fun <T> getValueExact(key: String): NBTBase<T>
             = getValue(key) ?: throw MoonLakeException("无法查找到键为 $key 的值.")
@@ -212,7 +212,7 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
             = getValueExact<NBTCompound>(key).getValue()
 
     override fun getCompoundOrDefault(key: String): NBTCompound
-            = getValueOfDefault0<NBTCompound>(key, NBTType.TAG_COMPOUND).getValue()
+            = getValueOfDefault0<NBTCompound>(key, NBTType.TAG_COMPOUND) as NBTCompound
 
     override fun putCompound(compound: NBTCompound): NBTCompound
             { getValue().put(compound.getName(), compound); return this; }
@@ -220,8 +220,9 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
     override fun <T> getList(key: String): NBTList<T>
             = getValueExact<NBTList<T>>(key).getValue()
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T> getListOrDefault(key: String): NBTList<T>
-            = getValueOfDefault0<NBTList<T>>(key, NBTType.TAG_LIST).getValue()
+            = getValueOfDefault0<NBTList<T>>(key, NBTType.TAG_LIST) as NBTList<T>
 
     override fun <T> putList(list: NBTList<T>): NBTCompound
             { getValue().put(list.getName(), list); return this; }
