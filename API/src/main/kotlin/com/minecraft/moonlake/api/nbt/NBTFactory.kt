@@ -35,8 +35,10 @@
 package com.minecraft.moonlake.api.nbt
 
 import com.minecraft.moonlake.api.converter.ConverterEquivalent
+import com.minecraft.moonlake.api.notNull
 import com.minecraft.moonlake.api.reflect.StructureModifier
 import com.minecraft.moonlake.api.reflect.accessor.AccessorConstructor
+import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import com.minecraft.moonlake.api.utility.MinecraftConverters
@@ -58,6 +60,9 @@ object NBTFactory {
     @JvmStatic
     private val itemStackConstructor: AccessorConstructor<out Any> by lazy {
         Accessors.getAccessorConstructor(MinecraftReflection.getItemStackClass(), false, MinecraftReflection.getNBTTagCompoundClass()) }
+    @JvmStatic
+    private val craftItemStackHandle: AccessorField by lazy {
+        Accessors.getAccessorField(MinecraftReflection.getCraftItemStackClass(), MinecraftReflection.getItemStackClass(), true) }
 
     @JvmStatic
     @JvmName("fromBase")
@@ -171,33 +176,76 @@ object NBTFactory {
 
     @JvmStatic
     @JvmName("readStackTag")
-    fun readStackTag(itemStack: ItemStack): NBTCompound {
-        val nmsItemStack = itemStackConverter.getGeneric(itemStack)
-        val modifier = itemStackModifier.withTarget<Any>(nmsItemStack)
-                .withType(MinecraftReflection.getNBTBaseClass(), MinecraftConverters.getNBT())
-        var result = modifier.read(0)
-        if(result == null) {
-            result = ofCompound("tag")
-            modifier.write(0, result)
+    fun readStackTag(itemStack: ItemStack): NBTCompound? {
+        return when(MinecraftReflection.getCraftItemStackClass().isInstance(itemStack)) {
+            true -> getCraftStackTag(itemStack)
+            else -> getOriginStackTag(itemStack)
         }
-        return fromBase(result) as NBTCompound
     }
 
     @JvmStatic
+    @JvmName("readSafeStackTag")
+    fun readSafeStackTag(itemStack: ItemStack): NBTCompound
+            = readStackTag(itemStack) ?: ofCompound("tag")
+
+    @JvmStatic
     @JvmName("writeStackTag")
-    fun writeStackTag(itemStack: ItemStack, tag: NBTCompound): ItemStack
-            // TODO Why set the field value to no results
-            = createStack(itemStack.type, itemStack.amount, itemStack.durability.toInt(), tag)
+    fun writeStackTag(itemStack: ItemStack, tag: NBTCompound?) {
+        when(MinecraftReflection.getCraftItemStackClass().isInstance(itemStack)) {
+            true -> setCraftStackTag(itemStack, tag)
+            else -> setOriginStackTag(itemStack, tag)
+        }
+    }
 
     @JvmStatic
     @JvmName("createStack")
     fun createStack(type: Material, amount: Int, durability: Int, tag: NBTCompound): ItemStack {
         val nbt = ofCompound("")
-        nbt.put("id", "minecraft:${type.name.toLowerCase()}")
-        nbt.put("Count", amount.toByte())
-        nbt.put("Damage", durability.toShort())
+        nbt.putString("id", "minecraft:${type.name.toLowerCase()}")
+        nbt.putByte("Count", amount)
+        nbt.putShort("Damage", durability)
         nbt.put("tag", tag)
         val nmsItemStack = itemStackConstructor.newInstance(fromBase(nbt).getHandle())
         return itemStackConverter.getSpecific(nmsItemStack) as ItemStack
+    }
+
+    /** implement */
+
+    @JvmStatic
+    @JvmName("getCraftStackTag")
+    private fun getCraftStackTag(itemStack: ItemStack): NBTCompound? {
+        val nmsItemStack = craftItemStackHandle.get(itemStack)
+        val modifier = itemStackModifier.withTarget<Any>(nmsItemStack)
+                .withType(MinecraftReflection.getNBTBaseClass(), MinecraftConverters.getNBT())
+        return modifier.read(0) as NBTCompound?
+    }
+
+    @JvmStatic
+    @JvmName("setCraftStackTag")
+    private fun setCraftStackTag(itemStack: ItemStack, tag: NBTCompound?) {
+        val nmsItemStack = craftItemStackHandle.get(itemStack)
+        val modifier = itemStackModifier.withTarget<Any>(nmsItemStack)
+                .withType(MinecraftReflection.getNBTBaseClass(), MinecraftConverters.getNBT())
+        modifier.write(0, tag)
+    }
+
+    @JvmStatic
+    @JvmName("getOriginStackTag")
+    private fun getOriginStackTag(itemStack: ItemStack): NBTCompound? {
+        val copyItemStack = itemStackConverter.getSpecific(itemStackConverter.getGeneric(itemStack)).notNull()
+        copyItemStack.itemMeta = itemStack.itemMeta
+        return getCraftStackTag(copyItemStack)
+    }
+
+    @JvmStatic
+    @JvmName("setOriginStackTag")
+    private fun setOriginStackTag(itemStack: ItemStack, tag: NBTCompound?) {
+        if(tag == null) {
+            itemStack.itemMeta = null
+        } else {
+            val copyItemStack = itemStackConverter.getSpecific(itemStackConverter.getGeneric(itemStack)).notNull()
+            setCraftStackTag(copyItemStack, tag)
+            itemStack.itemMeta = copyItemStack.itemMeta
+        }
     }
 }

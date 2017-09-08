@@ -55,10 +55,10 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
                 }
                 if(event.message == "/nbt w") {
                     val itemStack = ItemStack(Material.DIAMOND_SWORD)
-                    val tag = NBTFactory.readStackTag(itemStack)
-                    tag.put("Unbreakable", true) // 不可破坏
-                    tag.put("Age", 200) // 物品掉落后 10 秒消失
-                    event.player.itemInHand = NBTFactory.writeStackTag(itemStack, tag)
+                    val tag = NBTFactory.readSafeStackTag(itemStack)
+                    tag.putBoolean("Unbreakable", true) // 不可破坏
+                    NBTFactory.writeStackTag(itemStack, tag)
+                    event.player.itemInHand = itemStack
                 }
             }
         }.registerEvent(this)

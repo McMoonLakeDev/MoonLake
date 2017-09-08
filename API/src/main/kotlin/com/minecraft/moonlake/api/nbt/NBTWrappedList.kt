@@ -114,40 +114,49 @@ class NBTWrappedList<T>(handle: Any, name: String) : NBTWrapper<MutableList<NBTB
             { getValue().add(element) }
 
     @Suppress("UNCHECKED_CAST")
-    override fun add(value: String)
+    override fun addString(value: String)
             = add(NBTFactory.of("", value) as NBTBase<T>)
 
     @Suppress("UNCHECKED_CAST")
-    override fun add(value: Byte)
+    override fun addByte(value: Byte)
+            = add(NBTFactory.of("", value) as NBTBase<T>)
+
+    override fun addByte(value: Int)
+            = addByte(value.toByte())
+
+    @Suppress("UNCHECKED_CAST")
+    override fun addShort(value: Short)
+            = add(NBTFactory.of("", value) as NBTBase<T>)
+
+    override fun addShort(value: Int)
+            = addShort(value.toShort())
+
+    @Suppress("UNCHECKED_CAST")
+    override fun addInt(value: Int)
             = add(NBTFactory.of("", value) as NBTBase<T>)
 
     @Suppress("UNCHECKED_CAST")
-    override fun add(value: Short)
+    override fun addLong(value: Long)
             = add(NBTFactory.of("", value) as NBTBase<T>)
 
     @Suppress("UNCHECKED_CAST")
-    override fun add(value: Int)
+    override fun addFloat(value: Float)
             = add(NBTFactory.of("", value) as NBTBase<T>)
 
     @Suppress("UNCHECKED_CAST")
-    override fun add(value: Long)
+    override fun addDouble(value: Double)
             = add(NBTFactory.of("", value) as NBTBase<T>)
 
     @Suppress("UNCHECKED_CAST")
-    override fun add(value: Float)
+    override fun addByteArray(value: ByteArray)
             = add(NBTFactory.of("", value) as NBTBase<T>)
 
     @Suppress("UNCHECKED_CAST")
-    override fun add(value: Double)
+    override fun addIntArray(value: IntArray)
             = add(NBTFactory.of("", value) as NBTBase<T>)
 
-    @Suppress("UNCHECKED_CAST")
-    override fun add(value: ByteArray)
-            = add(NBTFactory.of("", value) as NBTBase<T>)
-
-    @Suppress("UNCHECKED_CAST")
-    override fun add(value: IntArray)
-            = add(NBTFactory.of("", value) as NBTBase<T>)
+    override fun addBoolean(value: Boolean)
+            = addByte((if(value) 1 else 0).toByte())
 
     override fun remove(value: Any)
             { getValue().remove(value) }

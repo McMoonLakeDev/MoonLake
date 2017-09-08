@@ -122,6 +122,11 @@ object MinecraftReflection {
             = getMinecraftClass("ItemStack")
 
     @JvmStatic
+    @JvmName("getCraftItemStack")
+    fun getCraftItemStackClass(): Class<*>
+            = getCraftBukkitClass("inventory.CraftItemStack")
+
+    @JvmStatic
     @JvmName("getNBTBaseClass")
     @Throws(MoonLakeException::class)
     fun getNBTBaseClass(): Class<*>

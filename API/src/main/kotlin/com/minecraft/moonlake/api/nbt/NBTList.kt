@@ -42,23 +42,29 @@ interface NBTList<T> : NBTBase<MutableList<NBTBase<T>>>, Iterable<T> {
 
     fun add(element: NBTBase<T>)
 
-    fun add(value: String)
+    fun addString(value: String)
 
-    fun add(value: Byte)
+    fun addByte(value: Byte)
 
-    fun add(value: Short)
+    fun addByte(value: Int)
 
-    fun add(value: Int)
+    fun addShort(value: Short)
 
-    fun add(value: Long)
+    fun addShort(value: Int)
 
-    fun add(value: Float)
+    fun addInt(value: Int)
 
-    fun add(value: Double)
+    fun addLong(value: Long)
 
-    fun add(value: ByteArray)
+    fun addFloat(value: Float)
 
-    fun add(value: IntArray)
+    fun addDouble(value: Double)
+
+    fun addByteArray(value: ByteArray)
+
+    fun addIntArray(value: IntArray)
+
+    fun addBoolean(value: Boolean)
 
     fun remove(value: Any)
 

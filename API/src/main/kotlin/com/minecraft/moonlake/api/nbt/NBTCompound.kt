@@ -56,71 +56,75 @@ interface NBTCompound : NBTBase<MutableMap<String, NBTBase<*>>>, MutableIterable
 
     fun getStringOrDefault(key: String): String
 
-    fun put(key: String, value: String): NBTCompound
+    fun putString(key: String, value: String): NBTCompound
 
     fun getByte(key: String): Byte
 
     fun getByteOrDefault(key: String): Byte
 
-    fun put(key: String, value: Byte): NBTCompound
+    fun putByte(key: String, value: Byte): NBTCompound
+
+    fun putByte(key: String, value: Int): NBTCompound
 
     fun getShort(key: String): Short
 
     fun getShortOrDefault(key: String): Short
 
-    fun put(key: String, value: Short): NBTCompound
+    fun putShort(key: String, value: Short): NBTCompound
+
+    fun putShort(key: String, value: Int): NBTCompound
 
     fun getInteger(key: String): Int
 
     fun getIntegerOrDefault(key: String): Int
 
-    fun put(key: String, value: Int): NBTCompound
+    fun putInt(key: String, value: Int): NBTCompound
 
     fun getLong(key: String): Long
 
     fun getLongOrDefault(key: String): Long
 
-    fun put(key: String, value: Long): NBTCompound
+    fun putLong(key: String, value: Long): NBTCompound
 
     fun getFloat(key: String): Float
 
     fun getFloatOrDefault(key: String): Float
 
-    fun put(key: String, value: Float): NBTCompound
+    fun putFloat(key: String, value: Float): NBTCompound
 
     fun getDouble(key: String): Double
 
     fun getDoubleOrDefault(key: String): Double
 
-    fun put(key: String, value: Double): NBTCompound
+    fun putDouble(key: String, value: Double): NBTCompound
 
     fun getByteArray(key: String): ByteArray
 
     fun getByteArrayOrDefault(key: String): ByteArray
 
-    fun put(key: String, value: ByteArray): NBTCompound
+    fun putByteArray(key: String, value: ByteArray): NBTCompound
 
     fun getIntegerArray(key: String): IntArray
 
     fun getIntegerArrayOrDefault(key: String): IntArray
 
-    fun put(key: String, value: IntArray): NBTCompound
+    fun putIntArray(key: String, value: IntArray): NBTCompound
 
     fun getBoolean(key: String): Boolean
 
     fun getBooleanOrDefault(key: String): Boolean
 
-    fun put(key: String, value: Boolean): NBTCompound
+    fun putBoolean(key: String, value: Boolean): NBTCompound
 
     fun getCompound(key: String): NBTCompound
 
     fun getCompoundOrDefault(key: String): NBTCompound
 
-    fun put(compound: NBTCompound): NBTCompound
+    fun putCompound(compound: NBTCompound): NBTCompound
 
     fun <T> getList(key: String): NBTList<T>
 
     fun <T> getListOrDefault(key: String): NBTList<T>
 
-    fun <T> put(list: NBTList<T>): NBTCompound
+    fun <T> putList(list: NBTList<T>): NBTCompound
 }

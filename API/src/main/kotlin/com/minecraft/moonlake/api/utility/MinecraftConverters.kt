@@ -89,8 +89,8 @@ object MinecraftConverters {
         Accessors.getAccessorMethod(MinecraftReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", false, ItemStack::class.java) }
 
     @JvmStatic
-    private val craftItemStackAsBukkitCopy: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(MinecraftReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asBukkitCopy", false, MinecraftReflection.getItemStackClass()) }
+    private val craftItemStackAsCraftMirror: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(MinecraftReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asCraftMirror", false, MinecraftReflection.getItemStackClass()) }
 
     @JvmStatic
     @JvmName("getItemStack")
@@ -99,7 +99,7 @@ object MinecraftConverters {
             override fun getGenericValue(specific: ItemStack): Any
                     = craftItemStackAsNMSCopy.invoke(null, specific)
             override fun getSpecificValue(generic: Any): ItemStack
-                    = craftItemStackAsBukkitCopy.invoke(null, generic) as ItemStack
+                    = craftItemStackAsCraftMirror.invoke(null, generic) as ItemStack
             override fun getSpecificType(): Class<ItemStack>
                     = ItemStack::class.java
         }
