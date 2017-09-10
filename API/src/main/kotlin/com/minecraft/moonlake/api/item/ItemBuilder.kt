@@ -25,12 +25,10 @@ import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.Material
 import org.bukkit.block.banner.Pattern
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
 
 interface ItemBuilder : Builder<ItemStack> {
 
@@ -59,8 +57,6 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun addSafeEnchant(enchantment: Enchantment, level: Int): ItemBuilder
 
-    fun removeEnchant(enchantment: Enchantment): ItemBuilder
-
     fun clearEnchant(): ItemBuilder
 
     fun addFlag(vararg flag: ItemFlag): ItemBuilder
@@ -79,9 +75,13 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setAttribute(type: AttributeType, operation: AttributeOperation, slot: AttributeSlot?, amount: Double): ItemBuilder
 
+    fun clearAttribute(): ItemBuilder
+
     fun setCanDestroy(vararg type: Material): ItemBuilder
 
     fun setCanPlaceOn(vararg type: Material): ItemBuilder
+
+    fun setRepairCost(value: Int): ItemBuilder
 
     /**
      * leather armor meta
@@ -103,8 +103,6 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setBookGeneration(generation: BookGeneration): ItemBuilder
 
-    fun setBookPage(index: Int, page: String): ItemBuilder
-
     fun setBookPages(vararg pages: String): ItemBuilder
 
     fun setBookPages(pages: Collection<String>): ItemBuilder
@@ -112,6 +110,8 @@ interface ItemBuilder : Builder<ItemStack> {
     fun addBookPages(vararg pages: String): ItemBuilder
 
     fun addBookPages(pages: Collection<String>): ItemBuilder
+
+    fun clearBookPage(): ItemBuilder
 
     /**
      * enchantment storage meta
@@ -121,8 +121,6 @@ interface ItemBuilder : Builder<ItemStack> {
     fun addStoredEnchant(enchantment: Enchantment, level: Int): ItemBuilder
 
     fun addStoredSafeEnchant(enchantment: Enchantment, level: Int): ItemBuilder
-
-    fun removeStoredEnchant(enchantment: Enchantment): ItemBuilder
 
     fun clearStoredEnchant(): ItemBuilder
 
@@ -139,6 +137,8 @@ interface ItemBuilder : Builder<ItemStack> {
      */
 
     fun setSpawnEggType(type: EntityType): ItemBuilder
+
+    // TODO fun setSpawnEggType(entity: Entity); read entity nbt data
 
     /**
      * map meta
@@ -161,8 +161,6 @@ interface ItemBuilder : Builder<ItemStack> {
     fun setPotionBase(type: String): ItemBuilder // TODO PotionBaseWrapper
 
     fun addPotionEffect(effect: PotionEffect, overwrite: Boolean = false): ItemBuilder
-
-    fun removePotionEffect(type: PotionEffectType): ItemBuilder
 
     fun clearPotionEffect(): ItemBuilder
 
@@ -189,8 +187,6 @@ interface ItemBuilder : Builder<ItemStack> {
     fun setBannerPattern(pattern: Collection<Pattern>): ItemBuilder
 
     fun addBannerPattern(pattern: Pattern): ItemBuilder
-
-    fun removeBannerPattern(index: Int): ItemBuilder
 
     /** static */
 

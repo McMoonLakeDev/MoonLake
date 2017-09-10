@@ -190,21 +190,22 @@ object NBTFactory {
 
     @JvmStatic
     @JvmName("writeStackTag")
-    fun writeStackTag(itemStack: ItemStack, tag: NBTCompound?) {
+    fun writeStackTag(itemStack: ItemStack, tag: NBTCompound?): ItemStack {
         when(MinecraftReflection.getCraftItemStackClass().isInstance(itemStack)) {
             true -> setCraftStackTag(itemStack, tag)
             else -> setOriginStackTag(itemStack, tag)
         }
+        return itemStack
     }
 
     @JvmStatic
     @JvmName("createStack")
-    fun createStack(type: Material, amount: Int, durability: Int, tag: NBTCompound): ItemStack {
+    fun createStack(type: Material, amount: Int, durability: Int, tag: NBTCompound?): ItemStack {
         val nbt = ofCompound()
         nbt.putString("id", "minecraft:${type.name.toLowerCase()}")
         nbt.putByte("Count", amount)
         nbt.putShort("Damage", durability)
-        nbt.put("tag", tag)
+        if(tag != null) nbt.put("tag", tag)
         val nmsItemStack = itemStackConstructor.newInstance(fromBase(nbt).getHandle())
         return itemStackConverter.getSpecific(nmsItemStack) as ItemStack
     }

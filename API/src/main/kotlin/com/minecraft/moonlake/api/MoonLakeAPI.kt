@@ -163,7 +163,7 @@ fun Array<out ItemFlag>.getAddBitModifier(): Int {
 
 fun Array<out ItemFlag>.getRemoveBitModifier(): Int {
     var modifier = 0
-    forEach { modifier = modifier xor it.getBitModifier() }
+    forEach { modifier = modifier and it.getBitModifier().inv() }
     return modifier
 }
 
