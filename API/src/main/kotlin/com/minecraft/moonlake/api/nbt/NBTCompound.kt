@@ -74,9 +74,9 @@ interface NBTCompound : NBTBase<MutableMap<String, NBTBase<*>>>, MutableIterable
 
     fun putShort(key: String, value: Int): NBTCompound
 
-    fun getInteger(key: String): Int
+    fun getInt(key: String): Int
 
-    fun getIntegerOrDefault(key: String): Int
+    fun getIntOrDefault(key: String): Int
 
     fun putInt(key: String, value: Int): NBTCompound
 
@@ -104,9 +104,9 @@ interface NBTCompound : NBTBase<MutableMap<String, NBTBase<*>>>, MutableIterable
 
     fun putByteArray(key: String, value: ByteArray): NBTCompound
 
-    fun getIntegerArray(key: String): IntArray
+    fun getIntArray(key: String): IntArray
 
-    fun getIntegerArrayOrDefault(key: String): IntArray
+    fun getIntArrayOrDefault(key: String): IntArray
 
     fun putIntArray(key: String, value: IntArray): NBTCompound
 

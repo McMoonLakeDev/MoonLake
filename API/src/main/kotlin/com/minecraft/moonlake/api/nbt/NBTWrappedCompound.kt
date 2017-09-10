@@ -145,10 +145,10 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
     override fun putShort(key: String, value: Int): NBTCompound
             = putShort(key, value.toShort())
 
-    override fun getInteger(key: String): Int
+    override fun getInt(key: String): Int
             = getValueExact<Int>(key).getValue()
 
-    override fun getIntegerOrDefault(key: String): Int
+    override fun getIntOrDefault(key: String): Int
             = getValueOfDefault0<Int>(key, NBTType.TAG_INT).getValue()
 
     override fun putInt(key: String, value: Int): NBTCompound
@@ -190,10 +190,10 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
     override fun putByteArray(key: String, value: ByteArray): NBTCompound
             { getValue().put(key, NBTFactory.of(key, value)); return this; }
 
-    override fun getIntegerArray(key: String): IntArray
+    override fun getIntArray(key: String): IntArray
             = getValueExact<IntArray>(key).getValue()
 
-    override fun getIntegerArrayOrDefault(key: String): IntArray
+    override fun getIntArrayOrDefault(key: String): IntArray
             = getValueOfDefault0<IntArray>(key, NBTType.TAG_INT_ARRAY).getValue()
 
     override fun putIntArray(key: String, value: IntArray): NBTCompound
