@@ -164,13 +164,13 @@ abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: 
     }
 
     override fun addFlag(vararg flag: ItemFlag): ItemBuilder
-            { tag.putInt(TAG_HIDE_FLAGS, flag.getAddBitModifier()); return this; }
+            { tag.putInt(TAG_HIDE_FLAGS, flag.getAddBitModifier(if(tag.containsKey(TAG_HIDE_FLAGS)) tag.getInteger(TAG_HIDE_FLAGS) else 0)); return this; }
 
     override fun addFlag(flag: Collection<ItemFlag>): ItemBuilder
             = addFlag(*flag.toTypedArray())
 
     override fun removeFlag(vararg flag: ItemFlag): ItemBuilder
-            { tag.putInt(TAG_HIDE_FLAGS, flag.getRemoveBitModifier()); return this; }
+            { tag.putInt(TAG_HIDE_FLAGS, flag.getRemoveBitModifier(if(tag.containsKey(TAG_HIDE_FLAGS)) tag.getInteger(TAG_HIDE_FLAGS) else 0)); return this; }
 
     override fun removeFlag(flag: Collection<ItemFlag>): ItemBuilder
             = removeFlag(*flag.toTypedArray())
