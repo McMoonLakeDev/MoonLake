@@ -160,7 +160,7 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setPotionBase(type: String): ItemBuilder // TODO PotionBaseWrapper
 
-    fun addPotionEffect(effect: PotionEffect, overwrite: Boolean = false): ItemBuilder
+    fun addPotionEffect(effect: PotionEffect): ItemBuilder
 
     fun clearPotionEffect(): ItemBuilder
 

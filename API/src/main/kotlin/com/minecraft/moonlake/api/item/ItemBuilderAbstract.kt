@@ -58,7 +58,7 @@ abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: 
         private const val TAG_ENCH_ID = "id"
         private const val TAG_ENCH_LVL = "lvl"
         private const val TAG_DISPLAY = "display"
-        private const val TAG_DISPLAY_LORE = "lore"
+        private const val TAG_DISPLAY_LORE = "Lore"
         private const val TAG_DISPLAY_NAME = "Name"
         private const val TAG_DISPLAY_LOC_NAME = "LocName"
         private const val TAG_ENTITY_TAG = "EntityTag"
@@ -282,7 +282,7 @@ abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: 
     override fun setPotionBase(type: String): ItemBuilder
             { tag.putString(TAG_POTION, type); return this; }
 
-    override fun addPotionEffect(effect: PotionEffect, overwrite: Boolean): ItemBuilder {
+    override fun addPotionEffect(effect: PotionEffect): ItemBuilder {
         val potionEffect = NBTFactory.ofCompound()
         potionEffect.putByte(TAG_POTION_ID, effect.type.id) // TODO EffectType
         potionEffect.putByte(TAG_POTION_AMPLIFIER, effect.amplifier)

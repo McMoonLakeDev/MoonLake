@@ -30,6 +30,7 @@ import com.minecraft.moonlake.api.registerEvent
 import com.minecraft.moonlake.api.setMoonLake
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
+import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.event.EventHandler
@@ -37,6 +38,8 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 
 class MoonLakePlugin : JavaPlugin, MoonLake {
 
@@ -78,6 +81,16 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
                             .addLore("标签属性", "标签属性") // 标签属性
                             .clearEnchant()
                             .addFlag(ItemFlag.HIDE_UNBREAKABLE) // 隐藏不可破坏属性
+                            .build()
+                    event.player.inventory.addItem(itemStack)
+                }
+                if(event.message == "/ib potion") {
+                    val itemStack = ItemBuilder.of(Material.POTION)
+                            .addPotionEffect(PotionEffect(PotionEffectType.JUMP, 100, 0))
+                            .addPotionEffect(PotionEffect(PotionEffectType.SPEED, 100, 0))
+                            .setPotionColor(Color.fromBGR(0, 0, 0))
+                            .addLore("标签属性")
+                            .setDisplayName("233")
                             .build()
                     event.player.inventory.addItem(itemStack)
                 }
