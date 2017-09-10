@@ -210,6 +210,18 @@ object NBTFactory {
         return itemStackConverter.getSpecific(nmsItemStack) as ItemStack
     }
 
+    @JvmStatic
+    @JvmName("getStackNBT")
+    fun getStackNBT(itemStack: ItemStack): NBTCompound {
+        val nbt = ofCompound()
+        val tag = readStackTag(itemStack)
+        nbt.putString("id", "minecraft:${itemStack.type.name.toLowerCase()}")
+        nbt.putByte("Count", itemStack.amount)
+        nbt.putShort("Damage", itemStack.durability)
+        if(tag != null) nbt.put("tag", tag)
+        return nbt
+    }
+
     /** implement */
 
     @JvmStatic

@@ -18,6 +18,7 @@
 package com.minecraft.moonlake.api.chat
 
 import com.minecraft.moonlake.api.funs.Builder
+import com.minecraft.moonlake.api.nbt.NBTFactory
 import org.bukkit.inventory.ItemStack
 
 open class ChatComponentFancy : Builder<ChatComponent> {
@@ -89,11 +90,8 @@ open class ChatComponentFancy : Builder<ChatComponent> {
     fun tooltipItem(item: String): ChatComponentFancy
             { getLast().getStyle().setHoverEvent(ChatHoverEvent(ChatHoverEvent.Action.SHOW_ITEM, ChatComponentText(item))); return this; }
 
-    fun tooltipItem(itemStack: ItemStack): ChatComponentFancy {
-        val tag = "" // TODO ItemStack NBT Tag
-        val item = "{\"id\":\"minecraft:${itemStack.type.name.toLowerCase()}\",\"Damage\":${itemStack.durability},\"Count\":${itemStack.amount},\"tag\":$tag}"
-        return tooltipItem(item)
-    }
+    fun tooltipItem(itemStack: ItemStack): ChatComponentFancy
+            = tooltipItem(NBTFactory.getStackNBT(itemStack).toString())
 
     fun join(chatComponentFancy: ChatComponentFancy): ChatComponentFancy
             { extras.addAll(chatComponentFancy.extras); return this; }

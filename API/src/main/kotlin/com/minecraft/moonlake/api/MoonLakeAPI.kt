@@ -152,21 +152,6 @@ fun Iterable<String>.stripColor(): List<String>
 fun String.messageFormat(vararg args: Any?): String
         = MessageFormat.format(this, args)
 
-fun ItemFlag.getBitModifier(): Int
-        = 1.shl(ordinal)
-
-fun Array<out ItemFlag>.getAddBitModifier(): Int {
-    var modifier = 0
-    forEach { modifier = modifier or it.getBitModifier() }
-    return modifier
-}
-
-fun Array<out ItemFlag>.getRemoveBitModifier(): Int {
-    var modifier = 0
-    forEach { modifier = modifier and it.getBitModifier().inv() }
-    return modifier
-}
-
 @Throws(MoonLakeException::class)
 fun Throwable.throwMoonLake(): Nothing = let {
     when(it is MoonLakeException) {

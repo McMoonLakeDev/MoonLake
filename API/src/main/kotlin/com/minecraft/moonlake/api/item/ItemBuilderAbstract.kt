@@ -20,8 +20,6 @@ package com.minecraft.moonlake.api.item
 import com.minecraft.moonlake.api.attribute.AttributeOperation
 import com.minecraft.moonlake.api.attribute.AttributeSlot
 import com.minecraft.moonlake.api.attribute.AttributeType
-import com.minecraft.moonlake.api.getAddBitModifier
-import com.minecraft.moonlake.api.getRemoveBitModifier
 import com.minecraft.moonlake.api.nbt.NBTCompound
 import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.nbt.NBTList
@@ -152,6 +150,18 @@ abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: 
 
     override fun clearEnchant(): ItemBuilder
             { tag.remove(TAG_ENCH); return this; }
+
+    private fun Array<out ItemFlag>.getAddBitModifier(modifier: Int = 0): Int {
+        var value = modifier
+        forEach { value = value or(1 shl it.ordinal)}
+        return value
+    }
+
+    private fun Array<out ItemFlag>.getRemoveBitModifier(modifier: Int = 0): Int {
+        var value = modifier
+        forEach { value = value and(1 shl it.ordinal).inv() }
+        return value
+    }
 
     override fun addFlag(vararg flag: ItemFlag): ItemBuilder
             { tag.putInt(TAG_HIDE_FLAGS, flag.getAddBitModifier()); return this; }
