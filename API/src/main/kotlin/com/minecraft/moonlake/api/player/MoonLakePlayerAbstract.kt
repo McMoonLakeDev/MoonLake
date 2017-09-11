@@ -18,6 +18,7 @@
 package com.minecraft.moonlake.api.player
 
 import com.minecraft.moonlake.api.attribute.AttributeType
+import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.notNull
 import com.minecraft.moonlake.api.toBukkitWorld
 import com.minecraft.moonlake.api.toColor
@@ -41,7 +42,6 @@ import org.bukkit.permissions.PermissionAttachment
 import org.bukkit.permissions.PermissionAttachmentInfo
 import org.bukkit.plugin.Plugin
 import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
 import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.util.Vector
 import java.net.InetSocketAddress
@@ -226,14 +226,17 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
     override fun getActivePotionEffects(): Collection<PotionEffect>
             = getBukkitPlayer().activePotionEffects
 
-    override fun hasPotionEffect(type: PotionEffectType): Boolean
-            = getBukkitPlayer().hasPotionEffect(type)
+    override fun hasPotionEffect(type: EffectType): Boolean
+            = getBukkitPlayer().hasPotionEffect(type.cast())
 
-    override fun removePotionEffect(type: PotionEffectType)
-            = getBukkitPlayer().removePotionEffect(type)
+    override fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean, particle: Boolean, color: Color?): Boolean
+            = getBukkitPlayer().addPotionEffect(PotionEffect(type.cast(), duration, amplifier, ambient, particle))
+
+    override fun removePotionEffect(type: EffectType)
+            = getBukkitPlayer().removePotionEffect(type.cast())
 
     override fun clearPotionEffects()
-            = getActivePotionEffects().map { it -> it.type }.filter { hasPotionEffect(it) }.forEach { removePotionEffect(it) }
+            = getActivePotionEffects().map { it -> EffectType.fromName(it.type.name) }.filter { hasPotionEffect(it) }.forEach { removePotionEffect(it) }
 
     override fun getVelocity(): Vector
             = getBukkitPlayer().velocity
@@ -461,18 +464,6 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
 
     override fun isSprinting(): Boolean
             = getBukkitPlayer().isSprinting
-
-    override fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration: Int): Boolean
-            = addPotionEffect(type, amplifier, duration, false, false)
-
-    override fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration: Int, ambient: Boolean): Boolean
-            = addPotionEffect(type, amplifier, duration, ambient, false)
-
-    override fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration: Int, ambient: Boolean, particles: Boolean): Boolean
-            = getBukkitPlayer().addPotionEffect(PotionEffect(type, duration, amplifier, ambient, particles))
-
-    override fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration: Int, ambient: Boolean, particles: Boolean, color: Color): Boolean
-            = getBukkitPlayer().addPotionEffect(PotionEffect(type, duration, amplifier, ambient, particles))
 
     override fun getScoreboard(): Scoreboard
             = getBukkitPlayer().scoreboard

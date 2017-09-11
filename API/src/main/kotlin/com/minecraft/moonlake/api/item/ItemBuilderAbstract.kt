@@ -17,9 +17,10 @@
 
 package com.minecraft.moonlake.api.item
 
-import com.minecraft.moonlake.api.attribute.AttributeOperation
-import com.minecraft.moonlake.api.attribute.AttributeSlot
 import com.minecraft.moonlake.api.attribute.AttributeType
+import com.minecraft.moonlake.api.attribute.Operation
+import com.minecraft.moonlake.api.attribute.Slot
+import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.nbt.NBTCompound
 import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.nbt.NBTList
@@ -30,7 +31,6 @@ import org.bukkit.block.banner.Pattern
 import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
-import org.bukkit.potion.PotionEffect
 import java.util.*
 
 abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: Int = 0) : ItemBuilder {
@@ -43,7 +43,7 @@ abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: 
     /** build */
 
     override fun build(): ItemStack
-            = NBTFactory.writeStackTag(itemStack, tag)
+            = NBTFactory.writeStackTag(itemStack, checkEmptyTag(tag))
 
     /** static */
 
@@ -94,6 +94,32 @@ abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: 
     }
 
     /** protected */
+
+    open protected fun checkEmptyTag(tag: NBTCompound): NBTCompound {
+        if(tag.containsKey(TAG_DISPLAY) && tagDisplay().isEmpty())
+            tag.remove(TAG_DISPLAY)
+        if(tag.containsKey(TAG_DISPLAY_LORE) && tagDisplayLore().isEmpty())
+            tagDisplay().remove(TAG_DISPLAY_LORE)
+        if(tag.containsKey(TAG_ENCH) && tagEnchant().isEmpty())
+            tag.remove(TAG_ENCH)
+        if(tag.containsKey(TAG_ATTRIBUTE_MODIFIERS) && tagAttributeModifiers().isEmpty())
+            tag.remove(TAG_ATTRIBUTE_MODIFIERS)
+        if(tag.containsKey(TAG_STORED_ENCHANTMENTS) && tagStoredEnchantments().isEmpty())
+            tag.remove(TAG_STORED_ENCHANTMENTS)
+        if(tag.containsKey(TAG_BOOK_PAGES) && tagPages().isEmpty())
+            tag.remove(TAG_BOOK_PAGES)
+        if(tag.containsKey(TAG_ENTITY_TAG) && tagEntityTag().isEmpty())
+            tag.remove(TAG_ENTITY_TAG)
+        if(tag.containsKey(TAG_CUSTOM_POTION_EFFECTS) && tagCustomPotionEffects().isEmpty())
+            tag.remove(TAG_CUSTOM_POTION_EFFECTS)
+        if(tag.containsKey(TAG_HIDE_FLAGS) && tag.getIntOrDefault(TAG_HIDE_FLAGS) == 0)
+            tag.remove(TAG_HIDE_FLAGS)
+        if(tag.containsKey(TAG_CAN_DESTROY) && tag.getListOrDefault<String>(TAG_CAN_DESTROY).isEmpty())
+            tag.remove(TAG_CAN_DESTROY)
+        if(tag.containsKey(TAG_CAN_PLACE_ON) && tag.getListOrDefault<String>(TAG_CAN_PLACE_ON).isEmpty())
+            tag.remove(TAG_CAN_PLACE_ON)
+        return tag
+    }
 
     open protected fun tagDisplay(): NBTCompound
             = tag.getCompoundOrDefault(TAG_DISPLAY)
@@ -164,13 +190,13 @@ abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: 
     }
 
     override fun addFlag(vararg flag: ItemFlag): ItemBuilder
-            { tag.putInt(TAG_HIDE_FLAGS, flag.getAddBitModifier(if(tag.containsKey(TAG_HIDE_FLAGS)) tag.getInt(TAG_HIDE_FLAGS) else 0)); return this; }
+            { tag.putInt(TAG_HIDE_FLAGS, flag.getAddBitModifier(tag.getInt(TAG_HIDE_FLAGS))); return this; }
 
     override fun addFlag(flag: Collection<ItemFlag>): ItemBuilder
             = addFlag(*flag.toTypedArray())
 
     override fun removeFlag(vararg flag: ItemFlag): ItemBuilder
-            { tag.putInt(TAG_HIDE_FLAGS, flag.getRemoveBitModifier(if(tag.containsKey(TAG_HIDE_FLAGS)) tag.getInt(TAG_HIDE_FLAGS) else 0)); return this; }
+            { tag.putInt(TAG_HIDE_FLAGS, flag.getRemoveBitModifier(tag.getInt(TAG_HIDE_FLAGS))); return this; }
 
     override fun removeFlag(flag: Collection<ItemFlag>): ItemBuilder
             = removeFlag(*flag.toTypedArray())
@@ -181,10 +207,10 @@ abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: 
     override fun setUnbreakable(unbreakable: Boolean): ItemBuilder
             { tag.putBoolean(TAG_UNBREAKABLE, unbreakable); return this; }
 
-    override fun setAttribute(type: AttributeType, operation: AttributeOperation, amount: Double): ItemBuilder
+    override fun setAttribute(type: AttributeType, operation: Operation, amount: Double): ItemBuilder
             = setAttribute(type, operation, null, amount)
 
-    override fun setAttribute(type: AttributeType, operation: AttributeOperation, slot: AttributeSlot?, amount: Double): ItemBuilder {
+    override fun setAttribute(type: AttributeType, operation: Operation, slot: Slot?, amount: Double): ItemBuilder {
         val attribute = NBTFactory.ofCompound()
         val attributeUUID = UUID.randomUUID()
         if(slot != null) attribute.putString(TAG_ATTRIBUTE_SLOT, slot.value())
@@ -292,14 +318,15 @@ abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: 
     override fun setPotionBase(type: String): ItemBuilder
             { tag.putString(TAG_POTION, type); return this; }
 
-    override fun addPotionEffect(effect: PotionEffect): ItemBuilder {
+    override fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean, particle: Boolean, color: Color?): ItemBuilder {
         val potionEffect = NBTFactory.ofCompound()
-        potionEffect.putByte(TAG_POTION_ID, effect.type.id) // TODO EffectType
-        potionEffect.putByte(TAG_POTION_AMPLIFIER, effect.amplifier)
-        potionEffect.putInt(TAG_POTION_DURATION, effect.duration)
-        potionEffect.putBoolean(TAG_POTION_AMBIENT, effect.isAmbient)
-        potionEffect.putBoolean(TAG_POTION_SHOW_PARTICLES, effect.hasParticles())
+        potionEffect.putByte(TAG_POTION_ID, type.id)
+        potionEffect.putByte(TAG_POTION_AMPLIFIER, amplifier)
+        potionEffect.putInt(TAG_POTION_DURATION, duration)
+        potionEffect.putBoolean(TAG_POTION_AMBIENT, ambient)
+        potionEffect.putBoolean(TAG_POTION_SHOW_PARTICLES, particle)
         tagCustomPotionEffects().addCompound(potionEffect)
+        if(color != null) return setPotionColor(color)
         return this
     }
 

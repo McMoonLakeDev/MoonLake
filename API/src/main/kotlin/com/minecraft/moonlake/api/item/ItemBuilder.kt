@@ -17,9 +17,10 @@
 
 package com.minecraft.moonlake.api.item
 
-import com.minecraft.moonlake.api.attribute.AttributeOperation
-import com.minecraft.moonlake.api.attribute.AttributeSlot
 import com.minecraft.moonlake.api.attribute.AttributeType
+import com.minecraft.moonlake.api.attribute.Operation
+import com.minecraft.moonlake.api.attribute.Slot
+import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.funs.Builder
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
@@ -28,7 +29,6 @@ import org.bukkit.block.banner.Pattern
 import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
-import org.bukkit.potion.PotionEffect
 
 interface ItemBuilder : Builder<ItemStack> {
 
@@ -71,9 +71,9 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setUnbreakable(unbreakable: Boolean): ItemBuilder
 
-    fun setAttribute(type: AttributeType, operation: AttributeOperation, amount: Double): ItemBuilder
+    fun setAttribute(type: AttributeType, operation: Operation, amount: Double): ItemBuilder
 
-    fun setAttribute(type: AttributeType, operation: AttributeOperation, slot: AttributeSlot?, amount: Double): ItemBuilder
+    fun setAttribute(type: AttributeType, operation: Operation, slot: Slot?, amount: Double): ItemBuilder
 
     fun clearAttribute(): ItemBuilder
 
@@ -160,7 +160,7 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setPotionBase(type: String): ItemBuilder // TODO PotionBaseWrapper
 
-    fun addPotionEffect(effect: PotionEffect): ItemBuilder
+    fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean = true, particle: Boolean = true, color: Color? = null): ItemBuilder
 
     fun clearPotionEffect(): ItemBuilder
 

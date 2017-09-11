@@ -15,23 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api.attribute
+package com.minecraft.moonlake.api.adapter
 
-import com.minecraft.moonlake.api.Valuable
-
-enum class AttributeOperation : Valuable<Int> {
-
-    ADD {
-        override fun value(): Int
-                = 0
-    },
-    MULTIPLY {
-        override fun value(): Int
-                = 1
-    },
-    MULTIPLY_INC {
-        override fun value(): Int
-                = 2
-    },
-    ;
+interface Adapter {
 }

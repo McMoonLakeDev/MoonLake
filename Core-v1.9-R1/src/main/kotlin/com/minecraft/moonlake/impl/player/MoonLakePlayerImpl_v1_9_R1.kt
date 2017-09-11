@@ -19,6 +19,7 @@ package com.minecraft.moonlake.impl.player
 
 import com.minecraft.moonlake.api.attribute.Attribute
 import com.minecraft.moonlake.api.attribute.AttributeType
+import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
 import com.minecraft.moonlake.impl.player.attribute.AttributeImpl_v1_9_R1
 import org.bukkit.Color
@@ -26,7 +27,6 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
 import java.util.*
 
 open class MoonLakePlayerImpl_v1_9_R1 :  MoonLakePlayerImpl_v1_8_R3 {
@@ -66,8 +66,8 @@ open class MoonLakePlayerImpl_v1_9_R1 :  MoonLakePlayerImpl_v1_8_R3 {
     override fun setSpectatorTarget(target: Entity)
             { getBukkitPlayer().spectatorTarget = target }
 
-    override fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration: Int, ambient: Boolean, particles: Boolean, color: Color): Boolean
-            = getBukkitPlayer().addPotionEffect(PotionEffect(type, duration, amplifier, ambient, particles, color))
+    override fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean, particle: Boolean, color: Color?): Boolean
+            = getBukkitPlayer().addPotionEffect(PotionEffect(type.cast(), duration, amplifier, ambient, particle, color))
 
     override fun getItemInHand(): ItemStack
             = getItemInMainHand()

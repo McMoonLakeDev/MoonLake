@@ -127,4 +127,8 @@ interface NBTCompound : NBTBase<MutableMap<String, NBTBase<*>>>, MutableIterable
     fun <T> getListOrDefault(key: String): NBTList<T>
 
     fun <T> putList(list: NBTList<T>): NBTCompound
+
+    fun isEmpty(): Boolean
+
+    fun isNotEmpty(): Boolean
 }

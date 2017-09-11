@@ -18,9 +18,10 @@
 package com.minecraft.moonlake
 
 import com.minecraft.moonlake.api.MoonLake
-import com.minecraft.moonlake.api.attribute.AttributeOperation
-import com.minecraft.moonlake.api.attribute.AttributeSlot
 import com.minecraft.moonlake.api.attribute.AttributeType
+import com.minecraft.moonlake.api.attribute.Operation
+import com.minecraft.moonlake.api.attribute.Slot
+import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.item.Enchantment
 import com.minecraft.moonlake.api.item.ItemBuilder
@@ -38,8 +39,6 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
-import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
 
 class MoonLakePlugin : JavaPlugin, MoonLake {
 
@@ -76,8 +75,8 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
                             .setCanPlaceOn(Material.STONE) // 只能放置在石头上
                             .addEnchant(Enchantment.锋利, 5) // 附魔锋利5
                             .setUnbreakable(true) // 不可破坏
-                            .setAttribute(AttributeType.ATTACK_DAMAGE, AttributeOperation.MULTIPLY, AttributeSlot.MAIN_HAND, .05) // 攻击增加 5%
-                            .setAttribute(AttributeType.ATTACK_SPEED, AttributeOperation.MULTIPLY, AttributeSlot.MAIN_HAND, .1) // 攻击速度增加 10%
+                            .setAttribute(AttributeType.攻击伤害, Operation.百分比, Slot.主手, .05) // 攻击增加 5%
+                            .setAttribute(AttributeType.攻击速度, Operation.百分比, Slot.主手, .1) // 攻击速度增加 10%
                             .addLore("标签属性", "标签属性") // 标签属性
                             .clearEnchant()
                             .addFlag(ItemFlag.HIDE_UNBREAKABLE) // 隐藏不可破坏属性
@@ -86,9 +85,9 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
                 }
                 if(event.message == "/ib potion") {
                     val itemStack = ItemBuilder.of(Material.POTION)
-                            .addPotionEffect(PotionEffect(PotionEffectType.JUMP, 100, 0))
-                            .addPotionEffect(PotionEffect(PotionEffectType.SPEED, 100, 0))
-                            .setPotionColor(Color.fromBGR(0, 0, 0))
+                            .addPotionEffect(EffectType.速度, 100, 0)
+                            .addPotionEffect(EffectType.跳跃提升, 100, 0)
+                            .setPotionColor(Color.fromRGB(0, 0, 0))
                             .addLore("标签属性")
                             .setDisplayName("233")
                             .build()

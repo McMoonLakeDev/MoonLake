@@ -174,6 +174,12 @@ class NBTWrappedList<T>(handle: Any, name: String) : NBTWrapper<MutableList<NBTB
     override fun clear()
             = getValue().clear()
 
+    override fun isEmpty(): Boolean
+            = size() <= 0
+
+    override fun isNotEmpty(): Boolean
+            = !isEmpty()
+
     override fun iterator(): Iterator<T>
             = Iterables.transform(getValue(), { input -> input?.getValue() }).iterator()
 

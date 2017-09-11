@@ -19,31 +19,18 @@ package com.minecraft.moonlake.api.attribute
 
 import com.minecraft.moonlake.api.Valuable
 
-enum class AttributeSlot : Valuable<String> {
+enum class Slot(val type: String) : Valuable<String> {
 
-    MAIN_HAND {
-        override fun value(): String
-                = "mainhand"
-    },
-    OFF_HAND {
-        override fun value(): String
-                = "offhand"
-    },
-    HEAD {
-        override fun value(): String
-                = "head"
-    },
-    LEGS {
-        override fun value(): String
-                = "legs"
-    },
-    CHEST {
-        override fun value(): String
-                = "chest"
-    },
-    FEET {
-        override fun value(): String
-                ="feet"
-    },
+    MAIN_HAND("mainhand"), 		主手(MAIN_HAND),
+    OFF_HAND("offhand"), 			副手(OFF_HAND),
+    HEAD("head"), 							头部(HEAD),
+    LEGS("legs"), 							腿部(LEGS),
+    CHEST("chest"), 						胸部(CHEST),
+    FEET("feet"), 							脚部(FEET),
     ;
+
+    constructor(equivalent: Slot) : this(equivalent.type)
+
+    override fun value(): String
+            = type
 }

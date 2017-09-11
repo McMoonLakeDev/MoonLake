@@ -227,6 +227,12 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
     override fun <T> putList(list: NBTList<T>): NBTCompound
             { getValue().put(list.getName(), list); return this; }
 
+    override fun isEmpty(): Boolean
+            = size() <= 0
+
+    override fun isNotEmpty(): Boolean
+            = !isEmpty()
+
     override fun iterator(): MutableIterator<NBTBase<*>>
             = getValue().values.iterator()
 

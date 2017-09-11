@@ -18,6 +18,7 @@
 package com.minecraft.moonlake.api.player
 
 import com.minecraft.moonlake.api.attribute.Attributable
+import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.version.IllegalBukkitVersionException
 import org.bukkit.*
 import org.bukkit.block.Block
@@ -28,12 +29,11 @@ import org.bukkit.inventory.*
 import org.bukkit.metadata.MetadataValue
 import org.bukkit.metadata.Metadatable
 import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
 import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.util.Vector
 import java.net.InetSocketAddress
 
-interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, Metadatable, InventoryHolder, Comparable<MoonLakePlayer> {
+interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, InventoryHolder, Metadatable , Comparable<MoonLakePlayer> {
 
     /** Base Function */
 
@@ -93,9 +93,11 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, Metadatable
 
     fun getActivePotionEffects(): Collection<PotionEffect>
 
-    fun hasPotionEffect(type: PotionEffectType): Boolean
+    fun hasPotionEffect(type: EffectType): Boolean
 
-    fun removePotionEffect(type: PotionEffectType)
+    fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean = true, particle: Boolean = true, color: Color? = null): Boolean
+
+    fun removePotionEffect(type: EffectType)
 
     fun clearPotionEffects()
 
@@ -244,14 +246,6 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, Metadatable
     fun isSneaking(): Boolean
 
     fun isSprinting(): Boolean
-
-    fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration : Int): Boolean
-
-    fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration : Int, ambient: Boolean): Boolean
-
-    fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration : Int, ambient: Boolean, particles: Boolean): Boolean
-
-    fun addPotionEffect(type: PotionEffectType, amplifier: Int, duration : Int, ambient: Boolean, particles: Boolean, color: Color): Boolean
 
     fun getScoreboard(): Scoreboard
 
