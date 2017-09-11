@@ -182,11 +182,11 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.BannerMeta
      */
 
-    fun setBannerPattern(index: Int, pattern: Pattern): ItemBuilder
-
     fun setBannerPattern(pattern: Collection<Pattern>): ItemBuilder
 
     fun addBannerPattern(pattern: Pattern): ItemBuilder
+
+    fun clearBannerPattern(): ItemBuilder
 
     /** static */
 

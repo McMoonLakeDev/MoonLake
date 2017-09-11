@@ -91,10 +91,25 @@ abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: 
         private const val TAG_POTION_DURATION = "Duration"
         private const val TAG_POTION_AMBIENT = "Ambient"
         private const val TAG_POTION_SHOW_PARTICLES = "ShowParticles"
+        private const val TAG_BLOCK_ENTITY_TAG = "BlockEntityTag"
+        private const val TAG_BANNER_PATTERNS = "Patterns"
+        private const val TAG_BANNER_COLOR = "Color"
+        private const val TAG_BANNER_PATTERN = "Pattern"
+        private const val TAG_FIREWORKS = "Fireworks"
+        private const val TAG_FIREWORKS_FLIGHT = "Flight"
+        private const val TAG_FIREWORKS_EXPLOSIONS = "Explosions"
+        private const val TAG_FIREWORKS_FLICKER = "Flicker"
+        private const val TAG_FIREWORKS_TRAIL = "Trail"
+        private const val TAG_FIREWORKS_TYPE = "Type"
+        private const val TAG_FIREWORKS_COLORS = "Colors"
+        private const val TAG_FIREWORKS_FADE_COLORS = "FadeColors"
     }
 
     /** protected */
 
+    /**
+     * Check the tag contains a key and the key is empty, cleared.
+     */
     open protected fun checkEmptyTag(tag: NBTCompound): NBTCompound {
         if(tag.containsKey(TAG_DISPLAY) && tagDisplay().isEmpty())
             tag.remove(TAG_DISPLAY)
@@ -118,6 +133,16 @@ abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: 
             tag.remove(TAG_CAN_DESTROY)
         if(tag.containsKey(TAG_CAN_PLACE_ON) && tag.getListOrDefault<String>(TAG_CAN_PLACE_ON).isEmpty())
             tag.remove(TAG_CAN_PLACE_ON)
+        if(tag.containsKey(TAG_BLOCK_ENTITY_TAG) && tagBlockEntityTag().containsKey(TAG_BANNER_PATTERNS) && tagBannerPatterns().isEmpty())
+            tagBlockEntityTag().remove(TAG_BANNER_PATTERNS)
+        if(tag.containsKey(TAG_BLOCK_ENTITY_TAG) && tagBlockEntityTag().isEmpty())
+            tag.remove(TAG_BLOCK_ENTITY_TAG)
+        if(tag.containsKey(TAG_BANNER_PATTERNS) && tagBannerPatterns().isEmpty())
+            tag.remove(TAG_BANNER_PATTERNS)
+        if(tag.containsKey(TAG_FIREWORKS) && tagFireworks().containsKey(TAG_FIREWORKS_EXPLOSIONS) && tagFireworksExplosions().isEmpty())
+            tagFireworks().remove(TAG_FIREWORKS_EXPLOSIONS)
+        if(tag.containsKey(TAG_FIREWORKS) && tagFireworks().isEmpty())
+            tag.remove(TAG_FIREWORKS)
         return tag
     }
 
@@ -144,6 +169,18 @@ abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: 
 
     open protected fun tagCustomPotionEffects(): NBTList<NBTCompound>
             = tag.getListOrDefault(TAG_CUSTOM_POTION_EFFECTS)
+
+    open protected fun tagBlockEntityTag(): NBTCompound
+            = tag.getCompoundOrDefault(TAG_BLOCK_ENTITY_TAG)
+
+    open protected fun tagFireworks(): NBTCompound
+            = tag.getCompoundOrDefault(TAG_FIREWORKS)
+
+    open protected fun tagFireworksExplosions(): NBTList<NBTCompound>
+            = tagFireworks().getListOrDefault(TAG_FIREWORKS_EXPLOSIONS)
+
+    open protected fun tagBannerPatterns(): NBTList<NBTCompound>
+            = tagBlockEntityTag().getListOrDefault(TAG_BANNER_PATTERNS)
 
     /** general */
 
@@ -335,26 +372,49 @@ abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: 
 
     /** firework */
 
-    override fun addFireworkEffect(vararg effect: FireworkEffect): ItemBuilder
-            = throw UnsupportedOperationException()
+    override fun addFireworkEffect(vararg effect: FireworkEffect): ItemBuilder {
+        effect.forEach {
+            val fireworkEffect = NBTFactory.ofCompound()
+            fireworkEffect.putBoolean(TAG_FIREWORKS_FLICKER, it.hasFlicker())
+            fireworkEffect.putBoolean(TAG_FIREWORKS_TRAIL, it.hasTrail())
+            fireworkEffect.putByte(TAG_FIREWORKS_TYPE, it.type.nbt())
+            fireworkEffect.putIntArray(TAG_FIREWORKS_COLORS, it.colors.map { it.asRGB() }.toIntArray())
+            fireworkEffect.putIntArray(TAG_FIREWORKS_FADE_COLORS, it.fadeColors.map { it.asRGB() }.toIntArray())
+            tagFireworksExplosions().addCompound(fireworkEffect)
+        }
+        return this
+    }
+
+    private fun FireworkEffect.Type.nbt(): Int = when(this) {
+        FireworkEffect.Type.BALL -> 0
+        FireworkEffect.Type.BALL_LARGE -> 1
+        FireworkEffect.Type.STAR -> 2
+        FireworkEffect.Type.CREEPER -> 3
+        FireworkEffect.Type.BURST -> 4
+    }
 
     override fun addFireworkEffect(effect: Collection<FireworkEffect>): ItemBuilder
-            = throw UnsupportedOperationException()
+            = addFireworkEffect(*effect.toTypedArray())
 
     override fun clearFireworkEffect(): ItemBuilder
-            = throw UnsupportedOperationException()
+            { tag.remove(TAG_FIREWORKS); return this; }
 
     override fun setFireworkPower(power: Int): ItemBuilder
-            = throw UnsupportedOperationException()
+            { tagFireworks().putByte(TAG_FIREWORKS_FLIGHT, power); return this; }
 
     /** banner */
 
-    override fun setBannerPattern(index: Int, pattern: Pattern): ItemBuilder
-            = throw UnsupportedOperationException()
-
     override fun setBannerPattern(pattern: Collection<Pattern>): ItemBuilder
-            = throw UnsupportedOperationException()
+            { pattern.forEach { addBannerPattern(it) }; return this; }
 
-    override fun addBannerPattern(pattern: Pattern): ItemBuilder
-            = throw UnsupportedOperationException()
+    override fun addBannerPattern(pattern: Pattern): ItemBuilder {
+        val bannerPattern = NBTFactory.ofCompound()
+        bannerPattern.putInt(TAG_BANNER_COLOR, (0 - pattern.color.ordinal).inv() + 1)
+        bannerPattern.putString(TAG_BANNER_PATTERN, pattern.pattern.identifier)
+        tagBannerPatterns().addCompound(bannerPattern)
+        return this
+    }
+
+    override fun clearBannerPattern(): ItemBuilder
+            { tagBlockEntityTag().remove(TAG_BANNER_PATTERNS); return this; }
 }
