@@ -311,7 +311,7 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
             = component.forEach { send(it) }
 
     override fun send(componentFancy: ChatComponentFancy, action: ChatAction)
-            = send(componentFancy.build())
+            = send(componentFancy.build(), action)
 
     override fun onKick()
             = onKick("None")
