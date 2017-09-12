@@ -21,6 +21,7 @@ import com.minecraft.moonlake.api.MoonLake
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
+import com.minecraft.moonlake.api.chat.ChatComponentFancy
 import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.item.Enchantment
@@ -29,6 +30,7 @@ import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.region.*
 import com.minecraft.moonlake.api.registerEvent
 import com.minecraft.moonlake.api.setMoonLake
+import com.minecraft.moonlake.api.toMoonLakePlayer
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
 import org.bukkit.Color
@@ -96,8 +98,10 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
                             .setPotionColor(Color.fromRGB(0, 0, 0))
                             .addLore("标签属性")
                             .setDisplayName("233")
+                            .addEnchant(Enchantment.锋利, 1)
                             .build()
                     event.player.inventory.addItem(itemStack)
+                    event.player.toMoonLakePlayer().send(ChatComponentFancy("物品展示: ").then("[ITEM]").tooltipItem(itemStack))
                 }
                 if(event.message == "/ib firework") {
                     val itemStack = ItemBuilder.of(Material.FIREWORK)

@@ -18,6 +18,9 @@
 package com.minecraft.moonlake.api.player
 
 import com.minecraft.moonlake.api.attribute.AttributeType
+import com.minecraft.moonlake.api.chat.ChatAction
+import com.minecraft.moonlake.api.chat.ChatComponent
+import com.minecraft.moonlake.api.chat.ChatComponentFancy
 import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.notNull
 import com.minecraft.moonlake.api.toBukkitWorld
@@ -303,6 +306,12 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
 
     override fun send(message: String, vararg args: Any)
             = getBukkitPlayer().sendMessage(message.format(args).toColor())
+
+    override fun send(vararg component: ChatComponent)
+            = component.forEach { send(it) }
+
+    override fun send(componentFancy: ChatComponentFancy, action: ChatAction)
+            = send(componentFancy.build())
 
     override fun onKick()
             = onKick("None")

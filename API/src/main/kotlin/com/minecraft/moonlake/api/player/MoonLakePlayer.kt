@@ -18,6 +18,9 @@
 package com.minecraft.moonlake.api.player
 
 import com.minecraft.moonlake.api.attribute.Attributable
+import com.minecraft.moonlake.api.chat.ChatAction
+import com.minecraft.moonlake.api.chat.ChatComponent
+import com.minecraft.moonlake.api.chat.ChatComponentFancy
 import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.version.IllegalBukkitVersionException
 import org.bukkit.*
@@ -144,6 +147,12 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, InventoryHo
     fun send(vararg messages: String)
 
     fun send(message: String, vararg args: Any)
+
+    fun send(component: ChatComponent, action: ChatAction = ChatAction.CHAT)
+
+    fun send(vararg component: ChatComponent)
+
+    fun send(componentFancy: ChatComponentFancy, action: ChatAction = ChatAction.CHAT)
 
     fun onKick()
 

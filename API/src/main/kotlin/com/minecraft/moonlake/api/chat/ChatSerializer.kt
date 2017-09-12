@@ -19,8 +19,10 @@ package com.minecraft.moonlake.api.chat
 
 import com.google.gson.*
 import com.google.gson.stream.JsonReader
+import com.minecraft.moonlake.api.converter.ConverterEquivalentIgnoreNull
 import com.minecraft.moonlake.api.fromNameOrNull
 import com.minecraft.moonlake.api.notNull
+import com.minecraft.moonlake.api.utility.MinecraftConverters
 import java.io.IOException
 import java.io.StringReader
 import java.lang.StringBuilder
@@ -29,6 +31,8 @@ import java.lang.reflect.Type
 object ChatSerializer {
 
     private val GSON: Gson
+    private val CONVERTER: ConverterEquivalentIgnoreNull<ChatComponent> by lazy {
+        MinecraftConverters.getChatComponent() as ConverterEquivalentIgnoreNull }
 
     init {
         GSON = GsonBuilder()
@@ -36,6 +40,16 @@ object ChatSerializer {
                 .registerTypeHierarchyAdapter(ChatComponent::class.java, ChatComponentSerializer())
                 .create()
     }
+
+    @JvmStatic
+    @JvmName("toNMS")
+    fun toNMS(component: ChatComponent): Any
+            = CONVERTER.getGenericValue(component)
+
+    @JvmStatic
+    @JvmName("fromNMS")
+    fun fromNMS(generic: Any): ChatComponent
+            = CONVERTER.getSpecificValue(generic)
 
     @JvmStatic
     @JvmName("fromJson")
