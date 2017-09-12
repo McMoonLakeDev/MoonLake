@@ -32,6 +32,7 @@ import com.minecraft.moonlake.api.setMoonLake
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
 import org.bukkit.Color
+import org.bukkit.FireworkEffect
 import org.bukkit.Material
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.event.EventHandler
@@ -69,7 +70,7 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
                     event.player.itemInHand = itemStack
                 }
                 if(event.message == "/ib") {
-                    val itemStack = ItemBuilder.of(Material.IRON_SWORD)
+                    var itemStack = ItemBuilder.of(Material.IRON_SWORD)
                             .setLocalizedName("tile.tnt.name") // 本地化名称
                             .setCanDestroy(Material.DIAMOND_ORE) // 只能破坏钻石矿
                             .setCanPlaceOn(Material.STONE) // 只能放置在石头上
@@ -81,6 +82,11 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
                             .clearEnchant()
                             .addFlag(ItemFlag.HIDE_UNBREAKABLE) // 隐藏不可破坏属性
                             .build()
+
+                    itemStack = ItemBuilder.of(itemStack)
+                            .removeFlag(ItemFlag.HIDE_UNBREAKABLE)
+                            .build()
+
                     event.player.inventory.addItem(itemStack)
                 }
                 if(event.message == "/ib potion") {
@@ -90,6 +96,13 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
                             .setPotionColor(Color.fromRGB(0, 0, 0))
                             .addLore("标签属性")
                             .setDisplayName("233")
+                            .build()
+                    event.player.inventory.addItem(itemStack)
+                }
+                if(event.message == "/ib firework") {
+                    val itemStack = ItemBuilder.of(Material.FIREWORK)
+                            .addFireworkEffect(FireworkEffect.builder().with(FireworkEffect.Type.BALL_LARGE).withColor(Color.RED).build())
+                            .addLore("233")
                             .build()
                     event.player.inventory.addItem(itemStack)
                 }

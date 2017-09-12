@@ -33,12 +33,24 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import java.util.*
 
-abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: Int = 0) : ItemBuilder {
+abstract class ItemBuilderAbstract : ItemBuilder {
 
     /** member */
 
-    private val itemStack = ItemStack(type, amount, durability.toShort()) // new material item stack object
-    private val tag: NBTCompound by lazy { NBTFactory.ofCompound(TAG) }
+    private val itemStack: ItemStack
+    private val tag: NBTCompound
+
+    /** constructor */
+
+    constructor(itemStack: ItemStack) {
+        this.itemStack = itemStack.clone() // clone
+        this.tag = NBTFactory.readSafeStackTag(this.itemStack)
+    }
+
+    constructor(type: Material, amount: Int = 1, durability: Int = 0) {
+        this.itemStack = ItemStack(type, amount, durability.toShort())
+        this.tag = NBTFactory.readSafeStackTag(this.itemStack)
+    }
 
     /** build */
 
@@ -227,13 +239,13 @@ abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: 
     }
 
     override fun addFlag(vararg flag: ItemFlag): ItemBuilder
-            { tag.putInt(TAG_HIDE_FLAGS, flag.getAddBitModifier(tag.getInt(TAG_HIDE_FLAGS))); return this; }
+            { tag.putInt(TAG_HIDE_FLAGS, flag.getAddBitModifier(tag.getIntOrDefault(TAG_HIDE_FLAGS))); return this; }
 
     override fun addFlag(flag: Collection<ItemFlag>): ItemBuilder
             = addFlag(*flag.toTypedArray())
 
     override fun removeFlag(vararg flag: ItemFlag): ItemBuilder
-            { tag.putInt(TAG_HIDE_FLAGS, flag.getRemoveBitModifier(tag.getInt(TAG_HIDE_FLAGS))); return this; }
+            { tag.putInt(TAG_HIDE_FLAGS, flag.getRemoveBitModifier(tag.getIntOrDefault(TAG_HIDE_FLAGS))); return this; }
 
     override fun removeFlag(flag: Collection<ItemFlag>): ItemBuilder
             = removeFlag(*flag.toTypedArray())
@@ -253,7 +265,7 @@ abstract class ItemBuilderAbstract(type: Material, amount: Int = 1, durability: 
         if(slot != null) attribute.putString(TAG_ATTRIBUTE_SLOT, slot.value())
         attribute.putString(TAG_ATTRIBUTE_NAME, type.value())
         attribute.putString(TAG_ATTRIBUTE_TYPE, type.value())
-        attribute.putInt(TAG_ATTRIBUTE_OPERATION, operation.ordinal)
+        attribute.putInt(TAG_ATTRIBUTE_OPERATION, operation.value())
         attribute.putDouble(TAG_ATTRIBUTE_AMOUNT, amount)
         attribute.putLong(TAG_ATTRIBUTE_UUID_MOST, attributeUUID.mostSignificantBits)
         attribute.putLong(TAG_ATTRIBUTE_UUID_LEAST, attributeUUID.leastSignificantBits)

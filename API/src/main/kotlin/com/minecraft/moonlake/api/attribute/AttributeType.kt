@@ -33,9 +33,7 @@ enum class AttributeType(val type: String, val def: Double, val min: Double, val
     ARMOR("generic.armor", .0, .0, 30.0, MinecraftVersion.V1_9), 												护甲(ARMOR),
     ARMOR_TOUGHNESS("generic.armorToughness", .0, .0, 20.0, MinecraftVersion.V1_9), 		护甲韧性(ARMOR_TOUGHNESS),
     LUCK("generic.luck", .0, -1024.0, 1024.0, MinecraftVersion.V1_9), 										幸运(LUCK),
-
-
-    /** FLYING_SPEED("generic.flyingSpeed", 0.4000000059604645, .0, 1024.0, MinecraftVersion.V1_12), */
+    FLYING_SPEED("generic.flyingSpeed", 0.4000000059604645, .0, 1024.0, MinecraftVersion.V1_12),            飞行速度(FLYING_SPEED),
     ;
 
     constructor(equivalent: AttributeType) : this(equivalent.type, equivalent.def, equivalent.min, equivalent.max, equivalent.mcVer)

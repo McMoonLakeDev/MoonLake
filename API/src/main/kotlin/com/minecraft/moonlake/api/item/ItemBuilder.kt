@@ -193,7 +193,7 @@ interface ItemBuilder : Builder<ItemStack> {
     companion object {
 
         fun of(itemStack: ItemStack): ItemBuilder
-                = object: ItemBuilderAbstract(itemStack.type, itemStack.amount, itemStack.durability.toInt()) {}
+                = object: ItemBuilderAbstract(itemStack) {}
 
         fun of(material: Material, amount: Int = 1, durability: Int = 0): ItemBuilder
                 = object: ItemBuilderAbstract(material, amount, durability) {}
