@@ -23,4 +23,4 @@ description: Minecraft MoonLake Core API Plugin
 website: http://www.mcmoonlake.com/
 author: Month_Light
 authors: [Month_Light, MoonLake]
-softdepend: [Vault, WorldEdit]
+softdepend: [Vault, WorldEdit, PlaceholderAPI]

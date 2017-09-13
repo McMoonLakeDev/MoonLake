@@ -22,6 +22,9 @@ import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
 import com.minecraft.moonlake.api.chat.ChatComponentFancy
+import com.minecraft.moonlake.api.depend.DependPlaceholderAPI
+import com.minecraft.moonlake.api.depend.DependPlugins
+import com.minecraft.moonlake.api.depend.DependWorldEdit
 import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.item.Enchantment
@@ -33,6 +36,9 @@ import com.minecraft.moonlake.api.setMoonLake
 import com.minecraft.moonlake.api.toMoonLakePlayer
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
+import com.minecraft.moonlake.impl.depend.DependPlaceholderAPIImpl
+import com.minecraft.moonlake.impl.depend.DependWorldEditImpl
+import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.Material
@@ -49,6 +55,7 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
 
     override fun onLoad() {
         registerConfigurationSerializable()
+        registerDependPluginImplement()
     }
 
     override fun onEnable() {
@@ -110,6 +117,17 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
                             .build()
                     event.player.inventory.addItem(itemStack)
                 }
+                if(event.message == "/dp we") {
+                    val region = DependPlugins.of(DependWorldEdit::class.java).getSelection(event.player)
+                    if(region == null)
+                        event.player.sendMessage("未使用 WorldEdit 选中区域.")
+                    else
+                        event.player.sendMessage(region.toString())
+                }
+                if(event.message == "/dp pipa") {
+                    val value = DependPlugins.of(DependPlaceholderAPI::class.java).setRelationalPlaceholders(event.player, Bukkit.getPlayer("Month_Light"), "233")
+                    event.player.sendMessage(value)
+                }
             }
         }.registerEvent(this)
     }
@@ -127,6 +145,12 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
                 RegionCylinder::class.java,
                 RegionEllipsoid::class.java
         ).forEach { ConfigurationSerialization.registerClass(it) }
+    }
+
+    /** register moonlake depend plugin implement class */
+    private fun registerDependPluginImplement() {
+        DependPlugins.register(DependWorldEdit::class.java, DependWorldEditImpl::class.java)
+        DependPlugins.register(DependPlaceholderAPI::class.java, DependPlaceholderAPIImpl::class.java)
     }
 
     override fun getPluginPrefix(): String

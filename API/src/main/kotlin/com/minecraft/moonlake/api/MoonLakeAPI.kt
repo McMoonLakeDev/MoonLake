@@ -50,7 +50,6 @@ import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
-import org.bukkit.inventory.ItemFlag
 import org.bukkit.plugin.EventExecutor
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginManager
@@ -274,6 +273,9 @@ fun getServicesManager(): ServicesManager
 
 fun getPluginManager(): PluginManager
         = Bukkit.getPluginManager()
+
+fun getPlugin(name: String): Plugin?
+        = Bukkit.getPluginManager().getPlugin(name)
 
 fun getScheduler(): BukkitScheduler
         = Bukkit.getScheduler()
