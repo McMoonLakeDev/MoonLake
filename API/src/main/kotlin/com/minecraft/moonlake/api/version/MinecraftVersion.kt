@@ -17,12 +17,12 @@
 
 package com.minecraft.moonlake.api.version
 
-import com.minecraft.moonlake.api.util.ComparisonChain
 import com.minecraft.moonlake.api.notNull
+import com.minecraft.moonlake.api.util.ComparisonChain
 import org.bukkit.Bukkit
 import java.util.regex.Pattern
 
-class MinecraftVersion(val major: Int, val minor: Int, val build: Int, private val pre: Int? = null) : Comparable<MinecraftVersion> {
+class MinecraftVersion(major: Int, minor: Int, build: Int, private val pre: Int? = null) : Version(major, minor, build),  Comparable<Version> {
 
     /** static */
 
@@ -35,7 +35,7 @@ class MinecraftVersion(val major: Int, val minor: Int, val build: Int, private v
         @JvmField val V1_8 = MinecraftVersion(1, 8, 0)
 
         private var currentVersion: MinecraftVersion? = null
-        private val VERSION_PATTERN = Pattern.compile(".*\\(.*MC.\\s*([a-zA-Z0-9\\-\\.]+)\\s*\\)")
+        private val VERSION_PATTERN = Pattern.compile(".*\\(.*MC.\\s*([a-zA-Z0-9\\-.]+)\\s*\\)")
 
         @JvmStatic
         @JvmName("currentVersion")
@@ -70,12 +70,12 @@ class MinecraftVersion(val major: Int, val minor: Int, val build: Int, private v
         }
     }
 
-    /** function */
+    /** api */
 
     fun isPre(): Boolean
             = pre != null
 
-    fun getVersion(): String
+    override fun getVersion(): String
             = "$major.$minor.$build" + if(pre != null) "-pre$pre" else ""
 
     fun getBukkitVersion(): MinecraftBukkitVersion
@@ -83,19 +83,20 @@ class MinecraftVersion(val major: Int, val minor: Int, val build: Int, private v
 
     /** significant */
 
-    override fun compareTo(other: MinecraftVersion): Int {
-        return ComparisonChain.start()
-                .compare(major, other.major)
-                .compare(minor, other.minor)
-                .compare(build, other.build)
-                .compare(pre ?: -1, other.pre ?: -1)
-                .result()
+    override fun compareTo(other: Version): Int {
+        return if(other is MinecraftVersion)
+            ComparisonChain.start()
+                    .compare(major, other.major)
+                    .compare(minor, other.minor)
+                    .compare(build, other.build)
+                    .compare(pre ?: -1, other.pre ?: -1)
+                    .result()
+        else
+            super.compareTo(other)
     }
 
     override fun hashCode(): Int {
-        var result = major
-        result = 31 * result + minor
-        result = 31 * result + build
+        var result = super.hashCode()
         result = 31 * result + (pre?.hashCode() ?: 0)
         return result
     }
@@ -104,7 +105,7 @@ class MinecraftVersion(val major: Int, val minor: Int, val build: Int, private v
         if(other === this)
             return true
         if(other is MinecraftVersion)
-            return major == other.major && minor == other.minor && build == other.build && isPre() == other.isPre()
+            return super.equals(other) && isPre() == other.isPre()
         return false
     }
 
