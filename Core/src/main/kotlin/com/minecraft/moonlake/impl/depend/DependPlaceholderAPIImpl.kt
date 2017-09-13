@@ -43,7 +43,7 @@ class DependPlaceholderAPIImpl : DependPluginAbstract<PlaceholderAPIPlugin>(getP
     override fun setRelationalPlaceholders(one: MoonLakePlayer, two: MoonLakePlayer, text: String): String
             = setRelationalPlaceholders(one.getBukkitPlayer(), two.getBukkitPlayer(), text)
 
-    override fun setRelationalPlaceholders(one: Player, two: Player, text: String): String = when(getPluginVersion() > "2.8.0") {
+    override fun setRelationalPlaceholders(one: Player, two: Player, text: String): String = when(getPluginVersion() >= "2.8.0") {
         true -> PlaceholderAPI.setRelationalPlaceholders(one, two, text)
         else -> throw DependPluginVersionException("依赖插件占位符 #setRelationalPlaceholders() 最低需求 2.8.0 版本.")
     }
