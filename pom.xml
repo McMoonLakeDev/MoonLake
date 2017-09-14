@@ -28,6 +28,7 @@
         <module>Core-v1.11-R1</module>
         <module>Core-v1.12-R1</module>
         <module>Plugin</module>
+        <module>PluginTest</module>
     </modules>
 
     <properties>
