@@ -38,6 +38,7 @@ import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
 import com.minecraft.moonlake.impl.depend.DependPlaceholderAPIImpl
 import com.minecraft.moonlake.impl.depend.DependWorldEditImpl
+import com.minecraft.moonlake.impl.listeners.PluginListeners
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
@@ -60,6 +61,7 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
 
     override fun onEnable() {
         setMoonLake(this)
+        this.registerMoonLakePluginListeners()
         this.logger.info("Server ${MinecraftVersion.currentVersion()} NMS: ${MinecraftBukkitVersion.currentVersion().getVersion()}")
         this.logger.info("月色之湖核心 API 插件 v${getPluginVersion()} 成功加载.")
 
@@ -151,6 +153,11 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
     private fun registerDependPluginImplement() {
         DependPlugins.register(DependWorldEdit::class.java, DependWorldEditImpl::class.java)
         DependPlugins.register(DependPlaceholderAPI::class.java, DependPlaceholderAPIImpl::class.java)
+    }
+
+    /** register moonlake plugin listeners */
+    private fun registerMoonLakePluginListeners() {
+        PluginListeners().registerEvent(this)
     }
 
     override fun getPluginPrefix(): String

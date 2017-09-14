@@ -19,7 +19,8 @@ package com.minecraft.moonlake.api.depend
 
 class DependPlugins private constructor() {
 
-    private val cached: MutableMap<Class<out DependPlugin>, DependPlugin> = HashMap() // interface class : impl instance
+    private val names: MutableMap<String, Class<out DependPlugin>> = HashMap() // name : interface class
+    private val values: MutableMap<Class<out DependPlugin>, DependPlugin> = HashMap() // interface class : impl instance
     private val implements: MutableMap<Class<out DependPlugin>, Class<out DependPluginAbstract<*>>> = HashMap() // interface class : impl class
 
     companion object {
@@ -32,13 +33,15 @@ class DependPlugins private constructor() {
         @Synchronized
         @Throws(DependPluginException::class)
         fun <T: DependPlugin> of(clazz: Class<T>): T {
-            var depend = instance.cached[clazz]
+            var depend = instance.values[clazz]
             if(depend == null) {
                 val implClazz = instance.implements[clazz]
                 if(implClazz == null || !implClazz.interfaces.contains(clazz))
                     throw DependPluginException("依赖插件接口类不存在实现类或实现类未实现接口.")
-                depend = implClazz.newInstance()
-                instance.cached.put(clazz, depend)
+                val value = implClazz.newInstance()
+                instance.values.put(clazz, value)
+                instance.names.put(value.getPluginName(), clazz)
+                depend = value
             }
             if(depend != null && clazz.isInstance(depend))
                 return clazz.cast(depend)
@@ -58,10 +61,45 @@ class DependPlugins private constructor() {
         @JvmName("register")
         @Synchronized
         @Throws(DependPluginException::class)
-        fun <T: DependPlugin> register(clazz: Class<T>, implClazz: Class<out DependPluginAbstract<*>>) {
+        fun <T: DependPlugin> register(clazz: Class<T>, implClazz: Class<out DependPluginAbstract<*>>): Boolean {
             if(!implClazz.interfaces.contains(clazz))
                 throw DependPluginException("依赖插件实现类未实现接口类.")
-            instance.implements.put(clazz, implClazz)
+            if(instance.implements.containsKey(clazz))
+                throw DependPluginException("依赖插件接口类 $clazz 已经被注册.")
+            return instance.implements.put(clazz, implClazz) == null
         }
+
+        @JvmStatic
+        @JvmName("unregister")
+        @Synchronized
+        fun <T: DependPlugin> unregister(clazz: Class<T>): Boolean {
+            if(!instance.implements.containsKey(clazz))
+                return false
+            return instance.implements.remove(clazz) != null &&
+                    instance.values.remove(clazz) != null
+        }
+
+        @JvmStatic
+        @JvmName("unregister")
+        @Synchronized
+        fun unregister(name: String): Boolean {
+            val clazz = instance.names[name] ?: return false
+            return unregister(clazz) && instance.names.remove(name) != null
+        }
+
+        @JvmStatic
+        @JvmName("unregisterAll")
+        @Synchronized
+        fun unregisterAll() {
+            instance.implements.clear()
+            instance.values.clear()
+            instance.names.clear()
+        }
+
+        @JvmStatic
+        @JvmName("contains")
+        @Synchronized
+        fun contains(name: String): Boolean
+                = instance.names.contains(name)
     }
 }

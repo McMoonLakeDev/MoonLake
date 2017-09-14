@@ -15,20 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api.depend
+package com.minecraft.moonlake.impl.listeners
 
-import com.minecraft.moonlake.api.player.MoonLakePlayer
-import com.minecraft.moonlake.api.region.Region
-import org.bukkit.entity.Player
+import com.minecraft.moonlake.api.MoonLake
+import com.minecraft.moonlake.api.depend.DependPlugins
+import com.minecraft.moonlake.api.event.MoonLakeListener
+import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
+import org.bukkit.event.server.PluginDisableEvent
 
-interface DependWorldEdit : DependPlugin {
+class PluginListeners : MoonLakeListener {
 
-    fun getSelection(player: Player): Region?
-
-    fun getSelection(player: MoonLakePlayer): Region?
-
-    companion object {
-
-        const val NAME = "WorldEdit"
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    fun onDisable(event: PluginDisableEvent) {
+        if(event.plugin is MoonLake)
+            DependPlugins.unregisterAll()
+        else
+            DependPlugins.unregister(event.plugin.name)
     }
 }

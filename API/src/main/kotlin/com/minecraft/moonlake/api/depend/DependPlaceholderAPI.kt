@@ -35,4 +35,9 @@ interface DependPlaceholderAPI : DependPlugin {
 
     @Throws(DependPluginVersionException::class)
     fun setRelationalPlaceholders(one: MoonLakePlayer, two: MoonLakePlayer, text: String): String
+
+    companion object {
+
+        const val NAME = "PlaceholderAPI"
+    }
 }

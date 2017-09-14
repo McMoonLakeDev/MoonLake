@@ -31,7 +31,7 @@ import com.sk89q.worldedit.regions.selector.CuboidRegionSelector
 import com.sk89q.worldedit.regions.selector.CylinderRegionSelector
 import org.bukkit.entity.Player
 
-class DependWorldEditImpl : DependPluginAbstract<WorldEditPlugin>(getPlugin("WorldEdit")), DependWorldEdit {
+class DependWorldEditImpl : DependPluginAbstract<WorldEditPlugin>(getPlugin(DependWorldEdit.NAME)), DependWorldEdit {
 
     private fun Vector.toRegionVectorBlock(): RegionVectorBlock
             = RegionVectorBlock(x, y, z)

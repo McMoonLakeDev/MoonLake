@@ -26,7 +26,7 @@ import me.clip.placeholderapi.PlaceholderAPI
 import me.clip.placeholderapi.PlaceholderAPIPlugin
 import org.bukkit.entity.Player
 
-class DependPlaceholderAPIImpl : DependPluginAbstract<PlaceholderAPIPlugin>(getPlugin("PlaceholderAPI")), DependPlaceholderAPI {
+class DependPlaceholderAPIImpl : DependPluginAbstract<PlaceholderAPIPlugin>(getPlugin(DependPlaceholderAPI.NAME)), DependPlaceholderAPI {
 
     override fun setPlaceholders(player: MoonLakePlayer, text: String): String
             = setPlaceholders(player.getBukkitPlayer(), text)
