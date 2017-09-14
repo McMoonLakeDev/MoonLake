@@ -24,6 +24,7 @@ import com.minecraft.moonlake.api.attribute.Slot
 import com.minecraft.moonlake.api.chat.ChatComponentFancy
 import com.minecraft.moonlake.api.depend.DependPlaceholderAPI
 import com.minecraft.moonlake.api.depend.DependPlugins
+import com.minecraft.moonlake.api.depend.DependVaultEconomy
 import com.minecraft.moonlake.api.depend.DependWorldEdit
 import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.event.MoonLakeListener
@@ -37,6 +38,7 @@ import com.minecraft.moonlake.api.toMoonLakePlayer
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
 import com.minecraft.moonlake.impl.depend.DependPlaceholderAPIImpl
+import com.minecraft.moonlake.impl.depend.DependVaultEconomyImpl
 import com.minecraft.moonlake.impl.depend.DependWorldEditImpl
 import com.minecraft.moonlake.impl.listeners.PluginListeners
 import org.bukkit.Bukkit
@@ -130,6 +132,11 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
                     val value = DependPlugins.of(DependPlaceholderAPI::class.java).setRelationalPlaceholders(event.player, Bukkit.getPlayer("Month_Light"), "233")
                     event.player.sendMessage(value)
                 }
+                if(event.message == "/dp eco") {
+                    val economy = DependPlugins.of(DependVaultEconomy::class.java)
+                    event.player.sendMessage("当前金钱 ${economy.format(economy.getBalance(event.player))} 并减少你 ${economy.format(10.0)} 金钱.")
+                    event.player.sendMessage("执行结果: ${economy.withdraw(event.player,  10.0)}")
+                }
             }
         }.registerEvent(this)
     }
@@ -153,6 +160,7 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
     private fun registerDependPluginImplement() {
         DependPlugins.register(DependWorldEdit::class.java, DependWorldEditImpl::class.java)
         DependPlugins.register(DependPlaceholderAPI::class.java, DependPlaceholderAPIImpl::class.java)
+        DependPlugins.register(DependVaultEconomy::class.java, DependVaultEconomyImpl::class.java)
     }
 
     /** register moonlake plugin listeners */
