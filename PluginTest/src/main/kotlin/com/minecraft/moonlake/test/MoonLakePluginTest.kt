@@ -17,6 +17,7 @@
 
 package com.minecraft.moonlake.test
 
+import com.minecraft.moonlake.api.*
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
@@ -30,8 +31,6 @@ import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.item.Enchantment
 import com.minecraft.moonlake.api.item.ItemBuilder
 import com.minecraft.moonlake.api.nbt.NBTFactory
-import com.minecraft.moonlake.api.registerEvent
-import com.minecraft.moonlake.api.toMoonLakePlayer
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
@@ -60,7 +59,7 @@ class MoonLakePluginTest : JavaPlugin() {
                 }
                 if(event.message == "/nbt w") {
                     val itemStack = ItemStack(Material.DIAMOND_SWORD)
-                    val tag = NBTFactory.readSafeStackTag(itemStack)
+                    val tag = NBTFactory.readStackTagSafe(itemStack)
                     tag.putBoolean("Unbreakable", true) // 不可破坏
                     NBTFactory.writeStackTag(itemStack, tag)
                     event.player.itemInHand = itemStack
@@ -116,9 +115,22 @@ class MoonLakePluginTest : JavaPlugin() {
                     event.player.sendMessage(value)
                 }
                 if(event.message == "/dp eco") {
-                    val economy = DependPlugins.of(DependVaultEconomy::class.java)
-                    event.player.sendMessage("当前金钱 ${economy.format(economy.getBalance(event.player))} 并减少你 ${economy.format(10.0)} 金钱.")
-                    event.player.sendMessage("执行结果: ${economy.withdraw(event.player,  10.0)}")
+                    DependVaultEconomy::class.java.useDependSafe {
+                        if(it == null) {
+                            event.player.sendMessage("依赖插件不存在, 无法使用功能.")
+                            return@useDependSafe
+                        }
+                        event.player.sendMessage("当前金币 ${it.format(it.getBalance(event.player))} 金币.")
+                        event.player.sendMessage("并扣掉你 ${it.format(10.0)} 金币: ${it.withdraw(event.player, 10.0)}")
+                    }
+                }
+                if(event.message == "/nbt rc") {
+
+                    Material.IRON_SWORD.newItemBuilder()
+                            .setDisplayName("显示名称")
+                            .addEnchant(Enchantment.锋利, 5)
+                            .build()
+                            .readTagSafe { event.player.sendMessage(it.toString()) }
                 }
             }
         }.registerEvent(this)

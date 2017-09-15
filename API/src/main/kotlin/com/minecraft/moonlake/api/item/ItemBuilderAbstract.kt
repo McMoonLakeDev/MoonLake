@@ -44,12 +44,12 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     constructor(itemStack: ItemStack) {
         this.itemStack = itemStack.clone() // clone
-        this.tag = NBTFactory.readSafeStackTag(this.itemStack)
+        this.tag = NBTFactory.readStackTagSafe(this.itemStack)
     }
 
     constructor(type: Material, amount: Int = 1, durability: Int = 0) {
         this.itemStack = ItemStack(type, amount, durability.toShort())
-        this.tag = NBTFactory.readSafeStackTag(this.itemStack)
+        this.tag = NBTFactory.readStackTagSafe(this.itemStack)
     }
 
     /** build */

@@ -184,8 +184,8 @@ object NBTFactory {
     }
 
     @JvmStatic
-    @JvmName("readSafeStackTag")
-    fun readSafeStackTag(itemStack: ItemStack): NBTCompound
+    @JvmName("readStackTagSafe")
+    fun readStackTagSafe(itemStack: ItemStack): NBTCompound
             = readStackTag(itemStack) ?: ofCompound("tag")
 
     @JvmStatic

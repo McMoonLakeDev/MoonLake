@@ -20,17 +20,21 @@
 package com.minecraft.moonlake.api
 
 import com.minecraft.moonlake.api.anvil.AnvilWindow
+import com.minecraft.moonlake.api.depend.DependPlugin
+import com.minecraft.moonlake.api.depend.DependPluginException
+import com.minecraft.moonlake.api.depend.DependPlugins
 import com.minecraft.moonlake.api.event.MoonLakeEvent
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.exception.MoonLakeException
 import com.minecraft.moonlake.api.funs.Consumer
 import com.minecraft.moonlake.api.funs.Function
+import com.minecraft.moonlake.api.item.ItemBuilder
+import com.minecraft.moonlake.api.nbt.NBTCompound
+import com.minecraft.moonlake.api.nbt.NBTFactory
+import com.minecraft.moonlake.api.nbt.NBTList
 import com.minecraft.moonlake.api.player.MoonLakePlayer
 import com.minecraft.moonlake.api.player.MoonLakePlayerCached
-import com.minecraft.moonlake.api.region.RegionCuboid
-import com.minecraft.moonlake.api.region.RegionVector
-import com.minecraft.moonlake.api.region.RegionVector2D
-import com.minecraft.moonlake.api.region.RegionVectorBlock
+import com.minecraft.moonlake.api.region.*
 import com.minecraft.moonlake.api.task.MoonLakeRunnable
 import com.minecraft.moonlake.api.utility.MinecraftReflection
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
@@ -50,6 +54,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
+import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.EventExecutor
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginManager
@@ -227,9 +232,8 @@ fun Any.parseDouble(def: Double = .0): Double = (this is Number).let {
     }
 }
 
-@Suppress("UNCHECKED_CAST")
 @Throws(MoonLakeException::class)
-fun <T: ConfigurationSerializable> Class<T>.deserializeConfigurationClass(configuration: Configuration, key: String, def: T? = null): T? = configuration.get(key).let {
+fun <T: ConfigurationSerializable> Class<T>.deserializeConfiguration(configuration: Configuration, key: String, def: T? = null): T? = configuration.get(key).let {
     when(it == null) {
         true -> def
         else -> when {
@@ -238,6 +242,7 @@ fun <T: ConfigurationSerializable> Class<T>.deserializeConfigurationClass(config
                 var method = getMethod("deserialize")
                 if(method == null) method = getMethod("valueOf")
                 if(method == null || !Modifier.isStatic(method.modifiers)) throw MoonLakeException("值为 Map 实例, 但是序列化类不存在 'deserialize' 或 'valueOf' 静态函数.")
+                @Suppress("UNCHECKED_CAST")
                 method.invoke(null, it) as T
             } catch (e: Exception) {
                 e.throwMoonLake()
@@ -346,13 +351,13 @@ fun Event.callEvent()
         = Bukkit.getServer().pluginManager.callEvent(this)
 
 fun Event.callEventAsync(plugin: Plugin)
-        = runTaskAsync(plugin, Runnable { Bukkit.getServer().pluginManager.callEvent(this) })
+        = plugin.runTaskAsync(Runnable { Bukkit.getServer().pluginManager.callEvent(this) })
 
 fun MoonLakeEvent.callEvent()
         = Bukkit.getServer().pluginManager.callEvent(this)
 
 fun MoonLakeEvent.callEventAsync(plugin: Plugin)
-        = runTaskAsync(plugin, Runnable { Bukkit.getServer().pluginManager.callEvent(this) })
+        = plugin.runTaskAsync(Runnable { Bukkit.getServer().pluginManager.callEvent(this) })
 
 fun Listener.registerEvent(plugin: Plugin)
         = Bukkit.getServer().pluginManager.registerEvents(this, plugin)
@@ -369,66 +374,66 @@ fun <T: MoonLakeEvent> Class<out T>.registerEvent(listener: MoonLakeListener, pr
 fun unregisterAll()
         = HandlerList.unregisterAll()
 
-fun unregisterAll(plugin: Plugin)
-        = HandlerList.unregisterAll(plugin)
+fun Plugin.unregisterAll()
+        = HandlerList.unregisterAll(this)
 
-fun unregisterAll(listener: Listener)
-        = HandlerList.unregisterAll(listener)
+fun Listener.unregisterAll()
+        = HandlerList.unregisterAll(this)
 
-fun unregisterAll(listener: MoonLakeListener)
-        = HandlerList.unregisterAll(listener)
+fun MoonLakeListener.unregisterAll()
+        = HandlerList.unregisterAll(this)
 
 /** task function */
 
-fun runTask(plugin: Plugin, task: Runnable): BukkitTask
-        = Bukkit.getScheduler().runTask(plugin, task)
+fun Plugin.runTask(task: Runnable): BukkitTask
+        = Bukkit.getScheduler().runTask(this, task)
 
-fun runTaskLater(plugin: Plugin, task: Runnable, delay: Long): BukkitTask
-        = Bukkit.getScheduler().runTaskLater(plugin, task, delay)
+fun Plugin.runTaskLater(task: Runnable, delay: Long): BukkitTask
+        = Bukkit.getScheduler().runTaskLater(this, task, delay)
 
-fun runTaskTimer(plugin: Plugin, task: Runnable, delay: Long, period: Long): BukkitTask
-        = Bukkit.getScheduler().runTaskTimer(plugin, task, delay, period)
+fun Plugin.runTaskTimer(task: Runnable, delay: Long, period: Long): BukkitTask
+        = Bukkit.getScheduler().runTaskTimer(this, task, delay, period)
 
-fun runTaskAsync(plugin: Plugin, task: Runnable): BukkitTask
-        = Bukkit.getScheduler().runTaskAsynchronously(plugin, task)
+fun Plugin.runTaskAsync(task: Runnable): BukkitTask
+        = Bukkit.getScheduler().runTaskAsynchronously(this, task)
 
-fun runTaskLaterAsync(plugin: Plugin, task: Runnable, delay: Long): BukkitTask
-        = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, task, delay)
+fun Plugin.runTaskLaterAsync(task: Runnable, delay: Long): BukkitTask
+        = Bukkit.getScheduler().runTaskLaterAsynchronously(this, task, delay)
 
-fun runTaskTimerAsync(plugin: Plugin, task: Runnable, delay: Long, period: Long): BukkitTask
-        = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, task, delay, period)
+fun Plugin.runTaskTimerAsync(task: Runnable, delay: Long, period: Long): BukkitTask
+        = Bukkit.getScheduler().runTaskTimerAsynchronously(this, task, delay, period)
 
-fun runTask(plugin: Plugin, task: MoonLakeRunnable): BukkitTask
-        = Bukkit.getScheduler().runTask(plugin, task as Runnable)
+fun Plugin.runTask(task: MoonLakeRunnable): BukkitTask
+        = Bukkit.getScheduler().runTask(this, task as Runnable)
 
-fun runTaskLater(plugin: Plugin, task: MoonLakeRunnable, delay: Long): BukkitTask
-        = Bukkit.getScheduler().runTaskLater(plugin, task as Runnable, delay)
+fun Plugin.runTaskLater(task: MoonLakeRunnable, delay: Long): BukkitTask
+        = Bukkit.getScheduler().runTaskLater(this, task as Runnable, delay)
 
-fun runTaskTimer(plugin: Plugin, task: MoonLakeRunnable, delay: Long, period: Long): BukkitTask
-        = Bukkit.getScheduler().runTaskTimer(plugin, task as Runnable, delay, period)
+fun Plugin.runTaskTimer(task: MoonLakeRunnable, delay: Long, period: Long): BukkitTask
+        = Bukkit.getScheduler().runTaskTimer(this, task as Runnable, delay, period)
 
-fun runTaskAsync(plugin: Plugin, task: MoonLakeRunnable): BukkitTask
-        = Bukkit.getScheduler().runTaskAsynchronously(plugin, task as Runnable)
+fun Plugin.runTaskAsync(task: MoonLakeRunnable): BukkitTask
+        = Bukkit.getScheduler().runTaskAsynchronously(this, task as Runnable)
 
-fun runTaskLaterAsync(plugin: Plugin, task: MoonLakeRunnable, delay: Long): BukkitTask
-        = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, task as Runnable, delay)
+fun Plugin.runTaskLaterAsync(task: MoonLakeRunnable, delay: Long): BukkitTask
+        = Bukkit.getScheduler().runTaskLaterAsynchronously(this, task as Runnable, delay)
 
-fun runTaskTimerAsync(plugin: Plugin, task: MoonLakeRunnable, delay: Long, period: Long): BukkitTask
-        = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, task as Runnable, delay, period)
+fun Plugin.runTaskTimerAsync(task: MoonLakeRunnable, delay: Long, period: Long): BukkitTask
+        = Bukkit.getScheduler().runTaskTimerAsynchronously(this, task as Runnable, delay, period)
 
-fun <T> Callable<T>.callSyncMethod(plugin: Plugin): Future<T>
+fun <T> Callable<T>.callMethodSync(plugin: Plugin): Future<T>
         = Bukkit.getScheduler().callSyncMethod(plugin, this)
 
-fun <T> Callable<T>.callSyncConsumer(plugin: Plugin, consumer: Consumer<T>)
+fun <T> Callable<T>.callTaskSync(plugin: Plugin, consumer: Consumer<T>)
         = callTaskConsumer(plugin, consumer, -1, false)
 
-fun <T> Callable<T>.callSyncConsumer(plugin: Plugin, consumer: Consumer<T>, delay: Long)
+fun <T> Callable<T>.callTaskSync(plugin: Plugin, consumer: Consumer<T>, delay: Long)
         = callTaskConsumer(plugin, consumer, delay, false)
 
-fun <T> Callable<T>.callAsyncConsumer(plugin: Plugin, consumer: Consumer<T>)
+fun <T> Callable<T>.callTaskAsync(plugin: Plugin, consumer: Consumer<T>)
         = callTaskConsumer(plugin, consumer, -1, true)
 
-fun <T> Callable<T>.callAsyncConsumer(plugin: Plugin, consumer: Consumer<T>, delay: Long)
+fun <T> Callable<T>.callTaskAsync(plugin: Plugin, consumer: Consumer<T>, delay: Long)
         = callTaskConsumer(plugin, consumer, delay, true)
 
 private fun <T> Callable<T>.callTaskConsumer(plugin: Plugin, consumer: Consumer<T>, delay: Long = -1, async: Boolean = false) {
@@ -442,8 +447,8 @@ private fun <T> Callable<T>.callTaskConsumer(plugin: Plugin, consumer: Consumer<
         }
     }
     when(delay <= 0) {
-        true -> async.let { if(it) runTaskAsync(plugin, runnable) else runTask(plugin, runnable) }
-        else -> async.let { if(it) runTaskLaterAsync(plugin, runnable, delay) else runTaskLater(plugin, runnable, delay) }
+        true -> async.let { if(it) plugin.runTaskAsync(runnable) else plugin.runTask(runnable) }
+        else -> async.let { if(it) plugin.runTaskLaterAsync(runnable, delay) else plugin.runTaskLater(runnable, delay) }
     }
 }
 
@@ -453,39 +458,39 @@ fun cancelTask(task: BukkitTask?)
 fun cancelTask(taskId: Int)
         = Bukkit.getScheduler().cancelTask(taskId)
 
-fun cancelTasks(plugin: Plugin)
-        = Bukkit.getScheduler().cancelTasks(plugin)
+fun Plugin.cancelTasks()
+        = Bukkit.getScheduler().cancelTasks(this)
 
 fun cancelAllTasks()
         = Bukkit.getScheduler().cancelAllTasks()
 
 /** target function */
 
-fun isInFront(source: Entity, target: Entity): Boolean {
-    val facing = source.location.direction
-    val relative = target.location.subtract(source.location).toVector().normalize()
+fun Entity.isInFront(target: Entity): Boolean {
+    val facing = location.direction
+    val relative = target.location.subtract(location).toVector().normalize()
     return facing.dot(relative) >= .0
 }
 
-fun isInFront(source: Entity, target: Entity, angle: Double): Boolean = angle.let {
+fun Entity.isInFront(target: Entity, angle: Double): Boolean = angle.let {
     if(angle <= .0) return false
     if(angle >= 360.0) return true
     val dotTarget = Math.cos(angle)
-    val facing = source.location.direction
-    val relative = target.location.subtract(source.location).toVector().normalize()
+    val facing = location.direction
+    val relative = target.location.subtract(location).toVector().normalize()
     return facing.dot(relative) >= dotTarget
 }
 
-fun isBehind(source: Entity, target: Entity, angle: Double): Boolean
-        = !isInFront(source, target, angle)
+fun Entity.isBehind(target: Entity, angle: Double): Boolean
+        = !isInFront(target, angle)
 
-fun <T: LivingEntity> getLivingTargets(clazz: Class<T>, source: LivingEntity, range: Double, tolerance: Double = 4.0): List<T> {
-    val entityList = source.getNearbyEntities(range, range, range)
+fun <T: LivingEntity> LivingEntity.getLivingTargets(clazz: Class<T>, range: Double, tolerance: Double = 4.0): List<T> {
+    val entityList = getNearbyEntities(range, range, range)
     val targets = ArrayList<T>()
-    val facing = source.location.direction
+    val facing = location.direction
     val fLengthSq = facing.lengthSquared()
-    entityList.filter { clazz.isInstance(it) && isInFront(source, it) }.forEach {
-        val  relative = it.location.subtract(source.location).toVector()
+    entityList.filter { clazz.isInstance(it) && isInFront(it) }.forEach {
+        val  relative = it.location.subtract(location).toVector()
         val dot = relative.dot(facing)
         val rLengthSq = relative.lengthSquared()
         val cosSquared = dot * dot / (rLengthSq * fLengthSq)
@@ -497,16 +502,16 @@ fun <T: LivingEntity> getLivingTargets(clazz: Class<T>, source: LivingEntity, ra
     return targets
 }
 
-fun getLivingTargets(source: LivingEntity, range: Double, tolerance: Double = 4.0): List<LivingEntity>
-        = getLivingTargets(LivingEntity::class.java, source, range, tolerance)
+fun LivingEntity.getLivingTargets(range: Double, tolerance: Double = 4.0): List<LivingEntity>
+        = getLivingTargets(LivingEntity::class.java, range, tolerance)
 
-fun <T: LivingEntity> getLivingTarget(clazz: Class<T>, source: LivingEntity, range: Double, tolerance: Double = 4.0): T? {
-    val targets = getLivingTargets(clazz, source, range, tolerance)
+fun <T: LivingEntity> LivingEntity.getLivingTarget(clazz: Class<T>, range: Double, tolerance: Double = 4.0): T? {
+    val targets = getLivingTargets(clazz, range, tolerance)
     if(targets.isEmpty()) return null
     var target = targets.first()
-    var minDistance = target.location.distanceSquared(source.location)
+    var minDistance = target.location.distanceSquared(location)
     targets.forEach {
-        val distance = it.location.distanceSquared(source.location)
+        val distance = it.location.distanceSquared(location)
         if(distance < minDistance) {
             minDistance = distance
             target = it
@@ -515,20 +520,20 @@ fun <T: LivingEntity> getLivingTarget(clazz: Class<T>, source: LivingEntity, ran
     return target
 }
 
-fun getLivingTarget(source: LivingEntity, range: Double, tolerance: Double = 4.0): LivingEntity?
-        = getLivingTarget(LivingEntity::class.java, source, range, tolerance)
+fun LivingEntity.getLivingTarget(range: Double, tolerance: Double = 4.0): LivingEntity?
+        = getLivingTarget(LivingEntity::class.java, range, tolerance)
 
-fun <T: LivingEntity> getLivingTargets(clazz: Class<T>, source: MoonLakePlayer, range: Double, tolerance: Double = 4.0): List<T>
-        = getLivingTargets(clazz, source.getBukkitPlayer(), range, tolerance)
+fun <T: LivingEntity> MoonLakePlayer.getLivingTargets(clazz: Class<T>, range: Double, tolerance: Double = 4.0): List<T>
+        = getBukkitPlayer().getLivingTargets(clazz, range, tolerance)
 
-fun getLivingTargets(source: MoonLakePlayer, range: Double, tolerance: Double = 4.0): List<LivingEntity>
-        = getLivingTargets(source.getBukkitPlayer(), range, tolerance)
+fun MoonLakePlayer.getLivingTargets(range: Double, tolerance: Double = 4.0): List<LivingEntity>
+        = getBukkitPlayer().getLivingTargets(range, tolerance)
 
-fun <T: LivingEntity> getLivingTarget(clazz: Class<T>, source: MoonLakePlayer, range: Double, tolerance: Double = 4.0): T?
-        = getLivingTarget(clazz, source.getBukkitPlayer(), range, tolerance)
+fun <T: LivingEntity> MoonLakePlayer.getLivingTarget(clazz: Class<T>, range: Double, tolerance: Double = 4.0): T?
+        = getBukkitPlayer().getLivingTarget(clazz, range, tolerance)
 
-fun getLivingTarget(source: MoonLakePlayer, range: Double, tolerance: Double = 4.0): LivingEntity?
-        = getLivingTarget(source.getBukkitPlayer(), range, tolerance)
+fun MoonLakePlayer.getLivingTarget(range: Double, tolerance: Double = 4.0): LivingEntity?
+        = getBukkitPlayer().getLivingTarget(range, tolerance)
 
 /** region function */
 
@@ -538,7 +543,7 @@ fun World.createCuboidRegion(pos1: Location, pos2: Location): RegionCuboid
 fun World.createCuboidRegion(pos1: RegionVector, pos2: RegionVector): RegionCuboid
         = RegionCuboid(this, pos1, pos2)
 
-fun RegionCuboid.createWorldBorder(): WorldBorder {
+fun Region.createWorldBorder(): WorldBorder {
     val worldBorder = getWorld().worldBorder
     worldBorder.setSize(getLength().toDouble(), 0L)
     worldBorder.center = getCenter().toLocation(getWorld())
@@ -549,3 +554,38 @@ fun RegionCuboid.createWorldBorder(): WorldBorder {
 
 fun Plugin.newAnvilWindow(): AnvilWindow
         = MinecraftReflection.anvilWindowConstructor.newInstance(this)
+
+/** item builder function */
+
+fun ItemStack.newItemBuilder(): ItemBuilder
+        = ItemBuilder.of(this)
+
+fun Material.newItemBuilder(amount: Int = 1, durability: Int = 0): ItemBuilder
+        = ItemBuilder.of(this, amount, durability)
+
+/** nbt function */
+
+fun newNBTCompound(name: String = ""): NBTCompound
+        = NBTFactory.ofCompound(name)
+
+fun <T> newNBTList(name: String = ""): NBTList<T>
+        = NBTFactory.ofList(name)
+
+fun ItemStack.readTag(consumer: (tag: NBTCompound?) -> Unit): ItemStack
+        { consumer(NBTFactory.readStackTag(this)); return this; }
+
+fun ItemStack.readTagSafe(consumer: (tag: NBTCompound) -> Unit): ItemStack
+        { consumer(NBTFactory.readStackTagSafe(this)); return this; }
+
+fun ItemStack.writeTag(tag: NBTCompound?): ItemStack
+        = NBTFactory.writeStackTag(this, tag)
+
+
+/** depend plugin function */
+
+@Throws(DependPluginException::class)
+fun <T: DependPlugin> Class<T>.useDepend(consumer: (depend: T) -> Unit): T
+        { val value = DependPlugins.of(this); consumer(value); return value; }
+
+fun <T: DependPlugin> Class<T>.useDependSafe(consumer: (depend: T?) -> Unit): T?
+        { val value = DependPlugins.ofSafe(this); consumer(value); return value; }
