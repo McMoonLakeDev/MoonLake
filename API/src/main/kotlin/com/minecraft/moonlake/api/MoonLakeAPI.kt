@@ -26,7 +26,6 @@ import com.minecraft.moonlake.api.depend.DependPlugins
 import com.minecraft.moonlake.api.event.MoonLakeEvent
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.exception.MoonLakeException
-import com.minecraft.moonlake.api.funs.Consumer
 import com.minecraft.moonlake.api.funs.Function
 import com.minecraft.moonlake.api.item.ItemBuilder
 import com.minecraft.moonlake.api.nbt.NBTCompound
@@ -424,24 +423,24 @@ fun Plugin.runTaskTimerAsync(task: MoonLakeRunnable, delay: Long, period: Long):
 fun <T> Callable<T>.callMethodSync(plugin: Plugin): Future<T>
         = Bukkit.getScheduler().callSyncMethod(plugin, this)
 
-fun <T> Callable<T>.callTaskSync(plugin: Plugin, consumer: Consumer<T>)
+fun <T> Callable<T>.callTaskSync(plugin: Plugin, consumer: (value: T) -> Unit)
         = callTaskConsumer(plugin, consumer, -1, false)
 
-fun <T> Callable<T>.callTaskSync(plugin: Plugin, consumer: Consumer<T>, delay: Long)
+fun <T> Callable<T>.callTaskSync(plugin: Plugin, consumer: (value: T) -> Unit, delay: Long)
         = callTaskConsumer(plugin, consumer, delay, false)
 
-fun <T> Callable<T>.callTaskAsync(plugin: Plugin, consumer: Consumer<T>)
+fun <T> Callable<T>.callTaskAsync(plugin: Plugin, consumer: (value: T) -> Unit)
         = callTaskConsumer(plugin, consumer, -1, true)
 
-fun <T> Callable<T>.callTaskAsync(plugin: Plugin, consumer: Consumer<T>, delay: Long)
+fun <T> Callable<T>.callTaskAsync(plugin: Plugin, consumer: (value: T) -> Unit, delay: Long)
         = callTaskConsumer(plugin, consumer, delay, true)
 
-private fun <T> Callable<T>.callTaskConsumer(plugin: Plugin, consumer: Consumer<T>, delay: Long = -1, async: Boolean = false) {
+private fun <T> Callable<T>.callTaskConsumer(plugin: Plugin, consumer: (value: T) -> Unit, delay: Long = -1, async: Boolean = false) {
     val futureTask = FutureTask(this)
     val runnable = Runnable {
         try {
             futureTask.run()
-            consumer.accept(futureTask.get())
+            consumer(futureTask.get())
         } catch (e: Exception) {
             throw MoonLakeException(e)
         }
