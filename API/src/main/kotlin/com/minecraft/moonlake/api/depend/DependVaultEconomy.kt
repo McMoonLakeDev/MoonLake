@@ -17,6 +17,7 @@
 
 package com.minecraft.moonlake.api.depend
 
+import com.minecraft.moonlake.api.player.MoonLakePlayer
 import com.minecraft.moonlake.api.wrapper.EconomyResponse
 import org.bukkit.OfflinePlayer
 
@@ -26,15 +27,27 @@ interface DependVaultEconomy : DependPlugin {
 
     fun hasAccount(player: OfflinePlayer, world: String? = null): Boolean
 
+    fun hasAccount(player: MoonLakePlayer, world: String? = null): Boolean
+
     fun createAccount(player: OfflinePlayer, world: String? = null): Boolean
+
+    fun createAccount(player: MoonLakePlayer, world: String? = null): Boolean
 
     fun getBalance(player: OfflinePlayer, world: String? = null): Double
 
+    fun getBalance(player: MoonLakePlayer, world: String? = null): Double
+
     fun hasBalance(player: OfflinePlayer, value: Double, world: String? = null): Boolean
+
+    fun hasBalance(player: MoonLakePlayer, value: Double, world: String? = null): Boolean
 
     fun withdraw(player: OfflinePlayer, value: Double, world: String? = null): EconomyResponse
 
+    fun withdraw(player: MoonLakePlayer, value: Double, world: String? = null): EconomyResponse
+
     fun deposit(player: OfflinePlayer, value: Double, world: String? = null): EconomyResponse
+
+    fun deposit(player: MoonLakePlayer, value: Double, world: String? = null): EconomyResponse
 
     // TODO Bank function is not currently available
 

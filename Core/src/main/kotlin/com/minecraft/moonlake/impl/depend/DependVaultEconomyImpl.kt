@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.depend.DependPluginException
 import com.minecraft.moonlake.api.depend.DependVaultEconomy
 import com.minecraft.moonlake.api.getPlugin
 import com.minecraft.moonlake.api.getServicesManager
+import com.minecraft.moonlake.api.player.MoonLakePlayer
 import net.milkbowl.vault.Vault
 import net.milkbowl.vault.economy.Economy
 import net.milkbowl.vault.economy.EconomyResponse
@@ -58,20 +59,38 @@ class DependVaultEconomyImpl : DependPluginAbstract<Vault>(getPlugin(DependVault
     override fun format(value: Double): String
             = economy.format(value)
 
+    override fun hasAccount(player: MoonLakePlayer, world: String?): Boolean
+            = hasAccount(player.getBukkitPlayer(), world)
+
     override fun hasAccount(player: OfflinePlayer, world: String?): Boolean
             = economy.hasAccount(player, world)
+
+    override fun createAccount(player: MoonLakePlayer, world: String?): Boolean
+            = createAccount(player.getBukkitPlayer(), world)
 
     override fun createAccount(player: OfflinePlayer, world: String?): Boolean
             = economy.createPlayerAccount(player, world)
 
+    override fun getBalance(player: MoonLakePlayer, world: String?): Double
+            = getBalance(player.getBukkitPlayer(), world)
+
     override fun getBalance(player: OfflinePlayer, world: String?): Double
             = economy.getBalance(player, world)
+
+    override fun hasBalance(player: MoonLakePlayer, value: Double, world: String?): Boolean
+            = hasBalance(player.getBukkitPlayer(), value, world)
 
     override fun hasBalance(player: OfflinePlayer, value: Double, world: String?): Boolean
             = economy.has(player, world, value)
 
+    override fun withdraw(player: MoonLakePlayer, value: Double, world: String?): com.minecraft.moonlake.api.wrapper.EconomyResponse
+            = withdraw(player.getBukkitPlayer(), value, world)
+
     override fun withdraw(player: OfflinePlayer, value: Double, world: String?): com.minecraft.moonlake.api.wrapper.EconomyResponse
             = adapter(economy.withdrawPlayer(player, world, value))
+
+    override fun deposit(player: MoonLakePlayer, value: Double, world: String?): com.minecraft.moonlake.api.wrapper.EconomyResponse
+            = deposit(player.getBukkitPlayer(), value, world)
 
     override fun deposit(player: OfflinePlayer, value: Double, world: String?): com.minecraft.moonlake.api.wrapper.EconomyResponse
             = adapter(economy.depositPlayer(player, world, value))
