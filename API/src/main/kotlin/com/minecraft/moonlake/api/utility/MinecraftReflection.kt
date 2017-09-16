@@ -94,6 +94,12 @@ object MinecraftReflection {
             = getMinecraftClass("Entity")
 
     @JvmStatic
+    @JvmName("getEntityLivingClass")
+    @Throws(MoonLakeException::class)
+    fun getEntityLivingClass(): Class<*>
+            = getMinecraftClass("EntityLiving")
+
+    @JvmStatic
     @JvmName("getCraftEntityClass")
     fun getCraftEntityClass(): Class<*>
             = getCraftBukkitClass("entity.CraftEntity")

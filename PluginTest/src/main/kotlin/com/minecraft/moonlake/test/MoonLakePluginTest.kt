@@ -35,6 +35,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.Material
+import org.bukkit.entity.Pig
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.inventory.ItemFlag
@@ -131,6 +132,20 @@ class MoonLakePluginTest : JavaPlugin() {
                             .addEnchant(Enchantment.锋利, 5)
                             .build()
                             .readTagSafe { event.player.sendMessage(it.toString()) }
+                }
+                if(event.message == "/nbt player") {
+                    event.player.readTag {
+                        event.player.sendMessage(it.toString())
+                        it.putShort("Health", 10) // 修改生命值为 10
+                        event.player.writeTag(it)
+                    }
+                }
+                if(event.message == "/nbt etarget") {
+                    val pig = event.player.toMoonLakePlayer().getLivingTarget(Pig::class.java, 5.0)
+                    if(pig == null)
+                        event.player.sendMessage("范围 5.0 内未找到猪.")
+                    else
+                        pig.readTag { event.player.sendMessage(it.toString()) }
                 }
             }
         }.registerEvent(this)

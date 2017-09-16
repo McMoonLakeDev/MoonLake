@@ -35,7 +35,10 @@
 package com.minecraft.moonlake.api.nbt
 
 import com.minecraft.moonlake.api.converter.ConverterEquivalent
+import com.minecraft.moonlake.api.currentBukkitVersion
+import com.minecraft.moonlake.api.isOrLater
 import com.minecraft.moonlake.api.notNull
+import com.minecraft.moonlake.api.reflect.FuzzyReflect
 import com.minecraft.moonlake.api.reflect.StructureModifier
 import com.minecraft.moonlake.api.reflect.accessor.AccessorConstructor
 import com.minecraft.moonlake.api.reflect.accessor.AccessorField
@@ -43,7 +46,10 @@ import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import com.minecraft.moonlake.api.utility.MinecraftConverters
 import com.minecraft.moonlake.api.utility.MinecraftReflection
+import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import org.bukkit.Material
+import org.bukkit.entity.Entity
+import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 
 object NBTFactory {
@@ -63,6 +69,21 @@ object NBTFactory {
     @JvmStatic
     private val craftItemStackHandle: AccessorField by lazy {
         Accessors.getAccessorField(MinecraftReflection.getCraftItemStackClass(), MinecraftReflection.getItemStackClass(), true) }
+    @JvmStatic
+    private val entitySave: AccessorMethod by lazy {
+        val nbtClazz = MinecraftReflection.getNBTTagCompoundClass()
+        if(!currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_9_R2))
+            Accessors.getAccessorMethod(MinecraftReflection.getEntityClass(), "e", false, nbtClazz)
+        Accessors.getAccessorMethod(FuzzyReflect.fromClass(MinecraftReflection.getEntityClass()).getMethodByParameters("save", nbtClazz, arrayOf(nbtClazz))) }
+    @JvmStatic
+    private val entityRead: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(MinecraftReflection.getEntityClass(), "f", false, MinecraftReflection.getNBTTagCompoundClass()) }
+    @JvmStatic
+    private val entityLivingSave: AccessorMethod by lazy {
+            Accessors.getAccessorMethod(MinecraftReflection.getEntityLivingClass(), "a", false, MinecraftReflection.getNBTTagCompoundClass()) }
+    @JvmStatic
+    private val entityLivingRead: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(MinecraftReflection.getEntityLivingClass(), "b", false, MinecraftReflection.getNBTTagCompoundClass()) }
 
     @JvmStatic
     @JvmName("fromBase")
@@ -99,10 +120,15 @@ object NBTFactory {
     }
 
     @JvmStatic
+    @JvmName("of")
+    fun of(type: NBTType): Any
+            = nbtBaseCreateTag.invoke(null, type.rawId.toByte())
+
+    @JvmStatic
     @JvmName("ofWrapper")
     @Suppress("UNCHECKED_CAST")
     fun <T> ofWrapper(type: NBTType, name: String): NBTWrapper<T> {
-        val handle = nbtBaseCreateTag.invoke(null, type.rawId.toByte())
+        val handle = of(type)
         return when(type) {
             NBTType.TAG_COMPOUND -> NBTWrappedCompound(handle, name) as NBTWrapper<T>
             NBTType.TAG_LIST -> NBTWrappedList<T>(handle, name) as NBTWrapper<T>
@@ -220,6 +246,28 @@ object NBTFactory {
         nbt.putShort("Damage", itemStack.durability)
         if(tag != null) nbt.put("tag", tag)
         return nbt
+    }
+
+    @JvmStatic
+    @JvmName("readEntityTag")
+    fun <T: Entity> readEntityTag(entity: T): NBTCompound {
+        val handle = of(NBTType.TAG_COMPOUND)
+        when(entity) {
+            is LivingEntity -> entityLivingRead.invoke(MinecraftConverters.getEntity(LivingEntity::class.java).getGeneric(entity), handle)
+            else -> entityRead.invoke(MinecraftConverters.getEntity(Entity::class.java).getGeneric(entity), handle)
+        }
+        return fromNMS<NBTCompound>(handle) as NBTCompound
+    }
+
+    @JvmStatic
+    @JvmName("writeEntityTag")
+    fun <T: Entity> writeEntityTag(entity: T, tag: NBTCompound): T {
+        val handle = fromBase(tag).getHandle()
+        when(entity) {
+            is LivingEntity -> entityLivingSave.invoke(MinecraftConverters.getEntity(LivingEntity::class.java).getGeneric(entity), handle)
+            else -> entitySave.invoke(MinecraftConverters.getEntity(Entity::class.java).getGeneric(entity), handle)
+        }
+        return entity
     }
 
     /** implement */

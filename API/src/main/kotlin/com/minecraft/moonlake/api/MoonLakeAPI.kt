@@ -579,6 +579,11 @@ fun ItemStack.readTagSafe(consumer: (tag: NBTCompound) -> Unit): ItemStack
 fun ItemStack.writeTag(tag: NBTCompound?): ItemStack
         = NBTFactory.writeStackTag(this, tag)
 
+fun <T: Entity> T.readTag(consumer: (tag: NBTCompound) -> Unit): T
+        { consumer(NBTFactory.readEntityTag(this)); return this; }
+
+fun <T: Entity> T.writeTag(tag: NBTCompound): T
+        = NBTFactory.writeEntityTag(this, tag)
 
 /** depend plugin function */
 
