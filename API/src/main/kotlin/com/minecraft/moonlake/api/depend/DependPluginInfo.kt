@@ -18,11 +18,18 @@
 package com.minecraft.moonlake.api.depend
 
 import com.minecraft.moonlake.api.PluginInfo
+import org.bukkit.configuration.file.FileConfiguration
 import java.io.File
+import java.io.InputStream
+import java.util.logging.Logger
 
 interface DependPluginInfo : PluginInfo {
 
     fun getDataFolder(): File
 
-    // TODO More...
+    fun getLogger(): Logger
+
+    fun getConfig(): FileConfiguration?
+
+    fun getResource(filename: String): InputStream?
 }

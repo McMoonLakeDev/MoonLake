@@ -17,8 +17,11 @@
 
 package com.minecraft.moonlake.api.depend
 
+import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.plugin.Plugin
 import java.io.File
+import java.io.InputStream
+import java.util.logging.Logger
 
 abstract class DependPluginAbstract<out T: Plugin> @Throws(DependPluginException::class) constructor(plugin: Plugin?) : DependPlugin {
 
@@ -67,6 +70,15 @@ abstract class DependPluginAbstract<out T: Plugin> @Throws(DependPluginException
 
     override fun getDataFolder(): File
             = plugin.dataFolder
+
+    override fun getLogger(): Logger
+            = plugin.logger
+
+    override fun getConfig(): FileConfiguration?
+            = plugin.config
+
+    override fun getResource(filename: String): InputStream?
+            = plugin.getResource(filename)
 
     override fun equals(other: Any?): Boolean {
         if(other === this)
