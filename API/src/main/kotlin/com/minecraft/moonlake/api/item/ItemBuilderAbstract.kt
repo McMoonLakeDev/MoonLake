@@ -28,6 +28,7 @@ import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.Material
 import org.bukkit.block.banner.Pattern
+import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
@@ -347,6 +348,9 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     override fun setSpawnEggType(type: EntityType): ItemBuilder
             { tagEntityTag().putString(TAG_ENTITY_TAG_ID, type.name); return this; }
+
+    override fun setSpawnEggType(entity: Entity): ItemBuilder
+            { tag.putCompound(NBTFactory.readEntityTag(entity).putString(TAG_ENTITY_TAG_ID, entity.type.name)); return this; }
 
     /** map */
 

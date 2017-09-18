@@ -26,6 +26,7 @@ import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.Material
 import org.bukkit.block.banner.Pattern
+import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
@@ -138,7 +139,7 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setSpawnEggType(type: EntityType): ItemBuilder
 
-    // TODO fun setSpawnEggType(entity: Entity); read entity nbt data
+    fun setSpawnEggType(entity: Entity): ItemBuilder
 
     /**
      * map meta

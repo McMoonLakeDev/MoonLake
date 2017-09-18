@@ -256,7 +256,7 @@ object NBTFactory {
             is LivingEntity -> entityLivingRead.invoke(MinecraftConverters.getEntity(LivingEntity::class.java).getGeneric(entity), handle)
             else -> entityRead.invoke(MinecraftConverters.getEntity(Entity::class.java).getGeneric(entity), handle)
         }
-        return fromNMS<NBTCompound>(handle) as NBTCompound
+        return fromNMS<NBTCompound>(handle, "EntityTag") as NBTCompound
     }
 
     @JvmStatic

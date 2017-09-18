@@ -36,6 +36,7 @@ import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.Material
 import org.bukkit.entity.Pig
+import org.bukkit.entity.Zombie
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.inventory.ItemFlag
@@ -146,6 +147,19 @@ class MoonLakePluginTest : JavaPlugin() {
                         event.player.sendMessage("范围 5.0 内未找到猪.")
                     else
                         pig.readTag { event.player.sendMessage(it.toString()) }
+                }
+                if(event.message == "/ib segg") {
+                    val zombie = event.player.world.spawn(event.player.location, Zombie::class.java)
+                    zombie.customName = "Zombie"
+                    zombie.isCustomNameVisible = true
+                    zombie.equipment.itemInHand = ItemStack(Material.DIAMOND_SWORD)
+                    zombie.equipment.helmet = ItemStack(Material.IRON_HELMET)
+                    zombie.remove()
+
+                    val spawnEgg = Material.MONSTER_EGG.newItemBuilder()
+                            .setSpawnEggType(zombie)
+                            .build()
+                    event.player.inventory.addItem(spawnEgg)
                 }
             }
         }.registerEvent(this)
