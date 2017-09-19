@@ -17,8 +17,8 @@
 
 package com.minecraft.moonlake.api.version
 
-import com.minecraft.moonlake.api.util.ComparisonChain
 import com.minecraft.moonlake.api.notNull
+import com.minecraft.moonlake.api.util.ComparisonChain
 import org.bukkit.Bukkit
 import java.util.*
 import java.util.regex.Pattern
@@ -107,7 +107,8 @@ class MinecraftBukkitVersion(val major: Int, val minor: Int, val release: Int) :
             ), V1_11_R1)
             map.put(arrayOf(
                     MinecraftVersion(1, 12, 0),
-                    MinecraftVersion(1, 12, 1)
+                    MinecraftVersion(1, 12, 1),
+                    MinecraftVersion(1, 12, 2)
                     // ---> net.minecraft.server.v1_12_R1
             ), V1_12_R1)
             return map

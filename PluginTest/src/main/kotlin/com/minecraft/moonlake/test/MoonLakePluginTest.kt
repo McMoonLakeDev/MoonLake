@@ -26,6 +26,7 @@ import com.minecraft.moonlake.api.depend.DependPlaceholderAPI
 import com.minecraft.moonlake.api.depend.DependPlugins
 import com.minecraft.moonlake.api.depend.DependVaultEconomy
 import com.minecraft.moonlake.api.depend.DependWorldEdit
+import com.minecraft.moonlake.api.effect.EffectBase
 import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.item.Enchantment
@@ -160,6 +161,13 @@ class MoonLakePluginTest : JavaPlugin() {
                             .setSpawnEggType(zombie)
                             .build()
                     event.player.inventory.addItem(spawnEgg)
+                }
+                if(event.message == "/ib potionbase") {
+                    val itemStack = Material.POTION.newItemBuilder()
+                            .setPotionBase(EffectBase.瞬间治疗药水增强版)
+                            .setDisplayName("&6治疗药剂".toColor())
+                            .build()
+                    event.player.inventory.addItem(itemStack)
                 }
             }
         }.registerEvent(this)

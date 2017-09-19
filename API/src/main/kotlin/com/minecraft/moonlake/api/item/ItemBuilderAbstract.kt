@@ -20,6 +20,7 @@ package com.minecraft.moonlake.api.item
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
+import com.minecraft.moonlake.api.effect.EffectBase
 import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.nbt.NBTCompound
 import com.minecraft.moonlake.api.nbt.NBTFactory
@@ -368,8 +369,8 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun setPotionColor(color: Color): ItemBuilder
             { tag.putInt(TAG_CUSTOM_POTION_COLOR, color.asRGB()); return this; }
 
-    override fun setPotionBase(type: String): ItemBuilder
-            { tag.putString(TAG_POTION, type); return this; }
+    override fun setPotionBase(base: EffectBase): ItemBuilder
+            { tag.putString(TAG_POTION, base.value); return this; }
 
     override fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean, particle: Boolean, color: Color?): ItemBuilder {
         val potionEffect = NBTFactory.ofCompound()

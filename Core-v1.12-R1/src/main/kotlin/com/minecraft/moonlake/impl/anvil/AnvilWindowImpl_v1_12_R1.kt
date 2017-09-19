@@ -44,7 +44,7 @@ open class AnvilWindowImpl_v1_12_R1(plugin: Plugin) : AnvilWindowBase(plugin) {
     private inner class AnvilWindowTileEntity(world: World) : BlockAnvil.TileEntityContainerAnvil(world, BlockPosition.ZERO) {
         override fun createContainer(playerInventory: PlayerInventory, opener: EntityHuman): Container? {
             val containerAnvil = object: ContainerAnvil(playerInventory, opener.world, BlockPosition.ZERO, opener) {
-                override fun a(entityHuman: EntityHuman?): Boolean
+                override fun canUse(entityHuman: EntityHuman?): Boolean
                         = true
                 override fun a(value: String?) {
                     if(inputHandler == null) {

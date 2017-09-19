@@ -20,6 +20,7 @@ package com.minecraft.moonlake.api.item
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
+import com.minecraft.moonlake.api.effect.EffectBase
 import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.funs.Builder
 import org.bukkit.Color
@@ -159,7 +160,7 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setPotionColor(color: Color): ItemBuilder
 
-    fun setPotionBase(type: String): ItemBuilder // TODO PotionBaseWrapper
+    fun setPotionBase(base: EffectBase): ItemBuilder
 
     fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean = true, particle: Boolean = true, color: Color? = null): ItemBuilder
 
