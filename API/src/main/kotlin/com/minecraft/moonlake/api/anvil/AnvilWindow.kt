@@ -27,13 +27,29 @@ interface AnvilWindow {
 
     fun getPlugin(): Plugin
 
-    fun setOpen(openHandler: AnvilWindowEventHandler<AnvilWindowOpenEvent>?)
+    fun handleOpen(openHandler: AnvilWindowEventHandler<AnvilWindowOpenEvent>?)
 
-    fun setInput(inputHandler: AnvilWindowEventHandler<AnvilWindowInputEvent>?)
+    fun handleOpen(openHandler: ((event: AnvilWindowOpenEvent) -> Unit)?)
 
-    fun setClick(clickHandler: AnvilWindowEventHandler<AnvilWindowClickEvent>?)
+    fun handleInput(inputHandler: AnvilWindowEventHandler<AnvilWindowInputEvent>?)
 
-    fun setClose(closeHandler: AnvilWindowEventHandler<AnvilWindowCloseEvent>?)
+    fun handleInput(inputHandler: ((event: AnvilWindowInputEvent) -> Unit)?)
+
+    fun handleClick(clickHandler: AnvilWindowEventHandler<AnvilWindowClickEvent>?)
+
+    fun handleClick(clickHandler: ((event: AnvilWindowClickEvent) -> Unit)?)
+
+    /** // TODO
+     * If the server stops, this event does not fire.
+     * Rewrite the container close function, because the class does not exist exception cannot be implemented.
+     */
+    fun handleClose(closeHandler: AnvilWindowEventHandler<AnvilWindowCloseEvent>?)
+
+    /** // TODO
+     * If the server stops, this event does not fire.
+     * Rewrite the container close function, because the class does not exist exception cannot be implemented.
+     */
+    fun handleClose(closeHandler: ((event: AnvilWindowCloseEvent) -> Unit)?)
 
     fun isAllowMove(): Boolean
 

@@ -19,28 +19,19 @@ package com.minecraft.moonlake.api.anvil
 
 import com.minecraft.moonlake.api.Valuable
 
-enum class AnvilWindowSlot : Valuable<Int> {
+enum class AnvilWindowSlot(val slot: Int) : Valuable<Int> {
 
     /** enums */
 
-    INPUT_LEFT {
-        override fun value(): Int
-                = 0
-    },
-    INPUT_RIGHT {
-        override fun value(): Int
-                = 1
-    },
-    OUTPUT {
-        override fun value(): Int
-                = 2
-    },
+    INPUT_LEFT(0),          左输入栏(INPUT_LEFT),
+    INPUT_RIGHT(1),       右输入栏(INPUT_RIGHT),
+    OUTPUT(2),                 输出栏(OUTPUT),
     ;
 
-    /** api */
+    constructor(equivalent: AnvilWindowSlot) : this(equivalent.slot)
 
-    fun getSlot(): Int
-            = value()
+    override fun value(): Int
+            = slot
 
     /** static */
 

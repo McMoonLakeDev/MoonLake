@@ -30,17 +30,45 @@ abstract class AnvilWindowAbstract(private val plugin: Plugin) : AnvilWindow {
     override final fun getPlugin(): Plugin
             = plugin
 
-    override fun setOpen(openHandler: AnvilWindowEventHandler<AnvilWindowOpenEvent>?)
+    override fun handleOpen(openHandler: AnvilWindowEventHandler<AnvilWindowOpenEvent>?)
             { this.openHandler = openHandler }
 
-    override fun setInput(inputHandler: AnvilWindowEventHandler<AnvilWindowInputEvent>?)
+    override fun handleOpen(openHandler: ((event: AnvilWindowOpenEvent) -> Unit)?) {
+        this.openHandler = if(openHandler == null) null else object: AnvilWindowEventHandler<AnvilWindowOpenEvent> {
+            override fun execute(param: AnvilWindowOpenEvent)
+                    = openHandler(param)
+        }
+    }
+
+    override fun handleInput(inputHandler: AnvilWindowEventHandler<AnvilWindowInputEvent>?)
             { this.inputHandler = inputHandler }
 
-    override fun setClick(clickHandler: AnvilWindowEventHandler<AnvilWindowClickEvent>?)
+    override fun handleInput(inputHandler: ((event: AnvilWindowInputEvent) -> Unit)?) {
+        this.inputHandler = if(inputHandler == null) null else object: AnvilWindowEventHandler<AnvilWindowInputEvent> {
+            override fun execute(param: AnvilWindowInputEvent)
+                    = inputHandler(param)
+        }
+    }
+
+    override fun handleClick(clickHandler: AnvilWindowEventHandler<AnvilWindowClickEvent>?)
             { this.clickHandler = clickHandler }
 
-    override fun setClose(closeHandler: AnvilWindowEventHandler<AnvilWindowCloseEvent>?)
+    override fun handleClick(clickHandler: ((event: AnvilWindowClickEvent) -> Unit)?) {
+        this.clickHandler = if(clickHandler == null) null else object: AnvilWindowEventHandler<AnvilWindowClickEvent> {
+            override fun execute(param: AnvilWindowClickEvent)
+                    = clickHandler(param)
+        }
+    }
+
+    override fun handleClose(closeHandler: AnvilWindowEventHandler<AnvilWindowCloseEvent>?)
             { this.closeHandler = closeHandler }
+
+    override fun handleClose(closeHandler: ((event: AnvilWindowCloseEvent) -> Unit)?) {
+        this.closeHandler = if(closeHandler == null) null else object: AnvilWindowEventHandler<AnvilWindowCloseEvent> {
+            override fun execute(param: AnvilWindowCloseEvent)
+                    = closeHandler(param)
+        }
+    }
 
     override fun open(player: MoonLakePlayer)
             = open(player.getBukkitPlayer())

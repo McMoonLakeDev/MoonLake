@@ -17,10 +17,6 @@
 
 package com.minecraft.moonlake.impl.anvil
 
-import com.minecraft.moonlake.api.anvil.AnvilWindowCloseEvent
-import com.minecraft.moonlake.api.anvil.AnvilWindowInputEvent
-import com.minecraft.moonlake.api.anvil.AnvilWindowOpenEvent
-import com.minecraft.moonlake.api.notNull
 import net.minecraft.server.v1_8_R3.*
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
@@ -51,50 +47,13 @@ open class AnvilWindowImpl_v1_8_R3(plugin: Plugin) : AnvilWindowBase(plugin) {
                         super.a(value)
                         return
                     }
-
-                    /** anvil input event handle */
-                    val event = AnvilWindowInputEvent(this@AnvilWindowImpl_v1_8_R3, getContainerAnvilPlayer(), value)
-                    try {
-                        inputHandler.notNull().execute(event)
-                    } catch(e: Exception) {
-                        handleException(e)
-                        super.a(value)
-                        return
-                    }
-                    if(!event.isCancelled)
+                    val event = callAnvilEvent(inputHandler, value)
+                    if(event != null && !event.isCancelled)
                         super.a(event.input)
-                }
-
-                override fun b(entityHuman: EntityHuman?) {
-                    if(closeHandler == null) {
-                        release()
-                        super.b(entityHuman)
-                        return
-                    }
-
-                    /** anvil close event handle */
-                    val event = AnvilWindowCloseEvent(this@AnvilWindowImpl_v1_8_R3, getContainerAnvilPlayer())
-                    try {
-                        closeHandler.notNull().execute(event)
-                    } catch(e: Exception) {
-                        handleException(e)
-                    }
-                    release()
-                    super.b(entityHuman)
                 }
             }
             handle = containerAnvil
-
-            /** anvil open event handle */
-            if(openHandler != null) {
-                val event = AnvilWindowOpenEvent(this@AnvilWindowImpl_v1_8_R3, getContainerAnvilPlayer())
-                try {
-                    openHandler.notNull().execute(event)
-                } catch(e: Exception) {
-                    handleException(e)
-                }
-            }
-
+            callAnvilEvent(openHandler)
             return containerAnvil
         }
     }

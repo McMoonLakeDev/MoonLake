@@ -17,11 +17,10 @@
 
 package com.minecraft.moonlake.impl.anvil
 
-import com.minecraft.moonlake.api.anvil.AnvilWindowAbstract
-import com.minecraft.moonlake.api.anvil.AnvilWindowClickEvent
-import com.minecraft.moonlake.api.anvil.AnvilWindowSlot
+import com.minecraft.moonlake.api.anvil.*
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.exception.MoonLakeException
+import com.minecraft.moonlake.api.getMoonLake
 import com.minecraft.moonlake.api.notNull
 import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
@@ -32,7 +31,9 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
@@ -46,40 +47,8 @@ open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
     override fun isAllowMove(): Boolean
             = allowMove
 
-    override fun setAllowMove(allowMove: Boolean) {
-        this.allowMove = allowMove
-        when(allowMove) {
-            true -> releaseListener()
-            else -> {
-                val clickListener = object: MoonLakeListener {
-                    @EventHandler
-                    fun onClick(event: InventoryClickEvent) {
-                        if(event.clickedInventory != getInventory() && !isAllowMove()) {
-                            event.isCancelled = true
-                            event.result = Event.Result.DENY
-                        } else {
-                            val clickSlot = AnvilWindowSlot.fromSlot(event.slot)
-                            var clickEvent: AnvilWindowClickEvent? = null
-                            if(clickSlot != null && clickHandler != null) {
-                                val clickItemStack = event.currentItem ?: ItemStack(Material.AIR)
-                                clickEvent = AnvilWindowClickEvent(this@AnvilWindowBase, getContainerAnvilPlayer(), clickSlot, clickItemStack)
-                                try {
-                                    clickHandler.notNull().execute(clickEvent)
-                                } catch(e: Exception) {
-                                    handleException(e)
-                                }
-                            }
-                            if((clickEvent != null && clickEvent.isCancelled) || !isAllowMove()) {
-                                event.isCancelled = true
-                                event.result = Event.Result.DENY
-                            }
-                        }
-                    }
-                }
-                listener = clickListener
-            }
-        }
-    }
+    override fun setAllowMove(allowMove: Boolean)
+            { this.allowMove = allowMove }
 
     override fun isOpened(): Boolean
             = handle != null
@@ -87,8 +56,7 @@ open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
     override fun open(player: Player) {
         if(isOpened())
             throw MoonLakeException("铁砧窗口已经处于打开状态.")
-        if(listener != null)
-            listener.notNull().registerEvent(getPlugin())
+        registerListener()
     }
 
     override fun getItem(anvilWindowSlot: AnvilWindowSlot): ItemStack {
@@ -112,6 +80,44 @@ open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
         super.release()
         releaseListener()
         handle = null
+    }
+
+    open protected fun registerListener() {
+        this.listener = object: MoonLakeListener {
+            @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
+            fun onClick(event: InventoryClickEvent) {
+                if(event.clickedInventory != getInventory() && !isAllowMove()) {
+                    event.isCancelled = true
+                    event.result = Event.Result.DENY
+                } else {
+                    val clickSlot = AnvilWindowSlot.fromSlot(event.slot)
+                    var clickEvent: AnvilWindowClickEvent? = null
+                    if(clickSlot != null && clickHandler != null) {
+                        val clickItemStack = event.currentItem ?: ItemStack(Material.AIR)
+                        clickEvent = AnvilWindowClickEvent(this@AnvilWindowBase, getContainerAnvilPlayer(), clickSlot, clickItemStack)
+                        try {
+                            clickHandler.notNull().execute(clickEvent)
+                        } catch(e: Exception) {
+                            handleException(e)
+                        }
+                    }
+                    if((clickEvent != null && clickEvent.isCancelled) || !isAllowMove()) {
+                        event.isCancelled = true
+                        event.result = Event.Result.DENY
+                    }
+                }
+            }
+            @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
+            fun onClose(event: InventoryCloseEvent) {
+                if(event.inventory == getInventory()) {
+                    // if the server stops, this event does not fire
+                    // rewrite the container close function, because the class does not exist exception cannot be implemented
+                    callAnvilEvent(closeHandler)
+                    release()
+                }
+            }
+        }
+        this.listener?.registerEvent(getPlugin())
     }
 
     open protected fun releaseListener() {
@@ -139,5 +145,29 @@ open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
         val entityHuman = containerAnvilEntityHuman.get(handle)
         val converter = MinecraftConverters.getEntity(Player::class.java)
         return converter.getSpecific(entityHuman) as Player
+    }
+
+    protected inline fun <reified T: AnvilWindowEvent> callAnvilEvent(handler: AnvilWindowEventHandler<T>?, inputEventValue: String? = null): T? {
+        return if(!getMoonLake().isEnabled) null else when(handler) {
+            null -> null
+            else -> {
+                val player = getContainerAnvilPlayer()
+                val anvilWindow = this@AnvilWindowBase
+                var event: T? = when {
+                    T::class.java == AnvilWindowOpenEvent::class.java -> AnvilWindowOpenEvent(anvilWindow, player)
+                    T::class.java == AnvilWindowCloseEvent::class.java -> AnvilWindowCloseEvent(anvilWindow, player)
+                    T::class.java == AnvilWindowInputEvent::class.java -> AnvilWindowInputEvent(anvilWindow, player, inputEventValue)
+                    else -> null
+                } as T?
+
+                if(event != null) try {
+                    handler.execute(event)
+                } catch(e: Exception) {
+                    handleException(e)
+                    event = null // if exception
+                }
+                event
+            }
+        }
     }
 }

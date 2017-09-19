@@ -18,6 +18,7 @@
 package com.minecraft.moonlake.test
 
 import com.minecraft.moonlake.api.*
+import com.minecraft.moonlake.api.anvil.AnvilWindowSlot
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
@@ -168,6 +169,16 @@ class MoonLakePluginTest : JavaPlugin() {
                             .setDisplayName("&6治疗药剂".toColor())
                             .build()
                     event.player.inventory.addItem(itemStack)
+                }
+                if(event.message == "/anvil") {
+                    val anvilWindow = this@MoonLakePluginTest.newAnvilWindow()
+                    anvilWindow.handleOpen { it.player.sendMessage("anvil open") }
+                    anvilWindow.handleInput { it.player.sendMessage("anvil input -> ${it.input}") }
+                    anvilWindow.handleClick { it.player.sendMessage("anvil click -> ${it.clickSlot}") }
+                    anvilWindow.handleClose { it.player.sendMessage("anvil close") }
+                    anvilWindow.setAllowMove(true)
+                    anvilWindow.open(event.player)
+                    anvilWindow.setItem(AnvilWindowSlot.左输入栏, ItemStack(Material.NAME_TAG))
                 }
             }
         }.registerEvent(this)
