@@ -7,7 +7,7 @@
     <groupId>com.minecraft.moonlake</groupId>
     <artifactId>MoonLake</artifactId>
     <packaging>jar</packaging>
-    <version>1.9-a5.3.1</version>
+    <version>1.9-a5.4</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -38,10 +38,10 @@
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>Spigot-1.12.1-R0.1</artifactId>
-            <version>1.12.1</version>
+            <artifactId>Spigot-1.12.2-R0.1</artifactId>
+            <version>1.12.2</version>
             <scope>system</scope>
-            <systemPath>${libraries}/Spigot-1.12.1-R0.1.jar</systemPath>
+            <systemPath>${libraries}/Spigot-1.12.2-R0.1.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>

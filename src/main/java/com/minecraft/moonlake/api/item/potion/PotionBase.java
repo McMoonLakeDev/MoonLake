@@ -24,7 +24,7 @@ import com.minecraft.moonlake.validate.Validate;
  * <h1>PotionBase</h1>
  * 基础药水效果
  *
- * @version 1.0
+ * @version 1.0.1
  * @author Month_Light
  */
 public abstract class PotionBase {
@@ -169,6 +169,10 @@ public abstract class PotionBase {
      * 基础药水效果类型: 虚弱药水 延长版
      */
     public final static PotionBase LONG_WEAKNESS = new PotionBase("long_weakness") {};
+    /**
+     * 基础药水效果类型: 幸运药水
+     */
+    public final static PotionBase LUCK = new PotionBase("luck") {};
 
     private String value;
 
@@ -288,6 +292,8 @@ public abstract class PotionBase {
                 return WEAKNESS;
             case "long_weakness":
                 return LONG_WEAKNESS;
+            case "luck":
+                return LUCK;
             default:
                 return def;
         }

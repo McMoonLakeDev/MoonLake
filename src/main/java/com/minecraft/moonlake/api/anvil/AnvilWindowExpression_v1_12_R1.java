@@ -53,7 +53,7 @@ class AnvilWindowExpression_v1_12_R1 extends ContainerAnvil implements VersionAd
     }
 
     @Override
-    public boolean a(EntityHuman entityhuman) {
+    public boolean canUse(EntityHuman entityhuman) {
 
         return true;
     }
