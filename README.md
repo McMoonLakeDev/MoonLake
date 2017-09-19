@@ -1,16 +1,21 @@
-# MoonLake [![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=1.9-a5.3.1&x2=0)](https://github.com/u2g/MoonLake) [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://github.com/u2g/MoonLake) [![Open Source Love](https://badges.frapsoft.com/os/gpl/gpl.svg?v=102)](https://github.com/u2g/MoonLake)
+# MoonLake
+[![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=1.9-a5.4&x2=0)](https://github.com/u2g/MoonLake) 
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://github.com/u2g/MoonLake) 
+[![Open Source Love](https://badges.frapsoft.com/os/gpl/gpl.svg?v=102)](https://github.com/u2g/MoonLake)
 
 Minecraft MoonLake Core API Plugin
-By Month_Light Ver: 1.9-a5.3.1
+By Month_Light Ver: 1.9-a5.4
+
+### 注: 此分支将在 Minecraft 1.13 版本停止更新, 未来请使用 [v2.0](https://github.com/McMoonLakeDev/MoonLake) 版本内容.
 
 ## 简介
 这个插件提供了大量的 API 功能，实现了一些 Bukkit 无法做到的 NMS 功能<br />
 例如数据包封装、物品栈操作类、玩家操作类、NBT 操作类、消息源操作类等。
 
 ## 目前插件支持的服务端版本
-* `Bukkit [1.8.x - 1.12.x]` <span style="color: red"><s>✔</s></span> 部分功能不支持
-* `Spigot [1.8.x - 1.12.x]` <span style="color: rgb(85, 255, 85)">✔</span> 完完全全支持全功能
-* `PaperSpigot [1.8.x - 1.12.x]` <span style="color: rgb(85, 255, 85)">✔</span> 完完全全支持全功能
+* `Bukkit [1.8.x - 1.12.2]` <span style="color: red"><s>✔</s></span> 部分功能不支持
+* `Spigot [1.8.x - 1.12.2]` <span style="color: rgb(85, 255, 85)">✔</span> 完完全全支持全功能
+* `PaperSpigot [1.8.x - 1.12.2]` <span style="color: rgb(85, 255, 85)">✔</span> 完完全全支持全功能
 * `Cauldron | KCauldron [模组服务端]` <span style="color: red">✘</span> 完全不支持
  
 ## 目前已经实现的功能

@@ -133,6 +133,7 @@ public class MinecraftBukkitVersion implements Comparable<MinecraftBukkitVersion
         map.put(new MinecraftVersion[] {
                 new MinecraftVersion(1, 12, 0),
                 new MinecraftVersion(1, 12, 1),
+                new MinecraftVersion(1, 12, 1),
                 // ---> net.minecraft.server.v1_12_R1
         }, V1_12_R1);
         return map;
