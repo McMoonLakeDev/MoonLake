@@ -85,11 +85,8 @@ fun getMoonLake(): MoonLake
 
 /** extended function */
 
-fun <T> T?.notNull(message: String = "验证的对象值为 null 时异常."): T {
-    if(this == null)
-        throw IllegalArgumentException(message)
-    return this
-}
+fun <T> T?.notNull(message: String = "验证的对象值为 null 时异常."): T
+        = this ?: throw IllegalArgumentException(message)
 
 fun <T, C: Comparable<T>> C.isLater(other: T): Boolean
         = compareTo(other) > 0
@@ -132,107 +129,93 @@ fun String.toColor(altColorChar: Char): String
         = ChatColor.translateAlternateColorCodes(altColorChar, this)
 
 fun Array<out String>.toColor(): Array<out String>
-        = this.toList().map { it -> it.toColor() }.toTypedArray()
+        = toList().map { it -> it.toColor() }.toTypedArray()
 
 fun Array<out String>.toColor(altColorChar: Char): Array<out String>
-        = this.toList().map { it -> it.toColor(altColorChar) }.toTypedArray()
+        = toList().map { it -> it.toColor(altColorChar) }.toTypedArray()
 
 fun Iterable<String>.toColor(): List<String>
-        = this.map { it -> it.toColor() }.let { ArrayList(it) }
+        = map { it -> it.toColor() }.let { ArrayList(it) }
 
 fun Iterable<String>.toColor(altColorChar: Char): List<String>
-        = this.map { it -> it.toColor(altColorChar) }
+        = map { it -> it.toColor(altColorChar) }
 
 fun String.stripColor(): String
         = ChatColor.stripColor(this)
 
 fun Array<out String>.stripColor(): Array<out String>
-        = this.toList().map { it -> it.stripColor() }.toTypedArray()
+        = toList().map { it -> it.stripColor() }.toTypedArray()
 
 fun Iterable<String>.stripColor(): List<String>
-        = this.map { it -> it.stripColor() }
+        = map { it -> it.stripColor() }
 
 fun String.messageFormat(vararg args: Any?): String
         = MessageFormat.format(this, args)
 
 @Throws(MoonLakeException::class)
-fun Throwable.throwMoonLake(): Nothing = let {
-    when(it is MoonLakeException) {
-        true -> throw it
-        else -> throw MoonLakeException(it)
+fun Throwable.throwMoonLake(): Nothing = when(this is MoonLakeException) {
+    true -> throw this
+    else -> throw MoonLakeException(this)
+}
+
+fun String.isInteger(): Boolean = when(isNullOrEmpty()) {
+    true -> false
+    else -> try {
+        toInt()
+        true
+    } catch (e: NumberFormatException) {
+        false
     }
 }
 
-fun String.isInteger(): Boolean = isNullOrEmpty().let {
-    when(it) {
-        true -> false
-        else -> return try {
-            toInt()
-            true
-        } catch (e: NumberFormatException) {
-            false
-        }
+fun String.isDouble(): Boolean = when(isNullOrEmpty()) {
+    true -> false
+    else -> try {
+        toDouble()
+        true
+    } catch (e: NumberFormatException) {
+        false
     }
 }
 
-fun String.isDouble(): Boolean = isNullOrEmpty().let {
-    when(it) {
-        true -> false
-        else -> return try {
-            toDouble()
-            true
-        } catch (e: NumberFormatException) {
-            false
-        }
+fun Any.parseInt(def: Int = 0): Int = when(this is Number) {
+    true -> (this as Number).toInt()
+    else -> try {
+        toString().toInt()
+    } catch (e: NumberFormatException) {
+        def
     }
 }
 
-fun Any.parseInt(def: Int = 0): Int = (this is Number).let {
-    when(it) {
-        true -> (this as Number).toInt()
-        else -> return try {
-            toString().toInt()
-        } catch (e: NumberFormatException) {
-            def
-        }
+fun Any.parseLong(def: Long = 0L): Long = when(this is Number) {
+    true -> (this as Number).toLong()
+    else -> try {
+        toString().toLong()
+    } catch (e: NumberFormatException) {
+        def
     }
 }
 
-fun Any.parseLong(def: Long = 0L): Long = (this is Number).let {
-    when(it) {
-        true -> (this as Number).toLong()
-        else -> return try {
-            toString().toLong()
-        } catch (e: NumberFormatException) {
-            def
-        }
+fun Any.parseFloat(def: Float = .0f): Float = when(this is Number) {
+    true -> (this as Number).toFloat()
+    else -> try {
+        toString().toFloat()
+    } catch (e: NumberFormatException) {
+        def
     }
 }
 
-fun Any.parseFloat(def: Float = .0f): Float = (this is Number).let {
-    when(it) {
-        true -> (this as Number).toFloat()
-        else -> return try {
-            toString().toFloat()
-        } catch (e: NumberFormatException) {
-            def
-        }
-    }
-}
-
-fun Any.parseDouble(def: Double = .0): Double = (this is Number).let {
-    when(it) {
-        true -> (this as Number).toDouble()
-        else -> return try {
-            toString().toDouble()
-        } catch (e: NumberFormatException) {
-            def
-        }
+fun Any.parseDouble(def: Double = .0): Double = when(this is Number) {
+    true -> (this as Number).toDouble()
+    else -> try {
+        toString().toDouble()
+    } catch (e: NumberFormatException) {
+        def
     }
 }
 
 @Throws(MoonLakeException::class)
-fun <T: ConfigurationSerializable> Class<T>.deserializeConfiguration(configuration: Configuration, key: String, def: T? = null): T? = configuration.get(key).let {
+fun <T: ConfigurationSerializable> Class<T>.deserialize(configuration: Configuration, key: String, def: T? = null): T? = configuration.get(key).let {
     when(it == null) {
         true -> def
         else -> when {
@@ -250,6 +233,10 @@ fun <T: ConfigurationSerializable> Class<T>.deserializeConfiguration(configurati
         }
     }
 }
+
+@Throws(MoonLakeException::class)
+fun <T: ConfigurationSerializable> Configuration.deserialize(clazz: Class<T>, key: String, def: T? = null): T?
+        = clazz.deserialize(this, key, def)
 
 fun createInventory(holder: InventoryHolder?, type: InventoryType): Inventory
         = Bukkit.createInventory(holder, type)
@@ -314,30 +301,22 @@ fun String.toPlayerExact(): Player?
         = Bukkit.getPlayerExact(this)
 
 fun Player.toMoonLakePlayer(): MoonLakePlayer
-        = MoonLakePlayerCached.instance().getCache(this)
+        = MoonLakePlayerCached.of(this)
 
-fun UUID.toMoonLakePlayer(): MoonLakePlayer? = this.toPlayer().let {
-    when(it == null) {
-        true -> null
-        else -> it.notNull().toMoonLakePlayer()
-    }
-}
+fun UUID.toMoonLakePlayer(): MoonLakePlayer?
+        = toPlayer()?.toMoonLakePlayer()
 
-fun String.toMoonLakePlayer(): MoonLakePlayer? = this.toPlayer().let {
-    when(it == null) {
-        true -> null
-        else -> it.notNull().toMoonLakePlayer()
-    }
-}
+fun String.toMoonLakePlayer(): MoonLakePlayer?
+        = toPlayer()?.toMoonLakePlayer()
 
 fun Location.toRegionVector(): RegionVector
-        = RegionVector(this.x, this.y, this.z)
+        = RegionVector(x, y, z)
 
 fun Location.toRegionVectorBlock(): RegionVectorBlock
-        = RegionVectorBlock(this.x, this.y, this.z)
+        = RegionVectorBlock(x, y, z)
 
 fun Location.toRegionVector2D(): RegionVector2D
-        = RegionVector2D(this.x, this.z)
+        = RegionVector2D(x, z)
 
 fun <T, R> ((_: T) -> R).toFunction(): Function<T, R> = object: Function<T, R> {
     override fun apply(param: T): R
@@ -420,23 +399,56 @@ fun Plugin.runTaskLaterAsync(task: MoonLakeRunnable, delay: Long): BukkitTask
 fun Plugin.runTaskTimerAsync(task: MoonLakeRunnable, delay: Long, period: Long): BukkitTask
         = Bukkit.getScheduler().runTaskTimerAsynchronously(this, task as Runnable, delay, period)
 
-fun <T> Callable<T>.callMethodSync(plugin: Plugin): Future<T>
-        = Bukkit.getScheduler().callSyncMethod(plugin, this)
+fun Plugin.runTask(task: () -> Unit): BukkitTask
+        = Bukkit.getScheduler().runTask(this, task)
 
-fun <T> Callable<T>.callTaskSync(plugin: Plugin, consumer: (value: T) -> Unit)
-        = callTaskConsumer(plugin, consumer, -1, false)
+fun Plugin.runTaskLater(task: () -> Unit, delay: Long): BukkitTask
+        = Bukkit.getScheduler().runTaskLater(this, task, delay)
 
-fun <T> Callable<T>.callTaskSync(plugin: Plugin, consumer: (value: T) -> Unit, delay: Long)
-        = callTaskConsumer(plugin, consumer, delay, false)
+fun Plugin.runTaskTimer(task: () -> Unit, delay: Long, period: Long): BukkitTask
+        = Bukkit.getScheduler().runTaskTimer(this, task, delay, period)
 
-fun <T> Callable<T>.callTaskAsync(plugin: Plugin, consumer: (value: T) -> Unit)
-        = callTaskConsumer(plugin, consumer, -1, true)
+fun Plugin.runTaskAsync(task: () -> Unit): BukkitTask
+        = Bukkit.getScheduler().runTaskAsynchronously(this, task)
 
-fun <T> Callable<T>.callTaskAsync(plugin: Plugin, consumer: (value: T) -> Unit, delay: Long)
-        = callTaskConsumer(plugin, consumer, delay, true)
+fun Plugin.runTaskLaterAsync(task: () -> Unit, delay: Long): BukkitTask
+        = Bukkit.getScheduler().runTaskLaterAsynchronously(this, task, delay)
 
-private fun <T> Callable<T>.callTaskConsumer(plugin: Plugin, consumer: (value: T) -> Unit, delay: Long = -1, async: Boolean = false) {
-    val futureTask = FutureTask(this)
+fun Plugin.runTaskTimerAsync(task: () -> Unit, delay: Long, period: Long): BukkitTask
+        = Bukkit.getScheduler().runTaskTimerAsynchronously(this, task, delay, period)
+
+fun <T> Plugin.callMethodSync(callback: Callable<T>): Future<T>
+        = Bukkit.getScheduler().callSyncMethod(this, callback)
+
+fun <T> Plugin.callMethodSync(callback: () -> T): Future<T>
+        = Bukkit.getScheduler().callSyncMethod(this, { callback() })
+
+fun <T> Plugin.callTaskSync(callback: Callable<T>, consumer: (value: T) -> Unit)
+        = callTaskConsumer(callback, consumer, -1L, false)
+
+fun <T> Plugin.callTaskSync(callback: () -> T, consumer: (value: T) -> Unit)
+        = callTaskConsumer(Callable { callback() }, consumer, -1L, false)
+
+fun <T> Plugin.callTaskSync(callback: Callable<T>, consumer: (value: T) -> Unit, delay: Long)
+        = callTaskConsumer(callback, consumer, delay, false)
+
+fun <T> Plugin.callTaskSync(callback: () -> T, consumer: (value: T) -> Unit, delay: Long)
+        = callTaskConsumer(Callable { callback() }, consumer, delay, false)
+
+fun <T> Plugin.callTaskAsync(callback: Callable<T>, consumer: (value: T) -> Unit)
+        = callTaskConsumer(callback, consumer, -1L, true)
+
+fun <T> Plugin.callTaskAsync(callback: () -> T, consumer: (value: T) -> Unit)
+        = callTaskConsumer(Callable { callback() }, consumer, -1L, true)
+
+fun <T> Plugin.callTaskAsync(callback: Callable<T>, consumer: (value: T) -> Unit, delay: Long)
+        = callTaskConsumer(callback, consumer, delay, true)
+
+fun <T> Plugin.callTaskAsync(callback: () -> T, consumer: (value: T) -> Unit, delay: Long)
+        = callTaskConsumer(Callable { callback() }, consumer, delay, true)
+
+private fun <T> Plugin.callTaskConsumer(callback: Callable<T>, consumer: (value: T) -> Unit, delay: Long = -1, async: Boolean = false) {
+    val futureTask = FutureTask(callback)
     val runnable = Runnable {
         try {
             futureTask.run()
@@ -446,8 +458,8 @@ private fun <T> Callable<T>.callTaskConsumer(plugin: Plugin, consumer: (value: T
         }
     }
     when(delay <= 0) {
-        true -> async.let { if(it) plugin.runTaskAsync(runnable) else plugin.runTask(runnable) }
-        else -> async.let { if(it) plugin.runTaskLaterAsync(runnable, delay) else plugin.runTaskLater(runnable, delay) }
+        true -> async.let { if(it) runTaskAsync(runnable) else runTask(runnable) }
+        else -> async.let { if(it) runTaskLaterAsync(runnable, delay) else runTaskLater(runnable, delay) }
     }
 }
 
@@ -472,9 +484,9 @@ fun Entity.isInFront(target: Entity): Boolean {
 }
 
 fun Entity.isInFront(target: Entity, angle: Double): Boolean = angle.let {
-    if(angle <= .0) return false
-    if(angle >= 360.0) return true
-    val dotTarget = Math.cos(angle)
+    if(it <= .0) return false
+    if(it >= 360.0) return true
+    val dotTarget = Math.cos(it)
     val facing = location.direction
     val relative = target.location.subtract(location).toVector().normalize()
     return facing.dot(relative) >= dotTarget
@@ -485,20 +497,17 @@ fun Entity.isBehind(target: Entity, angle: Double): Boolean
 
 fun <T: LivingEntity> LivingEntity.getLivingTargets(clazz: Class<T>, range: Double, tolerance: Double = 4.0): List<T> {
     val entityList = getNearbyEntities(range, range, range)
-    val targets = ArrayList<T>()
     val facing = location.direction
     val fLengthSq = facing.lengthSquared()
-    entityList.filter { clazz.isInstance(it) && isInFront(it) }.forEach {
+    return entityList.filter { clazz.isInstance(it) && isInFront(it) }.map { clazz.cast(it) }.filter {
         val  relative = it.location.subtract(location).toVector()
         val dot = relative.dot(facing)
         val rLengthSq = relative.lengthSquared()
         val cosSquared = dot * dot / (rLengthSq * fLengthSq)
         val sinSquared = 1.0 - cosSquared
         val dSquared = rLengthSq * sinSquared
-        if(dSquared < tolerance)
-            targets.add(clazz.cast(it))
-    }
-    return targets
+        dSquared < tolerance
+    }.toList()
 }
 
 fun LivingEntity.getLivingTargets(range: Double, tolerance: Double = 4.0): List<LivingEntity>
@@ -562,6 +571,9 @@ fun ItemStack.newItemBuilder(): ItemBuilder
 fun Material.newItemBuilder(amount: Int = 1, durability: Int = 0): ItemBuilder
         = ItemBuilder.of(this, amount, durability)
 
+fun Material.newItemStack(amount: Int = 1, durability: Int = 0): ItemStack
+        = ItemStack(this, amount, durability.toShort())
+
 /** nbt function */
 
 fun newNBTCompound(name: String = ""): NBTCompound
@@ -589,7 +601,15 @@ fun <T: Entity> T.writeTag(tag: NBTCompound): T
 
 @Throws(DependPluginException::class)
 fun <T: DependPlugin> Class<T>.useDepend(consumer: (depend: T) -> Unit): T
-        { val value = DependPlugins.of(this); consumer(value); return value; }
+        = DependPlugins.of(this).also(consumer)
 
 fun <T: DependPlugin> Class<T>.useDependSafe(consumer: (depend: T?) -> Unit): T?
-        { val value = DependPlugins.ofSafe(this); consumer(value); return value; }
+        = DependPlugins.ofSafe(this).also(consumer)
+
+/** entity function */
+
+fun <T: Entity> Class<T>.spawn(location: Location): T
+        = location.world.spawn(location, this)
+
+fun <T: Entity> Class<T>.spawn(location: Location, consumer: (entity: T) -> Unit): T
+        = spawn(location).also(consumer)

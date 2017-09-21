@@ -38,30 +38,28 @@ class MoonLakePlayerCached private constructor(): CachedWeakRef<UUID, MoonLakePl
 
     companion object {
 
-        private var instance: MoonLakePlayerCached? = null
-        private var constructor: AccessorConstructor<MoonLakePlayer>? = null
-        private val IMPLEMENT = "com.minecraft.moonlake.impl.player.MoonLakePlayerImpl_${MinecraftBukkitVersion.currentVersion().getVersion()}"
+        @JvmStatic
+        private val instance: MoonLakePlayerCached by lazy(MoonLakePlayerCached::class.java) { MoonLakePlayerCached() }
 
         @JvmStatic
-        @JvmName("instance")
-        fun instance(): MoonLakePlayerCached {
-            if(instance == null) synchronized(MoonLakePlayerCached::class) {
-                if(instance == null)
-                    instance = MoonLakePlayerCached()
-            }
-            return instance.notNull()
-        }
+        private val implement = "com.minecraft.moonlake.impl.player.MoonLakePlayerImpl_${MinecraftBukkitVersion.currentVersion().getVersion()}"
 
         @JvmStatic
-        @JvmName("instanceConstructor")
         @Suppress("UNCHECKED_CAST")
-        private fun instanceConstructor(): AccessorConstructor<MoonLakePlayer> {
-            if(constructor == null) synchronized(MoonLakePlayerCached::class) {
-                if(constructor == null)
-                    constructor = Accessors.getAccessorConstructor((Class.forName(IMPLEMENT) as Class<MoonLakePlayer>), false, Player::class.java)
-            }
-            return constructor.notNull()
-        }
+        private val constructor: AccessorConstructor<MoonLakePlayer> by lazy(MoonLakePlayerCached::class.java) {
+            Accessors.getAccessorConstructor((Class.forName(implement) as Class<MoonLakePlayer>), false, Player::class.java) }
+
+        @JvmStatic
+        @JvmName("of")
+        @Synchronized
+        fun of(player: Player): MoonLakePlayer
+                = instance.getCache(player)
+
+        @JvmStatic
+        @JvmName("clear")
+        @Synchronized
+        fun clear()
+                = instance.gc()
     }
 
     /** initialize */
@@ -94,5 +92,5 @@ class MoonLakePlayerCached private constructor(): CachedWeakRef<UUID, MoonLakePl
     /** implement */
 
     override fun produceValue(key: UUID): MoonLakePlayer
-            = key.toPlayer().notNull().let { instanceConstructor().newInstance(it) }
+            = key.toPlayer().notNull().let { constructor.newInstance(it) }
 }
