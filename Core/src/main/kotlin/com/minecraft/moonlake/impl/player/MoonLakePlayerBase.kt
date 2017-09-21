@@ -87,7 +87,7 @@ open class MoonLakePlayerBase : MoonLakePlayerAbstract {
         throw IllegalBukkitVersionException()
     }
 
-    override fun getSpectatorTarget(): Entity {
+    override fun getSpectatorTarget(): Entity? {
         throw IllegalBukkitVersionException()
     }
 

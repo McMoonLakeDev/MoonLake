@@ -70,7 +70,7 @@ open class MoonLakePlayerImpl_v1_9_R1 :  MoonLakePlayerImpl_v1_8_R3 {
     override fun setGliding(gliding: Boolean)
             { getBukkitPlayer().isGliding = gliding }
 
-    override fun getSpectatorTarget(): Entity
+    override fun getSpectatorTarget(): Entity?
             = getBukkitPlayer().spectatorTarget
 
     override fun setSpectatorTarget(target: Entity)

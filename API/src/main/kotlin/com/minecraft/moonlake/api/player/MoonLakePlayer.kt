@@ -388,7 +388,7 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, InventoryHo
      * @throws IllegalBukkitVersionException if bukkit version < 1.9
      */
     @Throws(IllegalBukkitVersionException::class)
-    fun getSpectatorTarget(): Entity
+    fun getSpectatorTarget(): Entity?
 
     /**
      * @throws IllegalBukkitVersionException if bukkit version < 1.9

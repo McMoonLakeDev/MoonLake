@@ -44,6 +44,7 @@ import org.bukkit.command.PluginCommand
 import org.bukkit.configuration.Configuration
 import org.bukkit.configuration.serialization.ConfigurationSerializable
 import org.bukkit.entity.Entity
+import org.bukkit.entity.Item
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
@@ -573,6 +574,21 @@ fun Material.newItemBuilder(amount: Int = 1, durability: Int = 0): ItemBuilder
 
 fun Material.newItemStack(amount: Int = 1, durability: Int = 0): ItemStack
         = ItemStack(this, amount, durability.toShort())
+
+fun ItemStack?.isAir(): Boolean
+        = this == null || this.type == Material.AIR
+
+fun ItemStack?.isEmpty(): Boolean
+        = this == null || this.type == Material.AIR || !hasItemMeta()
+
+fun ItemStack.givePlayer(player: Player): Boolean
+        = player.inventory.addItem(this).isEmpty() // the result is empty, indicating the success
+
+fun ItemStack.givePlayer(player: MoonLakePlayer): Boolean
+        = givePlayer(player.getBukkitPlayer())
+
+fun ItemStack.dropLocation(location: Location): Item
+        = location.world.dropItemNaturally(location, this)
 
 /** nbt function */
 
