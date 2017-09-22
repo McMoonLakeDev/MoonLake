@@ -15,33 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api.chat
+package com.minecraft.moonlake.api.packet
 
-import com.minecraft.moonlake.api.Valuable
+import java.io.IOException
 
-enum class ChatAction(val value: Byte) : Valuable<Byte> {
+interface Packet {
 
-    CHAT(0),                 	聊天栏(CHAT),
-    SYSTEM(1),            	系统聊天栏(SYSTEM),
-    ACTIONBAR(2),   		交互栏(ACTIONBAR),
-    ;
+    @Throws(IOException::class)
+    fun read(data: PacketBuffer)
 
-    constructor(equivalent: ChatAction) : this(equivalent.value)
-
-    override fun value(): Byte
-            = value
-
-    /** static */
-
-    companion object {
-
-        @JvmStatic
-        @JvmName("fromValue")
-        fun fromValue(value: Byte): ChatAction = when(value.toInt()) {
-            0 -> CHAT
-            1 -> SYSTEM
-            2 -> ACTIONBAR
-            else -> CHAT // else default chat
-        }
-    }
+    @Throws(IOException::class)
+    fun write(data: PacketBuffer)
 }

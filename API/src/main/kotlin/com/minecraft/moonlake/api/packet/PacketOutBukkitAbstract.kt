@@ -15,33 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api.chat
+package com.minecraft.moonlake.api.packet
 
-import com.minecraft.moonlake.api.Valuable
+import com.minecraft.moonlake.api.player.MoonLakePlayer
+import com.minecraft.moonlake.api.utility.MinecraftReflection
+import org.bukkit.entity.Player
 
-enum class ChatAction(val value: Byte) : Valuable<Byte> {
+abstract class PacketOutBukkitAbstract(clazzName: String) : PacketBukkitAbstract(MinecraftReflection.getMinecraftClass(clazzName)), PacketOutBukkit {
 
-    CHAT(0),                 	聊天栏(CHAT),
-    SYSTEM(1),            	系统聊天栏(SYSTEM),
-    ACTIONBAR(2),   		交互栏(ACTIONBAR),
-    ;
+    override fun send(receiver: MoonLakePlayer)
+            = send(receiver.getBukkitPlayer())
 
-    constructor(equivalent: ChatAction) : this(equivalent.value)
-
-    override fun value(): Byte
-            = value
-
-    /** static */
-
-    companion object {
-
-        @JvmStatic
-        @JvmName("fromValue")
-        fun fromValue(value: Byte): ChatAction = when(value.toInt()) {
-            0 -> CHAT
-            1 -> SYSTEM
-            2 -> ACTIONBAR
-            else -> CHAT // else default chat
-        }
+    override fun send(receiver: Player) = try {
+        MinecraftReflection.sendPacket(receiver, getHandle())
+    } catch(e: Exception) {
+        throw PacketException(e)
     }
 }

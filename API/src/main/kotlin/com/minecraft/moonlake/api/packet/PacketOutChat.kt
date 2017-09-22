@@ -15,33 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api.chat
+package com.minecraft.moonlake.api.packet
 
-import com.minecraft.moonlake.api.Valuable
+import com.minecraft.moonlake.api.chat.ChatAction
+import com.minecraft.moonlake.api.chat.ChatComponent
 
-enum class ChatAction(val value: Byte) : Valuable<Byte> {
+data class PacketOutChat(
+        var message: ChatComponent,
+        var action: ChatAction = ChatAction.CHAT) : PacketOutBukkitAbstract("PacketPlayOutChat") {
 
-    CHAT(0),                 	聊天栏(CHAT),
-    SYSTEM(1),            	系统聊天栏(SYSTEM),
-    ACTIONBAR(2),   		交互栏(ACTIONBAR),
-    ;
+    override fun read(data: PacketBuffer) {
+        message = data.readChatComponent()
+        action = ChatAction.fromValue(data.readByte())
+    }
 
-    constructor(equivalent: ChatAction) : this(equivalent.value)
-
-    override fun value(): Byte
-            = value
-
-    /** static */
-
-    companion object {
-
-        @JvmStatic
-        @JvmName("fromValue")
-        fun fromValue(value: Byte): ChatAction = when(value.toInt()) {
-            0 -> CHAT
-            1 -> SYSTEM
-            2 -> ACTIONBAR
-            else -> CHAT // else default chat
-        }
+    override fun write(data: PacketBuffer) {
+        data.writeChatComponent(message)
+        data.writeByte(action.value)
     }
 }

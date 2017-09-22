@@ -24,8 +24,10 @@ import com.minecraft.moonlake.api.exception.MoonLakeException
 import com.minecraft.moonlake.api.isOrLater
 import com.minecraft.moonlake.api.reflect.ClassSource
 import com.minecraft.moonlake.api.reflect.accessor.AccessorConstructor
+import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
+import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 
 object MinecraftReflection {
@@ -144,6 +146,27 @@ object MinecraftReflection {
     fun getNBTTagCompoundClass(): Class<*>
             = getMinecraftClass("NBTTagCompound")
 
+    @JvmStatic
+    @JvmName("getPlayerConnectionClass")
+    @Throws(MoonLakeException::class)
+    fun getPlayerConnectionClass(): Class<*>
+            = getMinecraftClass("PlayerConnection")
+
+    @JvmStatic
+    @JvmName("getPacketClass")
+    fun getPacketClass(): Class<*>
+            = getMinecraftClass("Packet")
+
+    @JvmStatic
+    @JvmName("getPacketDataSerializerClass")
+    fun getPacketDataSerializerClass(): Class<*>
+            = getMinecraftClass("PacketDataSerializer")
+
+    @JvmStatic
+    @JvmName("sendPacket")
+    fun sendPacket(receiver: Player, packet: Any)
+            { sendPacket.invoke(MinecraftPlayerMembers.CONNECTION.get(receiver), packet) }
+
     /** significant */
 
     @JvmStatic
@@ -151,4 +174,8 @@ object MinecraftReflection {
     val anvilWindowConstructor: AccessorConstructor<AnvilWindow> by lazy {
         val clazz = Class.forName("com.minecraft.moonlake.impl.anvil.AnvilWindowImpl_${currentBukkitVersion().getVersion()}") as Class<AnvilWindow>
         Accessors.getAccessorConstructor(clazz, false, Plugin::class.java) }
+
+    @JvmStatic
+    private val sendPacket: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(getPlayerConnectionClass(), "sendPacket", false, getPacketClass()) }
 }

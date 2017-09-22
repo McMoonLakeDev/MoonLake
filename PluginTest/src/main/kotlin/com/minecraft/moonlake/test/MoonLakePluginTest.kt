@@ -22,6 +22,8 @@ import com.minecraft.moonlake.api.anvil.AnvilWindowSlot
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
+import com.minecraft.moonlake.api.chat.ChatAction
+import com.minecraft.moonlake.api.chat.ChatColor
 import com.minecraft.moonlake.api.chat.ChatComponentFancy
 import com.minecraft.moonlake.api.depend.DependPlaceholderAPI
 import com.minecraft.moonlake.api.depend.DependPlugins
@@ -33,6 +35,7 @@ import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.item.Enchantment
 import com.minecraft.moonlake.api.item.ItemBuilder
 import com.minecraft.moonlake.api.nbt.NBTFactory
+import com.minecraft.moonlake.api.packet.PacketOutChat
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
@@ -179,6 +182,12 @@ class MoonLakePluginTest : JavaPlugin() {
                     anvilWindow.setAllowMove(true)
                     anvilWindow.open(event.player)
                     anvilWindow.setItem(AnvilWindowSlot.左输入栏, ItemStack(Material.NAME_TAG))
+                }
+                if(event.message == "/packet chat") {
+                    val packet = PacketOutChat(ChatComponentFancy("聊天花式组件").color(ChatColor.RED).withUnderlined().withBold().build())
+                    packet.action = ChatAction.聊天栏
+                    packet.send(event.player)
+                    println(packet)
                 }
             }
         }.registerEvent(this)

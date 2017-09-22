@@ -33,7 +33,7 @@ enum class MinecraftPlayerMembers(val clazz: Class<*>) : Valuable<String> {
         override fun value(): String
                 = "locale"
     },
-    CONNECTION(MinecraftReflection.getMinecraftClass("PlayerConnection")) {
+    CONNECTION(MinecraftReflection.getPlayerConnectionClass()) {
         override fun value(): String
                 = "playerConnection"
 
