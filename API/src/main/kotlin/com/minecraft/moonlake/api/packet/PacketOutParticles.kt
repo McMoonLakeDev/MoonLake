@@ -19,7 +19,7 @@ package com.minecraft.moonlake.api.packet
 
 import com.minecraft.moonlake.api.particle.Particle
 
-class PacketOutParticles(
+data class PacketOutParticles(
         var particle: Particle,
         var longDistance: Boolean,
         var x: Float,

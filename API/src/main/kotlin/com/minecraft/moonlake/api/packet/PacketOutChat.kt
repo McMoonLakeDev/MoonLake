@@ -21,7 +21,7 @@ import com.minecraft.moonlake.api.chat.ChatAction
 import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.chat.ChatComponentText
 
-class PacketOutChat(
+data class PacketOutChat(
         var message: ChatComponent,
         var action: ChatAction) : PacketOutBukkitAbstract("PacketPlayOutChat") {
 
@@ -36,24 +36,5 @@ class PacketOutChat(
     override fun write(data: PacketBuffer) {
         data.writeChatComponent(message)
         data.writeByte(action.value)
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if(other === this)
-            return true
-        if(other is PacketOutChat)
-            return super.equals(other) && message == other.message && action == other.action
-        return false
-    }
-
-    override fun hashCode(): Int {
-        var result = super.hashCode()
-        result = 31 * result + message.hashCode()
-        result = 31 * result + action.hashCode()
-        return result
-    }
-
-    override fun toString(): String {
-        return "PacketOutChat(message=$message, action=$action)"
     }
 }
