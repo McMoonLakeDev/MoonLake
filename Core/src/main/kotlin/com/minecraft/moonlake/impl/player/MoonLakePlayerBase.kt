@@ -19,8 +19,6 @@ package com.minecraft.moonlake.impl.player
 
 import com.minecraft.moonlake.api.attribute.Attribute
 import com.minecraft.moonlake.api.attribute.AttributeType
-import com.minecraft.moonlake.api.chat.ChatAction
-import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
 import com.minecraft.moonlake.api.player.MoonLakePlayerAbstract
 import com.minecraft.moonlake.api.utility.MinecraftPlayerMembers
@@ -50,10 +48,6 @@ open class MoonLakePlayerBase : MoonLakePlayerAbstract {
 
     override fun getAttribute(type: AttributeType): Attribute
             = AttributeBase(this, type)
-
-    override fun send(component: ChatComponent, action: ChatAction) {
-        throw IllegalBukkitVersionException()
-    }
 
     override fun isInvulnerable(): Boolean {
         throw IllegalBukkitVersionException()

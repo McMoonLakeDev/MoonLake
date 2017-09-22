@@ -24,4 +24,20 @@ abstract class PacketBukkitAbstract(private val clazz: Class<*>) : PacketAbstrac
 
     override fun getHandle(): Any
             = Packets.createPacket(this)
+
+    override fun equals(other: Any?): Boolean {
+        if(other === this)
+            return true
+        if(other is PacketBukkitAbstract)
+            return clazz == other.clazz
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return clazz.hashCode()
+    }
+
+    override fun toString(): String {
+        return "PacketBukkitAbstract(clazz=$clazz)"
+    }
 }

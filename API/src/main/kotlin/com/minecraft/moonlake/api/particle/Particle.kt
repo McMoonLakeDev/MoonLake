@@ -19,6 +19,7 @@ package com.minecraft.moonlake.api.particle
 
 import com.minecraft.moonlake.api.currentMCVersion
 import com.minecraft.moonlake.api.isOrLater
+import com.minecraft.moonlake.api.packet.PacketOutParticles
 import com.minecraft.moonlake.api.version.IllegalBukkitVersionException
 import com.minecraft.moonlake.api.version.MinecraftVersion
 import org.bukkit.Location
@@ -211,17 +212,17 @@ enum class Particle {
     /** 
      * 粒子效果: [物品碎裂](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#iconcrack) (版本: 全版本 | 需求: 矢量方向, 需求: 数据)
      */
-    ITEM_CRACK("iconcrack", 36, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_DATA),
+    ITEM_CRACK("iconcrack", 36, 2, null, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_DATA),
 
     /** 
      * 粒子效果: [方块碎裂](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#blockcrack) (版本: 全版本 | 需求: 数据)
      */
-    BLOCK_CRACK("blockcrack", 37, ParticleProperty.REQUIRES_DATA),
+    BLOCK_CRACK("blockcrack", 37, 1, null, ParticleProperty.REQUIRES_DATA),
 
     /** 
      * 粒子效果: [方块尘](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#blockdust) (版本: 全版本 | 需求: 矢量方向, 需求: 数据)
      */
-    BLOCK_DUST("blockdust", 38, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_DATA),
+    BLOCK_DUST("blockdust", 38, 1, null, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_DATA),
 
     /** 
      * 粒子效果: [雨滴](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#droplet) (版本: 1.8+)
@@ -261,7 +262,7 @@ enum class Particle {
     /** 
      * 粒子效果: [掉落尘](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#fallingdust) (版本: 1.9+ | 需求: 数据)
      */
-    FALLING_DUST("fallingdust", 46, MinecraftVersion.V1_10, ParticleProperty.REQUIRES_DATA),
+    FALLING_DUST("fallingdust", 46, 1, MinecraftVersion.V1_10, ParticleProperty.REQUIRES_DATA),
 
     /** 
      * 粒子效果: [不死图腾颗粒](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#totem) (版本: 1.11+)
@@ -278,6 +279,7 @@ enum class Particle {
 
     val id: Int
     val type: String
+    val dataLength: Int
     val mcVer: MinecraftVersion?
 
     private val properties: Array<out ParticleProperty>
@@ -285,11 +287,13 @@ enum class Particle {
     /** constructor */
 
     constructor(type: String, id: Int, vararg properties: ParticleProperty) : this(type, id, null, *properties)
-    constructor(type: String, id: Int, mcVer: MinecraftVersion? = null, vararg properties: ParticleProperty) {
+    constructor(type: String, id: Int, mcVer: MinecraftVersion? = null, vararg properties: ParticleProperty) : this(type, id, 0, mcVer, *properties)
+    constructor(type: String, id: Int, dataLength: Int = 0, mcVer: MinecraftVersion? = null, vararg properties: ParticleProperty) {
         this.id = id
         this.type = type
         this.mcVer = mcVer
         this.properties = properties
+        this.dataLength = dataLength
     }
 
     /** api */
@@ -455,6 +459,13 @@ enum class Particle {
     companion object {
 
         @JvmStatic
+        private val ID_MAP: MutableMap<Int, Particle> = HashMap()
+
+        init {
+            values().forEach { ID_MAP.put(it.id, it) }
+        }
+
+        @JvmStatic
         @JvmName("isWater")
         private fun isWater(location: Location): Boolean = location.block.type.let {
             it == Material.WATER || it == Material.STATIONARY_WATER
@@ -476,6 +487,11 @@ enum class Particle {
         @JvmName("isColorCorrect")
         private fun isColorCorrect(particle: Particle, color: ParticleColor): Boolean
                 = (particle == SPELL_MOB || particle == SPELL_MOB_AMBIENT || particle == RED_DUST) && color is ParticleColorOrdinary || particle == NOTE && color is ParticleColorNote
+
+        @JvmStatic
+        @JvmName("fromId")
+        fun fromId(id: Int): Particle
+                = ID_MAP[id] ?: Particle.BARRIER
     }
 
     /** inner class */
@@ -539,14 +555,15 @@ enum class Particle {
         /** implement */
 
         private fun sendToBukkit(center: Location, player: Player) {
-            var arguments: Array<out Int> = arrayOf()
+            var arguments = intArrayOf()
             if(data != null) {
                 arguments = when(particle) {
-                    ITEM_CRACK -> data.packetData
-                    else -> arrayOf(data.packetData[0].or(data.packetData[1].shl(12)))
+                    ITEM_CRACK -> data.packetData.toIntArray()
+                    else -> intArrayOf(data.packetData[0].or(data.packetData[1].shl(12)))
                 }
             }
-            // TODO PacketPlayOutWorldParticles
+            val packet = PacketOutParticles(particle, longDistance, center.x.toFloat(), center.y.toFloat(), center.z.toFloat(), offsetX, offsetY, offsetZ, speed, amount, arguments)
+            packet.send(player)
         }
     }
 }

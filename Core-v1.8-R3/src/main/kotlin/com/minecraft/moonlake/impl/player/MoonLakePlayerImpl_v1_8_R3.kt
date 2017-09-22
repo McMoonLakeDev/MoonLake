@@ -17,9 +17,6 @@
 
 package com.minecraft.moonlake.impl.player
 
-import com.minecraft.moonlake.api.chat.ChatAction
-import com.minecraft.moonlake.api.chat.ChatComponent
-import com.minecraft.moonlake.api.chat.ChatSerializer
 import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
 import org.bukkit.entity.Player
 import java.util.*
@@ -33,11 +30,4 @@ open class MoonLakePlayerImpl_v1_8_R3 : MoonLakePlayerImpl_v1_8_R2 {
 
     @Throws(IllegalOfflinePlayerException::class)
     constructor(player: Player) : super(player)
-
-    override fun send(component: ChatComponent, action: ChatAction) {
-        val connection = (getBukkitPlayer() as org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer).handle.playerConnection
-        val iChatBaseComponent = ChatSerializer.toNMS(component) as net.minecraft.server.v1_8_R3.IChatBaseComponent
-        val packet = net.minecraft.server.v1_8_R3.PacketPlayOutChat(iChatBaseComponent, action.value())
-        connection.sendPacket(packet)
-    }
 }

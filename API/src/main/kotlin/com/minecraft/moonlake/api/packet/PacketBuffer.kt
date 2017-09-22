@@ -115,6 +115,9 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
         return this
     }
 
+    fun writeBoolean(value: Boolean): PacketBuffer
+            { byteBuf.writeBoolean(value); return this; }
+
     fun readByte(): Byte
             = byteBuf.readByte()
 
@@ -189,6 +192,9 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
         }
         return value or ((b and 0x7F) shl (size * 7)).toLong()
     }
+
+    fun readBoolean(): Boolean
+            = byteBuf.readBoolean()
 
     fun clear(): PacketBuffer
             { byteBuf.clear(); return this; }

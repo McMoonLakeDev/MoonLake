@@ -36,6 +36,8 @@ import com.minecraft.moonlake.api.item.Enchantment
 import com.minecraft.moonlake.api.item.ItemBuilder
 import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.packet.PacketOutChat
+import com.minecraft.moonlake.api.particle.Particle
+import com.minecraft.moonlake.api.task.MoonLakeRunnable
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
@@ -188,6 +190,20 @@ class MoonLakePluginTest : JavaPlugin() {
                     packet.action = ChatAction.聊天栏
                     packet.send(event.player)
                     println(packet)
+                }
+                if(event.message == "/packet particle") {
+                    runTaskTimerAsync(object: MoonLakeRunnable() {
+                        var life = 0
+                        override fun run() {
+                            if(++life / 20 >= 10) {
+                                cancel()
+                                return
+                            }
+                            var dir = event.player.location.direction
+                            dir = dir.add(dir.multiply(0.1)).setY(dir.y)
+                            Particle.FLAME.display(dir, 0f, event.player.location, 32.0)
+                        }
+                    }, 0L, 1L)
                 }
             }
         }.registerEvent(this)

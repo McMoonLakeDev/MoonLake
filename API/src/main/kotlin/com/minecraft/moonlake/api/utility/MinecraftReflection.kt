@@ -59,6 +59,14 @@ object MinecraftReflection {
             = minecraftPackage.getPackageClass(className)
 
     @JvmStatic
+    @JvmName("getMinecraftClassOrNull")
+    fun getMinecraftClassOrNull(className: String): Class<*>? = try {
+        getMinecraftClass(className)
+    } catch(e: MoonLakeException) {
+        null
+    }
+
+    @JvmStatic
     @JvmName("setMinecraftClass")
     fun setMinecraftClass(className: String, clazz: Class<*>?): Class<*>?
             { minecraftPackage.setPackageClass(className, clazz); return clazz; }

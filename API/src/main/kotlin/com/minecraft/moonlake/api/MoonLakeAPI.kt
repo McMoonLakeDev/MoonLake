@@ -383,22 +383,22 @@ fun Plugin.runTaskTimerAsync(task: Runnable, delay: Long, period: Long): BukkitT
         = Bukkit.getScheduler().runTaskTimerAsynchronously(this, task, delay, period)
 
 fun Plugin.runTask(task: MoonLakeRunnable): BukkitTask
-        = Bukkit.getScheduler().runTask(this, task as Runnable)
+        = task.runTask(this)
 
 fun Plugin.runTaskLater(task: MoonLakeRunnable, delay: Long): BukkitTask
-        = Bukkit.getScheduler().runTaskLater(this, task as Runnable, delay)
+        = task.runTaskLater(this, delay)
 
 fun Plugin.runTaskTimer(task: MoonLakeRunnable, delay: Long, period: Long): BukkitTask
-        = Bukkit.getScheduler().runTaskTimer(this, task as Runnable, delay, period)
+        = task.runTaskTimer(this, delay, period)
 
 fun Plugin.runTaskAsync(task: MoonLakeRunnable): BukkitTask
-        = Bukkit.getScheduler().runTaskAsynchronously(this, task as Runnable)
+        = task.runTaskAsynchronously(this)
 
 fun Plugin.runTaskLaterAsync(task: MoonLakeRunnable, delay: Long): BukkitTask
-        = Bukkit.getScheduler().runTaskLaterAsynchronously(this, task as Runnable, delay)
+        = task.runTaskLaterAsynchronously(this, delay)
 
 fun Plugin.runTaskTimerAsync(task: MoonLakeRunnable, delay: Long, period: Long): BukkitTask
-        = Bukkit.getScheduler().runTaskTimerAsynchronously(this, task as Runnable, delay, period)
+        = task.runTaskTimerAsynchronously(this, delay, period)
 
 fun Plugin.runTask(task: () -> Unit): BukkitTask
         = Bukkit.getScheduler().runTask(this, task)

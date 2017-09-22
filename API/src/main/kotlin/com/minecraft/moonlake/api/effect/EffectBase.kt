@@ -26,220 +26,220 @@ class EffectBase private constructor(val value: String, val effect: EffectType? 
 
     companion object {
 
-        @JvmStatic
+        @JvmField
         val WATER = EffectBase("water")
 
-        @JvmStatic
+        @JvmField
         val 水瓶 = EffectBase(WATER)
 
-        @JvmStatic
+        @JvmField
         val WATER_MUNDANE = EffectBase("mundane")
 
-        @JvmStatic
+        @JvmField
         val 平凡药水 = EffectBase(WATER_MUNDANE)
 
-        @JvmStatic
+        @JvmField
         val WATER_THICK = EffectBase("thick")
 
-        @JvmStatic
+        @JvmField
         val 浑浊药水 = EffectBase(WATER_THICK)
 
-        @JvmStatic
+        @JvmField
         val WATER_AWKWAARD = EffectBase("awkward")
 
-        @JvmStatic
+        @JvmField
         val 粗制药水 = EffectBase(WATER_AWKWAARD)
 
-        @JvmStatic
+        @JvmField
         val NIGHT_VISION = EffectBase("night_vision", EffectType.NIGHT_VISION)
 
-        @JvmStatic
+        @JvmField
         val 夜视药水 = EffectBase(NIGHT_VISION)
 
-        @JvmStatic
+        @JvmField
         val NIGHT_VISION_LONG = EffectBase("long_night_vision", EffectType.NIGHT_VISION)
 
-        @JvmStatic
+        @JvmField
         val 夜视药水延长版 = EffectBase(NIGHT_VISION_LONG)
 
-        @JvmStatic
+        @JvmField
         val INVISIBILITY = EffectBase("invisibility", EffectType.INVISIBILITY)
 
-        @JvmStatic
+        @JvmField
         val 隐身药水 = EffectBase(INVISIBILITY)
 
-        @JvmStatic
+        @JvmField
         val INVISIBILITY_LONG = EffectBase("long_invisibility", EffectType.INVISIBILITY)
 
-        @JvmStatic
+        @JvmField
         val 隐身药水延长版 = EffectBase(INVISIBILITY_LONG)
 
-        @JvmStatic
+        @JvmField
         val LEAPING = EffectBase("leaping", EffectType.JUMP)
 
-        @JvmStatic
+        @JvmField
         val 跳跃药水 = EffectBase(LEAPING)
 
-        @JvmStatic
+        @JvmField
         val LEAPING_LONG = EffectBase("long_leaping", EffectType.JUMP)
 
-        @JvmStatic
+        @JvmField
         val 跳跃药水延长版 = EffectBase(LEAPING_LONG)
 
-        @JvmStatic
+        @JvmField
         val LEAPING_STRONG = EffectBase("strong_leaping", EffectType.JUMP)
 
-        @JvmStatic
+        @JvmField
         val 跳跃药水增强版 = EffectBase(LEAPING_STRONG)
 
-        @JvmStatic
+        @JvmField
         val FIRE_RESISTANCE = EffectBase("fire_resistance", EffectType.FIRE_RESISTANCE)
 
-        @JvmStatic
+        @JvmField
         val 抗火药水 = EffectBase(FIRE_RESISTANCE)
 
-        @JvmStatic
+        @JvmField
         val FIRE_RESISTANCE_LONG = EffectBase("long_fire_resistance", EffectType.FIRE_RESISTANCE)
 
-        @JvmStatic
+        @JvmField
         val 抗火药水延长版 = EffectBase(FIRE_RESISTANCE_LONG)
 
-        @JvmStatic
+        @JvmField
         val SWIFTNESS = EffectBase("swiftness", EffectType.SPEED)
 
-        @JvmStatic
+        @JvmField
         val 迅捷药水 = EffectBase(SWIFTNESS)
 
-        @JvmStatic
+        @JvmField
         val SWIFTNESS_LONG = EffectBase("long_swiftness", EffectType.SPEED)
 
-        @JvmStatic
+        @JvmField
         val 迅捷药水延长版 = EffectBase(SWIFTNESS_LONG)
 
-        @JvmStatic
+        @JvmField
         val SWIFTNESS_STRONG = EffectBase("strong_swiftness", EffectType.SPEED)
 
-        @JvmStatic
+        @JvmField
         val 迅捷药水增强版 = EffectBase(SWIFTNESS_STRONG)
 
-        @JvmStatic
+        @JvmField
         val SLOWNESS = EffectBase("slowness", EffectType.SLOW)
 
-        @JvmStatic
+        @JvmField
         val 缓慢药水 = EffectBase(SLOWNESS)
 
-        @JvmStatic
+        @JvmField
         val SLOWNESS_LONG = EffectBase("long_slowness", EffectType.SLOW)
 
-        @JvmStatic
+        @JvmField
         val 缓慢药水延长版 = EffectBase(SLOWNESS_LONG)
 
-        @JvmStatic
+        @JvmField
         val WATER_BREATHING = EffectBase("water_breathing", EffectType.WATER_BREATHING)
 
-        @JvmStatic
+        @JvmField
         val 水下呼吸药水 = EffectBase(WATER_BREATHING)
 
-        @JvmStatic
+        @JvmField
         val WATER_BREATHING_LONG = EffectBase("long_water_breathing", EffectType.WATER_BREATHING)
 
-        @JvmStatic
+        @JvmField
         val 水下呼吸药水延长版 = EffectBase(WATER_BREATHING_LONG)
 
-        @JvmStatic
+        @JvmField
         val HEALING = EffectBase("healing", EffectType.HEAL)
 
-        @JvmStatic
+        @JvmField
         val 瞬间治疗药水 = EffectBase(HEALING)
 
-        @JvmStatic
+        @JvmField
         val HEALING_STRONG = EffectBase("strong_healing", EffectType.HEAL)
 
-        @JvmStatic
+        @JvmField
         val 瞬间治疗药水增强版 = EffectBase(HEALING_STRONG)
 
-        @JvmStatic
+        @JvmField
         val HARMING = EffectBase("harming", EffectType.HARM)
 
-        @JvmStatic
+        @JvmField
         val 瞬间伤害药水 = EffectBase(HARMING)
 
-        @JvmStatic
+        @JvmField
         val HARMING_STRONG = EffectBase("strong_harming", EffectType.HARM)
 
-        @JvmStatic
+        @JvmField
         val 瞬间伤害药水增强版 = EffectBase(HARMING_STRONG)
 
-        @JvmStatic
+        @JvmField
         val POISON = EffectBase("poison", EffectType.POISON)
 
-        @JvmStatic
+        @JvmField
         val 中毒药水 = EffectBase(POISON)
 
-        @JvmStatic
+        @JvmField
         val POISON_LONG = EffectBase("long_poison", EffectType.POISON)
 
-        @JvmStatic
+        @JvmField
         val 中毒药水延长版 = EffectBase(POISON_LONG)
 
-        @JvmStatic
+        @JvmField
         val POISON_STRONG = EffectBase("strong_poison", EffectType.POISON)
 
-        @JvmStatic
+        @JvmField
         val 中毒药水增强版 = EffectBase(POISON_STRONG)
 
-        @JvmStatic
+        @JvmField
         val REGENERATION = EffectBase("regeneration", EffectType.REGENERATION)
 
-        @JvmStatic
+        @JvmField
         val 再生药水 = EffectBase(REGENERATION)
 
-        @JvmStatic
+        @JvmField
         val REGENERATION_LONG = EffectBase("long_regeneration", EffectType.REGENERATION)
 
-        @JvmStatic
+        @JvmField
         val 再生药水延长版 = EffectBase(REGENERATION)
 
-        @JvmStatic
+        @JvmField
         val REGENERATION_STRONG = EffectBase("strong_regeneration", EffectType.REGENERATION)
 
-        @JvmStatic
+        @JvmField
         val 再生药水增强版 = EffectBase(REGENERATION_STRONG)
 
-        @JvmStatic
+        @JvmField
         val STRENGTH = EffectBase("strength", EffectType.INCREASE_DAMAGE)
 
-        @JvmStatic
+        @JvmField
         val 力量药水 = EffectBase(STRENGTH)
 
-        @JvmStatic
+        @JvmField
         val STRENGTH_LONG = EffectBase("long_strength", EffectType.INCREASE_DAMAGE)
 
-        @JvmStatic
+        @JvmField
         val 力量药水延长版 = EffectBase(STRENGTH_LONG)
 
-        @JvmStatic
+        @JvmField
         val STRENGTH_STRONG = EffectBase("strong_strength", EffectType.INCREASE_DAMAGE)
 
-        @JvmStatic
+        @JvmField
         val 力量药水增强版 = EffectBase(STRENGTH_STRONG)
 
-        @JvmStatic
+        @JvmField
         val WEAKNESS = EffectBase("weakness", EffectType.WEAKNESS)
 
-        @JvmStatic
+        @JvmField
         val 虚弱药水 = EffectBase(WEAKNESS)
 
-        @JvmStatic
+        @JvmField
         val WEAKNESS_LONG = EffectBase("long_weakness", EffectType.WEAKNESS)
 
-        @JvmStatic
+        @JvmField
         val 虚弱药水延长版 = EffectBase(WEAKNESS_LONG)
 
-        @JvmStatic
+        @JvmField
         val LUCK = EffectBase("luck", EffectType.WEAKNESS)
 
-        @JvmStatic
+        @JvmField
         val 幸运药水 = EffectBase(LUCK)
     }
 }

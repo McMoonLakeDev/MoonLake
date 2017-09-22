@@ -40,6 +40,16 @@ object Packets {
     @JvmStatic
     private val packetWrite: AccessorMethod by lazy {
         Accessors.getAccessorMethod(MinecraftReflection.getPacketClass(), "b", false, MinecraftReflection.getPacketDataSerializerClass()) }
+    @JvmStatic
+    private val converter: ConverterEquivalentIgnoreNull<PacketBukkit> by lazy {
+        getPacketConverter() }
+    @JvmStatic
+    private val lookupBukkit: MutableMap<Class<*>, Class<out PacketBukkit>> = HashMap()
+
+    init {
+        registerPacketBukkit("PacketPlayOutChat", PacketOutChat::class.java)
+        registerPacketBukkit("PacketPlayOutWorldParticles", PacketOutParticles::class.java)
+    }
 
     @JvmStatic
     @JvmName("createPacket")
@@ -49,7 +59,7 @@ object Packets {
     @JvmStatic
     @JvmName("createPacket")
     fun createPacket(wrapped: PacketBukkit): Any
-            = getPacketConverter().getGenericValue(wrapped)
+            = converter.getGenericValue(wrapped)
 
     @JvmStatic
     @JvmName("createPacketDataSerializer")
@@ -57,8 +67,26 @@ object Packets {
             = packetDataSerializerConstructor.newInstance(buffer)
 
     @JvmStatic
+    @JvmName("createPacketBukkit")
+    @Throws(UnsupportedOperationException::class)
+    @Synchronized
+    fun createPacketBukkit(clazz: Class<*>): PacketBukkit
+            = lookupBukkit[clazz]?.newInstance() ?: throw UnsupportedOperationException("未对 NMS 数据包 $clazz 类添加包装类支持.")
+
+    @JvmStatic
+    @JvmName("registerPacketBukkit")
+    @Throws(IllegalArgumentException::class)
+    @Synchronized
+    fun registerPacketBukkit(clazzName: String, value: Class<out PacketBukkit>): Boolean {
+        val clazz = MinecraftReflection.getMinecraftClassOrNull(clazzName)
+        if(clazz == null || lookupBukkit.containsKey(clazz))
+            throw IllegalArgumentException("未知的 NMS 数据包 $clazzName 类或已经被注册.")
+        return lookupBukkit.put(clazz, value) == null
+    }
+
+    @JvmStatic
     @JvmName("getPacketConverter")
-    fun getPacketConverter(): ConverterEquivalentIgnoreNull<PacketBukkit> {
+    private fun getPacketConverter(): ConverterEquivalentIgnoreNull<PacketBukkit> {
         return object: ConverterEquivalentIgnoreNull<PacketBukkit> {
             override fun getGenericValue(specific: PacketBukkit): Any {
                 val handle = createPacket(specific.getType())
@@ -68,12 +96,14 @@ object Packets {
                 packetBuffer.release()
                 return handle
             }
-            override fun getSpecificValue(generic: Any): PacketBukkit { // TODO
-//                val packetDataSerializer = createPacketDataSerializer()
-//                val packetBuffer = PacketBuffer(packetDataSerializerBuffer.get(packetDataSerializer) as ByteBuf)
-//                packetWrite.invoke(generic, packetDataSerializer)
-//                createPacketBukkit()
-                throw UnsupportedOperationException()
+            override fun getSpecificValue(generic: Any): PacketBukkit {
+                val packetDataSerializer = createPacketDataSerializer()
+                val packetBuffer = PacketBuffer(packetDataSerializerBuffer.get(packetDataSerializer) as ByteBuf)
+                val wrapped = createPacketBukkit(generic::class.java)
+                packetWrite.invoke(generic, packetDataSerializer)
+                wrapped.read(packetBuffer)
+                packetBuffer.release()
+                return wrapped
             }
             override fun getSpecificType(): Class<PacketBukkit>
                     = PacketBukkit::class.java
