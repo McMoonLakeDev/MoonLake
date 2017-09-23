@@ -48,6 +48,7 @@ object Packets {
 
     init {
         registerPacketBukkit("PacketPlayOutChat", PacketOutChat::class.java)
+        registerPacketBukkit("PacketPlayOutCustomPayload", PacketOutPayload::class.java)
         registerPacketBukkit("PacketPlayOutWorldParticles", PacketOutParticles::class.java)
     }
 

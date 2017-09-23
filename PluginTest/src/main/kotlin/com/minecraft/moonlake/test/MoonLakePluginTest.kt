@@ -35,7 +35,9 @@ import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.item.Enchantment
 import com.minecraft.moonlake.api.item.ItemBuilder
 import com.minecraft.moonlake.api.nbt.NBTFactory
+import com.minecraft.moonlake.api.packet.PacketBuffer
 import com.minecraft.moonlake.api.packet.PacketOutChat
+import com.minecraft.moonlake.api.packet.PacketOutPayload
 import com.minecraft.moonlake.api.particle.Particle
 import com.minecraft.moonlake.api.task.MoonLakeRunnable
 import org.bukkit.Bukkit
@@ -204,6 +206,12 @@ class MoonLakePluginTest : JavaPlugin() {
                             Particle.FLAME.display(dir, 0f, event.player.location, 32.0)
                         }
                     }, 0L, 1L)
+                }
+                if(event.message == "/packet bopen") {
+                    val itemStack = Material.WRITTEN_BOOK.newItemStack()
+                    val packet = PacketOutPayload("MC|BOpen", PacketBuffer().writeByte(0))
+                    event.player.itemInHand = itemStack
+                    packet.send(event.player)
                 }
             }
         }.registerEvent(this)

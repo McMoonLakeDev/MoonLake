@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.chat.ChatSerializer
 import com.minecraft.moonlake.api.nbt.NBTCompound
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
+import java.nio.charset.Charset
 import java.util.*
 
 data class PacketBuffer(private var byteBuf: ByteBuf) {
@@ -50,6 +51,24 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
 
     fun writeBytes(value: ByteArray): PacketBuffer
             { byteBuf.writeBytes(value); return this; }
+
+    fun writeBytes(value: ByteBuf): PacketBuffer
+            { byteBuf.writeBytes(value); return this; }
+
+    fun writeBytes(value: ByteBuf, length: Int): PacketBuffer
+            { byteBuf.writeBytes(value, length); return this; }
+
+    fun writeBytes(value: ByteBuf, index: Int, length: Int): PacketBuffer
+            { byteBuf.writeBytes(value, index, length); return this; }
+
+    fun writeBytes(value: PacketBuffer): PacketBuffer
+            { byteBuf.writeBytes(value.byteBuf); return this; }
+
+    fun writeBytes(value: PacketBuffer, length: Int): PacketBuffer
+            { byteBuf.writeBytes(value.byteBuf, length); return this; }
+
+    fun writeBytes(value: PacketBuffer, index: Int, length: Int): PacketBuffer
+            { byteBuf.writeBytes(value.byteBuf, index, length); return this; }
 
     fun writeShort(value: Int): PacketBuffer
             { byteBuf.writeShort(value); return this; }
@@ -131,6 +150,24 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
         return buffer
     }
 
+    fun readBytes(value: ByteBuf): PacketBuffer
+            { byteBuf.readBytes(value); return this; }
+
+    fun readBytes(value: ByteBuf, length: Int): PacketBuffer
+            { byteBuf.readBytes(value, length); return this; }
+
+    fun readBytes(value: ByteBuf, index: Int, length: Int): PacketBuffer
+            { byteBuf.readBytes(value, index, length); return this; }
+
+    fun readBytes(value: PacketBuffer): PacketBuffer
+            { byteBuf.readBytes(value.byteBuf); return this; }
+
+    fun readBytes(value: PacketBuffer, length: Int): PacketBuffer
+            { byteBuf.readBytes(value.byteBuf, length); return this; }
+
+    fun readBytes(value: PacketBuffer, index: Int, length: Int): PacketBuffer
+            { byteBuf.readBytes(value.byteBuf, index, length); return this; }
+
     fun readShort(): Short
             = byteBuf.readShort()
 
@@ -196,6 +233,48 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
     fun readBoolean(): Boolean
             = byteBuf.readBoolean()
 
+    fun writerIndex(): Int
+            = byteBuf.writerIndex()
+
+    fun writerIndex(value: Int): PacketBuffer
+            { byteBuf.writerIndex(value); return this; }
+
+    fun readerIndex(): Int
+            = byteBuf.readerIndex()
+
+    fun readerIndex(value: Int): PacketBuffer
+            { byteBuf.readerIndex(value); return this; }
+
+    fun readableBytes(): Int
+            = byteBuf.readableBytes()
+
+    fun writableBytes(): Int
+            = byteBuf.writableBytes()
+
+    fun maxWritableBytes(): Int
+            = byteBuf.maxWritableBytes()
+
+    fun hasArray(): Boolean
+            = byteBuf.hasArray()
+
+    fun array(): ByteArray
+            = byteBuf.array()
+
+    fun arrayOffset(): Int
+            = byteBuf.arrayOffset()
+
+    fun hasMemoryAddress(): Boolean
+            = byteBuf.hasMemoryAddress()
+
+    fun memoryAddress(): Long
+            = byteBuf.memoryAddress()
+
+    fun toString(charset: Charset = Charsets.UTF_8): String
+            = byteBuf.toString(charset)
+
+    fun toString(index: Int, length: Int, charset: Charset = Charsets.UTF_8): String
+            = byteBuf.toString(index, length, charset)
+
     fun clear(): PacketBuffer
             { byteBuf.clear(); return this; }
 
@@ -204,4 +283,22 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
 
     fun release(decrement: Int): Boolean
             = byteBuf.release(decrement)
+
+    override fun equals(other: Any?): Boolean {
+        if(other === this)
+            return true
+        if(other is PacketBuffer)
+            return byteBuf == other.byteBuf
+        else if(other is ByteBuf)
+            return byteBuf == other
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return byteBuf.hashCode()
+    }
+
+    override fun toString(): String {
+        return "PacketBuffer(byteBuf=$byteBuf)"
+    }
 }
