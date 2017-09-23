@@ -25,6 +25,7 @@ import com.minecraft.moonlake.api.attribute.Slot
 import com.minecraft.moonlake.api.chat.ChatAction
 import com.minecraft.moonlake.api.chat.ChatColor
 import com.minecraft.moonlake.api.chat.ChatComponentFancy
+import com.minecraft.moonlake.api.chat.ChatComponentText
 import com.minecraft.moonlake.api.depend.DependPlaceholderAPI
 import com.minecraft.moonlake.api.depend.DependPlugins
 import com.minecraft.moonlake.api.depend.DependVaultEconomy
@@ -38,6 +39,7 @@ import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.packet.PacketBuffer
 import com.minecraft.moonlake.api.packet.PacketOutChat
 import com.minecraft.moonlake.api.packet.PacketOutPayload
+import com.minecraft.moonlake.api.packet.PacketOutTitle
 import com.minecraft.moonlake.api.particle.Particle
 import com.minecraft.moonlake.api.task.MoonLakeRunnable
 import org.bukkit.Bukkit
@@ -212,6 +214,14 @@ class MoonLakePluginTest : JavaPlugin() {
                     val packet = PacketOutPayload("MC|BOpen", PacketBuffer().writeByte(0))
                     event.player.itemInHand = itemStack
                     packet.send(event.player)
+                }
+                if(event.message == "/packet title") {
+                    val packetTitle = PacketOutTitle(PacketOutTitle.Action.主标题, ChatComponentText("主标题"))
+                    val packetSubTitle = PacketOutTitle(PacketOutTitle.Action.子标题, ChatComponentText("子标题"))
+                    val packetTimes = PacketOutTitle(30, 60, 30)
+                    packetTimes.send(event.player)
+                    packetSubTitle.send(event.player)
+                    packetTitle.send(event.player)
                 }
             }
         }.registerEvent(this)

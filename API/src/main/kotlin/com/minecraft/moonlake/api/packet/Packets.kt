@@ -50,6 +50,7 @@ object Packets {
         registerPacketBukkit("PacketPlayOutChat", PacketOutChat::class.java)
         registerPacketBukkit("PacketPlayOutCustomPayload", PacketOutPayload::class.java)
         registerPacketBukkit("PacketPlayOutWorldParticles", PacketOutParticles::class.java)
+        registerPacketBukkit("PacketPlayOutTitle", PacketOutTitle::class.java)
     }
 
     @JvmStatic
