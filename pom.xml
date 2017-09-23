@@ -32,7 +32,7 @@
     </modules>
 
     <properties>
-        <kotlin.version>1.1.50</kotlin.version> <!-- 用 1.1.50 版本在编译 AnvilWindow 有报错导致无法编译，暂时使用旧版本 -->
+        <kotlin.version>1.1.50</kotlin.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
