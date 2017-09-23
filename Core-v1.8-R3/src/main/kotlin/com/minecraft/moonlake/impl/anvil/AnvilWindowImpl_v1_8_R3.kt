@@ -51,6 +51,11 @@ open class AnvilWindowImpl_v1_8_R3(plugin: Plugin) : AnvilWindowBase(plugin) {
                     if(event != null && !event.isCancelled)
                         super.a(event.input)
                 }
+                override fun b(entityHuman: EntityHuman?) {
+                    callAnvilEvent(closeHandler)
+                    release()
+                    super.b(entityHuman)
+                }
             }
             handle = containerAnvil
             callAnvilEvent(openHandler)

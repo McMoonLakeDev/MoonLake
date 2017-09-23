@@ -33,7 +33,7 @@ import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryCloseEvent
+import org.bukkit.event.inventory.InventoryType
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
@@ -86,7 +86,7 @@ open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
         this.listener = object: MoonLakeListener {
             @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
             fun onClick(event: InventoryClickEvent) {
-                if(event.clickedInventory != getInventory() && !isAllowMove()) {
+                if((event.clickedInventory?.type != InventoryType.ANVIL || event.clickedInventory != getInventory()) && !isAllowMove()) {
                     event.isCancelled = true
                     event.result = Event.Result.DENY
                 } else {
@@ -105,15 +105,6 @@ open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
                         event.isCancelled = true
                         event.result = Event.Result.DENY
                     }
-                }
-            }
-            @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
-            fun onClose(event: InventoryCloseEvent) {
-                if(event.inventory == getInventory()) {
-                    // if the server stops, this event does not fire
-                    // rewrite the container close function, because the class does not exist exception cannot be implemented
-                    callAnvilEvent(closeHandler)
-                    release()
                 }
             }
         }
@@ -169,5 +160,17 @@ open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
                 event
             }
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if(other === this)
+            return true
+        if(other is AnvilWindowBase)
+            return handle == other.handle
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return handle?.hashCode() ?: 0
     }
 }

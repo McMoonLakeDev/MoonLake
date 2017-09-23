@@ -20,6 +20,7 @@
 package com.minecraft.moonlake.api
 
 import com.minecraft.moonlake.api.anvil.AnvilWindow
+import com.minecraft.moonlake.api.anvil.AnvilWindows
 import com.minecraft.moonlake.api.depend.DependPlugin
 import com.minecraft.moonlake.api.depend.DependPluginException
 import com.minecraft.moonlake.api.depend.DependPlugins
@@ -562,7 +563,7 @@ fun Region.createWorldBorder(): WorldBorder {
 /** anvil window function */
 
 fun Plugin.newAnvilWindow(): AnvilWindow
-        = MinecraftReflection.anvilWindowConstructor.newInstance(this)
+        = AnvilWindows.create(this)
 
 /** item builder function */
 

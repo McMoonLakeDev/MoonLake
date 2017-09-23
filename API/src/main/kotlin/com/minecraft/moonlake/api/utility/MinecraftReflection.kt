@@ -178,12 +178,6 @@ object MinecraftReflection {
     /** significant */
 
     @JvmStatic
-    @Suppress("UNCHECKED_CAST")
-    val anvilWindowConstructor: AccessorConstructor<AnvilWindow> by lazy {
-        val clazz = Class.forName("com.minecraft.moonlake.impl.anvil.AnvilWindowImpl_${currentBukkitVersion().getVersion()}") as Class<AnvilWindow>
-        Accessors.getAccessorConstructor(clazz, false, Plugin::class.java) }
-
-    @JvmStatic
     private val sendPacket: AccessorMethod by lazy {
         Accessors.getAccessorMethod(getPlayerConnectionClass(), "sendPacket", false, getPacketClass()) }
 }
