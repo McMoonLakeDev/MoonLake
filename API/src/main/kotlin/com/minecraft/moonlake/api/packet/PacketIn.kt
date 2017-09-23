@@ -23,8 +23,8 @@ import org.bukkit.entity.Player
 interface PacketIn : Packet {
 
     @Throws(PacketException::class)
-    fun recieve(sender: Player)
+    fun receive(sender: Player)
 
     @Throws(PacketException::class)
-    fun recieve(sender: MoonLakePlayer)
+    fun receive(sender: MoonLakePlayer)
 }
