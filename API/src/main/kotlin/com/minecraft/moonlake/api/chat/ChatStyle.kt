@@ -145,6 +145,20 @@ open class ChatStyle {
     fun isEmpty(): Boolean
             = color == null && bold == null && italic == null && strikethrough == null && underlined == null && obfuscated == null && clickEvent == null && hoverEvent == null && insertion == null
 
+    fun clone(): ChatStyle {
+        val copy = ChatStyle()
+        copy.color = color
+        copy.bold = bold
+        copy.italic = italic
+        copy.strikethrough = strikethrough
+        copy.underlined = underlined
+        copy.obfuscated = obfuscated
+        copy.clickEvent = clickEvent
+        copy.hoverEvent = hoverEvent
+        copy.insertion = insertion
+        return copy
+    }
+
     override fun equals(other: Any?): Boolean {
         if(other === this)
             return true

@@ -48,7 +48,7 @@ data class PacketOutTitle(var action: Action, var title: ChatComponent?, var fad
     override fun write(data: PacketBuffer) {
         data.writeVarInt(action.getId())
         if(action.isTitle())
-            data.writeChatComponent(title ?: ChatComponentText("null"))
+            data.writeChatComponent(title ?: ChatComponentText())
         if(action.isTimes()) {
             data.writeInt(fadeIn)
             data.writeInt(stay)

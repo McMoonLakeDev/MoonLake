@@ -22,15 +22,19 @@ import com.google.gson.stream.JsonReader
 import com.minecraft.moonlake.api.converter.ConverterEquivalentIgnoreNull
 import com.minecraft.moonlake.api.fromNameOrNull
 import com.minecraft.moonlake.api.notNull
+import com.minecraft.moonlake.api.toColor
 import com.minecraft.moonlake.api.utility.MinecraftConverters
 import java.io.IOException
 import java.io.StringReader
 import java.lang.StringBuilder
 import java.lang.reflect.Type
+import java.util.regex.Pattern
 
 object ChatSerializer {
 
+    @JvmStatic
     private val GSON: Gson
+    @JvmStatic
     private val CONVERTER: ConverterEquivalentIgnoreNull<ChatComponent> by lazy {
         MinecraftConverters.getChatComponent() as ConverterEquivalentIgnoreNull }
 
@@ -77,6 +81,72 @@ object ChatSerializer {
     @JvmName("toJson")
     fun toJson(chatComponent: ChatComponent): String
             = GSON.toJson(chatComponent)
+
+    @JvmStatic
+    @JvmName("fromRaw")
+    fun fromRaw(raw: String?): ChatComponent {
+        if(raw == null || raw.isEmpty())
+            return ChatComponentText("")
+        return RawMessage(raw.toColor()).get()
+    }
+
+    private class RawMessage(val raw: String) {
+
+        private var currentComponent: ChatComponent? = null
+        private var style: ChatStyle? = null
+        private var currentIndex: Int = 0
+
+        init {
+            val matcher = PATTERN_RAW.matcher(raw)
+            var match: String? = null
+            var groupId: Int
+            while(matcher.find()) {
+                groupId = 0
+                do { ++groupId } while (matcher.group(groupId).apply { match = this } == null)
+                append(matcher.start(groupId))
+                when(groupId) {
+                    1 -> {
+                        val color = ChatColor.fromCode(match?.toLowerCase()?.get(1) ?: 'f')
+                        when {
+                            color == ChatColor.RESET -> style = ChatStyle()
+                            color.format -> when(color) {
+                                ChatColor.OBFUSCATED -> style?.setObfuscated(true)
+                                ChatColor.BOLD -> style?.setBold(true)
+                                ChatColor.STRIKETHROUGH -> style?.setStrikethrough(true)
+                                ChatColor.UNDERLINE -> style?.setUnderlined(true)
+                                ChatColor.ITALIC -> style?.setItalic(true)
+                                else -> throw AssertionError("无效的聊天颜色格式符: $color.")
+                            }
+                            else -> style = ChatStyle().setColor(color)
+                        }
+                    }
+                }
+                currentIndex = matcher.end(groupId)
+            }
+            if(currentIndex < raw.length)
+                append(raw.length)
+        }
+
+        private fun append(index: Int) {
+            if (index > currentIndex) {
+                val extra = ChatComponentText(raw.substring(currentIndex, index)).setStyle(style)
+                currentIndex = index
+                style = style?.clone()
+                if (currentComponent == null)
+                    currentComponent = ChatComponentText("")
+                currentComponent?.append(extra)
+            }
+        }
+
+        internal fun get(): ChatComponent
+                = currentComponent ?: ChatComponentText("")
+
+        companion object {
+
+            @JvmStatic
+            private val PATTERN_RAW = Pattern.compile("(§[0-9a-fk-or])", Pattern.CASE_INSENSITIVE)
+        }
+    }
 
     @JvmStatic
     @JvmName("toRaw")

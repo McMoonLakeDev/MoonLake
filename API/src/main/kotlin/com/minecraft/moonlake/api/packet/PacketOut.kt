@@ -19,6 +19,7 @@ package com.minecraft.moonlake.api.packet
 
 import com.minecraft.moonlake.api.player.MoonLakePlayer
 import org.bukkit.entity.Player
+import org.bukkit.plugin.Plugin
 
 interface PacketOut : Packet {
 
@@ -27,4 +28,10 @@ interface PacketOut : Packet {
 
     @Throws(PacketException::class)
     fun send(receiver: MoonLakePlayer)
+
+    @Throws(PacketException::class)
+    fun sendAsync(receiver: Player, plugin: Plugin)
+
+    @Throws(PacketException::class)
+    fun sendAsync(receiver: MoonLakePlayer, plugin: Plugin)
 }

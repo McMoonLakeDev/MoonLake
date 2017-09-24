@@ -22,10 +22,7 @@ import com.minecraft.moonlake.api.anvil.AnvilWindowSlot
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
-import com.minecraft.moonlake.api.chat.ChatAction
-import com.minecraft.moonlake.api.chat.ChatColor
-import com.minecraft.moonlake.api.chat.ChatComponentFancy
-import com.minecraft.moonlake.api.chat.ChatComponentText
+import com.minecraft.moonlake.api.chat.*
 import com.minecraft.moonlake.api.depend.DependPlaceholderAPI
 import com.minecraft.moonlake.api.depend.DependPlugins
 import com.minecraft.moonlake.api.depend.DependVaultEconomy
@@ -222,6 +219,14 @@ class MoonLakePluginTest : JavaPlugin() {
                     packetTimes.send(event.player)
                     packetSubTitle.send(event.player)
                     packetTitle.send(event.player)
+                }
+                if(event.message == "/cs raw") {
+                    val component = ChatSerializer.fromRaw("&a&n你好&6&n世界&f!!!")
+                    val xd = ChatComponentText(" XD ")
+                    xd.getStyle().setHoverEvent(ChatHoverEvent(ChatHoverEvent.Action.SHOW_TEXT, ChatComponentText("你知道的太多了2333")))
+                    component.append(xd)
+                    event.player.toMoonLakePlayer().send(component)
+                    println(component)
                 }
             }
         }.registerEvent(this)

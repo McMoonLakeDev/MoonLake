@@ -21,6 +21,7 @@ package com.minecraft.moonlake.api
 
 import com.minecraft.moonlake.api.anvil.AnvilWindow
 import com.minecraft.moonlake.api.anvil.AnvilWindows
+import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.depend.DependPlugin
 import com.minecraft.moonlake.api.depend.DependPluginException
 import com.minecraft.moonlake.api.depend.DependPlugins
@@ -32,11 +33,11 @@ import com.minecraft.moonlake.api.item.ItemBuilder
 import com.minecraft.moonlake.api.nbt.NBTCompound
 import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.nbt.NBTList
+import com.minecraft.moonlake.api.packet.PacketOutTitle
 import com.minecraft.moonlake.api.player.MoonLakePlayer
 import com.minecraft.moonlake.api.player.MoonLakePlayerCached
 import com.minecraft.moonlake.api.region.*
 import com.minecraft.moonlake.api.task.MoonLakeRunnable
-import com.minecraft.moonlake.api.utility.MinecraftReflection
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
 import org.bukkit.*
@@ -630,3 +631,12 @@ fun <T: Entity> Class<T>.spawn(location: Location): T
 
 fun <T: Entity> Class<T>.spawn(location: Location, consumer: (entity: T) -> Unit): T
         = spawn(location).also(consumer)
+
+/** packet function */
+
+fun Player.sendTitle(title: ChatComponent, subTitle: ChatComponent, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20) {
+    // TODO
+}
+
+fun Player.sendTitleReset()
+        = PacketOutTitle(PacketOutTitle.Action.RESET, null).send(this)

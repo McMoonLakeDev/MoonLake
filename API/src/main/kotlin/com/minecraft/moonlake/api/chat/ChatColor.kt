@@ -44,4 +44,21 @@ enum class ChatColor(val code: Char, val format: Boolean = false) {
     ITALIC('o', true),
     RESET('r'),
     ;
+
+    /** static */
+
+    companion object {
+
+        @JvmStatic
+        private val CHAR_MAP: MutableMap<Char, ChatColor> = HashMap()
+
+        init {
+            values().forEach { CHAR_MAP.put(it.code, it) }
+        }
+
+        @JvmStatic
+        @JvmName("fromCode")
+        fun fromCode(code: Char): ChatColor
+                = CHAR_MAP[code] ?: WHITE
+    }
 }

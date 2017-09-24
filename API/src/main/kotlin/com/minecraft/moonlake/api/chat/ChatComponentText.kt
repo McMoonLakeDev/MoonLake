@@ -21,6 +21,8 @@ open class ChatComponentText : ChatComponentAbstract {
 
     private var text: String
 
+    constructor() : this("null")
+
     constructor(text: String) : super() {
         this.text = text
     }
