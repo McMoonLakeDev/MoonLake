@@ -226,7 +226,7 @@ object NBTFactory {
 
     @JvmStatic
     @JvmName("createStack")
-    fun createStack(type: Material, amount: Int, durability: Int, tag: NBTCompound?): ItemStack {
+    fun createStack(type: Material, amount: Int = 1, durability: Int = 0, tag: NBTCompound? = null): ItemStack {
         val nbt = ofCompound()
         nbt.putString("id", "minecraft:${type.name.toLowerCase()}")
         nbt.putByte("Count", amount)

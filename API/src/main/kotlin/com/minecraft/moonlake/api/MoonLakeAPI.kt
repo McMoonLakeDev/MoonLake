@@ -22,6 +22,7 @@ package com.minecraft.moonlake.api
 import com.minecraft.moonlake.api.anvil.AnvilWindow
 import com.minecraft.moonlake.api.anvil.AnvilWindows
 import com.minecraft.moonlake.api.chat.ChatComponent
+import com.minecraft.moonlake.api.chat.ChatSerializer
 import com.minecraft.moonlake.api.depend.DependPlugin
 import com.minecraft.moonlake.api.depend.DependPluginException
 import com.minecraft.moonlake.api.depend.DependPlugins
@@ -600,6 +601,9 @@ fun newNBTCompound(name: String = ""): NBTCompound
 fun <T> newNBTList(name: String = ""): NBTList<T>
         = NBTFactory.ofList(name)
 
+fun Material.newItemStack(amount: Int = 1, durability: Int = 0, tag: NBTCompound? = null): ItemStack
+        = NBTFactory.createStack(this, amount, durability, tag)
+
 fun ItemStack.readTag(consumer: (tag: NBTCompound?) -> Unit): ItemStack
         { consumer(NBTFactory.readStackTag(this)); return this; }
 
@@ -634,9 +638,19 @@ fun <T: Entity> Class<T>.spawn(location: Location, consumer: (entity: T) -> Unit
 
 /** packet function */
 
-fun Player.sendTitle(title: ChatComponent, subTitle: ChatComponent, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20) {
-    // TODO
+fun sendPacketTitle(player: Player, title: String, subTitle: String? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20)
+        = sendPacketTitle(player, ChatSerializer.fromRaw(title), if(subTitle == null) null else ChatSerializer.fromRaw(subTitle), fadeIn, stay, fadeOut)
+
+fun sendPacketTitle(player: Player, title: ChatComponent, subTitle: ChatComponent? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20) {
+    var packet = PacketOutTitle(PacketOutTitle.Action.TITLE, title)
+    packet.send(player)
+    if(subTitle != null) {
+        packet = PacketOutTitle(PacketOutTitle.Action.SUBTITLE, subTitle)
+        packet.send(player)
+    }
+    packet = PacketOutTitle(fadeIn, stay, fadeOut)
+    packet.send(player)
 }
 
-fun Player.sendTitleReset()
-        = PacketOutTitle(PacketOutTitle.Action.RESET, null).send(this)
+fun sendPacketTitleReset(player: Player)
+        = PacketOutTitle(PacketOutTitle.Action.RESET, null).send(player)

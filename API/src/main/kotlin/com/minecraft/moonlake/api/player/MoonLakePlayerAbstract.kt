@@ -17,16 +17,13 @@
 
 package com.minecraft.moonlake.api.player
 
+import com.minecraft.moonlake.api.*
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.chat.ChatAction
 import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.chat.ChatComponentFancy
 import com.minecraft.moonlake.api.effect.EffectType
-import com.minecraft.moonlake.api.notNull
 import com.minecraft.moonlake.api.packet.PacketOutChat
-import com.minecraft.moonlake.api.toBukkitWorld
-import com.minecraft.moonlake.api.toColor
-import com.minecraft.moonlake.api.toMoonLakePlayer
 import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.command.CommandSender
@@ -604,6 +601,15 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
     override fun setGravity(gravity: Boolean)
             { getBukkitPlayer().setGravity(gravity) }
 
+    override fun sendTitle(title: String, subTitle: String?, fadeIn: Int, stay: Int, fadeOut: Int)
+            = sendPacketTitle(getBukkitPlayer(), title, subTitle, fadeIn, stay, fadeOut)
+
+    override fun sendTitle(title: ChatComponent, subTitle: ChatComponent?, fadeIn: Int, stay: Int, fadeOut: Int)
+            = sendPacketTitle(getBukkitPlayer(), title, subTitle, fadeIn, stay, fadeOut)
+
+    override fun sendTitleReset()
+            = sendPacketTitleReset(getBukkitPlayer())
+
     /** significant */
 
     override final fun compareTo(other: MoonLakePlayer): Int
@@ -620,5 +626,9 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
         else if(other is Player)
             return getBukkitPlayer() == other
         return false
+    }
+
+    override fun toString(): String {
+        return "MoonLakePlayer(player=${player.name})"
     }
 }

@@ -334,6 +334,12 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, InventoryHo
 
     fun getLocale(): String
 
+    fun sendTitle(title: String, subTitle: String? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20)
+
+    fun sendTitle(title: ChatComponent, subTitle: ChatComponent? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20)
+
+    fun sendTitleReset()
+
     /** Minecraft Bukkit 1.9 */
 
     /**
