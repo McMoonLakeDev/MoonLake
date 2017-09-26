@@ -52,8 +52,6 @@ object Packets {
     private val lookupBukkit: MutableMap<Class<*>, Class<out PacketBukkit>> = HashMap()
 
     init {
-        registerPacketBukkit("PacketLoginInStart", PacketInLoginStart::class.java)
-
         registerPacketBukkit("PacketPlayOutChat", PacketOutChat::class.java)
         registerPacketBukkit("PacketPlayOutCustomPayload", PacketOutPayload::class.java)
         registerPacketBukkit("PacketPlayOutWorldParticles", PacketOutParticles::class.java)
