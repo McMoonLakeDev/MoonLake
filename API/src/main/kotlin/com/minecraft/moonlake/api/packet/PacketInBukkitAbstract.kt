@@ -23,20 +23,20 @@ import com.minecraft.moonlake.api.utility.MinecraftReflection
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 
-abstract class PacketOutBukkitAbstract(clazzName: String) : PacketBukkitAbstract(MinecraftReflection.getMinecraftClass(clazzName)), PacketOutBukkit {
+abstract class PacketInBukkitAbstract(clazzName: String) : PacketBukkitAbstract(MinecraftReflection.getMinecraftClass(clazzName)), PacketInBukkit {
 
-    override fun send(receiver: MoonLakePlayer)
-            = send(receiver.getBukkitPlayer())
+    override fun receive(sender: MoonLakePlayer)
+            = receive(sender.getBukkitPlayer())
 
-    override fun send(receiver: Player) = try {
-        Packets.sendPacket(receiver, getHandle())
+    override fun receive(sender: Player) = try {
+        // TODO
     } catch(e: Exception) {
         throw PacketException(e)
     }
 
-    override fun sendAsync(receiver: MoonLakePlayer, plugin: Plugin)
-            = sendAsync(receiver.getBukkitPlayer(), plugin)
+    override fun receiveAsync(sender: MoonLakePlayer, plugin: Plugin)
+            = receiveAsync(sender.getBukkitPlayer(), plugin)
 
-    override fun sendAsync(receiver: Player, plugin: Plugin)
-            { plugin.runTaskAsync { send(receiver) } }
+    override fun receiveAsync(sender: Player, plugin: Plugin)
+            { plugin.runTaskAsync { receive(sender) } }
 }

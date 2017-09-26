@@ -15,16 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api.reflect.accessor
+package com.minecraft.moonlake.api.packet
 
-import com.minecraft.moonlake.api.exception.MoonLakeException
-import java.lang.reflect.Field
+import com.minecraft.moonlake.api.Valuable
 
-interface AccessorField : Accessor<Field> {
+enum class PacketListenerPriority(val value: Int) : Valuable<Int> {
 
-    @Throws(MoonLakeException::class)
-    fun get(instance: Any?): Any?
+    LOWEST(0),
+    LOW(1),
+    NORMAL(2),
+    HIGH(3),
+    HIGHEST(4),
+    MONITOR(5),
+    ;
 
-    @Throws(MoonLakeException::class)
-    fun set(instance: Any?, value: Any?)
+    override fun value(): Int
+            = value
 }

@@ -21,6 +21,7 @@ import com.minecraft.moonlake.api.Valuable
 import com.minecraft.moonlake.api.converter.ConverterEquivalent
 import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
+import io.netty.channel.Channel
 import org.bukkit.entity.Player
 
 enum class MinecraftPlayerMembers(val clazz: Class<*>) : Valuable<String> {
@@ -44,14 +45,37 @@ enum class MinecraftPlayerMembers(val clazz: Class<*>) : Valuable<String> {
                 { Accessors.getAccessorField(MinecraftReflection.getEntityPlayerClass(), clazz, true) }
             }
         }
+    },
+    NETWORK_MANAGER(MinecraftReflection.getNetworkManagerClass()) { // parent = connection
+        override fun value(): String
+                = "networkManager"
+        override fun get(): () -> AccessorField
+                = { Accessors.getAccessorField(MinecraftReflection.getPlayerConnectionClass(), clazz, true) }
+        override fun get(player: Player): Any?
+                = getField().get(CONNECTION.get(player))
+        override fun set(player: Player, value: Any?)
+                = getField().set(CONNECTION.get(player), value)
+    },
+    CHANNEL(Channel::class.java) { // parent = networkManager
+        override fun value(): String
+                = "channel"
+        override fun get(): () -> AccessorField
+                = { Accessors.getAccessorField(MinecraftReflection.getNetworkManagerClass(), clazz, true) }
+        override fun get(player: Player): Any?
+                = getField().get(NETWORK_MANAGER.get(player))
+        override fun set(player: Player, value: Any?)
+                = getField().set(NETWORK_MANAGER.get(player), value)
     }
     ;
 
-    fun get(player: Player): Any
-            = cachedMap.getOrPut(this, get()).get(converter.getGeneric(player))
+    protected fun getField(): AccessorField
+            = cachedMap.getOrPut(this, get())
 
-    fun set(player: Player, value: Any?)
-            = cachedMap.getOrPut(this, get()).set(converter.getGeneric(player), value)
+    open fun get(player: Player): Any?
+            = getField().get(converter.getGeneric(player))
+
+    open fun set(player: Player, value: Any?)
+            = getField().set(converter.getGeneric(player), value)
 
     open protected fun get(): () -> AccessorField
             = { Accessors.getAccessorField(MinecraftReflection.getEntityPlayerClass(), value(), true) }

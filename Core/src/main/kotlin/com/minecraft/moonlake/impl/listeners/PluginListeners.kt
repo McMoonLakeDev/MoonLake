@@ -20,6 +20,7 @@ package com.minecraft.moonlake.impl.listeners
 import com.minecraft.moonlake.api.MoonLake
 import com.minecraft.moonlake.api.depend.DependPlugins
 import com.minecraft.moonlake.api.event.MoonLakeListener
+import com.minecraft.moonlake.api.packet.PacketListeners
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.server.PluginDisableEvent
@@ -28,9 +29,12 @@ class PluginListeners : MoonLakeListener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun onDisable(event: PluginDisableEvent) {
-        if(event.plugin is MoonLake)
+        if(event.plugin is MoonLake) {
             DependPlugins.unregisterAll()
-        else
+            PacketListeners.close()
+        } else {
             DependPlugins.unregister(event.plugin.name)
+            PacketListeners.unregisterListener(event.plugin)
+        }
     }
 }

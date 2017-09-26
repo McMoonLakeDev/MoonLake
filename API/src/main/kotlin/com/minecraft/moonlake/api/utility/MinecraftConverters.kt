@@ -74,7 +74,7 @@ object MinecraftConverters {
     fun <T: Entity> getEntity(clazz: Class<T>): ConverterEquivalent<T> {
         return object: ConverterEquivalentIgnoreNull<T> {
             override fun getGenericValue(specific: T): Any
-                    = craftEntityGetHandle.invoke(specific)
+                    = craftEntityGetHandle.invoke(specific) as Any
             override fun getSpecificValue(generic: Any): T
                     = entityGetBukkitEntity.invoke(generic) as T
             override fun getSpecificType(): Class<T>
@@ -97,7 +97,7 @@ object MinecraftConverters {
     fun getItemStack(): ConverterEquivalent<ItemStack> {
         return object: ConverterEquivalentIgnoreNull<ItemStack> {
             override fun getGenericValue(specific: ItemStack): Any
-                    = craftItemStackAsNMSCopy.invoke(null, specific)
+                    = craftItemStackAsNMSCopy.invoke(null, specific) as Any
             override fun getSpecificValue(generic: Any): ItemStack
                     = craftItemStackAsCraftMirror.invoke(null, generic) as ItemStack
             override fun getSpecificType(): Class<ItemStack>

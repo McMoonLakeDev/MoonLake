@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.depend.DependPlaceholderAPI
 import com.minecraft.moonlake.api.depend.DependPlugins
 import com.minecraft.moonlake.api.depend.DependVaultEconomy
 import com.minecraft.moonlake.api.depend.DependWorldEdit
+import com.minecraft.moonlake.api.packet.PacketListeners
 import com.minecraft.moonlake.api.region.*
 import com.minecraft.moonlake.api.registerEvent
 import com.minecraft.moonlake.api.setMoonLake
@@ -39,13 +40,14 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
     constructor(): super()
 
     override fun onLoad() {
+        setMoonLake(this)
         registerConfigurationSerializable()
         registerDependPluginImplement()
     }
 
     override fun onEnable() {
-        setMoonLake(this)
         this.registerMoonLakePluginListeners()
+        this.classLoader.loadClass(PacketListeners::class.java.name)
         this.logger.info("Server ${MinecraftVersion.currentVersion()} NMS: ${MinecraftBukkitVersion.currentVersion().getVersion()}")
         this.logger.info("月色之湖核心 API 插件 v${getPluginVersion()} 成功加载.")
     }

@@ -17,27 +17,34 @@
 
 package com.minecraft.moonlake.api.packet
 
-abstract class PacketBukkitAbstract(private val clazz: Class<*>) : PacketAbstract(), PacketBukkit {
+import com.minecraft.moonlake.api.event.Cancellable
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
+import java.lang.ref.WeakReference
+import java.util.*
 
-    override fun getType(): Class<*>
-            = clazz
+class PacketEvent(source: Any, var packet: PacketBukkit, player: Player?) : EventObject(source), Cancellable {
 
-    override fun getHandle(): Any
-            = Packets.createReadPacket(this)
+    private val playerRef: WeakReference<Player?> = WeakReference(player)
+    private var cancel = false
 
-    override fun equals(other: Any?): Boolean {
-        if(other === this)
-            return true
-        if(other is PacketBukkitAbstract)
-            return clazz == other.clazz
-        return false
-    }
+    val player: Player?
+        get() = playerRef.get()
 
-    override fun hashCode(): Int {
-        return clazz.hashCode()
-    }
+    override fun setCancelled(cancel: Boolean)
+            { this.cancel = cancel }
+
+    override fun isCancelled(): Boolean
+            = cancel
+
+    fun isAsync()
+            = !Bukkit.isPrimaryThread()
 
     override fun toString(): String {
-        return "PacketBukkitAbstract(clazz=$clazz)"
+        return "PacketEvent(player=$player, packet=$packet)"
+    }
+
+    companion object {
+        private const val serialVersionUID = -8793261513410637044L
     }
 }

@@ -23,5 +23,5 @@ import java.lang.reflect.Method
 interface AccessorMethod : Accessor<Method> {
 
     @Throws(MoonLakeException::class)
-    fun invoke(instance: Any?, vararg params: Any?): Any
+    fun invoke(instance: Any?, vararg params: Any?): Any?
 }

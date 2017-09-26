@@ -130,7 +130,7 @@ open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
         Accessors.getAccessorField(MinecraftReflection.getMinecraftClass("ContainerAnvil"), MinecraftReflection.getEntityHumanClass(), true) }
 
     protected fun getContainerAnvilPlayerHandle(): Any
-            = containerAnvilEntityHuman.get(handle)
+            = containerAnvilEntityHuman.get(handle) as Any
 
     protected fun getContainerAnvilPlayer(): Player {
         val entityHuman = containerAnvilEntityHuman.get(handle)

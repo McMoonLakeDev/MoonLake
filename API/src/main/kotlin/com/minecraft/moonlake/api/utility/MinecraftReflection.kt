@@ -17,37 +17,31 @@
 
 package com.minecraft.moonlake.api.utility
 
-import com.minecraft.moonlake.api.anvil.AnvilWindow
 import com.minecraft.moonlake.api.cached.CachedPackage
 import com.minecraft.moonlake.api.currentBukkitVersion
 import com.minecraft.moonlake.api.exception.MoonLakeException
 import com.minecraft.moonlake.api.isOrLater
 import com.minecraft.moonlake.api.reflect.ClassSource
-import com.minecraft.moonlake.api.reflect.accessor.AccessorConstructor
-import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
-import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
-import org.bukkit.entity.Player
-import org.bukkit.plugin.Plugin
 
 object MinecraftReflection {
 
     /** member */
 
     @JvmStatic
-    val craftBukkitFullPackage: String by lazy {
+    private val craftBukkitFullPackage: String by lazy {
         "org.bukkit.craftbukkit.${MinecraftBukkitVersion.currentVersion().getVersion()}" }
     @JvmStatic
-    val minecraftFullPackage: String by lazy {
+    private val minecraftFullPackage: String by lazy {
         "net.minecraft.server.${MinecraftBukkitVersion.currentVersion().getVersion()}" }
     @JvmStatic
-    val craftBukkitPackage: CachedPackage by lazy {
+    private val craftBukkitPackage: CachedPackage by lazy {
         CachedPackage(craftBukkitFullPackage, source) }
     @JvmStatic
-    val minecraftPackage: CachedPackage by lazy {
+    private val minecraftPackage: CachedPackage by lazy {
         CachedPackage(minecraftFullPackage, source) }
     @JvmStatic
-    val source: ClassSource by lazy {
+    private val source: ClassSource by lazy {
         ClassSource.fromClassLoader() }
 
     /** api */
@@ -171,13 +165,22 @@ object MinecraftReflection {
             = getMinecraftClass("PacketDataSerializer")
 
     @JvmStatic
-    @JvmName("sendPacket")
-    fun sendPacket(receiver: Player, packet: Any)
-            { sendPacket.invoke(MinecraftPlayerMembers.CONNECTION.get(receiver), packet) }
-
-    /** significant */
+    @JvmName("getNetworkManagerClass")
+    fun getNetworkManagerClass(): Class<*>
+            = getMinecraftClass("NetworkManager")
 
     @JvmStatic
-    private val sendPacket: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(getPlayerConnectionClass(), "sendPacket", false, getPacketClass()) }
+    @JvmName("getMinecraftServerClass")
+    fun getMinecraftServerClass(): Class<*>
+            = getMinecraftClass("MinecraftServer")
+
+    @JvmStatic
+    @JvmName("getServerConnectionClass")
+    fun getServerConnectionClass(): Class<*>
+            = getMinecraftClass("ServerConnection")
+
+    @JvmStatic
+    @JvmName("getCraftServerClass")
+    fun getCraftServerClass(): Class<*>
+            = getCraftBukkitClass("CraftServer")
 }

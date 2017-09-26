@@ -15,16 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api.reflect.accessor
+package com.minecraft.moonlake.api.packet
 
-import com.minecraft.moonlake.api.exception.MoonLakeException
-import java.lang.reflect.Field
+import org.bukkit.plugin.Plugin
 
-interface AccessorField : Accessor<Field> {
+interface PacketListener {
 
-    @Throws(MoonLakeException::class)
-    fun get(instance: Any?): Any?
+    fun getPlugin(): Plugin
 
-    @Throws(MoonLakeException::class)
-    fun set(instance: Any?, value: Any?)
+    fun getPriority(): PacketListenerPriority
+
+    fun getSendingTypes(): Set<Class<out PacketOut>>
+
+    fun getReceivingTypes(): Set<Class<out PacketIn>>
+
+    fun onSending(event: PacketEvent)
+
+    fun onReceiving(event: PacketEvent)
 }

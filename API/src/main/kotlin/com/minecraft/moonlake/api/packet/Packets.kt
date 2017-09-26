@@ -22,9 +22,11 @@ import com.minecraft.moonlake.api.reflect.accessor.AccessorConstructor
 import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
+import com.minecraft.moonlake.api.utility.MinecraftPlayerMembers
 import com.minecraft.moonlake.api.utility.MinecraftReflection
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
+import org.bukkit.entity.Player
 
 object Packets {
 
@@ -41,12 +43,17 @@ object Packets {
     private val packetWrite: AccessorMethod by lazy {
         Accessors.getAccessorMethod(MinecraftReflection.getPacketClass(), "b", false, MinecraftReflection.getPacketDataSerializerClass()) }
     @JvmStatic
+    private val sendPacket: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(MinecraftReflection.getPlayerConnectionClass(), "sendPacket", false, MinecraftReflection.getPacketClass()) }
+    @JvmStatic
     private val converter: ConverterEquivalentIgnoreNull<PacketBukkit> by lazy {
         getPacketConverter() }
     @JvmStatic
     private val lookupBukkit: MutableMap<Class<*>, Class<out PacketBukkit>> = HashMap()
 
     init {
+        registerPacketBukkit("PacketLoginInStart", PacketInLoginStart::class.java)
+
         registerPacketBukkit("PacketPlayOutChat", PacketOutChat::class.java)
         registerPacketBukkit("PacketPlayOutCustomPayload", PacketOutPayload::class.java)
         registerPacketBukkit("PacketPlayOutWorldParticles", PacketOutParticles::class.java)
@@ -54,14 +61,33 @@ object Packets {
     }
 
     @JvmStatic
-    @JvmName("createPacket")
-    fun createPacket(clazz: Class<*>): Any
-            = clazz.newInstance()
+    @JvmName("sendPacket")
+    fun sendPacket(receiver: Player, packet: Any)
+            { sendPacket.invoke(MinecraftPlayerMembers.CONNECTION.get(receiver), packet) }
 
     @JvmStatic
     @JvmName("createPacket")
-    fun createPacket(wrapped: PacketBukkit): Any
+    @Throws(IllegalArgumentException::class)
+    fun createPacket(clazz: Class<*>): Any
+            = if(MinecraftReflection.getPacketClass().isAssignableFrom(clazz)) clazz.newInstance() else throw IllegalArgumentException("无效的数据包 $clazz 类.")
+
+    @JvmStatic
+    @JvmName("createReadPacket")
+    fun createReadPacket(wrapped: PacketBukkit): Any
             = converter.getGenericValue(wrapped)
+
+    @JvmStatic
+    @JvmName("createReadPacket")
+    @Throws(UnsupportedOperationException::class)
+    @Synchronized
+    fun createReadPacket(packet: Any): PacketBukkit
+            = converter.getSpecificValue(packet)
+
+    @JvmStatic
+    @JvmName("createReadPacketSafe")
+    @Synchronized
+    fun createReadPacketSafe(packet: Any): PacketBukkit?
+            = if(isRegistered(packet::class.java)) converter.getSpecificValue(packet) else null
 
     @JvmStatic
     @JvmName("createPacketDataSerializer")
@@ -76,6 +102,12 @@ object Packets {
             = lookupBukkit[clazz]?.newInstance() ?: throw UnsupportedOperationException("未对 NMS 数据包 $clazz 类添加包装类支持.")
 
     @JvmStatic
+    @JvmName("createPacketBukkitSafe")
+    @Synchronized
+    fun createPacketBukkitSafe(clazz: Class<*>): PacketBukkit?
+            = lookupBukkit[clazz]?.newInstance()
+
+    @JvmStatic
     @JvmName("registerPacketBukkit")
     @Throws(IllegalArgumentException::class)
     @Synchronized
@@ -85,6 +117,18 @@ object Packets {
             throw IllegalArgumentException("未知的 NMS 数据包 $clazzName 类或已经被注册.")
         return lookupBukkit.put(clazz, value) == null
     }
+
+    @JvmStatic
+    @JvmName("isRegistered")
+    @Synchronized
+    fun isRegistered(clazz: Class<*>): Boolean
+            = lookupBukkit.containsKey(clazz)
+
+    @JvmStatic
+    @JvmName("isRegisteredWrapped")
+    @Synchronized
+    fun <T: Packet> isRegisteredWrapped(clazz: Class<out T>): Boolean
+            = lookupBukkit.entries.firstOrNull { it.value == clazz } != null
 
     @JvmStatic
     @JvmName("getPacketConverter")
@@ -99,9 +143,9 @@ object Packets {
                 return handle
             }
             override fun getSpecificValue(generic: Any): PacketBukkit {
+                val wrapped = createPacketBukkit(generic::class.java)
                 val packetDataSerializer = createPacketDataSerializer()
                 val packetBuffer = PacketBuffer(packetDataSerializerBuffer.get(packetDataSerializer) as ByteBuf)
-                val wrapped = createPacketBukkit(generic::class.java)
                 packetWrite.invoke(generic, packetDataSerializer)
                 wrapped.read(packetBuffer)
                 packetBuffer.release()

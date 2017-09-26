@@ -180,7 +180,7 @@ object Accessors {
     }
 
     private data class AccessorMethodSimple(private val method: Method) : AccessorMethod {
-        override fun invoke(instance: Any?, vararg params: Any?): Any = try {
+        override fun invoke(instance: Any?, vararg params: Any?): Any? = try {
             method.invoke(instance, *params)
         } catch(e: Exception) {
             when(e) {
@@ -195,7 +195,7 @@ object Accessors {
     }
 
     private data class AccessorFieldSimple(private val field: Field) : AccessorField {
-        override fun get(instance: Any?): Any = try {
+        override fun get(instance: Any?): Any? = try {
             field.get(instance)
         } catch(e: Exception) {
             when(e) {

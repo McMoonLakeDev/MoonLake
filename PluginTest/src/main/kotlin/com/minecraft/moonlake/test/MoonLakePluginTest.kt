@@ -33,10 +33,7 @@ import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.item.Enchantment
 import com.minecraft.moonlake.api.item.ItemBuilder
 import com.minecraft.moonlake.api.nbt.NBTFactory
-import com.minecraft.moonlake.api.packet.PacketBuffer
-import com.minecraft.moonlake.api.packet.PacketOutChat
-import com.minecraft.moonlake.api.packet.PacketOutPayload
-import com.minecraft.moonlake.api.packet.PacketOutTitle
+import com.minecraft.moonlake.api.packet.*
 import com.minecraft.moonlake.api.particle.Particle
 import com.minecraft.moonlake.api.task.MoonLakeRunnable
 import org.bukkit.Bukkit
@@ -230,6 +227,15 @@ class MoonLakePluginTest : JavaPlugin() {
                 }
             }
         }.registerEvent(this)
+
+        PacketListeners.registerListener(object: PacketListenerAdapter(this, PacketListenerPriority.NORMAL, PacketOutTitle::class.java) {
+            override fun onSending(event: PacketEvent) {
+                getPlugin().logger.info("[数据包][输出] >> ${event.packet}")
+            }
+            override fun onReceiving(event: PacketEvent) {
+                getPlugin().logger.info("[数据包][输入] << ${event.packet}")
+            }
+        })
     }
 
     override fun onDisable() {
