@@ -22,9 +22,11 @@ import com.minecraft.moonlake.api.depend.DependPlaceholderAPI
 import com.minecraft.moonlake.api.depend.DependPlugins
 import com.minecraft.moonlake.api.depend.DependVaultEconomy
 import com.minecraft.moonlake.api.depend.DependWorldEdit
-import com.minecraft.moonlake.api.packet.PacketListeners
 import com.minecraft.moonlake.api.region.*
 import com.minecraft.moonlake.api.registerEvent
+import com.minecraft.moonlake.api.service.ServiceConfig
+import com.minecraft.moonlake.api.service.ServiceManager
+import com.minecraft.moonlake.api.service.ServicePacketListener
 import com.minecraft.moonlake.api.setMoonLake
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
@@ -32,12 +34,15 @@ import com.minecraft.moonlake.impl.depend.DependPlaceholderAPIImpl
 import com.minecraft.moonlake.impl.depend.DependVaultEconomyImpl
 import com.minecraft.moonlake.impl.depend.DependWorldEditImpl
 import com.minecraft.moonlake.impl.listeners.PluginListeners
+import com.minecraft.moonlake.impl.service.ServiceConfigImpl
+import com.minecraft.moonlake.impl.service.ServiceManagerImpl
+import com.minecraft.moonlake.impl.service.ServicePacketListenerImpl
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.plugin.java.JavaPlugin
 
-class MoonLakePlugin : JavaPlugin, MoonLake {
+class MoonLakePlugin : JavaPlugin(), MoonLake {
 
-    constructor(): super()
+    private val serviceManagerImpl = ServiceManagerImpl()
 
     override fun onLoad() {
         setMoonLake(this)
@@ -46,13 +51,24 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
     }
 
     override fun onEnable() {
+        this.registerServiceCore()
         this.registerMoonLakePluginListeners()
-        this.classLoader.loadClass(PacketListeners::class.java.name)
-        this.logger.info("Server ${MinecraftVersion.currentVersion()} NMS: ${MinecraftBukkitVersion.currentVersion().getVersion()}")
-        this.logger.info("月色之湖核心 API 插件 v${getPluginVersion()} 成功加载.")
+        this.logger.info("Server ${MinecraftVersion.currentVersion()} NMS: ${MinecraftBukkitVersion.currentVersion().version}")
+        this.logger.info("月色之湖核心 API 插件 v$pluginVersion 成功加载.")
     }
 
     override fun onDisable() {
+    }
+
+    override val serviceManager: ServiceManager
+        get() = serviceManagerImpl
+
+    /** register moonlake service core */
+    private fun registerServiceCore() {
+        val configService = ServiceConfigImpl()
+        serviceManager.registerService(ServiceConfig::class.java, configService)
+        if(configService.hasPacketListener())
+            serviceManager.registerService(ServicePacketListener::class.java, ServicePacketListenerImpl())
     }
 
     /** register moonlake wrapped configuration serializable class */
@@ -79,22 +95,30 @@ class MoonLakePlugin : JavaPlugin, MoonLake {
         PluginListeners().registerEvent(this)
     }
 
-    override fun getPluginPrefix(): String
-            = description.prefix
-    override fun getPluginName(): String
-            = description.name
-    override fun getPluginMain(): String
-            = description.main
-    override fun getPluginVersion(): String
-            = description.version
-    override fun getPluginWebsite(): String
-            = description.website
-    override fun getPluginDescription(): String
-            = description.description
-    override fun getPluginAuthors(): Set<String>
-            = description.authors.toSet()
-    override fun getPluginDepends(): Set<String>
-            = description.depend.toSet()
-    override fun getPluginSoftDepends(): Set<String>
-            = description.softDepend.toSet()
+    override val pluginPrefix: String
+        get() = description.prefix
+
+    override val pluginName: String
+        get() = description.name
+
+    override val pluginMain: String
+        get() = description.main
+
+    override val pluginVersion: String
+        get() = description.version
+
+    override val pluginWebsite: String
+        get() = description.website
+
+    override val pluginDescription: String
+        get() = description.description
+
+    override val pluginAuthors: Set<String>
+        get() = description.authors.toSet()
+
+    override val pluginDepends: Set<String>
+        get() = description.depend.toSet()
+
+    override val pluginSoftDepends: Set<String>
+        get() = description.softDepend.toSet()
 }

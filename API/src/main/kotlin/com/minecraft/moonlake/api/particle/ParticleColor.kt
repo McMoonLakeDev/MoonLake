@@ -19,9 +19,9 @@ package com.minecraft.moonlake.api.particle
 
 abstract class ParticleColor {
 
-    abstract fun getValueX(): Float
+    abstract val valueX: Float
 
-    abstract fun getValueY(): Float
+    abstract val valueY: Float
 
-    abstract fun getValueZ(): Float
+    abstract val valueZ: Float
 }

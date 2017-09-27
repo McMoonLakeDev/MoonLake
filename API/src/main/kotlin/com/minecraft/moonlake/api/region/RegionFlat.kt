@@ -19,9 +19,9 @@ package com.minecraft.moonlake.api.region
 
 interface RegionFlat : Region {
 
-    fun getMinimumY(): Int
+    val minimumY: Int
 
-    fun getMaximumY(): Int
+    val maximumY: Int
 
     fun asRegionFlat(): MutableIterable<RegionVector2D>
 }

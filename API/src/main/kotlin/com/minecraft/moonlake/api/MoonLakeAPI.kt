@@ -545,16 +545,16 @@ fun LivingEntity.getLivingTarget(range: Double, tolerance: Double = 4.0): Living
         = getLivingTarget(LivingEntity::class.java, range, tolerance)
 
 fun <T: LivingEntity> MoonLakePlayer.getLivingTargets(clazz: Class<T>, range: Double, tolerance: Double = 4.0): List<T>
-        = getBukkitPlayer().getLivingTargets(clazz, range, tolerance)
+        = bukkitPlayer.getLivingTargets(clazz, range, tolerance)
 
 fun MoonLakePlayer.getLivingTargets(range: Double, tolerance: Double = 4.0): List<LivingEntity>
-        = getBukkitPlayer().getLivingTargets(range, tolerance)
+        = bukkitPlayer.getLivingTargets(range, tolerance)
 
 fun <T: LivingEntity> MoonLakePlayer.getLivingTarget(clazz: Class<T>, range: Double, tolerance: Double = 4.0): T?
-        = getBukkitPlayer().getLivingTarget(clazz, range, tolerance)
+        = bukkitPlayer.getLivingTarget(clazz, range, tolerance)
 
 fun MoonLakePlayer.getLivingTarget(range: Double, tolerance: Double = 4.0): LivingEntity?
-        = getBukkitPlayer().getLivingTarget(range, tolerance)
+        = bukkitPlayer.getLivingTarget(range, tolerance)
 
 /** region function */
 
@@ -565,9 +565,9 @@ fun World.createCuboidRegion(pos1: RegionVector, pos2: RegionVector): RegionCubo
         = RegionCuboid(this, pos1, pos2)
 
 fun Region.createWorldBorder(): WorldBorder {
-    val worldBorder = getWorld().worldBorder
-    worldBorder.setSize(getLength().toDouble(), 0L)
-    worldBorder.center = getCenter().toLocation(getWorld())
+    val worldBorder = world.worldBorder
+    worldBorder.setSize(length.toDouble(), 0L)
+    worldBorder.center = center.toLocation(world)
     return worldBorder
 }
 
@@ -597,7 +597,7 @@ fun ItemStack.givePlayer(player: Player): Boolean
         = player.inventory.addItem(this).isEmpty() // the result is empty, indicating the success
 
 fun ItemStack.givePlayer(player: MoonLakePlayer): Boolean
-        = givePlayer(player.getBukkitPlayer())
+        = givePlayer(player.bukkitPlayer)
 
 fun ItemStack.dropLocation(location: Location): Item
         = location.world.dropItemNaturally(location, this)

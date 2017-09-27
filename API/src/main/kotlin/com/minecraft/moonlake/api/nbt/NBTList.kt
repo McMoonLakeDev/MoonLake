@@ -36,9 +36,7 @@ package com.minecraft.moonlake.api.nbt
 
 interface NBTList<T> : NBTBase<MutableList<NBTBase<T>>>, Iterable<T> {
 
-    fun getElementType(): NBTType
-
-    fun setElementType(type: NBTType)
+    var elementType: NBTType
 
     fun add(element: NBTBase<T>)
 

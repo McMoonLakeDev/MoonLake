@@ -42,7 +42,7 @@ class MoonLakePlayerCached private constructor(): CachedWeakRef<UUID, MoonLakePl
         private val instance: MoonLakePlayerCached by lazy(MoonLakePlayerCached::class.java) { MoonLakePlayerCached() }
 
         @JvmStatic
-        private val implement = "com.minecraft.moonlake.impl.player.MoonLakePlayerImpl_${MinecraftBukkitVersion.currentVersion().getVersion()}"
+        private val implement = "com.minecraft.moonlake.impl.player.MoonLakePlayerImpl_${MinecraftBukkitVersion.currentVersion().version}"
 
         @JvmStatic
         @Suppress("UNCHECKED_CAST")

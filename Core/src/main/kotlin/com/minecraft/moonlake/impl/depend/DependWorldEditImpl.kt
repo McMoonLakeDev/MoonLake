@@ -41,10 +41,10 @@ class DependWorldEditImpl : DependPluginAbstract<WorldEditPlugin>(getPlugin(Depe
             = RegionVector2D(x, z)
 
     override fun getSelection(player: MoonLakePlayer): Region?
-            = getSelection(player.getBukkitPlayer())
+            = getSelection(player.bukkitPlayer)
 
     override fun getSelection(player: Player): Region? {
-        val selection = getPlugin().getSelection(player) ?: return null
+        val selection = plugin.getSelection(player) ?: return null
         val world = selection.world ?: return null
         return when(selection) {
             is CuboidSelection -> {

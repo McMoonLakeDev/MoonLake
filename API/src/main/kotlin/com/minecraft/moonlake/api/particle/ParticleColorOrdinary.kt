@@ -35,12 +35,12 @@ class ParticleColorOrdinary : ParticleColor {
         this.blue = blue
     }
 
-    override fun getValueX(): Float
-            = red.div(255f)
+    override val valueX: Float
+        get() = red.div(255f)
 
-    override fun getValueY(): Float
-            = green.div(255f)
+    override val valueY: Float
+        get() = green.div(255f)
 
-    override fun getValueZ(): Float
-            = blue.div(255f)
+    override val valueZ: Float
+        get() = blue.div(255f)
 }

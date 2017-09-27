@@ -30,8 +30,8 @@ open class ChatComponentFancy : Builder<ChatComponent> {
         this.then(text)
     }
 
-    protected fun getLast(): ChatComponent
-            = extras.last()
+    protected val last: ChatComponent
+        get() = extras.last()
 
     fun then(text: String): ChatComponentFancy
             = then(ChatComponentText(text))
@@ -40,46 +40,46 @@ open class ChatComponentFancy : Builder<ChatComponent> {
             { extras.add(chatComponent); return this; }
 
     fun color(color: ChatColor): ChatComponentFancy
-            { getLast().getStyle().setColor(color); return this; }
+            { last.style.setColor(color); return this; }
 
     fun withBold(): ChatComponentFancy
-            { getLast().getStyle().setBold(true); return this; }
+            { last.style.setBold(true); return this; }
 
     fun withItalic(): ChatComponentFancy
-            { getLast().getStyle().setItalic(true); return this; }
+            { last.style.setItalic(true); return this; }
 
     fun withUnderlined(): ChatComponentFancy
-            { getLast().getStyle().setUnderlined(true); return this; }
+            { last.style.setUnderlined(true); return this; }
 
     fun withStrikethrough(): ChatComponentFancy
-            { getLast().getStyle().setStrikethrough(true); return this; }
+            { last.style.setStrikethrough(true); return this; }
 
     fun withObfuscated(): ChatComponentFancy
-            { getLast().getStyle().setObfuscated(true); return this; }
+            { last.style.setObfuscated(true); return this; }
 
     fun withInsertion(insertion: String): ChatComponentFancy
-            { getLast().getStyle().setInsertion(insertion); return this; }
+            { last.style.setInsertion(insertion); return this; }
 
     fun withClickEvent(action: ChatClickEvent.Action, value: String): ChatComponentFancy
-            { getLast().getStyle().setClickEvent(ChatClickEvent(action, value)); return this; }
+            { last.style.setClickEvent(ChatClickEvent(action, value)); return this; }
 
     fun withHoverEvent(action: ChatHoverEvent.Action, value: ChatComponent): ChatComponentFancy
-            { getLast().getStyle().setHoverEvent(ChatHoverEvent(action, value)); return this; }
+            { last.style.setHoverEvent(ChatHoverEvent(action, value)); return this; }
 
     fun file(path: String): ChatComponentFancy
-            { getLast().getStyle().setClickEvent(ChatClickEvent(ChatClickEvent.Action.OPEN_FILE, path)); return this; }
+            { last.style.setClickEvent(ChatClickEvent(ChatClickEvent.Action.OPEN_FILE, path)); return this; }
 
     fun link(url: String): ChatComponentFancy
-            { getLast().getStyle().setClickEvent(ChatClickEvent(ChatClickEvent.Action.OPEN_URL, url)); return this; }
+            { last.style.setClickEvent(ChatClickEvent(ChatClickEvent.Action.OPEN_URL, url)); return this; }
 
     fun suggest(command: String): ChatComponentFancy
-            { getLast().getStyle().setClickEvent(ChatClickEvent(ChatClickEvent.Action.SUGGEST_COMMAND, command)); return this }
+            { last.style.setClickEvent(ChatClickEvent(ChatClickEvent.Action.SUGGEST_COMMAND, command)); return this }
 
     fun command(command: String): ChatComponentFancy
-            { getLast().getStyle().setClickEvent(ChatClickEvent(ChatClickEvent.Action.RUN_COMMAND, command)); return this; }
+            { last.style.setClickEvent(ChatClickEvent(ChatClickEvent.Action.RUN_COMMAND, command)); return this; }
 
     fun tooltipText(text: String): ChatComponentFancy
-            { getLast().getStyle().setHoverEvent(ChatHoverEvent(ChatHoverEvent.Action.SHOW_TEXT, ChatComponentText(text))); return this; }
+            { last.style.setHoverEvent(ChatHoverEvent(ChatHoverEvent.Action.SHOW_TEXT, ChatComponentText(text))); return this; }
 
     fun tooltipTexts(vararg texts: String): ChatComponentFancy {
         val lastIndex = texts.size - 1
@@ -88,7 +88,7 @@ open class ChatComponentFancy : Builder<ChatComponent> {
     }
 
     fun tooltipItem(item: String): ChatComponentFancy
-            { getLast().getStyle().setHoverEvent(ChatHoverEvent(ChatHoverEvent.Action.SHOW_ITEM, ChatComponentText(item))); return this; }
+            { last.style.setHoverEvent(ChatHoverEvent(ChatHoverEvent.Action.SHOW_ITEM, ChatComponentText(item))); return this; }
 
     fun tooltipItem(itemStack: ItemStack): ChatComponentFancy
             = tooltipItem(NBTFactory.getStackNBT(itemStack).toString())
@@ -98,7 +98,7 @@ open class ChatComponentFancy : Builder<ChatComponent> {
 
     override fun build(): ChatComponent {
         val chatComponent = ChatComponentText("")
-        chatComponent.getExtras().addAll(extras)
+        chatComponent.extras.addAll(extras)
         return chatComponent
     }
 }

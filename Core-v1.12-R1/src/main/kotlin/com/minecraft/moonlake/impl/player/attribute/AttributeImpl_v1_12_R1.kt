@@ -23,10 +23,6 @@ import org.bukkit.attribute.Attribute
 
 open class AttributeImpl_v1_12_R1(player: MoonLakePlayer, type: AttributeType) : AttributeImpl_v1_11_R1(player, type) {
 
-    override fun adapter(): Attribute? = getType().let {
-        when(it == AttributeType.FLYING_SPEED) {
-            true -> org.bukkit.attribute.Attribute.GENERIC_FLYING_SPEED
-            else -> super.adapter()
-        }
-    }
+    override val adapter: Attribute?
+        get() = if(type == AttributeType.FLYING_SPEED) org.bukkit.attribute.Attribute.GENERIC_FLYING_SPEED else super.adapter
 }

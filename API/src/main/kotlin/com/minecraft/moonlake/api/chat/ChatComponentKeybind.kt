@@ -40,6 +40,6 @@ open class ChatComponentKeybind(private var keybind: String) : ChatComponentAbst
     }
 
     override fun toString(): String {
-        return "ChatComponentKeybind(keybind='$keybind', style=${getStyle()}, extras=${getExtras()})"
+        return "ChatComponentKeybind(keybind='$keybind', style=$style, extras=$extras)"
     }
 }

@@ -29,7 +29,7 @@ open class Version(val major: Int, val minor: Int, val build: Int) : Comparable<
                 .compare(major, other.major)
                 .compare(minor, other.minor)
                 .compare(build, other.build)
-                .result()
+                .result
     }
 
     override fun equals(other: Any?): Boolean {

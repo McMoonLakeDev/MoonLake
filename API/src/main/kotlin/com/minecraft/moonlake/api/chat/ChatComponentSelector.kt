@@ -40,6 +40,6 @@ open class ChatComponentSelector(private var selector: String) : ChatComponentAb
     }
 
     override fun toString(): String {
-        return "ChatComponentSelector(selector='$selector', style=${getStyle()}, extras=${getExtras()})"
+        return "ChatComponentSelector(selector='$selector', style=$style, extras=$extras)"
     }
 }

@@ -533,7 +533,7 @@ enum class Particle {
             this.data = data
         }
 
-        constructor(particle: Particle, color: ParticleColor, longDistance: Boolean) : this(particle, color.getValueX(), color.getValueY(), color.getValueZ(), 1f, 0, longDistance, null) {
+        constructor(particle: Particle, color: ParticleColor, longDistance: Boolean) : this(particle, color.valueX, color.valueY, color.valueZ, 1f, 0, longDistance, null) {
             if(particle == RED_DUST && color is ParticleColorOrdinary && color.red == 0)
                 offsetX = java.lang.Float.MIN_NORMAL
         }

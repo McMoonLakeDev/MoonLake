@@ -19,13 +19,13 @@ package com.minecraft.moonlake.api.chat
 
 interface ChatComponent {
 
-    fun getStyle(): ChatStyle
+    var style: ChatStyle
 
     fun setStyle(style: ChatStyle?): ChatComponent
 
-    fun getExtras(): MutableList<ChatComponent>
+    val extras: MutableList<ChatComponent>
 
-    fun getExtraSize(): Int
+    val extraSize: Int
 
     fun append(text: String): ChatComponent
 

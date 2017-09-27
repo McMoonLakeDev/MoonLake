@@ -28,14 +28,14 @@ class RegionIterator(private val region: Region) : MutableIterator<RegionVectorB
     private var nextZ: Int
 
     init {
-        val max = region.getMaximumPoint()
-        this.maxX = max.getBlockX()
-        this.maxY = max.getBlockY()
-        this.maxZ = max.getBlockZ()
-        this.min = region.getMinimumPoint()
-        this.nextX = min.getBlockX()
-        this.nextY = min.getBlockY()
-        this.nextZ = min.getBlockZ()
+        val max = region.maximumPoint
+        this.maxX = max.blockX
+        this.maxY = max.blockY
+        this.maxZ = max.blockZ
+        this.min = region.minimumPoint
+        this.nextX = min.blockX
+        this.nextY = min.blockY
+        this.nextZ = min.blockZ
         this.forward()
     }
 
@@ -47,11 +47,11 @@ class RegionIterator(private val region: Region) : MutableIterator<RegionVectorB
     private fun forwardOne() {
         if(++nextX <= maxX)
             return
-        nextX = min.getBlockX()
+        nextX = min.blockX
 
         if(++nextY <= maxY)
             return
-        nextY = min.getBlockY()
+        nextY = min.blockY
 
         if(++nextZ <= maxZ)
             return

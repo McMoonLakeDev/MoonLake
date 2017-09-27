@@ -41,31 +41,28 @@ import com.minecraft.moonlake.api.reflect.StructureModifier
 import com.minecraft.moonlake.api.utility.MinecraftReflection
 import java.lang.reflect.Method
 
-class NBTWrappedElement<T>(private val handle: Any, private var name: String) : NBTWrapper<T> {
+class NBTWrappedElement<T>(private val _handle: Any, private var _name: String) : NBTWrapper<T> {
 
     /** member */
 
-    private var type: NBTType? = null
+    private var _type: NBTType? = null
 
-    /** api */
+    override val handle: Any
+        get() = _handle
 
-    override fun getHandle(): Any
-            = handle
+    override var name: String
+        get() = _name
+        set(value) { _name = value }
 
-    override fun getName(): String
-            = this.name
-
-    override fun setName(name: String)
-            { this.name = name }
-
-    override fun getType(): NBTType {
-        if(type == null) try {
-            type = NBTType.fromId((nbtBaseGetTypeId.invoke(handle) as Byte).toInt())
-        } catch (e: Exception) {
-            throw MoonLakeException("无法获取 $handle 的 NBT 类型.", e)
+    override val type: NBTType
+        get() {
+            if(_type == null) try {
+                _type = NBTType.fromId((nbtBaseGetTypeId.invoke(handle) as Byte).toInt())
+            } catch (e: Exception) {
+                throw MoonLakeException("无法获取 $handle 的 NBT 类型.", e)
+            }
+            return _type.notNull()
         }
-        return type.notNull()
-    }
 
     fun getElementType(): NBTType {
         val elementType = currentModifier().withTarget<Any>(handle).withType<Byte>(Byte::class.java).read(0)
@@ -77,15 +74,13 @@ class NBTWrappedElement<T>(private val handle: Any, private var name: String) : 
         currentModifier().withTarget<Any>(handle).withType<Byte>(Byte::class.java).write(0, elementType)
     }
 
-    @Suppress("UNCHECKED_CAST")
-    override fun getValue(): T
-            = currentModifier().withTarget<T>(handle).read(0) as T
-
-    override fun setValue(value: T)
-            { currentModifier().withTarget<T>(handle).write(0, value) }
+    override var value: T
+        @Suppress("UNCHECKED_CAST")
+        get() = currentModifier().withTarget<T>(handle).read(0) as T
+        set(value) { currentModifier().withTarget<T>(handle).write(0, value) }
 
     private fun currentModifier(): StructureModifier<*> {
-        val index = getType().ordinal
+        val index = type.ordinal
         var modifier = modifiers[index]
         if(modifier == null) synchronized(this) {
             if(modifiers[index] == null)
@@ -101,23 +96,23 @@ class NBTWrappedElement<T>(private val handle: Any, private var name: String) : 
         if(other === this)
             return true
         if(other is NBTBase<*>)
-            return other.getType() == getType() && other.getValue() == getValue()
+            return other.type == type && other.value == value
         return false
     }
 
     override fun hashCode(): Int {
-        var result = getName().hashCode()
-        result = 31 * result + getType().hashCode()
-        result = 31 * result + (getValue()?.hashCode() ?: 0)
+        var result = name.hashCode()
+        result = 31 * result + type.hashCode()
+        result = 31 * result + (value?.hashCode() ?: 0)
         return result
     }
 
     override fun toString(): String {
         return buildString {
             append("{")
-            when(getType()) {
-                NBTType.TAG_STRING -> append("\"${getValue()}\"")
-                else -> append("${getValue()}")
+            when(type) {
+                NBTType.TAG_STRING -> append("\"$value\"")
+                else -> append("$value")
             }
             append("}")
         }

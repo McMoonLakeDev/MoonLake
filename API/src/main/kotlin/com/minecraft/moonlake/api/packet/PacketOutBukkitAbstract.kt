@@ -26,16 +26,16 @@ import org.bukkit.plugin.Plugin
 abstract class PacketOutBukkitAbstract(clazzName: String) : PacketBukkitAbstract(MinecraftReflection.getMinecraftClass(clazzName)), PacketOutBukkit {
 
     override fun send(receiver: MoonLakePlayer)
-            = send(receiver.getBukkitPlayer())
+            = send(receiver.bukkitPlayer)
 
     override fun send(receiver: Player) = try {
-        Packets.sendPacket(receiver, getHandle())
+        Packets.sendPacket(receiver, handle)
     } catch(e: Exception) {
         throw PacketException(e)
     }
 
     override fun sendAsync(receiver: MoonLakePlayer, plugin: Plugin)
-            = sendAsync(receiver.getBukkitPlayer(), plugin)
+            = sendAsync(receiver.bukkitPlayer, plugin)
 
     override fun sendAsync(receiver: Player, plugin: Plugin)
             { plugin.runTaskAsync { send(receiver) } }

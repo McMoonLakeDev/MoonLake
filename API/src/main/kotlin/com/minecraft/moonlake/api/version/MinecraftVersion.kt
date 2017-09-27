@@ -72,14 +72,14 @@ class MinecraftVersion(major: Int, minor: Int, build: Int, private val pre: Int?
 
     /** api */
 
-    fun isPre(): Boolean
-            = pre != null
+    val isPre: Boolean
+        get() = pre != null
 
     override fun getVersion(): String
             = "$major.$minor.$build" + if(pre != null) "-pre$pre" else ""
 
-    fun getBukkitVersion(): MinecraftBukkitVersion
-            = MinecraftBukkitVersion.lookup(this)
+    val bukkitVersion: MinecraftBukkitVersion
+        get() = MinecraftBukkitVersion.lookup(this)
 
     /** significant */
 
@@ -90,7 +90,7 @@ class MinecraftVersion(major: Int, minor: Int, build: Int, private val pre: Int?
                     .compare(minor, other.minor)
                     .compare(build, other.build)
                     .compare(pre ?: -1, other.pre ?: -1)
-                    .result()
+                    .result
         else
             super.compareTo(other)
     }
@@ -105,7 +105,7 @@ class MinecraftVersion(major: Int, minor: Int, build: Int, private val pre: Int?
         if(other === this)
             return true
         if(other is MinecraftVersion)
-            return super.equals(other) && isPre() == other.isPre()
+            return super.equals(other) && isPre == other.isPre
         return false
     }
 

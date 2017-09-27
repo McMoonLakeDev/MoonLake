@@ -25,21 +25,21 @@ import org.bukkit.entity.Entity
 
 interface Region : ConfigurationSerializable, MutableIterable<RegionVectorBlock> {
 
-    fun getWorld(): World
+    val world: World
 
-    fun getMinimumPoint(): RegionVector
+    val minimumPoint: RegionVector
 
-    fun getMaximumPoint(): RegionVector
+    val maximumPoint: RegionVector
 
-    fun getCenter(): RegionVector
+    val center: RegionVector
 
-    fun getArea(): Int
+    val area: Int
 
-    fun getWidth(): Int
+    val width: Int
 
-    fun getHeight(): Int
+    val height: Int
 
-    fun getLength(): Int
+    val length: Int
 
     fun contains(vector: RegionVector): Boolean
 

@@ -41,7 +41,7 @@ object DependPlugins {
                 throw DependPluginException("依赖插件接口类不存在实现类或实现类未实现接口.")
             val value = implClazz.newInstance()
             values.put(clazz, value)
-            names.put(value.getPluginName(), clazz)
+            names.put(value.pluginName, clazz)
             depend = value
         }
         if(depend != null && clazz.isInstance(depend))

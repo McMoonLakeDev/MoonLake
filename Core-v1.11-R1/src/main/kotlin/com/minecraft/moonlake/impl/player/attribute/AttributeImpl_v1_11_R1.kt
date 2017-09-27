@@ -23,10 +23,6 @@ import org.bukkit.attribute.Attribute
 
 open class AttributeImpl_v1_11_R1(player: MoonLakePlayer, type: AttributeType) : AttributeImpl_v1_9_R1(player, type) {
 
-    override fun adapter(): Attribute? = getType().let {
-        when(it == AttributeType.ARMOR_TOUGHNESS) {
-            true -> org.bukkit.attribute.Attribute.GENERIC_ARMOR_TOUGHNESS
-            else -> super.adapter()
-        }
-    }
+    override val adapter: Attribute?
+        get() = if(type == AttributeType.ARMOR_TOUGHNESS) org.bukkit.attribute.Attribute.GENERIC_ARMOR_TOUGHNESS else super.adapter
 }

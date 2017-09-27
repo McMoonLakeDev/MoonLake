@@ -61,198 +61,186 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
 
     @Throws(IllegalOfflinePlayerException::class)
     constructor(player: Player) {
-        this.player = (!player.isOnline).let {
-            when(it) {
-                true -> throw IllegalOfflinePlayerException(player.name)
-                else -> player
-            }
-        }
+        this.player = if(player.isOnline) player else throw IllegalOfflinePlayerException(player.name)
     }
 
-    /** function */
-
-    override final fun getBukkitPlayer(): Player
-            = player
+    override final val bukkitPlayer: Player
+        get() = player
 
     override final fun spigot(): CommandSender.Spigot
             = throw UnsupportedOperationException()
 
     override final fun getName(): String
-            = getBukkitPlayer().name
+            = bukkitPlayer.name
 
     override final fun getUniqueId(): UUID
-            = getBukkitPlayer().uniqueId
+            = bukkitPlayer.uniqueId
 
     override fun sendMessage(message: String)
-            = getBukkitPlayer().sendMessage(message)
+            = bukkitPlayer.sendMessage(message)
 
     override fun sendMessage(messages: Array<out String>)
-            = getBukkitPlayer().sendMessage(messages)
+            = bukkitPlayer.sendMessage(messages)
 
     override fun isPermissionSet(permission: String): Boolean
-            = getBukkitPlayer().isPermissionSet(permission)
+            = bukkitPlayer.isPermissionSet(permission)
 
     override fun isPermissionSet(permission: Permission): Boolean
-            = getBukkitPlayer().isPermissionSet(permission)
+            = bukkitPlayer.isPermissionSet(permission)
 
     override fun addAttachment(plugin: Plugin, name: String, value: Boolean): PermissionAttachment
-            = getBukkitPlayer().addAttachment(plugin, name, value)
+            = bukkitPlayer.addAttachment(plugin, name, value)
 
     override fun addAttachment(plugin: Plugin): PermissionAttachment
-            = getBukkitPlayer().addAttachment(plugin)
+            = bukkitPlayer.addAttachment(plugin)
 
     override fun addAttachment(plugin: Plugin, name: String, value: Boolean, ticks: Int): PermissionAttachment
-            = getBukkitPlayer().addAttachment(plugin, name, value, ticks)
+            = bukkitPlayer.addAttachment(plugin, name, value, ticks)
 
     override fun addAttachment(plugin: Plugin, ticks: Int): PermissionAttachment
-            = getBukkitPlayer().addAttachment(plugin, ticks)
+            = bukkitPlayer.addAttachment(plugin, ticks)
 
     override fun isOp(): Boolean
-            = getBukkitPlayer().isOp
+            = bukkitPlayer.isOp
 
     override fun getEffectivePermissions(): MutableSet<PermissionAttachmentInfo>
-            = getBukkitPlayer().effectivePermissions
+            = bukkitPlayer.effectivePermissions
 
     override fun getServer(): Server
-            = getBukkitPlayer().server
+            = bukkitPlayer.server
 
     override fun removeAttachment(permissionAttachment: PermissionAttachment)
-            = getBukkitPlayer().removeAttachment(permissionAttachment)
+            = bukkitPlayer.removeAttachment(permissionAttachment)
 
     override fun recalculatePermissions()
-            = getBukkitPlayer().recalculatePermissions()
+            = bukkitPlayer.recalculatePermissions()
 
     override fun hasPermission(permission: String): Boolean
-            = getBukkitPlayer().hasPermission(permission)
+            = bukkitPlayer.hasPermission(permission)
 
     override fun hasPermission(permission: Permission): Boolean
-            = getBukkitPlayer().hasPermission(permission)
+            = bukkitPlayer.hasPermission(permission)
 
     override fun setOp(flag: Boolean)
-            { getBukkitPlayer().isOp = flag }
+            { bukkitPlayer.isOp = flag }
 
     override fun hasMetadata(key: String): Boolean
-            = getBukkitPlayer().hasMetadata(key)
+            = bukkitPlayer.hasMetadata(key)
 
     override fun removeMetadata(key: String, owner: Plugin)
-            = getBukkitPlayer().removeMetadata(key, owner)
+            = bukkitPlayer.removeMetadata(key, owner)
 
     override fun getMetadata(key: String): MutableList<MetadataValue>
-            = getBukkitPlayer().getMetadata(key)
+            = bukkitPlayer.getMetadata(key)
 
     override fun setMetadata(key: String, value: MetadataValue)
-            = getBukkitPlayer().setMetadata(key, value)
+            = bukkitPlayer.setMetadata(key, value)
 
-    override fun getInventory(): PlayerInventory
-            = getBukkitPlayer().inventory
+    override val inventory: PlayerInventory
+        get() = bukkitPlayer.inventory
 
-    override fun getEntityId(): Int
-            = getBukkitPlayer().entityId
+    override fun getInventory(): Inventory
+            = inventory
 
-    override fun getDisplayName(): String
-            = getBukkitPlayer().displayName
+    override val entityId: Int
+        get() = bukkitPlayer.entityId
 
-    override fun setDisplayName(displayName: String)
-            { getBukkitPlayer().displayName = displayName }
+    override var displayName: String
+        get() = bukkitPlayer.displayName
+        set(value) { bukkitPlayer.displayName = value }
 
-    override fun getTabListName(): String
-            = getBukkitPlayer().playerListName
-
-    override fun setTabListName(listName: String)
-            { getBukkitPlayer().playerListName = listName }
+    override var tabListName: String
+        get() = bukkitPlayer.playerListName
+        set(value) { bukkitPlayer.playerListName = value }
 
     override fun hasBeforePlayed(): Boolean
-            = getBukkitPlayer().hasPlayedBefore()
+            = bukkitPlayer.hasPlayedBefore()
 
-    override fun getWorld(): World
-            = getBukkitPlayer().world
+    override val world: World
+        get() = bukkitPlayer.world
 
-    override fun getLocation(): Location
-            = getBukkitPlayer().location
+    override val location: Location
+        get() = bukkitPlayer.location
 
-    override fun getX(): Double
-            = getLocation().x
+    override val x: Double
+        get() = location.x
 
-    override fun getY(): Double
-            = getLocation().y
+    override val y: Double
+        get() = location.y
 
-    override fun getZ(): Double
-            = getLocation().z
+    override val z: Double
+        get() = location.z
 
-    override fun getYaw(): Float
-            = getLocation().yaw
+    override val yaw: Float
+        get() = location.yaw
 
-    override fun getPitch(): Float
-            = getLocation().pitch
+    override val pitch: Float
+        get() = location.pitch
 
-    override fun getBlockX(): Int
-            = getX().toInt()
+    override val blockX: Int
+        get() = x.toInt()
 
-    override fun getBlockY(): Int
-            = getY().toInt()
+    override val blockY: Int
+        get() = y.toInt()
 
-    override fun getBlockZ(): Int
-            = getZ().toInt()
+    override val blockZ: Int
+        get() = z.toInt()
 
-    override fun getEyeLocation(): Location
-            = getBukkitPlayer().eyeLocation
+    override val eyeLocation: Location
+        get() = bukkitPlayer.eyeLocation
 
-    override fun getEyeHeight(): Double
-            = getBukkitPlayer().eyeHeight
+    override val eyeHeight: Double
+        get() = bukkitPlayer.eyeHeight
 
     override fun getEyeHeight(ignoreSneaking: Boolean): Double
-            = getBukkitPlayer().getEyeHeight(ignoreSneaking)
+            = bukkitPlayer.getEyeHeight(ignoreSneaking)
 
     override fun getTargetBlock(distance: Int): Block?
             = getTargetBlock(null, distance)
 
     override fun getTargetBlock(ignoreType: Set<Material>?, distance: Int): Block?
-            = getBukkitPlayer().getTargetBlock(ignoreType, distance)
+            = bukkitPlayer.getTargetBlock(ignoreType, distance)
 
     override fun distance(target: Location): Double
-            = getLocation().distance(target)
+            = location.distance(target)
 
     override fun distanceSq(target: Location): Double
-            = getLocation().distanceSquared(target)
+            = location.distanceSquared(target)
 
     override fun playSound(sound: Sound, volume: Float, pitch: Float)
-            = getBukkitPlayer().playSound(getLocation(), sound, volume, pitch)
+            = bukkitPlayer.playSound(location, sound, volume, pitch)
 
     override fun playSound(sound: String, volume: Float, pitch: Float)
-            = getBukkitPlayer().playSound(getLocation(), sound, volume, pitch)
+            = bukkitPlayer.playSound(location, sound, volume, pitch)
 
     override fun playNote(instrument: Instrument, note: Note)
-            = getBukkitPlayer().playNote(getLocation(), instrument, note)
+            = bukkitPlayer.playNote(location, instrument, note)
 
     override fun getActivePotionEffects(): Collection<PotionEffect>
-            = getBukkitPlayer().activePotionEffects
+            = bukkitPlayer.activePotionEffects
 
     override fun hasPotionEffect(type: EffectType): Boolean
-            = getBukkitPlayer().hasPotionEffect(type.cast())
+            = bukkitPlayer.hasPotionEffect(type.cast())
 
     override fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean, particle: Boolean, color: Color?): Boolean
-            = getBukkitPlayer().addPotionEffect(PotionEffect(type.cast(), duration, amplifier, ambient, particle))
+            = bukkitPlayer.addPotionEffect(PotionEffect(type.cast(), duration, amplifier, ambient, particle))
 
     override fun removePotionEffect(type: EffectType)
-            = getBukkitPlayer().removePotionEffect(type.cast())
+            = bukkitPlayer.removePotionEffect(type.cast())
 
     override fun clearPotionEffects()
             = getActivePotionEffects().map { it -> EffectType.fromName(it.type.name) }.filter { hasPotionEffect(it) }.forEach { removePotionEffect(it) }
 
-    override fun getVelocity(): Vector
-            = getBukkitPlayer().velocity
+    override var velocity: Vector
+        get() = bukkitPlayer.velocity
+        set(value) { bukkitPlayer.velocity = value }
 
-    override fun setVelocity(vector: Vector)
-            { getBukkitPlayer().velocity = vector }
-
-    override fun getNoDamageTicks(): Int
-            = getBukkitPlayer().noDamageTicks
-
-    override fun setNoDamageTicks(ticks: Int)
-            { getBukkitPlayer().noDamageTicks = ticks }
+    override var noDamageTicks: Int
+        get() = bukkitPlayer.noDamageTicks
+        set(value) { bukkitPlayer.noDamageTicks = value }
 
     override fun onEject(): Boolean
-            = getBukkitPlayer().eject()
+            = bukkitPlayer.eject()
 
     override fun createExplosion(power: Float)
             = createExplosion(power, true)
@@ -261,52 +249,48 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
             = createExplosion(power, fire, true)
 
     override fun createExplosion(power: Float, fire: Boolean, breakBlock: Boolean)
-            { getWorld().createExplosion(getX(), getY(), getZ(), power, fire, breakBlock) }
+            { world.createExplosion(x, y, z, power, fire, breakBlock) }
 
-    override fun getTime(): Long
-            = getBukkitPlayer().playerTime
-
-    override fun setTime(time: Long)
-            = setTime(time, true)
+    override var time: Long
+        get() = bukkitPlayer.playerTime
+        set(value) { setTime(value, true) }
 
     override fun setTime(time: Long, relative: Boolean)
-            = getBukkitPlayer().setPlayerTime(time, relative)
+            = bukkitPlayer.setPlayerTime(time, relative)
 
-    override fun getWeather(): WeatherType
-            = getBukkitPlayer().playerWeather
-
-    override fun setWeather(type: WeatherType)
-            { getBukkitPlayer().playerWeather = type }
+    override var weather: WeatherType
+        get() = bukkitPlayer.playerWeather
+        set(value) { bukkitPlayer.playerWeather = value }
 
     override fun resetTime()
-            = getBukkitPlayer().resetPlayerTime()
+            = bukkitPlayer.resetPlayerTime()
 
     override fun resetWeather()
-            = getBukkitPlayer().resetPlayerWeather()
+            = bukkitPlayer.resetPlayerWeather()
 
-    override fun getDirection(): Vector
-            = getLocation().direction
+    override val direction: Vector
+        get() = location.direction
 
-    override fun getLastDamage(): Double
-            = getBukkitPlayer().lastDamage
+    override val lastDamage: Double
+        get() = bukkitPlayer.lastDamage
 
-    override fun getLastDamageCause(): EntityDamageEvent
-            = getBukkitPlayer().lastDamageCause
+    override val lastDamageCause: EntityDamageEvent
+        get() = bukkitPlayer.lastDamageCause
 
     override fun chat(message: String)
-            = getBukkitPlayer().chat(message)
+            = bukkitPlayer.chat(message)
 
     override fun send(message: String)
-            = getBukkitPlayer().sendMessage(message.toColor())
+            = bukkitPlayer.sendMessage(message.toColor())
 
     override fun send(vararg messages: String)
-            = getBukkitPlayer().sendMessage(messages.toColor())
+            = bukkitPlayer.sendMessage(messages.toColor())
 
     override fun send(message: String, vararg args: Any)
-            = getBukkitPlayer().sendMessage(message.format(args).toColor())
+            = bukkitPlayer.sendMessage(message.format(args).toColor())
 
     override fun send(component: ChatComponent, action: ChatAction)
-            = PacketOutChat(component, action).send(getBukkitPlayer())
+            = PacketOutChat(component, action).send(bukkitPlayer)
 
     override fun send(vararg component: ChatComponent)
             = component.forEach { send(it) }
@@ -318,111 +302,95 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
             = onKick("None")
 
     override fun onKick(reason: String)
-            = getBukkitPlayer().kickPlayer(reason)
+            = bukkitPlayer.kickPlayer(reason)
 
-    override fun getHealth(): Double
-            = getBukkitPlayer().health
+    override var health: Double
+        get() = bukkitPlayer.health
+        set(value) { bukkitPlayer.health = value }
 
-    override fun setHealth(health: Double)
-            { getBukkitPlayer().health = health }
-
-    override fun giveHealth(value: Double) = (getHealth() + value >= getMaxHealth()).let {
+    override fun giveHealth(value: Double) = (health + value >= maxHealth).let {
         when(it) {
-            true -> setHealth(getMaxHealth())
-            else -> setHealth(getHealth() + value)
+            true -> health = maxHealth
+            else -> health += value
         }
     }
 
-    override fun takeHealth(value: Double) = (getHealth() - value <= .0).let {
+    override fun takeHealth(value: Double) = (health - value <= .0).let {
         when(it) {
-            true -> setHealth(.0)
-            else -> setHealth(getHealth() - value)
+            true -> health = .0
+            else -> health -= value
         }
     }
 
-    override fun getMaxHealth(): Double
-            = getAttribute(AttributeType.MAX_HEALTH).getValue()
-
-    override fun setMaxHealth(maxHealth: Double)
-            = getAttribute(AttributeType.MAX_HEALTH).setValue(maxHealth)
+    override var maxHealth: Double
+        get() = getAttribute(AttributeType.MAX_HEALTH).value
+        set(value) { getAttribute(AttributeType.MAX_HEALTH).value = value }
 
     override fun resetMaxHealth()
-            = setMaxHealth(AttributeType.MAX_HEALTH.def)
+            { maxHealth = AttributeType.MAX_HEALTH.def }
 
-    override fun getExp(): Float
-            = getBukkitPlayer().exp
-
-    override fun setExp(exp: Float)
-            { getBukkitPlayer().exp = exp }
+    override var exp: Float
+        get() = bukkitPlayer.exp
+        set(value) { bukkitPlayer.exp = value }
 
     override fun giveExp(value: Float)
-            = setExp(getExp() + value)
+            { exp += value }
 
     override fun takeExp(value: Float)
-            = setExp(getExp() - value)
+            { exp -= value }
 
-    override fun getLevel(): Int
-            = getBukkitPlayer().level
-
-    override fun setLevel(level: Int)
-            { getBukkitPlayer().level = level }
+    override var level: Int
+        get() = bukkitPlayer.level
+        set(value) { bukkitPlayer.level = value }
 
     override fun giveLevel(value: Int)
-            = setLevel(getLevel() + value)
+            { level += value }
 
     override fun takeLevel(value: Int)
-            = setLevel(getLevel() - value)
+            { level -= value }
 
-    override fun getFlySpeed(): Float
-            = getBukkitPlayer().flySpeed
+    override var flySpeed: Float
+        get() = bukkitPlayer.flySpeed
+        set(value) { bukkitPlayer.flySpeed = value }
 
-    override fun setFlySpeed(flySpeed: Float)
-            { getBukkitPlayer().flySpeed = flySpeed }
+    override var walkSpeed: Float
+        get() = bukkitPlayer.walkSpeed
+        set(value) { bukkitPlayer.walkSpeed = value }
 
-    override fun getWalkSpeed(): Float
-            = getBukkitPlayer().walkSpeed
-
-    override fun setWalkSpeed(walkSpeed: Float)
-            { getBukkitPlayer().walkSpeed = walkSpeed }
-
-    override fun getFoodLevel(): Int
-            = getBukkitPlayer().foodLevel
-
-    override fun setFoodLevel(foodLevel: Int)
-            { getBukkitPlayer().foodLevel = foodLevel }
+    override var foodLevel: Int
+        get() = bukkitPlayer.foodLevel
+        set(value) { bukkitPlayer.foodLevel = value }
 
     override fun isFlying(): Boolean
-            = getBukkitPlayer().isFlying
+            = bukkitPlayer.isFlying
 
-    override fun isAllowFly(): Boolean
-            = getBukkitPlayer().allowFlight
-
-    override fun setAllowFly(allowFly: Boolean)
-            { getBukkitPlayer().allowFlight = allowFly }
+    override var isAllowFly: Boolean
+        get() = bukkitPlayer.allowFlight
+        set(value) { bukkitPlayer.allowFlight = value }
 
     override fun damage(value: Double)
-            = getBukkitPlayer().damage(value)
+            = bukkitPlayer.damage(value)
 
     override fun damage(value: Double, damager: LivingEntity)
-            = getBukkitPlayer().damage(value, damager)
+            = bukkitPlayer.damage(value, damager)
 
     override fun teleport(location: Location): Boolean
-            = getBukkitPlayer().teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN)
+            = bukkitPlayer.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN)
 
     override fun teleport(player: Player): Boolean
             = teleport(player.location)
 
     override fun teleport(player: MoonLakePlayer): Boolean
-            = teleport(player.getLocation())
+            = teleport(player.location)
 
     override fun teleport(x: Double, y: Double, z: Double): Boolean
-            = teleport(x, y, z, getYaw(), getPitch())
+            = teleport(x, y, z, yaw, pitch)
 
     override fun teleport(x: Double, y: Double, z: Double, yaw: Float, pitch: Float): Boolean
-            = teleport(getWorld(), x, y, z, yaw, pitch)
+            = teleport(world, x, y, z, yaw, pitch)
 
     override fun teleport(world: World, x: Double, y: Double, z: Double): Boolean
-            = teleport(world, x, y, z, getYaw(), getPitch())
+            = teleport(world, x, y, z, yaw, pitch)
 
     override fun teleport(world: World, x: Double, y: Double, z: Double, yaw: Float, pitch: Float): Boolean
             = teleport(Location(world, x, y, z, yaw, pitch))
@@ -439,72 +407,63 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
     override fun teleportSpawn(world: String): Boolean
             = world.toBukkitWorld().notNull().let { teleport(it.spawnLocation) }
 
-    override fun isCanPickupItems(): Boolean
-            = getBukkitPlayer().canPickupItems
+    override var isCanPickupItems: Boolean
+        get() = bukkitPlayer.canPickupItems
+        set(value) { bukkitPlayer.canPickupItems = value }
 
-    override fun setCanPickupItems(canPickupItems: Boolean)
-            { getBukkitPlayer().canPickupItems = canPickupItems }
+    override var fallDistance: Float
+        get() = bukkitPlayer.fallDistance
+        set(value) { bukkitPlayer.fallDistance = value }
 
-    override fun getFallDistance(): Float
-            = getBukkitPlayer().fallDistance
+    override var gameMode: GameMode
+        get() = bukkitPlayer.gameMode
+        set(value) { bukkitPlayer.gameMode = value }
 
-    override fun setFallDistance(fallDistance: Float)
-            { getBukkitPlayer().fallDistance = fallDistance }
+    override val isSurvivalMode: Boolean
+        get() = gameMode == GameMode.SURVIVAL
 
-    override fun getGameMode(): GameMode
-            = getBukkitPlayer().gameMode
+    override val isCreativeMode: Boolean
+        get() = gameMode == GameMode.CREATIVE
 
-    override fun setGameMode(gameMode: GameMode)
-            { getBukkitPlayer().gameMode = gameMode }
+    override val isSpectatorMode: Boolean
+        get() = gameMode == GameMode.SPECTATOR
 
-    override fun isSurvivalMode(): Boolean
-            = getGameMode() == GameMode.SURVIVAL
+    override val isAdventureMode: Boolean
+        get() = gameMode == GameMode.ADVENTURE
 
-    override fun isCreativeMode(): Boolean
-            = getGameMode() == GameMode.CREATIVE
+    override val isSneaking: Boolean
+        get() = bukkitPlayer.isSneaking
 
-    override fun isSpectatorMode(): Boolean
-            = getGameMode() == GameMode.SPECTATOR
+    override val isSprinting: Boolean
+        get() = bukkitPlayer.isSprinting
 
-    override fun isAdventureMode(): Boolean
-            = getGameMode() == GameMode.ADVENTURE
-
-    override fun isSneaking(): Boolean
-            = getBukkitPlayer().isSneaking
-
-    override fun isSprinting(): Boolean
-            = getBukkitPlayer().isSprinting
-
-    override fun getScoreboard(): Scoreboard
-            = getBukkitPlayer().scoreboard
-
-    override fun setScoreboard(scoreboard: Scoreboard)
-            { getBukkitPlayer().scoreboard = scoreboard }
+    override var scoreboard: Scoreboard
+        get() = bukkitPlayer.scoreboard
+        set(value) { bukkitPlayer.scoreboard = value }
 
     override fun <T : Projectile> launchProjectile(projectile: Class<T>): T
-            = getBukkitPlayer().launchProjectile(projectile)
+            = bukkitPlayer.launchProjectile(projectile)
 
     override fun <T : Projectile> launchProjectile(projectile: Class<T>, vector: Vector): T
-            = getBukkitPlayer().launchProjectile(projectile, vector)
+            = bukkitPlayer.launchProjectile(projectile, vector)
 
     override fun performCommand(command: String): Boolean = command.let {
         when(it[0] == '/') {
-            true -> getBukkitPlayer().performCommand(it.substring(1))
-            else -> getBukkitPlayer().performCommand(it)
+            true -> bukkitPlayer.performCommand(it.substring(1))
+            else -> bukkitPlayer.performCommand(it)
         }
     }
 
-    override fun getCompassTarget(): Location?
-            = getBukkitPlayer().compassTarget
+    override var compassTarget: Location?
+        get() = bukkitPlayer.compassTarget
+        set(value) { bukkitPlayer.compassTarget = value }
 
-    override fun setCompassTarget(target: Location)
-            { getBukkitPlayer().compassTarget = target }
+    override var bedSpawnLocation: Location?
+        get() = bukkitPlayer.bedSpawnLocation
+        set(value) { setBedSpawnLocation(value, false) }
 
-    override fun getBedSpawnLocation(): Location?
-            = getBukkitPlayer().bedSpawnLocation
-
-    override fun setBedSpawnLocation(target: Location, force: Boolean)
-            = getBukkitPlayer().setBedSpawnLocation(target, force)
+    override fun setBedSpawnLocation(target: Location?, force: Boolean)
+            = bukkitPlayer.setBedSpawnLocation(target, force)
 
     override fun getNearbyEntities(radius: Double): List<Entity>
             = getNearbyEntities(radius, radius, radius)
@@ -516,7 +475,7 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
             = getNearbyPlayers(radius, radius, radius)
 
     override fun getNearbyEntities(x: Double, y: Double, z: Double): List<Entity>
-            = getBukkitPlayer().getNearbyEntities(x, y, z)
+            = bukkitPlayer.getNearbyEntities(x, y, z)
 
     override fun getNearbyLivingEntities(x: Double, y: Double, z: Double): List<LivingEntity>
             = getNearbyEntities(x, y, z).filter { it is LivingEntity }.map { it as LivingEntity }
@@ -544,50 +503,39 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
         }
     }
 
-    override fun getIp(): String = getAddress().address.let {
-        when(it == null) {
-            true -> "127.0.0.1"
-            else -> it.hostName
-        }
-    }
+    override val ip: String
+        get() = address.address?.hostName ?: "127.0.0.1"
 
-    override fun getPort(): Int
-            = getAddress().port
+    override val port: Int
+        get() = address.port
 
-    override fun getAddress(): InetSocketAddress
-            = getBukkitPlayer().address
+    override val address: InetSocketAddress
+        get() = bukkitPlayer.address
 
-    override fun getEnderChest(): Inventory
-            = getBukkitPlayer().enderChest
+    override val enderChest: Inventory
+        get() = bukkitPlayer.enderChest
 
     override fun updateInventory()
-            = getBukkitPlayer().updateInventory()
+            = bukkitPlayer.updateInventory()
 
     override fun closeInventory()
-            = getBukkitPlayer().closeInventory()
+            = bukkitPlayer.closeInventory()
 
     override fun clearInventory()
             = inventory.clear()
 
     @Suppress("DEPRECATION")
-    override fun getItemInHand(): ItemStack
-            = getBukkitPlayer().itemInHand
+    override var itemInHand: ItemStack
+        get() = bukkitPlayer.itemInHand
+        set(value) { bukkitPlayer.itemInHand = value }
 
-    @Suppress("DEPRECATION")
-    override fun setItemInHand(itemStack: ItemStack?)
-            { getBukkitPlayer().itemInHand = itemStack }
+    override var itemOnCursor: ItemStack
+        get() = bukkitPlayer.itemOnCursor
+        set(value) { bukkitPlayer.itemOnCursor = value }
 
-    override fun getItemOnCursor(): ItemStack
-            = getBukkitPlayer().itemOnCursor
-
-    override fun setItemOnCursor(itemStack: ItemStack?)
-            { getBukkitPlayer().itemOnCursor = itemStack }
-
-    override fun getOpenInventory(): InventoryView
-            = getBukkitPlayer().openInventory
-
-    override fun openInventory(inventory: Inventory): InventoryView
-            = getBukkitPlayer().openInventory(inventory)
+    override var openInventory: InventoryView
+        get() = bukkitPlayer.openInventory
+        set(value) { bukkitPlayer.openInventory(value) }
 
     override fun addItems(vararg itemStacks: ItemStack): Map<Int, ItemStack>
             = inventory.addItem(*itemStacks)
@@ -595,20 +543,18 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
     override fun removeItems(vararg itemStacks: ItemStack): Map<Int, ItemStack>
             = inventory.removeItem(*itemStacks)
 
-    override fun hasGravity(): Boolean
-            = getBukkitPlayer().hasGravity()
-
-    override fun setGravity(gravity: Boolean)
-            { getBukkitPlayer().setGravity(gravity) }
+    override var isNoGravity: Boolean
+        get() = bukkitPlayer.hasGravity()
+        set(value) { bukkitPlayer.setGravity(value) }
 
     override fun sendTitle(title: String, subTitle: String?, fadeIn: Int, stay: Int, fadeOut: Int)
-            = sendPacketTitle(getBukkitPlayer(), title, subTitle, fadeIn, stay, fadeOut)
+            = sendPacketTitle(bukkitPlayer, title, subTitle, fadeIn, stay, fadeOut)
 
     override fun sendTitle(title: ChatComponent, subTitle: ChatComponent?, fadeIn: Int, stay: Int, fadeOut: Int)
-            = sendPacketTitle(getBukkitPlayer(), title, subTitle, fadeIn, stay, fadeOut)
+            = sendPacketTitle(bukkitPlayer, title, subTitle, fadeIn, stay, fadeOut)
 
     override fun sendTitleReset()
-            = sendPacketTitleReset(getBukkitPlayer())
+            = sendPacketTitleReset(bukkitPlayer)
 
     /** significant */
 
@@ -622,9 +568,9 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
         if(other === this)
             return true
         if(other is MoonLakePlayer)
-            return getBukkitPlayer() == other.getBukkitPlayer()
+            return bukkitPlayer == other.bukkitPlayer
         else if(other is Player)
-            return getBukkitPlayer() == other
+            return bukkitPlayer == other
         return false
     }
 

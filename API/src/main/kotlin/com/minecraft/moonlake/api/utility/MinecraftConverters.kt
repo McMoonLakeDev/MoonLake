@@ -112,7 +112,7 @@ object MinecraftConverters {
     fun getNBT(): ConverterEquivalent<NBTBase<*>> {
         return object: ConverterEquivalentIgnoreNull<NBTBase<*>> {
             override fun getGenericValue(specific: NBTBase<*>): Any
-                    = NBTFactory.fromBase(specific).getHandle()
+                    = NBTFactory.fromBase(specific).handle
             override fun getSpecificValue(generic: Any): NBTBase<*>
                     = NBTFactory.fromNMS<Any>(generic)
             override fun getSpecificType(): Class<NBTBase<*>>

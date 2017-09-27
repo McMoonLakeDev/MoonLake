@@ -22,7 +22,6 @@ import com.minecraft.moonlake.api.chat.ChatAction
 import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.chat.ChatComponentFancy
 import com.minecraft.moonlake.api.effect.EffectType
-import com.minecraft.moonlake.api.version.IllegalBukkitVersionException
 import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.command.CommandSender
@@ -40,43 +39,39 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, InventoryHo
 
     /** Base Function */
 
-    fun getBukkitPlayer(): Player
+    val bukkitPlayer: Player
 
-    fun getEntityId(): Int
+    val entityId: Int
 
-    fun getDisplayName(): String
+    var displayName: String
 
-    fun setDisplayName(displayName: String)
-
-    fun getTabListName(): String
-
-    fun setTabListName(listName: String)
+    var tabListName: String
 
     fun hasBeforePlayed(): Boolean
 
-    fun getWorld(): World
+    val world: World
 
-    fun getLocation(): Location
+    val location: Location
 
-    fun getX(): Double
+    val x: Double
 
-    fun getY(): Double
+    val y: Double
 
-    fun getZ(): Double
+    val z: Double
 
-    fun getYaw(): Float
+    val yaw: Float
 
-    fun getPitch(): Float
+    val pitch: Float
 
-    fun getBlockX(): Int
+    val blockX: Int
 
-    fun getBlockY(): Int
+    val blockY: Int
 
-    fun getBlockZ(): Int
+    val blockZ: Int
 
-    fun getEyeLocation(): Location
+    val eyeLocation: Location
 
-    fun getEyeHeight(): Double
+    val eyeHeight: Double
 
     fun getEyeHeight(ignoreSneaking: Boolean): Double
 
@@ -104,13 +99,9 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, InventoryHo
 
     fun clearPotionEffects()
 
-    fun getVelocity(): Vector
+    var velocity: Vector
 
-    fun setVelocity(vector: Vector)
-
-    fun getNoDamageTicks(): Int
-
-    fun setNoDamageTicks(ticks: Int)
+    var noDamageTicks: Int
 
     fun onEject(): Boolean
 
@@ -120,25 +111,21 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, InventoryHo
 
     fun createExplosion(power: Float, fire: Boolean, breakBlock: Boolean)
 
-    fun getTime(): Long
-
-    fun setTime(time: Long)
+    var time: Long
 
     fun setTime(time: Long, relative: Boolean)
 
-    fun getWeather(): WeatherType
-
-    fun setWeather(type: WeatherType)
+    var weather: WeatherType
 
     fun resetTime()
 
     fun resetWeather()
 
-    fun getDirection(): Vector
+    val direction: Vector
 
-    fun getLastDamage(): Double
+    val lastDamage: Double
 
-    fun getLastDamageCause(): EntityDamageEvent
+    val lastDamageCause: EntityDamageEvent
 
     fun chat(message: String)
 
@@ -158,53 +145,37 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, InventoryHo
 
     fun onKick(reason: String)
 
-    fun getHealth(): Double
-
-    fun setHealth(health: Double)
+    var health: Double
 
     fun giveHealth(value: Double)
 
     fun takeHealth(value: Double)
 
-    fun getMaxHealth(): Double
-
-    fun setMaxHealth(maxHealth: Double)
+    var maxHealth: Double
 
     fun resetMaxHealth()
 
-    fun getExp(): Float
-
-    fun setExp(exp: Float)
+    var exp: Float
 
     fun giveExp(value: Float)
 
     fun takeExp(value: Float)
 
-    fun getLevel(): Int
-
-    fun setLevel(level: Int)
+    var level: Int
 
     fun giveLevel(value: Int)
 
     fun takeLevel(value: Int)
 
-    fun getFlySpeed(): Float
+    var flySpeed: Float
 
-    fun setFlySpeed(flySpeed: Float)
+    var walkSpeed: Float
 
-    fun getWalkSpeed(): Float
-
-    fun setWalkSpeed(walkSpeed: Float)
-
-    fun getFoodLevel(): Int
-
-    fun setFoodLevel(foodLevel: Int)
+    var foodLevel: Int
 
     fun isFlying(): Boolean
 
-    fun isAllowFly(): Boolean
-
-    fun setAllowFly(allowFly: Boolean)
+    var isAllowFly: Boolean
 
     fun damage(value: Double)
 
@@ -232,33 +203,25 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, InventoryHo
 
     fun teleportSpawn(world: String): Boolean
 
-    fun isCanPickupItems(): Boolean
+    var isCanPickupItems: Boolean
 
-    fun setCanPickupItems(canPickupItems: Boolean)
+    var fallDistance: Float
 
-    fun getFallDistance(): Float
+    var gameMode: GameMode
 
-    fun setFallDistance(fallDistance: Float)
+    val isSurvivalMode: Boolean
 
-    fun getGameMode(): GameMode
+    val isCreativeMode: Boolean
 
-    fun setGameMode(gameMode: GameMode)
+    val isSpectatorMode: Boolean
 
-    fun isSurvivalMode(): Boolean
+    val isAdventureMode: Boolean
 
-    fun isCreativeMode(): Boolean
+    val isSneaking: Boolean
 
-    fun isSpectatorMode(): Boolean
+    val isSprinting: Boolean
 
-    fun isAdventureMode(): Boolean
-
-    fun isSneaking(): Boolean
-
-    fun isSprinting(): Boolean
-
-    fun getScoreboard(): Scoreboard
-
-    fun setScoreboard(scoreboard: Scoreboard)
+    var scoreboard: Scoreboard
 
     fun <T: Projectile> launchProjectile(projectile: Class<T>): T
 
@@ -266,13 +229,11 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, InventoryHo
 
     fun performCommand(command: String): Boolean
 
-    fun getCompassTarget(): Location?
+    var compassTarget: Location?
 
-    fun setCompassTarget(target: Location)
+    var bedSpawnLocation: Location?
 
-    fun getBedSpawnLocation(): Location?
-
-    fun setBedSpawnLocation(target: Location, force: Boolean = false)
+    fun setBedSpawnLocation(target: Location?, force: Boolean = false)
 
     fun getNearbyEntities(radius: Double): List<Entity>
 
@@ -294,17 +255,17 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, InventoryHo
 
     fun getMetadataLast(key: String): MetadataValue?
 
-    fun getPing(): Int
+    val ping: Int
 
-    fun getIp(): String
+    val ip: String
 
-    fun getPort(): Int
+    val port: Int
 
-    fun getAddress(): InetSocketAddress
+    val address: InetSocketAddress
 
-    override fun getInventory(): PlayerInventory
+    val inventory: PlayerInventory
 
-    fun getEnderChest(): Inventory
+    val enderChest: Inventory
 
     fun updateInventory()
 
@@ -312,27 +273,19 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, InventoryHo
 
     fun clearInventory()
 
-    fun getItemInHand(): ItemStack
+    var itemInHand: ItemStack
 
-    fun setItemInHand(itemStack: ItemStack?)
+    var itemOnCursor: ItemStack
 
-    fun getItemOnCursor(): ItemStack
-
-    fun setItemOnCursor(itemStack: ItemStack?)
-
-    fun getOpenInventory(): InventoryView
-
-    fun openInventory(inventory: Inventory): InventoryView
+    var openInventory: InventoryView
 
     fun addItems(vararg itemStacks: ItemStack): Map<Int, ItemStack>
 
     fun removeItems(vararg itemStacks: ItemStack): Map<Int, ItemStack>
 
-    fun hasGravity(): Boolean
+    var isNoGravity: Boolean
 
-    fun setGravity(gravity: Boolean)
-
-    fun getLocale(): String
+    val locale: String
 
     fun sendTitle(title: String, subTitle: String? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20)
 
@@ -342,101 +295,23 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, InventoryHo
 
     /** Minecraft Bukkit 1.9 */
 
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.9
-     */
-    @Throws(IllegalBukkitVersionException::class)
-    fun isInvulnerable(): Boolean
+    var isInvulnerable: Boolean
 
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.9
-     */
-    @Throws(IllegalBukkitVersionException::class)
-    fun setInvulnerable(invulnerable: Boolean)
+    var isGlowing: Boolean
 
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.9
-     */
-    @Throws(IllegalBukkitVersionException::class)
-    fun isGlowing(): Boolean
+    var isGliding: Boolean
 
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.9
-     */
-    @Throws(IllegalBukkitVersionException::class)
-    fun setGlowing(glowing: Boolean)
+    var isSilent: Boolean
 
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.9
-     */
-    @Throws(IllegalBukkitVersionException::class)
-    fun isGliding(): Boolean
+    var spectatorTarget: Entity?
 
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.9
-     */
-    @Throws(IllegalBukkitVersionException::class)
-    fun setGliding(gliding: Boolean)
+    var itemInMainHand: ItemStack
 
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.9
-     */
-    @Throws(IllegalBukkitVersionException::class)
-    fun isSilent(): Boolean
-
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.9
-     */
-    @Throws(IllegalBukkitVersionException::class)
-    fun setSilent(silent: Boolean)
-
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.9
-     */
-    @Throws(IllegalBukkitVersionException::class)
-    fun getSpectatorTarget(): Entity?
-
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.9
-     */
-    @Throws(IllegalBukkitVersionException::class)
-    fun setSpectatorTarget(target: Entity)
-
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.9
-     */
-    @Throws(IllegalBukkitVersionException::class)
-    fun getItemInMainHand(): ItemStack
-
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.9
-     */
-    @Throws(IllegalBukkitVersionException::class)
-    fun setItemInMainHand(itemStack: ItemStack?)
-
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.9
-     */
-    @Throws(IllegalBukkitVersionException::class)
-    fun getItemInOffHand(): ItemStack
-
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.9
-     */
-    @Throws(IllegalBukkitVersionException::class)
-    fun setItemInOffHand(itemStack: ItemStack?)
+    var itemInOffHand: ItemStack
 
     /** Minecraft Bukkit 1.10 */
 
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.10
-     */
-    @Throws(IllegalBukkitVersionException::class)
     fun stopSound(sound: Sound)
 
-    /**
-     * @throws IllegalBukkitVersionException if bukkit version < 1.10
-     */
-    @Throws(IllegalBukkitVersionException::class)
     fun stopSound(sound: String)
 }

@@ -21,5 +21,5 @@ import org.bukkit.plugin.Plugin
 
 interface DependPlugin : DependPluginInfo {
 
-    fun getPlugin(): Plugin
+    val plugin: Plugin
 }

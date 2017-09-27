@@ -36,5 +36,5 @@ package com.minecraft.moonlake.api.nbt
 
 interface NBTWrapper<T> : NBTBase<T> {
 
-    fun getHandle(): Any
+    val handle: Any
 }

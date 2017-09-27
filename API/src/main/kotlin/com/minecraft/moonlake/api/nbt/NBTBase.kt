@@ -36,13 +36,9 @@ package com.minecraft.moonlake.api.nbt
 
 interface NBTBase<T> {
 
-    fun getName(): String
+    var name: String
 
-    fun setName(name: String)
+    val type: NBTType
 
-    fun getType(): NBTType
-
-    fun getValue(): T
-
-    fun setValue(value: T)
+    var value: T
 }

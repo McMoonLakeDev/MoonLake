@@ -42,9 +42,9 @@ class NBTWrappedList<T>(handle: Any, name: String) : NBTWrapper<MutableList<NBTB
 
     private val container: NBTWrappedElement<MutableList<Any>> = NBTWrappedElement(handle, name)
     private val savedList: ConvertedList<Any, NBTBase<T>> by lazy {
-        object: ConvertedList<Any, NBTBase<T>>(container.getValue()) {
+        object: ConvertedList<Any, NBTBase<T>>(container.value) {
             override fun toIn(outer: NBTBase<T>): Any
-                    = NBTFactory.fromBase(outer).getHandle()
+                    = NBTFactory.fromBase(outer).handle
             override fun toOut(inner: Any): NBTBase<T>
                     = NBTFactory.fromNMS(inner)
             override fun toString(): String
@@ -63,55 +63,47 @@ class NBTWrappedList<T>(handle: Any, name: String) : NBTWrapper<MutableList<NBTB
                 return result
             }
             private fun validateElement(element: NBTBase<T>) {
-                if(getElementType() != NBTType.TAG_END) {
-                    if(element.getType() != getElementType())
-                        throw IllegalArgumentException("不能添加元素 $element 到此类型为 ${getElementType()} 的列表.")
+                if(elementType != NBTType.TAG_END) {
+                    if(element.type != elementType)
+                        throw IllegalArgumentException("不能添加元素 $element 到此类型为 $elementType 的列表.")
                 } else {
-                    container.setElementType(element.getType())
+                    container.setElementType(element.type)
                 }
             }
         }
     }
-    private var elementType = container.getElementType()
+    private var _elementType = container.getElementType()
 
-    /** api */
+    override val handle: Any
+        get() = container.handle
 
-    override fun getHandle(): Any
-            = container.getHandle()
+    override var name: String
+        get() = container.name
+        set(value) { container.name = value }
 
-    override fun getName(): String
-            = container.getName()
+    override val type: NBTType
+        get() = NBTType.TAG_LIST
 
-    override fun setName(name: String)
-            { container.setName(name) }
-
-    override fun getType(): NBTType
-            = NBTType.TAG_LIST
-
-    override fun getValue(): MutableList<NBTBase<T>>
-            = savedList
-
-    override fun setValue(value: MutableList<NBTBase<T>>) {
-        var lastElement: NBTBase<T>? = null
-        val list = container.getValue()
-        list.clear()
-
-        value.forEach {
-            list.add(NBTFactory.fromBase(it).getHandle())
-            lastElement = it
+    override var value: MutableList<NBTBase<T>>
+        get() = savedList
+        set(value) {
+            var lastElement: NBTBase<T>? = null
+            val list = container.value
+            list.clear()
+            value.forEach {
+                list.add(NBTFactory.fromBase(it).handle)
+                lastElement = it
+            }
+            if(lastElement != null)
+                container.setElementType(lastElement.notNull().type)
         }
-        if(lastElement != null)
-            container.setElementType(lastElement.notNull().getType())
-    }
 
-    override fun getElementType(): NBTType
-            = elementType
-
-    override fun setElementType(type: NBTType)
-            { elementType = type }
+    override var elementType: NBTType
+        get() = _elementType
+        set(value) { _elementType = value }
 
     override fun add(element: NBTBase<T>)
-            { getValue().add(element) }
+            { this.value.add(element) }
 
     @Suppress("UNCHECKED_CAST")
     override fun addString(value: String)
@@ -160,19 +152,19 @@ class NBTWrappedList<T>(handle: Any, name: String) : NBTWrapper<MutableList<NBTB
 
     @Suppress("UNCHECKED_CAST")
     override fun addCompound(value: NBTCompound)
-            = add(NBTFactory.ofWrapper(NBTType.TAG_COMPOUND, "", value.getValue()) as NBTBase<T>)
+            = add(NBTFactory.ofWrapper(NBTType.TAG_COMPOUND, "", value.value) as NBTBase<T>)
 
     override fun remove(value: Any)
-            { getValue().remove(value) }
+            { this.value.remove(value) }
 
     override fun getValue(index: Int): T
-            = getValue()[index].getValue()
+            = value[index].value
 
     override fun size(): Int
-            = getValue().size
+            = value.size
 
     override fun clear()
-            = getValue().clear()
+            = value.clear()
 
     override fun isEmpty(): Boolean
             = size() <= 0
@@ -181,7 +173,7 @@ class NBTWrappedList<T>(handle: Any, name: String) : NBTWrapper<MutableList<NBTB
             = !isEmpty()
 
     override fun iterator(): Iterator<T>
-            = Iterables.transform(getValue(), { input -> input?.getValue() }).iterator()
+            = Iterables.transform(value, { input -> input?.value }).iterator()
 
     /** significant */
 
@@ -201,7 +193,7 @@ class NBTWrappedList<T>(handle: Any, name: String) : NBTWrapper<MutableList<NBTB
         return buildString {
             append("[")
             if(size() > 0) {
-                if(getElementType() == NBTType.TAG_STRING)
+                if(elementType == NBTType.TAG_STRING)
                     append("\"${joinToString("\",\"")}\"")
                 else
                     append(joinToString(", "))

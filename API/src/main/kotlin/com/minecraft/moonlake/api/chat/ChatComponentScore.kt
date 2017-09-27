@@ -55,6 +55,6 @@ open class ChatComponentScore(private var name: String, private var objective: S
     }
 
     override fun toString(): String {
-        return "ChatComponentScore(name='$name', objective='$objective', value=$value, style=${getStyle()}, extras=${getExtras()})"
+        return "ChatComponentScore(name='$name', objective='$objective', value=$value, style=$style, extras=$extras)"
     }
 }

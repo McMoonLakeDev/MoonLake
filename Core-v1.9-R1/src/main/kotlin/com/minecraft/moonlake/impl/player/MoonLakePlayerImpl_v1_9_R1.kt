@@ -42,48 +42,34 @@ open class MoonLakePlayerImpl_v1_9_R1 :  MoonLakePlayerImpl_v1_8_R3 {
     override fun getAttribute(type: AttributeType): Attribute
             = AttributeImpl_v1_9_R1(this, type)
 
-    override fun isInvulnerable(): Boolean
-            = getBukkitPlayer().isInvulnerable
+    override var isInvulnerable: Boolean
+        get() = bukkitPlayer.isInvulnerable
+        set(value) { bukkitPlayer.isInvulnerable = value }
 
-    override fun setInvulnerable(invulnerable: Boolean)
-            { getBukkitPlayer().isInvulnerable = invulnerable }
+    override var isGlowing: Boolean
+        get() = bukkitPlayer.isGlowing
+        set(value) { bukkitPlayer.isGlowing = value }
 
-    override fun isGlowing(): Boolean
-            = getBukkitPlayer().isGlowing
+    override var isGliding: Boolean
+        get() = bukkitPlayer.isGliding
+        set(value) { bukkitPlayer.isGlowing = value }
 
-    override fun setGlowing(glowing: Boolean)
-            { getBukkitPlayer().isGlowing = glowing }
-
-    override fun isGliding(): Boolean
-            = getBukkitPlayer().isGliding
-
-    override fun setGliding(gliding: Boolean)
-            { getBukkitPlayer().isGliding = gliding }
-
-    override fun getSpectatorTarget(): Entity?
-            = getBukkitPlayer().spectatorTarget
-
-    override fun setSpectatorTarget(target: Entity)
-            { getBukkitPlayer().spectatorTarget = target }
+    override var spectatorTarget: Entity?
+        get() = bukkitPlayer.spectatorTarget
+        set(value) { bukkitPlayer.spectatorTarget = value }
 
     override fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean, particle: Boolean, color: Color?): Boolean
-            = getBukkitPlayer().addPotionEffect(PotionEffect(type.cast(), duration, amplifier, ambient, particle, color))
+            = bukkitPlayer.addPotionEffect(PotionEffect(type.cast(), duration, amplifier, ambient, particle, color))
 
-    override fun getItemInHand(): ItemStack
-            = getItemInMainHand()
+    override var itemInHand: ItemStack
+        get() = itemInMainHand
+        set(value) { itemInMainHand = value }
 
-    override fun setItemInHand(itemStack: ItemStack?)
-            = setItemInMainHand(itemStack)
+    override var itemInMainHand: ItemStack
+        get() = inventory.itemInMainHand
+        set(value) { inventory.itemInMainHand = value }
 
-    override fun getItemInMainHand(): ItemStack
-            = inventory.itemInMainHand
-
-    override fun setItemInMainHand(itemStack: ItemStack?)
-            { inventory.itemInMainHand = itemStack }
-
-    override fun getItemInOffHand(): ItemStack
-            = inventory.itemInOffHand
-
-    override fun setItemInOffHand(itemStack: ItemStack?)
-            { inventory.itemInOffHand = itemStack }
+    override var itemInOffHand: ItemStack
+        get() = inventory.itemInOffHand
+        set(value) { inventory.itemInOffHand = value }
 }

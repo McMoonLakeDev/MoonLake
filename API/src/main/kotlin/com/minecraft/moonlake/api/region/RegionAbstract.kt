@@ -22,46 +22,44 @@ import org.bukkit.World
 import org.bukkit.block.Block
 import org.bukkit.entity.Entity
 
-abstract class RegionAbstract(private val world: World) : Region {
+abstract class RegionAbstract(private val _world: World) : Region {
 
-    /** api */
+    override val world: World
+        get() = _world
 
-    override final fun getWorld(): World
-            = world
+    override val center: RegionVector
+        get() = minimumPoint + maximumPoint / 2
 
-    override fun getCenter(): RegionVector
-            = getMinimumPoint() + getMaximumPoint() / 2
-
-    override fun getArea(): Int {
-        val min = getMinimumPoint()
-        val max = getMaximumPoint()
-        return ((max.x - min.x + 1.0) * (max.y - min.y + 1.0) * (max.z - min.z + 1.0)).toInt()
-    }
-
-    override fun getWidth(): Int {
-        val min = getMinimumPoint()
-        val max = getMaximumPoint()
-        return (max.x - min.x + 1.0).toInt()
-    }
-
-    override fun getHeight(): Int {
-        val min = getMinimumPoint()
-        val max = getMaximumPoint()
-        return (max.y - min.y + 1.0).toInt()
-    }
-
-    override fun getLength(): Int {
-        val min = getMinimumPoint()
-        val max = getMaximumPoint()
-        return (max.z - min.z + 1.0).toInt()
-    }
-
-    override fun contains(location: Location): Boolean = location.let {
-        when(it.world != world) {
-            true -> false
-            else -> contains(RegionVector(it.x, it.y, it.z))
+    override val area: Int
+        get() {
+            val min = minimumPoint
+            val max = maximumPoint
+            return ((max.x - min.x + 1.0) * (max.y - min.y + 1.0) * (max.z - min.z + 1.0)).toInt()
         }
-    }
+
+    override val width: Int
+        get() {
+            val min = minimumPoint
+            val max = maximumPoint
+            return (max.x - min.x + 1.0).toInt()
+        }
+
+    override val height: Int
+        get() {
+            val min = minimumPoint
+            val max = maximumPoint
+            return (max.y - min.y + 1.0).toInt()
+        }
+
+    override val length: Int
+        get() {
+            val min = minimumPoint
+            val max = maximumPoint
+            return (max.z - min.z + 1.0).toInt()
+        }
+
+    override fun contains(location: Location): Boolean
+            = if(location.world != world) false else contains(RegionVector(location.x, location.y, location.z))
 
     override fun contains(entity: Entity): Boolean
             = contains(entity.location)

@@ -34,8 +34,8 @@ open class MoonLakePlayerImpl_v1_12_R1 : MoonLakePlayerImpl_v1_11_R1 {
     @Throws(IllegalOfflinePlayerException::class)
     constructor(player: Player) : super(player)
 
-    override fun getLocale(): String
-            = getBukkitPlayer().locale
+    override val locale: String
+        get() = bukkitPlayer.locale
 
     override fun getAttribute(type: AttributeType): Attribute
             = AttributeImpl_v1_12_R1(this, type)

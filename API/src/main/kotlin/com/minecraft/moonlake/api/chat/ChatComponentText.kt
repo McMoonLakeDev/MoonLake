@@ -52,6 +52,6 @@ open class ChatComponentText : ChatComponentAbstract {
     }
 
     override fun toString(): String {
-        return "ChatComponentText(text='$text', style=${getStyle()}, extras=${getExtras()})"
+        return "ChatComponentText(text='$text', style=$style, extras=$extras)"
     }
 }

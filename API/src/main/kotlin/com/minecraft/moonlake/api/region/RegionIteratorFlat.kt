@@ -27,14 +27,14 @@ class RegionIteratorFlat(private val region: Region) : MutableIterator<RegionVec
     private var nextZ: Int
 
     init {
-        val min = region.getMinimumPoint()
-        val max = region.getMaximumPoint()
-        this.y = min.getBlockY()
-        this.minX = min.getBlockX()
-        this.maxX = max.getBlockX()
-        this.maxZ = max.getBlockZ()
+        val min = region.minimumPoint
+        val max = region.maximumPoint
+        this.y = min.blockY
+        this.minX = min.blockX
+        this.maxX = max.blockX
+        this.maxZ = max.blockZ
         this.nextX = minX
-        this.nextZ = min.getBlockZ()
+        this.nextZ = min.blockZ
         this.forward()
     }
 

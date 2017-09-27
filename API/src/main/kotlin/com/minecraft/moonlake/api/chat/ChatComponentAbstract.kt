@@ -21,34 +21,39 @@ import com.minecraft.moonlake.api.notNull
 
 abstract class ChatComponentAbstract : ChatComponent {
 
-    private var style: ChatStyle? = null
-    private var extras: MutableList<ChatComponent> = ArrayList()
+    private var _style: ChatStyle? = null
+    private var _extras: MutableList<ChatComponent> = ArrayList()
 
-    override fun getStyle(): ChatStyle {
-        if(style == null) {
-            style = ChatStyle()
-            extras.forEach { it.getStyle().setParent(style) }
+    override var style: ChatStyle
+        get() {
+            if(_style == null) {
+                _style = ChatStyle()
+                extras.forEach { it.style.setParent(style) }
+            }
+            return _style.notNull()
         }
-        return style.notNull()
-    }
+        set(value) {
+            _style = value
+            extras.forEach { it.style.setParent(style) }
+        }
 
     override fun setStyle(style: ChatStyle?): ChatComponent {
-        this.style = style
-        extras.forEach { it.getStyle().setParent(getStyle()) }
+        _style = style
+        extras.forEach { it.style.setParent(style) }
         return this
     }
 
-    override final fun getExtras(): MutableList<ChatComponent>
-            = extras
+    override val extras: MutableList<ChatComponent>
+        get() = _extras
 
-    override final fun getExtraSize(): Int
-            = extras.size
+    override val extraSize: Int
+        get() = extras.size
 
     override fun append(text: String): ChatComponent
             = append(ChatComponentText(text))
 
     override fun append(extra: ChatComponent): ChatComponent {
-        extra.getStyle().setParent(getStyle())
+        extra.style.setParent(style)
         extras.add(extra)
         return this
     }
@@ -63,12 +68,12 @@ abstract class ChatComponentAbstract : ChatComponent {
         if(other === this)
             return true
         if(other is ChatComponentAbstract)
-            return getStyle() == other.getStyle() && extras == other.extras
+            return style == other.style && extras == other.extras
         return false
     }
 
     override fun hashCode(): Int {
-        var result = style?.hashCode() ?: 0
+        var result = _style?.hashCode() ?: 0
         result = 31 * result + extras.hashCode()
         return result
     }

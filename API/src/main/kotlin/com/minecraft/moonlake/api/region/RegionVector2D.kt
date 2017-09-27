@@ -36,11 +36,11 @@ open class RegionVector2D(
 
     /** api */
 
-    fun getBlockX(): Int
-            = Math.round(x).toInt()
+    val blockX: Int
+        get() = Math.round(x).toInt()
 
-    fun getBlockZ(): Int
-            = Math.round(z).toInt()
+    val blockZ: Int
+        get() = Math.round(z).toInt()
 
     fun setX(x: Double): RegionVector2D
             = RegionVector2D(x, z)
@@ -164,7 +164,7 @@ open class RegionVector2D(
         return ComparisonChain.start()
                 .compare(x, other.x)
                 .compare(z, other.z)
-                .result()
+                .result
     }
 
     override fun serialize(): MutableMap<String, Any> {

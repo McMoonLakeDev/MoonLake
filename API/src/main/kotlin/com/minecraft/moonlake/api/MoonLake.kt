@@ -17,9 +17,14 @@
 
 package com.minecraft.moonlake.api
 
+import com.minecraft.moonlake.api.service.ServiceManager
 import org.bukkit.plugin.Plugin
 
 interface MoonLake : Plugin, PluginInfo {
+
+    /** api */
+
+    val serviceManager: ServiceManager
 
     /** static */
 

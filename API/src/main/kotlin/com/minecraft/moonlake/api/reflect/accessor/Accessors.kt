@@ -175,8 +175,8 @@ object Accessors {
             }
         }
 
-        override fun getAccessor(): Constructor<T>
-                = constructor
+        override val accessor: Constructor<T>
+            get() = constructor
     }
 
     private data class AccessorMethodSimple(private val method: Method) : AccessorMethod {
@@ -190,8 +190,8 @@ object Accessors {
             }
         }
 
-        override fun getAccessor(): Method
-                = method
+        override val accessor: Method
+            get() = method
     }
 
     private data class AccessorFieldSimple(private val field: Field) : AccessorField {
@@ -215,7 +215,7 @@ object Accessors {
             }
         }
 
-        override fun getAccessor(): Field
-                = field
+        override val accessor: Field
+            get() = this.field
     }
 }

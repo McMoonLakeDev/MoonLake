@@ -41,38 +41,36 @@ import org.bukkit.plugin.Plugin
 open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
 
     protected var handle: Any? = null
-    private var allowMove: Boolean = true
+    private var _allowMove: Boolean = true
     private var listener: MoonLakeListener? = null
 
-    override fun isAllowMove(): Boolean
-            = allowMove
+    override var isAllowMove: Boolean
+        get() =_allowMove
+        set(value) { _allowMove = value }
 
-    override fun setAllowMove(allowMove: Boolean)
-            { this.allowMove = allowMove }
-
-    override fun isOpened(): Boolean
-            = handle != null
+    override val isOpened: Boolean
+        get() = handle != null
 
     override fun open(player: Player) {
-        if(isOpened())
+        if(isOpened)
             throw MoonLakeException("铁砧窗口已经处于打开状态.")
         registerListener()
     }
 
     override fun getItem(anvilWindowSlot: AnvilWindowSlot): ItemStack {
-        if(!isOpened())
+        if(!isOpened)
             throw MoonLakeException("铁砧窗口尚未处于打开状态.")
         return getInventory().getItem(anvilWindowSlot.value())
     }
 
     override fun setItem(anvilWindowSlot: AnvilWindowSlot, itemStack: ItemStack) {
-        if(!isOpened())
+        if(!isOpened)
             throw MoonLakeException("铁砧窗口尚未处于打开状态.")
         getInventory().setItem(anvilWindowSlot.value(), itemStack)
     }
 
     override fun clear() {
-        if(isOpened())
+        if(isOpened)
             getInventory().clear()
     }
 
@@ -86,7 +84,7 @@ open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
         this.listener = object: MoonLakeListener {
             @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
             fun onClick(event: InventoryClickEvent) {
-                if((event.clickedInventory?.type != InventoryType.ANVIL || event.clickedInventory != getInventory()) && !isAllowMove()) {
+                if((event.clickedInventory?.type != InventoryType.ANVIL || event.clickedInventory != getInventory()) && !isAllowMove) {
                     event.isCancelled = true
                     event.result = Event.Result.DENY
                 } else {
@@ -101,14 +99,14 @@ open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
                             handleException(e)
                         }
                     }
-                    if((clickEvent != null && clickEvent.isCancelled) || !isAllowMove()) {
+                    if((clickEvent != null && clickEvent.isCancelled) || !isAllowMove) {
                         event.isCancelled = true
                         event.result = Event.Result.DENY
                     }
                 }
             }
         }
-        this.listener?.registerEvent(getPlugin())
+        this.listener?.registerEvent(plugin)
     }
 
     open protected fun releaseListener() {

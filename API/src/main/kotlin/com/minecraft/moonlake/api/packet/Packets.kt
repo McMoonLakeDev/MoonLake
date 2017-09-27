@@ -133,7 +133,7 @@ object Packets {
     private fun getPacketConverter(): ConverterEquivalentIgnoreNull<PacketBukkit> {
         return object: ConverterEquivalentIgnoreNull<PacketBukkit> {
             override fun getGenericValue(specific: PacketBukkit): Any {
-                val handle = createPacket(specific.getType())
+                val handle = createPacket(specific.type)
                 val packetBuffer = PacketBuffer()
                 specific.write(packetBuffer)
                 packetRead.invoke(handle, createPacketDataSerializer(packetBuffer.getByteBuf()))

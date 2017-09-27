@@ -28,12 +28,12 @@ class ParticleColorNote : ParticleColor {
         this.note = note
     }
 
-    override fun getValueX(): Float
-            = note.div(24f)
+    override val valueX: Float
+        get() = note.div(24f)
 
-    override fun getValueY(): Float
-            = 0f
+    override val valueY: Float
+        get() = 0f
 
-    override fun getValueZ(): Float
-            = 0f
+    override val valueZ: Float
+        get() = 0f
 }

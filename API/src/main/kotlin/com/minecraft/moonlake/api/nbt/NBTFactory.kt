@@ -91,18 +91,18 @@ object NBTFactory {
     fun <T> fromBase(base: NBTBase<T>): NBTWrapper<T> {
         return when(base is NBTWrapper) {
             true -> base as NBTWrapper
-            else -> return when(base.getType()) {
+            else -> return when(base.type) {
                 NBTType.TAG_COMPOUND -> {
-                    val compound = ofCompound(base.getName())
-                    compound.setValue(base.getValue() as MutableMap<String, NBTBase<*>>)
+                    val compound = ofCompound(base.name)
+                    compound.value = base.value as MutableMap<String, NBTBase<*>>
                     return compound as NBTWrapper<T>
                 }
                 NBTType.TAG_LIST -> {
-                    val list = ofList<T>(base.getName())
-                    list.setValue(base.getValue() as MutableList<NBTBase<T>>)
+                    val list = ofList<T>(base.name)
+                    list.value = base.value as MutableList<NBTBase<T>>
                     return list as NBTWrapper<T>
                 }
-                else -> ofWrapper(base.getType(), base.getName(), base.getValue())
+                else -> ofWrapper(base.type, base.name, base.value)
             }
         }
     }
@@ -112,7 +112,7 @@ object NBTFactory {
     @Suppress("UNCHECKED_CAST")
     fun <T> fromNMS(handle: Any, name: String = ""): NBTWrapper<T> {
         val element = NBTWrappedElement<T>(handle, name)
-        return when(element.getType()) {
+        return when(element.type) {
             NBTType.TAG_COMPOUND -> NBTWrappedCompound(handle, name) as NBTWrapper<T>
             NBTType.TAG_LIST -> NBTWrappedList<T>(handle, name) as NBTWrapper<T>
             else -> element
@@ -140,7 +140,7 @@ object NBTFactory {
     @JvmName("ofWrapper")
     fun <T> ofWrapper(type: NBTType, name: String, value: T): NBTWrapper<T> {
         val wrapper = ofWrapper<T>(type, name)
-        wrapper.setValue(value)
+        wrapper.value = value
         return wrapper
     }
 
@@ -232,7 +232,7 @@ object NBTFactory {
         nbt.putByte("Count", amount)
         nbt.putShort("Damage", durability)
         if(tag != null) nbt.put("tag", tag)
-        val nmsItemStack = itemStackConstructor.newInstance(fromBase(nbt).getHandle())
+        val nmsItemStack = itemStackConstructor.newInstance(fromBase(nbt).handle)
         return itemStackConverter.getSpecific(nmsItemStack) as ItemStack
     }
 
@@ -262,7 +262,7 @@ object NBTFactory {
     @JvmStatic
     @JvmName("writeEntityTag")
     fun <T: Entity> writeEntityTag(entity: T, tag: NBTCompound): T {
-        val handle = fromBase(tag).getHandle()
+        val handle = fromBase(tag).handle
         when(entity) {
             is LivingEntity -> entityLivingSave.invoke(MinecraftConverters.getEntity(LivingEntity::class.java).getGeneric(entity), handle)
             else -> entitySave.invoke(MinecraftConverters.getEntity(Entity::class.java).getGeneric(entity), handle)

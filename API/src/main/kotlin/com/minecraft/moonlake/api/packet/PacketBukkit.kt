@@ -19,7 +19,7 @@ package com.minecraft.moonlake.api.packet
 
 interface PacketBukkit : Packet {
 
-    fun getType(): Class<*>
+    val type: Class<*>
 
-    fun getHandle(): Any
+    val handle: Any
 }

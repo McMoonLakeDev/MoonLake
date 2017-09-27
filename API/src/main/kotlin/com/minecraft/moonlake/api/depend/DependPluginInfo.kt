@@ -25,11 +25,11 @@ import java.util.logging.Logger
 
 interface DependPluginInfo : PluginInfo {
 
-    fun getDataFolder(): File
+    val dataFolder: File
 
-    fun getLogger(): Logger
+    val logger: Logger
 
-    fun getConfig(): FileConfiguration?
+    val config: FileConfiguration?
 
     fun getResource(filename: String): InputStream?
 }

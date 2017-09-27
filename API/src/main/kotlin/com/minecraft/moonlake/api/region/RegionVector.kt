@@ -37,14 +37,14 @@ open class RegionVector(
 
     /** api */
 
-    fun getBlockX(): Int
-            = Math.round(x).toInt()
+    val blockX: Int
+        get() = Math.round(x).toInt()
 
-    fun getBlockY(): Int
-            = Math.round(y).toInt()
+    val blockY: Int
+        get() = Math.round(y).toInt()
 
-    fun getBlockZ(): Int
-            = Math.round(z).toInt()
+    val blockZ: Int
+        get() = Math.round(z).toInt()
 
     fun setX(x: Double): RegionVector
             = RegionVector(x, y, z)
@@ -173,7 +173,7 @@ open class RegionVector(
                 .compare(x, other.x)
                 .compare(y, other.y)
                 .compare(z, other.z)
-                .result()
+                .result
     }
 
     override fun serialize(): MutableMap<String, Any> {

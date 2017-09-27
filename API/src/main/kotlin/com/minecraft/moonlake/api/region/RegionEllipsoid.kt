@@ -22,43 +22,41 @@ import org.bukkit.World
 
 open class RegionEllipsoid(
         world: World,
-        private var center: RegionVector,
-        private var radius: RegionVector) : RegionAbstract(world) {
+        private var _center: RegionVector,
+        private var _radius: RegionVector) : RegionAbstract(world) {
 
     /** api */
 
-    override fun getCenter(): RegionVector
-            = center
+    override val center: RegionVector
+        get() = _center
 
     fun setCenter(center: RegionVector)
-            { this.center = center }
+            { this._center = center }
 
-    fun getRadius(): RegionVector
-            = radius.minus(.5, .5, .5)
+    var radius: RegionVector
+        get() = _radius.minus(.5, .5, .5)
+        set(value) { _radius.plus(.5, .5, .5) }
 
-    fun setRadius(radius: RegionVector)
-            { this.radius = radius.plus(.5, .5, .5) }
+    override val area: Int
+        get() = Math.floor(4.1887902047863905 * _radius.x * _radius.y * _radius.z).toInt()
 
-    override fun getArea(): Int
-            = Math.floor(4.1887902047863905 * radius.x * radius.y * radius.z).toInt()
+    override val width: Int
+        get() = (_radius.x * 2.0).toInt()
 
-    override fun getWidth(): Int
-            = (radius.x * 2.0).toInt()
+    override val height: Int
+        get() = (_radius.y * 2.0).toInt()
 
-    override fun getHeight(): Int
-            = (radius.y * 2.0).toInt()
+    override val length: Int
+        get() = (_radius.z * 2.0).toInt()
 
-    override fun getLength(): Int
-            = (radius.z * 2.0).toInt()
+    override val minimumPoint: RegionVector
+        get() = _center - _radius
 
-    override fun getMinimumPoint(): RegionVector
-            = center - radius
-
-    override fun getMaximumPoint(): RegionVector
-            = center + radius
+    override val maximumPoint: RegionVector
+        get() = _center + _radius
 
     override fun contains(vector: RegionVector): Boolean
-            = (vector - center / radius).lengthSq() <= 1.0
+            = (vector - _center / _radius).lengthSq() <= 1.0
 
     /** significant */
 
@@ -66,24 +64,24 @@ open class RegionEllipsoid(
         if(other === this)
             return true
         if(other is RegionEllipsoid)
-            return super.equals(other) && center == other.center && radius == other.radius
+            return super.equals(other) && _center == other._center && _radius == other._radius
         return false
     }
 
     override fun hashCode(): Int {
         var result = super.hashCode()
-        result = 31 * result + center.hashCode()
-        result = 31 * result + radius.hashCode()
+        result = 31 * result + _center.hashCode()
+        result = 31 * result + _radius.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "RegionEllipsoid(world=${getWorld().name}, center=$center, radius=$radius)"
+        return "RegionEllipsoid(world=${world.name}, center=$_center, radius=$_radius)"
     }
 
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()
-        result.put("world", getWorld().name)
+        result.put("world", world.name)
         result.put("center", center.serialize())
         result.put("radius", center.serialize())
         return result

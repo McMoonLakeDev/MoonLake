@@ -29,21 +29,21 @@ import org.bukkit.entity.Player
 class DependPlaceholderAPIImpl : DependPluginAbstract<PlaceholderAPIPlugin>(getPlugin(DependPlaceholderAPI.NAME)), DependPlaceholderAPI {
 
     override fun setPlaceholders(player: MoonLakePlayer, text: String): String
-            = setPlaceholders(player.getBukkitPlayer(), text)
+            = setPlaceholders(player.bukkitPlayer, text)
 
     override fun setPlaceholders(player: Player, text: String): String
             = PlaceholderAPI.setPlaceholders(player, text)
 
     override fun setBracketPlaceholders(player: MoonLakePlayer, text: String): String
-            = setBracketPlaceholders(player.getBukkitPlayer(), text)
+            = setBracketPlaceholders(player.bukkitPlayer, text)
 
     override fun setBracketPlaceholders(player: Player, text: String): String
             = PlaceholderAPI.setBracketPlaceholders(player, text)
 
     override fun setRelationalPlaceholders(one: MoonLakePlayer, two: MoonLakePlayer, text: String): String
-            = setRelationalPlaceholders(one.getBukkitPlayer(), two.getBukkitPlayer(), text)
+            = setRelationalPlaceholders(one.bukkitPlayer, two.bukkitPlayer, text)
 
-    override fun setRelationalPlaceholders(one: Player, two: Player, text: String): String = when(getPluginVersion() >= "2.8.0") {
+    override fun setRelationalPlaceholders(one: Player, two: Player, text: String): String = when(pluginVersion >= "2.8.0") {
         true -> PlaceholderAPI.setRelationalPlaceholders(one, two, text)
         else -> throw DependPluginVersionException("依赖插件占位符 #setRelationalPlaceholders() 最低需求 2.8.0 版本.")
     }

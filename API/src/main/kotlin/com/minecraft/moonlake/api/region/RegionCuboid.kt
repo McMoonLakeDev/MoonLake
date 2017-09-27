@@ -23,53 +23,49 @@ import org.bukkit.World
 
 open class RegionCuboid(
         world: World,
-        private var pos1: RegionVector,
-        private var pos2: RegionVector) : RegionAbstract(world), RegionFlat {
+        private var _pos1: RegionVector,
+        private var _pos2: RegionVector) : RegionAbstract(world), RegionFlat {
 
     /** api */
 
-    fun getPos1(): RegionVector
-            = pos1
+    var pos1: RegionVector
+        get() = _pos1
+        set(value) { _pos1 = value }
 
-    fun setPos1(pos1: RegionVector)
-            { this.pos1 = pos1 }
+    var pos2: RegionVector
+        get() = _pos2
+        set(value) { _pos2 = value }
 
-    fun getPos2(): RegionVector
-            = pos2
+    override val minimumPoint: RegionVector
+        get() = RegionVector(Math.min(pos1.x, pos2.x), Math.min(pos1.y, pos2.y), Math.min(pos1.z, pos2.z))
 
-    fun setPos2(pos2: RegionVector)
-            { this.pos2 = pos2 }
-
-    override fun getMinimumPoint(): RegionVector
-            = RegionVector(Math.min(pos1.x, pos2.x), Math.min(pos1.y, pos2.y), Math.min(pos1.z, pos2.z))
-
-    override fun getMaximumPoint(): RegionVector
-            = RegionVector(Math.max(pos1.x, pos2.x), Math.max(pos1.y, pos2.y), Math.max(pos1.z, pos2.z))
+    override val maximumPoint: RegionVector
+        get() = RegionVector(Math.max(pos1.x, pos2.x), Math.max(pos1.y, pos2.y), Math.max(pos1.z, pos2.z))
 
     override fun contains(vector: RegionVector): Boolean {
         val x = vector.x
         val y = vector.y
         val z = vector.z
-        val min = getMinimumPoint()
-        val max = getMaximumPoint()
-        return x >= min.getBlockX() && x <= max.getBlockX() &&
-                y >= min.getBlockY() && y <= max.getBlockY() &&
-                z >= min.getBlockZ() && z <= max.getBlockZ()
+        val min = minimumPoint
+        val max = maximumPoint
+        return x >= min.blockX && x <= max.blockX &&
+                y >= min.blockY && y <= max.blockY &&
+                z >= min.blockZ && z <= max.blockZ
     }
 
-    override fun getMinimumY(): Int
-            = Math.min(pos1.getBlockY(), pos2.getBlockY())
+    override val minimumY: Int
+        get() = Math.min(pos1.blockY, pos2.blockY)
 
-    override fun getMaximumY(): Int
-            = Math.max(pos1.getBlockY(), pos2.getBlockY())
+    override val maximumY: Int
+        get() = Math.max(pos1.blockY, pos2.blockY)
 
     override fun iterator(): MutableIterator<RegionVectorBlock> {
         return object: MutableIterator<RegionVectorBlock> {
-            private val min = getMinimumPoint()
-            private val max = getMaximumPoint()
-            private var nextX = min.getBlockX()
-            private var nextY = min.getBlockY()
-            private var nextZ = min.getBlockZ()
+            private val min = minimumPoint
+            private val max = maximumPoint
+            private var nextX = min.blockX
+            private var nextY = min.blockY
+            private var nextZ = min.blockZ
 
             override fun hasNext(): Boolean
                     = nextX != 0x7fffffff
@@ -78,11 +74,11 @@ open class RegionCuboid(
                 if(!hasNext())
                     throw NoSuchElementException()
                 val answer = RegionVectorBlock(nextX, nextY, nextZ)
-                if(++nextX > max.getBlockX()) {
-                    nextX = min.getBlockX()
-                    if(++nextY > max.getBlockY()) {
-                        nextY = min.getBlockY()
-                        if(++nextZ > max.getBlockZ()) {
+                if(++nextX > max.blockX) {
+                    nextX = min.blockX
+                    if(++nextY > max.blockY) {
+                        nextY = min.blockY
+                        if(++nextZ > max.blockZ) {
                             nextX = 0x7fffffff
                         }
                     }
@@ -99,10 +95,10 @@ open class RegionCuboid(
         return object: MutableIterable<RegionVector2D> {
             override fun iterator(): MutableIterator<RegionVector2D> {
                 return object: MutableIterator<RegionVector2D> {
-                    private val min = getMinimumPoint()
-                    private val max = getMaximumPoint()
-                    private var nextX = min.getBlockX()
-                    private var nextZ = min.getBlockZ()
+                    private val min = minimumPoint
+                    private val max = maximumPoint
+                    private var nextX = min.blockX
+                    private var nextZ = min.blockZ
 
                     override fun hasNext(): Boolean
                             = nextX != 0x7fffffff
@@ -111,9 +107,9 @@ open class RegionCuboid(
                         if(!hasNext())
                             throw NoSuchElementException()
                         val answer = RegionVector2D(nextX, nextZ)
-                        if(++nextX > max.getBlockX()) {
-                            nextX = min.getBlockX()
-                            if(++nextZ > max.getBlockZ()) {
+                        if(++nextX > max.blockX) {
+                            nextX = min.blockX
+                            if(++nextZ > max.blockZ) {
                                 nextX = 0x7fffffff
                             }
                         }
@@ -127,24 +123,25 @@ open class RegionCuboid(
         }
     }
 
-    fun getFaces(): MutableIterable<RegionVectorBlock> {
-        return object: MutableIterable<RegionVectorBlock> {
-            private val min = getMinimumPoint()
-            private val max = getMaximumPoint()
-            private val faceRegions = arrayOf(
-                    RegionCuboid(getWorld(), pos1.setX(min.x), pos2.setX(min.x)),
-                    RegionCuboid(getWorld(), pos1.setX(max.x), pos2.setX(max.x)),
-                    RegionCuboid(getWorld(), pos1.setY(min.y), pos2.setY(min.y)),
-                    RegionCuboid(getWorld(), pos1.setY(max.y), pos2.setY(max.y)),
-                    RegionCuboid(getWorld(), pos1.setZ(min.z), pos2.setZ(min.z)),
-                    RegionCuboid(getWorld(), pos1.setZ(max.z), pos2.setZ(max.z)))
+    val faces: MutableIterable<RegionVectorBlock>
+        get() {
+            return object: MutableIterable<RegionVectorBlock> {
+                private val min = minimumPoint
+                private val max = maximumPoint
+                private val faceRegions = arrayOf(
+                        RegionCuboid(world, pos1.setX(min.x), pos2.setX(min.x)),
+                        RegionCuboid(world, pos1.setX(max.x), pos2.setX(max.x)),
+                        RegionCuboid(world, pos1.setY(min.y), pos2.setY(min.y)),
+                        RegionCuboid(world, pos1.setY(max.y), pos2.setY(max.y)),
+                        RegionCuboid(world, pos1.setZ(min.z), pos2.setZ(min.z)),
+                        RegionCuboid(world, pos1.setZ(max.z), pos2.setZ(max.z)))
 
-            override fun iterator(): MutableIterator<RegionVectorBlock> {
-                val iterators = faceRegions.map { it -> it.iterator() }.toTypedArray()
-                return Iterators.concat(*iterators)
+                override fun iterator(): MutableIterator<RegionVectorBlock> {
+                    val iterators = faceRegions.map { it -> it.iterator() }.toTypedArray()
+                    return Iterators.concat(*iterators)
+                }
             }
         }
-    }
 
     /** significant */
 
@@ -164,12 +161,12 @@ open class RegionCuboid(
     }
 
     override fun toString(): String {
-        return "RegionCuboid(world=${getWorld()}, pos1=$pos1, pos2=$pos2)"
+        return "RegionCuboid(world=$world, pos1=$pos1, pos2=$pos2)"
     }
 
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()
-        result.put("world", getWorld().name)
+        result.put("world", world.name)
         result.put("pos1", pos1.serialize())
         result.put("pos2", pos2.serialize())
         return result

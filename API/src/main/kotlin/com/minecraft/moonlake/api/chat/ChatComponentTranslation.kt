@@ -49,6 +49,6 @@ open class ChatComponentTranslation(private var key: String) : ChatComponentAbst
     }
 
     override fun toString(): String {
-        return "ChatComponentTranslation(key='$key', withs=$withs, style=${getStyle()}, extras=${getExtras()})"
+        return "ChatComponentTranslation(key='$key', withs=$withs, style=$style, extras=$extras)"
     }
 }

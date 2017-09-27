@@ -33,8 +33,8 @@ open class MoonLakePlayerImpl_v1_10_R1 : MoonLakePlayerImpl_v1_9_R2 {
     constructor(player: Player) : super(player)
 
     override fun stopSound(sound: Sound)
-            = getBukkitPlayer().stopSound(sound)
+            = bukkitPlayer.stopSound(sound)
 
     override fun stopSound(sound: String)
-            = getBukkitPlayer().stopSound(sound)
+            = bukkitPlayer.stopSound(sound)
 }

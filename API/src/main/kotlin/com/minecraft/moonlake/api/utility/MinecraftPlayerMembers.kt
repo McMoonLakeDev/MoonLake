@@ -52,9 +52,9 @@ enum class MinecraftPlayerMembers(val clazz: Class<*>) : Valuable<String> {
         override fun get(): () -> AccessorField
                 = { Accessors.getAccessorField(MinecraftReflection.getPlayerConnectionClass(), clazz, true) }
         override fun get(player: Player): Any?
-                = getField().get(CONNECTION.get(player))
+                = field.get(CONNECTION.get(player))
         override fun set(player: Player, value: Any?)
-                = getField().set(CONNECTION.get(player), value)
+                = field.set(CONNECTION.get(player), value)
     },
     CHANNEL(Channel::class.java) { // parent = networkManager
         override fun value(): String
@@ -62,20 +62,20 @@ enum class MinecraftPlayerMembers(val clazz: Class<*>) : Valuable<String> {
         override fun get(): () -> AccessorField
                 = { Accessors.getAccessorField(MinecraftReflection.getNetworkManagerClass(), clazz, true) }
         override fun get(player: Player): Any?
-                = getField().get(NETWORK_MANAGER.get(player))
+                = field.get(NETWORK_MANAGER.get(player))
         override fun set(player: Player, value: Any?)
-                = getField().set(NETWORK_MANAGER.get(player), value)
+                = field.set(NETWORK_MANAGER.get(player), value)
     }
     ;
 
-    protected fun getField(): AccessorField
-            = cachedMap.getOrPut(this, get())
+    protected val field: AccessorField
+        get() = cachedMap.getOrPut(this, get())
 
     open fun get(player: Player): Any?
-            = getField().get(converter.getGeneric(player))
+            = field.get(converter.getGeneric(player))
 
     open fun set(player: Player, value: Any?)
-            = getField().set(converter.getGeneric(player), value)
+            = field.set(converter.getGeneric(player), value)
 
     open protected fun get(): () -> AccessorField
             = { Accessors.getAccessorField(MinecraftReflection.getEntityPlayerClass(), value(), true) }

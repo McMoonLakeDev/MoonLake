@@ -160,7 +160,7 @@ object ChatSerializer {
     @JvmName("toRaw0")
     private fun toRaw0(chatComponent: ChatComponent, color: Boolean = true, builder: StringBuilder) {
         if(color) {
-            val chatStyle = chatComponent.getStyle()
+            val chatStyle = chatComponent.style
             if(chatStyle.color != null)
                 appendColor(builder, chatStyle.color.notNull())
             if(chatStyle.bold != null)
@@ -176,7 +176,7 @@ object ChatSerializer {
         }
         if(chatComponent is ChatComponentText)
             builder.append(chatComponent.getText())
-        chatComponent.getExtras().forEach { toRaw0(it, color, builder) }
+        chatComponent.extras.forEach { toRaw0(it, color, builder) }
     }
 
     @JvmStatic
@@ -297,7 +297,7 @@ object ChatSerializer {
                         withs[it] = deserialize(jsonArray[it], typeOfT, context)
                         if(withs[it] is ChatComponentText) {
                             val componentText = withs[it] as ChatComponentText
-                            if(componentText.getStyle().isEmpty() && componentText.getExtras().isEmpty())
+                            if(componentText.style.isEmpty() && componentText.extras.isEmpty())
                                 withs[it] = componentText.getText()
                         }
                     }
@@ -335,16 +335,16 @@ object ChatSerializer {
 
         override fun serialize(src: ChatComponent, typeOfSrc: Type, context: JsonSerializationContext): JsonElement? {
             val jsonObject = JsonObject()
-            if(!src.getStyle().isEmpty()) {
-                val jsonElement = context.serialize(src.getStyle())
+            if(!src.style.isEmpty()) {
+                val jsonElement = context.serialize(src.style)
                 if(jsonElement.isJsonObject) {
                     val jsonObjectStyle = jsonElement.asJsonObject
                     jsonObjectStyle.entrySet().forEach { jsonObject.add(it.key, it.value) }
                 }
             }
-            if(!src.getExtras().isEmpty()) {
+            if(!src.extras.isEmpty()) {
                 val jsonArray = JsonArray()
-                src.getExtras().forEach { jsonArray.add(serialize(it, it.javaClass, context)) }
+                src.extras.forEach { jsonArray.add(serialize(it, it.javaClass, context)) }
                 jsonObject.add("extra", jsonArray)
             }
             if(src is ChatComponentText) {

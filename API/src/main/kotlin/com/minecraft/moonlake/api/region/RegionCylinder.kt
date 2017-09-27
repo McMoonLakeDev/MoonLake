@@ -23,81 +23,79 @@ import org.bukkit.World
 
 open class RegionCylinder(
         world: World,
-        private var center: RegionVector2D,
-        private var radius: RegionVector2D,
-        private var minY: Int = 0,
-        private var maxY: Int = 0) : RegionAbstract(world), RegionFlat {
+        private var _center: RegionVector2D,
+        private var _radius: RegionVector2D,
+        private var _minY: Int = 0,
+        private var _maxY: Int = 0) : RegionAbstract(world), RegionFlat {
 
     private var hasY: Boolean = false
 
     /** api */
 
-    override fun getCenter(): RegionVector
-            = center.toRegionVector((maxY + minY) / 2.0)
+    override val center: RegionVector
+        get() = _center.toRegionVector((_maxY + _minY) / 2.0)
 
     fun setCenter(center: RegionVector2D)
-            { this.center = center }
+            { this._center = center }
 
-    fun getRadius(): RegionVector2D
-            = radius.minus(.5, .5)
+    var radius: RegionVector2D
+        get() = _radius.minus(.5, .5)
+        set(value) { _radius = value.plus(.5, .5) }
 
-    fun setRadius(radius: RegionVector2D)
-            { this.radius = radius.plus(.5, .5) }
+    override val minimumPoint: RegionVector
+        get() = (_center - _radius).toRegionVector(_minY)
 
-    override fun getMinimumPoint(): RegionVector
-            = (center - radius).toRegionVector(minY)
+    override val maximumPoint: RegionVector
+        get() = (_center + _radius).toRegionVector(_maxY)
 
-    override fun getMaximumPoint(): RegionVector
-            = (center + radius).toRegionVector(maxY)
+    override val area: Int
+        get() = Math.floor(_radius.x * _radius.z * Math.PI * height).toInt()
 
-    override fun getArea(): Int
-            = Math.floor(radius.x * radius.z * Math.PI * getHeight()).toInt()
+    override val width: Int
+        get() = (_radius.x * 2.0).toInt()
 
-    override fun getWidth(): Int
-            = (radius.x * 2.0).toInt()
+    override val height: Int
+        get() = _maxY - _minY + 1
 
-    override fun getHeight(): Int
-            = maxY - minY + 1
-
-    override fun getLength(): Int
-            = (radius.z * 2.0).toInt()
+    override val length: Int
+        get() = (_radius.z * 2.0).toInt()
 
     override fun contains(vector: RegionVector): Boolean {
-        val blockY = vector.getBlockY()
-        if(blockY < minY || blockY > maxY)
+        val blockY = vector.blockY
+        if(blockY < _minY || blockY > _maxY)
             return false
-        return (vector.toRegionVector2D() - center / radius).lengthSq() <= 1.0
+        return (vector.toRegionVector2D() - _center / _radius).lengthSq() <= 1.0
     }
 
-    override fun getMinimumY(): Int
-            = minY
+    override val minimumY: Int
+        get() = _minY
 
     fun setMinimumY(minY: Int) {
-        this.minY = minY
+        this._minY = minY
         this.hasY = true
     }
 
-    override fun getMaximumY(): Int
-            = maxY
+    override val maximumY: Int
+        get() = _maxY
 
     fun setMaximumY(maxY: Int) {
-        this.maxY = maxY
+        this._maxY = maxY
         this.hasY = true
     }
 
     fun setY(y: Int): Boolean {
         if(!hasY) {
-            maxY = y
-            minY = y
+            _maxY = y
+            _minY = y
             hasY = true
             return true
         }
-        if(y < minY) {
-            minY = y
+        if(y < _minY) {
+            _minY = y
             return true
         }
-        if(y > maxY) {
-            maxY = y
+        if(y > _maxY) {
+            _maxY = y
             return true
         }
         return false
@@ -119,31 +117,31 @@ open class RegionCylinder(
         if(other === this)
             return true
         if(other is RegionCylinder)
-            return super.equals(other) && minY == other.minY && maxY == other.maxY && hasY == other.hasY && center == other.center && radius == other.radius
+            return super.equals(other) && _minY == other._minY && _maxY == other._maxY && hasY == other.hasY && _center == other._center && _radius == other._radius
         return false
     }
 
     override fun hashCode(): Int {
         var result = super.hashCode()
-        result = 31 * result + center.hashCode()
-        result = 31 * result + result.hashCode()
-        result = 31 * result + minY.hashCode()
-        result = 31 * result + maxY.hashCode()
+        result = 31 * result + _center.hashCode()
+        result = 31 * result + _radius.hashCode()
+        result = 31 * result + _minY.hashCode()
+        result = 31 * result + _maxY.hashCode()
         result = 31 * result + hasY.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "RegionCylinder(world=${getWorld().name}, center=$center, radius=$radius, minY=$minY, maxY=$maxY)"
+        return "RegionCylinder(world=${world.name}, center=$_center, radius=$_radius, minY=$_minY, maxY=$_maxY)"
     }
 
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()
-        result.put("world", getWorld().name)
-        result.put("center", center.serialize())
-        result.put("radius", radius.serialize())
-        result.put("minY", minY)
-        result.put("maxY", maxY)
+        result.put("world", world.name)
+        result.put("center", _center.serialize())
+        result.put("radius", _radius.serialize())
+        result.put("minY", _minY)
+        result.put("maxY", _maxY)
         return result
     }
 

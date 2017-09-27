@@ -27,7 +27,7 @@ object AnvilWindows {
     @JvmStatic
     @Suppress("UNCHECKED_CAST")
     private val anvilWindowConstructor: AccessorConstructor<AnvilWindow> by lazy {
-        val clazz = Class.forName("com.minecraft.moonlake.impl.anvil.AnvilWindowImpl_${currentBukkitVersion().getVersion()}") as Class<AnvilWindow>
+        val clazz = Class.forName("com.minecraft.moonlake.impl.anvil.AnvilWindowImpl_${currentBukkitVersion().version}") as Class<AnvilWindow>
         Accessors.getAccessorConstructor(clazz, false, Plugin::class.java) }
 
     @JvmStatic

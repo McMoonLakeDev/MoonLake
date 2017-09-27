@@ -30,10 +30,10 @@ object MinecraftReflection {
 
     @JvmStatic
     private val craftBukkitFullPackage: String by lazy {
-        "org.bukkit.craftbukkit.${MinecraftBukkitVersion.currentVersion().getVersion()}" }
+        "org.bukkit.craftbukkit.${MinecraftBukkitVersion.currentVersion().version}" }
     @JvmStatic
     private val minecraftFullPackage: String by lazy {
-        "net.minecraft.server.${MinecraftBukkitVersion.currentVersion().getVersion()}" }
+        "net.minecraft.server.${MinecraftBukkitVersion.currentVersion().version}" }
     @JvmStatic
     private val craftBukkitPackage: CachedPackage by lazy {
         CachedPackage(craftBukkitFullPackage, source) }

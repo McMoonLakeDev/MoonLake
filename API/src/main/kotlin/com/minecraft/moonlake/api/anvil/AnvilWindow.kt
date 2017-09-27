@@ -25,7 +25,7 @@ import org.bukkit.plugin.Plugin
 
 interface AnvilWindow {
 
-    fun getPlugin(): Plugin
+    val plugin: Plugin
 
     fun handleOpen(openHandler: AnvilWindowEventHandler<AnvilWindowOpenEvent>?)
 
@@ -51,11 +51,9 @@ interface AnvilWindow {
      */
     fun handleClose(closeHandler: ((event: AnvilWindowCloseEvent) -> Unit)?)
 
-    fun isAllowMove(): Boolean
+    var isAllowMove: Boolean
 
-    fun setAllowMove(allowMove: Boolean)
-
-    fun isOpened(): Boolean
+    val isOpened: Boolean
 
     @Throws(MoonLakeException::class)
     fun open(player: Player)

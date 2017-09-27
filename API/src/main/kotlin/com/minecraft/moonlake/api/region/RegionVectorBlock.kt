@@ -34,7 +34,7 @@ open class RegionVectorBlock : RegionVector {
     /** api */
 
     fun getBlock(world: World): Block
-            = world.getBlockAt(getBlockX(), getBlockY(), getBlockZ())
+            = world.getBlockAt(blockX, blockY, blockZ)
 
     /** significant */
 

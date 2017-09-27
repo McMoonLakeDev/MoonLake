@@ -26,7 +26,7 @@ import org.bukkit.plugin.Plugin
 abstract class PacketInBukkitAbstract(clazzName: String) : PacketBukkitAbstract(MinecraftReflection.getMinecraftClass(clazzName)), PacketInBukkit {
 
     override fun receive(sender: MoonLakePlayer)
-            = receive(sender.getBukkitPlayer())
+            = receive(sender.bukkitPlayer)
 
     override fun receive(sender: Player) = try {
         // TODO
@@ -35,7 +35,7 @@ abstract class PacketInBukkitAbstract(clazzName: String) : PacketBukkitAbstract(
     }
 
     override fun receiveAsync(sender: MoonLakePlayer, plugin: Plugin)
-            = receiveAsync(sender.getBukkitPlayer(), plugin)
+            = receiveAsync(sender.bukkitPlayer, plugin)
 
     override fun receiveAsync(sender: Player, plugin: Plugin)
             { plugin.runTaskAsync { receive(sender) } }

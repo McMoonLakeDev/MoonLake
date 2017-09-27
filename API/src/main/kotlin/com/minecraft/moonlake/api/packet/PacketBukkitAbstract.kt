@@ -19,11 +19,11 @@ package com.minecraft.moonlake.api.packet
 
 abstract class PacketBukkitAbstract(private val clazz: Class<*>) : PacketAbstract(), PacketBukkit {
 
-    override fun getType(): Class<*>
-            = clazz
+    override val type: Class<*>
+        get() = clazz
 
-    override fun getHandle(): Any
-            = Packets.createReadPacket(this)
+    override val handle: Any
+        get() = Packets.createReadPacket(this)
 
     override fun equals(other: Any?): Boolean {
         if(other === this)

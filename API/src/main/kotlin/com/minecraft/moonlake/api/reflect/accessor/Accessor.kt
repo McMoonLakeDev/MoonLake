@@ -17,7 +17,7 @@
 
 package com.minecraft.moonlake.api.reflect.accessor
 
-interface Accessor<T> {
+interface Accessor<out T> {
 
-    fun getAccessor(): T
+    val accessor: T
 }

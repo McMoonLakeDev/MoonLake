@@ -19,11 +19,9 @@ package com.minecraft.moonlake.api.attribute
 
 interface Attribute {
 
-    fun getType(): AttributeType
+    val type: AttributeType
 
-    fun getDefValue(): Double
+    val defValue: Double
 
-    fun getValue(): Double
-
-    fun setValue(value: Double)
+    var value: Double
 }

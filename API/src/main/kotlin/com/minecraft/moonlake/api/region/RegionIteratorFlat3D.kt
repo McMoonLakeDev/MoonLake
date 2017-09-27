@@ -19,8 +19,8 @@ package com.minecraft.moonlake.api.region
 
 class RegionIteratorFlat3D(region: RegionFlat, private val flatIterator: MutableIterator<RegionVector2D>) : MutableIterator<RegionVectorBlock> {
 
-    private val minY: Int = region.getMinimumY()
-    private val maxY: Int = region.getMaximumY()
+    private val minY: Int = region.minimumY
+    private val maxY: Int = region.maximumY
     private var next2D: RegionVector2D? = if(flatIterator.hasNext()) flatIterator.next() else null
     private var nextY: Int = minY
 
@@ -32,7 +32,7 @@ class RegionIteratorFlat3D(region: RegionFlat, private val flatIterator: Mutable
     override fun next(): RegionVectorBlock {
         if(!hasNext())
             throw NoSuchElementException()
-        val current = RegionVectorBlock(next2D!!.getBlockX(), nextY, next2D!!.getBlockZ())
+        val current = RegionVectorBlock(next2D!!.blockX, nextY, next2D!!.blockZ)
         when {
             nextY < maxY -> nextY += 1
             flatIterator.hasNext() -> {

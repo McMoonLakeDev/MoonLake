@@ -41,9 +41,9 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
 
     private val container: NBTWrappedElement<MutableMap<String, Any>> = NBTWrappedElement(handle, name)
     private val savedMap: ConvertedMap<String, Any, NBTBase<*>> by lazy {
-        object: ConvertedMap<String, Any, NBTBase<*>>(container.getValue()) {
+        object: ConvertedMap<String, Any, NBTBase<*>>(container.value) {
             override fun toIn(outer: NBTBase<*>): Any
-                    = NBTFactory.fromBase(outer).getHandle()
+                    = NBTFactory.fromBase(outer).handle
             override fun toOut(inner: Any): NBTBase<*>
                     = NBTFactory.fromNMS<Any>(inner)
             override fun toOut(key: String, inner: Any): NBTBase<*>
@@ -53,41 +53,35 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
         }
     }
 
-    /** api */
+    override val handle: Any
+        get() = container.handle
 
-    override fun getHandle(): Any
-            = container.getHandle()
+    override var name: String
+        get() = container.name
+        set(value) { container.name = value }
 
-    override fun getName(): String
-            = container.getName()
+    override val type: NBTType
+        get() = NBTType.TAG_COMPOUND
 
-    override fun setName(name: String)
-            { container.setName(name) }
-
-    override fun getType(): NBTType
-            = NBTType.TAG_COMPOUND
-
-    override fun getValue(): MutableMap<String, NBTBase<*>>
-            = savedMap
-
-    override fun setValue(value: MutableMap<String, NBTBase<*>>)
-            = value.entries.forEach { put(it.value) }
+    override var value: MutableMap<String, NBTBase<*>>
+        get() = savedMap
+        set(value) { value.entries.forEach { put(it.value) } }
 
     override fun size(): Int
-            = getValue().size
+            = value.size
 
     override fun getKeys(): Set<String>
-            = getValue().keys
+            = value.keys
 
     override fun remove(key: String): NBTBase<*>?
-            = getValue().remove(key)
+            = value.remove(key)
 
     override fun containsKey(key: String): Boolean
-            = getValue().containsKey(key)
+            = value.containsKey(key)
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getValue(key: String): NBTBase<T>?
-            = getValue()[key] as NBTBase<T>?
+            = value[key] as NBTBase<T>?
 
     private fun <T> getValueExact(key: String): NBTBase<T>
             = getValue(key) ?: throw MoonLakeException("无法查找到键为 $key 的值.")
@@ -100,104 +94,104 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
         if(nbt == null) {
             nbt = NBTFactory.ofWrapper(type, key)
             put(nbt)
-        } else if(nbt.getType() != type) {
+        } else if(nbt.type != type) {
             throw MoonLakeException("无法获取 NBT 对象 $nbt, 错误的类型: $type")
         }
         return nbt
     }
 
     override fun <T> put(entry: NBTBase<T>): NBTCompound
-            { getValue().put(entry.getName(), entry); return this; }
+            { value.put(entry.name, entry); return this; }
 
     override fun <T> put(key: String, value: NBTBase<T>): NBTCompound
-            { getValue().put(key, value); return this; }
+            { this.value.put(key, value); return this; }
 
     override fun getString(key: String): String
-            = getValueExact<String>(key).getValue()
+            = getValueExact<String>(key).value
 
     override fun getStringOrDefault(key: String): String
-            = getValueOfDefault0<String>(key, NBTType.TAG_STRING).getValue()
+            = getValueOfDefault0<String>(key, NBTType.TAG_STRING).value
 
     override fun putString(key: String, value: String): NBTCompound
-            { getValue().put(key, NBTFactory.of(key, value)); return this; }
+            { this.value.put(key, NBTFactory.of(key, value)); return this; }
 
     override fun getByte(key: String): Byte
-            = getValueExact<Byte>(key).getValue()
+            = getValueExact<Byte>(key).value
 
     override fun getByteOrDefault(key: String): Byte
-            = getValueOfDefault0<Byte>(key, NBTType.TAG_BYTE).getValue()
+            = getValueOfDefault0<Byte>(key, NBTType.TAG_BYTE).value
 
     override fun putByte(key: String, value: Byte): NBTCompound
-            { getValue().put(key, NBTFactory.of(key, value)); return this; }
+            { this.value.put(key, NBTFactory.of(key, value)); return this; }
 
     override fun putByte(key: String, value: Int): NBTCompound
             = putByte(key, value.toByte())
 
     override fun getShort(key: String): Short
-            = getValueExact<Short>(key).getValue()
+            = getValueExact<Short>(key).value
 
     override fun getShortOrDefault(key: String): Short
-            = getValueOfDefault0<Short>(key, NBTType.TAG_SHORT).getValue()
+            = getValueOfDefault0<Short>(key, NBTType.TAG_SHORT).value
 
     override fun putShort(key: String, value: Short): NBTCompound
-            { getValue().put(key, NBTFactory.of(key, value)); return this; }
+            { this.value.put(key, NBTFactory.of(key, value)); return this; }
 
     override fun putShort(key: String, value: Int): NBTCompound
             = putShort(key, value.toShort())
 
     override fun getInt(key: String): Int
-            = getValueExact<Int>(key).getValue()
+            = getValueExact<Int>(key).value
 
     override fun getIntOrDefault(key: String): Int
-            = getValueOfDefault0<Int>(key, NBTType.TAG_INT).getValue()
+            = getValueOfDefault0<Int>(key, NBTType.TAG_INT).value
 
     override fun putInt(key: String, value: Int): NBTCompound
-            { getValue().put(key, NBTFactory.of(key, value)); return this; }
+            { this.value.put(key, NBTFactory.of(key, value)); return this; }
 
     override fun getLong(key: String): Long
-            = getValueExact<Long>(key).getValue()
+            = getValueExact<Long>(key).value
 
     override fun getLongOrDefault(key: String): Long
-            = getValueOfDefault0<Long>(key, NBTType.TAG_LONG).getValue()
+            = getValueOfDefault0<Long>(key, NBTType.TAG_LONG).value
 
     override fun putLong(key: String, value: Long): NBTCompound
-            { getValue().put(key, NBTFactory.of(key, value)); return this; }
+            { this.value.put(key, NBTFactory.of(key, value)); return this; }
 
     override fun getFloat(key: String): Float
-            = getValueExact<Float>(key).getValue()
+            = getValueExact<Float>(key).value
 
     override fun getFloatOrDefault(key: String): Float
-            = getValueOfDefault0<Float>(key, NBTType.TAG_FLOAT).getValue()
+            = getValueOfDefault0<Float>(key, NBTType.TAG_FLOAT).value
 
     override fun putFloat(key: String, value: Float): NBTCompound
-            { getValue().put(key, NBTFactory.of(key, value)); return this; }
+            { this.value.put(key, NBTFactory.of(key, value)); return this; }
 
     override fun getDouble(key: String): Double
-            = getValueExact<Double>(key).getValue()
+            = getValueExact<Double>(key).value
 
     override fun getDoubleOrDefault(key: String): Double
-            = getValueOfDefault0<Double>(key, NBTType.TAG_DOUBLE).getValue()
+            = getValueOfDefault0<Double>(key, NBTType.TAG_DOUBLE).value
 
     override fun putDouble(key: String, value: Double): NBTCompound
-            { getValue().put(key, NBTFactory.of(key, value)); return this; }
+            { this.value.put(key, NBTFactory.of(key, value)); return this; }
 
     override fun getByteArray(key: String): ByteArray
-            = getValueExact<ByteArray>(key).getValue()
+            = getValueExact<ByteArray>(key).value
 
     override fun getByteArrayOrDefault(key: String): ByteArray
-            = getValueOfDefault0<ByteArray>(key, NBTType.TAG_BYTE_ARRAY).getValue()
+            = getValueOfDefault0<ByteArray>(key, NBTType.TAG_BYTE_ARRAY).value
 
     override fun putByteArray(key: String, value: ByteArray): NBTCompound
-            { getValue().put(key, NBTFactory.of(key, value)); return this; }
+            { this.value.put(key, NBTFactory.of(key, value)); return this; }
 
     override fun getIntArray(key: String): IntArray
-            = getValueExact<IntArray>(key).getValue()
+            = getValueExact<IntArray>(key).value
 
     override fun getIntArrayOrDefault(key: String): IntArray
-            = getValueOfDefault0<IntArray>(key, NBTType.TAG_INT_ARRAY).getValue()
+            = getValueOfDefault0<IntArray>(key, NBTType.TAG_INT_ARRAY).value
 
     override fun putIntArray(key: String, value: IntArray): NBTCompound
-            { getValue().put(key, NBTFactory.of(key, value)); return this; }
+            { this.value.put(key, NBTFactory.of(key, value)); return this; }
 
     override fun getBoolean(key: String): Boolean
             = getByte(key) == 1.toByte()
@@ -209,23 +203,23 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
             = putByte(key, (if(value) 1 else 0).toByte())
 
     override fun getCompound(key: String): NBTCompound
-            = getValueExact<NBTCompound>(key).getValue()
+            = getValueExact<NBTCompound>(key).value
 
     override fun getCompoundOrDefault(key: String): NBTCompound
             = getValueOfDefault0<NBTCompound>(key, NBTType.TAG_COMPOUND) as NBTCompound
 
     override fun putCompound(compound: NBTCompound): NBTCompound
-            { getValue().put(compound.getName(), compound); return this; }
+            { this.value.put(compound.name, compound); return this; }
 
     override fun <T> getList(key: String): NBTList<T>
-            = getValueExact<NBTList<T>>(key).getValue()
+            = getValueExact<NBTList<T>>(key).value
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getListOrDefault(key: String): NBTList<T>
             = getValueOfDefault0<NBTList<T>>(key, NBTType.TAG_LIST) as NBTList<T>
 
     override fun <T> putList(list: NBTList<T>): NBTCompound
-            { getValue().put(list.getName(), list); return this; }
+            { this.value.put(list.name, list); return this; }
 
     override fun isEmpty(): Boolean
             = size() <= 0
@@ -234,7 +228,7 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
             = !isEmpty()
 
     override fun iterator(): MutableIterator<NBTBase<*>>
-            = getValue().values.iterator()
+            = value.values.iterator()
 
     /** significant */
 
@@ -255,10 +249,10 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
             append("{")
             val size = size()
             this@NBTWrappedCompound.forEachIndexed { index, it ->
-                if(it.getType() == NBTType.TAG_STRING)
-                    append("\"${it.getName()}\":\"${it.getValue()}\"")
+                if(it.type == NBTType.TAG_STRING)
+                    append("\"${it.name}\":\"${it.value}\"")
                 else
-                    append("\"${it.getName()}\":${it.getValue()}")
+                    append("\"${it.name}\":${it.value}")
                 if(index != size - 1) append(",")
             }
             append("}")

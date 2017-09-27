@@ -19,21 +19,21 @@ package com.minecraft.moonlake.api
 
 interface PluginInfo {
 
-    fun getPluginPrefix(): String
+    val pluginPrefix: String
 
-    fun getPluginName(): String
+    val pluginName: String
 
-    fun getPluginMain(): String
+    val pluginMain: String
 
-    fun getPluginVersion(): String
+    val pluginVersion: String
 
-    fun getPluginWebsite(): String
+    val pluginWebsite: String
 
-    fun getPluginDescription(): String
+    val pluginDescription: String
 
-    fun getPluginAuthors(): Set<String>
+    val pluginAuthors: Set<String>
 
-    fun getPluginDepends(): Set<String>
+    val pluginDepends: Set<String>
 
-    fun getPluginSoftDepends(): Set<String>
+    val pluginSoftDepends: Set<String>
 }

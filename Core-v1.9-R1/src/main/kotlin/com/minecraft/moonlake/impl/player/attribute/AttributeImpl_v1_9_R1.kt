@@ -18,35 +18,32 @@
 package com.minecraft.moonlake.impl.player.attribute
 
 import com.minecraft.moonlake.api.attribute.AttributeType
-import com.minecraft.moonlake.api.notNull
 import com.minecraft.moonlake.api.player.MoonLakePlayer
 import org.bukkit.attribute.AttributeInstance
 
 open class AttributeImpl_v1_9_R1(player: MoonLakePlayer, type: AttributeType) : AttributeBase(player, type) {
 
-    override fun getValue(): Double = instance().let {
-        when(it == null) {
-            true -> super.getValue()
-            else -> it.notNull().baseValue
+    override var value: Double
+        get() = instance?.baseValue ?: super.value
+        set(value) {
+            val instance = instance
+            if(instance == null)
+                super.value = value
+            else
+                instance.baseValue = value
         }
-    }
 
-    override fun setValue(value: Double) = instance().let {
-        when(it == null) {
-            true -> super.setValue(value)
-            else -> it.notNull().baseValue = value
+    private val instance: AttributeInstance?
+        get() {
+            val adapter = adapter
+            return if(adapter == null)
+                null
+            else
+                player.bukkitPlayer.getAttribute(adapter)
         }
-    }
 
-    private fun instance(): AttributeInstance? = adapter().let {
-        when(it == null) {
-            true -> null
-            else -> player.getBukkitPlayer().getAttribute(it)
-        }
-    }
-
-    open protected fun adapter(): org.bukkit.attribute.Attribute? {
-        return when(getType()) {
+    open protected val adapter: org.bukkit.attribute.Attribute?
+        get() = when(type) {
             AttributeType.MAX_HEALTH -> org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH
             AttributeType.FOLLOW_RANGE -> org.bukkit.attribute.Attribute.GENERIC_FOLLOW_RANGE
             AttributeType.KNOCKBACK_RESISTANCE -> org.bukkit.attribute.Attribute.GENERIC_KNOCKBACK_RESISTANCE
@@ -58,5 +55,4 @@ open class AttributeImpl_v1_9_R1(player: MoonLakePlayer, type: AttributeType) : 
             AttributeType.ARMOR_TOUGHNESS -> null
             else -> null
         }
-    }
 }

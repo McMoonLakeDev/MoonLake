@@ -74,13 +74,13 @@ abstract class ComparisonChain private constructor() {
                 = classify(right.compareTo(left))
         override fun compareFalseFirst(left: Boolean, right: Boolean): ComparisonChain
                 = classify(left.compareTo(right))
-        override fun result(): Int
-                = 0
+        override val result: Int
+            get() = 0
         private fun classify(result: Int): ComparisonChain
                 = if(result < 0) LESS else if(result > 0) GREATER else ACTIVE
     }
 
-    private class InactiveComparisonChain(val result: Int) : ComparisonChain() {
+    private class InactiveComparisonChain(val _result: Int) : ComparisonChain() {
         override fun <T: Comparable<T>> compare(left: T, right: T): ComparisonChain
                 = this
         override fun <T> compare(left: T, right: T, comparator: Comparator<T>): ComparisonChain
@@ -97,8 +97,8 @@ abstract class ComparisonChain private constructor() {
                 = this
         override fun compareFalseFirst(left: Boolean, right: Boolean): ComparisonChain
                 = this
-        override fun result(): Int
-                = result
+        override val result: Int
+            get() = _result
     }
 
     /*
@@ -122,5 +122,5 @@ abstract class ComparisonChain private constructor() {
 
     abstract fun compareFalseFirst(left: Boolean, right: Boolean): ComparisonChain
 
-    abstract fun result(): Int
+    abstract val result: Int
 }

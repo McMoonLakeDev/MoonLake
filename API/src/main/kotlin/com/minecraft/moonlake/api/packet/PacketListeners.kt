@@ -171,7 +171,7 @@ object PacketListeners {
                 }
             }
         }
-        return if(event.isCancelled) null else event.packet.getHandle()
+        return if(event.isCancelled) null else event.packet.handle
     }
 
     @JvmStatic
@@ -188,7 +188,7 @@ object PacketListeners {
                 }
             }
         }
-        return if(event.isCancelled) null else event.packet.getHandle()
+        return if(event.isCancelled) null else event.packet.handle
     }
 
     @JvmStatic

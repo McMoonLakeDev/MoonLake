@@ -36,6 +36,6 @@ abstract class ParticleData {
     }
 
     /** api */
-    fun getPacketDataString(): String
-            = "_${packetData[0]}_${packetData[1]}"
+    open val packetDataString: String
+        get() = "_${packetData[0]}_${packetData[1]}"
 }

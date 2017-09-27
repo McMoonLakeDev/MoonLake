@@ -124,8 +124,8 @@ class MinecraftBukkitVersion(val major: Int, val minor: Int, val release: Int) :
 
     /** function */
 
-    fun getVersion(): String
-            = "v${major}_${minor}_R$release"
+    val version: String
+        get() = "v${major}_${minor}_R$release"
 
     /** significant */
 
@@ -134,7 +134,7 @@ class MinecraftBukkitVersion(val major: Int, val minor: Int, val release: Int) :
                 .compare(major, other.major)
                 .compare(minor, other.minor)
                 .compare(release, other.release)
-                .result()
+                .result
     }
 
     override fun hashCode(): Int {
@@ -153,6 +153,6 @@ class MinecraftBukkitVersion(val major: Int, val minor: Int, val release: Int) :
     }
 
     override fun toString(): String {
-        return "(MC Bukkit: ${getVersion()})"
+        return "(MC Bukkit: $version)"
     }
 }

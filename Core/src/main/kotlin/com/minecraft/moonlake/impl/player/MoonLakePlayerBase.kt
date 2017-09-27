@@ -40,70 +40,42 @@ open class MoonLakePlayerBase : MoonLakePlayerAbstract {
     @Throws(IllegalOfflinePlayerException::class)
     constructor(player: Player) : super(player)
 
-    override fun getPing(): Int
-            = MinecraftPlayerMembers.PING.get(getBukkitPlayer()) as Int
+    override val ping: Int
+        get() = MinecraftPlayerMembers.PING.get(bukkitPlayer) as Int
 
-    override fun getLocale(): String
-            = MinecraftPlayerMembers.LOCALE.get(getBukkitPlayer()) as String
+    override val locale: String
+        get() = MinecraftPlayerMembers.LOCALE.get(bukkitPlayer) as String
 
     override fun getAttribute(type: AttributeType): Attribute
             = AttributeBase(this, type)
 
-    override fun isInvulnerable(): Boolean {
-        throw IllegalBukkitVersionException()
-    }
+    override var isInvulnerable: Boolean
+        get() = throw IllegalBukkitVersionException()
+        set(value) = throw IllegalBukkitVersionException()
 
-    override fun setInvulnerable(invulnerable: Boolean) {
-        throw IllegalBukkitVersionException()
-    }
+    override var isGlowing: Boolean
+        get() = throw IllegalBukkitVersionException()
+        set(value) = throw IllegalBukkitVersionException()
 
-    override fun isGlowing(): Boolean {
-        throw IllegalBukkitVersionException()
-    }
+    override var isGliding: Boolean
+        get() = throw IllegalBukkitVersionException()
+        set(value) = throw IllegalBukkitVersionException()
 
-    override fun setGlowing(glowing: Boolean) {
-        throw IllegalBukkitVersionException()
-    }
+    override var isSilent: Boolean
+        get() = throw IllegalBukkitVersionException()
+        set(value) = throw IllegalBukkitVersionException()
 
-    override fun isGliding(): Boolean {
-        throw IllegalBukkitVersionException()
-    }
+    override var spectatorTarget: Entity?
+        get() = throw IllegalBukkitVersionException()
+        set(value) = throw IllegalBukkitVersionException()
 
-    override fun setGliding(gliding: Boolean) {
-        throw IllegalBukkitVersionException()
-    }
+    override var itemInMainHand: ItemStack
+        get() = throw IllegalBukkitVersionException()
+        set(value) = throw IllegalBukkitVersionException()
 
-    override fun isSilent(): Boolean {
-        throw IllegalBukkitVersionException()
-    }
-
-    override fun setSilent(silent: Boolean) {
-        throw IllegalBukkitVersionException()
-    }
-
-    override fun getSpectatorTarget(): Entity? {
-        throw IllegalBukkitVersionException()
-    }
-
-    override fun setSpectatorTarget(target: Entity) {
-        throw IllegalBukkitVersionException()
-    }
-
-    override fun getItemInMainHand(): ItemStack {
-        throw IllegalBukkitVersionException()
-    }
-
-    override fun setItemInMainHand(itemStack: ItemStack?) {
-        throw IllegalBukkitVersionException()
-    }
-
-    override fun getItemInOffHand(): ItemStack {
-        throw IllegalBukkitVersionException()
-    }
-
-    override fun setItemInOffHand(itemStack: ItemStack?) {
-        throw IllegalBukkitVersionException()
-    }
+    override var itemInOffHand: ItemStack
+        get() = throw IllegalBukkitVersionException()
+        set(value) = throw IllegalBukkitVersionException()
 
     override fun stopSound(sound: Sound) {
         throw IllegalBukkitVersionException()

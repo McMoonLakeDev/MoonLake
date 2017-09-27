@@ -179,7 +179,7 @@ class MoonLakePluginTest : JavaPlugin() {
                     anvilWindow.handleInput { it.player.sendMessage("anvil input -> ${it.input}") }
                     anvilWindow.handleClick { it.player.sendMessage("anvil click -> ${it.clickSlot}") }
                     anvilWindow.handleClose { it.player.sendMessage("anvil close") }
-                    anvilWindow.setAllowMove(true)
+                    anvilWindow.isAllowMove = true
                     anvilWindow.open(event.player)
                     anvilWindow.setItem(AnvilWindowSlot.左输入栏, ItemStack(Material.NAME_TAG))
                 }
@@ -220,7 +220,7 @@ class MoonLakePluginTest : JavaPlugin() {
                 if(event.message == "/cs raw") {
                     val component = ChatSerializer.fromRaw("&a&n你好&6&n世界&f!!!")
                     val xd = ChatComponentText(" XD ")
-                    xd.getStyle().setHoverEvent(ChatHoverEvent(ChatHoverEvent.Action.SHOW_TEXT, ChatComponentText("你知道的太多了2333")))
+                    xd.style.setHoverEvent(ChatHoverEvent(ChatHoverEvent.Action.SHOW_TEXT, ChatComponentText("你知道的太多了2333")))
                     component.append(xd)
                     event.player.toMoonLakePlayer().send(component)
                     println(component)
