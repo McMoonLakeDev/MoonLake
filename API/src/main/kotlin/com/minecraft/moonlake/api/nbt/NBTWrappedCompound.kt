@@ -109,6 +109,9 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
     override fun getString(key: String): String
             = getValueExact<String>(key).value
 
+    override fun getStringOrNull(key: String): String?
+            = getValue<String>(key)?.value
+
     override fun getStringOrDefault(key: String): String
             = getValueOfDefault0<String>(key, NBTType.TAG_STRING).value
 
@@ -117,6 +120,9 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
 
     override fun getByte(key: String): Byte
             = getValueExact<Byte>(key).value
+
+    override fun getByteOrNull(key: String): Byte?
+            = getValue<Byte>(key)?.value
 
     override fun getByteOrDefault(key: String): Byte
             = getValueOfDefault0<Byte>(key, NBTType.TAG_BYTE).value
@@ -130,6 +136,9 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
     override fun getShort(key: String): Short
             = getValueExact<Short>(key).value
 
+    override fun getShortOrNull(key: String): Short?
+            = getValue<Short>(key)?.value
+
     override fun getShortOrDefault(key: String): Short
             = getValueOfDefault0<Short>(key, NBTType.TAG_SHORT).value
 
@@ -142,6 +151,9 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
     override fun getInt(key: String): Int
             = getValueExact<Int>(key).value
 
+    override fun getIntOrNull(key: String): Int?
+            = getValue<Int>(key)?.value
+
     override fun getIntOrDefault(key: String): Int
             = getValueOfDefault0<Int>(key, NBTType.TAG_INT).value
 
@@ -150,6 +162,9 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
 
     override fun getLong(key: String): Long
             = getValueExact<Long>(key).value
+
+    override fun getLongOrNull(key: String): Long?
+            = getValue<Long>(key)?.value
 
     override fun getLongOrDefault(key: String): Long
             = getValueOfDefault0<Long>(key, NBTType.TAG_LONG).value
@@ -160,6 +175,9 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
     override fun getFloat(key: String): Float
             = getValueExact<Float>(key).value
 
+    override fun getFloatOrNull(key: String): Float?
+            = getValue<Float>(key)?.value
+
     override fun getFloatOrDefault(key: String): Float
             = getValueOfDefault0<Float>(key, NBTType.TAG_FLOAT).value
 
@@ -168,6 +186,9 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
 
     override fun getDouble(key: String): Double
             = getValueExact<Double>(key).value
+
+    override fun getDoubleOrNull(key: String): Double?
+            = getValue<Double>(key)?.value
 
     override fun getDoubleOrDefault(key: String): Double
             = getValueOfDefault0<Double>(key, NBTType.TAG_DOUBLE).value
@@ -178,6 +199,9 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
     override fun getByteArray(key: String): ByteArray
             = getValueExact<ByteArray>(key).value
 
+    override fun getByteArrayOrNull(key: String): ByteArray?
+            = getValue<ByteArray>(key)?.value
+
     override fun getByteArrayOrDefault(key: String): ByteArray
             = getValueOfDefault0<ByteArray>(key, NBTType.TAG_BYTE_ARRAY).value
 
@@ -186,6 +210,9 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
 
     override fun getIntArray(key: String): IntArray
             = getValueExact<IntArray>(key).value
+
+    override fun getIntArrayOrNull(key: String): IntArray?
+            = getValue<IntArray>(key)?.value
 
     override fun getIntArrayOrDefault(key: String): IntArray
             = getValueOfDefault0<IntArray>(key, NBTType.TAG_INT_ARRAY).value
@@ -196,6 +223,12 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
     override fun getBoolean(key: String): Boolean
             = getByte(key) == 1.toByte()
 
+    override fun getBooleanOrNull(key: String): Boolean?
+            = getByteOrNull(key).let { if(it == null) null else it == 1.toByte() }
+
+    override fun getBooleanOrFalse(key: String): Boolean
+            = getByteOrNull(key).let { if(it == null) false else it == 1.toByte() }
+
     override fun getBooleanOrDefault(key: String): Boolean
             = getByteOrDefault(key) == 1.toByte()
 
@@ -205,6 +238,9 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
     override fun getCompound(key: String): NBTCompound
             = getValueExact<NBTCompound>(key).value
 
+    override fun getCompoundOrNull(key: String): NBTCompound?
+            = getValue<NBTCompound>(key)?.value
+
     override fun getCompoundOrDefault(key: String): NBTCompound
             = getValueOfDefault0<NBTCompound>(key, NBTType.TAG_COMPOUND) as NBTCompound
 
@@ -213,6 +249,9 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
 
     override fun <T> getList(key: String): NBTList<T>
             = getValueExact<NBTList<T>>(key).value
+
+    override fun <T> getListOrNull(key: String): NBTList<T>?
+            = getValue<NBTList<T>>(key)?.value
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getListOrDefault(key: String): NBTList<T>

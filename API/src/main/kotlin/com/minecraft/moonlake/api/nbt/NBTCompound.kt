@@ -54,11 +54,15 @@ interface NBTCompound : NBTBase<MutableMap<String, NBTBase<*>>>, MutableIterable
 
     fun getString(key: String): String
 
+    fun getStringOrNull(key: String): String?
+
     fun getStringOrDefault(key: String): String
 
     fun putString(key: String, value: String): NBTCompound
 
     fun getByte(key: String): Byte
+
+    fun getByteOrNull(key: String): Byte?
 
     fun getByteOrDefault(key: String): Byte
 
@@ -68,6 +72,8 @@ interface NBTCompound : NBTBase<MutableMap<String, NBTBase<*>>>, MutableIterable
 
     fun getShort(key: String): Short
 
+    fun getShortOrNull(key: String): Short?
+
     fun getShortOrDefault(key: String): Short
 
     fun putShort(key: String, value: Short): NBTCompound
@@ -76,11 +82,15 @@ interface NBTCompound : NBTBase<MutableMap<String, NBTBase<*>>>, MutableIterable
 
     fun getInt(key: String): Int
 
+    fun getIntOrNull(key: String): Int?
+
     fun getIntOrDefault(key: String): Int
 
     fun putInt(key: String, value: Int): NBTCompound
 
     fun getLong(key: String): Long
+
+    fun getLongOrNull(key: String): Long?
 
     fun getLongOrDefault(key: String): Long
 
@@ -88,11 +98,15 @@ interface NBTCompound : NBTBase<MutableMap<String, NBTBase<*>>>, MutableIterable
 
     fun getFloat(key: String): Float
 
+    fun getFloatOrNull(key: String): Float?
+
     fun getFloatOrDefault(key: String): Float
 
     fun putFloat(key: String, value: Float): NBTCompound
 
     fun getDouble(key: String): Double
+
+    fun getDoubleOrNull(key: String): Double?
 
     fun getDoubleOrDefault(key: String): Double
 
@@ -100,11 +114,15 @@ interface NBTCompound : NBTBase<MutableMap<String, NBTBase<*>>>, MutableIterable
 
     fun getByteArray(key: String): ByteArray
 
+    fun getByteArrayOrNull(key: String): ByteArray?
+
     fun getByteArrayOrDefault(key: String): ByteArray
 
     fun putByteArray(key: String, value: ByteArray): NBTCompound
 
     fun getIntArray(key: String): IntArray
+
+    fun getIntArrayOrNull(key: String): IntArray?
 
     fun getIntArrayOrDefault(key: String): IntArray
 
@@ -112,17 +130,25 @@ interface NBTCompound : NBTBase<MutableMap<String, NBTBase<*>>>, MutableIterable
 
     fun getBoolean(key: String): Boolean
 
+    fun getBooleanOrNull(key: String): Boolean?
+
+    fun getBooleanOrFalse(key: String): Boolean
+
     fun getBooleanOrDefault(key: String): Boolean
 
     fun putBoolean(key: String, value: Boolean): NBTCompound
 
     fun getCompound(key: String): NBTCompound
 
+    fun getCompoundOrNull(key: String): NBTCompound?
+
     fun getCompoundOrDefault(key: String): NBTCompound
 
     fun putCompound(compound: NBTCompound): NBTCompound
 
     fun <T> getList(key: String): NBTList<T>
+
+    fun <T> getListOrNull(key: String): NBTList<T>?
 
     fun <T> getListOrDefault(key: String): NBTList<T>
 

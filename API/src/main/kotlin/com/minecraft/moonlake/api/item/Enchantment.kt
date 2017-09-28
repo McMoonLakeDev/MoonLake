@@ -78,8 +78,27 @@ enum class Enchantment(val id: Int, val max: Int, val type: String, val mcVer: M
     companion object {
 
         @JvmStatic
+        private val ID_MAP: MutableMap<Int, Enchantment> = HashMap()
+
+        init {
+            val regex = Regex("(i?)[a-z]([a-z_\\d]*)")
+            values().forEach { if(it.name.matches(regex)) ID_MAP.put(it.id, it) }
+        }
+
+        @JvmStatic
         @JvmName("fromName")
         fun fromName(name: String): Enchantment
                 = Enchantment.valueOf(name.toUpperCase())
+
+        @JvmStatic
+        @JvmName("fromId")
+        @Throws(IllegalArgumentException::class)
+        fun fromId(id: Int): Enchantment
+                = ID_MAP[id] ?: throw IllegalArgumentException("错误: 无效的附魔效果 ID $id 值.")
+
+        @JvmStatic
+        @JvmName("hasId")
+        fun hasId(id: Int): Boolean
+                = ID_MAP.containsKey(id)
     }
 }

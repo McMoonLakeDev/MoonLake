@@ -17,6 +17,7 @@
 
 package com.minecraft.moonlake.api.item
 
+import com.minecraft.moonlake.api.attribute.AttributeModifier
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
@@ -25,6 +26,7 @@ import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.nbt.NBTCompound
 import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.nbt.NBTList
+import com.minecraft.moonlake.api.util.Enums
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.Material
@@ -196,13 +198,20 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     open protected fun tagBannerPatterns(): NBTList<NBTCompound>
             = tagBlockEntityTag().getListOrDefault(TAG_BANNER_PATTERNS)
 
-    /** general */
+    override fun getDisplayName(block: (self: ItemBuilder, displayName: String?) -> Unit): ItemBuilder
+            { block(this, tagDisplay().getStringOrNull(TAG_DISPLAY_NAME)); return this; }
 
     override fun setDisplayName(displayName: String): ItemBuilder
             { tagDisplay().putString(TAG_DISPLAY_NAME, displayName); return this; }
 
+    override fun getLocalizedName(block: (self: ItemBuilder, localizedName: String?) -> Unit): ItemBuilder
+            { block(this, tagDisplay().getStringOrNull(TAG_DISPLAY_LOC_NAME)); return this; }
+
     override fun setLocalizedName(localizedName: String): ItemBuilder
             { tagDisplay().putString(TAG_DISPLAY_LOC_NAME, localizedName); return this; }
+
+    override fun getLore(block: (self: ItemBuilder, lore: List<String>?) -> Unit): ItemBuilder
+            { block(this, tagDisplay().getListOrNull<String>(TAG_DISPLAY_LORE)?.toList()); return this; }
 
     override fun setLore(vararg lore: String): ItemBuilder
             = setLore(lore.toList())
@@ -218,6 +227,13 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     override fun clearLore(): ItemBuilder
             { if(tag.containsKey(TAG_DISPLAY)) tagDisplay().remove(TAG_DISPLAY_LORE); return this; }
+
+    override fun getEnchant(block: (self: ItemBuilder, ench: Map<Enchantment, Int>?) -> Unit): ItemBuilder {
+        val ench = tag.getListOrNull<NBTCompound>(TAG_ENCH)
+        val enchEntry = ench?.associate { Pair(it.getShort(TAG_ENCH_ID).toInt(), it.getShort(TAG_ENCH_LVL).toInt()) }?.toMap()
+        block(this, enchEntry?.filter { Enchantment.hasId(it.key) }?.mapKeys { Enchantment.fromId(it.key) })
+        return this
+    }
 
     override fun addEnchant(enchantment: Enchantment, level: Int): ItemBuilder
             { tagEnchant().addCompound(NBTFactory.ofCompound().putShort(TAG_ENCH_ID, enchantment.id).putShort(TAG_ENCH_LVL, level)); return this; }
@@ -240,6 +256,12 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         return value
     }
 
+    private fun getItemFlag(modifier: Int?): Array<out ItemFlag>?
+            = if(modifier == null) null else ItemFlag.values().filter { it.ordinal and (1 shl it.ordinal) == 1 shl it.ordinal }.toTypedArray()
+
+    override fun getFlag(block: (self: ItemBuilder, flag: Array<out ItemFlag>?) -> Unit): ItemBuilder
+            { block(this, getItemFlag(tag.getIntOrNull(TAG_HIDE_FLAGS))); return this; }
+
     override fun addFlag(vararg flag: ItemFlag): ItemBuilder
             { tag.putInt(TAG_HIDE_FLAGS, flag.getAddBitModifier(tag.getIntOrDefault(TAG_HIDE_FLAGS))); return this; }
 
@@ -255,8 +277,28 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun clearFlag(): ItemBuilder
             { tag.remove(TAG_HIDE_FLAGS); return this; }
 
+    override fun isUnbreakable(block: (self: ItemBuilder, unbreakable: Boolean) -> Unit): ItemBuilder
+            { block(this, tag.getBooleanOrFalse(TAG_UNBREAKABLE)); return this; }
+
     override fun setUnbreakable(unbreakable: Boolean): ItemBuilder
             { tag.putBoolean(TAG_UNBREAKABLE, unbreakable); return this; }
+
+    override fun getAttribute(block: (self: ItemBuilder, attribute: Set<AttributeModifier>?) -> Unit): ItemBuilder {
+        val attributeModifiers = tag.getListOrNull<NBTCompound>(TAG_ATTRIBUTE_MODIFIERS)
+        val attributes: MutableSet<AttributeModifier>? = if(attributeModifiers == null) null else HashSet()
+        if(attributeModifiers != null) for(attribute in attributeModifiers) {
+            val type = Enums.ofValuable(AttributeType::class.java, attribute.getString(TAG_ATTRIBUTE_NAME)) ?: continue
+            val operation = attribute.getIntOrNull(TAG_ATTRIBUTE_OPERATION).let { if(it == null) null else Enums.ofValuable(Operation::class.java, it) } ?: continue
+            val slot = attribute.getStringOrNull(TAG_ATTRIBUTE_SLOT).let { if(it == null) null else Enums.ofValuable(Slot::class.java, it) }
+            val uuidMost = attribute.getLongOrNull(TAG_ATTRIBUTE_UUID_MOST)
+            val uuidLeast = attribute.getLongOrNull(TAG_ATTRIBUTE_UUID_LEAST)
+            val amount = attribute.getDoubleOrNull(TAG_ATTRIBUTE_AMOUNT)
+            val uuid = if(uuidMost == null || uuidLeast == null) UUID.randomUUID() else UUID(uuidMost, uuidLeast)
+            attributes?.add(AttributeModifier(type, operation, slot, amount ?: .0, uuid))
+        }
+        block(this, attributes)
+        return this
+    }
 
     override fun setAttribute(type: AttributeType, operation: Operation, amount: Double): ItemBuilder
             = setAttribute(type, operation, null, amount)
@@ -278,19 +320,30 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun clearAttribute(): ItemBuilder
             { tag.remove(TAG_ATTRIBUTE_MODIFIERS); return this; }
 
-    override fun setCanDestroy(vararg type: Material): ItemBuilder {
-        val canDestroy = NBTFactory.ofList<String>(TAG_CAN_DESTROY)
-        type.forEach { canDestroy.addString("minecraft:${it.name.toLowerCase()}") }
-        tag.putList(canDestroy)
+    private fun getMaterialFromStringList(key: String): Set<Material>?
+            = tag.getListOrNull<String>(key)?.mapNotNull { Material.matchMaterial(it.replaceFirst("minecraft:", "", true)) }?.toSet()
+
+    private fun setMaterialFromArray(key: String, vararg type: Material): ItemBuilder {
+        val list = NBTFactory.ofList<String>(key)
+        type.forEach { list.addString("minecraft:${it.name.toLowerCase()}") }
+        tag.putList(list)
         return this
     }
 
-    override fun setCanPlaceOn(vararg type: Material): ItemBuilder {
-        val canPlaceOn = NBTFactory.ofList<String>(TAG_CAN_PLACE_ON)
-        type.forEach { canPlaceOn.addString("minecraft:${it.name.toLowerCase()}") }
-        tag.putList(canPlaceOn)
-        return this
-    }
+    override fun getCanDestroy(block: (self: ItemBuilder, canDestroy: Set<Material>?) -> Unit): ItemBuilder
+            { block(this, getMaterialFromStringList(TAG_CAN_DESTROY)); return this; }
+
+    override fun setCanDestroy(vararg type: Material): ItemBuilder
+            = setMaterialFromArray(TAG_CAN_DESTROY, *type)
+
+    override fun getCanPlaceOn(block: (self: ItemBuilder, canPlaceOn: Set<Material>?) -> Unit): ItemBuilder
+            { block(this, getMaterialFromStringList(TAG_CAN_PLACE_ON)); return this; }
+
+    override fun setCanPlaceOn(vararg type: Material): ItemBuilder
+            = setMaterialFromArray(TAG_CAN_PLACE_ON, *type)
+
+    override fun getRepairCost(block: (self: ItemBuilder, repairCost: Int?) -> Unit): ItemBuilder
+            { block(this, tag.getIntOrNull(TAG_REPAIR_COST)); return this; }
 
     override fun setRepairCost(value: Int): ItemBuilder
             { tag.putInt(TAG_REPAIR_COST, value); return this; }

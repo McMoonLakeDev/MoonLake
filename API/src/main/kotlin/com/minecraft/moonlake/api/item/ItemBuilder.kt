@@ -17,6 +17,7 @@
 
 package com.minecraft.moonlake.api.item
 
+import com.minecraft.moonlake.api.attribute.AttributeModifier
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
@@ -41,9 +42,15 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.ItemMeta
      */
 
+    fun getDisplayName(block: (self: ItemBuilder, displayName: String?) -> Unit): ItemBuilder
+
     fun setDisplayName(displayName: String): ItemBuilder
 
+    fun getLocalizedName(block: (self: ItemBuilder, localizedName: String?) -> Unit): ItemBuilder
+
     fun setLocalizedName(localizedName: String): ItemBuilder
+
+    fun getLore(block: (self: ItemBuilder, lore: List<String>?) -> Unit): ItemBuilder
 
     fun setLore(vararg lore: String): ItemBuilder
 
@@ -55,11 +62,15 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun clearLore(): ItemBuilder
 
+    fun getEnchant(block: (self: ItemBuilder, ench: Map<Enchantment, Int>?) -> Unit): ItemBuilder
+
     fun addEnchant(enchantment: Enchantment, level: Int): ItemBuilder
 
     fun addSafeEnchant(enchantment: Enchantment, level: Int): ItemBuilder
 
     fun clearEnchant(): ItemBuilder
+
+    fun getFlag(block: (self: ItemBuilder, flag: Array<out ItemFlag>?) -> Unit): ItemBuilder
 
     fun addFlag(vararg flag: ItemFlag): ItemBuilder
 
@@ -71,7 +82,11 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun clearFlag(): ItemBuilder
 
+    fun isUnbreakable(block: (self: ItemBuilder, unbreakable: Boolean) -> Unit): ItemBuilder
+
     fun setUnbreakable(unbreakable: Boolean): ItemBuilder
+
+    fun getAttribute(block: (self: ItemBuilder, attribute: Set<AttributeModifier>?) -> Unit): ItemBuilder
 
     fun setAttribute(type: AttributeType, operation: Operation, amount: Double): ItemBuilder
 
@@ -79,9 +94,15 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun clearAttribute(): ItemBuilder
 
+    fun getCanDestroy(block: (self: ItemBuilder, canDestroy: Set<Material>?) -> Unit): ItemBuilder
+
     fun setCanDestroy(vararg type: Material): ItemBuilder
 
+    fun getCanPlaceOn(block: (self: ItemBuilder, canPlaceOn: Set<Material>?) -> Unit): ItemBuilder
+
     fun setCanPlaceOn(vararg type: Material): ItemBuilder
+
+    fun getRepairCost(block: (self: ItemBuilder, repairCost: Int?) -> Unit): ItemBuilder
 
     fun setRepairCost(value: Int): ItemBuilder
 
