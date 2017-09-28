@@ -27,30 +27,35 @@ class ServiceManagerImpl : ServiceManager {
 
     private val services: MutableMap<Class<out Service>, Service> = ConcurrentHashMap()
 
-    override fun <T : Service> registerService(clazz: Class<T>, service: T): Boolean {
+    override fun <T: Service> registerService(clazz: Class<T>, service: T): Boolean {
         if((service is ServiceRegistrable && !service.registrable()) || services.containsKey(clazz))
             return false
         return (services.put(clazz, service) == null).also { if(it) service.onInitialize() }
     }
 
-    override fun <T : Service> unregisterService(clazz: Class<T>): Boolean {
-        if(ServiceCoreAbstract::class.java.isInstance(services[clazz]))
+    override fun <T: Service> unregisterService(clazz: Class<T>): Boolean {
+        if(ServiceAbstractCore::class.java.isInstance(services[clazz]))
             throw ServiceException("待卸载的服务 $clazz 类是核心服务, 不可卸载.")
         return services.remove(clazz).also { service -> service?.onUnload() } != null
     }
 
-    override fun <T : Service> getService(clazz: Class<T>): T = try {
+    override fun <T: Service> getService(clazz: Class<T>): T = try {
         clazz.cast(services[clazz])
     } catch(e: Exception) {
         throw ServiceException(e)
     }
 
-    override fun <T : Service> getServiceSafe(clazz: Class<T>): T? = try {
+    override fun <T: Service> getServiceSafe(clazz: Class<T>): T? = try {
         getService(clazz)
     } catch(e: Exception) {
         null
     }
 
-    override fun <T : Service> hasService(clazz: Class<T>): Boolean
+    override fun <T: Service> hasService(clazz: Class<T>): Boolean
             = getServiceSafe(clazz) != null
+
+    override fun shutdown() { // TODO 卸载顺序
+        services.values.forEach { it.onUnload() }
+        services.clear()
+    }
 }

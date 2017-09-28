@@ -17,5 +17,16 @@
 
 package com.minecraft.moonlake.api.service
 
+import com.minecraft.moonlake.api.packet.PacketListener
+import org.bukkit.plugin.Plugin
+
 interface ServicePacketListener : ServiceRegistrable {
+
+    fun registerListener(listener: PacketListener): Boolean
+
+    fun unregisterListener(listener: PacketListener): Boolean
+
+    fun unregisterListener(plugin: Plugin): Boolean
+
+    fun unregisterListenerAll()
 }

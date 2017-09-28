@@ -22,7 +22,7 @@ import com.minecraft.moonlake.api.service.ServiceConfig
 import org.bukkit.configuration.file.FileConfiguration
 import java.io.File
 
-class ServiceConfigImpl : ServiceCoreAbstract(), ServiceConfig {
+class ServiceConfigImpl : ServiceAbstractCore(), ServiceConfig {
 
     private val config: FileConfiguration by lazy { getMoonLake().config }
 

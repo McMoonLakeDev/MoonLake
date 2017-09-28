@@ -230,10 +230,10 @@ class MoonLakePluginTest : JavaPlugin() {
 
         PacketListeners.registerListener(object: PacketListenerAdapter(this, PacketListenerPriority.NORMAL, PacketOutTitle::class.java) {
             override fun onSending(event: PacketEvent) {
-                getPlugin().logger.info("[数据包][输出] >> ${event.packet}")
+                plugin.logger.info("[数据包][输出] >> ${event.packet}")
             }
             override fun onReceiving(event: PacketEvent) {
-                getPlugin().logger.info("[数据包][输入] << ${event.packet}")
+                plugin.logger.info("[数据包][输入] << ${event.packet}")
             }
         })
     }

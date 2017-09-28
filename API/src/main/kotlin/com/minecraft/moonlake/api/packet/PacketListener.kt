@@ -21,13 +21,13 @@ import org.bukkit.plugin.Plugin
 
 interface PacketListener {
 
-    fun getPlugin(): Plugin
+    val plugin: Plugin
 
-    fun getPriority(): PacketListenerPriority
+    val priority: PacketListenerPriority
 
-    fun getSendingTypes(): Set<Class<out PacketOut>>
+    val sendingTypes: Set<Class<out PacketOut>>
 
-    fun getReceivingTypes(): Set<Class<out PacketIn>>
+    val receivingTypes: Set<Class<out PacketIn>>
 
     fun onSending(event: PacketEvent)
 

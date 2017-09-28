@@ -20,10 +20,10 @@ package com.minecraft.moonlake.api.packet
 import com.minecraft.moonlake.api.copyHashSetOrEmpty
 import org.bukkit.plugin.Plugin
 
-abstract class PacketListenerAdapter(private val plugin: Plugin, private val priority: PacketListenerPriority = PacketListenerPriority.NORMAL, vararg types: Class<out Packet>) : PacketListener {
+open class PacketListenerAdapter(private val _plugin: Plugin, private val _priority: PacketListenerPriority = PacketListenerPriority.NORMAL, vararg types: Class<out Packet>) : PacketListener {
 
-    private val sendingTypes: MutableSet<Class<out PacketOut>> = HashSet()
-    private val receivingTypes: MutableSet<Class<out PacketIn>> = HashSet()
+    private val _sendingTypes: MutableSet<Class<out PacketOut>> = HashSet()
+    private val _receivingTypes: MutableSet<Class<out PacketIn>> = HashSet()
 
     init {
         if(types.isEmpty())
@@ -35,44 +35,51 @@ abstract class PacketListenerAdapter(private val plugin: Plugin, private val pri
             registered
         }.forEach {
             when(PacketOut::class.java.isAssignableFrom(it)) {
-                true -> sendingTypes.add(it.asSubclass(PacketOut::class.java))
-                else -> receivingTypes.add(it.asSubclass(PacketIn::class.java))
+                true -> _sendingTypes.add(it.asSubclass(PacketOut::class.java))
+                else -> _receivingTypes.add(it.asSubclass(PacketIn::class.java))
             }
         }
     }
 
-    override final fun getPlugin(): Plugin
-            = plugin
+    override final val plugin: Plugin
+        get() = _plugin
 
-    override final fun getPriority(): PacketListenerPriority
-            = priority
+    override final val priority: PacketListenerPriority
+        get() = _priority
 
-    override final fun getSendingTypes(): Set<Class<out PacketOut>>
-            = sendingTypes.copyHashSetOrEmpty()
+    override final val sendingTypes: Set<Class<out PacketOut>>
+        get() = _sendingTypes.copyHashSetOrEmpty()
 
-    override final fun getReceivingTypes(): Set<Class<out PacketIn>>
-            = receivingTypes.copyHashSetOrEmpty()
+    override final val receivingTypes: Set<Class<out PacketIn>>
+        get() = _receivingTypes.copyHashSetOrEmpty()
 
-    override abstract fun onSending(event: PacketEvent)
+    /**
+     * Execute in non-main threads.
+     */
+    override fun onSending(event: PacketEvent) {}
 
-    override abstract fun onReceiving(event: PacketEvent)
+    /**
+     * Execute in non-main threads.
+     */
+    override fun onReceiving(event: PacketEvent) {}
 
-    override fun equals(other: Any?): Boolean {
+    override final fun equals(other: Any?): Boolean {
         if(other === this)
             return true
         if(other is PacketListenerAdapter)
-            return plugin == other.plugin && sendingTypes == other.sendingTypes && receivingTypes == other.sendingTypes
+            return plugin == other.plugin && priority == other.priority && _sendingTypes == other._sendingTypes && _receivingTypes == other._receivingTypes
         return false
     }
 
-    override fun hashCode(): Int {
-        var result = plugin.hashCode()
-        result = 31 * result + sendingTypes.hashCode()
-        result = 31 * result + receivingTypes.hashCode()
+    override final fun hashCode(): Int {
+        var result = _plugin.hashCode()
+        result = 31 * result + _priority.hashCode()
+        result = 31 * result + _sendingTypes.hashCode()
+        result = 31 * result + _receivingTypes.hashCode()
         return result
     }
 
-    override fun toString(): String {
-        return "PacketListener(plugin=$plugin, sendingTypes=$sendingTypes, receivingTypes=$receivingTypes)"
+    override final fun toString(): String {
+        return "PacketListener(plugin=$plugin, priority=$priority, sendingTypes=$_sendingTypes, receivingTypes=$_receivingTypes)"
     }
 }

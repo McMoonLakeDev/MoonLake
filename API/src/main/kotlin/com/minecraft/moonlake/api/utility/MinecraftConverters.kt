@@ -28,6 +28,7 @@ import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
+import org.bukkit.Server
 import org.bukkit.entity.Entity
 import org.bukkit.inventory.ItemStack
 import java.io.StringReader
@@ -117,6 +118,28 @@ object MinecraftConverters {
                     = NBTFactory.fromNMS<Any>(generic)
             override fun getSpecificType(): Class<NBTBase<*>>
                     = NBTBase::class.java
+        }
+    }
+
+    /** server */
+
+    @JvmStatic
+    private val craftServerMinecraft: AccessorField by lazy {
+        Accessors.getAccessorField(MinecraftReflection.getCraftServerClass(), MinecraftReflection.getMinecraftServerClass(), true) }
+    @JvmStatic
+    private val minecraftServerCraft: AccessorField by lazy {
+        Accessors.getAccessorField(MinecraftReflection.getMinecraftServerClass(), MinecraftReflection.getCraftServerClass(), true) }
+
+    @JvmStatic
+    @JvmName("getServer")
+    fun getServer(): ConverterEquivalent<Server> {
+        return object: ConverterEquivalentIgnoreNull<Server> {
+            override fun getSpecificValue(generic: Any): Server
+                    = minecraftServerCraft.get(generic) as Server
+            override fun getGenericValue(specific: Server): Any
+                    = craftServerMinecraft.get(specific) as Any
+            override fun getSpecificType(): Class<Server>
+                    = Server::class.java
         }
     }
 }

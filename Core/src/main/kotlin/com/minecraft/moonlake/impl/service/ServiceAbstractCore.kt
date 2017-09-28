@@ -23,5 +23,5 @@ import com.minecraft.moonlake.api.service.ServiceAbstract
  * 如果继承此服务，那么此服务不可卸载。只有当插件被 disable 时才会释放。
  * 注：此服务用于 MoonLake 内的核心服务，请勿依赖此模块。随时将会改动。
  */
-abstract class ServiceCoreAbstract : ServiceAbstract() {
+abstract class ServiceAbstractCore : ServiceAbstract() {
 }
