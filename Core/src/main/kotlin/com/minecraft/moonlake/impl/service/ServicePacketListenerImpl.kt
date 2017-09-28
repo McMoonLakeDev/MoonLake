@@ -56,11 +56,13 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
         eventListener?.registerEvent(getMoonLake())
         var result = false
         try {
+            injectOnlinePlayers()
             injectChannelServer()
             result = true
         } catch(e: Exception) {
             // If you fail again try again
             getMoonLake().runTask { try {
+                injectOnlinePlayers()
                 injectChannelServer()
                 result = true
             } catch(e: Exception) {
@@ -150,6 +152,9 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
         val channel = getChannelPlayer(player)
         channel.eventLoop().execute { channel.pipeline().remove(NAME) }
     }
+
+    private fun injectOnlinePlayers()
+            { getOnlinePlayers().forEach { injectChannelPlayer(it) } }
 
     private fun unInjectOnlinePlayers()
             { getOnlinePlayers().forEach { unInjectChannelPlayer(it) } }
