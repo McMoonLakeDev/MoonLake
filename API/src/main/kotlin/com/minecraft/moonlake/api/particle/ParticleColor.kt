@@ -17,6 +17,9 @@
 
 package com.minecraft.moonlake.api.particle
 
+/**
+ * @author [DarkBlade12](https://github.com/DarkBlade12) by origin, [lgou2w](https://github.com/lgou2w) by modified.
+ */
 abstract class ParticleColor {
 
     abstract val valueX: Float

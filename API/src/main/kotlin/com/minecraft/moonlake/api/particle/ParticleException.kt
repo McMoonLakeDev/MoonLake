@@ -19,6 +19,9 @@ package com.minecraft.moonlake.api.particle
 
 import com.minecraft.moonlake.api.exception.MoonLakeException
 
+/**
+ * @author [DarkBlade12](https://github.com/DarkBlade12) by origin, [lgou2w](https://github.com/lgou2w) by modified.
+ */
 class ParticleException : MoonLakeException {
 
     constructor() : super()

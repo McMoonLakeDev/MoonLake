@@ -27,6 +27,9 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 
+/**
+ * @author [DarkBlade12](https://github.com/DarkBlade12) by origin, [lgou2w](https://github.com/lgou2w) by modified.
+ */
 enum class Particle {
 
     /** 

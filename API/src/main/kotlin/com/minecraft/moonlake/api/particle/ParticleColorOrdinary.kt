@@ -19,6 +19,9 @@ package com.minecraft.moonlake.api.particle
 
 import org.bukkit.Color
 
+/**
+ * @author [DarkBlade12](https://github.com/DarkBlade12) by origin, [lgou2w](https://github.com/lgou2w) by modified.
+ */
 class ParticleColorOrdinary : ParticleColor {
 
     val red: Int
