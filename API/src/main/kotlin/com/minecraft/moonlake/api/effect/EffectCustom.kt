@@ -15,18 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api.item
+package com.minecraft.moonlake.api.effect
 
-import com.minecraft.moonlake.api.Valuable
+import org.bukkit.Color
 
-enum class BookGeneration : Valuable<Int> {
-
-    ORIGINAL,
-    COPY_OF_ORIGINAL,
-    COPY_OF_COPY,
-    TATTERED,
-    ;
-
-    override fun value(): Int
-            = ordinal
+data class EffectCustom(val type: EffectType, val duration: Int, val amplifier: Int, val ambient: Boolean = true, val particle: Boolean = true, val color: Color? = null) {
 }

@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
 import com.minecraft.moonlake.api.effect.EffectBase
+import com.minecraft.moonlake.api.effect.EffectCustom
 import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.funs.Builder
 import org.bukkit.Color
@@ -111,6 +112,8 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.LeatherArmorMeta
      */
 
+    fun getLeatherColor(block: (self: ItemBuilder, color: Color?) -> Unit): ItemBuilder
+
     fun setLeatherColor(color: Color): ItemBuilder
 
     fun setLeatherColor(red: Int, green: Int, blue: Int): ItemBuilder
@@ -120,11 +123,19 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.BookMeta
      */
 
+    fun getBookTitle(block: (self: ItemBuilder, title: String?) -> Unit): ItemBuilder
+
     fun setBookTitle(title: String): ItemBuilder
+
+    fun getBookAuthor(block: (self: ItemBuilder, author: String?) -> Unit): ItemBuilder
 
     fun setBookAuthor(author: String): ItemBuilder
 
+    fun getBookGeneration(block: (self: ItemBuilder, generation: BookGeneration?) -> Unit): ItemBuilder
+
     fun setBookGeneration(generation: BookGeneration): ItemBuilder
+
+    fun getBookPages(block: (self: ItemBuilder, pages: Collection<String>?) -> Unit): ItemBuilder
 
     fun setBookPages(vararg pages: String): ItemBuilder
 
@@ -141,6 +152,8 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.EnchantmentStorageMeta
      */
 
+    fun getStoredEnchant(block: (self: ItemBuilder, ench: Map<Enchantment, Int>?) -> Unit): ItemBuilder
+
     fun addStoredEnchant(enchantment: Enchantment, level: Int): ItemBuilder
 
     fun addStoredSafeEnchant(enchantment: Enchantment, level: Int): ItemBuilder
@@ -152,12 +165,16 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.SkullMeta
      */
 
+    fun getSkullOwner(block: (self: ItemBuilder, owner: String?) -> Unit): ItemBuilder
+
     fun setSkullOwner(owner: String): ItemBuilder
 
     /**
      * spawn egg meta
      * @see org.bukkit.inventory.meta.SpawnEggMeta
      */
+
+    fun getSpawnEggType(block: (self: ItemBuilder, type: EntityType?) -> Unit): ItemBuilder
 
     fun setSpawnEggType(type: EntityType): ItemBuilder
 
@@ -168,9 +185,15 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.MapMeta
      */
 
+    fun getMapScaling(block: (self: ItemBuilder, scaling: Boolean) -> Unit): ItemBuilder
+
     fun setMapScaling(scaling: Boolean): ItemBuilder
 
+    fun getMapLocationName(block: (self: ItemBuilder, locationName: String?) -> Unit): ItemBuilder
+
     fun setMapLocationName(locationName: String): ItemBuilder
+
+    fun getMapColor(block: (self: ItemBuilder, color: Color?) -> Unit): ItemBuilder
 
     fun setMapColor(color: Color): ItemBuilder
 
@@ -179,9 +202,17 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.PotionMeta
      */
 
+    fun getPotionColor(block: (self: ItemBuilder, color: Color?) -> Unit): ItemBuilder
+
     fun setPotionColor(color: Color): ItemBuilder
 
+    fun getPotionBase(block: (self: ItemBuilder, base: EffectBase?) -> Unit): ItemBuilder
+
     fun setPotionBase(base: EffectBase): ItemBuilder
+
+    fun getPotionEffect(block: (self: ItemBuilder, effect: Collection<EffectCustom>?) -> Unit): ItemBuilder
+
+    fun addPotionEffect(effect: EffectCustom): ItemBuilder
 
     fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean = true, particle: Boolean = true, color: Color? = null): ItemBuilder
 
@@ -192,11 +223,15 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.FireworkMeta
      */
 
+    fun getFireworkEffect(block: (self: ItemBuilder, effect: Collection<FireworkEffect>?) -> Unit): ItemBuilder
+
     fun addFireworkEffect(vararg effect: FireworkEffect): ItemBuilder
 
     fun addFireworkEffect(effect: Collection<FireworkEffect>): ItemBuilder
 
     fun clearFireworkEffect(): ItemBuilder
+
+    fun getFireworkPower(block: (self: ItemBuilder, power: Int?) -> Unit): ItemBuilder
 
     fun setFireworkPower(power: Int): ItemBuilder
 
@@ -205,11 +240,15 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.BannerMeta
      */
 
+    fun getBannerPattern(block: (self: ItemBuilder, pattern: Collection<Pattern>?) -> Unit): ItemBuilder
+
     fun setBannerPattern(pattern: Collection<Pattern>): ItemBuilder
 
     fun addBannerPattern(pattern: Pattern): ItemBuilder
 
     fun clearBannerPattern(): ItemBuilder
+
+    fun testGet(): ItemBuilder
 
     /** static */
 

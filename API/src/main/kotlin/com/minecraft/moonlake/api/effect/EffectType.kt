@@ -22,7 +22,7 @@ import com.minecraft.moonlake.api.adapter.AdapterBukkit
 import com.minecraft.moonlake.api.version.MinecraftVersion
 import org.bukkit.potion.PotionEffectType
 
-enum class EffectType(val id: Int, val type: String, val mcVer: MinecraftVersion? = null) : AdapterBukkit<PotionEffectType>, Valuable<String> {
+enum class EffectType(val id: Int, val type: String, val mcVer: MinecraftVersion? = null) : AdapterBukkit<PotionEffectType>, Valuable<Int> {
 
     SPEED(1, "SPEED"), 														  			 速度(SPEED),
     SLOW(2, "SLOW"), 														  			 缓慢(SLOW),
@@ -55,8 +55,8 @@ enum class EffectType(val id: Int, val type: String, val mcVer: MinecraftVersion
 
     constructor(equivalent: EffectType) : this(equivalent.id, equivalent.type, equivalent.mcVer)
 
-    override fun value(): String
-            = type
+    override fun value(): Int
+            = id
 
     override fun cast(): PotionEffectType
             = PotionEffectType.getByName(type)

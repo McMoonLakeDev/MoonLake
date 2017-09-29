@@ -21,10 +21,26 @@ class EffectBase private constructor(val value: String, val effect: EffectType? 
 
     private constructor(equivalent: EffectBase) : this(equivalent.value, equivalent.effect)
 
+    init {
+        NAME_MAP.put(value, this)
+    }
+
     fun hasEffect(): Boolean
             = effect != null
 
+    override fun toString(): String {
+        return "EffectBase(value='$value', effect=$effect)"
+    }
+
     companion object {
+
+        @JvmStatic
+        private val NAME_MAP: MutableMap<String, EffectBase> = HashMap()
+
+        @JvmStatic
+        @JvmName("fromName")
+        fun fromName(name: String): EffectBase?
+                = NAME_MAP[name]
 
         @JvmField
         val WATER = EffectBase("water")

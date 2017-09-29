@@ -100,6 +100,15 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
         return nbt
     }
 
+    private fun <T> getValueOfNull(key: String, type: NBTType): NBTBase<T>? {
+        if(!containsKey(key))
+            return null
+        var nbt = getValue<T>(key)
+        if(nbt == null)
+            nbt = NBTFactory.ofWrapper(type, key)
+        return nbt
+    }
+
     override fun <T> put(entry: NBTBase<T>): NBTCompound
             { value.put(entry.name, entry); return this; }
 
@@ -236,10 +245,10 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
             = putByte(key, (if(value) 1 else 0).toByte())
 
     override fun getCompound(key: String): NBTCompound
-            = getValueExact<NBTCompound>(key).value
+            = getValueExact<NBTCompound>(key) as NBTCompound
 
     override fun getCompoundOrNull(key: String): NBTCompound?
-            = getValue<NBTCompound>(key)?.value
+            = getValueOfNull<NBTCompound>(key, NBTType.TAG_COMPOUND) as NBTCompound?
 
     override fun getCompoundOrDefault(key: String): NBTCompound
             = getValueOfDefault0<NBTCompound>(key, NBTType.TAG_COMPOUND) as NBTCompound
@@ -247,11 +256,13 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
     override fun putCompound(compound: NBTCompound): NBTCompound
             { this.value.put(compound.name, compound); return this; }
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T> getList(key: String): NBTList<T>
-            = getValueExact<NBTList<T>>(key).value
+            = getValueExact<NBTList<T>>(key) as NBTList<T>
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T> getListOrNull(key: String): NBTList<T>?
-            = getValue<NBTList<T>>(key)?.value
+            = getValueOfNull<NBTList<T>>(key, NBTType.TAG_LIST) as NBTList<T>?
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getListOrDefault(key: String): NBTList<T>
@@ -267,7 +278,7 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
             = !isEmpty()
 
     override fun iterator(): MutableIterator<NBTBase<*>>
-            = value.values.iterator()
+            = value.values.map { NBTFactory.fromBase(it) }.toMutableList().iterator()
 
     /** significant */
 

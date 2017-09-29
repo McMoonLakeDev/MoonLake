@@ -83,6 +83,7 @@ class MoonLakePluginTest : JavaPlugin() {
                             .addLore("标签属性", "标签属性") // 标签属性
                             .clearEnchant()
                             .addFlag(ItemFlag.HIDE_UNBREAKABLE) // 隐藏不可破坏属性
+                            .testGet()
                             .build()
 
                     itemStack = ItemBuilder.of(itemStack)
@@ -99,6 +100,7 @@ class MoonLakePluginTest : JavaPlugin() {
                             .addLore("标签属性")
                             .setDisplayName("233")
                             .addEnchant(Enchantment.锋利, 1)
+                            .testGet()
                             .build()
                     event.player.inventory.addItem(itemStack)
                     event.player.toMoonLakePlayer().send(ChatComponentFancy("物品展示: ").then("[ITEM]").tooltipItem(itemStack))
@@ -136,6 +138,7 @@ class MoonLakePluginTest : JavaPlugin() {
                     Material.IRON_SWORD.newItemBuilder()
                             .setDisplayName("显示名称")
                             .addEnchant(Enchantment.锋利, 5)
+                            .testGet()
                             .build()
                             .readTagSafe { event.player.sendMessage(it.toString()) }
                 }
@@ -163,6 +166,7 @@ class MoonLakePluginTest : JavaPlugin() {
 
                     val spawnEgg = Material.MONSTER_EGG.newItemBuilder()
                             .setSpawnEggType(zombie)
+                            .testGet()
                             .build()
                     event.player.inventory.addItem(spawnEgg)
                 }
@@ -170,6 +174,7 @@ class MoonLakePluginTest : JavaPlugin() {
                     val itemStack = Material.POTION.newItemBuilder()
                             .setPotionBase(EffectBase.瞬间治疗药水增强版)
                             .setDisplayName("&6治疗药剂".toColor())
+                            .testGet()
                             .build()
                     event.player.inventory.addItem(itemStack)
                 }

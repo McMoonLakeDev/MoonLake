@@ -81,7 +81,7 @@ enum class Enchantment(val id: Int, val max: Int, val type: String, val mcVer: M
         private val ID_MAP: MutableMap<Int, Enchantment> = HashMap()
 
         init {
-            val regex = Regex("(i?)[a-z]([a-z_\\d]*)")
+            val regex = Regex("(?i)[a-z]([a-z_\\d]*)", RegexOption.IGNORE_CASE)
             values().forEach { if(it.name.matches(regex)) ID_MAP.put(it.id, it) }
         }
 

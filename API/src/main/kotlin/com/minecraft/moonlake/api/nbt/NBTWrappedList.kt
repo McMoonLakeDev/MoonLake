@@ -34,7 +34,6 @@
 
 package com.minecraft.moonlake.api.nbt
 
-import com.google.common.collect.Iterables
 import com.minecraft.moonlake.api.notNull
 import com.minecraft.moonlake.api.util.ConvertedList
 
@@ -172,8 +171,11 @@ class NBTWrappedList<T>(handle: Any, name: String) : NBTWrapper<MutableList<NBTB
     override fun isNotEmpty(): Boolean
             = !isEmpty()
 
-    override fun iterator(): Iterator<T>
-            = Iterables.transform(value, { input -> input?.value }).iterator()
+    @Suppress("UNCHECKED_CAST")
+    override fun iterator(): Iterator<T> = when(elementType) {
+        NBTType.TAG_LIST, NBTType.TAG_COMPOUND -> value.map { NBTFactory.ofWrapper(it.type, it.name, it.value) as T }.iterator()
+        else -> value.map { it.value }.iterator()
+    }
 
     /** significant */
 

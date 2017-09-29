@@ -22,20 +22,24 @@ import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
 import com.minecraft.moonlake.api.effect.EffectBase
+import com.minecraft.moonlake.api.effect.EffectCustom
 import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.nbt.NBTCompound
 import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.nbt.NBTList
 import com.minecraft.moonlake.api.util.Enums
 import org.bukkit.Color
+import org.bukkit.DyeColor
 import org.bukkit.FireworkEffect
 import org.bukkit.Material
 import org.bukkit.block.banner.Pattern
+import org.bukkit.block.banner.PatternType
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import java.util.*
+import kotlin.collections.HashMap
 
 abstract class ItemBuilderAbstract : ItemBuilder {
 
@@ -198,6 +202,8 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     open protected fun tagBannerPatterns(): NBTList<NBTCompound>
             = tagBlockEntityTag().getListOrDefault(TAG_BANNER_PATTERNS)
 
+    /** general */
+
     override fun getDisplayName(block: (self: ItemBuilder, displayName: String?) -> Unit): ItemBuilder
             { block(this, tagDisplay().getStringOrNull(TAG_DISPLAY_NAME)); return this; }
 
@@ -228,12 +234,19 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun clearLore(): ItemBuilder
             { if(tag.containsKey(TAG_DISPLAY)) tagDisplay().remove(TAG_DISPLAY_LORE); return this; }
 
-    override fun getEnchant(block: (self: ItemBuilder, ench: Map<Enchantment, Int>?) -> Unit): ItemBuilder {
-        val ench = tag.getListOrNull<NBTCompound>(TAG_ENCH)
-        val enchEntry = ench?.associate { Pair(it.getShort(TAG_ENCH_ID).toInt(), it.getShort(TAG_ENCH_LVL).toInt()) }?.toMap()
-        block(this, enchEntry?.filter { Enchantment.hasId(it.key) }?.mapKeys { Enchantment.fromId(it.key) })
-        return this
+    private fun getEnchantFromKey(key: String): Map<Enchantment, Int>? {
+        val enchantments = tag.getListOrNull<NBTCompound>(key)
+        val enchs: MutableMap<Enchantment, Int>? = if(enchantments == null) null else HashMap()
+        if(enchantments != null) for(enchantment in enchantments) {
+            val type = enchantment.getShortOrNull(TAG_ENCH_ID)?.toInt().let { if(it == null || !Enchantment.hasId(it)) null else Enchantment.fromId(it) } ?: continue
+            val level = enchantment.getShortOrNull(TAG_ENCH_LVL) ?: 0
+            enchs?.put(type, level.toInt())
+        }
+        return enchs
     }
+
+    override fun getEnchant(block: (self: ItemBuilder, ench: Map<Enchantment, Int>?) -> Unit): ItemBuilder
+            { block(this, getEnchantFromKey(TAG_ENCH)); return this; }
 
     override fun addEnchant(enchantment: Enchantment, level: Int): ItemBuilder
             { tagEnchant().addCompound(NBTFactory.ofCompound().putShort(TAG_ENCH_ID, enchantment.id).putShort(TAG_ENCH_LVL, level)); return this; }
@@ -350,6 +363,9 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     /** leather armor */
 
+    override fun getLeatherColor(block: (self: ItemBuilder, color: Color?) -> Unit): ItemBuilder
+            { block(this, tag.getIntOrNull(TAG_LEATHER_ARMOR_COLOR).let { if(it == null) null else Color.fromRGB(it) }); return this; }
+
     override fun setLeatherColor(color: Color): ItemBuilder
             { tagDisplay().putInt(TAG_LEATHER_ARMOR_COLOR, color.asRGB()); return this; }
 
@@ -358,14 +374,26 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     /** book */
 
+    override fun getBookTitle(block: (self: ItemBuilder, title: String?) -> Unit): ItemBuilder
+            { block(this, tag.getStringOrNull(TAG_BOOK_TITLE)); return this; }
+
     override fun setBookTitle(title: String): ItemBuilder
             { tag.putString(TAG_BOOK_TITLE, title); return this; }
+
+    override fun getBookAuthor(block: (self: ItemBuilder, author: String?) -> Unit): ItemBuilder
+            { block(this, tag.getStringOrNull(TAG_BOOK_AUTHOR)); return this; }
 
     override fun setBookAuthor(author: String): ItemBuilder
             { tag.putString(TAG_BOOK_AUTHOR, author); return this; }
 
+    override fun getBookGeneration(block: (self: ItemBuilder, generation: BookGeneration?) -> Unit): ItemBuilder
+            { block(this, tag.getIntOrNull(TAG_BOOK_GENERATION).let { if(it == null) null else Enums.ofValuable(BookGeneration::class.java, it) }); return this; }
+
     override fun setBookGeneration(generation: BookGeneration): ItemBuilder
             { tag.putInt(TAG_BOOK_GENERATION, generation.ordinal); return this; }
+
+    override fun getBookPages(block: (self: ItemBuilder, pages: Collection<String>?) -> Unit): ItemBuilder
+            { block(this, tag.getListOrNull<String>(TAG_BOOK_PAGES)?.toList()); return this; }
 
     override fun setBookPages(vararg pages: String): ItemBuilder
             { clearBookPage(); return addBookPages(*pages); }
@@ -384,6 +412,9 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     /** enchantment storage */
 
+    override fun getStoredEnchant(block: (self: ItemBuilder, ench: Map<Enchantment, Int>?) -> Unit): ItemBuilder
+            { block(this, getEnchantFromKey(TAG_STORED_ENCHANTMENTS)); return this; }
+
     override fun addStoredEnchant(enchantment: Enchantment, level: Int): ItemBuilder
             { tagStoredEnchantments().addCompound(NBTFactory.ofCompound().putShort(TAG_ENCH_ID, enchantment.id).putShort(TAG_ENCH_LVL, level)); return this; }
 
@@ -395,10 +426,16 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     /** skull */
 
+    override fun getSkullOwner(block: (self: ItemBuilder, owner: String?) -> Unit): ItemBuilder
+            { block(this, tag.getStringOrNull(TAG_SKULL_OWNER)); return this; }
+
     override fun setSkullOwner(owner: String): ItemBuilder
             { tag.putString(TAG_SKULL_OWNER, owner); return this; }
 
     /** spawn egg */
+
+    override fun getSpawnEggType(block: (self: ItemBuilder, type: EntityType?) -> Unit): ItemBuilder // TODO
+            { block(this, tag.getCompoundOrNull(TAG_ENTITY_TAG)?.getStringOrNull(TAG_ENTITY_TAG_ID).let { if(it == null) null else EntityType.fromName(it) }); return this; }
 
     override fun setSpawnEggType(type: EntityType): ItemBuilder
             { tagEntityTag().putString(TAG_ENTITY_TAG_ID, type.name); return this; }
@@ -408,22 +445,56 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     /** map */
 
+    override fun getMapScaling(block: (self: ItemBuilder, scaling: Boolean) -> Unit): ItemBuilder
+            { block(this, tag.getBooleanOrFalse(TAG_MAP_SCALING)); return this; }
+
     override fun setMapScaling(scaling: Boolean): ItemBuilder
             { tag.putBoolean(TAG_MAP_SCALING, scaling); return this; }
 
+    override fun getMapLocationName(block: (self: ItemBuilder, locationName: String?) -> Unit): ItemBuilder
+            { block(this, tag.getCompoundOrNull(TAG_DISPLAY)?.getStringOrNull(TAG_DISPLAY_LOC_NAME)); return this; }
+
     override fun setMapLocationName(locationName: String): ItemBuilder
             { tagDisplay().putString(TAG_DISPLAY_LOC_NAME, locationName); return this; }
+
+    override fun getMapColor(block: (self: ItemBuilder, color: Color?) -> Unit): ItemBuilder
+            { block(this, tag.getCompoundOrNull(TAG_DISPLAY)?.getIntOrNull(TAG_MAP_COLOR).let { if(it == null) null else Color.fromRGB(it) }); return this; }
 
     override fun setMapColor(color: Color): ItemBuilder
             { tagDisplay().putInt(TAG_MAP_COLOR, color.asRGB()); return this; }
 
     /** potion */
 
+    override fun getPotionColor(block: (self: ItemBuilder, color: Color?) -> Unit): ItemBuilder
+            { block(this, tag.getIntOrNull(TAG_CUSTOM_POTION_COLOR).let { if(it == null) null else Color.fromRGB(it) }); return this; }
+
     override fun setPotionColor(color: Color): ItemBuilder
             { tag.putInt(TAG_CUSTOM_POTION_COLOR, color.asRGB()); return this; }
 
+    override fun getPotionBase(block: (self: ItemBuilder, base: EffectBase?) -> Unit): ItemBuilder
+            { block(this, tag.getStringOrNull(TAG_POTION).let { if(it == null) null else EffectBase.fromName(it) }); return this; }
+
     override fun setPotionBase(base: EffectBase): ItemBuilder
             { tag.putString(TAG_POTION, base.value); return this; }
+
+    override fun getPotionEffect(block: (self: ItemBuilder, effect: Collection<EffectCustom>?) -> Unit): ItemBuilder {
+        val potionEffects = tag.getListOrNull<NBTCompound>(TAG_CUSTOM_POTION_EFFECTS)
+        val effects: MutableList<EffectCustom>? = if(potionEffects == null) null else ArrayList()
+        if(potionEffects != null) for(potionEffect in potionEffects) {
+            val type = potionEffect.getByteOrNull(TAG_POTION_ID)?.toInt().let { if(it == null) null else Enums.ofValuable(EffectType::class.java, it) } ?: continue
+            val amplifier = potionEffect.getByteOrNull(TAG_POTION_AMPLIFIER) ?: 0
+            val duration = potionEffect.getIntOrNull(TAG_POTION_DURATION) ?: 0
+            val ambient = potionEffect.getBooleanOrFalse(TAG_POTION_AMBIENT)
+            val particles = potionEffect.getBooleanOrFalse(TAG_POTION_SHOW_PARTICLES)
+            var color: Color? = null; getPotionColor { _, v -> color = v }
+            effects?.add(EffectCustom(type, duration, amplifier.toInt(), ambient, particles, color))
+        }
+        block(this, effects)
+        return this
+    }
+
+    override fun addPotionEffect(effect: EffectCustom): ItemBuilder
+            = addPotionEffect(effect.type, effect.duration, effect.amplifier, effect.ambient, effect.particle, effect.color)
 
     override fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean, particle: Boolean, color: Color?): ItemBuilder {
         val potionEffect = NBTFactory.ofCompound()
@@ -442,6 +513,22 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     /** firework */
 
+    override fun getFireworkEffect(block: (self: ItemBuilder, effect: Collection<FireworkEffect>?) -> Unit): ItemBuilder {
+        val fireworkExplosions = tag.getListOrNull<NBTCompound>(TAG_FIREWORKS_EXPLOSIONS)
+        val effects: MutableList<FireworkEffect>? = if(fireworkExplosions == null) null else ArrayList()
+        if(fireworkExplosions != null) for(fireworkExplosion in fireworkExplosions) {
+            val type = fireworkExplosion.getByteOrNull(TAG_FIREWORKS_TYPE).let { if(it == null) null else fromNBT(it.toInt()) } ?: continue
+            val builder = FireworkEffect.builder().with(type)
+            fireworkExplosion.getBooleanOrNull(TAG_FIREWORKS_FLICKER).also { if(it != null && it) builder.withFlicker() }
+            fireworkExplosion.getBooleanOrNull(TAG_FIREWORKS_TRAIL).also { if(it != null && it) builder.withTrail() }
+            fireworkExplosion.getIntArrayOrNull(TAG_FIREWORKS_COLORS).also { it?.forEach { builder.withColor(Color.fromRGB(it)) } }
+            fireworkExplosion.getIntArrayOrNull(TAG_FIREWORKS_FADE_COLORS).also { it?.forEach { builder.withFade(Color.fromRGB(it)) } }
+            effects?.add(builder.build())
+        }
+        block(this, effects)
+        return this
+    }
+
     override fun addFireworkEffect(vararg effect: FireworkEffect): ItemBuilder {
         effect.forEach {
             val fireworkEffect = NBTFactory.ofCompound()
@@ -453,6 +540,15 @@ abstract class ItemBuilderAbstract : ItemBuilder {
             tagFireworksExplosions().addCompound(fireworkEffect)
         }
         return this
+    }
+
+    private fun fromNBT(type: Int): FireworkEffect.Type? = when(type) {
+        0 -> FireworkEffect.Type.BALL
+        1 -> FireworkEffect.Type.BALL_LARGE
+        2 -> FireworkEffect.Type.STAR
+        3 -> FireworkEffect.Type.CREEPER
+        4 -> FireworkEffect.Type.BURST
+        else -> null
     }
 
     private fun FireworkEffect.Type.nbt(): Int = when(this) {
@@ -469,10 +565,25 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun clearFireworkEffect(): ItemBuilder
             { tag.remove(TAG_FIREWORKS); return this; }
 
+    override fun getFireworkPower(block: (self: ItemBuilder, power: Int?) -> Unit): ItemBuilder
+            { block(this, tag.getCompoundOrNull(TAG_FIREWORKS)?.getByteOrNull(TAG_FIREWORKS_FLIGHT)?.toInt()); return this; }
+
     override fun setFireworkPower(power: Int): ItemBuilder
             { tagFireworks().putByte(TAG_FIREWORKS_FLIGHT, power); return this; }
 
     /** banner */
+
+    override fun getBannerPattern(block: (self: ItemBuilder, pattern: Collection<Pattern>?) -> Unit): ItemBuilder {
+        val bannerPatterns = tag.getListOrNull<NBTCompound>(TAG_BANNER_PATTERNS)
+        val patterns: MutableList<Pattern>? = if(bannerPatterns == null) null else ArrayList()
+        if(bannerPatterns != null) for(bannerPattern in bannerPatterns) { // TODO
+            val color = bannerPattern.getIntOrNull(TAG_BANNER_COLOR).let { if(it == null) null else DyeColor.getByDyeData(it.toByte()) } ?: continue
+            val type = bannerPattern.getStringOrNull(TAG_BANNER_PATTERN).let { if(it == null) null else PatternType.getByIdentifier(it) } ?: continue
+            patterns?.add(Pattern(color, type))
+        }
+        block(this, patterns)
+        return this
+    }
 
     override fun setBannerPattern(pattern: Collection<Pattern>): ItemBuilder
             { pattern.forEach { addBannerPattern(it) }; return this; }
@@ -487,4 +598,16 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     override fun clearBannerPattern(): ItemBuilder
             { tagBlockEntityTag().remove(TAG_BANNER_PATTERNS); return this; }
+
+    override fun testGet(): ItemBuilder {
+        val block: (self: ItemBuilder, value: Any?) -> Unit = { _, value -> if(value != null) println("=$value") }
+        val methods = ItemBuilder::class.java.declaredMethods
+        methods.forEach {
+            if(it.name.startsWith("get")) {
+                print("${it.name}")
+                it.invoke(this@ItemBuilderAbstract, block)
+            }
+        }
+        return this
+    }
 }
