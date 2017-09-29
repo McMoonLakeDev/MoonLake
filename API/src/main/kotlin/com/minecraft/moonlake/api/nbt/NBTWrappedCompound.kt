@@ -100,13 +100,10 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
         return nbt
     }
 
-    private fun <T> getValueOfNull(key: String, type: NBTType): NBTBase<T>? {
+    private fun <T> getValueOfNull(key: String): NBTBase<T>? {
         if(!containsKey(key))
             return null
-        var nbt = getValue<T>(key)
-        if(nbt == null)
-            nbt = NBTFactory.ofWrapper(type, key)
-        return nbt
+        return getValue(key)
     }
 
     override fun <T> put(entry: NBTBase<T>): NBTCompound
@@ -248,7 +245,7 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
             = getValueExact<NBTCompound>(key) as NBTCompound
 
     override fun getCompoundOrNull(key: String): NBTCompound?
-            = getValueOfNull<NBTCompound>(key, NBTType.TAG_COMPOUND) as NBTCompound?
+            = getValueOfNull<NBTCompound>(key) as NBTCompound?
 
     override fun getCompoundOrDefault(key: String): NBTCompound
             = getValueOfDefault0<NBTCompound>(key, NBTType.TAG_COMPOUND) as NBTCompound
@@ -262,7 +259,7 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getListOrNull(key: String): NBTList<T>?
-            = getValueOfNull<NBTList<T>>(key, NBTType.TAG_LIST) as NBTList<T>?
+            = getValueOfNull<NBTList<T>>(key) as NBTList<T>?
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getListOrDefault(key: String): NBTList<T>

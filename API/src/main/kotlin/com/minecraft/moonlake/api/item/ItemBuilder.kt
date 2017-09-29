@@ -248,8 +248,6 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun clearBannerPattern(): ItemBuilder
 
-    fun testGet(): ItemBuilder
-
     /** static */
 
     companion object {

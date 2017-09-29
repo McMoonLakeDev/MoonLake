@@ -514,7 +514,8 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     /** firework */
 
     override fun getFireworkEffect(block: (self: ItemBuilder, effect: Collection<FireworkEffect>?) -> Unit): ItemBuilder {
-        val fireworkExplosions = tag.getListOrNull<NBTCompound>(TAG_FIREWORKS_EXPLOSIONS)
+        val fireworks = tag.getCompoundOrNull(TAG_FIREWORKS)
+        val fireworkExplosions = fireworks?.getListOrNull<NBTCompound>(TAG_FIREWORKS_EXPLOSIONS)
         val effects: MutableList<FireworkEffect>? = if(fireworkExplosions == null) null else ArrayList()
         if(fireworkExplosions != null) for(fireworkExplosion in fireworkExplosions) {
             val type = fireworkExplosion.getByteOrNull(TAG_FIREWORKS_TYPE).let { if(it == null) null else fromNBT(it.toInt()) } ?: continue
@@ -574,7 +575,8 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     /** banner */
 
     override fun getBannerPattern(block: (self: ItemBuilder, pattern: Collection<Pattern>?) -> Unit): ItemBuilder {
-        val bannerPatterns = tag.getListOrNull<NBTCompound>(TAG_BANNER_PATTERNS)
+        val blockEntityTag = tag.getCompoundOrNull(TAG_BLOCK_ENTITY_TAG)
+        val bannerPatterns = blockEntityTag?.getListOrNull<NBTCompound>(TAG_BANNER_PATTERNS)
         val patterns: MutableList<Pattern>? = if(bannerPatterns == null) null else ArrayList()
         if(bannerPatterns != null) for(bannerPattern in bannerPatterns) { // TODO
             val color = bannerPattern.getIntOrNull(TAG_BANNER_COLOR).let { if(it == null) null else DyeColor.getByDyeData(it.toByte()) } ?: continue
@@ -598,16 +600,4 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     override fun clearBannerPattern(): ItemBuilder
             { tagBlockEntityTag().remove(TAG_BANNER_PATTERNS); return this; }
-
-    override fun testGet(): ItemBuilder {
-        val block: (self: ItemBuilder, value: Any?) -> Unit = { _, value -> if(value != null) println("=$value") }
-        val methods = ItemBuilder::class.java.declaredMethods
-        methods.forEach {
-            if(it.name.startsWith("get")) {
-                print("${it.name}")
-                it.invoke(this@ItemBuilderAbstract, block)
-            }
-        }
-        return this
-    }
 }
