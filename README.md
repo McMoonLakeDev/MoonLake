@@ -2,7 +2,7 @@
 - [English](README-en.md)
 
 <p align="center">
-<img src="logo.png" alt="MoonLake" />
+<img src="images/logo.png" alt="MoonLake" />
 </p>
 
 <p align="center">
