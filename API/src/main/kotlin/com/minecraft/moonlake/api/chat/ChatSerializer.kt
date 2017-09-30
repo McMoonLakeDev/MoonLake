@@ -20,9 +20,9 @@ package com.minecraft.moonlake.api.chat
 import com.google.gson.*
 import com.google.gson.stream.JsonReader
 import com.minecraft.moonlake.api.converter.ConverterEquivalentIgnoreNull
-import com.minecraft.moonlake.api.fromNameOrNull
 import com.minecraft.moonlake.api.notNull
 import com.minecraft.moonlake.api.toColor
+import com.minecraft.moonlake.api.util.Enums
 import com.minecraft.moonlake.api.utility.MinecraftConverters
 import java.io.IOException
 import java.io.StringReader
@@ -106,7 +106,7 @@ object ChatSerializer {
                 append(matcher.start(groupId))
                 when(groupId) {
                     1 -> {
-                        val color = ChatColor.fromCode(match?.toLowerCase()?.get(1) ?: 'f')
+                        val color = Enums.ofValuable(ChatColor::class.java, match?.toLowerCase()?.get(1)) ?: ChatColor.WHITE
                         when {
                             color == ChatColor.RESET -> style = ChatStyle()
                             color.format -> when(color) {
@@ -191,7 +191,7 @@ object ChatSerializer {
                 val jsonObject: JsonObject = json.asJsonObject ?: return null
                 val chatStyle = ChatStyle()
                 if(jsonObject.has("color"))
-                    chatStyle.color = fromNameOrNull<ChatColor>(jsonObject.get("color").asString.toUpperCase())
+                    chatStyle.color = Enums.ofName(ChatColor::class.java, jsonObject.get("color").asString.toUpperCase(), ChatColor.WHITE)
                 if(jsonObject.has("bold"))
                     chatStyle.bold = jsonObject.get("bold").asBoolean
                 if(jsonObject.has("italic"))
@@ -207,7 +207,7 @@ object ChatSerializer {
                 if(jsonObject.has("clickEvent")) {
                     val jsonObjectClickEvent = jsonObject.getAsJsonObject("clickEvent") ?: null
                     if(jsonObjectClickEvent != null) {
-                        val action = fromNameOrNull<ChatClickEvent.Action>(jsonObjectClickEvent.get("action").asString.toUpperCase())
+                        val action = Enums.ofName(ChatClickEvent.Action::class.java, jsonObjectClickEvent.get("action").asString.toUpperCase())
                         val value = jsonObjectClickEvent.get("value").asString ?: null
                         if(action != null && value != null)
                             chatStyle.clickEvent = ChatClickEvent(action, value)
@@ -216,7 +216,7 @@ object ChatSerializer {
                 if(jsonObject.has("hoverEvent")) {
                     val jsonObjectHoverEvent = jsonObject.getAsJsonObject("hoverEvent") ?: null
                     if(jsonObjectHoverEvent != null) {
-                        val action = fromNameOrNull<ChatHoverEvent.Action>(jsonObjectHoverEvent.get("action").asString.toUpperCase())
+                        val action = Enums.ofName(ChatHoverEvent.Action::class.java, jsonObjectHoverEvent.get("action").asString.toUpperCase())
                         val value = jsonObjectHoverEvent.get("value") ?: null
                         if(action != null && value != null) {
                             if(value.isJsonPrimitive)

@@ -17,7 +17,9 @@
 
 package com.minecraft.moonlake.api.chat
 
-enum class ChatColor(val code: Char, val format: Boolean = false) {
+import com.minecraft.moonlake.api.Valuable
+
+enum class ChatColor(val code: Char, val format: Boolean = false) : Valuable<Char> {
 
     /** enums */
 
@@ -45,20 +47,6 @@ enum class ChatColor(val code: Char, val format: Boolean = false) {
     RESET('r'),
     ;
 
-    /** static */
-
-    companion object {
-
-        @JvmStatic
-        private val CHAR_MAP: MutableMap<Char, ChatColor> = HashMap()
-
-        init {
-            values().forEach { CHAR_MAP.put(it.code, it) }
-        }
-
-        @JvmStatic
-        @JvmName("fromCode")
-        fun fromCode(code: Char): ChatColor
-                = CHAR_MAP[code] ?: WHITE
-    }
+    override fun value(): Char
+            = code
 }
