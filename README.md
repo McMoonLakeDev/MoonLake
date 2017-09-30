@@ -1,24 +1,32 @@
 - **简体中文**
 - [English](README-en.md)
 
-# MoonLake Kotlin
+<p align="center">
+<img src="logo.png" alt="MoonLake" />
+</p>
 
-[![Gitter](https://badges.gitter.im/McMoonLakeDev/MoonLake.svg)](https://gitter.im/McMoonLakeDev/MoonLake)
-[![Open Source](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://github.com/McMoonLakeDev/MoonLake)
-[![GPLv3](https://badges.frapsoft.com/os/gpl/gpl.svg?v=102)](http://www.gnu.org/licenses/gpl-3.0)
-[![Codebeat](https://codebeat.co/badges/71de9e97-982a-4630-a501-07e6c7c35d94)](https://codebeat.co/projects/github-com-mcmoonlakedev-moonlake-v2-0-alpha-kotlin)
+<p align="center">
+<a href="https://gitter.im/McMoonLakeDev/MoonLake"><img src="https://badges.gitter.im/McMoonLakeDev/MoonLake.svg" alt="Gitter" /></a>
+<a href="https://github.com/McMoonLakeDev/MoonLake"><img src="https://badges.frapsoft.com/os/v1/open-source.svg?v=102" alt="OpenSource" /></a>
+<a href="http://www.gnu.org/licenses/gpl-3.0"><img src="https://badges.frapsoft.com/os/gpl/gpl.svg?v=102" alt="GPLv3" /></a>
+<a href="https://codebeat.co/projects/github-com-mcmoonlakedev-moonlake-v2-0-alpha-kotlin"><img src="https://codebeat.co/badges/71de9e97-982a-4630-a501-07e6c7c35d94" alt="Codebeat" /></a>
+</p>
 
-* 此分支将会是未来 `v2.0` 版本的内容. 旧内容请查看 [Override](https://github.com/McMoonLakeDev/MoonLake/tree/override) 分支.
+介绍
+---
 
-## 介绍
+- 此分支将会是未来 `v2.0` 版本的内容. 旧内容请查看 [Override](https://github.com/McMoonLakeDev/MoonLake/tree/override) 分支.
 
-## 安装
+安装
+---
 
-## 错误和反馈
+错误和反馈
+---
 
-有关错误、问题或讨论，请使用 [GitHub Issues](https://github.com/McMoonLakeDev/MoonLake/issues) 功能.
+- 有关错误、问题或讨论，请使用 [GitHub Issues](https://github.com/McMoonLakeDev/MoonLake/issues) 功能.
 
-## 协议
+协议
+---
 
     Copyright (C) 2016-Present The MoonLake (mcmoonlake@hotmail.com)
 
