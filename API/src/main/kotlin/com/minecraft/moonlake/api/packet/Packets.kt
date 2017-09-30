@@ -52,10 +52,30 @@ object Packets {
     private val lookupBukkit: MutableMap<Class<*>, Class<out PacketBukkit>> = HashMap()
 
     init {
+
+        /**
+         * Packet Direction : Client -> Server
+         */
+
+        registerPacketBukkit("PacketPlayInChat", PacketInChat::class.java)
+        registerPacketBukkit("PacketPlayInCustomPayload", PacketInPayload::class.java)
+        registerPacketBukkit("PacketPlayInSettings", PacketInSettings::class.java)
+        registerPacketBukkit("PacketPlayInUseEntity", PacketInUseEntity::class.java)
+
+        /**
+         * Packet Direction : Server -> Client
+         */
+
+        registerPacketBukkit("PacketPlayOutAbilities", PacketOutAbilities::class.java)
+        registerPacketBukkit("PacketPlayOutAnimation", PacketOutAnimation::class.java)
+        registerPacketBukkit("PacketPlayOutBlockBreakAnimation", PacketOutBlockBreakAnimation::class.java)
         registerPacketBukkit("PacketPlayOutChat", PacketOutChat::class.java)
         registerPacketBukkit("PacketPlayOutCustomPayload", PacketOutPayload::class.java)
-        registerPacketBukkit("PacketPlayOutWorldParticles", PacketOutParticles::class.java)
+        registerPacketBukkit("PacketPlayOutEntityDestroy", PacketOutEntityDestroy::class.java)
+        registerPacketBukkit("PacketPlayOutKickDisconnect", PacketOutKickDisconnect::class.java)
+        registerPacketBukkit("PacketPlayOutPlayerListHeaderFooter", PacketOutListHeaderFooter::class.java)
         registerPacketBukkit("PacketPlayOutTitle", PacketOutTitle::class.java)
+        registerPacketBukkit("PacketPlayOutWorldParticles", PacketOutParticles::class.java)
     }
 
     @JvmStatic

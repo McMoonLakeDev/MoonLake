@@ -20,8 +20,10 @@ package com.minecraft.moonlake.api.packet
 import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.chat.ChatSerializer
 import com.minecraft.moonlake.api.nbt.NBTCompound
+import com.minecraft.moonlake.api.wrapper.BlockPosition
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
+import org.bukkit.Location
 import java.nio.charset.Charset
 import java.util.*
 
@@ -114,6 +116,15 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
     fun writeNBTComponent(value: NBTCompound?): PacketBuffer
             { return this; } // TODO
 
+    fun writeBlockPosition(x: Int, y: Int, z: Int): PacketBuffer
+            { writeLong((x.toLong() and 0x3FFFFFF shl 38) or (y.toLong() and 0xFFF shl 26) or (z.toLong() and 0x3FFFFFF)); return this; }
+
+    fun writeBlockPosition(blockPosition: BlockPosition): PacketBuffer
+            { writeBlockPosition(blockPosition.x, blockPosition.y, blockPosition.z); return this; }
+
+    fun writeBlockPosition(location: Location): PacketBuffer
+            = writeBlockPosition(location.blockX, location.blockY, location.blockZ)
+
     fun writeVarInt(value: Int): PacketBuffer {
         var value0 = value
         while((value0 and 0x7F.inv()) != 0) {
@@ -139,6 +150,9 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
 
     fun readByte(): Byte
             = byteBuf.readByte()
+
+    fun readUnsignedByte(): Short
+            = byteBuf.readUnsignedByte()
 
     /**
      * @throws IllegalArgumentException If [length] < 0.
@@ -197,6 +211,14 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
 
     fun readNBTComponent(): NBTCompound?
             = throw UnsupportedOperationException() // TODO
+
+    fun readBlockPosition(): BlockPosition {
+        val value = readLong()
+        val x = (value shr 38).toInt()
+        val y = (value shr 26 and 0xFFF).toInt()
+        val z = (value shl 38 shr 38).toInt()
+        return BlockPosition(x, y, z)
+    }
 
     /**
      * @throws IllegalArgumentException If VarInt length > 5.
