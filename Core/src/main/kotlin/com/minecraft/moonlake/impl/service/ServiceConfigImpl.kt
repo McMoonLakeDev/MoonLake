@@ -33,7 +33,8 @@ class ServiceConfigImpl : ServiceAbstractCore(), ServiceConfig {
         val config = File(dataFolder, "config.yml")
         if(!config.exists())
             getMoonLake().saveDefaultConfig()
-        checkConfigVersion(config)
+        else
+            checkConfigVersion(config)
     }
 
     override fun onUnloaded() {

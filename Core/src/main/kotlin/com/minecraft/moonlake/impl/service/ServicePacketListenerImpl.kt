@@ -257,7 +257,7 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
                 service.handlerException(e)
             }
             if(packet != null)
-                super.write(ctx, msg, promise)
+                super.write(ctx, packet, promise)
         }
     }
 
