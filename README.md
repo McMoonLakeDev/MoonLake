@@ -12,21 +12,48 @@
 <a href="https://codebeat.co/projects/github-com-mcmoonlakedev-moonlake-v2-0-alpha-kotlin"><img src="https://codebeat.co/badges/71de9e97-982a-4630-a501-07e6c7c35d94" alt="Codebeat" /></a>
 </p>
 
-介绍
----
+## 介绍
 
 - 此分支将会是未来 `v2.0` 版本的内容. 旧内容请查看 [Override](https://github.com/McMoonLakeDev/MoonLake/tree/override) 分支.
 
-安装
----
+## 安装
 
-错误和反馈
----
+您可以在 [GitHub Releases](https://github.com/McMoonLakeDev/MoonLake/releases) 功能中下载已构建的插件文件.
+
+#### 接下来
+
+1. 关闭服务器
+2. 将 `MoonLakePlugin.jar` 文件放入 `plugins` 文件夹
+3. 运行服务器
+4. 在 `plugins/MoonLake/config.yml` 配置文件自定义功能
+5. 重载服务器
+6. 安装成功
+
+## 自行构建
+
+MoonLake 使用 `Maven` 管理项目依赖关系.
+
+#### 要求
+
+- JDK 8
+- Maven 3.3.x
+- Git
+
+运行:
+
+```sh
+git clone https://github.com/McMoonLakeDev/MoonLake.git
+cd MoonLake
+mvn clean package
+```
+
+您可以在对应模块的 `target` 目录中找到输出的文件.
+
+## 错误和反馈
 
 - 有关错误、问题或讨论，请使用 [GitHub Issues](https://github.com/McMoonLakeDev/MoonLake/issues) 功能.
 
-协议
----
+## 协议
 
     Copyright (C) 2016-Present The MoonLake (mcmoonlake@hotmail.com)
 
