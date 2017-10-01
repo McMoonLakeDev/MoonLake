@@ -25,7 +25,7 @@ data class PacketOutEntityDestroy(var entityId: IntArray) : PacketOutBukkitAbstr
 
     override fun read(data: PacketBuffer) {
         entityId = IntArray(data.readVarInt())
-        (0..entityId.size).forEach { entityId[it] = data.readVarInt() }
+        (0 until entityId.size).forEach { entityId[it] = data.readVarInt() }
     }
 
     override fun write(data: PacketBuffer) {

@@ -84,7 +84,7 @@ open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
         this.listener = object: MoonLakeListener {
             @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
             fun onClick(event: InventoryClickEvent) {
-                if((event.clickedInventory?.type != InventoryType.ANVIL || event.clickedInventory != getInventory()) && !isAllowMove) {
+                if((event.inventory?.type != InventoryType.ANVIL || event.inventory != getInventory()) && !isAllowMove) {
                     event.isCancelled = true
                     event.result = Event.Result.DENY
                 } else {

@@ -38,7 +38,7 @@
 
 Version: `1.8.x` ~ `1.12.x`
 
-- [ ] [Bukkit](https://bukkit.org)
+- [x] [Bukkit](https://bukkit.org)
 - [x] [Spigot](https://spigotmc.org)
 - [x] [PaperSpigot](https://ci.destroystokyo.com/view/All/job/PaperSpigot/)
 - [x] [PaperClip](https://ci.destroystokyo.com/view/All/job/PaperSpigot/)
