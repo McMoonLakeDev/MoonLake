@@ -16,6 +16,32 @@
 
 - 此分支将会是未来 `v2.0` 版本的内容. 旧内容请查看 [Override](https://github.com/McMoonLakeDev/MoonLake/tree/override) 分支.
 
+## 功能
+
+- [x] 反射
+- [x] 版本
+- [x] 区域
+- [x] 服务
+- [x] 事件
+- [x] 数据包
+- [ ] 命令注解
+- [x] 高速缓存
+- [x] 粒子效果
+- [x] NBT 组件
+- [x] 铁砧窗口
+- [x] 聊天组件
+- [x] 软依赖插件
+- [x] 物品构建者
+- [x] 月色之湖玩家
+
+## 支持
+
+版本范围: 1.8.x ~ 1.12.x
+
+- [ ] Bukkit
+- [x] Spigot
+- [x] PaperSpigot
+
 ## 安装
 
 您可以在 [GitHub Releases](https://github.com/McMoonLakeDev/MoonLake/releases) 功能中下载已构建的插件文件.

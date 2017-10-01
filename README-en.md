@@ -16,6 +16,32 @@
 
 - This branch will be the content of the future `v2.0` version. For the old content, Please view the [Override](https://github.com/McMoonLakeDev/MoonLake/tree/override) branch.
 
+## Features
+
+- [x] Reflection
+- [x] Version
+- [x] Region
+- [x] Service
+- [x] Event
+- [x] Packet
+- [ ] Command Annotation
+- [x] Cached
+- [x] Particle
+- [x] NBT Component
+- [x] Anvil Window
+- [x] Chat Component
+- [x] Depend Plugin
+- [x] Item Builder
+- [x] MoonLake Player
+
+## Support
+
+Version Range: 1.8.x ~ 1.12.x
+
+- [ ] Bukkit
+- [x] Spigot
+- [x] PaperSpigot
+
 ## Install
 
 You can download a successful build file in the [GitHub Releases](https://github.com/McMoonLakeDev/MoonLake/releases).
