@@ -16,7 +16,7 @@
 
 - 此分支将会是未来 `v2.0` 版本的内容. 旧内容请查看 [Override](https://github.com/McMoonLakeDev/MoonLake/tree/override) 分支.
 
-## 功能
+## API
 
 - [x] 反射
 - [x] 版本
@@ -36,11 +36,12 @@
 
 ## 支持
 
-版本范围: 1.8.x ~ 1.12.x
+版本: `1.8.x` ~ `1.12.x`
 
-- [ ] Bukkit
-- [x] Spigot
-- [x] PaperSpigot
+- [ ] [Bukkit](https://bukkit.org)
+- [x] [Spigot](https://spigotmc.org)
+- [x] [PaperSpigot](https://ci.destroystokyo.com/view/All/job/PaperSpigot/)
+- [x] [PaperClip](https://ci.destroystokyo.com/view/All/job/PaperSpigot/)
 
 ## 安装
 
@@ -75,7 +76,7 @@ mvn clean package
 
 您可以在对应模块的 `target` 目录中找到输出的文件.
 
-## 错误和反馈
+## 反馈
 
 - 有关错误、问题或讨论，请使用 [GitHub Issues](https://github.com/McMoonLakeDev/MoonLake/issues) 功能.
 

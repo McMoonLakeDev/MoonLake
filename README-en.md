@@ -16,7 +16,7 @@
 
 - This branch will be the content of the future `v2.0` version. For the old content, Please view the [Override](https://github.com/McMoonLakeDev/MoonLake/tree/override) branch.
 
-## Features
+## API
 
 - [x] Reflection
 - [x] Version
@@ -36,11 +36,12 @@
 
 ## Support
 
-Version Range: 1.8.x ~ 1.12.x
+Version: `1.8.x` ~ `1.12.x`
 
-- [ ] Bukkit
-- [x] Spigot
-- [x] PaperSpigot
+- [ ] [Bukkit](https://bukkit.org)
+- [x] [Spigot](https://spigotmc.org)
+- [x] [PaperSpigot](https://ci.destroystokyo.com/view/All/job/PaperSpigot/)
+- [x] [PaperClip](https://ci.destroystokyo.com/view/All/job/PaperSpigot/)
 
 ## Install
 
@@ -75,7 +76,7 @@ mvn clean package
 
 You can find the output file in the `target` directory of the corresponding module.
 
-## Bugs and Feedback
+## Feedback
 
 - For bugs, questions and discussions please use the [GitHub Issues](https://github.com/McMoonLakeDev/MoonLake/issues).
 
