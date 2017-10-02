@@ -20,12 +20,22 @@ package com.minecraft.moonlake.api.packet
 import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.chat.ChatSerializer
 import com.minecraft.moonlake.api.nbt.NBTCompound
+import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.wrapper.BlockPosition
 import io.netty.buffer.ByteBuf
+import io.netty.buffer.ByteBufInputStream
+import io.netty.buffer.ByteBufOutputStream
 import io.netty.buffer.Unpooled
+import io.netty.handler.codec.EncoderException
 import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.inventory.ItemStack
+import java.io.BufferedOutputStream
+import java.io.DataOutputStream
+import java.io.IOException
 import java.nio.charset.Charset
 import java.util.*
+import java.util.zip.GZIPOutputStream
 
 data class PacketBuffer(private var byteBuf: ByteBuf) {
 
@@ -113,8 +123,27 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
     fun writeChatComponent(value: ChatComponent): PacketBuffer
             { writeString(value.toJson()); return this; }
 
-    fun writeNBTComponent(value: NBTCompound?): PacketBuffer
-            { return this; } // TODO
+    fun writeNBTComponent(value: NBTCompound?): PacketBuffer {
+        if(value == null)
+            return writeByte(0)
+        try {
+            val stream = DataOutputStream(BufferedOutputStream(GZIPOutputStream(ByteBufOutputStream(byteBuf))))
+            stream.use { NBTFactory.writeData(value, it) }
+        } catch(e: Exception) {
+            throw EncoderException(e)
+        }
+        return this
+    }
+
+    fun writeItemStack(itemStack: ItemStack?): PacketBuffer {
+        if(itemStack == null || itemStack.type == Material.AIR)
+            return writeShort(-1)
+        writeShort(itemStack.type.id)
+        writeByte(itemStack.amount)
+        writeShort(itemStack.durability.toInt())
+        writeNBTComponent(NBTFactory.readStackTag(itemStack))
+        return this
+    }
 
     fun writeBlockPosition(x: Int, y: Int, z: Int): PacketBuffer
             { writeLong((x.toLong() and 0x3FFFFFF shl 38) or (y.toLong() and 0xFFF shl 26) or (z.toLong() and 0x3FFFFFF)); return this; }
@@ -209,8 +238,29 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
     fun readChatComponent(): ChatComponent
             = ChatSerializer.fromJson(readString())
 
-    fun readNBTComponent(): NBTCompound?
-            = throw UnsupportedOperationException() // TODO
+    fun readNBTComponent(): NBTCompound? {
+        val index = readerIndex()
+        val type = readByte().toInt()
+        if(type == 0)
+            return null
+        readerIndex(index)
+        try {
+            return NBTFactory.readDataCompound(ByteBufInputStream(byteBuf))
+        } catch(e: IOException) {
+            throw EncoderException(e)
+        }
+    }
+
+    fun readItemStack(): ItemStack? {
+        val typeId = readShort()
+        if(typeId < 0)
+            return ItemStack(Material.AIR)
+        val amount = readByte()
+        val durability = readShort()
+        val tag = readNBTComponent() // TODO
+        val itemStack = ItemStack(Material.getMaterial(typeId.toInt()), amount.toInt(), durability)
+        return NBTFactory.writeStackTag(itemStack, tag)
+    }
 
     fun readBlockPosition(): BlockPosition {
         val value = readLong()
