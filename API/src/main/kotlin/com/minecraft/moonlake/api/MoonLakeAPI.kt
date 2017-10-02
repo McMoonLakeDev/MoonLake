@@ -66,6 +66,8 @@ import org.bukkit.plugin.messaging.Messenger
 import org.bukkit.scheduler.BukkitScheduler
 import org.bukkit.scheduler.BukkitTask
 import org.bukkit.scoreboard.Scoreboard
+import java.io.Closeable
+import java.io.IOException
 import java.lang.reflect.Modifier
 import java.text.MessageFormat
 import java.util.*
@@ -91,6 +93,18 @@ fun getMoonLake(): MoonLake
 
 fun <T> T?.notNull(message: String = "验证的对象值为 null 时异常."): T
         = this ?: throw IllegalArgumentException(message)
+
+@Throws(IOException::class)
+fun Closeable?.ioClose(swallow: Boolean) {
+    if(this == null)
+        return
+    try {
+        close()
+    } catch(e: IOException) {
+        if(!swallow)
+            throw e
+    }
+}
 
 fun <T, C: Comparable<T>> C.isLater(other: T): Boolean
         = compareTo(other) > 0

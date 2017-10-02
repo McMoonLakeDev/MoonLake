@@ -34,10 +34,9 @@
 
 package com.minecraft.moonlake.api.nbt
 
+import com.minecraft.moonlake.api.*
 import com.minecraft.moonlake.api.converter.ConverterEquivalent
-import com.minecraft.moonlake.api.currentBukkitVersion
-import com.minecraft.moonlake.api.isOrLater
-import com.minecraft.moonlake.api.notNull
+import com.minecraft.moonlake.api.exception.MoonLakeException
 import com.minecraft.moonlake.api.reflect.FuzzyReflect
 import com.minecraft.moonlake.api.reflect.StructureModifier
 import com.minecraft.moonlake.api.reflect.accessor.AccessorConstructor
@@ -51,12 +50,33 @@ import org.bukkit.Material
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
+import java.io.*
+import java.util.zip.GZIPInputStream
+import java.util.zip.GZIPOutputStream
 
 object NBTFactory {
 
     @JvmStatic
     private val nbtBaseCreateTag: AccessorMethod by lazy {
         Accessors.getAccessorMethod(MinecraftReflection.getNBTBaseClass(), "createTag", true, Byte::class.java) }
+    @JvmStatic
+    private val nbtStreamClass: Class<*> by lazy {
+        MinecraftReflection.getMinecraftClass("NBTCompressedStreamTools") }
+    @JvmStatic
+    private val nbtReadLimiterClass: Class<*> by lazy {
+        MinecraftReflection.getMinecraftClass("NBTReadLimiter") }
+    @JvmStatic
+    private val nbtReadLimiterInstance: Any by lazy {
+        Accessors.getAccessorField(FuzzyReflect.fromClass(nbtReadLimiterClass, true)
+                .getFieldByType("instance", nbtReadLimiterClass), true).get(null).notNull() }
+    @JvmStatic
+    private val nbtStreamRead: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(FuzzyReflect.fromClass(nbtStreamClass, true)
+                .getMethodByParameters("read", MinecraftReflection.getNBTBaseClass(), arrayOf(DataInput::class.java, Int::class.java, nbtReadLimiterClass)), true) }
+    @JvmStatic
+    private val nbtStreamWrite: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(FuzzyReflect.fromClass(nbtStreamClass, true)
+                .getMethodByParameters("write", Void::class.java, arrayOf(MinecraftReflection.getNBTBaseClass(), DataOutput::class.java)), true) }
     @JvmStatic
     private val itemStackModifier: StructureModifier<*> by lazy {
         StructureModifier.of(MinecraftReflection.getItemStackClass(), Object::class.java) }
@@ -268,6 +288,85 @@ object NBTFactory {
             else -> entitySave.invoke(MinecraftConverters.getEntity(Entity::class.java).getGeneric(entity), handle)
         }
         return entity
+    }
+
+    @JvmStatic
+    @JvmName("writeData")
+    @Throws(MoonLakeException::class)
+    fun writeData(base: NBTBase<*>, data: DataOutput) = try {
+        nbtStreamWrite.invoke(null, fromBase(base).handle, data)
+    } catch(e: Exception) {
+        e.throwMoonLake()
+    }
+
+    @JvmStatic
+    @JvmName("readData")
+    @Throws(MoonLakeException::class)
+    fun <T> readData(data: DataInput): NBTWrapper<T>? {
+        try {
+            val handle = nbtStreamRead.invoke(null, data, 0, nbtReadLimiterInstance) ?: return null
+            return fromNMS(handle)
+        } catch(e: Exception) {
+            e.throwMoonLake()
+        }
+    }
+
+    @JvmStatic
+    @JvmName("readDataCompound")
+    @Throws(MoonLakeException::class)
+    fun readDataCompound(data: DataInput): NBTCompound? = try {
+        readData<NBTCompound>(data) as NBTCompound?
+    } catch(e: Exception) {
+        e.throwMoonLake()
+    }
+
+    @JvmStatic
+    @JvmName("readDataList")
+    @Throws(MoonLakeException::class)
+    fun <T> readDataList(data: DataInput): NBTList<T>? = try {
+        @Suppress("UNCHECKED_CAST")
+        readData<NBTList<T>>(data) as NBTList<T>?
+    } catch(e: Exception) {
+        e.throwMoonLake()
+    }
+
+    @JvmStatic
+    @JvmName("writeDataCompoundFile")
+    @Throws(IOException::class)
+    fun writeDataCompoundFile(compound: NBTCompound, file: File, compress: Boolean = true) {
+        var stream: FileOutputStream? = null
+        var output: DataOutputStream? = null
+        var swallow = true
+        try {
+            stream = FileOutputStream(file)
+            output = if(compress) DataOutputStream(GZIPOutputStream(stream)) else DataOutputStream(stream)
+            writeData(compound, output)
+            swallow = false
+        } finally {
+            if(output != null) output.ioClose(swallow)
+            else if(stream != null) stream.ioClose(swallow)
+        }
+    }
+
+    @JvmStatic
+    @JvmName("readDataCompoundFile")
+    @Throws(IOException::class)
+    fun readDataCompoundFile(file: File, compress: Boolean = true): NBTCompound? {
+        if(!file.exists() || file.isDirectory)
+            return null
+        var stream: FileInputStream? = null
+        var input: DataInputStream? = null
+        var swallow = true
+        try {
+            stream = FileInputStream(file)
+            input = if(compress) DataInputStream(GZIPInputStream(stream)) else DataInputStream(stream)
+            val result = readDataCompound(input)
+            swallow = false
+            return result
+        } finally {
+            if(input != null) input.ioClose(swallow)
+            else if(stream != null) stream.ioClose(swallow)
+        }
     }
 
     /** implement */

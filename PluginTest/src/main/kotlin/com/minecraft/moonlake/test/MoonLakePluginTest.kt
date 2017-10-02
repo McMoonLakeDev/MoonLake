@@ -47,6 +47,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
+import java.io.File
 
 class MoonLakePluginTest : JavaPlugin() {
 
@@ -235,6 +236,16 @@ class MoonLakePluginTest : JavaPlugin() {
                             .getSkullTexture { _, value -> event.player.sendMessage("value -> $value") }
                             .build()
                     event.player.inventory.addItem(itemStack)
+                }
+                if(event.message == "/nbt stream") {
+                    val file = File(dataFolder.parentFile, "player.dat")
+                    event.player.readTag {
+                        event.player.sendMessage(it.toString())
+                        NBTFactory.writeDataCompoundFile(it, file)
+                        NBTFactory.writeDataCompoundFile(it, File(file.parentFile, "player-un.dat"), false) // uncompressed
+                    }
+                    val nbt = NBTFactory.readDataCompoundFile(file)
+                    println(nbt)
                 }
             }
         }.registerEvent(this)
