@@ -178,8 +178,10 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.SpawnEggMeta
      */
 
+    @Deprecated("EntityType")
     fun getSpawnEggType(block: (self: ItemBuilder, type: EntityType?) -> Unit): ItemBuilder
 
+    @Deprecated("EntityType")
     fun setSpawnEggType(type: EntityType): ItemBuilder
 
     fun setSpawnEggType(entity: Entity): ItemBuilder
@@ -244,10 +246,13 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.BannerMeta
      */
 
+    @Deprecated("Pattern")
     fun getBannerPattern(block: (self: ItemBuilder, pattern: Collection<Pattern>?) -> Unit): ItemBuilder
 
+    @Deprecated("Pattern")
     fun setBannerPattern(pattern: Collection<Pattern>): ItemBuilder
 
+    @Deprecated("Pattern")
     fun addBannerPattern(pattern: Pattern): ItemBuilder
 
     fun clearBannerPattern(): ItemBuilder
