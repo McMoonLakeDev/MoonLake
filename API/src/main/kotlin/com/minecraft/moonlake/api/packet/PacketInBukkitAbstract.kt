@@ -18,10 +18,8 @@
 package com.minecraft.moonlake.api.packet
 
 import com.minecraft.moonlake.api.player.MoonLakePlayer
-import com.minecraft.moonlake.api.runTaskAsync
 import com.minecraft.moonlake.api.utility.MinecraftReflection
 import org.bukkit.entity.Player
-import org.bukkit.plugin.Plugin
 
 abstract class PacketInBukkitAbstract(clazzName: String) : PacketBukkitAbstract(MinecraftReflection.getMinecraftClass(clazzName)), PacketInBukkit {
 
@@ -29,14 +27,8 @@ abstract class PacketInBukkitAbstract(clazzName: String) : PacketBukkitAbstract(
             = receive(sender.bukkitPlayer)
 
     override fun receive(sender: Player) = try {
-        // TODO
+        Packets.processPacket(sender, handle)
     } catch(e: Exception) {
         throw PacketException(e)
     }
-
-    override fun receiveAsync(sender: MoonLakePlayer, plugin: Plugin)
-            = receiveAsync(sender.bukkitPlayer, plugin)
-
-    override fun receiveAsync(sender: Player, plugin: Plugin)
-            { plugin.runTaskAsync { receive(sender) } }
 }

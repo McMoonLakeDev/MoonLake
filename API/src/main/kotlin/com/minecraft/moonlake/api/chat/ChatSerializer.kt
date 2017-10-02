@@ -276,7 +276,7 @@ object ChatSerializer {
                 var component: ChatComponent? = null
                 val jsonArray = json.asJsonArray
                 jsonArray.forEach {
-                    val component1 = deserialize(it, it.javaClass, context)
+                    val component1 = deserialize(it, it::class.java, context)
                     if(component == null)
                         component = component1
                     if(component1 != null)
@@ -301,7 +301,7 @@ object ChatSerializer {
                                 withs[it] = componentText.getText()
                         }
                     }
-                    component = ChatComponentTranslation(translate).addWiths(withs)
+                    component = ChatComponentTranslation(translate).addWiths(withs.filterNotNull().toTypedArray())
                 } else {
                     component = ChatComponentTranslation(translate)
                 }
@@ -344,7 +344,7 @@ object ChatSerializer {
             }
             if(!src.extras.isEmpty()) {
                 val jsonArray = JsonArray()
-                src.extras.forEach { jsonArray.add(serialize(it, it.javaClass, context)) }
+                src.extras.forEach { jsonArray.add(serialize(it, it::class.java, context)) }
                 jsonObject.add("extra", jsonArray)
             }
             if(src is ChatComponentText) {
@@ -355,7 +355,7 @@ object ChatSerializer {
                     val jsonArray = JsonArray()
                     src.getWiths().forEach {
                         if(it is ChatComponent)
-                            jsonArray.add(serialize(it, it.javaClass, context))
+                            jsonArray.add(serialize(it, it::class.java, context))
                         else
                             jsonArray.add(JsonPrimitive(it.toString()))
                     }

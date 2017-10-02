@@ -117,14 +117,18 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
     private fun injectChannelServer() {
         val mcServer = MinecraftConverters.getServer().getGeneric(Bukkit.getServer())
         val serverConnection = minecraftServerConnection.get(mcServer) ?: return
-        main@for(field in FuzzyReflect.fromClass(serverConnection::class.java).getFieldListByType(List::class.java)) {
+        var lookup = false
+        for(field in FuzzyReflect.fromClass(serverConnection::class.java).getFieldListByType(List::class.java)) {
+            if(lookup)
+                break
             val list = field.get(serverConnection) as List<*>
             for(item in list) {
                 if(!ChannelFuture::class.java.isInstance(item))
                     break
-                val channel = (item as ChannelFuture).channel()
-                channel.pipeline().addFirst(channelServerHandler)
-                break@main
+                val serverChannel = (item as ChannelFuture).channel()
+                serverChannels.add(serverChannel)
+                serverChannel.pipeline().addFirst(channelServerHandler)
+                lookup = true
             }
         }
     }
@@ -189,7 +193,6 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
     private val channelServerHandler = object: ChannelInboundHandlerAdapter() {
         override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
             val serverChannel = msg as Channel
-            serverChannels.add(serverChannel)
             serverChannel.pipeline().addFirst(channelBeginInitializer)
             ctx.fireChannelRead(msg)
         }

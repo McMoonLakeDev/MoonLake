@@ -225,6 +225,10 @@ class MoonLakePluginTest : JavaPlugin() {
                     event.player.toMoonLakePlayer().send(component)
                     println(component)
                 }
+                if(event.message == "/packetin chat") {
+                    val packet = PacketInChat("我没有，我不是")
+                    packet.receive(event.player)
+                }
             }
         }.registerEvent(this)
 

@@ -28,10 +28,4 @@ interface PacketOut : Packet {
 
     @Throws(PacketException::class)
     fun send(receiver: MoonLakePlayer)
-
-    @Throws(PacketException::class)
-    fun sendAsync(receiver: Player, plugin: Plugin)
-
-    @Throws(PacketException::class)
-    fun sendAsync(receiver: MoonLakePlayer, plugin: Plugin)
 }

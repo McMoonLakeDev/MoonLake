@@ -27,7 +27,7 @@ open class ChatComponentTranslation(private var key: String) : ChatComponentAbst
     fun setKey(key: String): ChatComponentTranslation
             { this.key = key; return this; }
 
-    fun addWiths(vararg withs: Any): ChatComponentTranslation
+    fun addWiths(withs: Array<Any>): ChatComponentTranslation
             { this.withs.addAll(withs); return this; }
 
     fun getWiths(): List<Any>

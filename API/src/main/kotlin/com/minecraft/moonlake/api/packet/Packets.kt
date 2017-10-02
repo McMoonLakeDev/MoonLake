@@ -43,6 +43,9 @@ object Packets {
     private val packetWrite: AccessorMethod by lazy {
         Accessors.getAccessorMethod(MinecraftReflection.getPacketClass(), "b", false, MinecraftReflection.getPacketDataSerializerClass()) }
     @JvmStatic
+    private val processPacket: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(MinecraftReflection.getPacketClass(), Void::class.java, true, arrayOf(MinecraftReflection.getPacketListenerClass())) }
+    @JvmStatic
     private val sendPacket: AccessorMethod by lazy {
         Accessors.getAccessorMethod(MinecraftReflection.getPlayerConnectionClass(), "sendPacket", false, MinecraftReflection.getPacketClass()) }
     @JvmStatic
@@ -81,7 +84,12 @@ object Packets {
     @JvmStatic
     @JvmName("sendPacket")
     fun sendPacket(receiver: Player, packet: Any)
-            { sendPacket.invoke(MinecraftPlayerMembers.CONNECTION.get(receiver), packet) }
+            { sendPacket.invoke(MinecraftPlayerMembers.CONNECTION.get(receiver), packet) } // Server -> Client
+
+    @JvmStatic
+    @JvmName("processPacket")
+    fun processPacket(sender: Player, packet: Any)
+            { processPacket.invoke(packet, MinecraftPlayerMembers.CONNECTION.get(sender)) } // Client -> Server
 
     @JvmStatic
     @JvmName("createPacket")

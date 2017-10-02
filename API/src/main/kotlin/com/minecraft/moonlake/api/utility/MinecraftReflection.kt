@@ -160,6 +160,11 @@ object MinecraftReflection {
             = getMinecraftClass("Packet")
 
     @JvmStatic
+    @JvmName("getPacketListenerClass")
+    fun getPacketListenerClass(): Class<*>
+            = getMinecraftClass("PacketListener")
+
+    @JvmStatic
     @JvmName("getPacketDataSerializerClass")
     fun getPacketDataSerializerClass(): Class<*>
             = getMinecraftClass("PacketDataSerializer")
