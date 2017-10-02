@@ -46,6 +46,8 @@ interface NBTCompound : NBTBase<MutableMap<String, NBTBase<*>>>, MutableIterable
 
     fun <T> getValue(key: String): NBTBase<T>?
 
+    fun getValueOfNull(key: String): NBTBase<*>?
+
     fun getValueOfDefault(key: String, type: NBTType): NBTBase<*>
 
     fun <T> put(entry: NBTBase<T>): NBTCompound

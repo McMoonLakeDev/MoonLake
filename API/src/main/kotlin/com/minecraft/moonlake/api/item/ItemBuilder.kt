@@ -169,6 +169,10 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setSkullOwner(owner: String): ItemBuilder
 
+    fun getSkullTexture(block: (self: ItemBuilder, value: String?) -> Unit): ItemBuilder
+
+    fun setSkullTexture(value: String): ItemBuilder
+
     /**
      * spawn egg meta
      * @see org.bukkit.inventory.meta.SpawnEggMeta

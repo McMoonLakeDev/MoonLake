@@ -165,6 +165,9 @@ class NBTWrappedList<T>(handle: Any, name: String) : NBTWrapper<MutableList<NBTB
     override fun clear()
             = value.clear()
 
+    override fun clearSelf(): NBTList<T>
+            { clear(); return this; }
+
     override fun isEmpty(): Boolean
             = size() <= 0
 

@@ -74,6 +74,8 @@ interface NBTList<T> : NBTBase<MutableList<NBTBase<T>>>, Iterable<T> {
 
     fun clear()
 
+    fun clearSelf(): NBTList<T>
+
     fun isEmpty(): Boolean
 
     fun isNotEmpty(): Boolean

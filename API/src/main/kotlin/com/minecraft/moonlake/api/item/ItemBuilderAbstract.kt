@@ -27,6 +27,7 @@ import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.nbt.NBTCompound
 import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.nbt.NBTList
+import com.minecraft.moonlake.api.nbt.NBTType
 import com.minecraft.moonlake.api.util.Enums
 import org.bukkit.Color
 import org.bukkit.DyeColor
@@ -105,6 +106,8 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         private const val TAG_MAP_COLOR = "MapColor"
         private const val TAG_MAP_SCALING = "map_is_scaling"
         private const val TAG_SKULL_OWNER = "SkullOwner"
+        private const val TAG_SKULL_PROPERTIES = "Properties"
+        private const val TAG_SKULL_TEXTURES = "textures"
         private const val TAG_POTION = "Potion"
         private const val TAG_POTION_ID = "Id"
         private const val TAG_POTION_AMPLIFIER = "Amplifier"
@@ -431,6 +434,31 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     override fun setSkullOwner(owner: String): ItemBuilder
             { tag.putString(TAG_SKULL_OWNER, owner); return this; }
+
+    override fun getSkullTexture(block: (self: ItemBuilder, value: String?) -> Unit): ItemBuilder {
+        val skullOwner = tag.getValueOfNull(TAG_SKULL_OWNER)
+        var value: String? = null
+        if(skullOwner?.type == NBTType.TAG_COMPOUND) {
+            val properties = (skullOwner as NBTCompound).getCompoundOrNull(TAG_SKULL_PROPERTIES)
+            val textures = properties?.getListOrNull<NBTCompound>(TAG_SKULL_TEXTURES)
+            if(textures != null) for(texture in textures) {
+                value = texture.getStringOrNull("Value")
+                if(value != null)
+                    break
+            }
+        }
+        block(this, value)
+        return this
+    }
+
+    override fun setSkullTexture(value: String): ItemBuilder {
+        tag.getCompoundOrDefault(TAG_SKULL_OWNER)
+                    .putString("Id", UUID.randomUUID().toString())
+                    .getCompoundOrDefault(TAG_SKULL_PROPERTIES)
+                    .getListOrDefault<NBTCompound>(TAG_SKULL_TEXTURES).clearSelf()
+                    .addCompound(NBTFactory.ofCompound().putString("Value", value))
+        return this
+    }
 
     /** spawn egg */
 

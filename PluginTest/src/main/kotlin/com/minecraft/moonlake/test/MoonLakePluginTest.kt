@@ -229,6 +229,13 @@ class MoonLakePluginTest : JavaPlugin() {
                     val packet = PacketInChat("我没有，我不是")
                     packet.receive(event.player)
                 }
+                if(event.message == "/ib skull") {
+                    val itemStack = Material.SKULL_ITEM.newItemBuilder(1, 3)
+                            .setSkullTexture("eyJ0aW1lc3RhbXAiOjE1MDY5MzExMzczNTEsInByb2ZpbGVJZCI6ImU5NDhmMGIzYzliZTQ5MDlhMTc2ZjEzNzIwZDNiZTRjIiwicHJvZmlsZU5hbWUiOiJNb250aF9MaWdodCIsInRleHR1cmVzIjp7IlNLSU4iOnsibWV0YWRhdGEiOnsibW9kZWwiOiJzbGltIn0sInVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGM5MThhNzk5YTI4ZjQ0ZGZhOWQ0OWNiYzdiM2I2M2ZjMDE5MmYzYzU1ZDAyYzI1ODIwMzk2YTUwYjRkZmM0In19fQ==")
+                            .getSkullTexture { _, value -> event.player.sendMessage("value -> $value") }
+                            .build()
+                    event.player.inventory.addItem(itemStack)
+                }
             }
         }.registerEvent(this)
 

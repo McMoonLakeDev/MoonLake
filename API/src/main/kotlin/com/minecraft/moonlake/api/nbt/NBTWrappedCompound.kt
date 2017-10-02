@@ -100,7 +100,10 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
         return nbt
     }
 
-    private fun <T> getValueOfNull(key: String): NBTBase<T>? {
+    override fun getValueOfNull(key: String): NBTBase<*>?
+            = getValue<Any>(key)
+
+    private fun <T> getValueOfNull0(key: String): NBTBase<T>? {
         if(!containsKey(key))
             return null
         return getValue(key)
@@ -245,7 +248,7 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
             = getValueExact<NBTCompound>(key) as NBTCompound
 
     override fun getCompoundOrNull(key: String): NBTCompound?
-            = getValueOfNull<NBTCompound>(key) as NBTCompound?
+            = getValueOfNull0<NBTCompound>(key) as NBTCompound?
 
     override fun getCompoundOrDefault(key: String): NBTCompound
             = getValueOfDefault0<NBTCompound>(key, NBTType.TAG_COMPOUND) as NBTCompound
@@ -259,7 +262,7 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getListOrNull(key: String): NBTList<T>?
-            = getValueOfNull<NBTList<T>>(key) as NBTList<T>?
+            = getValueOfNull0<NBTList<T>>(key) as NBTList<T>?
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getListOrDefault(key: String): NBTList<T>
