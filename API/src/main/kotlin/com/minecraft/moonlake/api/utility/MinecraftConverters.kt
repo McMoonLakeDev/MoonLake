@@ -29,6 +29,7 @@ import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import org.bukkit.Server
+import org.bukkit.World
 import org.bukkit.entity.Entity
 import org.bukkit.inventory.ItemStack
 import java.io.StringReader
@@ -57,6 +58,28 @@ object MinecraftConverters {
             }
             override fun getSpecificType(): Class<ChatComponent>
                     = ChatComponent::class.java
+        }
+    }
+
+    /** world */
+
+    @JvmStatic
+    private val craftWorldGetHandle: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(MinecraftReflection.getCraftWorldClass(), "getHandle", true) }
+    @JvmStatic
+    private val worldGetWorld: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(MinecraftReflection.getWorldClass(), "getWorld", true) }
+
+    @JvmStatic
+    @JvmName("getWorld")
+    fun getWorld(): ConverterEquivalent<World> {
+        return object: ConverterEquivalentIgnoreNull<World> {
+            override fun getGenericValue(specific: World): Any
+                    = craftWorldGetHandle.invoke(specific) as Any
+            override fun getSpecificValue(generic: Any): World
+                    = worldGetWorld.invoke(generic) as World
+            override fun getSpecificType(): Class<World>
+                    = World::class.java
         }
     }
 

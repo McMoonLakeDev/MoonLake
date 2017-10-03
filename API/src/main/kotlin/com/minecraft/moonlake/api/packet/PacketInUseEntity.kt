@@ -18,8 +18,11 @@
 package com.minecraft.moonlake.api.packet
 
 import com.minecraft.moonlake.api.Valuable
+import com.minecraft.moonlake.api.entity.Entities
 import com.minecraft.moonlake.api.util.Enums
 import com.minecraft.moonlake.api.wrapper.EnumHand
+import org.bukkit.World
+import org.bukkit.entity.Entity
 import org.bukkit.util.Vector
 
 data class PacketInUseEntity(var entityId: Int, var action: Action, var target: Vector?, var hand: EnumHand?) : PacketInBukkitAbstract("PacketPlayInUseEntity") {
@@ -48,9 +51,11 @@ data class PacketInUseEntity(var entityId: Int, var action: Action, var target: 
             data.writeVarInt(hand?.value ?: EnumHand.MAIN.value)
     }
 
-// TODO NMS World getEntity(Int)
-//    fun getEntity(world: World): Entity?
-//            = world.entities.find { it.entityId == entityId }
+    /**
+     * Obtains an entity object from the current entity id in the specified world.
+     */
+    fun getEntity(world: World?): Entity?
+            = if(world == null) null else Entities.getEntity(world, entityId)
 
     enum class Action(val type: Int) : Valuable<Int> {
 

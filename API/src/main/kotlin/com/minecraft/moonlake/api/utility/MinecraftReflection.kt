@@ -92,6 +92,23 @@ object MinecraftReflection {
             = getMinecraftClass("IChatBaseComponent")
 
     @JvmStatic
+    @JvmName("getWorldClass")
+    @Throws(MoonLakeException::class)
+    fun getWorldClass(): Class<*>
+            = getMinecraftClass("World")
+
+    @JvmStatic
+    @JvmName("getWorldServerClass")
+    @Throws(MoonLakeException::class)
+    fun getWorldServerClass(): Class<*>
+            = getMinecraftClass("WorldServer")
+
+    @JvmStatic
+    @JvmName("getCraftWorldClass")
+    fun getCraftWorldClass(): Class<*>
+            = getCraftBukkitClass("CraftWorld")
+
+    @JvmStatic
     @JvmName("getEntityClass")
     @Throws(MoonLakeException::class)
     fun getEntityClass(): Class<*>

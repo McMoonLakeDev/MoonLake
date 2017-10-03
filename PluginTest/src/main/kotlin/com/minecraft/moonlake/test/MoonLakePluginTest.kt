@@ -249,6 +249,15 @@ class MoonLakePluginTest : JavaPlugin() {
                 }
             }
         }.registerEvent(this)
+
+        PacketListeners.registerListener(object: PacketListenerAdapter(this, PacketListenerPriority.NORMAL, PacketInUseEntity::class.java) {
+            override fun onReceiving(event: PacketEvent) {
+                val packet = event.packet as PacketInUseEntity
+                val entity = packet.getEntity(event.player?.world)
+                if(entity != null)
+                    event.player?.sendMessage("你交互了实体 -> ${entity.type}")
+            }
+        })
     }
 
     override fun onDisable() {
