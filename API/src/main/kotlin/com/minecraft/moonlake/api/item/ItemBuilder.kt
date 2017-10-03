@@ -245,11 +245,11 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.BannerMeta
      */
 
-    fun getBannerPattern(block: (self: ItemBuilder, pattern: Collection<com.minecraft.moonlake.api.item.Pattern>?) -> Unit): ItemBuilder
+    fun getBannerPattern(block: (self: ItemBuilder, pattern: Collection<Pattern>?) -> Unit): ItemBuilder
 
-    fun setBannerPattern(pattern: Collection<com.minecraft.moonlake.api.item.Pattern>): ItemBuilder
+    fun setBannerPattern(pattern: Collection<Pattern>): ItemBuilder
 
-    fun addBannerPattern(pattern: com.minecraft.moonlake.api.item.Pattern): ItemBuilder
+    fun addBannerPattern(pattern: Pattern): ItemBuilder
 
     fun clearBannerPattern(): ItemBuilder
 
