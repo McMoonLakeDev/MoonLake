@@ -250,7 +250,7 @@ class MoonLakePluginTest : JavaPlugin() {
             }
         }.registerEvent(this)
 
-        PacketListeners.registerListener(object: PacketListenerAdapter(this, PacketListenerPriority.NORMAL, PacketInUseEntity::class.java) {
+        PacketListeners.registerListener(object: PacketListenerAdapter(this, PacketInUseEntity::class.java) {
             override fun onReceiving(event: PacketEvent) {
                 val packet = event.packet as PacketInUseEntity
                 val entity = packet.getEntity(event.player?.world)

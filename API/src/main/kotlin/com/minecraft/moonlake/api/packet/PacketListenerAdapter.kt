@@ -20,10 +20,13 @@ package com.minecraft.moonlake.api.packet
 import com.minecraft.moonlake.api.copyHashSetOrEmpty
 import org.bukkit.plugin.Plugin
 
-open class PacketListenerAdapter(private val _plugin: Plugin, private val _priority: PacketListenerPriority = PacketListenerPriority.NORMAL, vararg types: Class<out Packet>) : PacketListener {
+open class PacketListenerAdapter(private val _plugin: Plugin, private val _priority: PacketListenerPriority, vararg types: Class<out Packet>) : PacketListener {
 
     private val _sendingTypes: MutableSet<Class<out PacketOut>> = HashSet()
     private val _receivingTypes: MutableSet<Class<out PacketIn>> = HashSet()
+
+    constructor(plugin: Plugin, vararg types: Class<out Packet>) : this(plugin, PacketListenerPriority.NORMAL, *types)
+    constructor(plugin: Plugin, packetClass: Class<out Packet>) : this(plugin, PacketListenerPriority.NORMAL, packetClass)
 
     init {
         if(types.isEmpty())
