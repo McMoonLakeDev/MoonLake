@@ -249,15 +249,6 @@ class MoonLakePluginTest : JavaPlugin() {
                 }
             }
         }.registerEvent(this)
-
-        PacketListeners.registerListener(object: PacketListenerAdapter(this, PacketListenerPriority.NORMAL, PacketOutTitle::class.java, PacketOutSetSlot::class.java) {
-            override fun onSending(event: PacketEvent) {
-                plugin.logger.info("[数据包][输出] >> ${event.packet}")
-            }
-            override fun onReceiving(event: PacketEvent) {
-                plugin.logger.info("[数据包][输入] << ${event.packet}")
-            }
-        })
     }
 
     override fun onDisable() {

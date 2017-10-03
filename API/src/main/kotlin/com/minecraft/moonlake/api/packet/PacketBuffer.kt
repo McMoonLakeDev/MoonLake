@@ -30,12 +30,9 @@ import io.netty.handler.codec.EncoderException
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
-import java.io.BufferedOutputStream
-import java.io.DataOutputStream
 import java.io.IOException
 import java.nio.charset.Charset
 import java.util.*
-import java.util.zip.GZIPOutputStream
 
 data class PacketBuffer(private var byteBuf: ByteBuf) {
 
@@ -127,7 +124,7 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
         if(value == null)
             return writeByte(0)
         try {
-            val stream = DataOutputStream(BufferedOutputStream(GZIPOutputStream(ByteBufOutputStream(byteBuf))))
+            val stream = ByteBufOutputStream(byteBuf)
             stream.use { NBTFactory.writeData(value, it) }
         } catch(e: Exception) {
             throw EncoderException(e)

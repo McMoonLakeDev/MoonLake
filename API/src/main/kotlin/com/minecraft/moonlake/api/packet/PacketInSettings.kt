@@ -19,7 +19,7 @@ package com.minecraft.moonlake.api.packet
 
 import com.minecraft.moonlake.api.util.Enums
 import com.minecraft.moonlake.api.wrapper.EnumChatVisibility
-import com.minecraft.moonlake.api.wrapper.EnumHand
+import com.minecraft.moonlake.api.wrapper.EnumMainHand
 
 data class PacketInSettings(
         var locale: String,
@@ -27,9 +27,9 @@ data class PacketInSettings(
         var chatVisibility: EnumChatVisibility,
         var chatColor: Boolean,
         var skinDisplayed: Int,
-        var hand: EnumHand?) : PacketInBukkitAbstract("PacketPlayInSettings") {
+        var hand: EnumMainHand?) : PacketInBukkitAbstract("PacketPlayInSettings") {
 
-    constructor() : this("en_US", 12, EnumChatVisibility.FULL, true, 6, null)
+    constructor() : this("en_US", 12, EnumChatVisibility.FULL, true, 0x80, null)
 
     override fun read(data: PacketBuffer) {
         locale = data.readString()
@@ -37,8 +37,8 @@ data class PacketInSettings(
         chatVisibility = Enums.ofValuable(EnumChatVisibility::class.java, data.readVarInt()) ?: EnumChatVisibility.FULL
         chatColor = data.readBoolean()
         skinDisplayed = data.readByte().toInt()
-        if(EnumHand.support())
-            hand = Enums.ofValuable(EnumHand::class.java, data.readVarInt(), EnumHand.MAIN)
+        if(EnumMainHand.support())
+            hand = Enums.ofValuable(EnumMainHand::class.java, data.readVarInt(), EnumMainHand.RIGHT)
     }
 
     override fun write(data: PacketBuffer) {
@@ -47,7 +47,7 @@ data class PacketInSettings(
         data.writeVarInt(chatVisibility.value)
         data.writeBoolean(chatColor)
         data.writeByte(skinDisplayed)
-        if(EnumHand.support())
-            data.writeVarInt(hand?.value ?: EnumHand.MAIN.value)
+        if(EnumMainHand.support())
+            data.writeVarInt(hand?.value ?: EnumMainHand.RIGHT.value)
     }
 }

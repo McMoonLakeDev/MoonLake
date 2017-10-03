@@ -60,8 +60,12 @@ object Packets {
          * Packet Direction : Client -> Server
          */
 
+        registerPacketBukkit("PacketPlayInBlockDig", PacketInBlockDig::class.java)
         registerPacketBukkit("PacketPlayInChat", PacketInChat::class.java)
         registerPacketBukkit("PacketPlayInCustomPayload", PacketInPayload::class.java)
+        registerPacketBukkit("PacketPlayInClientCommand", PacketInClientStatus::class.java)
+        registerPacketBukkit("PacketPlayInEntityAction", PacketInEntityAction::class.java)
+        registerPacketBukkit("PacketPlayInKeepAlive", PacketInKeepAlive::class.java)
         registerPacketBukkit("PacketPlayInSettings", PacketInSettings::class.java)
         registerPacketBukkit("PacketPlayInUseEntity", PacketInUseEntity::class.java)
 
@@ -75,6 +79,7 @@ object Packets {
         registerPacketBukkit("PacketPlayOutChat", PacketOutChat::class.java)
         registerPacketBukkit("PacketPlayOutCustomPayload", PacketOutPayload::class.java)
         registerPacketBukkit("PacketPlayOutEntityDestroy", PacketOutEntityDestroy::class.java)
+        registerPacketBukkit("PacketPlayOutKeepAlive", PacketOutKeepAlive::class.java)
         registerPacketBukkit("PacketPlayOutKickDisconnect", PacketOutKickDisconnect::class.java)
         registerPacketBukkit("PacketPlayOutPlayerListHeaderFooter", PacketOutListHeaderFooter::class.java)
         registerPacketBukkit("PacketPlayOutSetSlot", PacketOutSetSlot::class.java)

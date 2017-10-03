@@ -224,7 +224,11 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
                 }
             }
         }
-        return if(event.isCancelled) null else event.packet.handle
+
+        if(direction == Direction.IN)
+            println(wrapped)
+
+        return if(event.isCancelled) null else Packets.createReadPacket(event.packet) // create new nms packet instance
     }
 
     internal enum class Direction {
