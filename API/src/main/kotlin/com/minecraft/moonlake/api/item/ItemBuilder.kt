@@ -28,7 +28,6 @@ import com.minecraft.moonlake.api.funs.Builder
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.Material
-import org.bukkit.block.banner.Pattern
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemFlag
@@ -131,9 +130,9 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setBookAuthor(author: String): ItemBuilder
 
-    fun getBookGeneration(block: (self: ItemBuilder, generation: BookGeneration?) -> Unit): ItemBuilder
+    fun getBookGeneration(block: (self: ItemBuilder, generation: Generation?) -> Unit): ItemBuilder
 
-    fun setBookGeneration(generation: BookGeneration): ItemBuilder
+    fun setBookGeneration(generation: Generation): ItemBuilder
 
     fun getBookPages(block: (self: ItemBuilder, pages: Collection<String>?) -> Unit): ItemBuilder
 
@@ -246,14 +245,11 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.BannerMeta
      */
 
-    @Deprecated("Pattern")
-    fun getBannerPattern(block: (self: ItemBuilder, pattern: Collection<Pattern>?) -> Unit): ItemBuilder
+    fun getBannerPattern(block: (self: ItemBuilder, pattern: Collection<com.minecraft.moonlake.api.item.Pattern>?) -> Unit): ItemBuilder
 
-    @Deprecated("Pattern")
-    fun setBannerPattern(pattern: Collection<Pattern>): ItemBuilder
+    fun setBannerPattern(pattern: Collection<com.minecraft.moonlake.api.item.Pattern>): ItemBuilder
 
-    @Deprecated("Pattern")
-    fun addBannerPattern(pattern: Pattern): ItemBuilder
+    fun addBannerPattern(pattern: com.minecraft.moonlake.api.item.Pattern): ItemBuilder
 
     fun clearBannerPattern(): ItemBuilder
 

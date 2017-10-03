@@ -30,11 +30,8 @@ import com.minecraft.moonlake.api.nbt.NBTList
 import com.minecraft.moonlake.api.nbt.NBTType
 import com.minecraft.moonlake.api.util.Enums
 import org.bukkit.Color
-import org.bukkit.DyeColor
 import org.bukkit.FireworkEffect
 import org.bukkit.Material
-import org.bukkit.block.banner.Pattern
-import org.bukkit.block.banner.PatternType
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemFlag
@@ -389,10 +386,10 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun setBookAuthor(author: String): ItemBuilder
             { tag.putString(TAG_BOOK_AUTHOR, author); return this; }
 
-    override fun getBookGeneration(block: (self: ItemBuilder, generation: BookGeneration?) -> Unit): ItemBuilder
-            { block(this, tag.getIntOrNull(TAG_BOOK_GENERATION).let { if(it == null) null else Enums.ofValuable(BookGeneration::class.java, it) }); return this; }
+    override fun getBookGeneration(block: (self: ItemBuilder, generation: Generation?) -> Unit): ItemBuilder
+            { block(this, tag.getIntOrNull(TAG_BOOK_GENERATION).let { if(it == null) null else Enums.ofValuable(Generation::class.java, it) }); return this; }
 
-    override fun setBookGeneration(generation: BookGeneration): ItemBuilder
+    override fun setBookGeneration(generation: Generation): ItemBuilder
             { tag.putInt(TAG_BOOK_GENERATION, generation.ordinal); return this; }
 
     override fun getBookPages(block: (self: ItemBuilder, pages: Collection<String>?) -> Unit): ItemBuilder
@@ -606,9 +603,9 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         val blockEntityTag = tag.getCompoundOrNull(TAG_BLOCK_ENTITY_TAG)
         val bannerPatterns = blockEntityTag?.getListOrNull<NBTCompound>(TAG_BANNER_PATTERNS)
         val patterns: MutableList<Pattern>? = if(bannerPatterns == null) null else ArrayList()
-        if(bannerPatterns != null) for(bannerPattern in bannerPatterns) { // TODO
-            val color = bannerPattern.getIntOrNull(TAG_BANNER_COLOR).let { if(it == null) null else DyeColor.getByDyeData(it.toByte()) } ?: continue
-            val type = bannerPattern.getStringOrNull(TAG_BANNER_PATTERN).let { if(it == null) null else PatternType.getByIdentifier(it) } ?: continue
+        if(bannerPatterns != null) for(bannerPattern in bannerPatterns) {
+            val color = bannerPattern.getIntOrNull(TAG_BANNER_COLOR).let { if(it == null) null else Enums.ofValuable(Pattern.Color::class.java, it) } ?: continue
+            val type = bannerPattern.getStringOrNull(TAG_BANNER_PATTERN).let { if(it == null) null else Enums.ofValuable(Pattern.Type::class.java, it) } ?: continue
             patterns?.add(Pattern(color, type))
         }
         block(this, patterns)
@@ -620,8 +617,8 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     override fun addBannerPattern(pattern: Pattern): ItemBuilder {
         val bannerPattern = NBTFactory.ofCompound()
-        bannerPattern.putInt(TAG_BANNER_COLOR, (0 - pattern.color.ordinal).inv() + 1)
-        bannerPattern.putString(TAG_BANNER_PATTERN, pattern.pattern.identifier)
+        bannerPattern.putInt(TAG_BANNER_COLOR, pattern.color.data)
+        bannerPattern.putString(TAG_BANNER_PATTERN, pattern.type.identifier)
         tagBannerPatterns().addCompound(bannerPattern)
         return this
     }

@@ -32,6 +32,7 @@ import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.item.Enchantment
 import com.minecraft.moonlake.api.item.ItemBuilder
+import com.minecraft.moonlake.api.item.Pattern
 import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.packet.*
 import com.minecraft.moonlake.api.particle.Particle
@@ -246,6 +247,17 @@ class MoonLakePluginTest : JavaPlugin() {
                     }
                     val nbt = NBTFactory.readDataCompoundFile(file)
                     println(nbt)
+                }
+                if(event.message == "/ib banner") {
+                    val itemStack = Material.BANNER.newItemBuilder(1, 15)
+                            .addBannerPattern(Pattern(Pattern.Color.PINK, Pattern.Type.CIRCLE_MIDDLE))
+                            .addBannerPattern(Pattern(Pattern.Color.WHITE, Pattern.Type.FLOWER))
+                            .addBannerPattern(Pattern(Pattern.Color.PINK, Pattern.Type.TRIANGLE_TOP))
+                            .addBannerPattern(Pattern(Pattern.Color.WHITE, Pattern.Type.CROSS))
+                            .addBannerPattern(Pattern(Pattern.Color.PINK, Pattern.Type.CURLY_BORDER))
+                            .addBannerPattern(Pattern(Pattern.Color.WHITE, Pattern.Type.TRIANGLES_BOTTOM))
+                            .build()
+                    event.player.inventory.addItem(itemStack)
                 }
             }
         }.registerEvent(this)

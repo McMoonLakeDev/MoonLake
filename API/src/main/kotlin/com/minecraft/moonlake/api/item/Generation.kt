@@ -19,7 +19,7 @@ package com.minecraft.moonlake.api.item
 
 import com.minecraft.moonlake.api.Valuable
 
-enum class BookGeneration : Valuable<Int> {
+enum class Generation : Valuable<Int> {
 
     ORIGINAL,
     COPY_OF_ORIGINAL,
