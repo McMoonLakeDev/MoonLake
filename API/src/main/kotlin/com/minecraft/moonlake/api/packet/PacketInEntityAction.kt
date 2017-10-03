@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.util.Enums
 
 data class PacketInEntityAction(var entityId: Int, var action: Action, var jumpBoost: Int = 0) : PacketInBukkitAbstract("PacketPlayInEntityAction") {
 
+    @Deprecated("")
     constructor() : this(-1, Action.STOP_SNEAKING, 0)
 
     override fun read(data: PacketBuffer) {

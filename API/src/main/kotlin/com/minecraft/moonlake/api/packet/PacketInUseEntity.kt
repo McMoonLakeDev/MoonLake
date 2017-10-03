@@ -24,6 +24,7 @@ import org.bukkit.util.Vector
 
 data class PacketInUseEntity(var entityId: Int, var action: Action, var target: Vector?, var hand: EnumHand?) : PacketInBukkitAbstract("PacketPlayInUseEntity") {
 
+    @Deprecated("")
     constructor() : this(-1, Action.INTERACT, null, null)
 
     override fun read(data: PacketBuffer) {

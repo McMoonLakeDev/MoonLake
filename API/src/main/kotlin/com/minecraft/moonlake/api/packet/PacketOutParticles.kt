@@ -32,6 +32,7 @@ data class PacketOutParticles(
         var amount: Int,
         var arguments: IntArray) : PacketOutBukkitAbstract("PacketPlayOutWorldParticles") {
 
+    @Deprecated("")
     constructor() : this(Particle.BARRIER, false, -1f, -1f, -1f, 0f, 0f, 0f, 0f, 1, intArrayOf())
 
     override fun read(data: PacketBuffer) {

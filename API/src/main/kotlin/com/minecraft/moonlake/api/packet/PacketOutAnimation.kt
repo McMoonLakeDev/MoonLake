@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.util.Enums
 
 data class PacketOutAnimation(var entityId: Int, var animation: Type) : PacketOutBukkitAbstract("PacketPlayOutAnimation") {
 
+    @Deprecated("")
     constructor() : this(-1, Type.HURT_EFFECT)
 
     override fun read(data: PacketBuffer) {

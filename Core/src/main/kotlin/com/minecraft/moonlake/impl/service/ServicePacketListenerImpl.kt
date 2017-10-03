@@ -224,10 +224,6 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
                 }
             }
         }
-
-        if(direction == Direction.IN)
-            println(wrapped)
-
         return if(event.isCancelled) null else Packets.createReadPacket(event.packet) // create new nms packet instance
     }
 

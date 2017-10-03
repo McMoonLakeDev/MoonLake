@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.chat.ChatComponentText
 
 data class PacketOutKickDisconnect(var reason: ChatComponent) : PacketOutBukkitAbstract("PacketPlayOutKickDisconnect") {
 
+    @Deprecated("")
     constructor() : this(ChatComponentText())
 
     override fun read(data: PacketBuffer) {

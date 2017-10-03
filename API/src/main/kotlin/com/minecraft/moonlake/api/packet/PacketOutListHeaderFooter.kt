@@ -22,6 +22,9 @@ import com.minecraft.moonlake.api.chat.ChatComponentText
 
 data class PacketOutListHeaderFooter(var header: ChatComponent, var footer: ChatComponent?) : PacketOutBukkitAbstract("PacketPlayOutPlayerListHeaderFooter") {
 
+    @Deprecated("")
+    constructor() : this(ChatComponentText(""), null)
+
     override fun read(data: PacketBuffer) {
         header = data.readChatComponent()
         footer = data.readChatComponent()

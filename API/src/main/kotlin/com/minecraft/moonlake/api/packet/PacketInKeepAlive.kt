@@ -19,6 +19,7 @@ package com.minecraft.moonlake.api.packet
 
 data class PacketInKeepAlive(var id: Long) : PacketInBukkitAbstract("PacketPlayInKeepAlive") {
 
+    @Deprecated("")
     constructor() : this(-1L)
 
     override fun read(data: PacketBuffer) {

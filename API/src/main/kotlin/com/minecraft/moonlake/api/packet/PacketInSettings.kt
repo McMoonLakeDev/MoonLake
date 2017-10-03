@@ -29,6 +29,7 @@ data class PacketInSettings(
         var skinDisplayed: Int,
         var hand: EnumMainHand?) : PacketInBukkitAbstract("PacketPlayInSettings") {
 
+    @Deprecated("")
     constructor() : this("en_US", 12, EnumChatVisibility.FULL, true, 0x80, null)
 
     override fun read(data: PacketBuffer) {

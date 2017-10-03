@@ -19,6 +19,7 @@ package com.minecraft.moonlake.api.packet
 
 data class PacketInPayload(var channel: String, var data: PacketBuffer) : PacketInBukkitAbstract("PacketPlayInCustomPayload") {
 
+    @Deprecated("")
     constructor() : this("MoonLake", PacketBuffer())
 
     override fun read(data: PacketBuffer) {

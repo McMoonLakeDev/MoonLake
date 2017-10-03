@@ -23,6 +23,7 @@ import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 
 data class PacketInChat(var message: String) : PacketInBukkitAbstract("PacketPlayInChat") {
 
+    @Deprecated("")
     constructor() : this("")
 
     init {

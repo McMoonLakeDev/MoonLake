@@ -24,6 +24,7 @@ import com.minecraft.moonlake.api.wrapper.BlockPosition
 
 data class PacketInBlockDig(var status: Status, var blockPosition: BlockPosition, var direction: BlockDirection) : PacketInBukkitAbstract("PacketPlayInBlockDig") {
 
+    @Deprecated("")
     constructor() : this(Status.STOP_DESTROY_BLOCK, BlockPosition.ZERO, BlockDirection.UP)
 
     override fun read(data: PacketBuffer) {

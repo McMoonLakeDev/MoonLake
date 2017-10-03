@@ -21,6 +21,7 @@ import java.util.*
 
 data class PacketOutEntityDestroy(var entityId: IntArray) : PacketOutBukkitAbstract("PacketPlayOutEntityDestroy") {
 
+    @Deprecated("")
     constructor() : this(intArrayOf())
 
     override fun read(data: PacketBuffer) {

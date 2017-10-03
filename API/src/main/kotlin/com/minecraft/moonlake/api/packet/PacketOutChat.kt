@@ -26,6 +26,8 @@ data class PacketOutChat(
         var action: ChatAction) : PacketOutBukkitAbstract("PacketPlayOutChat") {
 
     constructor(message: ChatComponent) : this(message, ChatAction.CHAT)
+
+    @Deprecated("")
     constructor() : this(ChatComponentText(), ChatAction.CHAT)
 
     override fun read(data: PacketBuffer) {

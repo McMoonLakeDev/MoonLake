@@ -27,6 +27,8 @@ data class PacketOutTitle(var action: Action, var title: ChatComponent?, var fad
 
     constructor(fadeIn: Int, stay: Int, fadeOut: Int) : this(Action.TIMES, null, fadeIn, stay, fadeOut)
     constructor(action: Action, title: ChatComponent?) : this(action, title, -1, -1, -1)
+
+    @Deprecated("")
     constructor() : this(Action.CLEAR, null, -1, -1, -1)
 
     init {

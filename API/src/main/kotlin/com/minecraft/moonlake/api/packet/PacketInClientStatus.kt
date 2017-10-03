@@ -22,6 +22,9 @@ import com.minecraft.moonlake.api.util.Enums
 
 data class PacketInClientStatus(var status: Status) : PacketInBukkitAbstract("PacketPlayInClientCommand") {
 
+    @Deprecated("")
+    constructor() : this(Status.PERFORM_RESPAWN)
+
     override fun read(data: PacketBuffer) {
         status = Enums.ofValuable(Status::class.java, data.readVarInt()) ?: Status.PERFORM_RESPAWN
     }

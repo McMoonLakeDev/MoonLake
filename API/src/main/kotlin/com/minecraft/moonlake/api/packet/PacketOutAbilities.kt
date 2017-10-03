@@ -30,6 +30,8 @@ data class PacketOutAbilities(
 
     constructor(abilities: PlayerAbilities) : this(abilities.isInvulnerable, abilities.isFlying, abilities.canFly, abilities.canInstantlyBuild, abilities.flySpeed, abilities.walkSpeed)
     constructor(player: Player) : this(PlayerAbilities.ofPlayer(player))
+
+    @Deprecated("")
     constructor() : this(false, false, false, false, .05f, .1f)
 
     override fun read(data: PacketBuffer) {

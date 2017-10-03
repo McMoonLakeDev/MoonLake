@@ -21,6 +21,7 @@ import com.minecraft.moonlake.api.wrapper.BlockPosition
 
 data class PacketOutBlockBreakAnimation(var entityId: Int, var blockPosition: BlockPosition, var value: Int) : PacketOutBukkitAbstract("PacketPlayOutBlockBreakAnimation") {
 
+    @Deprecated("")
     constructor() : this(-1, BlockPosition.ZERO, 0)
 
     init {
