@@ -66,8 +66,6 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun addEnchant(enchantment: Enchantment, level: Int): ItemBuilder
 
-    fun addSafeEnchant(enchantment: Enchantment, level: Int): ItemBuilder
-
     fun clearEnchant(): ItemBuilder
 
     fun getFlag(block: (self: ItemBuilder, flag: Array<out ItemFlag>?) -> Unit): ItemBuilder
@@ -154,8 +152,6 @@ interface ItemBuilder : Builder<ItemStack> {
     fun getStoredEnchant(block: (self: ItemBuilder, ench: Map<Enchantment, Int>?) -> Unit): ItemBuilder
 
     fun addStoredEnchant(enchantment: Enchantment, level: Int): ItemBuilder
-
-    fun addStoredSafeEnchant(enchantment: Enchantment, level: Int): ItemBuilder
 
     fun clearStoredEnchant(): ItemBuilder
 

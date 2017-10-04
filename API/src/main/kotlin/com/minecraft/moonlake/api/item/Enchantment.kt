@@ -65,13 +65,6 @@ enum class Enchantment(val id: Int, val max: Int, val type: String, val mcVer: M
     override fun value(): String
             = type
 
-    /**
-     * @throws IllegalArgumentException if the level is unsafe
-     */
-    @Throws(IllegalArgumentException::class)
-    fun checkSafe(level: Int) // TODO check item enchantment support
-            = if(level < 1 || level > max) throw IllegalArgumentException() else Unit
-
     override fun cast(): org.bukkit.enchantments.Enchantment
             = org.bukkit.enchantments.Enchantment.getByName(type)
 

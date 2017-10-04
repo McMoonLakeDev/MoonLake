@@ -251,9 +251,6 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun addEnchant(enchantment: Enchantment, level: Int): ItemBuilder
             { tagEnchant().addCompound(NBTFactory.ofCompound().putShort(TAG_ENCH_ID, enchantment.id).putShort(TAG_ENCH_LVL, level)); return this; }
 
-    override fun addSafeEnchant(enchantment: Enchantment, level: Int): ItemBuilder
-            { enchantment.checkSafe(level); return addEnchant(enchantment, level); }
-
     override fun clearEnchant(): ItemBuilder
             { tag.remove(TAG_ENCH); return this; }
 
@@ -417,9 +414,6 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     override fun addStoredEnchant(enchantment: Enchantment, level: Int): ItemBuilder
             { tagStoredEnchantments().addCompound(NBTFactory.ofCompound().putShort(TAG_ENCH_ID, enchantment.id).putShort(TAG_ENCH_LVL, level)); return this; }
-
-    override fun addStoredSafeEnchant(enchantment: Enchantment, level: Int): ItemBuilder
-            { enchantment.checkSafe(level); return addStoredEnchant(enchantment, level); }
 
     override fun clearStoredEnchant(): ItemBuilder
             { tag.remove(TAG_STORED_ENCHANTMENTS); return this; }
