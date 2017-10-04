@@ -459,7 +459,7 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     /** spawn egg */
 
-    override fun getSpawnEggType(block: (self: ItemBuilder, type: EntityType?) -> Unit): ItemBuilder // TODO
+    override fun getSpawnEggType(block: (self: ItemBuilder, type: EntityType?) -> Unit): ItemBuilder // TODO EntityType.fromName
             { block(this, tag.getCompoundOrNull(TAG_ENTITY_TAG)?.getStringOrNull(TAG_ENTITY_TAG_ID).let { if(it == null) null else EntityType.fromName(it) }); return this; }
 
     override fun setSpawnEggType(type: EntityType): ItemBuilder

@@ -177,10 +177,8 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.SpawnEggMeta
      */
 
-    @Deprecated("EntityType")
     fun getSpawnEggType(block: (self: ItemBuilder, type: EntityType?) -> Unit): ItemBuilder
 
-    @Deprecated("EntityType")
     fun setSpawnEggType(type: EntityType): ItemBuilder
 
     fun setSpawnEggType(entity: Entity): ItemBuilder
