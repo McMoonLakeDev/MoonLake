@@ -21,11 +21,29 @@ import com.minecraft.moonlake.api.Valuable
 
 enum class BlockDirection : Valuable<Int> {
 
+    /**
+     * Block Direction: Down (方块方向: 下面)
+     */
     DOWN,
+    /**
+     * Block Direction: Up (方块方向: 上面)
+     */
     UP,
+    /**
+     * Block Direction: North (方块方向: 北面)
+     */
     NORTH,
+    /**
+     * Block Direction: SOUTH (方块方向: 南面)
+     */
     SOUTH,
+    /**
+     * Block Direction: WEST (方块方向: 西面)
+     */
     WEST,
+    /**
+     * Block Direction: EAST (方块方向: 东面)
+     */
     EAST,
     ;
 

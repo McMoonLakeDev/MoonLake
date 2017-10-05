@@ -78,10 +78,10 @@ class MoonLakePluginTest : JavaPlugin() {
                             .setLocalizedName("tile.tnt.name") // 本地化名称
                             .setCanDestroy(Material.DIAMOND_ORE) // 只能破坏钻石矿
                             .setCanPlaceOn(Material.STONE) // 只能放置在石头上
-                            .addEnchant(Enchantment.锋利, 5) // 附魔锋利5
+                            .addEnchant(Enchantment.DAMAGE, 5) // 附魔锋利5
                             .setUnbreakable(true) // 不可破坏
-                            .setAttribute(AttributeType.攻击伤害, Operation.百分比, Slot.主手, .05) // 攻击增加 5%
-                            .setAttribute(AttributeType.攻击速度, Operation.百分比, Slot.主手, .1) // 攻击速度增加 10%
+                            .setAttribute(AttributeType.ATTACK_DAMAGE, Operation.MULTIPLY, Slot.MAIN_HAND, .05) // 攻击增加 5%
+                            .setAttribute(AttributeType.ATTACK_SPEED, Operation.MULTIPLY, Slot.MAIN_HAND, .1) // 攻击速度增加 10%
                             .addLore("标签属性", "标签属性") // 标签属性
                             .clearEnchant()
                             .addFlag(ItemFlag.HIDE_UNBREAKABLE) // 隐藏不可破坏属性
@@ -95,12 +95,12 @@ class MoonLakePluginTest : JavaPlugin() {
                 }
                 if(event.message == "/ib potion") {
                     val itemStack = ItemBuilder.of(Material.POTION)
-                            .addPotionEffect(EffectType.速度, 100, 0)
-                            .addPotionEffect(EffectType.跳跃提升, 100, 0)
+                            .addPotionEffect(EffectType.SPEED, 100, 0)
+                            .addPotionEffect(EffectType.JUMP, 100, 0)
                             .setPotionColor(Color.fromRGB(0, 0, 0))
                             .addLore("标签属性")
                             .setDisplayName("233")
-                            .addEnchant(Enchantment.锋利, 1)
+                            .addEnchant(Enchantment.DAMAGE, 1)
                             .build()
                     event.player.inventory.addItem(itemStack)
                     event.player.toMoonLakePlayer().send(ChatComponentFancy("物品展示: ").then("[ITEM]").tooltipItem(itemStack))
@@ -137,7 +137,7 @@ class MoonLakePluginTest : JavaPlugin() {
 
                     Material.IRON_SWORD.newItemBuilder()
                             .setDisplayName("显示名称")
-                            .addEnchant(Enchantment.锋利, 5)
+                            .addEnchant(Enchantment.DAMAGE, 5)
                             .build()
                             .readTagSafe { event.player.sendMessage(it.toString()) }
                 }
@@ -183,11 +183,11 @@ class MoonLakePluginTest : JavaPlugin() {
                     anvilWindow.handleClose { it.player.sendMessage("anvil close") }
                     anvilWindow.isAllowMove = true
                     anvilWindow.open(event.player)
-                    anvilWindow.setItem(AnvilWindowSlot.左输入栏, ItemStack(Material.NAME_TAG))
+                    anvilWindow.setItem(AnvilWindowSlot.INPUT_LEFT, ItemStack(Material.NAME_TAG))
                 }
                 if(event.message == "/packet chat") {
                     val packet = PacketOutChat(ChatComponentFancy("聊天花式组件").color(ChatColor.RED).withUnderlined().withBold().build())
-                    packet.action = ChatAction.聊天栏
+                    packet.action = ChatAction.CHAT
                     packet.send(event.player)
                     println(packet)
                 }

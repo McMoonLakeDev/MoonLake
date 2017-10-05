@@ -22,9 +22,21 @@ package com.minecraft.moonlake.api.particle
  */
 enum class ParticleProperty {
 
+    /**
+     * Particle Property: Requires Water (粒子效果属性: 需求水源)
+     */
     REQUIRES_WATER,
+    /**
+     * Particle Property: Requires Data (粒子效果属性: 需求数据)
+     */
     REQUIRES_DATA,
+    /**
+     * Particle Property: Directional (粒子效果属性: 矢量方向)
+     */
     DIRECTIONAL,
+    /**
+     * Particle Property: Color (粒子效果属性: 颜色)
+     */
     COLOR,
     ;
 }

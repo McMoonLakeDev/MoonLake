@@ -28,252 +28,301 @@ import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 
 /**
- * @author [DarkBlade12](https://github.com/DarkBlade12) by origin, [lgou2w](https://github.com/lgou2w) by modified.
+ * @author # [DarkBlade12](https://github.com/DarkBlade12) by origin, [lgou2w](https://github.com/lgou2w) by modified.
  */
 enum class Particle {
 
-    /** 
-     * 粒子效果: [普通爆炸](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#explode) (版本: 全版本 | 需求: 矢量方向)
+    /**
+     * Particle: Explosion, Version: All | Requires: Directional (粒子效果: 普通爆炸, 版本: 全版本 | 需求: 矢量方向)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#explode)
      */
     EXPLOSION_NORMAL("explode", 0, ParticleProperty.DIRECTIONAL),
 
-    /** 
-     * 粒子效果: [大型爆炸](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#largeexplode) (版本: 全版本)
+    /**
+     * Particle: Large Explode, Version: All (粒子效果: 大型爆炸, 版本: 全版本)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#largeexplode)
      */
     EXPLOSION_LARGE("largeexplode", 1),
 
-    /** 
-     * 粒子效果: [巨大爆炸](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#hugeexplosion) (版本: 全版本)
+    /**
+     * Particle: Huge Explosion, Version: All (粒子效果: 巨大爆炸, 版本: 全版本)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#hugeexplosion)
      */
     EXPLOSION_HUGE("hugeexplosion", 2),
 
-    /** 
-     * 粒子效果: [烟花尾迹](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#fireworksSpark) (版本: 全版本)
+    /**
+     * Particle: Fireworks Spark, Version: All (粒子效果: 烟花尾迹, 版本: 全版本)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#fireworksSpark)
      */
     FIREWORKS_SPARK("fireworksSpark", 3, ParticleProperty.DIRECTIONAL),
 
-    /** 
-     * 粒子效果: [水泡](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#bubble) (版本: 全版本 | 需求: 矢量方向, 需求: 水源)
+    /**
+     * Particle: Water Bubble, Version: All | Requires: Directional, Water (粒子效果: 水泡, 版本: 全版本 | 需求: 矢量方向, 需求: 水源)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#bubble)
      */
     WATER_BUBBLE("bubble", 4, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_WATER),
 
-    /** 
-     * 粒子效果: [水花溅起](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#splash) (版本: 全版本 | 需求: 矢量方向)
+    /**
+     * Particle: Water Splash, Version: All | Requires: Directional (粒子效果: 水花溅起, 版本: 全版本 | 需求: 矢量方向)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#splash)
      */
     WATER_SPLASH("splash", 5, ParticleProperty.DIRECTIONAL),
 
-    /** 
-     * 粒子效果: [水尾波](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#wake) (版本: 全版本 | 需求: 矢量方向)
+    /**
+     * Particle: Water Wake, Version: All | Requires: Directional (粒子效果: 水尾波, 版本: 全版本 | 需求: 矢量方向)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#)
      */
     WATER_WAKE("wake", 6, ParticleProperty.DIRECTIONAL),
 
     /**
-     * 粒子效果: [水下颗粒](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#suspended) (版本: 全版本 | 需求: 水源)
+     * Particle: Suspended, Version: All | Requires: Water (粒子效果: 水下颗粒, 版本: 全版本 | 需求: 水源)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#suspended)
      */
     SUSPENDED("suspended", 7, ParticleProperty.REQUIRES_WATER),
 
     /**
-     * 粒子效果: [虚空颗粒](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#depthSuspended) (版本: 全版本 | 需求: 矢量方向)
+     * Particle: Suspended Depth, Version: All | Requires: Directional  (粒子效果: 虚空颗粒, 版本: 全版本 | 需求: 矢量方向)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#depthSuspended)
      */
     SUSPENDED_DEPTH("depthSuspended", 8, ParticleProperty.DIRECTIONAL),
 
-    /** 
-     * 粒子效果: [暴击](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#crit) (版本: 全版本 | 需求: 矢量方向)
+    /**
+     * Particle: Crit, Version: All | Requires: Directional (粒子效果: 暴击, 版本: 全版本 | 需求: 矢量方向)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#crit)
      */
     CRIT("crit", 9, ParticleProperty.DIRECTIONAL),
 
-    /** 
-     * 粒子效果: [魔法暴击](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#magicCrit) (版本: 全版本 | 需求: 矢量方向)
+    /**
+     * Particle: Magic Crit, Version: All | Requires: Directional (粒子效果: 魔法暴击, 版本: 全版本 | 需求: 矢量方向)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#)
      */
     CRIT_MAGIC("magicCrit", 10, ParticleProperty.DIRECTIONAL),
 
-    /** 
-     * 粒子效果: [烟雾](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#smoke) (版本: 全版本 | 需求: 矢量方向)
+    /**
+     * Particle: Smoke, Version: All | Requires: Directional (粒子效果: 烟雾, 版本: 全版本 | 需求: 矢量方向)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#smoke)
      */
     SMOKE_NORMAL("smoke", 11, ParticleProperty.DIRECTIONAL),
 
-    /** 
-     * 粒子效果: [大型烟雾](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#largesmoke) (版本: 全版本 | 需求: 矢量方向)
+    /**
+     * Particle: Large Smoke, Version: All | Requires: Directional (粒子效果: 大型烟雾, 版本: 全版本 | 需求: 矢量方向)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#largesmoke)
      */
     SMOKE_LARGE("largesmoke", 12, ParticleProperty.DIRECTIONAL),
 
-    /** 
-     * 粒子效果: [药水符咒](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#spell) (版本: 全版本)
+    /**
+     * Particle: Spell, Version: All (粒子效果: 药水符咒, 版本: 全版本)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#spell)
      */
     SPELL("spell", 13),
 
-    /** 
-     * 粒子效果: [瞬间药水符咒](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#instantSpell) (版本: 全版本)
+    /**
+     * Particle: Instant Spell, Version: All (粒子效果: 瞬间药水符咒, 版本: 全版本)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#instantSpell)
      */
     SPELL_INSTANT("instantSpell", 14),
 
-    /** 
-     * 粒子效果: [实体药水符咒](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#mobSpell) (版本: 全版本 | 需求: 颜色)
+    /**
+     * Particle: Mob Spell, Version: All | Requires: Color (粒子效果: 实体药水符咒, 版本: 全版本 | 需求: 颜色)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#mobSpell)
      */
     SPELL_MOB("mobSpell", 15, ParticleProperty.COLOR),
 
-    /** 
-     * 粒子效果: [实体药水符咒环境](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#mobSpellAmbient) (版本: 全版本 | 需求: 颜色)
+    /**
+     * Particle: Mob Spell Ambient, Version: All | Requires: Color (粒子效果: 实体药水符咒环境, 版本: 全版本 | 需求: 颜色)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#mobSpellAmbient)
      */
     SPELL_MOB_AMBIENT("mobSpellAmbient", 16, ParticleProperty.COLOR),
 
-    /** 
-     * 粒子效果: [女巫魔法](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#witchMagic) (版本: 全版本)
+    /**
+     * Particle: Witch Magic, Version: All (粒子效果: 女巫魔法, 版本: 全版本)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#witchMagic)
      */
     SPELL_WITCH("witchMagic", 17),
 
-    /** 
-     * 粒子效果: [滴水](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#dripWater) (版本: 全版本)
+    /**
+     * Particle: Drip Water, Version: All (粒子效果: 滴水, 版本: 全版本)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#dripWater)
      */
     DRIP_WATER("dripWater", 18),
 
-    /** 
-     * 粒子效果: [滴岩浆](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#dripLava) (版本: 全版本)
+    /**
+     * Particle: Drip Lava, Version: All (粒子效果: 滴岩浆, 版本: 全版本)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#dripLava)
      */
     DRIP_LAVA("dripLava", 19),
 
-    /** 
-     * 粒子效果: [村民生气](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#angryVillager) (版本: 全版本)
+    /**
+     * Particle: Villager Angry, Version: All (粒子效果: 村民生气, 版本: 全版本)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#angryVillager)
      */
     VILLAGER_ANGRY("angryVillager", 20),
 
-    /** 
-     * 粒子效果: [村民高兴](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#happyVillager) (版本: 全版本 | 需求: 矢量方向)
+    /**
+     * Particle: Villager Happy, Version: All | Requires: Directional (粒子效果: 村民高兴, 版本: 全版本 | 需求: 矢量方向)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#happyVillager)
      */
     VILLAGER_HAPPY("happyVillager", 21, ParticleProperty.DIRECTIONAL),
 
-    /** 
-     * 粒子效果: [菌丝颗粒](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#townAura) (版本: 全版本)
+    /**
+     * Particle: Town Aura, Version: All (粒子效果: 菌丝颗粒, 版本: 全版本)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#townAura)
      */
     TOWN_AURA("townAura", 22),
 
-    /** 
-     * 粒子效果: [音符](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#note) (版本: 全版本 | 需求: 颜色)
+    /**
+     * Particle: Note, Version: All | Requires: Color (粒子效果: 音符, 版本: 全版本 | 需求: 颜色)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#note)
      */
     NOTE("note", 23, ParticleProperty.COLOR),
 
-    /** 
-     * 粒子效果: [传送门](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#portal) (版本: 全版本 | 需求: 矢量方向)
+    /**
+     * Particle: Portal, Version: All | Requires: Directional (粒子效果: 传送门, 版本: 全版本 | 需求: 矢量方向)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#portal)
      */
     PORTAL("portal", 24, ParticleProperty.DIRECTIONAL),
 
-    /** 
-     * 粒子效果: [附魔台](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#enchantmenttable) (版本: 全版本 | 需求: 矢量方向)
+    /**
+     * Particle: Enchantment Table, Version: All | Requires: Directional (粒子效果: 附魔台, 版本: 全版本 | 需求: 矢量方向)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#enchantmenttable)
      */
     ENCHANTMENT_TABLE("enchantmenttable", 25, ParticleProperty.DIRECTIONAL),
 
-    /** 
-     * 粒子效果: [火焰](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#flame) (版本: 全版本 | 需求: 矢量方向)
+    /**
+     * Particle: Flame, Version: All | Requires: Directional (粒子效果: 火焰, 版本: 全版本 | 需求: 矢量方向)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#flame)
      */
     FLAME("flame", 26, ParticleProperty.DIRECTIONAL),
 
-    /** 
-     * 粒子效果: [岩浆](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#lava) (版本: 全版本)
+    /**
+     * Particle: Lava, Version: All (粒子效果: 岩浆, 版本: 全版本)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#lava)
      */
     LAVA("lava", 27),
 
-    /** 
-     * 粒子效果: [脚印](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#footstep) (版本: 全版本)
+    /**
+     * Particle: Footstep, Version: All (粒子效果: 脚印, 版本: 全版本)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#footstep)
      */
     FOOTSTEP("footstep", 28),
 
-    /** 
-     * 粒子效果: [云](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#cloud) (版本: 全版本 | 需求: 矢量方向)
+    /**
+     * Particle: Cloud, Version: All | Requires: Directional (粒子效果: 云, 版本: 全版本 | 需求: 矢量方向)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#cloud)
      */
     CLOUD("cloud", 29, ParticleProperty.DIRECTIONAL),
 
-    /** 
-     * 粒子效果: [红尘](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#reddust) (版本: 全版本 | 需求: 颜色)
+    /**
+     * Particle: Red Dust, Version: All | Requires: Color (粒子效果: 红尘, 版本: 全版本 | 需求: 颜色)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#reddust)
      */
     RED_DUST("reddust", 30, ParticleProperty.COLOR),
 
-    /** 
-     * 粒子效果: [雪球碎裂](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#snowballpoof) (版本: 全版本)
+    /**
+     * Particle: Snow Ball, Version: All (粒子效果: 雪球碎裂, 版本: 全版本)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#snowballpoof)
      */
     SNOWBALL("snowballpoof", 31),
 
-    /** 
-     * 粒子效果: [雪颗粒](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#snowshovel) (版本: 全版本 | 需求: 矢量方向)
+    /**
+     * Particle: Snow Shovel, Version: All | Requires: Directional (粒子效果: 雪颗粒, 版本: 全版本 | 需求: 矢量方向)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#snowshovel)
      */
     SNOW_SHOVEL("snowshovel", 32, ParticleProperty.DIRECTIONAL),
 
-    /** 
-     * 粒子效果: [史莱姆](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#slime) (版本: 全版本)
+    /**
+     * Particle: Slime, Version: All (粒子效果: 史莱姆, 版本: 全版本)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#slime)
      */
     SLIME("slime", 33),
 
-    /** 
-     * 粒子效果: [爱心](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#heart) (版本: 全版本)
+    /**
+     * Particle: Heart, Version: All (粒子效果: 爱心, 版本: 全版本)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#heart)
      */
     HEART("heart", 34),
 
-    /** 
-     * 粒子效果: [屏障](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#barrier) (版本: 1.8+)
+    /**
+     * Particle: Barrier, Version: 1.8+  (粒子效果: 屏障, 版本: 1.8+)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#barrier)
      */
     BARRIER("barrier", 35, MinecraftVersion.V1_8),
 
-    /** 
-     * 粒子效果: [物品碎裂](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#iconcrack) (版本: 全版本 | 需求: 矢量方向, 需求: 数据)
+    /**
+     * Particle: Item Crack, Version: All | Requires: Directional, Data (粒子效果: 物品碎裂, 版本: 全版本 | 需求: 矢量方向, 需求: 数据)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#iconcrack)
      */
     ITEM_CRACK("iconcrack", 36, 2, null, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_DATA),
 
-    /** 
-     * 粒子效果: [方块碎裂](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#blockcrack) (版本: 全版本 | 需求: 数据)
+    /**
+     * Particle: Block Crack, Version: All | Requires: Data (粒子效果: 方块碎裂, 版本: 全版本 | 需求: 数据)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#blockcrack)
      */
     BLOCK_CRACK("blockcrack", 37, 1, null, ParticleProperty.REQUIRES_DATA),
 
-    /** 
-     * 粒子效果: [方块尘](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#blockdust) (版本: 全版本 | 需求: 矢量方向, 需求: 数据)
+    /**
+     * Particle: Block Dust, Version: All | Requires: Directional, Data (粒子效果: 方块尘, 版本: 全版本 | 需求: 矢量方向, 需求: 数据)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#blockdust)
      */
     BLOCK_DUST("blockdust", 38, 1, null, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_DATA),
 
-    /** 
-     * 粒子效果: [雨滴](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#droplet) (版本: 1.8+)
+    /**
+     * Particle: Water Drop, Version: 1.8+ (粒子效果: 雨滴, 版本: 1.8+)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#droplet)
      */
     WATER_DROP("droplet", 39, MinecraftVersion.V1_8),
 
-    /** 
-     * 粒子效果: [物品获取](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#take) (版本: 1.8+)
+    /**
+     * Particle: Item Take, Version: 1.8+ (粒子效果: 物品获取, 版本: 1.8+)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#take)
      */
     ITEM_TAKE("take", 40, MinecraftVersion.V1_8),
 
-    /** 
-     * 粒子效果: [远古守护者](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#mobappearance) (版本: 1.8+)
+    /**
+     * Particle: Mob Appearance, Version: 1.8+ (粒子效果: 远古守护者, 版本: 1.8+)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#mobappearance)
      */
     MOB_APPEARANCE("mobappearance", 41, MinecraftVersion.V1_8),
 
-    /** 
-     * 粒子效果: [龙息](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#dragonbreath) (版本: 1.9+)
+    /**
+     * Particle: Dragon Breath, Version: 1.9+ (粒子效果: 龙息, 版本: 1.9+)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#dragonbreath)
      */
     DRAGON_BREATH("dragonbreath", 42, MinecraftVersion.V1_9),
 
-    /** 
-     * 粒子效果: [末地烛](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#endRod) (版本: 1.9+)
+    /**
+     * Particle: End Rod, Version: 1.9+ (粒子效果: 末地烛, 版本: 1.9+)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#endRod)
      */
     END_ROD("endRod", 43, MinecraftVersion.V1_9),
 
-    /** 
-     * 粒子效果: [伤害指示器](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#damageIndicator) (版本: 1.9+)
+    /**
+     * Particle: Damage Indicator, Version: 1.9+ (粒子效果: 伤害指示器, 版本: 1.9+)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#damageIndicator)
      */
     DAMAGE_INDICATOR("damageIndicator", 44, MinecraftVersion.V1_9),
 
-    /** 
-     * 粒子效果: [扫荡攻击](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#sweepAttack) (版本: 1.9+)
+    /**
+     * Particle: Sweep Attack, Version: 1.9+ (粒子效果: 扫荡攻击, 版本: 1.9+)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#sweepAttack)
      */
     SWEEP_ATTACK("sweepAttack", 45, MinecraftVersion.V1_9),
 
-    /** 
-     * 粒子效果: [掉落尘](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#fallingdust) (版本: 1.9+ | 需求: 数据)
+    /**
+     * Particle: Falling Dust, Version: 1.9+ | Requires: Data (粒子效果: 掉落尘, 版本: 1.9+ | 需求: 数据)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#fallingdust)
      */
     FALLING_DUST("fallingdust", 46, 1, MinecraftVersion.V1_10, ParticleProperty.REQUIRES_DATA),
 
-    /** 
-     * 粒子效果: [不死图腾颗粒](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#totem) (版本: 1.11+)
+    /**
+     * Particle: Totem, Version: 1.11+ (粒子效果: 不死图腾颗粒, 版本: 1.11+)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#totem)
      */
     TOTEM("totem", 47, MinecraftVersion.V1_11),
 
-    /** 
-     * 粒子效果: [羊驼口水](https://minecraft-zh.gamepedia.com/%E9%A2%97%E7%B2%92#spit) (版本: 1.11+)
+    /**
+     * Particle: Spit, Version: 1.11+ (粒子效果: 羊驼口水, 版本: 1.11+)
+     * - [Wiki](https://minecraft.gamepedia.com/Particle#spit)
      */
     SPIT("spit", 48, MinecraftVersion.V1_11),
     ;

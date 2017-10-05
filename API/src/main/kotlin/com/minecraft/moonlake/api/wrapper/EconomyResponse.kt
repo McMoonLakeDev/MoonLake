@@ -24,9 +24,21 @@ data class EconomyResponse(val amount: Double, val balance: Double, val type: Ty
 
     enum class Type {
 
+        /**
+         * Economy Response Type: Success (经济回应类型: 成功)
+         */
         SUCCESS,
+        /**
+         * Economy Response Type: Failure (经济回应类型: 失败)
+         */
         FAILURE,
+        /**
+         * Economy Response Type: Not Implemented (经济回应类型: 未实现)
+         */
         NOT_IMPLEMENTED,
+        /**
+         * Economy Response Type: NULL (经济回应类型: NULL)
+         */
         NULL,
         ;
     }

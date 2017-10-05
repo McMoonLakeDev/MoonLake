@@ -27,7 +27,13 @@ import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
  */
 enum class EnumHand(val value: Int) : Valuable<Int> {
 
+    /**
+     * Enum Hand: Main (枚举手: 主)
+     */
     MAIN(0),
+    /**
+     * Enum Hand: Off (枚举手: 副)
+     */
     OFF(1),
     ;
 

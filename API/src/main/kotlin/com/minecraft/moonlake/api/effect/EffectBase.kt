@@ -28,6 +28,20 @@ class EffectBase private constructor(val value: String, val effect: EffectType? 
     fun hasEffect(): Boolean
             = effect != null
 
+    override fun hashCode(): Int {
+        var result = value.hashCode()
+        result = 31 * result + (effect?.hashCode() ?: 0)
+        return result
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if(other === this)
+            return true
+        if(other is EffectBase)
+            return value == other.value && effect == other.effect
+        return false
+    }
+
     override fun toString(): String {
         return "EffectBase(value='$value', effect=$effect)"
     }

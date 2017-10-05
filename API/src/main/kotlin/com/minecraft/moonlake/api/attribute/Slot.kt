@@ -21,15 +21,31 @@ import com.minecraft.moonlake.api.Valuable
 
 enum class Slot(val type: String) : Valuable<String> {
 
-    MAIN_HAND("mainhand"), 		主手(MAIN_HAND),
-    OFF_HAND("offhand"), 			副手(OFF_HAND),
-    HEAD("head"), 							头部(HEAD),
-    LEGS("legs"), 							腿部(LEGS),
-    CHEST("chest"), 						胸部(CHEST),
-    FEET("feet"), 							脚部(FEET),
+    /**
+     * Attribute Slot: Main hand (属性部位: 主手)
+     */
+    MAIN_HAND("mainhand"),
+    /**
+     * Attribute Slot: Off hand (属性部位: 副手)
+     */
+    OFF_HAND("offhand"),
+    /**
+     * Attribute Slot: Head (属性部分: 头)
+     */
+    HEAD("head"),
+    /**
+     * Attribute Slot: Legs (属性部分: 腿)
+     */
+    LEGS("legs"),
+    /**
+     * Attribute Slot: Chest (属性部分: 胸)
+     */
+    CHEST("chest"),
+    /**
+     * Attribute Slot: Feet (属性部分: 脚)
+     */
+    FEET("feet"),
     ;
-
-    constructor(equivalent: Slot) : this(equivalent.type)
 
     override fun value(): String
             = type

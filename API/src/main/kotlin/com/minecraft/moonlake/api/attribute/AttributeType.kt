@@ -24,19 +24,47 @@ import com.minecraft.moonlake.api.version.MinecraftVersion
 
 enum class AttributeType(val type: String, val def: Double, val min: Double, val max: Double, val mcVer: MinecraftVersion? = null) : Valuable<String> {
 
-    MAX_HEALTH("generic.maxHealth", 20.0, .0, 2048.0), 															最大生命(MAX_HEALTH),
-    FOLLOW_RANGE("generic.followRange", 32.0, .0, 2048.0), 													追踪范围(FOLLOW_RANGE),
-    KNOCKBACK_RESISTANCE("generic.knockbackResistance", .0, .0, 1.0), 								击退抗性(KNOCKBACK_RESISTANCE),
-    MOVEMENT_SPEED("generic.movementSpeed", 0.699999988079071, .0, 2048.0), 				移动速度(MOVEMENT_SPEED),
-    ATTACK_DAMAGE("generic.attackDamage", 2.0, .0, 2048.0), 												攻击伤害(ATTACK_DAMAGE),
-    ATTACK_SPEED("generic.attackSpeed", 4.0, .0, 1024.0, MinecraftVersion.V1_9), 					攻击速度(ATTACK_SPEED),
-    ARMOR("generic.armor", .0, .0, 30.0, MinecraftVersion.V1_9), 												护甲(ARMOR),
-    ARMOR_TOUGHNESS("generic.armorToughness", .0, .0, 20.0, MinecraftVersion.V1_9), 		护甲韧性(ARMOR_TOUGHNESS),
-    LUCK("generic.luck", .0, -1024.0, 1024.0, MinecraftVersion.V1_9), 										幸运(LUCK),
-    FLYING_SPEED("generic.flyingSpeed", 0.4000000059604645, .0, 1024.0, MinecraftVersion.V1_12),            飞行速度(FLYING_SPEED),
+    /**
+     * Attribute Type: Max Health (属性类型: 最大生命)
+     */
+    MAX_HEALTH("generic.maxHealth", 20.0, .0, 2048.0),
+    /**
+     * Attribute Type: Follow Range (属性类型: 追踪范围)
+     */
+    FOLLOW_RANGE("generic.followRange", 32.0, .0, 2048.0),
+    /**
+     * Attribute Type: Knockback Resistance (属性类型: 击退抗性)
+     */
+    KNOCKBACK_RESISTANCE("generic.knockbackResistance", .0, .0, 1.0),
+    /**
+     * Attribute Type: Movement Speed (属性类型: 移动速度)
+     */
+    MOVEMENT_SPEED("generic.movementSpeed", 0.699999988079071, .0, 2048.0),
+    /**
+     * Attribute Type: Attack Damage (属性类型: 攻击伤害)
+     */
+    ATTACK_DAMAGE("generic.attackDamage", 2.0, .0, 2048.0),
+    /**
+     * Attribute Type: Attack Speed (属性类型: 攻击速度)
+     */
+    ATTACK_SPEED("generic.attackSpeed", 4.0, .0, 1024.0, MinecraftVersion.V1_9),
+    /**
+     * Attribute Type: Armor (属性类型: 护甲)
+     */
+    ARMOR("generic.armor", .0, .0, 30.0, MinecraftVersion.V1_9),
+    /**
+     * Attribute Type: Armor Toughness (属性类型: 护甲韧性)
+     */
+    ARMOR_TOUGHNESS("generic.armorToughness", .0, .0, 20.0, MinecraftVersion.V1_9),
+    /**
+     * Attribute Type: Luck (属性类型: 幸运)
+     */
+    LUCK("generic.luck", .0, -1024.0, 1024.0, MinecraftVersion.V1_9),
+    /**
+     * Attribute Type: Flying Speed (属性类型: 飞行速度)
+     */
+    FLYING_SPEED("generic.flyingSpeed", 0.4000000059604645, .0, 1024.0, MinecraftVersion.V1_12),
     ;
-
-    constructor(equivalent: AttributeType) : this(equivalent.type, equivalent.def, equivalent.min, equivalent.max, equivalent.mcVer)
 
     override fun value(): String
             = type

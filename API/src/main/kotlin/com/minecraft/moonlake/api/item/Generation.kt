@@ -21,9 +21,21 @@ import com.minecraft.moonlake.api.Valuable
 
 enum class Generation : Valuable<Int> {
 
+    /**
+     * Book Generation: Original (书本代: 原作)
+     */
     ORIGINAL,
+    /**
+     * Book Generation: Copy of Original (书本代: 原作的副本)
+     */
     COPY_OF_ORIGINAL,
+    /**
+     * Book Generation: Copy of Copy (书本代: 副本的副本)
+     */
     COPY_OF_COPY,
+    /**
+     * Book Generation: Tattered (书本代: 破烂的)
+     */
     TATTERED,
     ;
 

@@ -24,7 +24,13 @@ import com.minecraft.moonlake.api.Valuable
  */
 enum class EnumMainHand(val value: Int) : Valuable<Int> {
 
+    /**
+     * Enum Main Hand: Left (枚举主手: 左)
+     */
     LEFT(0),
+    /**
+     * Enum Main Hand: Right (枚举主手: 右)
+     */
     RIGHT(1),
     ;
 

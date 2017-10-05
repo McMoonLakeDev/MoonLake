@@ -21,12 +21,19 @@ import com.minecraft.moonlake.api.Valuable
 
 enum class ChatAction(val value: Byte) : Valuable<Byte> {
 
-    CHAT(0),                 	聊天栏(CHAT),
-    SYSTEM(1),            	系统聊天栏(SYSTEM),
-    ACTIONBAR(2),   		交互栏(ACTIONBAR),
+    /**
+     * Chat Action: Chat (聊天类型: 聊天)
+     */
+    CHAT(0),
+    /**
+     * Chat Action: System (聊天类型: 系统)
+     */
+    SYSTEM(1),
+    /**
+     * Chat Action: Action Bar (聊天类型: 交互栏)
+     */
+    ACTIONBAR(2),
     ;
-
-    constructor(equivalent: ChatAction) : this(equivalent.value)
 
     override fun value(): Byte
             = value

@@ -23,21 +23,69 @@ data class Pattern(val color: Color, val type: Type) {
 
     enum class Color(val data: Int) : Valuable<Int> {
 
+        /**
+         * Banner Color: White (旗帜颜色: 白色)
+         */
         WHITE(15),
+        /**
+         * Banner Color: Orange (旗帜颜色: 橙色)
+         */
         ORANGE(14),
+        /**
+         * Banner Color: Magenta (旗帜颜色: 品红色)
+         */
         MAGENTA(13),
+        /**
+         * Banner Color: Light Blue (旗帜颜色: 淡蓝色)
+         */
         LIGHT_BLUE(12),
+        /**
+         * Banner Color: Yellow (旗帜颜色: 黄色)
+         */
         YELLOW(11),
+        /**
+         * Banner Color: Lime (旗帜颜色: 黄绿色)
+         */
         LIME(10),
+        /**
+         * Banner Color: Pink (旗帜颜色: 粉红色)
+         */
         PINK(9),
+        /**
+         * Banner Color: Gray (旗帜颜色: 灰色)
+         */
         GRAY(8),
+        /**
+         * Banner Color: Silver (旗帜颜色: 淡灰色)
+         */
         SILVER(7),
+        /**
+         * Banner Color: Cyan (旗帜颜色: 青色)
+         */
         CYAN(6),
+        /**
+         * Banner Color: Purple (旗帜颜色: 紫色)
+         */
         PURPLE(5),
+        /**
+         * Banner Color: Blue (旗帜颜色: 蓝色)
+         */
         BLUE(4),
+        /**
+         * Banner Color: Brown (旗帜颜色: 棕色)
+         */
         BROWN(3),
+        /**
+         * Banner Color: Green (旗帜颜色: 绿色)
+         */
         GREEN(2),
+        /**
+         * Banner Color: Red (旗帜颜色: 红色)
+         */
         RED(1),
+        /**
+         * Banner Color: Black (旗帜颜色: 黑色)
+         */
         BLACK(0),
         ;
 
@@ -46,6 +94,8 @@ data class Pattern(val color: Color, val type: Type) {
     }
 
     enum class Type(val identifier: String) : Valuable<String> {
+
+        // TODO document not yet available
 
         BASE("b"),
         SQUARE_BOTTOM_LEFT("bl"),

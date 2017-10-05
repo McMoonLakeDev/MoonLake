@@ -21,12 +21,22 @@ import com.minecraft.moonlake.api.Valuable
 
 enum class Operation(val value: Int) : Valuable<Int> {
 
-    ADD(0), 						增加(ADD),
-    MULTIPLY(1), 				百分比(MULTIPLY),
-    MULTIPLY_INC(2), 		百分比增加(MULTIPLY_INC),
+    /**
+     * Attribute Operation Mode: Add (属性运算模式: 增加)
+     * - Increment X by Amount
+     */
+    ADD(0),
+    /**
+     * Attribute Operation Mode: Multiply (属性运算模式: 百分比)
+     * - Increment Y by X * Amount
+     */
+    MULTIPLY(1),
+    /**
+     * Attribute Operation Mode: Multiply Inc (属性运算模式: 百分比增加)
+     * - Y = Y * (1 + Amount) (equivalent to Increment Y by Y * Amount)
+     */
+    MULTIPLY_INC(2),
     ;
-
-    constructor(equivalent: Operation) : this(equivalent.value)
 
     override fun value(): Int
             = value

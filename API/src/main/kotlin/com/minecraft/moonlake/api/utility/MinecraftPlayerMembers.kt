@@ -26,14 +26,23 @@ import org.bukkit.entity.Player
 
 enum class MinecraftPlayerMembers(val clazz: Class<*>) : Valuable<String> {
 
+    /**
+     * Minecraft Entity Player Field Member: Ping (实体玩家字段成员: 延迟)
+     */
     PING(Int::class.java) {
         override fun value(): String
                 = "ping"
     },
+    /**
+     * Minecraft Entity Player Field Member: Locale (实体玩家字段成员: 本地化)
+     */
     LOCALE(String::class.java) {
         override fun value(): String
                 = "locale"
     },
+    /**
+     * Minecraft Entity Player Field Member: Connection (实体玩家字段成员: 连接)
+     */
     CONNECTION(MinecraftReflection.getPlayerConnectionClass()) {
         override fun value(): String
                 = "playerConnection"
@@ -46,6 +55,10 @@ enum class MinecraftPlayerMembers(val clazz: Class<*>) : Valuable<String> {
             }
         }
     },
+    /**
+     * Minecraft Entity Player Field Member: Network Manager (实体玩家字段成员: 网络管理器)
+     * - Parent: [CONNECTION]
+     */
     NETWORK_MANAGER(MinecraftReflection.getNetworkManagerClass()) { // parent = connection
         override fun value(): String
                 = "networkManager"
@@ -56,6 +69,10 @@ enum class MinecraftPlayerMembers(val clazz: Class<*>) : Valuable<String> {
         override fun set(player: Player, value: Any?)
                 = field.set(CONNECTION.get(player), value)
     },
+    /**
+     * Minecraft Entity Player Field Member: Channel (实体玩家字段成员: 通道)
+     * - Parent: [NETWORK_MANAGER]
+     */
     CHANNEL(Channel::class.java) { // parent = networkManager
         override fun value(): String
                 = "channel"

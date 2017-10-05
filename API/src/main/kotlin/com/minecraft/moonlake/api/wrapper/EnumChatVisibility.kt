@@ -21,8 +21,17 @@ import com.minecraft.moonlake.api.Valuable
 
 enum class EnumChatVisibility(val value: Int) : Valuable<Int> {
 
+    /**
+     * Enum Chat Visibility: Full (聊天可见度: 全部)
+     */
     FULL(0),
+    /**
+     * Enum Chat Visibility: System (聊天可见度: 系统)
+     */
     SYSTEM(1),
+    /**
+     * Enum Chat Visibility: Hidden (聊天可见度: 隐藏)
+     */
     HIDDEN(2),
     ;
 
