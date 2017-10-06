@@ -32,6 +32,7 @@ import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import com.minecraft.moonlake.api.item.Enchantment
 import com.minecraft.moonlake.api.item.ItemBuilder
+import com.minecraft.moonlake.api.item.ItemCooldowns
 import com.minecraft.moonlake.api.item.Pattern
 import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.packet.*
@@ -258,6 +259,20 @@ class MoonLakePluginTest : JavaPlugin() {
                             .addBannerPattern(Pattern(Pattern.Color.WHITE, Pattern.Type.TRIANGLES_BOTTOM))
                             .build()
                     event.player.inventory.addItem(itemStack)
+                }
+                if(event.message == "/ic set") {
+                    val itemStack = event.player.itemInHand
+                    ItemCooldowns.set(event.player, itemStack.type, 10 * 20)
+                }
+                if(event.message == "/ic get") {
+                    val itemStack = event.player.itemInHand
+                    val ticks = ItemCooldowns.get(event.player, itemStack.type)
+                    event.player.sendMessage("冷却时间: $ticks")
+                }
+                if(event.message == "/ic has") {
+                    val itemStack = event.player.itemInHand
+                    val result = ItemCooldowns.has(event.player, itemStack.type)
+                    event.player.sendMessage("是否拥有冷却时间: $result")
                 }
             }
         }.registerEvent(this)

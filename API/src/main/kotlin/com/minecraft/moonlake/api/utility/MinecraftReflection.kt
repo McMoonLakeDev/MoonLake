@@ -143,6 +143,12 @@ object MinecraftReflection {
             = getMinecraftClass("EntityHuman")
 
     @JvmStatic
+    @JvmName("getItemClass")
+    @Throws(MoonLakeException::class)
+    fun getItemClass(): Class<*>
+            = getMinecraftClass("Item")
+
+    @JvmStatic
     @JvmName("getItemStackClass")
     @Throws(MoonLakeException::class)
     fun getItemStackClass(): Class<*>
