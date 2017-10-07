@@ -618,8 +618,14 @@ fun Material.newItemStack(amount: Int = 1, durability: Int = 0, tag: NBTCompound
 fun ItemStack.readTag(consumer: (tag: NBTCompound?) -> Unit): ItemStack
         { consumer(NBTFactory.readStackTag(this)); return this; }
 
+fun <R> ItemStack.readTagLet(consumer: (tag: NBTCompound?) -> R): R
+        = consumer(NBTFactory.readStackTag(this))
+
 fun ItemStack.readTagSafe(consumer: (tag: NBTCompound) -> Unit): ItemStack
         { consumer(NBTFactory.readStackTagSafe(this)); return this; }
+
+fun <R> ItemStack.readTagSafeLet(consumer: (tag: NBTCompound) -> R): R
+        = consumer(NBTFactory.readStackTagSafe(this))
 
 fun ItemStack.writeTag(tag: NBTCompound?): ItemStack
         = NBTFactory.writeStackTag(this, tag)
@@ -639,8 +645,15 @@ fun <T: Entity> T.writeTag(tag: NBTCompound): T
 fun <T: DependPlugin> Class<T>.useDepend(consumer: (depend: T) -> Unit): T
         = DependPlugins.of(this).also(consumer)
 
+@Throws(DependPluginException::class)
+fun <T: DependPlugin, R> Class<T>.useDependLet(consumer: (depend: T) -> R): R
+        = consumer(DependPlugins.of(this))
+
 fun <T: DependPlugin> Class<T>.useDependSafe(consumer: (depend: T?) -> Unit): T?
         = DependPlugins.ofSafe(this).also(consumer)
+
+fun <T: DependPlugin, R> Class<T>.useDependSafeLet(consumer: (depend: T?) -> R): R
+        = consumer(DependPlugins.ofSafe(this))
 
 /** entity function */
 
@@ -649,6 +662,9 @@ fun <T: Entity> Class<T>.spawn(location: Location): T
 
 fun <T: Entity> Class<T>.spawn(location: Location, consumer: (entity: T) -> Unit): T
         = spawn(location).also(consumer)
+
+fun <T: Entity, R> Class<T>.spawnLet(location: Location, consumer: (entity: T) -> R): R
+        = spawn(location).let(consumer)
 
 /** packet function */
 
