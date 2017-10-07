@@ -20,9 +20,11 @@ package com.minecraft.moonlake.impl.player
 import com.minecraft.moonlake.api.attribute.Attribute
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.effect.EffectType
+import com.minecraft.moonlake.api.item.ItemCooldowns
 import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
 import com.minecraft.moonlake.impl.player.attribute.AttributeImpl_v1_9_R1
 import org.bukkit.Color
+import org.bukkit.Material
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -72,4 +74,13 @@ open class MoonLakePlayerImpl_v1_9_R1 :  MoonLakePlayerImpl_v1_8_R3 {
     override var itemInOffHand: ItemStack
         get() = inventory.itemInOffHand
         set(value) { inventory.itemInOffHand = value }
+
+    override fun setCooldown(type: Material, ticks: Int)
+            = ItemCooldowns.set(bukkitPlayer, type, ticks)
+
+    override fun getCooldown(type: Material): Int
+            = ItemCooldowns.get(bukkitPlayer, type)
+
+    override fun hasCooldown(type: Material): Boolean
+            = ItemCooldowns.has(bukkitPlayer, type)
 }

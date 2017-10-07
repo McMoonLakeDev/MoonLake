@@ -24,6 +24,7 @@ import com.minecraft.moonlake.api.player.MoonLakePlayerAbstract
 import com.minecraft.moonlake.api.utility.MinecraftPlayerMembers
 import com.minecraft.moonlake.api.version.IllegalBukkitVersionException
 import com.minecraft.moonlake.impl.player.attribute.AttributeBase
+import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
@@ -76,6 +77,18 @@ open class MoonLakePlayerBase : MoonLakePlayerAbstract {
     override var itemInOffHand: ItemStack
         get() = throw IllegalBukkitVersionException()
         set(value) = throw IllegalBukkitVersionException()
+
+    override fun setCooldown(type: Material, ticks: Int) {
+        throw IllegalBukkitVersionException()
+    }
+
+    override fun getCooldown(type: Material): Int {
+        throw IllegalBukkitVersionException()
+    }
+
+    override fun hasCooldown(type: Material): Boolean {
+        throw IllegalBukkitVersionException()
+    }
 
     override fun stopSound(sound: Sound) {
         throw IllegalBukkitVersionException()

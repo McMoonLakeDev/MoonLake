@@ -309,6 +309,12 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, InventoryHo
 
     var itemInOffHand: ItemStack
 
+    fun setCooldown(type: Material, ticks: Int)
+
+    fun getCooldown(type: Material): Int
+
+    fun hasCooldown(type: Material): Boolean
+
     /** Minecraft Bukkit 1.10 */
 
     fun stopSound(sound: Sound)
