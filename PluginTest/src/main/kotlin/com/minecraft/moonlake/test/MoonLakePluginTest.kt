@@ -274,6 +274,12 @@ class MoonLakePluginTest : JavaPlugin() {
                     val result = ItemCooldowns.has(event.player, itemStack.type)
                     event.player.sendMessage("是否拥有冷却时间: $result")
                 }
+                if(event.message == "/nbt streamb64") {
+                    val value = event.player.readTagLet { NBTFactory.writeDataBase64(it) }
+                    event.player.sendMessage(value)
+                    val nbt = NBTFactory.readDataBase64Compound(value)
+                    println(nbt)
+                }
             }
         }.registerEvent(this)
 

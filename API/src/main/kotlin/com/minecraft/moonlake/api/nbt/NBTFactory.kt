@@ -51,6 +51,7 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 import java.io.*
+import java.util.*
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
@@ -290,6 +291,8 @@ object NBTFactory {
         return entity
     }
 
+    /** nbt io */
+
     @JvmStatic
     @JvmName("writeData")
     @Throws(MoonLakeException::class)
@@ -367,6 +370,44 @@ object NBTFactory {
             if(input != null) input.ioClose(swallow)
             else if(stream != null) stream.ioClose(swallow)
         }
+    }
+
+    @JvmStatic
+    @JvmName("writeDataBase64")
+    @Throws(MoonLakeException::class)
+    fun writeDataBase64(base: NBTBase<*>): String {
+        val stream = ByteArrayOutputStream()
+        val output = DataOutputStream(stream)
+        writeData(base, output)
+        return Base64.getEncoder().encodeToString(stream.toByteArray())
+    }
+
+    @JvmStatic
+    @JvmName("readDataBase64")
+    @Throws(MoonLakeException::class)
+    fun <T> readDataBase64(value: String): NBTWrapper<T>? {
+        val stream = ByteArrayInputStream(Base64.getDecoder().decode(value))
+        val input = DataInputStream(stream)
+        return readData(input)
+    }
+
+    @JvmStatic
+    @JvmName("readDataBase64Compound")
+    @Throws(MoonLakeException::class)
+    fun readDataBase64Compound(value: String): NBTCompound? = try {
+        readDataBase64<NBTCompound>(value) as NBTCompound?
+    } catch(e: Exception) {
+        e.throwMoonLake()
+    }
+
+    @JvmStatic
+    @JvmName("readDataBase64List")
+    @Throws(MoonLakeException::class)
+    fun <T> readDataBase64List(value: String): NBTList<T>? = try {
+        @Suppress("UNCHECKED_CAST")
+        readDataBase64<NBTList<T>>(value) as NBTList<T>?
+    } catch(e: Exception) {
+        e.throwMoonLake()
     }
 
     /** implement */

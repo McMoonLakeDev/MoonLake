@@ -627,6 +627,9 @@ fun ItemStack.writeTag(tag: NBTCompound?): ItemStack
 fun <T: Entity> T.readTag(consumer: (tag: NBTCompound) -> Unit): T
         { consumer(NBTFactory.readEntityTag(this)); return this; }
 
+fun <T: Entity, R> T.readTagLet(consumer: (tag: NBTCompound) -> R): R
+        = consumer(NBTFactory.readEntityTag(this))
+
 fun <T: Entity> T.writeTag(tag: NBTCompound): T
         = NBTFactory.writeEntityTag(this, tag)
 
