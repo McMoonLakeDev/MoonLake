@@ -31,4 +31,18 @@ abstract class PacketInBukkitAbstract(clazzName: String) : PacketBukkitAbstract(
     } catch(e: Exception) {
         throw PacketException(e)
     }
+
+    override fun receive(senders: Array<Player>) {
+        val packet = handle
+        senders.forEach {
+            try {
+                Packets.processPacket(it, packet)
+            } catch(e: Exception) {
+                throw PacketException(e)
+            }
+        }
+    }
+
+    override fun receive(senders: Array<MoonLakePlayer>)
+            = receive(senders.map { it.bukkitPlayer }.toTypedArray())
 }

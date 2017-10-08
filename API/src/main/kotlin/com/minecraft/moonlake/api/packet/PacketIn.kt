@@ -27,4 +27,10 @@ interface PacketIn : Packet {
 
     @Throws(PacketException::class)
     fun receive(sender: MoonLakePlayer)
+
+    @Throws(PacketException::class)
+    fun receive(senders: Array<Player>)
+
+    @Throws(PacketException::class)
+    fun receive(senders: Array<MoonLakePlayer>)
 }

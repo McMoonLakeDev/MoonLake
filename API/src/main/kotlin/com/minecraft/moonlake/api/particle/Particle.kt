@@ -594,19 +594,16 @@ enum class Particle {
 
         fun sendTo(center: Location, range: Double) {
             val squared = if(range < 1.0) throw ParticleException("粒子效果数据包范围不能小于 1.0 的值.") else range * range
-            center.world.players.iterator().forEach {
-                if(it.location.distanceSquared(center) <= squared)
-                    sendToBukkit(center, it)
-            }
+            val receivers = center.world.players.filter { it.location.distanceSquared(center) <= squared }.toTypedArray()
+            createPacket(center).send(receivers)
         }
 
-        fun sendTo(center: Location, players: List<Player>) {
-            players.iterator().forEach { sendToBukkit(center, it) }
-        }
+        fun sendTo(center: Location, players: List<Player>)
+                = createPacket(center).send(players.toTypedArray())
 
         /** implement */
 
-        private fun sendToBukkit(center: Location, player: Player) {
+        private fun createPacket(center: Location): PacketOutParticles {
             var arguments = intArrayOf()
             if(data != null) {
                 arguments = when(particle) {
@@ -614,8 +611,7 @@ enum class Particle {
                     else -> intArrayOf(data.packetData[0].or(data.packetData[1].shl(12)))
                 }
             }
-            val packet = PacketOutParticles(particle, longDistance, center.x.toFloat(), center.y.toFloat(), center.z.toFloat(), offsetX, offsetY, offsetZ, speed, amount, arguments)
-            packet.send(player)
+            return PacketOutParticles(particle, longDistance, center.x.toFloat(), center.y.toFloat(), center.z.toFloat(), offsetX, offsetY, offsetZ, speed, amount, arguments)
         }
     }
 }
