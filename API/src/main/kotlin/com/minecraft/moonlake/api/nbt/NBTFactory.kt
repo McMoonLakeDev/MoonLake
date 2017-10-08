@@ -36,6 +36,7 @@ package com.minecraft.moonlake.api.nbt
 
 import com.minecraft.moonlake.api.*
 import com.minecraft.moonlake.api.converter.ConverterEquivalent
+import com.minecraft.moonlake.api.entity.Entities
 import com.minecraft.moonlake.api.exception.MoonLakeException
 import com.minecraft.moonlake.api.reflect.FuzzyReflect
 import com.minecraft.moonlake.api.reflect.StructureModifier
@@ -274,8 +275,8 @@ object NBTFactory {
     fun <T: Entity> readEntityTag(entity: T): NBTCompound {
         val handle = of(NBTType.TAG_COMPOUND)
         when(entity) {
-            is LivingEntity -> entityLivingRead.invoke(MinecraftConverters.getEntity(LivingEntity::class.java).getGeneric(entity), handle)
-            else -> entityRead.invoke(MinecraftConverters.getEntity(Entity::class.java).getGeneric(entity), handle)
+            is LivingEntity -> entityLivingRead.invoke(Entities.asNMSEntity(entity), handle)
+            else -> entityRead.invoke(Entities.asNMSEntity(entity), handle)
         }
         return fromNMS<NBTCompound>(handle, "EntityTag") as NBTCompound
     }
@@ -285,8 +286,8 @@ object NBTFactory {
     fun <T: Entity> writeEntityTag(entity: T, tag: NBTCompound): T {
         val handle = fromBase(tag).handle
         when(entity) {
-            is LivingEntity -> entityLivingSave.invoke(MinecraftConverters.getEntity(LivingEntity::class.java).getGeneric(entity), handle)
-            else -> entitySave.invoke(MinecraftConverters.getEntity(Entity::class.java).getGeneric(entity), handle)
+            is LivingEntity -> entityLivingSave.invoke(Entities.asNMSEntity(entity), handle)
+            else -> entitySave.invoke(Entities.asNMSEntity(entity), handle)
         }
         return entity
     }

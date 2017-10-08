@@ -310,14 +310,20 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         return this
     }
 
-    override fun setAttribute(type: AttributeType, operation: Operation, amount: Double): ItemBuilder
-            = setAttribute(type, operation, null, amount)
+    override fun addAttribute(type: AttributeType, operation: Operation, amount: Double): ItemBuilder
+            = addAttribute(type, type.value(), operation, amount)
 
-    override fun setAttribute(type: AttributeType, operation: Operation, slot: Slot?, amount: Double): ItemBuilder {
+    override fun addAttribute(type: AttributeType, operation: Operation, slot: Slot?, amount: Double): ItemBuilder
+            = addAttribute(type, type.value(), operation, slot, amount)
+
+    override fun addAttribute(type: AttributeType, name: String, operation: Operation, amount: Double): ItemBuilder
+            = addAttribute(type, name, operation, null, amount)
+
+    override fun addAttribute(type: AttributeType, name: String, operation: Operation, slot: Slot?, amount: Double): ItemBuilder {
         val attribute = NBTFactory.ofCompound()
         val attributeUUID = UUID.randomUUID()
         if(slot != null) attribute.putString(TAG_ATTRIBUTE_SLOT, slot.value())
-        attribute.putString(TAG_ATTRIBUTE_NAME, type.value())
+        attribute.putString(TAG_ATTRIBUTE_NAME, name) // nameable
         attribute.putString(TAG_ATTRIBUTE_TYPE, type.value())
         attribute.putInt(TAG_ATTRIBUTE_OPERATION, operation.value())
         attribute.putDouble(TAG_ATTRIBUTE_AMOUNT, amount)

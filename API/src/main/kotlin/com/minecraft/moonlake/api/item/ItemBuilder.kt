@@ -86,9 +86,13 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun getAttribute(block: (self: ItemBuilder, attribute: Set<AttributeModifier>?) -> Unit): ItemBuilder
 
-    fun setAttribute(type: AttributeType, operation: Operation, amount: Double): ItemBuilder
+    fun addAttribute(type: AttributeType, operation: Operation, amount: Double): ItemBuilder
 
-    fun setAttribute(type: AttributeType, operation: Operation, slot: Slot?, amount: Double): ItemBuilder
+    fun addAttribute(type: AttributeType, operation: Operation, slot: Slot?, amount: Double): ItemBuilder
+
+    fun addAttribute(type: AttributeType, name: String = type.value(), operation: Operation, amount: Double): ItemBuilder
+
+    fun addAttribute(type: AttributeType, name: String = type.value(), operation: Operation, slot: Slot?, amount: Double): ItemBuilder
 
     fun clearAttribute(): ItemBuilder
 

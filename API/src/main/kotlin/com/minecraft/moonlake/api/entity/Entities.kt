@@ -17,6 +17,7 @@
 
 package com.minecraft.moonlake.api.entity
 
+import com.minecraft.moonlake.api.converter.ConverterEquivalent
 import com.minecraft.moonlake.api.reflect.FuzzyReflect
 import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
@@ -35,5 +36,19 @@ object Entities {
     @JvmStatic
     @JvmName("getEntity")
     fun getEntity(world: World, entityId: Int): Entity?
-            = MinecraftConverters.getEntity(Entity::class.java).getSpecific(worldGetEntityById.invoke(MinecraftConverters.getWorld().getGeneric(world), entityId))
+            = asBukkitEntity(worldGetEntityById.invoke(MinecraftConverters.getWorld().getGeneric(world), entityId))
+
+    @JvmStatic
+    private val entityConverter: ConverterEquivalent<Entity> by lazy {
+        MinecraftConverters.getEntity(Entity::class.java) }
+
+    @JvmStatic
+    @JvmName("asNMSEntity")
+    fun asNMSEntity(entity: Entity?): Any?
+            = entityConverter.getGeneric(entity)
+
+    @JvmStatic
+    @JvmName("asBukkitEntity")
+    fun asBukkitEntity(nmsEntity: Any?): Entity?
+            = entityConverter.getSpecific(nmsEntity)
 }

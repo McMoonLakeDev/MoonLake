@@ -18,7 +18,7 @@
 package com.minecraft.moonlake.api.utility
 
 import com.minecraft.moonlake.api.Valuable
-import com.minecraft.moonlake.api.converter.ConverterEquivalent
+import com.minecraft.moonlake.api.entity.Entities
 import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import io.netty.channel.Channel
@@ -89,10 +89,10 @@ enum class MinecraftPlayerMembers(val clazz: Class<*>) : Valuable<String> {
         get() = cachedMap.getOrPut(this, get())
 
     open fun get(player: Player): Any?
-            = field.get(converter.getGeneric(player))
+            = field.get(Entities.asNMSEntity(player))
 
     open fun set(player: Player, value: Any?)
-            = field.set(converter.getGeneric(player), value)
+            = field.set(Entities.asNMSEntity(player), value)
 
     open protected fun get(): () -> AccessorField
             = { Accessors.getAccessorField(MinecraftReflection.getEntityPlayerClass(), value(), true) }
@@ -102,9 +102,5 @@ enum class MinecraftPlayerMembers(val clazz: Class<*>) : Valuable<String> {
         @JvmStatic
         private val cachedMap: MutableMap<MinecraftPlayerMembers, AccessorField> by lazy {
             HashMap<MinecraftPlayerMembers, AccessorField>() }
-
-        @JvmStatic
-        private val converter: ConverterEquivalent<Player> by lazy {
-            MinecraftConverters.getEntity(Player::class.java) }
     }
 }

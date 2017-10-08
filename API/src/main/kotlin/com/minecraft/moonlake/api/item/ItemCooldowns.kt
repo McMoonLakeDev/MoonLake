@@ -18,12 +18,12 @@
 package com.minecraft.moonlake.api.item
 
 import com.minecraft.moonlake.api.currentBukkitVersion
+import com.minecraft.moonlake.api.entity.Entities
 import com.minecraft.moonlake.api.isOrLater
 import com.minecraft.moonlake.api.reflect.FuzzyReflect
 import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
-import com.minecraft.moonlake.api.utility.MinecraftConverters
 import com.minecraft.moonlake.api.utility.MinecraftReflection
 import com.minecraft.moonlake.api.version.IllegalBukkitVersionException
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
@@ -67,7 +67,7 @@ object ItemCooldowns {
     private fun checkAndGet(player: Player): Any? {
         if(!currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_9_R1))
             throw IllegalBukkitVersionException("物品冷却功能不支持您的服务器, 需要 1.9+ 版本.")
-        return entityHumanItemCooldown.get(MinecraftConverters.getEntity(Player::class.java).getGeneric(player))
+        return entityHumanItemCooldown.get(Entities.asNMSEntity(player))
     }
 
     /**

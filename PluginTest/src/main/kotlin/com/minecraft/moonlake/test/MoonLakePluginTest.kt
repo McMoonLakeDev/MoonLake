@@ -81,8 +81,8 @@ class MoonLakePluginTest : JavaPlugin() {
                             .setCanPlaceOn(Material.STONE) // 只能放置在石头上
                             .addEnchant(Enchantment.DAMAGE, 5) // 附魔锋利5
                             .setUnbreakable(true) // 不可破坏
-                            .setAttribute(AttributeType.ATTACK_DAMAGE, Operation.MULTIPLY, Slot.MAIN_HAND, .05) // 攻击增加 5%
-                            .setAttribute(AttributeType.ATTACK_SPEED, Operation.MULTIPLY, Slot.MAIN_HAND, .1) // 攻击速度增加 10%
+                            .addAttribute(AttributeType.ATTACK_DAMAGE, Operation.MULTIPLY, Slot.MAIN_HAND, .05) // 攻击增加 5%
+                            .addAttribute(AttributeType.ATTACK_SPEED, Operation.MULTIPLY, Slot.MAIN_HAND, .1) // 攻击速度增加 10%
                             .addLore("标签属性", "标签属性") // 标签属性
                             .clearEnchant()
                             .addFlag(ItemFlag.HIDE_UNBREAKABLE) // 隐藏不可破坏属性
@@ -279,6 +279,12 @@ class MoonLakePluginTest : JavaPlugin() {
                     event.player.sendMessage(value)
                     val nbt = NBTFactory.readDataBase64Compound(value)
                     println(nbt)
+                }
+                if(event.message == "/ib attitem") {
+                    Material.IRON_SWORD.newItemBuilder()
+                            .addAttribute(AttributeType.ATTACK_DAMAGE, "1", Operation.ADD, Slot.MAIN_HAND, 5.0)
+                            .addAttribute(AttributeType.ATTACK_DAMAGE, "2", Operation.MULTIPLY, Slot.MAIN_HAND, .5)
+                            .build().givePlayer(event.player)
                 }
             }
         }.registerEvent(this)

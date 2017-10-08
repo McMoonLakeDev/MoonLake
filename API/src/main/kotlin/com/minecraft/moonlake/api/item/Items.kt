@@ -17,21 +17,19 @@
 
 package com.minecraft.moonlake.api.item
 
+import com.minecraft.moonlake.api.converter.ConverterEquivalent
 import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
+import com.minecraft.moonlake.api.utility.MinecraftConverters
 import com.minecraft.moonlake.api.utility.MinecraftReflection
 import org.bukkit.Material
+import org.bukkit.inventory.ItemStack
 
 object Items {
 
     @JvmStatic
     private val itemGetById: AccessorMethod by lazy {
         Accessors.getAccessorMethod(MinecraftReflection.getItemClass(), "getById", true, Int::class.java) }
-
-    init {
-        println(itemGetById)
-        println(itemGetById.accessor)
-    }
 
     @JvmStatic
     @JvmName("getItemById")
@@ -42,4 +40,18 @@ object Items {
     @JvmName("getItemByType")
     fun getItemByType(type: Material): Any?
             = itemGetById.invoke(null, type.id)
+
+    @JvmStatic
+    private val itemStackConverter: ConverterEquivalent<ItemStack> by lazy {
+        MinecraftConverters.getItemStack() }
+
+    @JvmStatic
+    @JvmName("asNMSCopy")
+    fun asNMSCopy(itemStack: ItemStack?): Any?
+            = itemStackConverter.getGeneric(itemStack)
+
+    @JvmStatic
+    @JvmName("asBukkitCopy")
+    fun asBukkitCopy(nmsItemStack: Any?): ItemStack?
+            = itemStackConverter.getSpecific(nmsItemStack)
 }
