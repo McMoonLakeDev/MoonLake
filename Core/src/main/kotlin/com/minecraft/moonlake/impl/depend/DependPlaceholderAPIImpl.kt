@@ -21,27 +21,17 @@ import com.minecraft.moonlake.api.depend.DependPlaceholderAPI
 import com.minecraft.moonlake.api.depend.DependPluginAbstract
 import com.minecraft.moonlake.api.depend.DependPluginVersionException
 import com.minecraft.moonlake.api.getPlugin
-import com.minecraft.moonlake.api.player.MoonLakePlayer
 import me.clip.placeholderapi.PlaceholderAPI
 import me.clip.placeholderapi.PlaceholderAPIPlugin
 import org.bukkit.entity.Player
 
 class DependPlaceholderAPIImpl : DependPluginAbstract<PlaceholderAPIPlugin>(getPlugin(DependPlaceholderAPI.NAME)), DependPlaceholderAPI {
 
-    override fun setPlaceholders(player: MoonLakePlayer, text: String): String
-            = setPlaceholders(player.bukkitPlayer, text)
-
     override fun setPlaceholders(player: Player, text: String): String
             = PlaceholderAPI.setPlaceholders(player, text)
 
-    override fun setBracketPlaceholders(player: MoonLakePlayer, text: String): String
-            = setBracketPlaceholders(player.bukkitPlayer, text)
-
     override fun setBracketPlaceholders(player: Player, text: String): String
             = PlaceholderAPI.setBracketPlaceholders(player, text)
-
-    override fun setRelationalPlaceholders(one: MoonLakePlayer, two: MoonLakePlayer, text: String): String
-            = setRelationalPlaceholders(one.bukkitPlayer, two.bukkitPlayer, text)
 
     override fun setRelationalPlaceholders(one: Player, two: Player, text: String): String = when(pluginVersion >= "2.8.0") {
         true -> PlaceholderAPI.setRelationalPlaceholders(one, two, text)

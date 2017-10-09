@@ -20,13 +20,14 @@ package com.minecraft.moonlake.impl.depend
 import com.minecraft.moonlake.api.depend.DependPluginAbstract
 import com.minecraft.moonlake.api.depend.DependWorldEdit
 import com.minecraft.moonlake.api.getPlugin
-import com.minecraft.moonlake.api.player.MoonLakePlayer
 import com.minecraft.moonlake.api.region.*
+import com.sk89q.worldedit.BlockVector2D
 import com.sk89q.worldedit.Vector
 import com.sk89q.worldedit.Vector2D
 import com.sk89q.worldedit.bukkit.WorldEditPlugin
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection
 import com.sk89q.worldedit.bukkit.selections.CylinderSelection
+import com.sk89q.worldedit.bukkit.selections.Selection
 import com.sk89q.worldedit.regions.selector.CuboidRegionSelector
 import com.sk89q.worldedit.regions.selector.CylinderRegionSelector
 import org.bukkit.entity.Player
@@ -39,9 +40,10 @@ class DependWorldEditImpl : DependPluginAbstract<WorldEditPlugin>(getPlugin(Depe
             = RegionVector2D(x, z)
     private fun Vector2D.toRegionVector2D(): RegionVector2D
             = RegionVector2D(x, z)
-
-    override fun getSelection(player: MoonLakePlayer): Region?
-            = getSelection(player.bukkitPlayer)
+    private fun RegionVector.toVector(): Vector
+            = Vector(x, y, z)
+    private fun RegionVector.toVector2D(): BlockVector2D
+            = BlockVector2D(x, z)
 
     override fun getSelection(player: Player): Region? {
         val selection = plugin.getSelection(player) ?: return null
@@ -57,5 +59,15 @@ class DependWorldEditImpl : DependPluginAbstract<WorldEditPlugin>(getPlugin(Depe
             }
             else -> null
         }
+    }
+
+    override fun setSelection(player: Player, region: Region) {
+        val world = region.world
+        val selection: Selection = when(region) {
+            is RegionCuboid -> CuboidSelection(world, region.pos1.toVector(), region.pos2.toVector())
+            is RegionCylinder -> CylinderSelection(world, region.center.toVector2D(), region.center.toVector2D(), region.minimumY, region.maximumY)
+            else -> throw IllegalArgumentException("不支持的区域类型, WorldEdit 仅支持矩形和圆柱.")
+        }
+        plugin.setSelection(player, selection)
     }
 }

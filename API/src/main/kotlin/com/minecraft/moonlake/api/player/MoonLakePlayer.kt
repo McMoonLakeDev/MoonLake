@@ -21,6 +21,7 @@ import com.minecraft.moonlake.api.attribute.Attributable
 import com.minecraft.moonlake.api.chat.ChatAction
 import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.chat.ChatComponentFancy
+import com.minecraft.moonlake.api.depend.DependPlayer
 import com.minecraft.moonlake.api.effect.EffectType
 import org.bukkit.*
 import org.bukkit.block.Block
@@ -35,7 +36,7 @@ import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.util.Vector
 import java.net.InetSocketAddress
 
-interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, InventoryHolder, Metadatable , Comparable<MoonLakePlayer> {
+interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, DependPlayer, InventoryHolder, Metadatable, Comparable<MoonLakePlayer> {
 
     /** Base Function */
 

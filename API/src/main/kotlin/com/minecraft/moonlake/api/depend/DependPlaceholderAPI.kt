@@ -17,24 +17,16 @@
 
 package com.minecraft.moonlake.api.depend
 
-import com.minecraft.moonlake.api.player.MoonLakePlayer
 import org.bukkit.entity.Player
 
 interface DependPlaceholderAPI : DependPlugin {
 
     fun setPlaceholders(player: Player, text: String): String
 
-    fun setPlaceholders(player: MoonLakePlayer, text: String): String
-
     fun setBracketPlaceholders(player: Player, text: String): String
-
-    fun setBracketPlaceholders(player: MoonLakePlayer, text: String): String
 
     @Throws(DependPluginVersionException::class)
     fun setRelationalPlaceholders(one: Player, two: Player, text: String): String
-
-    @Throws(DependPluginVersionException::class)
-    fun setRelationalPlaceholders(one: MoonLakePlayer, two: MoonLakePlayer, text: String): String
 
     companion object {
 

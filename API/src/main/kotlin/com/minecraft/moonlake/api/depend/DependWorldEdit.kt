@@ -17,7 +17,6 @@
 
 package com.minecraft.moonlake.api.depend
 
-import com.minecraft.moonlake.api.player.MoonLakePlayer
 import com.minecraft.moonlake.api.region.Region
 import org.bukkit.entity.Player
 
@@ -25,7 +24,8 @@ interface DependWorldEdit : DependPlugin {
 
     fun getSelection(player: Player): Region?
 
-    fun getSelection(player: MoonLakePlayer): Region?
+    @Throws(IllegalArgumentException::class)
+    fun setSelection(player: Player, region: Region)
 
     companion object {
 

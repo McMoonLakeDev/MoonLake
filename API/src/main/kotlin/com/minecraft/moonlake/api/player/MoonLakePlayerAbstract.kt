@@ -22,8 +22,14 @@ import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.chat.ChatAction
 import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.chat.ChatComponentFancy
+import com.minecraft.moonlake.api.depend.DependPlaceholderAPI
+import com.minecraft.moonlake.api.depend.DependPlugins
+import com.minecraft.moonlake.api.depend.DependVaultEconomy
+import com.minecraft.moonlake.api.depend.DependWorldEdit
 import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.packet.PacketOutChat
+import com.minecraft.moonlake.api.region.Region
+import com.minecraft.moonlake.api.wrapper.EconomyResponse
 import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.command.CommandSender
@@ -555,6 +561,53 @@ abstract class MoonLakePlayerAbstract : MoonLakePlayer {
 
     override fun sendTitleReset()
             = sendPacketTitleReset(bukkitPlayer)
+
+    /** depend plugin */
+
+    private val placeholderAPI: DependPlaceholderAPI
+        get() = DependPlugins.of(DependPlaceholderAPI::class.java)
+
+    override fun setPlaceholders(text: String): String
+            = placeholderAPI.setPlaceholders(bukkitPlayer, text)
+
+    override fun setPlaceholdersBracket(text: String): String
+            = placeholderAPI.setBracketPlaceholders(bukkitPlayer, text)
+
+    override fun setPlaceholdersRelational(target: MoonLakePlayer, text: String): String
+            = placeholderAPI.setRelationalPlaceholders(bukkitPlayer, target.bukkitPlayer, text)
+
+    private val vaultEconomy: DependVaultEconomy
+        get() = DependPlugins.of(DependVaultEconomy::class.java)
+
+    override fun formatEconomy(value: Double): String
+            = vaultEconomy.format(value)
+
+    override fun hasEconomyAccount(world: String?): Boolean
+            = vaultEconomy.hasAccount(bukkitPlayer, world)
+
+    override fun createEconomyAccount(world: String?): Boolean
+            = vaultEconomy.createAccount(bukkitPlayer, world)
+
+    override fun getEconomyBalance(world: String?): Double
+            = vaultEconomy.getBalance(bukkitPlayer, world)
+
+    override fun hasEconomyBalance(value: Double, world: String?): Boolean
+            = vaultEconomy.hasBalance(bukkitPlayer, value, world)
+
+    override fun withdrawEconomy(value: Double, world: String?): EconomyResponse
+            = vaultEconomy.withdraw(bukkitPlayer, value, world)
+
+    override fun depositEconomy(value: Double, world: String?): EconomyResponse
+            = vaultEconomy.deposit(bukkitPlayer, value, world)
+
+    private val worldEdit: DependWorldEdit
+        get() = DependPlugins.of(DependWorldEdit::class.java)
+
+    override fun getWorldEditSelection(): Region?
+            = worldEdit.getSelection(bukkitPlayer)
+
+    override fun setWorldEditSelection(region: Region)
+            = worldEdit.setSelection(bukkitPlayer, region)
 
     /** significant */
 
