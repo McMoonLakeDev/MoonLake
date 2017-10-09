@@ -44,6 +44,8 @@ import com.minecraft.moonlake.api.reflect.accessor.AccessorConstructor
 import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
+import com.minecraft.moonlake.api.security.base64DString
+import com.minecraft.moonlake.api.security.base64EString
 import com.minecraft.moonlake.api.utility.MinecraftConverters
 import com.minecraft.moonlake.api.utility.MinecraftReflection
 import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
@@ -52,7 +54,6 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 import java.io.*
-import java.util.*
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
@@ -380,14 +381,14 @@ object NBTFactory {
         val stream = ByteArrayOutputStream()
         val output = DataOutputStream(stream)
         writeData(base, output)
-        return Base64.getEncoder().encodeToString(stream.toByteArray())
+        return base64EString(stream.toByteArray())
     }
 
     @JvmStatic
     @JvmName("readDataBase64")
     @Throws(MoonLakeException::class)
     fun <T> readDataBase64(value: String): NBTWrapper<T>? {
-        val stream = ByteArrayInputStream(Base64.getDecoder().decode(value))
+        val stream = ByteArrayInputStream(base64DString(value))
         val input = DataInputStream(stream)
         return readData(input)
     }
