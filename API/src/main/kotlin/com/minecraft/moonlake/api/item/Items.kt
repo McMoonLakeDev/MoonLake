@@ -33,11 +33,13 @@ object Items {
 
     @JvmStatic
     @JvmName("getItemById")
+    @Deprecated("Material Id")
     fun getItemById(id: Int): Any?
             = itemGetById.invoke(null, id)
 
     @JvmStatic
     @JvmName("getItemByType")
+    @Deprecated("Material Id")
     fun getItemByType(type: Material): Any?
             = itemGetById.invoke(null, type.id)
 
