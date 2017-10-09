@@ -244,12 +244,6 @@ fun <T: ConfigurationSerializable> Class<T>.deserialize(configuration: Configura
 fun <T: ConfigurationSerializable> Configuration.deserialize(clazz: Class<T>, key: String, def: T? = null): T?
         = clazz.deserialize(this, key, def)
 
-fun <E> Set<E>.copyHashSet(): Set<E>
-        = HashSet(this)
-
-fun <E> Set<E>.copyHashSetOrEmpty(): Set<E>
-        = if(isEmpty()) Collections.emptySet() else copyHashSet()
-
 fun getOnlinePlayers(): Collection<Player>
         = Bukkit.getOnlinePlayers()
 

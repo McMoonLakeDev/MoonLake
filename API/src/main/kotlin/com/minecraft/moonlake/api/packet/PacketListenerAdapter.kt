@@ -17,8 +17,9 @@
 
 package com.minecraft.moonlake.api.packet
 
-import com.minecraft.moonlake.api.copyHashSetOrEmpty
 import org.bukkit.plugin.Plugin
+import java.util.*
+import kotlin.collections.HashSet
 
 open class PacketListenerAdapter(private val _plugin: Plugin, private val _priority: PacketListenerPriority, vararg types: Class<out Packet>) : PacketListener {
 
@@ -51,10 +52,10 @@ open class PacketListenerAdapter(private val _plugin: Plugin, private val _prior
         get() = _priority
 
     override final val sendingTypes: Set<Class<out PacketOut>>
-        get() = _sendingTypes.copyHashSetOrEmpty()
+        get() = if(_sendingTypes.isEmpty()) Collections.emptySet() else HashSet(_sendingTypes)
 
     override final val receivingTypes: Set<Class<out PacketIn>>
-        get() = _receivingTypes.copyHashSetOrEmpty()
+        get() = if(_receivingTypes.isEmpty()) Collections.emptySet() else HashSet(_receivingTypes)
 
     /**
      * Execute in non-main threads.
