@@ -75,7 +75,7 @@ open class RegionEllipsoid(
         get() = _center + _radius
 
     override fun contains(vector: RegionVector): Boolean
-            = (vector - _center / _radius).lengthSq() <= 1.0
+            = ((vector - _center) / _radius).lengthSq() <= 1.0
 
     /** significant */
 

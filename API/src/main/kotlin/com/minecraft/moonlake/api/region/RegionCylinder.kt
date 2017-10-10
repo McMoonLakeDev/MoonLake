@@ -83,7 +83,7 @@ open class RegionCylinder(
         val blockY = vector.blockY
         if(blockY < _minY || blockY > _maxY)
             return false
-        return (vector.toRegionVector2D() - _center / _radius).lengthSq() <= 1.0
+        return ((vector.toRegionVector2D() - _center) / _radius).lengthSq() <= 1.0
     }
 
     override val minimumY: Int

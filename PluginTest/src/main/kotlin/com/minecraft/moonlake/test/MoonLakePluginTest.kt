@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.anvil.AnvilWindowSlot
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
+import com.minecraft.moonlake.api.block.Blocks
 import com.minecraft.moonlake.api.chat.*
 import com.minecraft.moonlake.api.depend.DependPlaceholderAPI
 import com.minecraft.moonlake.api.depend.DependPlugins
@@ -287,13 +288,22 @@ class MoonLakePluginTest : JavaPlugin() {
                             .build().givePlayer(event.player)
                 }
                 if(event.message == "/packet chestopen") {
-                    val block = event.player.location.subtract(.0, 1.0, .0).block
-                    if(block.type != Material.CHEST) {
-                        event.player.sendMessage("脚下方块不为箱子.")
+                    val block = event.player.toMoonLakePlayer().getTargetBlock(5)
+                    if(block == null) {
+                        event.player.sendMessage("方块为空")
                         return
                     }
-                    val packet = PacketOutBlockAction(block, 1,  1)
-                    packet.send(event.player)
+                    Blocks.fakeActionChest(block, true)
+                }
+                if(event.message == "/region border") {
+                    DependWorldEdit::class.java.useDependSafe {
+                        val selection = it?.getSelection(event.player)
+                        println(selection)
+                        selection?.createWorldBorder()
+                    }
+                }
+                if(event.message == "/region borderreset") {
+                    event.player.world.worldBorder.reset()
                 }
             }
         }.registerEvent(this)

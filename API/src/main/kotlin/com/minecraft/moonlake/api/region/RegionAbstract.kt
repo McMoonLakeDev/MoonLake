@@ -47,7 +47,7 @@ abstract class RegionAbstract(private val _world: World) : Region {
         get() = _world
 
     override val center: RegionVector
-        get() = minimumPoint + maximumPoint / 2
+        get() = (minimumPoint + maximumPoint) / 2
 
     override val area: Int
         get() {
