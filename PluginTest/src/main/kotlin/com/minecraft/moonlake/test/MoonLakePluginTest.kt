@@ -286,6 +286,15 @@ class MoonLakePluginTest : JavaPlugin() {
                             .addAttribute(AttributeType.ATTACK_DAMAGE, "2", Operation.MULTIPLY, Slot.MAIN_HAND, .5)
                             .build().givePlayer(event.player)
                 }
+                if(event.message == "/packet chestopen") {
+                    val block = event.player.location.subtract(.0, 1.0, .0).block
+                    if(block.type != Material.CHEST) {
+                        event.player.sendMessage("脚下方块不为箱子.")
+                        return
+                    }
+                    val packet = PacketOutBlockAction(block, 1,  1)
+                    packet.send(event.player)
+                }
             }
         }.registerEvent(this)
 

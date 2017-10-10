@@ -75,6 +75,7 @@ object Packets {
 
         registerPacketBukkit("PacketPlayOutAbilities", PacketOutAbilities::class.java)
         registerPacketBukkit("PacketPlayOutAnimation", PacketOutAnimation::class.java)
+        registerPacketBukkit("PacketPlayOutBlockAction", PacketOutBlockAction::class.java)
         registerPacketBukkit("PacketPlayOutBlockBreakAnimation", PacketOutBlockBreakAnimation::class.java)
         registerPacketBukkit("PacketPlayOutChat", PacketOutChat::class.java)
         registerPacketBukkit("PacketPlayOutCustomPayload", PacketOutPayload::class.java)
