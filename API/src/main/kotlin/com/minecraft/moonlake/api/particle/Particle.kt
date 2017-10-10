@@ -592,11 +592,8 @@ enum class Particle {
 
         /** api */
 
-        fun sendTo(center: Location, range: Double) {
-            val squared = if(range < 1.0) throw ParticleException("粒子效果数据包范围不能小于 1.0 的值.") else range * range
-            val receivers = center.world.players.filter { it.location.distanceSquared(center) <= squared }.toTypedArray()
-            createPacket(center).send(receivers)
-        }
+        fun sendTo(center: Location, range: Double)
+                = createPacket(center).sendToNearby(center, range)
 
         fun sendTo(center: Location, players: List<Player>)
                 = createPacket(center).send(players.toTypedArray())

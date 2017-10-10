@@ -18,6 +18,7 @@
 package com.minecraft.moonlake.api.packet
 
 import com.minecraft.moonlake.api.player.MoonLakePlayer
+import org.bukkit.Location
 import org.bukkit.entity.Player
 
 interface PacketOut : Packet {
@@ -33,4 +34,16 @@ interface PacketOut : Packet {
 
     @Throws(PacketException::class)
     fun send(receivers: Array<MoonLakePlayer>)
+
+    @Throws(PacketException::class)
+    fun sendToAllPlayer()
+
+    @Throws(PacketException::class)
+    fun sendToNearby(center: Location, radius: Double)
+
+    @Throws(PacketException::class)
+    fun sendToNearbyExcept(target: Player?, center: Location, radius: Double)
+
+    @Throws(PacketException::class)
+    fun sendToNearbyExcept(target: MoonLakePlayer?, center: Location, radius: Double)
 }

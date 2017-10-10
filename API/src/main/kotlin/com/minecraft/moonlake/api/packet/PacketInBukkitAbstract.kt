@@ -17,8 +17,10 @@
 
 package com.minecraft.moonlake.api.packet
 
+import com.minecraft.moonlake.api.getOnlinePlayers
 import com.minecraft.moonlake.api.player.MoonLakePlayer
 import com.minecraft.moonlake.api.utility.MinecraftReflection
+import org.bukkit.Location
 import org.bukkit.entity.Player
 
 abstract class PacketInBukkitAbstract(clazzName: String) : PacketBukkitAbstract(MinecraftReflection.getMinecraftClass(clazzName)), PacketInBukkit {
@@ -45,4 +47,19 @@ abstract class PacketInBukkitAbstract(clazzName: String) : PacketBukkitAbstract(
 
     override fun receive(senders: Array<MoonLakePlayer>)
             = receive(senders.map { it.bukkitPlayer }.toTypedArray())
+
+    override fun receiveFromAllPlayer()
+            = receive(getOnlinePlayers().toTypedArray())
+
+    override fun receiveFromNearby(center: Location, radius: Double)
+            = receiveFromNearbyExcept(null as Player?, center, radius)
+
+    override fun receiveFromNearbyExcept(target: MoonLakePlayer?, center: Location, radius: Double)
+            = receiveFromNearbyExcept(target?.bukkitPlayer, center, radius)
+
+    override fun receiveFromNearbyExcept(target: Player?, center: Location, radius: Double) {
+        val squared = if(radius < 1.0) 1.0 else radius * radius
+        val senders = center.world.players.filter { it != target && it.location.distanceSquared(center) <= squared }.toTypedArray()
+        receive(senders)
+    }
 }
