@@ -19,7 +19,6 @@ package com.minecraft.moonlake.impl.player
 
 import com.minecraft.moonlake.api.attribute.Attribute
 import com.minecraft.moonlake.api.attribute.AttributeType
-import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
 import com.minecraft.moonlake.api.player.MoonLakePlayerAbstract
 import com.minecraft.moonlake.api.utility.MinecraftPlayerMembers
 import com.minecraft.moonlake.api.version.IllegalBukkitVersionException
@@ -29,17 +28,8 @@ import org.bukkit.Sound
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import java.util.*
 
-open class MoonLakePlayerBase : MoonLakePlayerAbstract {
-
-    /** constructor */
-
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(uuid: UUID) : super(uuid)
-
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(player: Player) : super(player)
+open class MoonLakePlayerBase(player: Player) : MoonLakePlayerAbstract(player) {
 
     override val ping: Int
         get() = MinecraftPlayerMembers.PING.get(bukkitPlayer) as Int

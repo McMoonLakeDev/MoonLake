@@ -17,17 +17,7 @@
 
 package com.minecraft.moonlake.impl.player
 
-import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
 import org.bukkit.entity.Player
-import java.util.*
 
-open class MoonLakePlayerImpl_v1_8_R1 : MoonLakePlayerBase {
-
-    /** constructor */
-
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(uuid: UUID) : super(uuid)
-
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(player: Player) : super(player)
+open class MoonLakePlayerImpl_v1_8_R1 constructor(player: Player) : MoonLakePlayerBase(player) {
 }

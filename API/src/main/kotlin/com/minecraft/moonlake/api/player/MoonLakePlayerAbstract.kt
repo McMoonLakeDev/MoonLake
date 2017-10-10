@@ -54,20 +54,11 @@ import org.bukkit.util.Vector
 import java.net.InetSocketAddress
 import java.util.*
 
-abstract class MoonLakePlayerAbstract : MoonLakePlayer {
+abstract class MoonLakePlayerAbstract(val player: Player) : MoonLakePlayer {
 
-    /** member */
-
-    private val player: Player
-
-    /** constructor */
-
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(uuid: UUID) : this(Bukkit.getPlayer(uuid))
-
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(player: Player) {
-        this.player = if(player.isOnline) player else throw IllegalOfflinePlayerException(player.name)
+    init {
+        if(!player.isOnline)
+            throw IllegalOfflinePlayerException(player.name)
     }
 
     override final val bukkitPlayer: Player

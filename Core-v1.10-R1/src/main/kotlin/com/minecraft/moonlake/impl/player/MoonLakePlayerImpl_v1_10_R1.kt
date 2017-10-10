@@ -17,20 +17,10 @@
 
 package com.minecraft.moonlake.impl.player
 
-import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
 import org.bukkit.Sound
 import org.bukkit.entity.Player
-import java.util.*
 
-open class MoonLakePlayerImpl_v1_10_R1 : MoonLakePlayerImpl_v1_9_R2 {
-
-    /** constructor */
-
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(uuid: UUID) : super(uuid)
-
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(player: Player) : super(player)
+open class MoonLakePlayerImpl_v1_10_R1(player: Player) : MoonLakePlayerImpl_v1_9_R2(player) {
 
     override fun stopSound(sound: Sound)
             = bukkitPlayer.stopSound(sound)

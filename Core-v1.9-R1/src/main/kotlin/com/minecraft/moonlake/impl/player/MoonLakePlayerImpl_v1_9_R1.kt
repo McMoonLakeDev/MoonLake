@@ -21,7 +21,6 @@ import com.minecraft.moonlake.api.attribute.Attribute
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.item.ItemCooldowns
-import com.minecraft.moonlake.api.player.IllegalOfflinePlayerException
 import com.minecraft.moonlake.impl.player.attribute.AttributeImpl_v1_9_R1
 import org.bukkit.Color
 import org.bukkit.Material
@@ -29,17 +28,8 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
-import java.util.*
 
-open class MoonLakePlayerImpl_v1_9_R1 :  MoonLakePlayerImpl_v1_8_R3 {
-
-    /** constructor */
-
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(uuid: UUID) : super(uuid)
-
-    @Throws(IllegalOfflinePlayerException::class)
-    constructor(player: Player) : super(player)
+open class MoonLakePlayerImpl_v1_9_R1(player: Player) : MoonLakePlayerImpl_v1_8_R3(player) {
 
     override fun getAttribute(type: AttributeType): Attribute
             = AttributeImpl_v1_9_R1(this, type)
