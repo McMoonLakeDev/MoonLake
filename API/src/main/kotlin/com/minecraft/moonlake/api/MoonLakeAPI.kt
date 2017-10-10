@@ -227,8 +227,8 @@ fun <T: ConfigurationSerializable> Class<T>.deserialize(configuration: Configura
         else -> when {
             isInstance(it) -> cast(it)
             it is Map<*, *> -> try {
-                var method = getMethod("deserialize")
-                if(method == null) method = getMethod("valueOf")
+                var method = getDeclaredMethod("deserialize", Map::class.java)
+                if(method == null) method = getDeclaredMethod("valueOf", Map::class.java)
                 if(method == null || !Modifier.isStatic(method.modifiers)) throw MoonLakeException("值为 Map 实例, 但是序列化类不存在 'deserialize' 或 'valueOf' 静态函数.")
                 @Suppress("UNCHECKED_CAST")
                 method.invoke(null, it) as T
