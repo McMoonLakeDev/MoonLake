@@ -18,8 +18,9 @@
 package com.minecraft.moonlake.api.chat
 
 import com.minecraft.moonlake.api.Valuable
+import java.util.regex.Pattern
 
-enum class ChatColor(val code: Char, val format: Boolean = false) : Valuable<Char> {
+enum class ChatColor(val code: Char, val isFormat: Boolean = false) : Valuable<Char> {
 
     /** enums */
 
@@ -49,4 +50,47 @@ enum class ChatColor(val code: Char, val format: Boolean = false) : Valuable<Cha
 
     override fun value(): Char
             = code
+
+    override fun toString(): String {
+        return "$CHAR_COLOR$code"
+    }
+
+    companion object {
+
+        /**
+         * @see [org.bukkit.ChatColor.COLOR_CHAR]
+         */
+        @JvmStatic
+        private val CHAR_COLOR = '§'
+
+        /**
+         * @see [org.bukkit.ChatColor.STRIP_COLOR_PATTERN]
+         */
+        @JvmStatic
+        private val STRIP_COLOR = Pattern.compile("(?i)$CHAR_COLOR[0-9A-FK-OR]")
+
+        /**
+         * @see [org.bukkit.ChatColor.stripColor]
+         */
+        @JvmStatic
+        @JvmName("stripColor")
+        fun stripColor(input: String): String
+                = STRIP_COLOR.matcher(input).replaceAll("")
+
+        /**
+         * @see [org.bukkit.ChatColor.translateAlternateColorCodes]
+         */
+        @JvmStatic
+        @JvmName("translateAlternateColorCodes")
+        fun translateAlternateColorCodes(altColorChar: Char, textToTranslate: String): String {
+            val chars = textToTranslate.toCharArray()
+            for(i in 0 until chars.size - 1) {
+                if(chars[i] == altColorChar && "0123456789AaBbCcDdEeFfKkLlMmNnOoRr".indexOf(chars[i + 1]) > -1) {
+                    chars[i] = CHAR_COLOR
+                    chars[i + 1] = Character.toLowerCase(chars[i + 1])
+                }
+            }
+            return String(chars)
+        }
+    }
 }

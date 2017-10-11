@@ -129,10 +129,10 @@ fun currentBukkitVersion(): MinecraftBukkitVersion
 /** util function */
 
 fun String.toColor(): String
-        = ChatColor.translateAlternateColorCodes('\u0026', this)
+        = com.minecraft.moonlake.api.chat.ChatColor.translateAlternateColorCodes('&', this)
 
 fun String.toColor(altColorChar: Char): String
-        = ChatColor.translateAlternateColorCodes(altColorChar, this)
+        = com.minecraft.moonlake.api.chat.ChatColor.translateAlternateColorCodes(altColorChar, this)
 
 fun Array<out String>.toColor(): Array<out String>
         = toList().map { it -> it.toColor() }.toTypedArray()
@@ -147,7 +147,7 @@ fun Iterable<String>.toColor(altColorChar: Char): List<String>
         = map { it -> it.toColor(altColorChar) }
 
 fun String.stripColor(): String
-        = ChatColor.stripColor(this)
+        = com.minecraft.moonlake.api.chat.ChatColor.stripColor(this)
 
 fun Array<out String>.stripColor(): Array<out String>
         = toList().map { it -> it.stripColor() }.toTypedArray()

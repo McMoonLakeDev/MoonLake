@@ -109,13 +109,13 @@ object ChatSerializer {
                         val color = Enums.ofValuable(ChatColor::class.java, match?.toLowerCase()?.get(1)) ?: ChatColor.WHITE
                         when {
                             color == ChatColor.RESET -> style = ChatStyle()
-                            color.format -> when(color) {
+                            color.isFormat -> when(color) {
                                 ChatColor.OBFUSCATED -> style?.setObfuscated(true)
                                 ChatColor.BOLD -> style?.setBold(true)
                                 ChatColor.STRIKETHROUGH -> style?.setStrikethrough(true)
                                 ChatColor.UNDERLINE -> style?.setUnderlined(true)
                                 ChatColor.ITALIC -> style?.setItalic(true)
-                                else -> throw AssertionError("无效的聊天颜色格式符: $color.")
+                                else -> throw AssertionError("无效的聊天颜色格式符: ${color.code}.")
                             }
                             else -> style = ChatStyle().setColor(color)
                         }
@@ -182,7 +182,7 @@ object ChatSerializer {
     @JvmStatic
     @JvmName("appendColor")
     private fun appendColor(builder: StringBuilder, color: ChatColor) {
-        builder.append('\u00A7').append(color.code)
+        builder.append(color.toString())
     }
 
     private class ChatStyleSerializer : JsonDeserializer<ChatStyle>, JsonSerializer<ChatStyle> {
