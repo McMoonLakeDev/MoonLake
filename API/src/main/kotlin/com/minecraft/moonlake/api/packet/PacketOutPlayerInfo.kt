@@ -61,7 +61,7 @@ data class PacketOutPlayerInfo(var action: Action, var info: MutableList<PlayerI
         data.writeVarInt(info.size)
         for(playerInfo in info) {
             val profile = playerInfo.profile
-            data.writeUUID(profile.id)
+            data.writeUUID(profile.id ?: UUID.randomUUID())
             when(action) {
                 Action.ADD_PLAYER -> {
                     data.writeString(profile.name ?: "<null>")
@@ -93,10 +93,25 @@ data class PacketOutPlayerInfo(var action: Action, var info: MutableList<PlayerI
 
     enum class Action(val value: Int) : Valuable<Int> {
 
+        /**
+         * PlayerInfo Action: Add Player (玩家信息交互: 添加玩家)
+         */
         ADD_PLAYER(0),
+        /**
+         * PlayerInfo Action: Update Game Mode (玩家信息交互: 更新游戏模式)
+         */
         UPDATE_GAME_MODE(1),
+        /**
+         * PlayerInfo Action: Update Latency (玩家信息交互: 更新延迟)
+         */
         UPDATE_LATENCY(2),
+        /**
+         * PlayerInfo Action: Update Display Name (玩家信息交互: 更新显示名称)
+         */
         UPDATE_DISPLAY_NAME(3),
+        /**
+         * PlayerInfo Action: Remove Player (玩家信息交互: 移除玩家)
+         */
         REMOVE_PLAYER(4),
         ;
 

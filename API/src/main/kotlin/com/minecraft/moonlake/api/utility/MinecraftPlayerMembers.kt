@@ -21,6 +21,7 @@ import com.minecraft.moonlake.api.Valuable
 import com.minecraft.moonlake.api.entity.Entities
 import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
+import com.mojang.authlib.GameProfile
 import io.netty.channel.Channel
 import org.bukkit.entity.Player
 
@@ -82,7 +83,16 @@ enum class MinecraftPlayerMembers(val clazz: Class<*>) : Valuable<String> {
                 = field.get(NETWORK_MANAGER.get(player))
         override fun set(player: Player, value: Any?)
                 = field.set(NETWORK_MANAGER.get(player), value)
-    }
+    },
+    /**
+     * Minecraft Entity Player Field Member: Profile (实体玩家字段成员: 简介)
+     */
+    PROFILE(GameProfile::class.java) {
+        override fun value(): String
+                = "profile"
+        override fun get(): () -> AccessorField
+                = { Accessors.getAccessorField(MinecraftReflection.getEntityHumanClass(), clazz, true) }
+    },
     ;
 
     protected val field: AccessorField

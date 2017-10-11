@@ -29,7 +29,9 @@ import com.minecraft.moonlake.api.depend.DependWorldEdit
 import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.packet.PacketOutChat
 import com.minecraft.moonlake.api.region.Region
+import com.minecraft.moonlake.api.utility.MinecraftPlayerMembers
 import com.minecraft.moonlake.api.wrapper.EconomyResponse
+import com.mojang.authlib.GameProfile
 import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.command.CommandSender
@@ -149,6 +151,9 @@ abstract class MoonLakePlayerAbstract(val player: Player) : MoonLakePlayer {
     override var tabListName: String
         get() = bukkitPlayer.playerListName
         set(value) { bukkitPlayer.playerListName = value }
+
+    override val profile: GameProfile
+        get() = MinecraftPlayerMembers.PROFILE.get(bukkitPlayer) as GameProfile
 
     override fun hasBeforePlayed(): Boolean
             = bukkitPlayer.hasPlayedBefore()

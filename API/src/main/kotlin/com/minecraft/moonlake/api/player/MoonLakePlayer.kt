@@ -23,6 +23,7 @@ import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.chat.ChatComponentFancy
 import com.minecraft.moonlake.api.depend.DependPlayer
 import com.minecraft.moonlake.api.effect.EffectType
+import com.mojang.authlib.GameProfile
 import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.command.CommandSender
@@ -47,6 +48,8 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, DependPlaye
     var displayName: String
 
     var tabListName: String
+
+    val profile: GameProfile
 
     fun hasBeforePlayed(): Boolean
 

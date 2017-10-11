@@ -311,6 +311,10 @@ class MoonLakePluginTest : JavaPlugin() {
                     val packet = PacketOutPlayerInfo(PacketOutPlayerInfo.Action.ADD_PLAYER, info)
                     packet.sendToAllPlayer()
                 }
+                if(event.message == "/profile player") {
+                    val profile = event.player.toMoonLakePlayer().profile
+                    event.player.sendMessage(profile.toString())
+                }
             }
         }.registerEvent(this)
 
