@@ -165,6 +165,18 @@ fun Throwable.throwMoonLake(): Nothing = when(this is MoonLakeException) {
     else -> throw MoonLakeException(this)
 }
 
+/**
+ * Returns true if this is null or true
+ */
+fun Boolean?.orTrue(): Boolean
+        = this == null || this == true
+
+/**
+ * Returns false if this is null or false
+ */
+fun Boolean?.orFalse(): Boolean
+        = !(this == null || this == false)
+
 fun String.isInteger(): Boolean = when(isNullOrEmpty()) {
     true -> false
     else -> try {
@@ -610,25 +622,25 @@ fun <T> newNBTList(name: String = ""): NBTList<T>
 fun Material.newItemStack(amount: Int = 1, durability: Int = 0, tag: NBTCompound? = null): ItemStack
         = NBTFactory.createStack(this, amount, durability, tag)
 
-fun ItemStack.readTag(consumer: (tag: NBTCompound?) -> Unit): ItemStack
+inline fun ItemStack.readTag(consumer: (tag: NBTCompound?) -> Unit): ItemStack
         { consumer(NBTFactory.readStackTag(this)); return this; }
 
-fun <R> ItemStack.readTagLet(consumer: (tag: NBTCompound?) -> R): R
+inline fun <R> ItemStack.readTagLet(consumer: (tag: NBTCompound?) -> R): R
         = consumer(NBTFactory.readStackTag(this))
 
-fun ItemStack.readTagSafe(consumer: (tag: NBTCompound) -> Unit): ItemStack
+inline fun ItemStack.readTagSafe(consumer: (tag: NBTCompound) -> Unit): ItemStack
         { consumer(NBTFactory.readStackTagSafe(this)); return this; }
 
-fun <R> ItemStack.readTagSafeLet(consumer: (tag: NBTCompound) -> R): R
+inline fun <R> ItemStack.readTagSafeLet(consumer: (tag: NBTCompound) -> R): R
         = consumer(NBTFactory.readStackTagSafe(this))
 
 fun ItemStack.writeTag(tag: NBTCompound?): ItemStack
         = NBTFactory.writeStackTag(this, tag)
 
-fun <T: Entity> T.readTag(consumer: (tag: NBTCompound) -> Unit): T
+inline fun <T: Entity> T.readTag(consumer: (tag: NBTCompound) -> Unit): T
         { consumer(NBTFactory.readEntityTag(this)); return this; }
 
-fun <T: Entity, R> T.readTagLet(consumer: (tag: NBTCompound) -> R): R
+inline fun <T: Entity, R> T.readTagLet(consumer: (tag: NBTCompound) -> R): R
         = consumer(NBTFactory.readEntityTag(this))
 
 fun <T: Entity> T.writeTag(tag: NBTCompound): T
@@ -637,17 +649,17 @@ fun <T: Entity> T.writeTag(tag: NBTCompound): T
 /** depend plugin function */
 
 @Throws(DependPluginException::class)
-fun <T: DependPlugin> Class<T>.useDepend(consumer: (depend: T) -> Unit): T
+inline fun <T: DependPlugin> Class<T>.useDepend(consumer: (depend: T) -> Unit): T
         = DependPlugins.of(this).also(consumer)
 
 @Throws(DependPluginException::class)
-fun <T: DependPlugin, R> Class<T>.useDependLet(consumer: (depend: T) -> R): R
+inline fun <T: DependPlugin, R> Class<T>.useDependLet(consumer: (depend: T) -> R): R
         = consumer(DependPlugins.of(this))
 
-fun <T: DependPlugin> Class<T>.useDependSafe(consumer: (depend: T?) -> Unit): T?
+inline fun <T: DependPlugin> Class<T>.useDependSafe(consumer: (depend: T?) -> Unit): T?
         = DependPlugins.ofSafe(this).also(consumer)
 
-fun <T: DependPlugin, R> Class<T>.useDependSafeLet(consumer: (depend: T?) -> R): R
+inline fun <T: DependPlugin, R> Class<T>.useDependSafeLet(consumer: (depend: T?) -> R): R
         = consumer(DependPlugins.ofSafe(this))
 
 /** entity function */
@@ -655,10 +667,10 @@ fun <T: DependPlugin, R> Class<T>.useDependSafeLet(consumer: (depend: T?) -> R):
 fun <T: Entity> Class<T>.spawn(location: Location): T
         = location.world.spawn(location, this)
 
-fun <T: Entity> Class<T>.spawn(location: Location, consumer: (entity: T) -> Unit): T
+inline fun <T: Entity> Class<T>.spawn(location: Location, consumer: (entity: T) -> Unit): T
         = spawn(location).also(consumer)
 
-fun <T: Entity, R> Class<T>.spawnLet(location: Location, consumer: (entity: T) -> R): R
+inline fun <T: Entity, R> Class<T>.spawnLet(location: Location, consumer: (entity: T) -> R): R
         = spawn(location).let(consumer)
 
 /** packet function */
