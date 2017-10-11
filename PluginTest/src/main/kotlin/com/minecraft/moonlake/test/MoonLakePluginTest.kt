@@ -24,6 +24,7 @@ import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
 import com.minecraft.moonlake.api.block.Blocks
 import com.minecraft.moonlake.api.chat.*
+import com.minecraft.moonlake.api.chat.ChatColor
 import com.minecraft.moonlake.api.depend.DependPlaceholderAPI
 import com.minecraft.moonlake.api.depend.DependPlugins
 import com.minecraft.moonlake.api.depend.DependVaultEconomy
@@ -39,10 +40,8 @@ import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.packet.*
 import com.minecraft.moonlake.api.particle.Particle
 import com.minecraft.moonlake.api.task.MoonLakeRunnable
-import org.bukkit.Bukkit
-import org.bukkit.Color
-import org.bukkit.FireworkEffect
-import org.bukkit.Material
+import com.minecraft.moonlake.api.wrapper.PlayerInfo
+import org.bukkit.*
 import org.bukkit.entity.Pig
 import org.bukkit.entity.Zombie
 import org.bukkit.event.EventHandler
@@ -51,6 +50,7 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
+import java.util.*
 
 class MoonLakePluginTest : JavaPlugin() {
 
@@ -305,15 +305,19 @@ class MoonLakePluginTest : JavaPlugin() {
                 if(event.message == "/region borderreset") {
                     event.player.world.worldBorder.reset()
                 }
+                if(event.message == "/packet fakeplayer") {
+                    val info: MutableList<PlayerInfo> = ArrayList()
+                    (0 until 10).forEach { info.add(PlayerInfo(UUID.randomUUID(), "FakePlayer-$it", null, GameMode.SURVIVAL, it * 100)) }
+                    val packet = PacketOutPlayerInfo(PacketOutPlayerInfo.Action.ADD_PLAYER, info)
+                    packet.sendToAllPlayer()
+                }
             }
         }.registerEvent(this)
 
-        PacketListeners.registerListener(object: PacketListenerAdapter(this, PacketInUseEntity::class.java) {
-            override fun onReceiving(event: PacketEvent) {
-                val packet = event.packet as PacketInUseEntity
-                val entity = packet.getEntity(event.player?.world)
-                if(entity != null)
-                    event.player?.sendMessage("你交互了实体 -> ${entity.type}")
+        PacketListeners.registerListener(object: PacketListenerAdapter(this, PacketOutPlayerInfo::class.java) {
+            override fun onSending(event: PacketEvent) {
+                val packet = event.packet as PacketOutPlayerInfo
+                println(packet)
             }
         })
     }

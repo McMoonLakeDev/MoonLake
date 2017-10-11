@@ -90,6 +90,11 @@ object ChatSerializer {
         return RawMessage(raw.toColor()).get()
     }
 
+    @JvmStatic
+    @JvmName("fromRawOrNull")
+    fun fromRawOrNull(raw: String?): ChatComponent?
+            = if(raw == null) null else fromRaw(raw)
+
     private class RawMessage(val raw: String) {
 
         private var currentComponent: ChatComponent? = null

@@ -82,6 +82,7 @@ object Packets {
         registerPacketBukkit("PacketPlayOutEntityDestroy", PacketOutEntityDestroy::class.java)
         registerPacketBukkit("PacketPlayOutKeepAlive", PacketOutKeepAlive::class.java)
         registerPacketBukkit("PacketPlayOutKickDisconnect", PacketOutKickDisconnect::class.java)
+        registerPacketBukkit("PacketPlayOutPlayerInfo", PacketOutPlayerInfo::class.java)
         registerPacketBukkit("PacketPlayOutPlayerListHeaderFooter", PacketOutListHeaderFooter::class.java)
         registerPacketBukkit("PacketPlayOutSetSlot", PacketOutSetSlot::class.java)
         registerPacketBukkit("PacketPlayOutTitle", PacketOutTitle::class.java)
