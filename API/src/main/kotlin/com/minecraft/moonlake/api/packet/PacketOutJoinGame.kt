@@ -22,7 +22,7 @@ import org.bukkit.GameMode
 import org.bukkit.World
 import org.bukkit.WorldType
 
-data class PacketOutLogin(
+data class PacketOutJoinGame(
         var entityId: Int,
         var mode: GameMode,
         var hardCore: Boolean,
