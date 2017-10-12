@@ -241,7 +241,7 @@ object ChatSerializer {
                 return null
             val jsonObject = JsonObject()
             if(src.color != null)
-                jsonObject.addProperty("color", src.color.toString().toLowerCase())
+                jsonObject.addProperty("color", src.color?.name?.toLowerCase())
             if(src.bold != null)
                 jsonObject.addProperty("bold", src.bold)
             if(src.italic != null)
