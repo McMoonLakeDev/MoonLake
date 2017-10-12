@@ -68,6 +68,10 @@ object Packets {
         registerPacketBukkit("PacketStatusInStart", PacketInStatusStart::class.java)
         registerPacketBukkit("PacketStatusInPing", PacketInStatusPing::class.java)
 
+        // Login Start
+        registerPacketBukkit("PacketLoginInEncryptionBegin", PacketInLoginEncryptionResponse::class.java)
+        registerPacketBukkit("PacketLoginInStart", PacketInLoginStart::class.java)
+
         // Play Start
         registerPacketBukkit("PacketPlayInBlockDig", PacketInBlockDig::class.java)
         registerPacketBukkit("PacketPlayInChat", PacketInChat::class.java)
@@ -85,6 +89,11 @@ object Packets {
         // Status Start
         registerPacketBukkit("PacketStatusOutServerInfo", PacketOutStatusServerInfo::class.java)
         registerPacketBukkit("PacketStatusOutPong", PacketOutStatusPong::class.java)
+
+        // Login Start
+        registerPacketBukkit("PacketLoginOutEncryptionBegin", PacketOutLoginEncryptionRequest::class.java)
+        registerPacketBukkit("PacketLoginOutSetCompression", PacketOutLoginSetCompression::class.java)
+        registerPacketBukkit("PacketLoginOutSuccess", PacketOutLoginSuccess::class.java)
 
         // Play Start
         registerPacketBukkit("PacketPlayOutAbilities", PacketOutAbilities::class.java)
