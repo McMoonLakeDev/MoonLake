@@ -48,7 +48,7 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
 
     override fun onInitialized() {
         val listener = object: MoonLakeListener {
-            @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
+            @EventHandler(priority = EventPriority.MONITOR)
             fun onJoin(event: PlayerJoinEvent)
                     = injectChannelPlayer(event.player)
         }
@@ -89,8 +89,7 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
     /** api */
 
     private val listeners: MutableSet<PacketListener> by lazy {
-        TreeSet(Comparator<PacketListener> { o1, o2 -> o2.priority.compareTo(o1.priority) })
-    }
+        TreeSet(Comparator<PacketListener> { o1, o2 -> o2.priority.compareTo(o1.priority) }) }
 
     override fun registerListener(listener: PacketListener): Boolean
             = synchronized(listeners, { listeners.add(listener) })
@@ -113,14 +112,14 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
         }
     }
 
+    private val serverChannels: MutableList<Channel> by lazy {
+        ArrayList<Channel>() }
     private val networkManagers: MutableList<Any> by lazy {
         val mcServer = MinecraftConverters.getServer().getGeneric(Bukkit.getServer())
         val serverConnection = minecraftServerConnection.get(mcServer) ?: throw IllegalStateException("Null of Minecraft Server Connection.")
         @Suppress("UNCHECKED_CAST")
         Accessors.getAccessorMethod(serverConnection::class.java, List::class.java, true, arrayOf(serverConnection::class.java))
-                .invoke(serverConnection, serverConnection) as MutableList<Any>
-    }
-    private val serverChannels: MutableList<Channel> by lazy { ArrayList<Channel>() }
+                .invoke(serverConnection, serverConnection) as MutableList<Any> }
     private val minecraftServerConnection: AccessorField by lazy {
         Accessors.getAccessorField(MinecraftReflection.getMinecraftServerClass(), MinecraftReflection.getServerConnectionClass(), true) }
 
@@ -186,7 +185,6 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
             try {
                 synchronized(networkManagers) {
                     channel.eventLoop().submit { injectChannel(channel) }
-                    //println("inject channel -> $channel")
                 }
             } catch(e: Exception) {
                 handlerException(e)
@@ -252,9 +250,6 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
         override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
             val channel = ctx.channel()
             var packet: Any? = null
-
-            //println("IN -> ${msg::class.java}")
-
             try {
                 packet = service.onReceivingAsync(player, channel, msg)
             } catch(e: Exception) {
@@ -267,9 +262,6 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
         override fun write(ctx: ChannelHandlerContext, msg: Any, promise: ChannelPromise) {
             val channel = ctx.channel()
             var packet: Any? = null
-
-            //println("OUT -> ${msg::class.java}")
-
             try {
                 packet = service.onSendingAsync(player, channel, msg)
             } catch(e: Exception) {
