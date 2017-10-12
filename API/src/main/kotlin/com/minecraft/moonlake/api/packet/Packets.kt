@@ -61,6 +61,14 @@ object Packets {
          * Packet Direction : Client -> Server
          */
 
+        // Handshaking Start
+        registerPacketBukkit("PacketHandshakingInSetProtocol", PacketInSetProtocol::class.java)
+
+        // Status Start
+        registerPacketBukkit("PacketStatusInStart", PacketInStatusStart::class.java)
+        registerPacketBukkit("PacketStatusInPing", PacketInStatusPing::class.java)
+
+        // Play Start
         registerPacketBukkit("PacketPlayInBlockDig", PacketInBlockDig::class.java)
         registerPacketBukkit("PacketPlayInChat", PacketInChat::class.java)
         registerPacketBukkit("PacketPlayInCustomPayload", PacketInPayload::class.java)
@@ -74,6 +82,11 @@ object Packets {
          * Packet Direction : Server -> Client
          */
 
+        // Status Start
+        registerPacketBukkit("PacketStatusOutServerInfo", PacketOutStatusServerInfo::class.java)
+        registerPacketBukkit("PacketStatusOutPong", PacketOutStatusPong::class.java)
+
+        // Play Start
         registerPacketBukkit("PacketPlayOutAbilities", PacketOutAbilities::class.java)
         registerPacketBukkit("PacketPlayOutAnimation", PacketOutAnimation::class.java)
         registerPacketBukkit("PacketPlayOutBlockAction", PacketOutBlockAction::class.java)

@@ -211,6 +211,9 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
     fun readShort(): Short
             = byteBuf.readShort()
 
+    fun readUnsignedShort(): Int
+            = byteBuf.readUnsignedShort()
+
     fun readInt(): Int
             = byteBuf.readInt()
 

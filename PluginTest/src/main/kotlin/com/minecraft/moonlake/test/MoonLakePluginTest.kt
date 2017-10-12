@@ -41,6 +41,7 @@ import com.minecraft.moonlake.api.packet.*
 import com.minecraft.moonlake.api.particle.Particle
 import com.minecraft.moonlake.api.task.MoonLakeRunnable
 import com.minecraft.moonlake.api.wrapper.PlayerInfo
+import com.minecraft.moonlake.api.wrapper.ServerInfo
 import org.bukkit.*
 import org.bukkit.entity.Pig
 import org.bukkit.entity.Zombie
@@ -318,13 +319,17 @@ class MoonLakePluginTest : JavaPlugin() {
             }
         }.registerEvent(this)
 
-        PacketListeners.registerListener(object: PacketListenerAdapter(this, PacketOutLogin::class.java) {
+        PacketListeners.registerListener(object: PacketListenerAdapter(this, PacketOutStatusServerInfo::class.java) {
             override fun onSending(event: PacketEvent) {
-                val packet = event.packet as PacketOutLogin
-                println(packet)
+                val packet = event.packet as PacketOutStatusServerInfo
+                val serverInfo = packet.info.copy(
+                        players = ServerInfo.Players(-1, 99999, arrayOf()),
+                        description = ChatComponentFancy("你已被屏蔽 2333").color(ChatColor.RED).build())
+                packet.info = serverInfo
             }
         })
     }
+
 
     override fun onDisable() {
     }
