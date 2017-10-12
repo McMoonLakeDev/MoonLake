@@ -17,7 +17,7 @@
 
 package com.minecraft.moonlake.api.packet
 
-data class PacketInSetProtocol(
+data class PacketInHandshake(
         var version: Int,
         var host: String,
         var port: Int,

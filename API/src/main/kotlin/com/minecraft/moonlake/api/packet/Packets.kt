@@ -62,7 +62,7 @@ object Packets {
          */
 
         // Handshaking Start
-        registerPacketBukkit("PacketHandshakingInSetProtocol", PacketInSetProtocol::class.java)
+        registerPacketBukkit("PacketHandshakingInSetProtocol", PacketInHandshake::class.java)
 
         // Status Start
         registerPacketBukkit("PacketStatusInStart", PacketInStatusStart::class.java)
