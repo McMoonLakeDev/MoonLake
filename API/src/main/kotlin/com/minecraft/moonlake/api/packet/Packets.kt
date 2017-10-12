@@ -52,7 +52,8 @@ object Packets {
     private val converter: ConverterEquivalentIgnoreNull<PacketBukkit> by lazy {
         getPacketConverter() }
     @JvmStatic
-    private val lookupBukkit: MutableMap<Class<*>, Class<out PacketBukkit>> = HashMap()
+    private val lookupBukkit: MutableMap<Class<*>, Class<out PacketBukkit>> by lazy {
+        HashMap<Class<*>, Class<out PacketBukkit>>() }
 
     init {
 
@@ -82,6 +83,7 @@ object Packets {
         registerPacketBukkit("PacketPlayOutEntityDestroy", PacketOutEntityDestroy::class.java)
         registerPacketBukkit("PacketPlayOutKeepAlive", PacketOutKeepAlive::class.java)
         registerPacketBukkit("PacketPlayOutKickDisconnect", PacketOutKickDisconnect::class.java)
+        registerPacketBukkit("PacketPlayOutLogin", PacketOutLogin::class.java)
         registerPacketBukkit("PacketPlayOutPlayerInfo", PacketOutPlayerInfo::class.java)
         registerPacketBukkit("PacketPlayOutPlayerListHeaderFooter", PacketOutListHeaderFooter::class.java)
         registerPacketBukkit("PacketPlayOutSetSlot", PacketOutSetSlot::class.java)
@@ -149,6 +151,8 @@ object Packets {
         val clazz = MinecraftReflection.getMinecraftClassOrNull(clazzName)
         if(clazz == null || lookupBukkit.containsKey(clazz))
             throw IllegalArgumentException("未知的 NMS 数据包 $clazzName 类或已经被注册.")
+        if(!registerInternal(value))
+            throw IllegalArgumentException("数据包 $value 未存在无参构造函数, 注册失败.")
         return lookupBukkit.put(clazz, value) == null
     }
 
@@ -188,5 +192,17 @@ object Packets {
             override fun getSpecificType(): Class<PacketBukkit>
                     = PacketBukkit::class.java
         }
+    }
+
+    @JvmStatic
+    @JvmName("registerInternal")
+    private fun registerInternal(value: Class<out PacketBukkit>): Boolean {
+        var result = value.canonicalName.contains("com.minecraft.moonlake.api.packet", true)
+        if(!result) result = try {
+            value.getConstructor() != null
+        } catch(e: Exception) {
+            false
+        }
+        return result
     }
 }

@@ -318,9 +318,9 @@ class MoonLakePluginTest : JavaPlugin() {
             }
         }.registerEvent(this)
 
-        PacketListeners.registerListener(object: PacketListenerAdapter(this, PacketOutPlayerInfo::class.java) {
+        PacketListeners.registerListener(object: PacketListenerAdapter(this, PacketOutLogin::class.java) {
             override fun onSending(event: PacketEvent) {
-                val packet = event.packet as PacketOutPlayerInfo
+                val packet = event.packet as PacketOutLogin
                 println(packet)
             }
         })

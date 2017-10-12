@@ -37,7 +37,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.Plugin
-import java.util.TreeSet
+import java.util.*
 import java.util.logging.Level
 import kotlin.Comparator
 import kotlin.collections.ArrayList
@@ -56,21 +56,24 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
         eventListener?.registerEvent(getMoonLake())
         var result = false
         try {
-            injectOnlinePlayers()
             injectChannelServer()
+            injectOnlinePlayers()
             result = true
         } catch(e: Exception) {
             // If you fail again try again
-            getMoonLake().runTask { try {
-                injectOnlinePlayers()
-                injectChannelServer()
-                result = true
-            } catch(e: Exception) {
-                handlerException(e)
-            } }
+            getMoonLake().runTask {
+                result = try {
+                    injectChannelServer()
+                    injectOnlinePlayers()
+                    true
+                } catch(e: Exception) {
+                    handlerException(e)
+                    false
+                }
+            }
         }
-        if(result)
-            getMoonLake().logger.info("数据包监听器服务初始化工作完成.")
+        if(result) getMoonLake().logger.info("数据包监听器服务初始化工作完成.")
+        else getMoonLake().logger.warning("数据包监听器服务初始化工作异常, 请提交异常栈信息.")
     }
 
     override fun onUnloaded() {
@@ -110,6 +113,13 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
         }
     }
 
+    private val networkManagers: MutableList<Any> by lazy {
+        val mcServer = MinecraftConverters.getServer().getGeneric(Bukkit.getServer())
+        val serverConnection = minecraftServerConnection.get(mcServer) ?: throw IllegalStateException("Null of Minecraft Server Connection.")
+        @Suppress("UNCHECKED_CAST")
+        Accessors.getAccessorMethod(serverConnection::class.java, List::class.java, true, arrayOf(serverConnection::class.java))
+                .invoke(serverConnection, serverConnection) as MutableList<Any>
+    }
     private val serverChannels: MutableList<Channel> by lazy { ArrayList<Channel>() }
     private val minecraftServerConnection: AccessorField by lazy {
         Accessors.getAccessorField(MinecraftReflection.getMinecraftServerClass(), MinecraftReflection.getServerConnectionClass(), true) }
@@ -117,18 +127,15 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
     private fun injectChannelServer() {
         val mcServer = MinecraftConverters.getServer().getGeneric(Bukkit.getServer())
         val serverConnection = minecraftServerConnection.get(mcServer) ?: return
-        var lookup = false
-        for(field in FuzzyReflect.fromClass(serverConnection::class.java).getFieldListByType(List::class.java)) {
-            if(lookup)
-                break
-            val list = field.get(serverConnection) as List<*>
+        for(field in FuzzyReflect.fromClass(serverConnection::class.java, true).getFieldListByType(List::class.java)) {
+            field.isAccessible = true
+            val list = field.get(serverConnection) as MutableList<*>
             for(item in list) {
                 if(!ChannelFuture::class.java.isInstance(item))
                     break
                 val serverChannel = (item as ChannelFuture).channel()
                 serverChannels.add(serverChannel)
                 serverChannel.pipeline().addFirst(channelServerHandler)
-                lookup = true
             }
         }
     }
@@ -177,7 +184,10 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
     private val channelEndInitializer = object: ChannelInitializer<Channel>() {
         override fun initChannel(channel: Channel) {
             try {
-                channel.eventLoop().submit { injectChannel(channel) }
+                synchronized(networkManagers) {
+                    channel.eventLoop().submit { injectChannel(channel) }
+                    //println("inject channel -> $channel")
+                }
             } catch(e: Exception) {
                 handlerException(e)
             }
@@ -242,6 +252,9 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
         override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
             val channel = ctx.channel()
             var packet: Any? = null
+
+            //println("IN -> ${msg::class.java}")
+
             try {
                 packet = service.onReceivingAsync(player, channel, msg)
             } catch(e: Exception) {
@@ -254,6 +267,9 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
         override fun write(ctx: ChannelHandlerContext, msg: Any, promise: ChannelPromise) {
             val channel = ctx.channel()
             var packet: Any? = null
+
+            //println("OUT -> ${msg::class.java}")
+
             try {
                 packet = service.onSendingAsync(player, channel, msg)
             } catch(e: Exception) {
