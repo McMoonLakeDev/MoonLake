@@ -23,7 +23,7 @@ abstract class PacketBukkitAbstract(private val clazz: Class<*>) : PacketAbstrac
         get() = clazz
 
     override val handle: Any
-        get() = Packets.createReadPacket(this)
+        get() = Packets.createBufferPacket(this)
 
     override fun equals(other: Any?): Boolean {
         if(other === this)

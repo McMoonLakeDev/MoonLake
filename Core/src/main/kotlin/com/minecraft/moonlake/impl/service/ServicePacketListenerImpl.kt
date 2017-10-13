@@ -217,7 +217,7 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
             = onExecuteAndFilterPacketAsync(Direction.OUT, receiver, channel, packet)
 
     private fun onExecuteAndFilterPacketAsync(direction: Direction, player: Player?, channel: Channel, packet: Any): Any? {
-        val wrapped = Packets.createReadPacketSafe(packet) ?: return packet
+        val wrapped = Packets.createBufferPacketSafe(packet) ?: return packet
         val event = PacketEvent(packet, wrapped, player)
         synchronized(listeners) {
             if(listeners.isNotEmpty()) listeners.forEach {
@@ -233,7 +233,7 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
                 }
             }
         }
-        return if(event.isCancelled) null else Packets.createReadPacket(event.packet) // create new nms packet instance
+        return if(event.isCancelled) null else Packets.createBufferPacket(event.packet) // create new nms packet instance
     }
 
     internal enum class Direction {

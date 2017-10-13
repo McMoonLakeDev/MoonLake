@@ -27,6 +27,7 @@ import com.minecraft.moonlake.api.utility.MinecraftReflection
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
 import org.bukkit.entity.Player
+import java.util.*
 
 object Packets {
 
@@ -53,7 +54,7 @@ object Packets {
         getPacketConverter() }
     @JvmStatic
     private val lookupBukkit: MutableMap<Class<*>, Class<out PacketBukkit>> by lazy {
-        HashMap<Class<*>, Class<out PacketBukkit>>() }
+        Collections.synchronizedMap(HashMap<Class<*>, Class<out PacketBukkit>>()) }
 
     init {
 
@@ -134,21 +135,19 @@ object Packets {
             = if(MinecraftReflection.getPacketClass().isAssignableFrom(clazz)) clazz.newInstance() else throw IllegalArgumentException("无效的数据包 $clazz 类.")
 
     @JvmStatic
-    @JvmName("createReadPacket")
-    fun createReadPacket(wrapped: PacketBukkit): Any
+    @JvmName("createBufferPacket")
+    fun createBufferPacket(wrapped: PacketBukkit): Any
             = converter.getGenericValue(wrapped)
 
     @JvmStatic
-    @JvmName("createReadPacket")
+    @JvmName("createBufferPacket")
     @Throws(UnsupportedOperationException::class)
-    @Synchronized
-    fun createReadPacket(packet: Any): PacketBukkit
+    fun createBufferPacket(packet: Any): PacketBukkit
             = converter.getSpecificValue(packet)
 
     @JvmStatic
-    @JvmName("createReadPacketSafe")
-    @Synchronized
-    fun createReadPacketSafe(packet: Any): PacketBukkit?
+    @JvmName("createBufferPacketSafe")
+    fun createBufferPacketSafe(packet: Any): PacketBukkit?
             = if(isRegistered(packet::class.java)) converter.getSpecificValue(packet) else null
 
     @JvmStatic
@@ -159,20 +158,17 @@ object Packets {
     @JvmStatic
     @JvmName("createPacketBukkit")
     @Throws(UnsupportedOperationException::class)
-    @Synchronized
     fun createPacketBukkit(clazz: Class<*>): PacketBukkit
             = lookupBukkit[clazz]?.newInstance() ?: throw UnsupportedOperationException("未对 NMS 数据包 $clazz 类添加包装类支持.")
 
     @JvmStatic
     @JvmName("createPacketBukkitSafe")
-    @Synchronized
     fun createPacketBukkitSafe(clazz: Class<*>): PacketBukkit?
             = lookupBukkit[clazz]?.newInstance()
 
     @JvmStatic
     @JvmName("registerPacketBukkit")
     @Throws(IllegalArgumentException::class)
-    @Synchronized
     fun registerPacketBukkit(clazzName: String, value: Class<out PacketBukkit>): Boolean {
         val clazz = MinecraftReflection.getMinecraftClassOrNull(clazzName)
         if(clazz == null || lookupBukkit.containsKey(clazz))
@@ -184,13 +180,11 @@ object Packets {
 
     @JvmStatic
     @JvmName("isRegistered")
-    @Synchronized
     fun isRegistered(clazz: Class<*>): Boolean
             = lookupBukkit.containsKey(clazz)
 
     @JvmStatic
     @JvmName("isRegisteredWrapped")
-    @Synchronized
     fun <T: Packet> isRegisteredWrapped(clazz: Class<out T>): Boolean
             = lookupBukkit.entries.firstOrNull { it.value == clazz } != null
 

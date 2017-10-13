@@ -61,6 +61,7 @@ object PacketListeners {
 
     @JvmStatic
     @JvmName("checkServiceAndGet")
+    @Throws(UnsupportedOperationException::class)
     private fun checkServiceAndGet(): ServicePacketListener
             = getMoonLake().serviceManager.getServiceSafe(ServicePacketListener::class.java) ?: throw UnsupportedOperationException("错误: 数据包监听器服务不可用, 请检查配置文件是否开启.")
 }
