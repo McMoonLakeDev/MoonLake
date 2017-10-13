@@ -334,6 +334,9 @@ class MoonLakePluginTest : JavaPlugin() {
             override fun onReceiving(event: PacketEvent) {
                 println(event.packet)
             }
+            override fun handlerException(ex: Exception) {
+                ex.printStackTrace()
+            }
         })
     }
 

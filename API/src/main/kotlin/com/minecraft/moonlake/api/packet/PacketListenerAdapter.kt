@@ -57,15 +57,11 @@ open class PacketListenerAdapter(private val _plugin: Plugin, private val _prior
     override final val receivingTypes: Set<Class<out PacketIn>>
         get() = if(_receivingTypes.isEmpty()) Collections.emptySet() else HashSet(_receivingTypes)
 
-    /**
-     * Execute in non-main threads.
-     */
     override fun onSending(event: PacketEvent) {}
 
-    /**
-     * Execute in non-main threads.
-     */
     override fun onReceiving(event: PacketEvent) {}
+
+    override fun handlerException(ex: Exception) { ex.printStackTrace() }
 
     override final fun equals(other: Any?): Boolean {
         if(other === this)

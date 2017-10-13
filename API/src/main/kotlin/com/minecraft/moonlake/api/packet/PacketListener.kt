@@ -29,7 +29,21 @@ interface PacketListener {
 
     val receivingTypes: Set<Class<out PacketIn>>
 
+    /**
+     * Execute asynchronously on non-main threads when the server sends packets to the client.
+     * If the [event] is cancelled, the client will not receive the packet.
+     */
     fun onSending(event: PacketEvent)
 
+    /**
+     * Execute asynchronously on non-main threads when the client sends packets to the server.
+     * If the [event] is cancelled, the server will not receive the packet.
+     */
     fun onReceiving(event: PacketEvent)
+
+    /**
+     * If an exception is executed when [onSending] or [onReceiving], this method is called.
+     * @param [ex] Exception Cause
+     */
+    fun handlerException(ex: Exception)
 }

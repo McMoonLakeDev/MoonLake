@@ -228,7 +228,8 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
                         else -> it.onSending(event)
                     }
                 } catch(e: Exception) {
-                    it.plugin.logger.log(Level.SEVERE, "[MoonLake] 插件 ${it.plugin} 的数据包监听器执行 $direction 时异常:", e)
+                    it.plugin.logger.log(Level.SEVERE, "[MoonLake] 插件 ${it.plugin} 的数据包监听器执行 $direction 时异常.")
+                    it.handlerException(e)
                 }
             }
         }
