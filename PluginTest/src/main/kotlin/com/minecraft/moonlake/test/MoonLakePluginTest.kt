@@ -230,8 +230,10 @@ class MoonLakePluginTest : JavaPlugin() {
                     println(component)
                 }
                 if(event.message == "/packetin chat") {
-                    val packet = PacketInChat("我没有，我不是")
-                    packet.receive(event.player)
+                    runTaskAsync {
+                        val packet = PacketInChat("我没有，我不是")
+                        packet.receive(event.player)
+                    }
                 }
                 if(event.message == "/ib skull") {
                     val itemStack = Material.SKULL_ITEM.newItemBuilder(1, 3)
