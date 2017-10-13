@@ -19,8 +19,8 @@ package com.minecraft.moonlake.api.packet
 
 import com.minecraft.moonlake.api.Valuable
 import com.minecraft.moonlake.api.util.Enums
-import com.minecraft.moonlake.api.wrapper.BlockDirection
-import com.minecraft.moonlake.api.wrapper.BlockPosition
+import com.minecraft.moonlake.api.block.BlockDirection
+import com.minecraft.moonlake.api.block.BlockPosition
 
 data class PacketInBlockDig(var status: Status, var blockPosition: BlockPosition, var direction: BlockDirection) : PacketInBukkitAbstract("PacketPlayInBlockDig") {
 

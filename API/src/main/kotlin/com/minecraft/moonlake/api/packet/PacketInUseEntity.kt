@@ -19,6 +19,7 @@ package com.minecraft.moonlake.api.packet
 
 import com.minecraft.moonlake.api.Valuable
 import com.minecraft.moonlake.api.entity.Entities
+import com.minecraft.moonlake.api.isCombatOrLaterVer
 import com.minecraft.moonlake.api.util.Enums
 import com.minecraft.moonlake.api.wrapper.EnumHand
 import org.bukkit.World
@@ -35,7 +36,7 @@ data class PacketInUseEntity(var entityId: Int, var action: Action, var target: 
         action = Enums.ofValuable(Action::class.java, data.readVarInt()) ?: Action.INTERACT
         if(action == Action.INTERACT_AT)
             target = Vector(data.readFloat(), data.readFloat(), data.readFloat())
-        if((action == Action.INTERACT || action == Action.INTERACT_AT) && EnumHand.support())
+        if((action == Action.INTERACT || action == Action.INTERACT_AT) && isCombatOrLaterVer)
             hand = Enums.ofValuable(EnumHand::class.java, data.readVarInt(), EnumHand.MAIN)
     }
 
@@ -47,7 +48,7 @@ data class PacketInUseEntity(var entityId: Int, var action: Action, var target: 
             data.writeFloat(target?.y?.toFloat() ?: 0f)
             data.writeFloat(target?.z?.toFloat() ?: 0f)
         }
-        if((action == Action.INTERACT || action == Action.INTERACT_AT) && EnumHand.support())
+        if((action == Action.INTERACT || action == Action.INTERACT_AT) && isCombatOrLaterVer)
             data.writeVarInt(hand?.value ?: EnumHand.MAIN.value)
     }
 

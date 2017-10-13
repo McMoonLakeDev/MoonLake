@@ -39,8 +39,8 @@ import com.minecraft.moonlake.api.item.Pattern
 import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.packet.*
 import com.minecraft.moonlake.api.particle.Particle
+import com.minecraft.moonlake.api.player.PlayerInfo
 import com.minecraft.moonlake.api.task.MoonLakeRunnable
-import com.minecraft.moonlake.api.wrapper.PlayerInfo
 import org.bukkit.*
 import org.bukkit.entity.Pig
 import org.bukkit.entity.Zombie

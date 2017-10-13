@@ -17,7 +17,7 @@
 
 package com.minecraft.moonlake.api.packet
 
-import com.minecraft.moonlake.api.wrapper.PlayerAbilities
+import com.minecraft.moonlake.api.player.PlayerAbilities
 import org.bukkit.entity.Player
 
 data class PacketOutAbilities(

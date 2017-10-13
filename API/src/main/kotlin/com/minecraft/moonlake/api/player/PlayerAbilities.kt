@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api.wrapper
+package com.minecraft.moonlake.api.player
 
 import com.minecraft.moonlake.api.nbt.NBTCompound
 import com.minecraft.moonlake.api.nbt.NBTFactory

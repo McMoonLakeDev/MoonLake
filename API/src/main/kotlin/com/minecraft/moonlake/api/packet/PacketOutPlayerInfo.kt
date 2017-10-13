@@ -19,7 +19,7 @@ package com.minecraft.moonlake.api.packet
 
 import com.minecraft.moonlake.api.Valuable
 import com.minecraft.moonlake.api.util.Enums
-import com.minecraft.moonlake.api.wrapper.PlayerInfo
+import com.minecraft.moonlake.api.player.PlayerInfo
 import com.mojang.authlib.GameProfile
 import com.mojang.authlib.properties.Property
 import org.bukkit.GameMode
@@ -45,11 +45,11 @@ data class PacketOutPlayerInfo(var action: Action, var info: MutableList<PlayerI
                     }
                     val mode = GameMode.getByValue(data.readVarInt())
                     val latency = data.readVarInt()
-                    PlayerInfo(profile, if(data.readBoolean()) data.readChatComponent() else null, mode, latency)
+                    PlayerInfo(profile, if (data.readBoolean()) data.readChatComponent() else null, mode, latency)
                 }
                 Action.UPDATE_GAME_MODE -> PlayerInfo(profile, null, GameMode.getByValue(data.readVarInt()), 0)
                 Action.UPDATE_LATENCY -> PlayerInfo(profile, null, null, data.readVarInt())
-                Action.UPDATE_DISPLAY_NAME -> PlayerInfo(profile, if(data.readBoolean()) data.readChatComponent() else null, null, 0)
+                Action.UPDATE_DISPLAY_NAME -> PlayerInfo(profile, if (data.readBoolean()) data.readChatComponent() else null, null, 0)
                 Action.REMOVE_PLAYER -> PlayerInfo(profile, null, null, 0)
             }
             info.add(playerInfo)

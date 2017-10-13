@@ -17,7 +17,7 @@
 
 package com.minecraft.moonlake.api.packet
 
-import com.minecraft.moonlake.api.wrapper.BlockPosition
+import com.minecraft.moonlake.api.block.BlockPosition
 
 data class PacketOutBlockBreakAnimation(var entityId: Int, var blockPosition: BlockPosition, var value: Int) : PacketOutBukkitAbstract("PacketPlayOutBlockBreakAnimation") {
 

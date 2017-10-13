@@ -17,6 +17,7 @@
 
 package com.minecraft.moonlake.api.packet
 
+import com.minecraft.moonlake.api.isCombatOrLaterVer
 import com.minecraft.moonlake.api.util.Enums
 import com.minecraft.moonlake.api.wrapper.EnumChatVisibility
 import com.minecraft.moonlake.api.wrapper.EnumMainHand
@@ -38,7 +39,7 @@ data class PacketInSettings(
         chatVisibility = Enums.ofValuable(EnumChatVisibility::class.java, data.readVarInt()) ?: EnumChatVisibility.FULL
         chatColor = data.readBoolean()
         skinDisplayed = data.readByte().toInt()
-        if(EnumMainHand.support())
+        if(isCombatOrLaterVer)
             hand = Enums.ofValuable(EnumMainHand::class.java, data.readVarInt(), EnumMainHand.RIGHT)
     }
 
@@ -48,7 +49,7 @@ data class PacketInSettings(
         data.writeVarInt(chatVisibility.value)
         data.writeBoolean(chatColor)
         data.writeByte(skinDisplayed)
-        if(EnumMainHand.support())
+        if(isCombatOrLaterVer)
             data.writeVarInt(hand?.value ?: EnumMainHand.RIGHT.value)
     }
 }

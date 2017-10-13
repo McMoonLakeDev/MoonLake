@@ -21,7 +21,7 @@ import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.chat.ChatSerializer
 import com.minecraft.moonlake.api.nbt.NBTCompound
 import com.minecraft.moonlake.api.nbt.NBTFactory
-import com.minecraft.moonlake.api.wrapper.BlockPosition
+import com.minecraft.moonlake.api.block.BlockPosition
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufInputStream
 import io.netty.buffer.ByteBufOutputStream

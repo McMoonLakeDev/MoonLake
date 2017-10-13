@@ -18,9 +18,6 @@
 package com.minecraft.moonlake.api.wrapper
 
 import com.minecraft.moonlake.api.Valuable
-import com.minecraft.moonlake.api.currentBukkitVersion
-import com.minecraft.moonlake.api.isOrLater
-import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 
 /**
  * Only applies to Minecraft 1.9+
@@ -39,15 +36,4 @@ enum class EnumHand(val value: Int) : Valuable<Int> {
 
     override fun value(): Int
             = value
-
-    companion object {
-
-        @JvmField
-        val HAND_AVAILABLE = currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_9_R1)
-
-        @JvmStatic
-        @JvmName("support")
-        fun support(): Boolean
-                = HAND_AVAILABLE
-    }
 }

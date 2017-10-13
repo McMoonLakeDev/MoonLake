@@ -129,6 +129,14 @@ fun currentBukkitVersion(): MinecraftBukkitVersion
 
 /** util function */
 
+private val combatOrLaterVer = currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_9_R1)
+
+/**
+ * Returns if the server version is 1.9 or later.
+ */
+val isCombatOrLaterVer: Boolean
+    get() = combatOrLaterVer
+
 fun String.toColor(): String
         = com.minecraft.moonlake.api.chat.ChatColor.translateAlternateColorCodes('&', this)
 

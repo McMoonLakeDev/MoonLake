@@ -36,12 +36,4 @@ enum class EnumMainHand(val value: Int) : Valuable<Int> {
 
     override fun value(): Int
             = value
-
-    companion object {
-
-        @JvmStatic
-        @JvmName("support")
-        fun support(): Boolean
-                = EnumHand.support()
-    }
 }

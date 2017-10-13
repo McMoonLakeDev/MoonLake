@@ -17,7 +17,7 @@
 
 package com.minecraft.moonlake.api.packet
 
-import com.minecraft.moonlake.api.wrapper.BlockPosition
+import com.minecraft.moonlake.api.block.BlockPosition
 import org.bukkit.Material
 import org.bukkit.block.Block
 
