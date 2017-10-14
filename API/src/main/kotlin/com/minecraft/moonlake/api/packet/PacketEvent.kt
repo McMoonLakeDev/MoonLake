@@ -37,8 +37,8 @@ class PacketEvent(source: Any, var packet: PacketBukkit, player: Player?) : Even
     override fun isCancelled(): Boolean
             = cancel
 
-    fun isAsync()
-            = !Bukkit.isPrimaryThread()
+    val isAsync: Boolean
+        get() = !Bukkit.isPrimaryThread()
 
     override fun toString(): String {
         return "PacketEvent(player=$player, packet=$packet)"

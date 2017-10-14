@@ -106,7 +106,7 @@ data class ServerInfo(val version: Version, val players: Players, val descriptio
                 }
             }
             val players = Players(jsonPlayers["max"].asInt, jsonPlayers["online"].asInt, sample.toTypedArray())
-            val description = ChatSerializer.fromJson(jsonObject["description"].toString())
+            val description = ChatSerializer.fromJsonLenient(jsonObject["description"].toString())
             var favicon: BufferedImage? = null
             if(jsonObject.has("favicon"))
                 favicon = faviconFromString(jsonObject["favicon"].asString)

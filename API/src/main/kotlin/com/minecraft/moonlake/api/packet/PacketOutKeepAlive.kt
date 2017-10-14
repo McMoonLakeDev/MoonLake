@@ -17,16 +17,16 @@
 
 package com.minecraft.moonlake.api.packet
 
-data class PacketOutKeepAlive(var id: Long) : PacketOutBukkitAbstract("PacketPlayOutKeepAlive") {
+data class PacketOutKeepAlive(var id: Int) : PacketOutBukkitAbstract("PacketPlayOutKeepAlive") {
 
     @Deprecated("")
-    constructor() : this(-1L)
+    constructor() : this(-1)
 
     override fun read(data: PacketBuffer) {
-        id = data.readLong()
+        id = data.readVarInt()
     }
 
     override fun write(data: PacketBuffer) {
-        data.writeLong(id)
+        data.writeVarInt(id)
     }
 }

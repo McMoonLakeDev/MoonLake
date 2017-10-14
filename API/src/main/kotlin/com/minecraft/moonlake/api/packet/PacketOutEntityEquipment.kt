@@ -17,6 +17,7 @@
 
 package com.minecraft.moonlake.api.packet
 
+import com.minecraft.moonlake.api.isCombatOrLaterVer
 import com.minecraft.moonlake.api.util.Enums
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
@@ -31,13 +32,13 @@ data class PacketOutEntityEquipment(
 
     override fun read(data: PacketBuffer) {
         entityId = data.readVarInt()
-        equipmentSlot = Enums.ofOrigin(EquipmentSlot::class.java, data.readVarInt()) ?: EquipmentSlot.HAND
+        equipmentSlot = Enums.ofOrigin(EquipmentSlot::class.java, if(!isCombatOrLaterVer) data.readShort().toInt() else data.readVarInt()) ?: EquipmentSlot.HAND
         itemStack = data.readItemStack()
     }
 
     override fun write(data: PacketBuffer) {
         data.writeVarInt(entityId)
-        data.writeVarInt(equipmentSlot.ordinal)
+        if(!isCombatOrLaterVer) data.writeShort(equipmentSlot.ordinal) else data.writeVarInt(equipmentSlot.ordinal)
         data.writeItemStack(itemStack)
     }
 }

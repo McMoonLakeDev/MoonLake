@@ -17,47 +17,31 @@
 
 package com.minecraft.moonlake.api.packet
 
-import com.minecraft.moonlake.api.isCombatOrLaterVer
 import org.bukkit.Difficulty
 import org.bukkit.GameMode
 import org.bukkit.World
 import org.bukkit.WorldType
 
-data class PacketOutJoinGame(
-        var entityId: Int,
-        var mode: GameMode,
-        var hardCore: Boolean,
+data class PacketOutRespawn(
         var dimension: World.Environment,
         var difficulty: Difficulty,
-        var maxPlayer: Int,
-        var worldType: WorldType,
-        var reducedDebug: Boolean) : PacketOutBukkitAbstract("PacketPlayOutLogin") {
+        var mode: GameMode,
+        var worldType: WorldType) : PacketOutBukkitAbstract("PacketPlayOutRespawn") {
 
     @Deprecated("")
-    constructor() : this(-1, GameMode.SURVIVAL, false, World.Environment.NORMAL, Difficulty.EASY, 20, WorldType.NORMAL, false)
+    constructor() : this(World.Environment.NORMAL, Difficulty.EASY, GameMode.SURVIVAL, WorldType.NORMAL)
 
     override fun read(data: PacketBuffer) {
-        entityId = data.readInt()
-        val flag = data.readUnsignedByte().toInt()
-        hardCore = (flag and 8) == 8
-        mode = GameMode.getByValue(if(!isCombatOrLaterVer) flag else flag and -9)
-        dimension = World.Environment.getEnvironment(if(!isCombatOrLaterVer) data.readByte().toInt() else data.readInt())
+        dimension = World.Environment.getEnvironment(data.readInt())
         difficulty = Difficulty.getByValue(data.readUnsignedByte().toInt())
-        maxPlayer = data.readUnsignedByte().toInt()
+        mode = GameMode.getByValue(data.readUnsignedByte().toInt())
         worldType = WorldType.getByName(data.readString()) ?: WorldType.NORMAL
-        reducedDebug = data.readBoolean()
     }
 
     override fun write(data: PacketBuffer) {
-        data.writeInt(entityId)
-        var flag = mode.value
-        if(hardCore)
-            flag = flag or 8
-        data.writeByte(flag)
-        if(!isCombatOrLaterVer) data.writeByte(dimension.id) else data.writeInt(dimension.id)
+        data.writeInt(dimension.id)
         data.writeByte(difficulty.value)
-        data.writeByte(maxPlayer)
+        data.writeByte(mode.value)
         data.writeString(worldType.getName())
-        data.writeBoolean(reducedDebug)
     }
 }

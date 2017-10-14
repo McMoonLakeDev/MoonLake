@@ -112,6 +112,8 @@ object Packets {
         registerPacketBukkit("PacketPlayOutLogin", PacketOutJoinGame::class.java)
         registerPacketBukkit("PacketPlayOutPlayerInfo", PacketOutPlayerInfo::class.java)
         registerPacketBukkit("PacketPlayOutPlayerListHeaderFooter", PacketOutListHeaderFooter::class.java)
+        registerPacketBukkit("PacketPlayOutPosition", PacketOutPosition::class.java)
+        registerPacketBukkit("PacketPlayOutRespawn", PacketOutRespawn::class.java)
         registerPacketBukkit("PacketPlayOutServerDifficulty", PacketOutServerDifficulty::class.java)
         registerPacketBukkit("PacketPlayOutSetSlot", PacketOutSetSlot::class.java)
         registerPacketBukkit("PacketPlayOutTitle", PacketOutTitle::class.java)
