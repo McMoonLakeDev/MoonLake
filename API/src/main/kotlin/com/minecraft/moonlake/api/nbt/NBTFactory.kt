@@ -260,8 +260,19 @@ object NBTFactory {
     }
 
     @JvmStatic
-    @JvmName("getStackNBT")
-    fun getStackNBT(itemStack: ItemStack): NBTCompound {
+    @JvmName("readStackNBT")
+    fun readStackNBT(nbt: NBTCompound): ItemStack {
+        val type = nbt.getString("id").replaceFirst("minecraft:", "", true)
+        val count = nbt.getByteOrNull("Count") ?: 1
+        val durability = nbt.getShortOrNull("Damage") ?: 0
+        val tag = nbt.getCompoundOrNull("tag")
+        val itemStack = ItemStack(Material.getMaterial(type), count.toInt(), durability)
+        return writeStackTag(itemStack, tag)
+    }
+
+    @JvmStatic
+    @JvmName("writeStackNBT")
+    fun writeStackNBT(itemStack: ItemStack): NBTCompound {
         val nbt = ofCompound()
         val tag = readStackTag(itemStack)
         nbt.putString("id", "minecraft:${itemStack.type.name.toLowerCase()}")

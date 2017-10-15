@@ -91,7 +91,7 @@ open class ChatComponentFancy : Builder<ChatComponent> {
             { last.style.setHoverEvent(ChatHoverEvent(ChatHoverEvent.Action.SHOW_ITEM, ChatComponentText(item))); return this; }
 
     fun tooltipItem(itemStack: ItemStack): ChatComponentFancy
-            = tooltipItem(NBTFactory.getStackNBT(itemStack).toString())
+            = tooltipItem(NBTFactory.writeStackNBT(itemStack).toString())
 
     fun join(chatComponentFancy: ChatComponentFancy): ChatComponentFancy
             { extras.addAll(chatComponentFancy.extras); return this; }

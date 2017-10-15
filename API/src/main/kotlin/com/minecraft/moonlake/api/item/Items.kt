@@ -18,12 +18,20 @@
 package com.minecraft.moonlake.api.item
 
 import com.minecraft.moonlake.api.converter.ConverterEquivalent
+import com.minecraft.moonlake.api.nbt.NBTCompound
+import com.minecraft.moonlake.api.nbt.NBTFactory
+import com.minecraft.moonlake.api.notNull
+import com.minecraft.moonlake.api.reflect.FuzzyReflect
 import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import com.minecraft.moonlake.api.utility.MinecraftConverters
 import com.minecraft.moonlake.api.utility.MinecraftReflection
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.lang.reflect.Modifier
 
 object Items {
 
@@ -56,4 +64,49 @@ object Items {
     @JvmName("asBukkitCopy")
     fun asBukkitCopy(nmsItemStack: Any?): ItemStack?
             = itemStackConverter.getSpecific(nmsItemStack)
+
+    @JvmStatic
+    @JvmName("toJson")
+    fun writeJson(itemStack: ItemStack): String
+            = NBTFactory.writeStackNBT(itemStack).toString()
+
+    @JvmStatic
+    @JvmName("toBase64")
+    @Throws(IOException::class)
+    fun writeBase64(itemStack: ItemStack): String
+            = NBTFactory.writeDataBase64(NBTFactory.writeStackNBT(itemStack))
+
+    @JvmStatic
+    @JvmName("toCompoundFile")
+    @Throws(IOException::class)
+    fun writeCompoundFile(itemStack: ItemStack, outFile: File, compress: Boolean = true)
+            = NBTFactory.writeDataCompoundFile(NBTFactory.writeStackNBT(itemStack), outFile, compress)
+
+    @JvmStatic
+    private val mojangsonParser: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(
+                FuzzyReflect.fromClass(MinecraftReflection.getMinecraftClass("MojangsonParser"), true)
+                        .getMethodListByParameters(MinecraftReflection.getNBTTagCompoundClass(), arrayOf(String::class.java))
+                        .first { Modifier.isStatic(it.modifiers) }, true) }
+
+    @JvmStatic
+    @JvmName("fromJson")
+    @Throws(IllegalArgumentException::class)
+    fun fromJson(value: String): ItemStack {
+        val handle = mojangsonParser.invoke(null, value) ?: throw IllegalArgumentException("Null of Mojangson Parser.")
+        val wrapped = NBTFactory.fromNMS<NBTCompound>(handle) as NBTCompound
+        return NBTFactory.readStackNBT(wrapped)
+    }
+
+    @JvmStatic
+    @JvmName("fromBase64")
+    @Throws(IOException::class)
+    fun fromBase64(value: String): ItemStack
+            = NBTFactory.readStackNBT(NBTFactory.readDataBase64Compound(value).notNull())
+
+    @JvmStatic
+    @JvmName("fromCompoundFile")
+    @Throws(IOException::class)
+    fun fromCompoundFile(inFile: File, compress: Boolean = true): ItemStack
+            = if(!inFile.exists() || inFile.isDirectory) throw FileNotFoundException(inFile.absolutePath) else NBTFactory.readStackNBT(NBTFactory.readDataCompoundFile(inFile, compress).notNull())
 }
