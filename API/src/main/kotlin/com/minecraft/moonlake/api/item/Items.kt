@@ -66,20 +66,21 @@ object Items {
             = itemStackConverter.getSpecific(nmsItemStack)
 
     @JvmStatic
-    @JvmName("toJson")
-    fun writeJson(itemStack: ItemStack): String
-            = NBTFactory.writeStackNBT(itemStack).toString()
+    @JvmName("toMojangson")
+    @Deprecated("The future version 1.13 may be subject to change.")
+    fun toMojangson(itemStack: ItemStack): String
+            = NBTFactory.writeStackNBT(itemStack).toMojangson() // Because it is compatible with MojangsonParser
 
     @JvmStatic
     @JvmName("toBase64")
     @Throws(IOException::class)
-    fun writeBase64(itemStack: ItemStack): String
+    fun toBase64(itemStack: ItemStack): String
             = NBTFactory.writeDataBase64(NBTFactory.writeStackNBT(itemStack))
 
     @JvmStatic
     @JvmName("toCompoundFile")
     @Throws(IOException::class)
-    fun writeCompoundFile(itemStack: ItemStack, outFile: File, compress: Boolean = true)
+    fun toCompoundFile(itemStack: ItemStack, outFile: File, compress: Boolean = true)
             = NBTFactory.writeDataCompoundFile(NBTFactory.writeStackNBT(itemStack), outFile, compress)
 
     @JvmStatic
@@ -90,9 +91,10 @@ object Items {
                         .first { Modifier.isStatic(it.modifiers) }, true) }
 
     @JvmStatic
-    @JvmName("fromJson")
+    @JvmName("fromMojangson")
     @Throws(IllegalArgumentException::class)
-    fun fromJson(value: String): ItemStack {
+    @Deprecated("The future version 1.13 may be subject to change.")
+    fun fromMojangson(value: String): ItemStack {
         val handle = mojangsonParser.invoke(null, value) ?: throw IllegalArgumentException("Null of Mojangson Parser.")
         val wrapped = NBTFactory.fromNMS<NBTCompound>(handle) as NBTCompound
         return NBTFactory.readStackNBT(wrapped)

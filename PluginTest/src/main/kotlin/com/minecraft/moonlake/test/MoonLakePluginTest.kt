@@ -32,10 +32,7 @@ import com.minecraft.moonlake.api.depend.DependWorldEdit
 import com.minecraft.moonlake.api.effect.EffectBase
 import com.minecraft.moonlake.api.effect.EffectType
 import com.minecraft.moonlake.api.event.MoonLakeListener
-import com.minecraft.moonlake.api.item.Enchantment
-import com.minecraft.moonlake.api.item.ItemBuilder
-import com.minecraft.moonlake.api.item.ItemCooldowns
-import com.minecraft.moonlake.api.item.Pattern
+import com.minecraft.moonlake.api.item.*
 import com.minecraft.moonlake.api.nbt.NBTFactory
 import com.minecraft.moonlake.api.packet.*
 import com.minecraft.moonlake.api.particle.Particle
@@ -316,6 +313,24 @@ class MoonLakePluginTest : JavaPlugin() {
                 if(event.message == "/profile player") {
                     val profile = event.player.toMoonLakePlayer().profile
                     event.player.sendMessage(profile.toString())
+                }
+                if(event.message == "/items to") {
+                    val itemStack = event.player.itemInHand
+                    Items.toMojangson(itemStack).consumer { println(it) }
+                    Items.toBase64(itemStack).consumer { println(it) }
+                    Items.toCompoundFile(itemStack, File(dataFolder, "NBT.dat"))
+                }
+                if(event.message == "/items from") {
+                    val origin = event.player.itemInHand
+                    val json = Items.fromMojangson("{\"id\":\"minecraft:iron_sword\",\"Count\":1b,\"tag\":{\"Unbreakable\":1b,\"display\":{\"LocName\":\"tile.tnt.name\",\"Lore\":[\"标签属性\",\"标签属性\"]},\"CanPlaceOn\":[\"minecraft:stone\"],\"AttributeModifiers\":[{\"UUIDMost\":-5437538306879371484l,\"UUIDLeast\":-8190449683700789007l,\"Amount\":0.05d,\"Slot\":\"mainhand\",\"AttributeName\":\"generic.attackDamage\",\"Operation\":1,\"Name\":\"generic.attackDamage\"},{\"UUIDMost\":-2188973625266909354l,\"UUIDLeast\":-7798395392786142574l,\"Amount\":0.1d,\"Slot\":\"mainhand\",\"AttributeName\":\"generic.attackSpeed\",\"Operation\":1,\"Name\":\"generic.attackSpeed\"}],\"CanDestroy\":[\"minecraft:diamond_ore\"]},\"Damage\":0s}")
+                    val base64 = Items.fromBase64("CgAACAACaWQAFG1pbmVjcmFmdDppcm9uX3N3b3JkAQAFQ291bnQBCgADdGFnAQALVW5icmVha2FibGUBCgAHZGlzcGxheQgAB0xvY05hbWUADXRpbGUudG50Lm5hbWUJAARMb3JlCAAAAAIADOagh+etvuWxnuaApwAM5qCH562+5bGe5oCnAAkACkNhblBsYWNlT24IAAAAAQAPbWluZWNyYWZ0OnN0b25lCQASQXR0cmlidXRlTW9kaWZpZXJzCgAAAAIEAAhVVUlETW9zdLSJ+7gd4EckBAAJVVVJRExlYXN0jlWtaFRN0PEGAAZBbW91bnQ/qZmZmZmZmggABFNsb3QACG1haW5oYW5kCAANQXR0cmlidXRlTmFtZQAUZ2VuZXJpYy5hdHRhY2tEYW1hZ2UDAAlPcGVyYXRpb24AAAABCAAETmFtZQAUZ2VuZXJpYy5hdHRhY2tEYW1hZ2UABAAIVVVJRE1vc3ThnzQV40RPVgQACVVVSURMZWFzdJPGiLU68GqSBgAGQW1vdW50P7mZmZmZmZoIAARTbG90AAhtYWluaGFuZAgADUF0dHJpYnV0ZU5hbWUAE2dlbmVyaWMuYXR0YWNrU3BlZWQDAAlPcGVyYXRpb24AAAABCAAETmFtZQATZ2VuZXJpYy5hdHRhY2tTcGVlZAAJAApDYW5EZXN0cm95CAAAAAEAFW1pbmVjcmFmdDpkaWFtb25kX29yZQACAAZEYW1hZ2UAAAA=")
+                    val file = Items.fromCompoundFile(File(dataFolder, "NBT.dat"))
+
+                    println("origin == json -> " + json.isSimilar(origin))
+                    println("origin == base64 -> " + base64.isSimilar(origin))
+                    println("origin == file -> " + file.isSimilar(origin))
+
+                    json.givePlayer(event.player)
                 }
             }
         }.registerEvent(this)

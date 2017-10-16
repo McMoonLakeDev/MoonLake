@@ -266,7 +266,7 @@ object NBTFactory {
         val count = nbt.getByteOrNull("Count") ?: 1
         val durability = nbt.getShortOrNull("Damage") ?: 0
         val tag = nbt.getCompoundOrNull("tag")
-        val itemStack = ItemStack(Material.getMaterial(type), count.toInt(), durability)
+        val itemStack = ItemStack(Material.matchMaterial(type), count.toInt(), durability)
         return writeStackTag(itemStack, tag)
     }
 

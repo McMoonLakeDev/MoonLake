@@ -118,6 +118,23 @@ class NBTWrappedElement<T>(private val _handle: Any, private var _name: String) 
         }
     }
 
+    override fun toMojangson(): String {
+        return buildString {
+            append("{")
+            when(type) {
+                NBTType.TAG_STRING -> append("\"$value\"")
+                NBTType.TAG_BYTE -> append("${value}b") // byte = b
+                NBTType.TAG_SHORT -> append("${value}s") // short = s
+                NBTType.TAG_INT -> append("$value") // int = N/A
+                NBTType.TAG_LONG -> append("${value}l") // long = l
+                NBTType.TAG_FLOAT -> append("${value}f") // float = f
+                NBTType.TAG_DOUBLE -> append("${value}d") // double = d
+                else -> append("$value")
+            }
+            append("}")
+        }
+    }
+
     /** static */
 
     companion object {

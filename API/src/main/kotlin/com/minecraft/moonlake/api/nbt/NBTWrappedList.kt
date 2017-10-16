@@ -201,7 +201,26 @@ class NBTWrappedList<T>(handle: Any, name: String) : NBTWrapper<MutableList<NBTB
                 if(elementType == NBTType.TAG_STRING)
                     append("\"${joinToString("\",\"")}\"")
                 else
-                    append(joinToString(", "))
+                    append(joinToString(","))
+            }
+            append("]")
+        }
+    }
+
+    override fun toMojangson(): String {
+        return buildString {
+            append("[")
+            if(size() > 0) {
+                when(elementType) {
+                    NBTType.TAG_STRING -> append("\"${joinToString("\",\"")}\"")
+                    NBTType.TAG_BYTE -> append(joinToString("b,", postfix = "b")) // byte = b
+                    NBTType.TAG_SHORT -> append(joinToString("s,", postfix = "s")) // short = s
+                    NBTType.TAG_INT -> append(joinToString(",")) // int = N/A
+                    NBTType.TAG_LONG -> append(joinToString("l,", postfix = "l")) // long = l
+                    NBTType.TAG_FLOAT -> append(joinToString("f,", postfix = "f")) // float = f
+                    NBTType.TAG_DOUBLE -> append(joinToString("d,", postfix = "d")) // double = d
+                    else -> append(this@NBTWrappedList.map { it as NBTBase<*> }.joinToString(",") { it.toMojangson() }) // to mojangson
+                }
             }
             append("]")
         }

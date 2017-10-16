@@ -192,6 +192,9 @@ fun Boolean?.orTrue(): Boolean
 fun Boolean?.orFalse(): Boolean
         = !(this == null || this == false)
 
+inline fun <reified T> T.consumer(block: (T) -> Unit)
+        = block(this)
+
 fun String.isInteger(): Boolean = when(isNullOrEmpty()) {
     true -> false
     else -> try {
