@@ -100,6 +100,8 @@ class MoonLakePluginTest : JavaPlugin() {
                             .addLore("标签属性")
                             .setDisplayName("233")
                             .addEnchant(Enchantment.DAMAGE, 1)
+                            .addAttribute(AttributeType.ATTACK_DAMAGE, Operation.ADD, Slot.MAIN_HAND, 10.0)
+                            .addAttribute(AttributeType.ATTACK_SPEED, Operation.ADD, Slot.MAIN_HAND, 1.0)
                             .build()
                     event.player.inventory.addItem(itemStack)
                     event.player.toMoonLakePlayer().send(ChatComponentFancy("物品展示: ").then("[ITEM]").tooltipItem(itemStack))
