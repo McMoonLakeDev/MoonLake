@@ -23,5 +23,9 @@ interface Attribute {
 
     val defValue: Double
 
-    var value: Double
+    var baseValue: Double
+
+    val value: Double
+
+    // TODO AttributeModifier
 }

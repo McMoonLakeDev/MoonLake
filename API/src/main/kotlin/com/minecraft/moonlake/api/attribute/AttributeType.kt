@@ -69,6 +69,11 @@ enum class AttributeType(val type: String, val def: Double, val min: Double, val
     override fun value(): String
             = type
 
+    /**
+     * Verify that the attribute is supported.
+     *
+     * @throws IllegalBukkitVersionException If the attribute is not supported.
+     */
     @Throws(IllegalBukkitVersionException::class)
     fun validateSupport() = mcVer.let {
         if(it != null && !MinecraftVersion.currentVersion().isOrLater(it))

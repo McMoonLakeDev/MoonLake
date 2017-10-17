@@ -17,7 +17,7 @@
 
 package com.minecraft.moonlake.api.item
 
-import com.minecraft.moonlake.api.attribute.AttributeModifier
+import com.minecraft.moonlake.api.attribute.AttributeItemModifier
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
@@ -84,7 +84,7 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setUnbreakable(unbreakable: Boolean): ItemBuilder
 
-    fun getAttribute(block: (self: ItemBuilder, attribute: Set<AttributeModifier>?) -> Unit): ItemBuilder
+    fun getAttribute(block: (self: ItemBuilder, attribute: Set<AttributeItemModifier>?) -> Unit): ItemBuilder
 
     fun addAttribute(type: AttributeType, operation: Operation, amount: Double): ItemBuilder
 

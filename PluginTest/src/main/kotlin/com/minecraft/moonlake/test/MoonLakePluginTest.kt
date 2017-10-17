@@ -334,6 +334,16 @@ class MoonLakePluginTest : JavaPlugin() {
 
                     json.givePlayer(event.player)
                 }
+                if(event.message == "/get attribute") {
+                    val player = event.player.toMoonLakePlayer()
+                    player.sendMessage("Attribute Attack Damage: ${player.getAttribute(AttributeType.ATTACK_DAMAGE).value}")
+                    try {
+                        // An exception is thrown if the server version is 1.8 or earlier
+                        player.sendMessage("Attribute Attack Speed: ${player.getAttribute(AttributeType.ATTACK_SPEED).value}")
+                    } catch(e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
             }
         }.registerEvent(this)
 

@@ -29,7 +29,10 @@ open class AttributeBase(protected val player: MoonLakePlayer, private val _type
     override val defValue: Double
         get() = _type.def
 
-    override var value: Double
+    override var baseValue: Double
         get() = throw UnsupportedOperationException()
         set(value) = throw UnsupportedOperationException()
+
+    override val value: Double
+        get() = throw UnsupportedOperationException()
 }

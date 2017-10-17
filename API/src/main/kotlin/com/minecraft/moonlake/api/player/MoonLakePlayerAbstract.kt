@@ -326,7 +326,7 @@ abstract class MoonLakePlayerAbstract(val player: Player) : MoonLakePlayer {
 
     override var maxHealth: Double
         get() = getAttribute(AttributeType.MAX_HEALTH).value
-        set(value) { getAttribute(AttributeType.MAX_HEALTH).value = value }
+        set(value) { getAttribute(AttributeType.MAX_HEALTH).baseValue = value }
 
     override fun resetMaxHealth()
             { maxHealth = AttributeType.MAX_HEALTH.def }

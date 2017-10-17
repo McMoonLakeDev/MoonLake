@@ -18,11 +18,14 @@
 package com.minecraft.moonlake.api.player
 
 import com.minecraft.moonlake.api.attribute.Attributable
+import com.minecraft.moonlake.api.attribute.Attribute
+import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.chat.ChatAction
 import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.chat.ChatComponentFancy
 import com.minecraft.moonlake.api.depend.DependPlayer
 import com.minecraft.moonlake.api.effect.EffectType
+import com.minecraft.moonlake.api.version.IllegalBukkitVersionException
 import com.mojang.authlib.GameProfile
 import org.bukkit.*
 import org.bukkit.block.Block
@@ -42,6 +45,15 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, DependPlaye
     /** Base Function */
 
     val bukkitPlayer: Player
+
+    /**
+     * Gets the attribute instance of the this player.
+     *
+     * @throws IllegalBukkitVersionException If the server does not support attribute type.
+     * @throws NoSuchElementException If the player does not have this attribute type.
+     */
+    @Throws(IllegalBukkitVersionException::class, NoSuchElementException::class)
+    override fun getAttribute(type: AttributeType): Attribute
 
     val entityId: Int
 

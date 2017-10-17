@@ -17,7 +17,7 @@
 
 package com.minecraft.moonlake.api.item
 
-import com.minecraft.moonlake.api.attribute.AttributeModifier
+import com.minecraft.moonlake.api.attribute.AttributeItemModifier
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.attribute.Slot
@@ -295,9 +295,9 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun setUnbreakable(unbreakable: Boolean): ItemBuilder
             { tag.putBoolean(TAG_UNBREAKABLE, unbreakable); return this; }
 
-    override fun getAttribute(block: (self: ItemBuilder, attribute: Set<AttributeModifier>?) -> Unit): ItemBuilder {
+    override fun getAttribute(block: (self: ItemBuilder, attribute: Set<AttributeItemModifier>?) -> Unit): ItemBuilder {
         val attributeModifiers = tag.getListOrNull<NBTCompound>(TAG_ATTRIBUTE_MODIFIERS)
-        val attributes: MutableSet<AttributeModifier>? = if(attributeModifiers == null) null else HashSet()
+        val attributes: MutableSet<AttributeItemModifier>? = if(attributeModifiers == null) null else HashSet()
         if(attributeModifiers != null) for(attribute in attributeModifiers) {
             val type = Enums.ofValuable(AttributeType::class.java, attribute.getString(TAG_ATTRIBUTE_NAME)) ?: continue
             val operation = attribute.getIntOrNull(TAG_ATTRIBUTE_OPERATION).let { if(it == null) null else Enums.ofValuable(Operation::class.java, it) } ?: continue
@@ -306,7 +306,7 @@ abstract class ItemBuilderAbstract : ItemBuilder {
             val uuidLeast = attribute.getLongOrNull(TAG_ATTRIBUTE_UUID_LEAST)
             val amount = attribute.getDoubleOrNull(TAG_ATTRIBUTE_AMOUNT)
             val uuid = if(uuidMost == null || uuidLeast == null) UUID.randomUUID() else UUID(uuidMost, uuidLeast)
-            attributes?.add(AttributeModifier(type, operation, slot, amount ?: .0, uuid))
+            attributes?.add(AttributeItemModifier(type, operation, slot, amount ?: .0, uuid))
         }
         block(this, attributes)
         return this

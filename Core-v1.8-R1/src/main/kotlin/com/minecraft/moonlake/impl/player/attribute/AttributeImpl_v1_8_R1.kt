@@ -15,19 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api.attribute
+package com.minecraft.moonlake.impl.player.attribute
 
-import com.minecraft.moonlake.api.util.ComparisonChain
-import java.util.*
+import com.minecraft.moonlake.api.attribute.Attribute
+import com.minecraft.moonlake.api.attribute.AttributeType
+import com.minecraft.moonlake.api.attribute.Attributes
+import com.minecraft.moonlake.api.player.MoonLakePlayer
 
-data class AttributeModifier(val type: AttributeType, val operation: Operation, val amount: Double, val uuid: UUID) : Comparable<AttributeModifier> {
+open class AttributeImpl_v1_8_R1(player: MoonLakePlayer, type: AttributeType) : AttributeBase(player, type) {
 
-    override fun compareTo(other: AttributeModifier): Int {
-        return ComparisonChain.start()
-                .compare(type, other.type)
-                .compare(operation, other.operation)
-                .compare(amount, other.amount)
-                .compare(uuid, other.uuid)
-                .result
-    }
+    private val handle: Attribute by lazy {
+        Attributes.getEntityAttribute(player.bukkitPlayer, type) }
+
+    override var baseValue: Double
+        get() = handle.baseValue
+        set(value) { handle.baseValue = value }
+
+    override val value: Double
+        get() = handle.value
 }

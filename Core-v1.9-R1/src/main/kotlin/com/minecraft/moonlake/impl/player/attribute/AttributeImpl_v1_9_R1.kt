@@ -21,17 +21,20 @@ import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.player.MoonLakePlayer
 import org.bukkit.attribute.AttributeInstance
 
-open class AttributeImpl_v1_9_R1(player: MoonLakePlayer, type: AttributeType) : AttributeBase(player, type) {
+open class AttributeImpl_v1_9_R1(player: MoonLakePlayer, type: AttributeType) : AttributeImpl_v1_8_R1(player, type) {
 
-    override var value: Double
-        get() = instance?.baseValue ?: super.value
+    override var baseValue: Double
+        get() = instance?.baseValue ?: super.baseValue
         set(value) {
             val instance = instance
             if(instance == null)
-                super.value = value
+                super.baseValue = value
             else
                 instance.baseValue = value
         }
+
+    override val value: Double
+        get() = instance?.value ?: super.value
 
     private val instance: AttributeInstance?
         get() {

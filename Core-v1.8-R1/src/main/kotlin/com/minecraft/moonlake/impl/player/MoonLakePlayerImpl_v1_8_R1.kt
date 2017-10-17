@@ -17,7 +17,16 @@
 
 package com.minecraft.moonlake.impl.player
 
+import com.minecraft.moonlake.api.attribute.Attribute
+import com.minecraft.moonlake.api.attribute.AttributeType
+import com.minecraft.moonlake.impl.player.attribute.AttributeImpl_v1_8_R1
 import org.bukkit.entity.Player
 
-open class MoonLakePlayerImpl_v1_8_R1 constructor(player: Player) : MoonLakePlayerBase(player) {
+open class MoonLakePlayerImpl_v1_8_R1(player: Player) : MoonLakePlayerBase(player) {
+
+    override fun getAttribute(type: AttributeType): Attribute {
+        // Verify that the attribute is supported, otherwise an exception is thrown.
+        type.validateSupport()
+        return AttributeImpl_v1_8_R1(this, type)
+    }
 }
