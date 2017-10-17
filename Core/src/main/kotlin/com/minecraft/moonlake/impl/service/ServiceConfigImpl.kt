@@ -46,6 +46,7 @@ class ServiceConfigImpl : ServiceAbstractCore(), ServiceConfig {
             return
         getMoonLake().logger.warning("检测到配置文件版本与插件版本不符, 已进行重写覆盖.")
         getMoonLake().saveResource("config.yml", true)
+        getMoonLake().reloadConfig()
     }
 
     override fun reload()
