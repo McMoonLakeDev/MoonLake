@@ -144,6 +144,21 @@ val isCombatOrLaterVer: Boolean
 val isColorWorldOrLaterVer: Boolean
     get() = colorWorldOrLaterVer
 
+private val spigotServer: Boolean by lazy {
+    try {
+        Class.forName("org.spigotmc.SpigotConfig")
+        true
+    } catch(e: Exception) {
+        false
+    }
+}
+
+/**
+ * Returns true if the server is spigot.
+ */
+val isSpigotServer: Boolean
+    get() = spigotServer
+
 fun String.toColor(): String
         = com.minecraft.moonlake.api.chat.ChatColor.translateAlternateColorCodes('&', this)
 

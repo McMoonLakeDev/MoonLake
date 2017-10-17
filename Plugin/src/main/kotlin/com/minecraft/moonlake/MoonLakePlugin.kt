@@ -22,6 +22,7 @@ import com.minecraft.moonlake.api.depend.DependPlaceholderAPI
 import com.minecraft.moonlake.api.depend.DependPlugins
 import com.minecraft.moonlake.api.depend.DependVaultEconomy
 import com.minecraft.moonlake.api.depend.DependWorldEdit
+import com.minecraft.moonlake.api.isSpigotServer
 import com.minecraft.moonlake.api.region.*
 import com.minecraft.moonlake.api.registerEvent
 import com.minecraft.moonlake.api.service.ServiceConfig
@@ -37,6 +38,7 @@ import com.minecraft.moonlake.impl.listeners.PluginListeners
 import com.minecraft.moonlake.impl.service.ServiceConfigImpl
 import com.minecraft.moonlake.impl.service.ServiceManagerImpl
 import com.minecraft.moonlake.impl.service.ServicePacketListenerImpl
+import com.minecraft.moonlake.impl.service.ServicePacketListenerSpigotImpl
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -68,8 +70,11 @@ class MoonLakePlugin : JavaPlugin(), MoonLake {
     private fun registerServiceCore() {
         val configService = ServiceConfigImpl()
         serviceManager.registerService(ServiceConfig::class.java, configService)
-        if(configService.hasPacketListener())
-            serviceManager.registerService(ServicePacketListener::class.java, ServicePacketListenerImpl())
+        if(configService.hasPacketListener()) {
+            // If the server is spigot, use the timings service.
+            val service = if(!isSpigotServer) ServicePacketListenerImpl() else ServicePacketListenerSpigotImpl()
+            serviceManager.registerService(ServicePacketListener::class.java, service)
+        }
     }
 
     /** register moonlake wrapped configuration serializable class */

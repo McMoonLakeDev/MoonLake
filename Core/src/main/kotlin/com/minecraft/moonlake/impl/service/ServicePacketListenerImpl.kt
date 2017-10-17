@@ -42,7 +42,7 @@ import java.util.logging.Level
 import kotlin.Comparator
 import kotlin.collections.ArrayList
 
-class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
+open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
 
     private var eventListener: MoonLakeListener? = null
 
@@ -210,10 +210,10 @@ class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
         ex?.printStackTrace()
     }
 
-    internal fun onReceivingAsync(sender: Player?, channel: Channel, packet: Any): Any?
+    open internal fun onReceivingAsync(sender: Player?, channel: Channel, packet: Any): Any?
             = onExecuteAndFilterPacketAsync(Direction.IN, sender, channel, packet)
 
-    internal fun onSendingAsync(receiver: Player?, channel: Channel, packet: Any): Any?
+    open internal fun onSendingAsync(receiver: Player?, channel: Channel, packet: Any): Any?
             = onExecuteAndFilterPacketAsync(Direction.OUT, receiver, channel, packet)
 
     private fun onExecuteAndFilterPacketAsync(direction: Direction, player: Player?, channel: Channel, packet: Any): Any? {
