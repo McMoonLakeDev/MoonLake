@@ -78,7 +78,7 @@ object ItemCooldowns {
     @Throws(IllegalBukkitVersionException::class)
     fun set(player: Player, type: Material, ticks: Int) {
         val handle = checkAndGet(player)
-        val item = Items.getItemByType(type)
+        val item = Items.getItemByType(type) // TODO v1.13
         itemCooldownSet.invoke(handle, item, ticks)
     }
 
@@ -90,7 +90,7 @@ object ItemCooldowns {
     @Throws(IllegalBukkitVersionException::class)
     fun get(player: Player, type: Material): Int {
         val handle = checkAndGet(player)
-        val item = Items.getItemByType(type)
+        val item = Items.getItemByType(type) // TODO v1.13
         val map = itemCooldownMap.get(handle) as Map<*, *>
         val info = map[item] ?: return 0
         val infoEndTick = itemCooldownInfoEndTick.get(info) as Int
@@ -106,7 +106,7 @@ object ItemCooldowns {
     @Throws(IllegalBukkitVersionException::class)
     fun has(player: Player, type: Material): Boolean {
         val handle = checkAndGet(player)
-        val item = Items.getItemByType(type)
+        val item = Items.getItemByType(type) // TODO v1.13
         return (itemCooldownHas.invoke(handle, item) as Boolean?) ?: false
     }
 }

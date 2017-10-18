@@ -45,6 +45,6 @@ interface NBTBase<T> {
     /**
      * Convert the json string to the numeric carrying type suffix.
      */
-    @Deprecated("The future version 1.13 may be subject to change.")
+    @Deprecated("The future version 1.13 may be subject to change.") // TODO v1.13
     fun toMojangson(): String
 }

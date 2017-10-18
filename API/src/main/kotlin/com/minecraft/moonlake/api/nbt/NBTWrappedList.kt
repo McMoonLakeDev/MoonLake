@@ -207,7 +207,7 @@ class NBTWrappedList<T>(handle: Any, name: String) : NBTWrapper<MutableList<NBTB
         }
     }
 
-    override fun toMojangson(): String {
+    override fun toMojangson(): String { // TODO v1.13
         return buildString {
             append("[")
             if(size() > 0) {

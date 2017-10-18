@@ -35,7 +35,7 @@ abstract class ParticleData {
     constructor(material: Material, data: Byte) {
         this.material = material
         this.data = data
-        this.packetData = arrayOf(material.id, data.toInt())
+        this.packetData = arrayOf(material.id, data.toInt()) // TODO v1.13
     }
 
     /** api */

@@ -36,7 +36,7 @@ data class PacketOutJoinGame(
     @Deprecated("")
     constructor() : this(-1, GameMode.SURVIVAL, false, World.Environment.NORMAL, Difficulty.EASY, 20, WorldType.NORMAL, false)
 
-    override fun read(data: PacketBuffer) {
+    override fun read(data: PacketBuffer) { // TODO v1.13
         entityId = data.readInt()
         val flag = data.readUnsignedByte().toInt()
         hardCore = (flag and 8) == 8
@@ -48,7 +48,7 @@ data class PacketOutJoinGame(
         reducedDebug = data.readBoolean()
     }
 
-    override fun write(data: PacketBuffer) {
+    override fun write(data: PacketBuffer) { // TODO v1.13
         data.writeInt(entityId)
         var flag = mode.value
         if(hardCore)

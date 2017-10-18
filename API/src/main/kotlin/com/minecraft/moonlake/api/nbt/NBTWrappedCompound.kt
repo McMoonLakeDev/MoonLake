@@ -309,7 +309,7 @@ class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<Stri
         }
     }
 
-    override fun toMojangson(): String {
+    override fun toMojangson(): String { // TODO v1.13
         return buildString {
             append("{")
             val size = size()

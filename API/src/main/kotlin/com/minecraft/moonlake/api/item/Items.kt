@@ -43,13 +43,13 @@ object Items {
     @JvmName("getItemById")
     @Deprecated("Material Id")
     fun getItemById(id: Int): Any?
-            = itemGetById.invoke(null, id)
+            = itemGetById.invoke(null, id) // TODO v1.13
 
     @JvmStatic
     @JvmName("getItemByType")
     @Deprecated("Material Id")
     fun getItemByType(type: Material): Any?
-            = itemGetById.invoke(null, type.id)
+            = itemGetById.invoke(null, type.id) // TODO v1.13
 
     @JvmStatic
     private val itemStackConverter: ConverterEquivalent<ItemStack> by lazy {
@@ -69,7 +69,7 @@ object Items {
     @JvmName("toMojangson")
     @Deprecated("The future version 1.13 may be subject to change.")
     fun toMojangson(itemStack: ItemStack): String
-            = NBTFactory.writeStackNBT(itemStack).toMojangson() // Because it is compatible with MojangsonParser
+            = NBTFactory.writeStackNBT(itemStack).toMojangson() // Because it is compatible with MojangsonParser // TODO v1.13
 
     @JvmStatic
     @JvmName("toBase64")
@@ -93,7 +93,7 @@ object Items {
     @JvmStatic
     @JvmName("fromMojangson")
     @Throws(IllegalArgumentException::class)
-    @Deprecated("The future version 1.13 may be subject to change.")
+    @Deprecated("The future version 1.13 may be subject to change.") // TODO v1.13
     fun fromMojangson(value: String): ItemStack {
         val handle = mojangsonParser.invoke(null, value) ?: throw IllegalArgumentException("Null of Mojangson Parser.")
         val wrapped = NBTFactory.fromNMS<NBTCompound>(handle) as NBTCompound

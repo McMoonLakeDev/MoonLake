@@ -31,14 +31,14 @@ data class PacketOutRespawn(
     @Deprecated("")
     constructor() : this(World.Environment.NORMAL, Difficulty.EASY, GameMode.SURVIVAL, WorldType.NORMAL)
 
-    override fun read(data: PacketBuffer) {
+    override fun read(data: PacketBuffer) { // TODO v1.13
         dimension = World.Environment.getEnvironment(data.readInt())
         difficulty = Difficulty.getByValue(data.readUnsignedByte().toInt())
         mode = GameMode.getByValue(data.readUnsignedByte().toInt())
         worldType = WorldType.getByName(data.readString()) ?: WorldType.NORMAL
     }
 
-    override fun write(data: PacketBuffer) {
+    override fun write(data: PacketBuffer) { // TODO v1.13
         data.writeInt(dimension.id)
         data.writeByte(difficulty.value)
         data.writeByte(mode.value)

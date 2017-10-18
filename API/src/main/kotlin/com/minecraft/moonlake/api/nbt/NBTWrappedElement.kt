@@ -118,7 +118,7 @@ class NBTWrappedElement<T>(private val _handle: Any, private var _name: String) 
         }
     }
 
-    override fun toMojangson(): String {
+    override fun toMojangson(): String { // TODO v1.13
         return buildString {
             append("{")
             when(type) {

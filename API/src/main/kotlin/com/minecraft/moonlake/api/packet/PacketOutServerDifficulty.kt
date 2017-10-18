@@ -24,11 +24,11 @@ data class PacketOutServerDifficulty(var difficulty: Difficulty) : PacketOutBukk
     @Deprecated("")
     constructor() : this(Difficulty.EASY)
 
-    override fun read(data: PacketBuffer) {
+    override fun read(data: PacketBuffer) { // TODO v1.13
         difficulty = Difficulty.getByValue(data.readUnsignedByte().toInt())
     }
 
-    override fun write(data: PacketBuffer) {
+    override fun write(data: PacketBuffer) { // TODO v1.13
         data.writeByte(difficulty.value)
     }
 }

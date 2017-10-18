@@ -32,13 +32,13 @@ data class PacketOutBlockAction(var blockPosition: BlockPosition, var action: In
         blockPosition = data.readBlockPosition()
         action = data.readUnsignedByte().toInt()
         parameter = data.readUnsignedByte().toInt()
-        block = Material.getMaterial(data.readVarInt() and 4095)
+        block = Material.getMaterial(data.readVarInt() and 4095) // TODO v1.13
     }
 
     override fun write(data: PacketBuffer) {
         data.writeBlockPosition(blockPosition)
         data.writeByte(action)
         data.writeByte(parameter)
-        data.writeVarInt(block.id and 4095)
+        data.writeVarInt(block.id and 4095) // TODO v1.13
     }
 }
