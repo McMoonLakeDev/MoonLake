@@ -17,7 +17,7 @@
 
 package com.minecraft.moonlake.api.packet
 
-import com.minecraft.moonlake.api.isColorWorldOrLaterVer
+import com.minecraft.moonlake.api.isJavaEditionOrLaterVer
 
 data class PacketOutKeepAlive(var id: Long) : PacketOutBukkitAbstract("PacketPlayOutKeepAlive") {
 
@@ -25,10 +25,10 @@ data class PacketOutKeepAlive(var id: Long) : PacketOutBukkitAbstract("PacketPla
     constructor() : this(-1L)
 
     override fun read(data: PacketBuffer) {
-        id = if(!isColorWorldOrLaterVer) data.readVarInt().toLong() else data.readLong()
+        id = if(!isJavaEditionOrLaterVer) data.readVarInt().toLong() else data.readLong()
     }
 
     override fun write(data: PacketBuffer) {
-        if(!isColorWorldOrLaterVer) data.writeVarInt(id.toInt()) else data.writeLong(id)
+        if(!isJavaEditionOrLaterVer) data.writeVarInt(id.toInt()) else data.writeLong(id)
     }
 }

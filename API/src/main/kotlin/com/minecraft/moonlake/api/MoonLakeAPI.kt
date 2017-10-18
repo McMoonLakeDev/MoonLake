@@ -131,6 +131,7 @@ fun currentBukkitVersion(): MinecraftBukkitVersion
 
 private val combatOrLaterVer = currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_9_R1)
 private val colorWorldOrLaterVer = currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_12_R1)
+private val javaEditionOrLaterVer = currentMCVersion().isOrLater(MinecraftVersion(1, 12, 2))
 
 /**
  * Returns if the server version is 1.9 or later.
@@ -143,6 +144,12 @@ val isCombatOrLaterVer: Boolean
  */
 val isColorWorldOrLaterVer: Boolean
     get() = colorWorldOrLaterVer
+
+/**
+ * Returns if the server version is 1.12.2 or later.
+ */
+val isJavaEditionOrLaterVer: Boolean
+    get() = javaEditionOrLaterVer
 
 private val spigotServer: Boolean by lazy {
     try {

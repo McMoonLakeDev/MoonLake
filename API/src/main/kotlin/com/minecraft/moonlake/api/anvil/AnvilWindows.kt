@@ -17,7 +17,8 @@
 
 package com.minecraft.moonlake.api.anvil
 
-import com.minecraft.moonlake.api.currentBukkitVersion
+import com.minecraft.moonlake.api.currentMCVersion
+import com.minecraft.moonlake.api.getMoonLake
 import com.minecraft.moonlake.api.reflect.accessor.AccessorConstructor
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import org.bukkit.plugin.Plugin
@@ -27,7 +28,8 @@ object AnvilWindows {
     @JvmStatic
     @Suppress("UNCHECKED_CAST")
     private val anvilWindowConstructor: AccessorConstructor<AnvilWindow> by lazy {
-        val clazz = Class.forName("com.minecraft.moonlake.impl.anvil.AnvilWindowImpl_${currentBukkitVersion().version}") as Class<AnvilWindow>
+        val clazz = Class.forName("com.minecraft.moonlake.impl.anvil.AnvilWindowImpl_${currentMCVersion().bukkitVersion.version}") as Class<AnvilWindow>
+        getMoonLake().logger.fine("Anvil Window Using: ${clazz.canonicalName}")
         Accessors.getAccessorConstructor(clazz, false, Plugin::class.java) }
 
     @JvmStatic

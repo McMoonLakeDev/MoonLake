@@ -15,20 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.minecraft.moonlake.api.packet
+package com.minecraft.moonlake.impl.player.attribute
 
-import com.minecraft.moonlake.api.isJavaEditionOrLaterVer
+import com.minecraft.moonlake.api.attribute.AttributeType
+import com.minecraft.moonlake.api.player.MoonLakePlayer
+import org.bukkit.attribute.Attribute
 
-data class PacketInKeepAlive(var id: Long) : PacketInBukkitAbstract("PacketPlayInKeepAlive") {
+open class AttributeImpl_v1_12_R2(player: MoonLakePlayer, type: AttributeType) : AttributeImpl_v1_12_R1(player, type) {
 
-    @Deprecated("")
-    constructor() : this(-1L)
-
-    override fun read(data: PacketBuffer) {
-        id = if(!isJavaEditionOrLaterVer) data.readVarInt().toLong() else data.readLong()
-    }
-
-    override fun write(data: PacketBuffer) {
-        if(!isJavaEditionOrLaterVer) data.writeVarInt(id.toInt()) else data.writeLong(id)
-    }
+    override val adapter: Attribute?
+        get() = super.adapter
 }

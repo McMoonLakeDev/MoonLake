@@ -37,6 +37,7 @@ class MinecraftBukkitVersion(val major: Int, val minor: Int, val release: Int) :
         @JvmField val V1_10_R1 = MinecraftBukkitVersion(1, 10, 1)
         @JvmField val V1_11_R1 = MinecraftBukkitVersion(1, 11, 1)
         @JvmField val V1_12_R1 = MinecraftBukkitVersion(1, 12, 1)
+        @JvmField val V1_12_R2 = MinecraftBukkitVersion(1, 12, 2)
         @JvmField val UNKNOWN = MinecraftBukkitVersion(-1, -1, -1)
 
         private var currentVersion: MinecraftBukkitVersion? = null
@@ -107,10 +108,13 @@ class MinecraftBukkitVersion(val major: Int, val minor: Int, val release: Int) :
             ), V1_11_R1)
             map.put(arrayOf(
                     MinecraftVersion(1, 12, 0),
-                    MinecraftVersion(1, 12, 1),
-                    MinecraftVersion(1, 12, 2)
+                    MinecraftVersion(1, 12, 1)
                     // ---> net.minecraft.server.v1_12_R1
             ), V1_12_R1)
+            map.put(arrayOf(
+                    MinecraftVersion(1, 12, 2) // Because 1.12.2 changes larger
+                    // ---> net.minecraft.server.v1_12_R2
+            ), V1_12_R2)
             return map
         }
 

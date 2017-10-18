@@ -10,7 +10,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>MoonLakeCore-v1.12-R1</artifactId>
+    <artifactId>MoonLakeCore-v1.12-R2</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -28,28 +28,28 @@
         </dependency>
         <dependency>
             <groupId>com.minecraft.moonlake</groupId>
-            <artifactId>MoonLakeCore-v1.11-R1</artifactId>
+            <artifactId>MoonLakeCore-v1.12-R1</artifactId>
             <version>2.0</version>
         </dependency>
         <!-- Spigot Dependency -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.12.1-R0.1-SNAPSHOT</version>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- Bukkit Dependency -->
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.12.1-R0.1-SNAPSHOT</version>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- CraftBukkit Dependency -->
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.12.1-R0.1-SNAPSHOT</version>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

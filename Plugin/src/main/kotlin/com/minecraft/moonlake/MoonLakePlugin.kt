@@ -29,7 +29,6 @@ import com.minecraft.moonlake.api.service.ServiceConfig
 import com.minecraft.moonlake.api.service.ServiceManager
 import com.minecraft.moonlake.api.service.ServicePacketListener
 import com.minecraft.moonlake.api.setMoonLake
-import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
 import com.minecraft.moonlake.api.version.MinecraftVersion
 import com.minecraft.moonlake.impl.depend.DependPlaceholderAPIImpl
 import com.minecraft.moonlake.impl.depend.DependVaultEconomyImpl
@@ -55,7 +54,7 @@ class MoonLakePlugin : JavaPlugin(), MoonLake {
     override fun onEnable() {
         this.registerServiceCore()
         this.registerMoonLakePluginListeners()
-        this.logger.info("Server ${MinecraftVersion.currentVersion()} NMS: ${MinecraftBukkitVersion.currentVersion().version}")
+        this.logger.info("Server ${MinecraftVersion.currentVersion()} NMS: ${MinecraftVersion.currentVersion().bukkitVersion.version}")
         this.logger.info("月色之湖核心 API 插件 v$pluginVersion 成功加载.")
     }
 

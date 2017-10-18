@@ -25,7 +25,7 @@ import com.minecraft.moonlake.api.reflect.accessor.AccessorConstructor
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import com.minecraft.moonlake.api.registerEvent
 import com.minecraft.moonlake.api.toPlayer
-import com.minecraft.moonlake.api.version.MinecraftBukkitVersion
+import com.minecraft.moonlake.api.version.MinecraftVersion
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -42,12 +42,14 @@ class MoonLakePlayerCached private constructor(): CachedWeakRef<UUID, MoonLakePl
         private val instance: MoonLakePlayerCached by lazy(MoonLakePlayerCached::class.java) { MoonLakePlayerCached() }
 
         @JvmStatic
-        private val implement = "com.minecraft.moonlake.impl.player.MoonLakePlayerImpl_${MinecraftBukkitVersion.currentVersion().version}"
+        private val implement = "com.minecraft.moonlake.impl.player.MoonLakePlayerImpl_${MinecraftVersion.currentVersion().bukkitVersion.version}"
 
         @JvmStatic
         @Suppress("UNCHECKED_CAST")
         private val constructor: AccessorConstructor<MoonLakePlayer> by lazy(MoonLakePlayerCached::class.java) {
-            Accessors.getAccessorConstructor((Class.forName(implement) as Class<MoonLakePlayer>), false, Player::class.java) }
+            val clazz = (Class.forName(implement) as Class<MoonLakePlayer>)
+            getMoonLake().logger.fine("MoonLake Player Using: ${clazz.canonicalName}")
+            Accessors.getAccessorConstructor(clazz, false, Player::class.java) }
 
         @JvmStatic
         @JvmName("of")
