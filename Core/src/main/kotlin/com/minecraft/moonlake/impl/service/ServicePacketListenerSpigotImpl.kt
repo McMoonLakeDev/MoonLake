@@ -17,6 +17,7 @@
 
 package com.minecraft.moonlake.impl.service
 
+import com.minecraft.moonlake.api.getMoonLake
 import io.netty.channel.Channel
 import org.bukkit.entity.Player
 import org.spigotmc.CustomTimingsHandler
@@ -26,8 +27,13 @@ import org.spigotmc.CustomTimingsHandler
  */
 class ServicePacketListenerSpigotImpl : ServicePacketListenerImpl() {
 
-    private val receivingTimings = CustomTimingsHandler("MoonLake Packet Listener - #onReceiving")
-    private val sendingTimings = CustomTimingsHandler("MoonLake Packet Listener - #onSending")
+    private val receivingTimings = CustomTimingsHandler("MoonLake Packet Listener - onReceiving")
+    private val sendingTimings = CustomTimingsHandler("MoonLake Packet Listener - onSending")
+
+    override fun onInitialized() {
+        super.onInitialized()
+        getMoonLake().logger.info("数据包监听器服务已为 Spigot 服务端启用 Timings 统计.")
+    }
 
     override fun onReceivingAsync(sender: Player?, channel: Channel, packet: Any): Any? {
         receivingTimings.startTiming()
