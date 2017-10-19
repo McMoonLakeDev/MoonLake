@@ -257,7 +257,7 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
             return ItemStack(Material.AIR)
         val amount = readByte()
         val durability = readShort()
-        val tag = readNBTComponent() // TODO
+        val tag = readNBTComponent()
         val itemStack = ItemStack(Material.getMaterial(typeId.toInt()), amount.toInt(), durability)
         return NBTFactory.writeStackTag(itemStack, tag)
     }

@@ -95,8 +95,6 @@ data class Pattern(val color: Color, val type: Type) {
 
     enum class Type(val identifier: String) : Valuable<String> {
 
-        // TODO document not yet available
-
         BASE("b"),
         SQUARE_BOTTOM_LEFT("bl"),
         SQUARE_BOTTOM_RIGHT("br"),

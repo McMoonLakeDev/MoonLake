@@ -63,6 +63,12 @@ interface DependPlayer {
     @Throws(DependPluginException::class)
     fun depositEconomy(value: Double, world: String? = null): EconomyResponse
 
+    @Throws(DependPluginException::class)
+    fun isEconomyBankOwner(name: String): EconomyResponse
+
+    @Throws(DependPluginException::class)
+    fun isEconomyBankMember(name: String): EconomyResponse
+
     /**
      * WorldEdit
      * @see [DependWorldEdit]

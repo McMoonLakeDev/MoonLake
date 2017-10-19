@@ -596,6 +596,12 @@ abstract class MoonLakePlayerAbstract(val player: Player) : MoonLakePlayer {
     override fun depositEconomy(value: Double, world: String?): EconomyResponse
             = vaultEconomy.deposit(bukkitPlayer, value, world)
 
+    override fun isEconomyBankOwner(name: String): EconomyResponse
+            = vaultEconomy.isBankOwner(name, bukkitPlayer)
+
+    override fun isEconomyBankMember(name: String): EconomyResponse
+            = vaultEconomy.isBankMember(name, bukkitPlayer)
+
     private val worldEdit: DependWorldEdit
         get() = DependPlugins.of(DependWorldEdit::class.java)
 

@@ -55,6 +55,18 @@ class DependVaultEconomyImpl : DependPluginAbstract<Vault>(getPlugin(DependVault
         return com.minecraft.moonlake.api.wrapper.EconomyResponse(value.amount, value.balance, type, value.errorMessage)
     }
 
+    override val name: String
+        get() = economy.name
+
+    override fun fractionalDigits(): Int
+            = economy.fractionalDigits()
+
+    override fun currencyNamePlural(): String
+            = economy.currencyNamePlural()
+
+    override fun currencyNameSingular(): String
+            = economy.currencyNameSingular()
+
     override fun format(value: Double): String
             = economy.format(value)
 
@@ -75,4 +87,34 @@ class DependVaultEconomyImpl : DependPluginAbstract<Vault>(getPlugin(DependVault
 
     override fun deposit(player: OfflinePlayer, value: Double, world: String?): com.minecraft.moonlake.api.wrapper.EconomyResponse
             = adapter(economy.depositPlayer(player, world, value))
+
+    override fun hasBankSupport(): Boolean
+            = economy.hasBankSupport()
+
+    override fun createBank(name: String, owner: OfflinePlayer): com.minecraft.moonlake.api.wrapper.EconomyResponse
+            = adapter(economy.createBank(name, owner))
+
+    override fun deleteBank(name: String): com.minecraft.moonlake.api.wrapper.EconomyResponse
+            = adapter(economy.deleteBank(name))
+
+    override fun getBankBalance(name: String): com.minecraft.moonlake.api.wrapper.EconomyResponse
+            = adapter(economy.bankBalance(name))
+
+    override fun hasBankBalance(name: String, value: Double): com.minecraft.moonlake.api.wrapper.EconomyResponse
+            = adapter(economy.bankHas(name, value))
+
+    override fun bankWithdraw(name: String, value: Double): com.minecraft.moonlake.api.wrapper.EconomyResponse
+            = adapter(economy.bankWithdraw(name, value))
+
+    override fun bankDeposit(name: String, value: Double): com.minecraft.moonlake.api.wrapper.EconomyResponse
+            = adapter(economy.bankDeposit(name, value))
+
+    override fun isBankOwner(name: String, player: OfflinePlayer): com.minecraft.moonlake.api.wrapper.EconomyResponse
+            = adapter(economy.isBankOwner(name, player))
+
+    override fun isBankMember(name: String, player: OfflinePlayer): com.minecraft.moonlake.api.wrapper.EconomyResponse
+            = adapter(economy.isBankMember(name, player))
+
+    override val banks: List<String>
+        get() = economy.banks
 }

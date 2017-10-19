@@ -22,6 +22,14 @@ import org.bukkit.OfflinePlayer
 
 interface DependVaultEconomy : DependPlugin {
 
+    val name: String
+
+    fun fractionalDigits(): Int
+
+    fun currencyNamePlural(): String
+
+    fun currencyNameSingular(): String
+
     fun format(value: Double): String
 
     fun hasAccount(player: OfflinePlayer, world: String? = null): Boolean
@@ -36,7 +44,25 @@ interface DependVaultEconomy : DependPlugin {
 
     fun deposit(player: OfflinePlayer, value: Double, world: String? = null): EconomyResponse
 
-    // TODO Bank function is not currently available
+    fun hasBankSupport(): Boolean
+
+    fun createBank(name: String, owner: OfflinePlayer): EconomyResponse
+
+    fun deleteBank(name: String): EconomyResponse
+
+    fun getBankBalance(name: String): EconomyResponse
+
+    fun hasBankBalance(name: String, value: Double): EconomyResponse
+
+    fun bankWithdraw(name: String, value: Double): EconomyResponse
+
+    fun bankDeposit(name: String, value: Double): EconomyResponse
+
+    fun isBankOwner(name: String, player: OfflinePlayer): EconomyResponse
+
+    fun isBankMember(name: String, player: OfflinePlayer): EconomyResponse
+
+    val banks: List<String>
 
     companion object {
 
