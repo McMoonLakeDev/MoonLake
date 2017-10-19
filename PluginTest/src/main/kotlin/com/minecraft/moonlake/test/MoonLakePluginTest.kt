@@ -180,7 +180,11 @@ class MoonLakePluginTest : JavaPlugin() {
                     val anvilWindow = this@MoonLakePluginTest.newAnvilWindow()
                     anvilWindow.handleOpen { it.player.sendMessage("anvil open") }
                     anvilWindow.handleInput { it.player.sendMessage("anvil input -> ${it.input}") }
-                    anvilWindow.handleClick { it.player.sendMessage("anvil click -> ${it.clickSlot}") }
+                    anvilWindow.handleClick {
+                        it.player.sendMessage("anvil click -> ${it.clickSlot}")
+                        val itemRight = it.anvilWindow.getItem(AnvilWindowSlot.INPUT_RIGHT)
+                        it.player.sendMessage(itemRight?.type?.name ?: "null")
+                    }
                     anvilWindow.handleClose { println("如果处于打开状态服务器关闭的话看看我") }
                     anvilWindow.isAllowMove = true
                     anvilWindow.open(event.player)

@@ -146,7 +146,7 @@ interface AnvilWindow {
      * @throws MoonLakeException 如果此铁砧窗口没有被打开.
      */
     @Throws(MoonLakeException::class)
-    fun getItem(anvilWindowSlot: AnvilWindowSlot): ItemStack
+    fun getItem(anvilWindowSlot: AnvilWindowSlot): ItemStack?
 
     /**
      * * Set the item stack of the anvil window for a specific slot.
@@ -156,7 +156,7 @@ interface AnvilWindow {
      * @throws MoonLakeException 如果此铁砧窗口没有被打开.
      */
     @Throws(MoonLakeException::class)
-    fun setItem(anvilWindowSlot: AnvilWindowSlot, itemStack: ItemStack)
+    fun setItem(anvilWindowSlot: AnvilWindowSlot, itemStack: ItemStack?)
 
     /**
      * * Clear all item stacks in this anvil window.

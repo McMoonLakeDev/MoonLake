@@ -59,13 +59,13 @@ open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
         registerListener()
     }
 
-    override fun getItem(anvilWindowSlot: AnvilWindowSlot): ItemStack {
+    override fun getItem(anvilWindowSlot: AnvilWindowSlot): ItemStack? {
         if(!isOpened)
             throw MoonLakeException("铁砧窗口尚未处于打开状态.")
         return getInventory().getItem(anvilWindowSlot.value())
     }
 
-    override fun setItem(anvilWindowSlot: AnvilWindowSlot, itemStack: ItemStack) {
+    override fun setItem(anvilWindowSlot: AnvilWindowSlot, itemStack: ItemStack?) {
         if(!isOpened)
             throw MoonLakeException("铁砧窗口尚未处于打开状态.")
         getInventory().setItem(anvilWindowSlot.value(), itemStack)
