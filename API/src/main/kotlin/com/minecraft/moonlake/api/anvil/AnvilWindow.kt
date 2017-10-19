@@ -25,39 +25,148 @@ import org.bukkit.plugin.Plugin
 
 interface AnvilWindow {
 
+    /**
+     * * Get the plugin of this anvil window.
+     * * 获取此铁砧窗口的插件.
+     */
     val plugin: Plugin
 
+    /**
+     * * Handle with when the anvil window is opened.
+     * * 当此铁砧窗口被打开时处理.
+     *
+     * @param openHandler Handler. If it's `null` then Remove.
+     * @param openHandler 处理器. 如果为 `null` 则移除.
+     */
     fun handleOpen(openHandler: AnvilWindowEventHandler<AnvilWindowOpenEvent>?)
 
+    /**
+     * * Handle with when the anvil window is opened.
+     * * 当此铁砧窗口被打开时处理.
+     *
+     * @param openHandler Handler. If it's `null` then Remove.
+     * @param openHandler 处理器. 如果为 `null` 则移除.
+     */
     fun handleOpen(openHandler: ((event: AnvilWindowOpenEvent) -> Unit)?)
 
+    /**
+     * * Handle with when the anvil window is by the player input.
+     * * 当此铁砧窗口在被玩家输入时处理.
+     *
+     * @param inputHandler Handler. If it's `null` then Remove.
+     * @param inputHandler 处理器. 如果为 `null` 则移除.
+     */
     fun handleInput(inputHandler: AnvilWindowEventHandler<AnvilWindowInputEvent>?)
 
+    /**
+     * * Handle with when the anvil window is by the player input.
+     * * 当此铁砧窗口在被玩家输入时处理.
+     *
+     * @param inputHandler Handler. If it's `null` then Remove.
+     * @param inputHandler 处理器. 如果为 `null` 则移除.
+     */
     fun handleInput(inputHandler: ((event: AnvilWindowInputEvent) -> Unit)?)
 
+    /**
+     * * Handle with when the anvil window is by the player clicked item stack.
+     * * 当此铁砧窗口在被玩家点击物品栈时处理.
+     *
+     * @param clickHandler Handler. If it's `null` then Remove.
+     * @param clickHandler 处理器. 如果为 `null` 则移除.
+     */
     fun handleClick(clickHandler: AnvilWindowEventHandler<AnvilWindowClickEvent>?)
 
+    /**
+     * * Handle with when the anvil window is by the player clicked item stack.
+     * * 当此铁砧窗口在被玩家点击物品栈时处理.
+     *
+     * @param clickHandler Handler. If it's `null` then Remove.
+     * @param clickHandler 处理器. 如果为 `null` 则移除.
+     */
     fun handleClick(clickHandler: ((event: AnvilWindowClickEvent) -> Unit)?)
 
+    /**
+     * * Handle with when the anvil window is closed.
+     * * 当此铁砧窗口被关闭时处理.
+     *
+     * - TODO AnvilWindow Closed Issue
+     * - If the server stops, this event does not fire.
+     * - Rewrite the container close function, because the class does not exist exception cannot be implemented.
+     * @param closeHandler Handler. If it's `null` then Remove.
+     * @param closeHandler 处理器. 如果为 `null` 则移除.
+     */
     fun handleClose(closeHandler: AnvilWindowEventHandler<AnvilWindowCloseEvent>?)
 
+    /**
+     * * Handle with when the anvil window is closed.
+     * * 当此铁砧窗口被关闭时处理.
+     * - TODO AnvilWindow Closed Issue
+     * - If the server stops, this event does not fire.
+     * - Rewrite the container close function, because the class does not exist exception cannot be implemented.
+     *
+     * @param closeHandler Handler. If it's `null` then Remove.
+     * @param closeHandler 处理器. 如果为 `null` 则移除.
+     */
     fun handleClose(closeHandler: ((event: AnvilWindowCloseEvent) -> Unit)?)
 
+    /**
+     * * Get or set whether this anvil window allows the player to move the item stack.
+     * * 获取或设置此铁砧窗口是否允许玩家移动物品栈.
+     */
     var isAllowMove: Boolean
 
+    /**
+     * * Get whether this anvil window has been opened.
+     * * 获取此铁砧窗口是否已经被打开.
+     */
     val isOpened: Boolean
 
+    /**
+     * * Open the anvil window to the specified player.
+     * * 将此铁砧窗口打开给指定玩家.
+     *
+     * @throws MoonLakeException If the anvil window has been opened.
+     * @throws MoonLakeException 如果此铁砧窗口已经被打开.
+     * @see isOpened
+     */
     @Throws(MoonLakeException::class)
     fun open(player: Player)
 
+    /**
+     * * Open the anvil window to the specified player.
+     * * 将此铁砧窗口打开给指定玩家.
+     *
+     * @throws MoonLakeException If the anvil window has been opened.
+     * @throws MoonLakeException 如果此铁砧窗口已经被打开.
+     * @see open
+     * @see isOpened
+     */
     @Throws(MoonLakeException::class)
     fun open(player: MoonLakePlayer)
 
+    /**
+     * * Get the item stack of the anvil window for a specific slot.
+     * * 获取此铁砧窗口指定槽位的物品栈.
+     *
+     * @throws MoonLakeException If the anvil window is not opened.
+     * @throws MoonLakeException 如果此铁砧窗口没有被打开.
+     */
     @Throws(MoonLakeException::class)
     fun getItem(anvilWindowSlot: AnvilWindowSlot): ItemStack
 
+    /**
+     * * Set the item stack of the anvil window for a specific slot.
+     * * 设置此铁砧窗口指定槽位的物品栈.
+     *
+     * @throws MoonLakeException If the anvil window is not opened.
+     * @throws MoonLakeException 如果此铁砧窗口没有被打开.
+     */
     @Throws(MoonLakeException::class)
     fun setItem(anvilWindowSlot: AnvilWindowSlot, itemStack: ItemStack)
 
+    /**
+     * * Clear all item stacks in this anvil window.
+     * * 清除此铁砧窗口内的所有物品栈.
+     */
     fun clear()
 }
