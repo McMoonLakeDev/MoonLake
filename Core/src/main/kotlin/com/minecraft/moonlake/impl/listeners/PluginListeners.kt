@@ -18,6 +18,7 @@
 package com.minecraft.moonlake.impl.listeners
 
 import com.minecraft.moonlake.api.MoonLake
+import com.minecraft.moonlake.api.anvil.AnvilWindows
 import com.minecraft.moonlake.api.depend.DependPlugins
 import com.minecraft.moonlake.api.event.MoonLakeListener
 import org.bukkit.event.EventHandler
@@ -29,6 +30,7 @@ class PluginListeners : MoonLakeListener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun onDisable(event: PluginDisableEvent) {
         if(event.plugin is MoonLake) {
+            AnvilWindows.releaseAll()
             DependPlugins.unregisterAll()
         } else {
             DependPlugins.unregister(event.plugin.name)

@@ -25,6 +25,7 @@ import com.minecraft.moonlake.api.notNull
 import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import com.minecraft.moonlake.api.registerEvent
+import com.minecraft.moonlake.api.unregisterAll
 import com.minecraft.moonlake.api.utility.MinecraftConverters
 import com.minecraft.moonlake.api.utility.MinecraftReflection
 import org.bukkit.Material
@@ -41,6 +42,7 @@ import org.bukkit.plugin.Plugin
 open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
 
     protected var handle: Any? = null
+    protected var windowId: Int = -1
     private var _allowMove: Boolean = true
     private var listener: MoonLakeListener? = null
 
@@ -77,7 +79,23 @@ open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
     override fun release() {
         super.release()
         releaseListener()
+        releaseWindowId()
         handle = null
+    }
+
+    private fun releaseWindowId() {
+        if(windowId != -1)
+            removeWindowId(windowId)
+    }
+
+    override fun addWindowId(windowId: Int) {
+        super.addWindowId(windowId)
+        this.windowId = windowId
+    }
+
+    override fun removeWindowId(windowId: Int) {
+        super.removeWindowId(windowId)
+        this.windowId = -1
     }
 
     open protected fun registerListener() {
@@ -111,7 +129,7 @@ open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
 
     open protected fun releaseListener() {
         if(listener != null)
-            InventoryClickEvent.getHandlerList().unregister(listener)
+            listener?.unregisterAll()
         listener = null
     }
 

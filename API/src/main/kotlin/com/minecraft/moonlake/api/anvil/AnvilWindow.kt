@@ -39,16 +39,8 @@ interface AnvilWindow {
 
     fun handleClick(clickHandler: ((event: AnvilWindowClickEvent) -> Unit)?)
 
-    /** // TODO
-     * If the server stops, this event does not fire.
-     * Rewrite the container close function, because the class does not exist exception cannot be implemented.
-     */
     fun handleClose(closeHandler: AnvilWindowEventHandler<AnvilWindowCloseEvent>?)
 
-    /** // TODO
-     * If the server stops, this event does not fire.
-     * Rewrite the container close function, because the class does not exist exception cannot be implemented.
-     */
     fun handleClose(closeHandler: ((event: AnvilWindowCloseEvent) -> Unit)?)
 
     var isAllowMove: Boolean

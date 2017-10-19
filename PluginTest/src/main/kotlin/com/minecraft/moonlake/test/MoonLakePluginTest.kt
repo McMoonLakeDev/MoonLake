@@ -181,7 +181,7 @@ class MoonLakePluginTest : JavaPlugin() {
                     anvilWindow.handleOpen { it.player.sendMessage("anvil open") }
                     anvilWindow.handleInput { it.player.sendMessage("anvil input -> ${it.input}") }
                     anvilWindow.handleClick { it.player.sendMessage("anvil click -> ${it.clickSlot}") }
-                    anvilWindow.handleClose { it.player.sendMessage("anvil close") }
+                    anvilWindow.handleClose { println("如果处于打开状态服务器关闭的话看看我") }
                     anvilWindow.isAllowMove = true
                     anvilWindow.open(event.player)
                     anvilWindow.setItem(AnvilWindowSlot.INPUT_LEFT, ItemStack(Material.NAME_TAG))

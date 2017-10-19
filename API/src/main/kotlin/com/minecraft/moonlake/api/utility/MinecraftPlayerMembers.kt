@@ -19,6 +19,7 @@ package com.minecraft.moonlake.api.utility
 
 import com.minecraft.moonlake.api.Valuable
 import com.minecraft.moonlake.api.entity.Entities
+import com.minecraft.moonlake.api.gui.Containers
 import com.minecraft.moonlake.api.reflect.accessor.AccessorField
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import com.mojang.authlib.GameProfile
@@ -93,6 +94,13 @@ enum class MinecraftPlayerMembers(val clazz: Class<*>) : Valuable<String> {
         override fun get(): () -> AccessorField
                 = { Accessors.getAccessorField(MinecraftReflection.getEntityHumanClass(), clazz, true) }
     },
+    /**
+     * Minecraft Entity Player Field Member: Active Container (实体玩家字段成员: 交互容器)
+     */
+    ACTIVE_CONTAINER(Containers.containerClass) {
+        override fun value(): String
+                = "activeContainer"
+    }
     ;
 
     protected val field: AccessorField

@@ -19,9 +19,13 @@ package com.minecraft.moonlake.api.anvil
 
 import com.minecraft.moonlake.api.currentMCVersion
 import com.minecraft.moonlake.api.getMoonLake
+import com.minecraft.moonlake.api.getOnlinePlayers
+import com.minecraft.moonlake.api.gui.Containers
 import com.minecraft.moonlake.api.reflect.accessor.AccessorConstructor
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
+import com.minecraft.moonlake.api.utility.MinecraftPlayerMembers
 import org.bukkit.plugin.Plugin
+import java.util.*
 
 object AnvilWindows {
 
@@ -36,4 +40,19 @@ object AnvilWindows {
     @JvmName("create")
     fun create(plugin: Plugin): AnvilWindow
             = anvilWindowConstructor.newInstance(plugin)
+
+    @JvmStatic
+    @JvmName("releaseAll")
+    fun releaseAll() {
+        val map = getOnlinePlayers().associateBy { Containers.getWindowId(MinecraftPlayerMembers.ACTIVE_CONTAINER.get(it)) }
+        val source = ArrayList(windowIds)
+        source.retainAll(map.keys)
+        source.forEach { map[it]?.closeInventory() }
+        if(source.isNotEmpty() || windowIds.isNotEmpty())
+            windowIds.removeAll(source)
+    }
+
+    @JvmStatic
+    internal val windowIds: MutableList<Int> by lazy {
+        Collections.synchronizedList(ArrayList<Int>()) }
 }

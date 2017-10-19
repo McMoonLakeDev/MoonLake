@@ -30,6 +30,8 @@ open class AnvilWindowImpl_v1_8_R3(plugin: Plugin) : AnvilWindowBase(plugin) {
         val playerHandle = (player as CraftPlayer).handle
         val anvilTileContainer = AnvilWindowTileEntity(playerHandle.world)
         playerHandle.openTileEntity(anvilTileContainer)
+        // add this anvil window id to list
+        addWindowId(playerHandle.activeContainer.windowId)
     }
 
     override fun getInventory(): Inventory {

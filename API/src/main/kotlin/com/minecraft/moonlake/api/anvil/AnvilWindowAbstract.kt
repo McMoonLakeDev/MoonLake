@@ -79,4 +79,12 @@ abstract class AnvilWindowAbstract(private val _plugin: Plugin) : AnvilWindow {
         clickHandler = null
         closeHandler = null
     }
+
+    open protected fun addWindowId(windowId: Int) {
+        AnvilWindows.windowIds.add(windowId)
+    }
+
+    open protected fun removeWindowId(windowId: Int) {
+        AnvilWindows.windowIds.remove(windowId)
+    }
 }
