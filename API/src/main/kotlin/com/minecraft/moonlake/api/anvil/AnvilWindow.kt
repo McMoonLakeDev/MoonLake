@@ -89,9 +89,6 @@ interface AnvilWindow {
      * * Handle with when the anvil window is closed.
      * * 当此铁砧窗口被关闭时处理.
      *
-     * - TODO AnvilWindow Closed Issue
-     * - If the server stops, this event does not fire.
-     * - Rewrite the container close function, because the class does not exist exception cannot be implemented.
      * @param closeHandler Handler. If it's `null` then Remove.
      * @param closeHandler 处理器. 如果为 `null` 则移除.
      */
@@ -100,9 +97,6 @@ interface AnvilWindow {
     /**
      * * Handle with when the anvil window is closed.
      * * 当此铁砧窗口被关闭时处理.
-     * - TODO AnvilWindow Closed Issue
-     * - If the server stops, this event does not fire.
-     * - Rewrite the container close function, because the class does not exist exception cannot be implemented.
      *
      * @param closeHandler Handler. If it's `null` then Remove.
      * @param closeHandler 处理器. 如果为 `null` 则移除.
