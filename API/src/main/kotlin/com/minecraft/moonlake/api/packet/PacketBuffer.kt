@@ -17,11 +17,11 @@
 
 package com.minecraft.moonlake.api.packet
 
+import com.minecraft.moonlake.api.block.BlockPosition
 import com.minecraft.moonlake.api.chat.ChatComponent
 import com.minecraft.moonlake.api.chat.ChatSerializer
 import com.minecraft.moonlake.api.nbt.NBTCompound
 import com.minecraft.moonlake.api.nbt.NBTFactory
-import com.minecraft.moonlake.api.block.BlockPosition
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufInputStream
 import io.netty.buffer.ByteBufOutputStream
@@ -236,7 +236,7 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
             = UUID(readLong(), readLong())
 
     fun readChatComponent(): ChatComponent
-            = ChatSerializer.fromJson(readString())
+            = ChatSerializer.fromJsonLenient(readString())
 
     fun readNBTComponent(): NBTCompound? {
         val index = readerIndex()

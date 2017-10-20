@@ -27,5 +27,9 @@ interface Attribute {
 
     val value: Double
 
-    // TODO AttributeModifier
+    val modifiers: Collection<AttributeModifier>
+
+    fun addModifier(modifier: AttributeModifier)
+
+    fun removeModifier(modifier: AttributeModifier)
 }

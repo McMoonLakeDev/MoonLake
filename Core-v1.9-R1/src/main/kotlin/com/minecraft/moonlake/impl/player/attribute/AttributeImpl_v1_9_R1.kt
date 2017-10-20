@@ -17,8 +17,11 @@
 
 package com.minecraft.moonlake.impl.player.attribute
 
+import com.minecraft.moonlake.api.attribute.AttributeModifier
 import com.minecraft.moonlake.api.attribute.AttributeType
+import com.minecraft.moonlake.api.attribute.Operation
 import com.minecraft.moonlake.api.player.MoonLakePlayer
+import com.minecraft.moonlake.api.util.Enums
 import org.bukkit.attribute.AttributeInstance
 
 open class AttributeImpl_v1_9_R1(player: MoonLakePlayer, type: AttributeType) : AttributeImpl_v1_8_R1(player, type) {
@@ -35,6 +38,15 @@ open class AttributeImpl_v1_9_R1(player: MoonLakePlayer, type: AttributeType) : 
 
     override val value: Double
         get() = instance?.value ?: super.value
+
+    override val modifiers: Collection<AttributeModifier>
+        get() = instance?.modifiers?.map { convert(it) }?.toList() ?: super.modifiers
+
+    override fun addModifier(modifier: AttributeModifier)
+            = instance?.addModifier(convert(modifier)) ?: super.addModifier(modifier)
+
+    override fun removeModifier(modifier: AttributeModifier)
+            = instance?.removeModifier(convert(modifier)) ?: super.removeModifier(modifier)
 
     private val instance: AttributeInstance?
         get() {
@@ -58,4 +70,17 @@ open class AttributeImpl_v1_9_R1(player: MoonLakePlayer, type: AttributeType) : 
             AttributeType.ARMOR_TOUGHNESS -> null
             else -> null
         }
+
+    companion object {
+
+        @JvmStatic
+        @JvmName("convert")
+        internal fun convert(bukkit: org.bukkit.attribute.AttributeModifier): AttributeModifier
+                = AttributeModifier(bukkit.name, Enums.ofValuable(Operation::class.java, bukkit.operation.ordinal) ?: Operation.ADD, bukkit.amount, bukkit.uniqueId)
+
+        @JvmStatic
+        @JvmName("convert")
+        internal fun convert(wrapped: AttributeModifier): org.bukkit.attribute.AttributeModifier
+                = org.bukkit.attribute.AttributeModifier(wrapped.uuid, wrapped.name, wrapped.amount, Enums.ofOrigin(org.bukkit.attribute.AttributeModifier.Operation::class.java, wrapped.operation.value))
+    }
 }

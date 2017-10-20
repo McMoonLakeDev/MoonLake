@@ -17,11 +17,15 @@
 
 package com.minecraft.moonlake.api.attribute
 
+import com.minecraft.moonlake.api.converter.ConverterEquivalent
 import com.minecraft.moonlake.api.currentMCVersion
 import com.minecraft.moonlake.api.entity.Entities
 import com.minecraft.moonlake.api.exception.MoonLakeException
 import com.minecraft.moonlake.api.isOrLater
+import com.minecraft.moonlake.api.parseInt
+import com.minecraft.moonlake.api.reflect.ExactReflect
 import com.minecraft.moonlake.api.reflect.FuzzyReflect
+import com.minecraft.moonlake.api.reflect.StructureModifier
 import com.minecraft.moonlake.api.reflect.accessor.AccessorMethod
 import com.minecraft.moonlake.api.reflect.accessor.Accessors
 import com.minecraft.moonlake.api.util.Enums
@@ -29,6 +33,7 @@ import com.minecraft.moonlake.api.utility.MinecraftReflection
 import com.minecraft.moonlake.api.version.IllegalBukkitVersionException
 import org.bukkit.entity.LivingEntity
 import java.lang.reflect.Modifier
+import java.util.*
 
 object Attributes {
 
@@ -85,6 +90,36 @@ object Attributes {
             set(value) { attributeInstanceSetBaseValue.invoke(handle, value) }
         override val value: Double
             get() = attributeInstanceGetValue.invoke(handle) as Double
+        override val modifiers: Collection<AttributeModifier>
+            get() = getAttributeInstanceModifiers(handle)
+        override fun addModifier(modifier: AttributeModifier)
+                { attributeInstanceAddModifier.invoke(handle, convertModifier(modifier)) }
+        override fun removeModifier(modifier: AttributeModifier)
+                { attributeInstanceRemoveModifier.invoke(handle, convertModifier(modifier)) }
+    }
+
+    @JvmStatic
+    @JvmName("getAttributeInstanceModifiers")
+    internal fun getAttributeInstanceModifiers(handle: Any): Collection<AttributeModifier> {
+        val result = ArrayList<AttributeModifier>()
+        @Suppress("UNCHECKED_CAST")
+        val iterator = (attributeInstanceGetModifiers.invoke(handle) as Collection<Any>).iterator()
+        iterator.forEach {
+            val sm = attributeModifierStructure.withTarget<Any>(it)
+            val uuid = sm.withType<UUID>(UUID::class.java).readSafe(0) ?: UUID.randomUUID()
+            val name = sm.withType<String>(String::class.java).readSafe(0) ?: "null"
+            val amount = sm.withType<Double>(Double::class.java).readSafe(0) ?: .0
+            val operation = sm.withType(Int::class.java, attributeModifierOperationConverter).readSafe(0) ?: Operation.ADD
+            result.add(AttributeModifier(name, operation, amount, uuid))
+        }
+        return result
+    }
+
+    @JvmStatic
+    @JvmName("convertModifier")
+    internal fun convertModifier(modifier: AttributeModifier): Any {
+        val constructor = ExactReflect.fromClass(getAttributeModifierClass(), true).getConstructor(arrayOf(UUID::class.java, String::class.java, Double::class.java, Int::class.java))
+        return constructor.newInstance(modifier.uuid, modifier.name, modifier.amount, modifier.operation.value)
     }
 
     @JvmStatic
@@ -104,6 +139,12 @@ object Attributes {
     @Throws(MoonLakeException::class)
     private fun getAttributeInstanceClass(): Class<*>
             = MinecraftReflection.getMinecraftClass("AttributeInstance")
+
+    @JvmStatic
+    @JvmName("getAttributeModifierClass")
+    @Throws(MoonLakeException::class)
+    private fun getAttributeModifierClass(): Class<*>
+            = MinecraftReflection.getMinecraftClass("AttributeModifier")
 
     @JvmStatic
     @JvmName("getGenericAttributesClass")
@@ -168,6 +209,33 @@ object Attributes {
     @JvmStatic
     private val attributeInstanceGetValue: AccessorMethod by lazy {
         Accessors.getAccessorMethod(getAttributeInstanceClass(), "getValue", true) }
+
+    @JvmStatic
+    private val attributeInstanceGetModifiers: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(getAttributeInstanceClass(), Collection::class.java, true, arrayOf()) }
+
+    @JvmStatic
+    private val attributeInstanceAddModifier: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(getAttributeInstanceClass(), "b", true, getAttributeModifierClass()) }
+
+    @JvmStatic
+    private val attributeInstanceRemoveModifier: AccessorMethod by lazy {
+        Accessors.getAccessorMethod(getAttributeInstanceClass(), "c", true, getAttributeModifierClass()) }
+
+    @JvmStatic
+    private val attributeModifierStructure: StructureModifier<*> by lazy {
+        StructureModifier.of(getAttributeModifierClass(), null, null) }
+
+    @JvmStatic
+    private val attributeModifierOperationConverter: ConverterEquivalent<Operation> by lazy {
+        object: ConverterEquivalent<Operation> {
+            override fun getGeneric(specific: Operation?): Any?
+                    = specific?.value ?: 0
+            override fun getSpecific(generic: Any?): Operation?
+                    = Enums.ofValuable(Operation::class.java, generic?.parseInt()) ?: Operation.ADD
+            override fun getSpecificType(): Class<Operation>
+                    = Operation::class.java
+        } }
 
     init {
         FuzzyReflect.fromClass(getGenericAttributesClass(), true).getFieldListByType(getIAttributeClass())

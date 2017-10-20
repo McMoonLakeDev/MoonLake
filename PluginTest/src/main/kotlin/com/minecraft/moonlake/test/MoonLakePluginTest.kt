@@ -348,6 +348,10 @@ class MoonLakePluginTest : JavaPlugin() {
                         e.printStackTrace()
                     }
                 }
+                if(event.message == "/get attmodifiers") {
+                    val player = event.player.toMoonLakePlayer()
+                    player.sendMessage(player.getAttribute(AttributeType.ATTACK_DAMAGE).modifiers.joinToString())
+                }
             }
         }.registerEvent(this)
 

@@ -18,6 +18,7 @@
 package com.minecraft.moonlake.impl.player.attribute
 
 import com.minecraft.moonlake.api.attribute.Attribute
+import com.minecraft.moonlake.api.attribute.AttributeModifier
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.attribute.Attributes
 import com.minecraft.moonlake.api.player.MoonLakePlayer
@@ -33,4 +34,13 @@ open class AttributeImpl_v1_8_R1(player: MoonLakePlayer, type: AttributeType) : 
 
     override val value: Double
         get() = handle.value
+
+    override val modifiers: Collection<AttributeModifier>
+        get() = handle.modifiers
+
+    override fun addModifier(modifier: AttributeModifier)
+            = handle.addModifier(modifier)
+
+    override fun removeModifier(modifier: AttributeModifier)
+            = handle.removeModifier(modifier)
 }

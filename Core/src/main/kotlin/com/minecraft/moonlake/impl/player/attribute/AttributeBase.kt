@@ -18,6 +18,7 @@
 package com.minecraft.moonlake.impl.player.attribute
 
 import com.minecraft.moonlake.api.attribute.Attribute
+import com.minecraft.moonlake.api.attribute.AttributeModifier
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.player.MoonLakePlayer
 
@@ -35,4 +36,15 @@ open class AttributeBase(protected val player: MoonLakePlayer, private val _type
 
     override val value: Double
         get() = throw UnsupportedOperationException()
+
+    override val modifiers: Collection<AttributeModifier>
+        get() = throw UnsupportedOperationException()
+
+    override fun addModifier(modifier: AttributeModifier) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun removeModifier(modifier: AttributeModifier) {
+        throw UnsupportedOperationException()
+    }
 }

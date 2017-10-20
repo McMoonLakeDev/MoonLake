@@ -20,11 +20,11 @@ package com.minecraft.moonlake.api.attribute
 import com.minecraft.moonlake.api.util.ComparisonChain
 import java.util.*
 
-data class AttributeModifier(val type: AttributeType, val operation: Operation, val amount: Double, val uuid: UUID) : Comparable<AttributeModifier> {
+data class AttributeModifier(val name: String, val operation: Operation, val amount: Double, val uuid: UUID = UUID.randomUUID()) : Comparable<AttributeModifier> {
 
     override fun compareTo(other: AttributeModifier): Int {
         return ComparisonChain.start()
-                .compare(type, other.type)
+                .compare(name, other.name)
                 .compare(operation, other.operation)
                 .compare(amount, other.amount)
                 .compare(uuid, other.uuid)
