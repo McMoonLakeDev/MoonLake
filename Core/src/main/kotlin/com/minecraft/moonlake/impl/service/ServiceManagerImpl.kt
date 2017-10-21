@@ -54,7 +54,7 @@ class ServiceManagerImpl : ServiceManager {
     override fun <T: Service> hasService(clazz: Class<T>): Boolean
             = getServiceSafe(clazz) != null
 
-    override fun shutdown() { // TODO 卸载顺序
+    override fun shutdown() {
         services.values.forEach { it.onUnload() }
         services.clear()
     }
