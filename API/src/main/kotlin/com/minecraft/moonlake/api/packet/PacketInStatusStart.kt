@@ -17,7 +17,7 @@
 
 package com.minecraft.moonlake.api.packet
 
-class PacketInStatusStart @Deprecated("") constructor() : PacketInBukkitAbstract("PacketStatusInStart"), PacketStatus {
+class PacketInStatusStart : PacketInBukkitAbstract("PacketStatusInStart"), PacketStatus {
 
     override fun read(data: PacketBuffer) {
     }

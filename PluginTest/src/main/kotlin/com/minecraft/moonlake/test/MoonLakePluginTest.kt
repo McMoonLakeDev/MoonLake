@@ -38,6 +38,7 @@ import com.minecraft.moonlake.api.packet.*
 import com.minecraft.moonlake.api.particle.Particle
 import com.minecraft.moonlake.api.player.PlayerInfo
 import com.minecraft.moonlake.api.task.MoonLakeRunnable
+import com.minecraft.moonlake.api.wrapper.ServerInfo
 import org.bukkit.*
 import org.bukkit.entity.Pig
 import org.bukkit.entity.Zombie
@@ -356,13 +357,15 @@ class MoonLakePluginTest : JavaPlugin() {
         }.registerEvent(this)
 
         val packets = arrayOf(
-                PacketOutJoinGame::class.java,
-                PacketOutPosition::class.java,
-                PacketOutRespawn::class.java
+                PacketOutStatusServerInfo::class.java
         )
         PacketListeners.registerListener(object: PacketListenerAdapter(this, *packets) {
             override fun onSending(event: PacketEvent) {
-                println(event.packet)
+                val packet = event.packet as PacketOutStatusServerInfo
+                val info = packet.info.copy(modInfo = ServerInfo.ModInfo.SAMPLE)
+                packet.info = info
+
+                println(packet)
             }
             override fun onReceiving(event: PacketEvent) {
                 println(event.packet)

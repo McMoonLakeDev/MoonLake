@@ -32,9 +32,8 @@ import java.awt.image.BufferedImage
 import java.io.IOException
 import java.util.*
 import javax.imageio.ImageIO
-import kotlin.collections.ArrayList
 
-data class ServerInfo(val version: Version, val players: Players, val description: ChatComponent, val favicon: BufferedImage?) {
+data class ServerInfo(val version: Version, val players: Players, val description: ChatComponent, val modInfo: ModInfo?, val favicon: BufferedImage?) {
 
     fun toJson(): String
             = Companion.toJson(this)
@@ -56,11 +55,39 @@ data class ServerInfo(val version: Version, val players: Players, val descriptio
             return false
         }
     }
+    data class ModSample(val modid: String, val version: String)
+    data class ModInfo(val type: String, val modList: Array<ModSample>) {
+        override fun hashCode(): Int {
+            var result = type.hashCode()
+            result = 31 * result + Arrays.hashCode(modList)
+            return result
+        }
+        override fun equals(other: Any?): Boolean {
+            if(other === this)
+                return true
+            if(other is ModInfo)
+                return type == other.type && Arrays.equals(modList, other.modList)
+            return false
+        }
+
+        companion object {
+
+            @JvmField
+            val SAMPLE = ModInfo("FML", arrayOf(
+                    // Forge Mod List
+                    ModSample("mcp", "9.19"),
+                    ModSample("FML", "8.0.99.99"),
+                    ModSample("Forge", "11.15.1.1722"),
+                    // Other Mod List
+                    ModSample("rpcraft", "2.0")
+            ))
+        }
+    }
 
     companion object {
 
         @JvmField
-        val SAMPLE = ServerInfo(Version("1.8.9", 47), Players(20, 0, arrayOf()), ChatComponentText("A Minecraft Server"), null)
+        val SAMPLE = ServerInfo(Version("1.8.9", 47), Players(20, 0, arrayOf()), ChatComponentText("A Minecraft Server"), null, null)
 
         @JvmStatic
         @JvmName("toJson")
@@ -85,6 +112,19 @@ data class ServerInfo(val version: Version, val players: Players, val descriptio
             jsonObject.add("version", jsonVersion)
             jsonObject.add("players", jsonPlayers)
             jsonObject.add("description", JsonParser().parse(serverInfo.description.toJson()))
+            if(serverInfo.modInfo != null) {
+                val jsonModInfo = JsonObject()
+                val jsonModList = JsonArray()
+                serverInfo.modInfo.modList.forEach {
+                    val jsonMod = JsonObject()
+                    jsonMod.addProperty("modid", it.modid)
+                    jsonMod.addProperty("version", it.version)
+                    jsonModList.add(jsonMod)
+                }
+                jsonModInfo.addProperty("type", serverInfo.modInfo.type)
+                jsonModInfo.add("modList", jsonModList)
+                jsonObject.add("modinfo", jsonModInfo)
+            }
             if(serverInfo.favicon != null)
                 jsonObject.addProperty("favicon", faviconToString(serverInfo.favicon))
             return jsonObject.toString()
@@ -107,10 +147,23 @@ data class ServerInfo(val version: Version, val players: Players, val descriptio
             }
             val players = Players(jsonPlayers["max"].asInt, jsonPlayers["online"].asInt, sample.toTypedArray())
             val description = ChatSerializer.fromJsonLenient(jsonObject["description"].toString())
+            var modInfo: ModInfo? = null
             var favicon: BufferedImage? = null
+            if(jsonObject.has("modinfo")) {
+                val jsonModInfo = jsonObject["modinfo"].asJsonObject
+                val modList = ArrayList<ModSample>()
+                if(jsonModInfo.has("modList")) {
+                    val jsonModList = jsonModInfo["modList"].asJsonArray
+                    jsonModList.forEach {
+                        val jsonMod = it.asJsonObject
+                        modList.add(ModSample(jsonMod["modid"].asString, jsonMod["version"].asString))
+                    }
+                }
+                modInfo = ModInfo(jsonModInfo["type"]?.asString ?: "FML", modList.toTypedArray())
+            }
             if(jsonObject.has("favicon"))
                 favicon = faviconFromString(jsonObject["favicon"].asString)
-            return ServerInfo(version, players, description, favicon)
+            return ServerInfo(version, players, description, modInfo, favicon)
         }
 
         @JvmStatic
