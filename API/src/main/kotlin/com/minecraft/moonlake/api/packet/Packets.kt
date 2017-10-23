@@ -75,6 +75,7 @@ object Packets {
 
         // Play Start
         registerPacketBukkit("PacketPlayInBlockDig", PacketInBlockDig::class.java)
+        registerPacketBukkit("PacketPlayInBlockPlace", PacketInBlockPlaceLegacyAdapter())
         registerPacketBukkit("PacketPlayInChat", PacketInChat::class.java)
         registerPacketBukkit("PacketPlayInCustomPayload", PacketInPayload::class.java)
         registerPacketBukkit("PacketPlayInClientCommand", PacketInClientStatus::class.java)
@@ -172,12 +173,27 @@ object Packets {
     @JvmName("registerPacketBukkit")
     @Throws(IllegalArgumentException::class)
     fun registerPacketBukkit(clazzName: String, value: Class<out PacketBukkit>): Boolean {
+        if(PacketBukkitLegacy::class.java.isAssignableFrom(value))
+            throw IllegalArgumentException("数据包 $value 具有数据包遗产接口, 请使用 #registerPacketBukkit(String, PacketLegacyAdapter) 注册.")
         val clazz = MinecraftReflection.getMinecraftClassOrNull(clazzName)
         if(clazz == null || lookupBukkit.containsKey(clazz))
             throw IllegalArgumentException("未知的 NMS 数据包 $clazzName 类或已经被注册.")
         if(!registerInternal(value))
             throw IllegalArgumentException("数据包 $value 未存在无参构造函数, 注册失败.")
-        return lookupBukkit.put(clazz, value) == null
+        return registerInternal(clazz, value)
+    }
+
+    @JvmStatic
+    @JvmName("registerPacketBukkit")
+    @Throws(IllegalArgumentException::class)
+    fun registerPacketBukkit(clazzName: String, legacyAdapter: PacketLegacyAdapter<*, *>): Boolean {
+        val clazz = MinecraftReflection.getMinecraftClassOrNull(clazzName)
+        if(clazz == null || lookupBukkit.containsKey(clazz))
+            throw IllegalArgumentException("未知的 NMS 数据包 $clazzName 类或已经被注册.")
+        val value = legacyAdapter.result
+        if(!registerInternal(value))
+            throw IllegalArgumentException("数据包 $value 未存在无参构造函数, 注册失败.")
+        return registerInternal(clazz, value)
     }
 
     @JvmStatic
@@ -227,4 +243,9 @@ object Packets {
         }
         return result
     }
+
+    @JvmStatic
+    @JvmName("registerInternal")
+    private fun registerInternal(clazz: Class<*>, value: Class<out PacketBukkit>): Boolean
+            = lookupBukkit.put(clazz, value) == null
 }

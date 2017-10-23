@@ -38,7 +38,6 @@ import com.minecraft.moonlake.api.packet.*
 import com.minecraft.moonlake.api.particle.Particle
 import com.minecraft.moonlake.api.player.PlayerInfo
 import com.minecraft.moonlake.api.task.MoonLakeRunnable
-import com.minecraft.moonlake.api.wrapper.ServerInfo
 import org.bukkit.*
 import org.bukkit.entity.Pig
 import org.bukkit.entity.Zombie
@@ -356,26 +355,26 @@ class MoonLakePluginTest : JavaPlugin() {
             }
         }.registerEvent(this)
 
-        val packets = arrayOf(
-                PacketOutStatusServerInfo::class.java
-        )
-        PacketListeners.registerListener(object: PacketListenerAdapter(this, *packets) {
-            override fun onSending(event: PacketEvent) {
-                val packet = event.packet as PacketOutStatusServerInfo
-                val info = packet.info.copy(modInfo = ServerInfo.ModInfo.SAMPLE)
-                packet.info = info
-
-                println(packet)
-            }
+        PacketListeners.registerListener(object: PacketListenerLegacyAdapter<PacketInBlockPlace, PacketInBlockPlaceLegacy>(this, PacketInBlockPlaceLegacyAdapter()) {
             override fun onReceiving(event: PacketEvent) {
-                println(event.packet)
-            }
-            override fun handlerException(ex: Exception) {
-                ex.printStackTrace()
+                if(!event.isLegacy) {
+                    val packet = event.packet as PacketInBlockPlace
+                    println(packet)
+                } else {
+                    val packet = event.packet as PacketInBlockPlaceLegacy
+                    println(packet)
+                }
             }
         })
-    }
 
+        try {
+            // Did not guess the wrong words should be throwing an exception.
+            // Because 'PacketInBlockPlace' implements the 'PacketBukkitLegacy' interface.
+            Packets.registerPacketBukkit("PacketPlayInBlockPlace", PacketInBlockPlace::class.java)
+        } catch(e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
     override fun onDisable() {
     }
