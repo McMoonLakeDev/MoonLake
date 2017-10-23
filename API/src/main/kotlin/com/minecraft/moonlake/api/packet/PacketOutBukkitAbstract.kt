@@ -23,7 +23,10 @@ import com.minecraft.moonlake.api.utility.MinecraftReflection
 import org.bukkit.Location
 import org.bukkit.entity.Player
 
-abstract class PacketOutBukkitAbstract(clazzName: String) : PacketBukkitAbstract(MinecraftReflection.getMinecraftClass(clazzName)), PacketOutBukkit {
+abstract class PacketOutBukkitAbstract : PacketBukkitAbstract, PacketOutBukkit {
+
+    constructor(clazzName: String) : super(MinecraftReflection.getMinecraftClass(clazzName))
+    constructor(clazzName: String, vararg aliases: String) : super(MinecraftReflection.getMinecraftClass(clazzName, *aliases))
 
     override fun send(receiver: MoonLakePlayer)
             = send(receiver.bukkitPlayer)

@@ -367,13 +367,17 @@ class MoonLakePluginTest : JavaPlugin() {
             }
         })
 
-        try {
-            // Did not guess the wrong words should be throwing an exception.
-            // Because 'PacketInBlockPlace' implements the 'PacketBukkitLegacy' interface.
-            Packets.registerPacketBukkit("PacketPlayInBlockPlace", PacketInBlockPlace::class.java)
-        } catch(e: Exception) {
-            e.printStackTrace()
-        }
+        val packets = arrayOf(
+                PacketInFlying::class.java,
+                PacketInLook::class.java,
+                PacketInPosition::class.java,
+                PacketInPositionLook::class.java)
+
+        PacketListeners.registerListener(object: PacketListenerAdapter(this, *packets) {
+            override fun onReceiving(event: PacketEvent) {
+                println(event.packet)
+            }
+        })
     }
 
     override fun onDisable() {

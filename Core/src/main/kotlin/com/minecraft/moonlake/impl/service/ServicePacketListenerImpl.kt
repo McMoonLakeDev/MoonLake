@@ -39,8 +39,6 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.Plugin
 import java.util.*
 import java.util.logging.Level
-import kotlin.Comparator
-import kotlin.collections.ArrayList
 
 open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListener {
 
@@ -88,22 +86,28 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
 
     /** api */
 
-    private val listeners: MutableSet<PacketListener> by lazy {
-        TreeSet(Comparator<PacketListener> { o1, o2 -> o2.priority.compareTo(o1.priority) }) }
+    private val listeners: MutableList<PacketListener> by lazy {
+        ArrayList<PacketListener>() }
 
     override fun registerListener(listener: PacketListener): Boolean
-            = synchronized(listeners, { listeners.add(listener) })
+            = synchronized(listeners, { listeners.add(listener).also { if(it) sortListeners() } })
 
     override fun unregisterListener(listener: PacketListener): Boolean
-            = synchronized(listeners, { listeners.remove(listener) })
+            = synchronized(listeners, { listeners.remove(listener).also { if(it) sortListeners() } })
 
     override fun unregisterListener(plugin: Plugin): Boolean
-            = synchronized(listeners, { val removeList = listeners.filter { it.plugin == plugin }; listeners.removeAll(removeList) })
+            = synchronized(listeners, { val removeList = listeners.filter { it.plugin == plugin }; listeners.removeAll(removeList).also { if(it) sortListeners() } })
 
     override fun unregisterListenerAll()
             = synchronized(listeners, { listeners.clear() })
 
     /** implements */
+
+    private fun sortListeners()
+            = Collections.sort(listeners, { o1, o2 -> o2.priority.compareTo(o1.priority) })
+
+    private fun sortListenersSync()
+            = synchronized(listeners, { Collections.sort(listeners, { o1, o2 -> o2.priority.compareTo(o1.priority) }) })
 
     private fun unloadEventListener() {
         if(eventListener != null) {

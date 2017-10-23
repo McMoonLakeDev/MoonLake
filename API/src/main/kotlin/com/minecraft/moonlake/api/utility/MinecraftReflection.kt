@@ -70,9 +70,32 @@ object MinecraftReflection {
             = minecraftPackage.getPackageClass(className)
 
     @JvmStatic
+    @JvmName("getMinecraftClass")
+    @Throws(MoonLakeException::class)
+    fun getMinecraftClass(className: String, vararg aliases: String): Class<*> = try {
+        getMinecraftClass(className)
+    } catch(e: MoonLakeException) {
+        var result: Class<*>? = null
+        for(alias in aliases) try {
+            result = getMinecraftClass(alias)
+        } catch(e: MoonLakeException) {
+        }
+        if(result != null) result.also { setMinecraftClass(className, it) }
+        else throw MoonLakeException("未查找到 $className 以及别名 ${aliases.joinToString()} 的类.", e)
+    }
+
+    @JvmStatic
     @JvmName("getMinecraftClassOrNull")
     fun getMinecraftClassOrNull(className: String): Class<*>? = try {
         getMinecraftClass(className)
+    } catch(e: MoonLakeException) {
+        null
+    }
+
+    @JvmStatic
+    @JvmName("getMinecraftClassOrNull")
+    fun getMinecraftClassOrNull(className: String, vararg aliases: String): Class<*>? = try {
+        getMinecraftClass(className, *aliases)
     } catch(e: MoonLakeException) {
         null
     }
