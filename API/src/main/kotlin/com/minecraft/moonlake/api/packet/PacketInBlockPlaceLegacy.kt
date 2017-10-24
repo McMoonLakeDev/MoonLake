@@ -25,19 +25,19 @@ import org.bukkit.inventory.ItemStack
 data class PacketInBlockPlaceLegacy(
         var timestamp: Long,
         var blockPosition: BlockPosition,
-        var direction: BlockDirection,
+        var direction: BlockDirection?,
         var itemStack: ItemStack?,
         var cursorX: Float,
         var cursorY: Float,
         var cursorZ: Float) : PacketInBukkitAbstract("PacketPlayInBlockPlace"), PacketBukkitLegacy, PacketLegacy {
 
     @Deprecated("")
-    constructor() : this(-1L, BlockPosition.ZERO, BlockDirection.UP, null, 0f, 0f, 0f)
+    constructor() : this(-1L, BlockPosition.ZERO, null, null, 0f, 0f, 0f)
 
     override fun read(data: PacketBuffer) {
         timestamp = System.currentTimeMillis()
         blockPosition = data.readBlockPosition()
-        direction = Enums.ofValuable(BlockDirection::class.java, data.readUnsignedByte().toInt()) ?: BlockDirection.UP
+        direction = Enums.ofValuable(BlockDirection::class.java, data.readUnsignedByte().toInt())
         itemStack = data.readItemStack()
         cursorX = data.readUnsignedByte().toFloat() / 16f
         cursorY = data.readUnsignedByte().toFloat() / 16f
@@ -46,7 +46,7 @@ data class PacketInBlockPlaceLegacy(
 
     override fun write(data: PacketBuffer) {
         data.writeBlockPosition(blockPosition)
-        data.writeByte(direction.value())
+        data.writeByte(direction?.value() ?: 255)
         data.writeItemStack(itemStack)
         data.writeByte((cursorX * 16f).toInt())
         data.writeByte((cursorY * 16f).toInt())

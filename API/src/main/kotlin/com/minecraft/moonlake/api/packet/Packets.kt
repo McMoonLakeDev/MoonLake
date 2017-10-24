@@ -100,6 +100,7 @@ object Packets {
         registerPacketBukkit("PacketPlayInWindowClick", PacketInWindowClick::class.java)
 
         registerPacketBukkitFreshly("PacketPlayInTeleportAccept", PacketInTeleportAccept::class.java)
+        registerPacketBukkitFreshly("PacketPlayInVehicleMove", PacketInVehicleMove::class.java)
 
         /**
          * Packet Direction : Server -> Client
@@ -117,10 +118,16 @@ object Packets {
         // Play Start
         registerPacketBukkit("PacketPlayOutAbilities", PacketOutAbilities::class.java)
         registerPacketBukkit("PacketPlayOutAnimation", PacketOutAnimation::class.java)
+        registerPacketBukkit("PacketPlayOutAttachEntity", PacketOutAttachEntity::class.java)
+        registerPacketBukkit("PacketPlayOutBed", PacketOutBed::class.java)
         registerPacketBukkit("PacketPlayOutBlockAction", PacketOutBlockAction::class.java)
         registerPacketBukkit("PacketPlayOutBlockBreakAnimation", PacketOutBlockBreakAnimation::class.java)
+        registerPacketBukkit("PacketPlayOutBlockChange", PacketOutBlockChange::class.java)
+        registerPacketBukkit("PacketPlayOutCamera", PacketOutCamera::class.java)
         registerPacketBukkit("PacketPlayOutChat", PacketOutChat::class.java)
         registerPacketBukkit("PacketPlayOutCloseWindow", PacketOutCloseWindow::class.java)
+        registerPacketBukkit("PacketPlayOutCollect", PacketOutCollect::class.java)
+        registerPacketBukkit("PacketPlayOutCombatEvent", PacketOutCombatEvent::class.java)
         registerPacketBukkit("PacketPlayOutCustomPayload", PacketOutPayload::class.java)
         registerPacketBukkit("PacketPlayOutEntityDestroy", PacketOutEntityDestroy::class.java)
         registerPacketBukkit("PacketPlayOutEntityEquipment", PacketOutEntityEquipment::class.java)
