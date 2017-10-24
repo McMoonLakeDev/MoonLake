@@ -46,7 +46,7 @@ data class PacketInBlockPlaceLegacy(
 
     override fun write(data: PacketBuffer) {
         data.writeBlockPosition(blockPosition)
-        data.writeByte(direction?.value() ?: 255)
+        data.writeByte(direction?.value() ?: 0xFF)
         data.writeItemStack(itemStack)
         data.writeByte((cursorX * 16f).toInt())
         data.writeByte((cursorY * 16f).toInt())

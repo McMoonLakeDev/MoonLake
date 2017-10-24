@@ -28,7 +28,7 @@ data class BlockData(val type: Int, val data: Int) : Comparable<BlockData> {
                 .result
     }
 
-    val toId: Int
+    fun toId(): Int
             = toId(this)
 
     companion object {

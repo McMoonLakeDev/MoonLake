@@ -32,6 +32,6 @@ data class PacketOutBlockChange(var blockPosition: BlockPosition, var blockData:
 
     override fun write(data: PacketBuffer) {
         data.writeBlockPosition(blockPosition)
-        data.writeVarInt(blockData.toId)
+        data.writeVarInt(blockData.toId())
     }
 }
