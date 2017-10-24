@@ -74,19 +74,30 @@ object Packets {
         registerPacketBukkit("PacketLoginInStart", PacketInLoginStart::class.java)
 
         // Play Start
+        registerPacketBukkit("PacketPlayInArmAnimation", PacketInArmAnimation::class.java)
         registerPacketBukkit("PacketPlayInBlockDig", PacketInBlockDig::class.java)
         registerPacketBukkit("PacketPlayInBlockPlace", PacketInBlockPlaceLegacyAdapter())
         registerPacketBukkit("PacketPlayInChat", PacketInChat::class.java)
         registerPacketBukkit("PacketPlayInCustomPayload", PacketInPayload::class.java)
         registerPacketBukkit("PacketPlayInClientCommand", PacketInClientStatus::class.java)
+        registerPacketBukkit("PacketPlayInEnchantItem", PacketInEnchantItem::class.java)
         registerPacketBukkit("PacketPlayInEntityAction", PacketInEntityAction::class.java)
         registerPacketBukkit("PacketPlayInFlying", PacketInFlying::class.java)
         registerPacketBukkit("PacketPlayInFlying\$PacketPlayInLook", arrayOf("PacketPlayInLook"), PacketInLook::class.java)
         registerPacketBukkit("PacketPlayInFlying\$PacketPlayInPosition", arrayOf("PacketPlayInPosition"), PacketInPosition::class.java)
         registerPacketBukkit("PacketPlayInFlying\$PacketPlayInPositionLook", arrayOf("PacketPlayInPositionLook"), PacketInPositionLook::class.java)
+        registerPacketBukkit("PacketPlayInHeldItemSlot", PacketInHeldItemSlot::class.java)
         registerPacketBukkit("PacketPlayInKeepAlive", PacketInKeepAlive::class.java)
+        registerPacketBukkit("PacketPlayInResourcePackStatus", PacketInResourcePackStatus::class.java)
+        registerPacketBukkit("PacketPlayInSetCreativeSlot", PacketInSetCreativeSlot::class.java)
         registerPacketBukkit("PacketPlayInSettings", PacketInSettings::class.java)
+        registerPacketBukkit("PacketPlayInSpectate", PacketInSpectate::class.java)
+        registerPacketBukkit("PacketPlayInSteerVehicle", PacketInSteerVehicle::class.java)
+        registerPacketBukkit("PacketPlayInTabComplete", PacketInTabComplete::class.java)
+        registerPacketBukkit("PacketPlayInTransaction", PacketInTransaction::class.java)
+        registerPacketBukkit("PacketPlayInUpdateSign", PacketInUpdateSign::class.java)
         registerPacketBukkit("PacketPlayInUseEntity", PacketInUseEntity::class.java)
+        registerPacketBukkit("PacketPlayInWindowClick", PacketInWindowClick::class.java)
 
         /**
          * Packet Direction : Server -> Client

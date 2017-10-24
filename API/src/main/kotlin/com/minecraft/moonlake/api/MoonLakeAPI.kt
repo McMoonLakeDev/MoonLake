@@ -130,6 +130,7 @@ fun currentBukkitVersion(): MinecraftBukkitVersion
 /** util function */
 
 private val combatOrLaterVer = currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_9_R1)
+private val frostburnOrLaterVer = currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_10_R1)
 private val colorWorldOrLaterVer = currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_12_R1)
 private val javaEditionOrLaterVer = currentMCVersion().isOrLater(MinecraftVersion(1, 12, 2))
 
@@ -138,6 +139,12 @@ private val javaEditionOrLaterVer = currentMCVersion().isOrLater(MinecraftVersio
  */
 val isCombatOrLaterVer: Boolean
     get() = combatOrLaterVer
+
+/**
+ * Returns if the server version is 1.10 or later.
+ */
+val isFrostburnOrLaterVer: Boolean
+    get() = frostburnOrLaterVer
 
 /**
  * Returns if the server version is 1.12 or later.

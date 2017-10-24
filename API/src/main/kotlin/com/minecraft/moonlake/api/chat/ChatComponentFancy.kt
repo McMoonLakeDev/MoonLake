@@ -88,7 +88,7 @@ open class ChatComponentFancy : Builder<ChatComponent> {
     }
 
     fun tooltipItem(item: String): ChatComponentFancy
-            { last.style.setHoverEvent(ChatHoverEvent(ChatHoverEvent.Action.SHOW_ITEM, ChatComponentText(item))); return this; }
+            { last.style.setHoverEvent(ChatHoverEvent(ChatHoverEvent.Action.SHOW_ITEM, ChatSerializer.ChatComponentRaw(item))); return this; }
 
     fun tooltipItem(itemStack: ItemStack): ChatComponentFancy
             = tooltipItem(NBTFactory.writeStackNBT(itemStack).toMojangson())

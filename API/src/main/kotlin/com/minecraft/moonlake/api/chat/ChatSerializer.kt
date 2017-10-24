@@ -223,12 +223,8 @@ object ChatSerializer {
                     if(jsonObjectHoverEvent != null) {
                         val action = Enums.ofName(ChatHoverEvent.Action::class.java, jsonObjectHoverEvent.get("action").asString.toUpperCase())
                         val value = jsonObjectHoverEvent.get("value") ?: null
-                        if(action != null && value != null) {
-                            if(value.isJsonPrimitive)
-                                chatStyle.hoverEvent = ChatHoverEvent(action, ChatComponentText(value.asString))
-                            else
-                                chatStyle.hoverEvent = ChatHoverEvent(action, context.deserialize(value, ChatComponent::class.java))
-                        }
+                        if(action != null && value != null)
+                            chatStyle.hoverEvent = ChatHoverEvent(action, context.deserialize(value, ChatComponent::class.java))
                     }
                 }
                 return chatStyle
@@ -263,8 +259,8 @@ object ChatSerializer {
             if(src.hoverEvent != null) {
                 val jsonObjectHoverEvent = JsonObject()
                 jsonObjectHoverEvent.addProperty("action", src.hoverEvent?.action.toString().toLowerCase())
-                if(src.hoverEvent?.value is ChatComponentText)
-                    jsonObjectHoverEvent.addProperty("value", (src.hoverEvent?.value as ChatComponentText).getText())
+                if(src.hoverEvent?.value is ChatComponentRaw)
+                    jsonObjectHoverEvent.addProperty("value", (src.hoverEvent?.value as ChatComponentRaw).getText())
                 else
                     jsonObjectHoverEvent.add("value", context.serialize(src.hoverEvent?.value))
                 jsonObject.add("hoverEvent", jsonObjectHoverEvent)
@@ -382,4 +378,9 @@ object ChatSerializer {
             return jsonObject
         }
     }
+
+    /**
+     * 仅用在 Tooltip ItemStack 上
+     */
+    internal class ChatComponentRaw(raw: String) : ChatComponentText(raw)
 }
