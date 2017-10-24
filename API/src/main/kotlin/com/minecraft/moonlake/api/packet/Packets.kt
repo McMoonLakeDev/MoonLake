@@ -99,6 +99,8 @@ object Packets {
         registerPacketBukkit("PacketPlayInUseEntity", PacketInUseEntity::class.java)
         registerPacketBukkit("PacketPlayInWindowClick", PacketInWindowClick::class.java)
 
+        registerPacketBukkitFreshly("PacketPlayInTeleportAccept", PacketInTeleportAccept::class.java)
+
         /**
          * Packet Direction : Server -> Client
          */
@@ -192,6 +194,7 @@ object Packets {
 
     @JvmStatic
     @JvmName("registerPacketBukkit")
+    @Throws(IllegalArgumentException::class)
     fun registerPacketBukkit(clazzName: String, aliases: Array<String>, value: Class<out PacketBukkit>): Boolean
             = registerInternal(MinecraftReflection.getMinecraftClassOrNull(clazzName, *aliases), value)
 
@@ -200,6 +203,12 @@ object Packets {
     @Throws(IllegalArgumentException::class)
     fun registerPacketBukkit(clazzName: String, legacyAdapter: PacketLegacyAdapter<*, *>): Boolean
             = registerInternalLegacy(MinecraftReflection.getMinecraftClassOrNull(clazzName), legacyAdapter)
+
+    @JvmStatic
+    @JvmName("registerPacketBukkitFreshly")
+    @Throws(IllegalArgumentException::class)
+    fun registerPacketBukkitFreshly(clazzName: String, value: Class<out PacketBukkitFreshly>): Boolean
+            = registerInternalFreshly(MinecraftReflection.getMinecraftClassOrNull(clazzName), value)
 
     @JvmStatic
     @JvmName("isRegistered")
@@ -238,12 +247,9 @@ object Packets {
     }
 
     @JvmStatic
-    @JvmName("registerInternal")
-    private fun registerInternal(clazz: Class<*>?, value: Class<out PacketBukkit>): Boolean {
-        if(PacketBukkitLegacy::class.java.isAssignableFrom(value))
-            throw IllegalArgumentException("数据包 $value 具有数据包遗产接口, 请使用 #registerPacketBukkit(String, PacketLegacyAdapter) 注册.")
-        if(clazz == null || lookupBukkit.containsKey(clazz))
-            throw IllegalArgumentException("未知的 NMS 数据包 ${clazz?.name} 类或已经被注册.")
+    @JvmName("registerInternalAndCheckStructure")
+    @Throws(IllegalArgumentException::class)
+    private fun registerInternalAndCheckStructure(clazz: Class<*>, value: Class<out PacketBukkit>): Boolean {
         if(!value.canonicalName.contains("com.minecraft.moonlake.api.packet", true)) try {
             value.getConstructor()
         } catch(e: Exception) {
@@ -253,16 +259,35 @@ object Packets {
     }
 
     @JvmStatic
+    @JvmName("registerInternal")
+    @Throws(IllegalArgumentException::class)
+    private fun registerInternal(clazz: Class<*>?, value: Class<out PacketBukkit>): Boolean {
+        if(PacketBukkitFreshly::class.java.isAssignableFrom(value))
+            throw IllegalArgumentException("数据包 $value 具有数据包新鲜接口, 请使用 #registerPacketBukkitFreshly(String, Class) 注册.")
+        if(PacketBukkitLegacy::class.java.isAssignableFrom(value))
+            throw IllegalArgumentException("数据包 $value 具有数据包遗产接口, 请使用 #registerPacketBukkit(String, PacketLegacyAdapter) 注册.")
+        if(clazz == null || lookupBukkit.containsKey(clazz))
+            throw IllegalArgumentException("未知的 NMS 数据包 ${clazz?.name} 类或已经被注册.")
+        return registerInternalAndCheckStructure(clazz, value)
+    }
+
+    @JvmStatic
     @JvmName("registerInternalLegacy")
+    @Throws(IllegalArgumentException::class)
     private fun registerInternalLegacy(clazz: Class<*>?, legacyAdapter: PacketLegacyAdapter<*, *>): Boolean {
         if(clazz == null || lookupBukkit.containsKey(clazz))
             throw IllegalArgumentException("未知的 NMS 数据包 ${clazz?.name} 类或已经被注册.")
         val value = legacyAdapter.result
-        if(!value.canonicalName.contains("com.minecraft.moonlake.api.packet", true)) try {
-            value.getConstructor()
-        } catch(e: Exception) {
-            throw IllegalArgumentException("数据包 $value 未存在无参构造函数, 注册失败.")
-        }
-        return lookupBukkit.put(clazz, value) == null
+        return registerInternalAndCheckStructure(clazz, value)
+    }
+
+    @JvmStatic
+    @JvmName("registerInternalFreshly")
+    @Throws(IllegalArgumentException::class)
+    private fun registerInternalFreshly(clazz: Class<*>?, value: Class<out PacketBukkitFreshly>): Boolean {
+        if(clazz != null && lookupBukkit.containsKey(clazz))
+            throw IllegalArgumentException("数据包 ${clazz.name} 类已经被注册.")
+        return if(clazz != null) registerInternalAndCheckStructure(clazz, value)
+        else false
     }
 }

@@ -19,7 +19,6 @@ package com.minecraft.moonlake.api.packet
 
 import org.bukkit.plugin.Plugin
 import java.util.*
-import kotlin.collections.HashSet
 
 open class PacketListenerAdapter(private val _plugin: Plugin, private val _priority: PacketListenerPriority, vararg types: Class<out Packet>) : PacketListener {
 
@@ -30,18 +29,20 @@ open class PacketListenerAdapter(private val _plugin: Plugin, private val _prior
     constructor(plugin: Plugin, packetClass: Class<out Packet>) : this(plugin, PacketListenerPriority.NORMAL, packetClass)
 
     init {
-        if(types.isEmpty())
-            throw IllegalArgumentException("待监听的数据包类型为空, 无法进行构造.")
         types.filter {
             val registered = Packets.isRegisteredWrapped(it)
-            if(!registered)
+            if(!registered && PacketBukkitFreshly::class.java.isAssignableFrom(it))
+                plugin.logger.warning("[MoonLake] 警告: 待监听的数据包包装类 $it 并不兼容当前服务端, 已过滤.")
+            else if(!registered)
                 plugin.logger.warning("[MoonLake] 警告: 待监听的数据包包装类 $it 没有注册, 此监听器已将之过滤.")
             registered
-        }.forEach {
-            when(PacketOut::class.java.isAssignableFrom(it)) {
+        }.also {
+            if(it.isEmpty())
+                throw IllegalArgumentException("待监听的数据包类型为空, 无法进行构造.")
+            it.forEach { when(PacketOut::class.java.isAssignableFrom(it)) {
                 true -> _sendingTypes.add(it.asSubclass(PacketOut::class.java))
                 else -> _receivingTypes.add(it.asSubclass(PacketIn::class.java))
-            }
+            } }
         }
     }
 

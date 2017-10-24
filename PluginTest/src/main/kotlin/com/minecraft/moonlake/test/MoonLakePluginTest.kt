@@ -368,26 +368,11 @@ class MoonLakePluginTest : JavaPlugin() {
         })
 
         val packets = arrayOf(
-                PacketOutChat::class.java,
-                PacketInArmAnimation::class.java,
-                PacketInEnchantItem::class.java,
-                PacketInHeldItemSlot::class.java,
-                PacketInResourcePackStatus::class.java,
-                PacketInSetCreativeSlot::class.java,
-                PacketInSpectate::class.java,
-                PacketInSteerVehicle::class.java,
-                PacketInTabComplete::class.java,
-                PacketInTransaction::class.java,
-                PacketInUpdateSign::class.java,
-                PacketInWindowClick::class.java)
+                PacketInTeleportAccept::class.java) // 如果服务端是 1.8, 那么注册监听器应该会因为空而抛出异常
 
         PacketListeners.registerListener(object: PacketListenerAdapter(this, *packets) {
             override fun onReceiving(event: PacketEvent) {
                 println(event.packet)
-            }
-            override fun onSending(event: PacketEvent) {
-                println(event.packet)
-                println((event.packet as PacketOutChat).message.toJson())
             }
         })
     }
