@@ -217,8 +217,8 @@ class MoonLakePluginTest : JavaPlugin() {
                     packet.send(event.player)
                 }
                 if(event.message == "/packet title") {
-                    val packetTitle = PacketOutTitle(PacketOutTitle.Action.主标题, ChatComponentText("主标题"))
-                    val packetSubTitle = PacketOutTitle(PacketOutTitle.Action.子标题, ChatComponentText("子标题"))
+                    val packetTitle = PacketOutTitle(PacketOutTitle.Action.TITLE, ChatComponentText("主标题"))
+                    val packetSubTitle = PacketOutTitle(PacketOutTitle.Action.SUBTITLE, ChatComponentText("子标题"))
                     val packetTimes = PacketOutTitle(30, 60, 30)
                     packetTimes.send(event.player)
                     packetSubTitle.send(event.player)
