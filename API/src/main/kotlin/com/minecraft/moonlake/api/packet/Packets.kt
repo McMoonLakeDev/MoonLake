@@ -76,7 +76,6 @@ object Packets {
         // Play Start
         registerPacketBukkit("PacketPlayInArmAnimation", PacketInArmAnimation::class.java)
         registerPacketBukkit("PacketPlayInBlockDig", PacketInBlockDig::class.java)
-        registerPacketBukkit("PacketPlayInBlockPlace", PacketInBlockPlaceLegacyAdapter())
         registerPacketBukkit("PacketPlayInChat", PacketInChat::class.java)
         registerPacketBukkit("PacketPlayInCustomPayload", PacketInPayload::class.java)
         registerPacketBukkit("PacketPlayInClientCommand", PacketInClientStatus::class.java)
@@ -99,8 +98,12 @@ object Packets {
         registerPacketBukkit("PacketPlayInUseEntity", PacketInUseEntity::class.java)
         registerPacketBukkit("PacketPlayInWindowClick", PacketInWindowClick::class.java)
 
+        // Freshly
         registerPacketBukkitFreshly("PacketPlayInTeleportAccept", PacketInTeleportAccept::class.java)
         registerPacketBukkitFreshly("PacketPlayInVehicleMove", PacketInVehicleMove::class.java)
+
+        // Legacy
+        registerPacketBukkitLegacy("PacketPlayInBlockPlace", PacketInBlockPlaceLegacyAdapter())
 
         /**
          * Packet Direction : Server -> Client
@@ -143,6 +146,9 @@ object Packets {
         registerPacketBukkit("PacketPlayOutSetSlot", PacketOutSetSlot::class.java)
         registerPacketBukkit("PacketPlayOutTitle", PacketOutTitle::class.java)
         registerPacketBukkit("PacketPlayOutWorldParticles", PacketOutParticles::class.java)
+
+        // Legacy
+        registerPacketBukkitLegacy(PacketOutNamedSoundLegacyAdapter())
     }
 
     @JvmStatic
@@ -206,10 +212,16 @@ object Packets {
             = registerInternal(MinecraftReflection.getMinecraftClassOrNull(clazzName, *aliases), value)
 
     @JvmStatic
-    @JvmName("registerPacketBukkit")
+    @JvmName("registerPacketBukkitLegacy")
     @Throws(IllegalArgumentException::class)
-    fun registerPacketBukkit(clazzName: String, legacyAdapter: PacketLegacyAdapter<*, *>): Boolean
+    fun registerPacketBukkitLegacy(clazzName: String, legacyAdapter: PacketLegacyAdapter<*, *>): Boolean
             = registerInternalLegacy(MinecraftReflection.getMinecraftClassOrNull(clazzName), legacyAdapter)
+
+    @JvmStatic
+    @JvmName("registerPacketBukkitLegacy")
+    @Throws(IllegalArgumentException::class)
+    fun registerPacketBukkitLegacy(legacyAdapterCustom: PacketLegacyAdapterCustom<*, *>): Boolean
+            = registerInternalLegacyCustom(legacyAdapterCustom)
 
     @JvmStatic
     @JvmName("registerPacketBukkitFreshly")
@@ -282,10 +294,21 @@ object Packets {
     @JvmName("registerInternalLegacy")
     @Throws(IllegalArgumentException::class)
     private fun registerInternalLegacy(clazz: Class<*>?, legacyAdapter: PacketLegacyAdapter<*, *>): Boolean {
+        if(legacyAdapter is PacketLegacyAdapterCustom<*, *>)
+            throw IllegalArgumentException("遗产适配器 $legacyAdapter 具有 Custom 能力, 请使用 #registerPacketBukkit(PacketLegacyAdapterCustom) 注册.")
         if(clazz == null || lookupBukkit.containsKey(clazz))
             throw IllegalArgumentException("未知的 NMS 数据包 ${clazz?.name} 类或已经被注册.")
-        val value = legacyAdapter.result
-        return registerInternalAndCheckStructure(clazz, value)
+        return registerInternalAndCheckStructure(clazz, legacyAdapter.result)
+    }
+
+    @JvmStatic
+    @JvmName("registerInternalLegacyCustom")
+    @Throws(IllegalArgumentException::class)
+    private fun registerInternalLegacyCustom(legacyAdapter: PacketLegacyAdapterCustom<*, *>): Boolean {
+        val clazz = MinecraftReflection.getMinecraftClassOrNull(legacyAdapter.resultName)
+        if(clazz == null || lookupBukkit.containsKey(clazz))
+            throw IllegalArgumentException("未知的 NMS 数据包 ${clazz?.name} 类或已经被注册.")
+        return registerInternalAndCheckStructure(clazz, legacyAdapter.result)
     }
 
     @JvmStatic

@@ -367,14 +367,15 @@ class MoonLakePluginTest : JavaPlugin() {
             }
         })
 
-        val packets = arrayOf(PacketOutCombatEvent::class.java)
-
-        PacketListeners.registerListener(object: PacketListenerAdapter(this, *packets) {
-            override fun onReceiving(event: PacketEvent) {
-                println(event.packet)
-            }
+        PacketListeners.registerListener(object: PacketListenerLegacyAdapter<PacketOutNamedSound, PacketOutNamedSoundLegacy>(this, PacketOutNamedSoundLegacyAdapter()) {
             override fun onSending(event: PacketEvent) {
-                println(event.packet)
+                if(!event.isLegacy) {
+                    val packet = event.packet as PacketOutNamedSound
+                    println(packet)
+                } else {
+                    val packet = event.packet as PacketOutNamedSoundLegacy
+                    println(packet)
+                }
             }
         })
     }
