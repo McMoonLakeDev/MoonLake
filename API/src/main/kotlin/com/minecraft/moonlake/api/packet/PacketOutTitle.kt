@@ -38,9 +38,9 @@ data class PacketOutTitle(var action: Action, var title: ChatComponent?, var fad
 
     override fun read(data: PacketBuffer) {
         action = Action.fromId(data.readVarInt())
-        if(action.isTitle())
+        if(action == Action.TITLE || action == Action.SUBTITLE || action == Action.ACTIONBAR)
             title = data.readChatComponent()
-        if(action.isTimes()) {
+        if(action == Action.TIMES) {
             fadeIn = data.readInt()
             stay = data.readInt()
             fadeOut = data.readInt()
@@ -49,32 +49,47 @@ data class PacketOutTitle(var action: Action, var title: ChatComponent?, var fad
 
     override fun write(data: PacketBuffer) {
         data.writeVarInt(action.getId())
-        if(action.isTitle())
+        if(action == Action.TITLE || action == Action.SUBTITLE || action == Action.ACTIONBAR)
             data.writeChatComponent(title ?: ChatComponentText())
-        if(action.isTimes()) {
+        if(action == Action.TIMES) {
             data.writeInt(fadeIn)
             data.writeInt(stay)
             data.writeInt(fadeOut)
         }
     }
 
-    enum class Action(private val equivalent: Action? = null) {
-        TITLE,                      主标题(TITLE),
-        SUBTITLE,             子标题(SUBTITLE),
-        ACTIONBAR,       交互栏(ACTIONBAR),
-        TIMES,                    时间(TIMES),
-        CLEAR,                  清除(CLEAR),
-        RESET,                   重置(RESET),
+    enum class Action {
+
+        /**
+         * Title Action: Main Title (标题交互: 主标题)
+         */
+        TITLE,
+        /**
+         * Title Action: Sub Title (标题交互: 子标题)
+         */
+        SUBTITLE,
+        /**
+         * Title Action: Action Bar (标题交互: 交互栏)
+         * * Only valid at 1.11 or higher.
+         * * 仅在 1.11 或更高版本有效.
+         */
+        ACTIONBAR,
+        /**
+         * Title Action: Times (标题交互: 时间)
+         */
+        TIMES,
+        /**
+         * Title Action: Clear (标题交互: 清除)
+         */
+        CLEAR,
+        /**
+         * Title Action: Reset (标题交互: 重置)
+         */
+        RESET,
         ;
 
         fun getId(): Int
-                = equivalent?.getId() ?: ID_MAP.entries.first { it.value == this }.key
-
-        fun isTitle(): Boolean
-                = equivalent?.isTitle() ?: (this == TITLE || this == SUBTITLE)
-
-        fun isTimes(): Boolean
-                = equivalent?.isTimes() ?: (this == TIMES)
+                = ID_MAP.entries.first { it.value == this }.key
 
         companion object {
 
