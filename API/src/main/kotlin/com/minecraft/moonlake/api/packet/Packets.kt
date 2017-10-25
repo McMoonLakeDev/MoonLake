@@ -133,6 +133,7 @@ object Packets {
         registerPacketBukkit("PacketPlayOutCombatEvent", PacketOutCombatEvent::class.java)
         registerPacketBukkit("PacketPlayOutCustomPayload", PacketOutPayload::class.java)
         registerPacketBukkit("PacketPlayOutEntityDestroy", PacketOutEntityDestroy::class.java)
+        registerPacketBukkit("PacketPlayOutEntityEffect", PacketOutEntityEffect::class.java)
         registerPacketBukkit("PacketPlayOutEntityEquipment", PacketOutEntityEquipment::class.java)
         registerPacketBukkit("PacketPlayOutHeldItemSlot", PacketOutHeldItemSlot::class.java)
         registerPacketBukkit("PacketPlayOutKeepAlive", PacketOutKeepAlive::class.java)
