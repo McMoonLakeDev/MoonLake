@@ -154,6 +154,9 @@ object Packets {
         registerPacketBukkit("PacketPlayOutTitle", PacketOutTitle::class.java)
         registerPacketBukkit("PacketPlayOutWorldParticles", PacketOutParticles::class.java)
 
+        // Freshly
+        registerPacketBukkitFreshly("PacketPlayOutMount", PacketOutMount::class.java)
+
         // Legacy
         registerPacketBukkitLegacy(PacketOutNamedSoundLegacyAdapter())
     }

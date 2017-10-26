@@ -356,12 +356,7 @@ class MoonLakePluginTest : JavaPlugin() {
         }.registerEvent(this)
 
         val packets = arrayOf(
-                PacketOutEntityStatus::class.java,
-                PacketOutEntityTeleport::class.java,
-                PacketOutEntityVelocity::class.java,
-                PacketOutExperience::class.java,
-                PacketOutExplosion::class.java,
-                PacketOutGameStateChange::class.java)
+                PacketOutMount::class.java)
 
         PacketListeners.registerListener(object: PacketListenerAdapter(this, *packets) {
             override fun onSending(event: PacketEvent) {
