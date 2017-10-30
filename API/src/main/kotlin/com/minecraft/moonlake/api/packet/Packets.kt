@@ -145,6 +145,7 @@ object Packets {
         registerPacketBukkit("PacketPlayOutKeepAlive", PacketOutKeepAlive::class.java)
         registerPacketBukkit("PacketPlayOutKickDisconnect", PacketOutKickDisconnect::class.java)
         registerPacketBukkit("PacketPlayOutLogin", PacketOutJoinGame::class.java)
+        registerPacketBukkit("PacketPlayOutMultiBlockChange", PacketOutMultiBlockChange::class.java)
         registerPacketBukkit("PacketPlayOutPlayerInfo", PacketOutPlayerInfo::class.java)
         registerPacketBukkit("PacketPlayOutPlayerListHeaderFooter", PacketOutListHeaderFooter::class.java)
         registerPacketBukkit("PacketPlayOutPosition", PacketOutPosition::class.java)
