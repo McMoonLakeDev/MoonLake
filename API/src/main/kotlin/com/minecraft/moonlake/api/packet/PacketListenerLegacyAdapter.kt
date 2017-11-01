@@ -21,9 +21,9 @@ import org.bukkit.plugin.Plugin
 import java.util.*
 
 open class PacketListenerLegacyAdapter<P: PacketBukkitLegacy, T>(
-        private val _plugin: Plugin,
-        private val _priority: PacketListenerPriority,
-        private val _legacyAdapter: PacketLegacyAdapter<P, T>) : PacketListener where T: PacketBukkitLegacy, T: PacketLegacy {
+        override final val plugin: Plugin,
+        override final val priority: PacketListenerPriority,
+        val legacyAdapter: PacketLegacyAdapter<P, T>) : PacketListener where T: PacketBukkitLegacy, T: PacketLegacy {
 
     private val _sendingTypes: MutableSet<Class<out PacketOut>> = HashSet()
     private val _receivingTypes: MutableSet<Class<out PacketIn>> = HashSet()
@@ -31,7 +31,7 @@ open class PacketListenerLegacyAdapter<P: PacketBukkitLegacy, T>(
     constructor(plugin: Plugin, legacyAdapter: PacketLegacyAdapter<P, T>) : this(plugin, PacketListenerPriority.NORMAL, legacyAdapter)
 
     init {
-        val clazz = _legacyAdapter.result
+        val clazz = legacyAdapter.result
         if(!Packets.isRegisteredWrapped(clazz))
             throw IllegalArgumentException("待监听的数据包包装类 $clazz 没有注册.")
         when(PacketOut::class.java.isAssignableFrom(clazz)) {
@@ -39,15 +39,6 @@ open class PacketListenerLegacyAdapter<P: PacketBukkitLegacy, T>(
             false -> _receivingTypes.add(clazz.asSubclass(PacketIn::class.java))
         }
     }
-
-    override final val plugin: Plugin
-        get() = _plugin
-
-    override final val priority: PacketListenerPriority
-        get() = _priority
-
-    val legacyAdapter: PacketLegacyAdapter<P, T>
-        get() = _legacyAdapter
 
     override final val sendingTypes: Set<Class<out PacketOut>>
         get() = if(_sendingTypes.isEmpty()) Collections.emptySet() else HashSet(_sendingTypes)
@@ -65,23 +56,23 @@ open class PacketListenerLegacyAdapter<P: PacketBukkitLegacy, T>(
         if(other === this)
             return true
         if(other is PacketListenerLegacyAdapter<*, *>)
-            return plugin == other.plugin && priority == other.priority && _legacyAdapter == other._legacyAdapter && _sendingTypes == other._sendingTypes && _receivingTypes == other._receivingTypes
+            return plugin == other.plugin && priority == other.priority && legacyAdapter == other.legacyAdapter && _sendingTypes == other._sendingTypes && _receivingTypes == other._receivingTypes
         return false
     }
 
     override final fun hashCode(): Int {
-        var result = _plugin.hashCode()
-        result = 31 * result + _priority.hashCode()
-        result = 31 * result + _legacyAdapter.hashCode()
+        var result = plugin.hashCode()
+        result = 31 * result + priority.hashCode()
+        result = 31 * result + legacyAdapter.hashCode()
         result = 31 * result + _sendingTypes.hashCode()
         result = 31 * result + _receivingTypes.hashCode()
         return result
     }
 
     override final fun toString(): String {
-        return "PacketListenerLegacy(plugin=$plugin, priority=$priority, legacyAdapter=$_legacyAdapter, sendingTypes=$_sendingTypes, receivingTypes=$_receivingTypes)"
+        return "PacketListenerLegacy(plugin=$plugin, priority=$priority, legacyAdapter=$legacyAdapter, sendingTypes=$_sendingTypes, receivingTypes=$_receivingTypes)"
     }
 
     val PacketEvent.isLegacy: Boolean
-        get() = _legacyAdapter.isLegacy
+        get() = legacyAdapter.isLegacy
 }

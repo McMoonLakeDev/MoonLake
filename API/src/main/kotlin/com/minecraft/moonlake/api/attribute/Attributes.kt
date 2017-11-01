@@ -80,11 +80,9 @@ object Attributes {
 
     /** implement */
 
-    private class EntityAttributeImpl(val handle: Any, val _type: AttributeType) : Attribute {
-        override val type: AttributeType
-            get() = _type
+    private class EntityAttributeImpl(val handle: Any, override val type: AttributeType) : Attribute {
         override val defValue: Double
-            get() = _type.def
+            get() = type.def
         override var baseValue: Double
             get() = attributeInstanceGetBaseValue.invoke(handle) as Double
             set(value) { attributeInstanceSetBaseValue.invoke(handle, value) }

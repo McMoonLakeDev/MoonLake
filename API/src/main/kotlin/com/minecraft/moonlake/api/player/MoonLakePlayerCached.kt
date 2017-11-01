@@ -31,8 +31,9 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerQuitEvent
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
-class MoonLakePlayerCached private constructor(): CachedWeakRef<UUID, MoonLakePlayer>() {
+class MoonLakePlayerCached private constructor(): CachedWeakRef<UUID, MoonLakePlayer>(ConcurrentHashMap()) {
 
     /** static */
 
@@ -53,13 +54,11 @@ class MoonLakePlayerCached private constructor(): CachedWeakRef<UUID, MoonLakePl
 
         @JvmStatic
         @JvmName("of")
-        @Synchronized
         fun of(player: Player): MoonLakePlayer
                 = instance.getCache(player)
 
         @JvmStatic
         @JvmName("clear")
-        @Synchronized
         fun clear()
                 = instance.gc()
     }

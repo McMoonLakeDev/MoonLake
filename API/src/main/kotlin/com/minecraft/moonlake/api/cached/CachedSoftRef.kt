@@ -17,7 +17,10 @@
 
 package com.minecraft.moonlake.api.cached
 
-abstract class CachedSoftRef<K, V> : CachedReferenceAbstract<K, V, CachedSoftReference<K, V>>() {
+abstract class CachedSoftRef<K, V>(
+        map: MutableMap<K, CachedSoftReference<K, V>>?) : CachedReferenceAbstract<K, V, CachedSoftReference<K, V>>(map) {
+
+    constructor() : this(null)
 
     override final fun produceRef(key: K, value: V, queue: CachedReferenceQueue<V>): CachedSoftReference<K, V>
             = CachedSoftReference(key, value, queue)

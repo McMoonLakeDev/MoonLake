@@ -17,7 +17,10 @@
 
 package com.minecraft.moonlake.api.cached
 
-abstract class CachedWeakRef<K, V> : CachedReferenceAbstract<K, V, CachedWeakReference<K, V>>() {
+abstract class CachedWeakRef<K, V>(
+        map: MutableMap<K, CachedWeakReference<K, V>>?) : CachedReferenceAbstract<K, V, CachedWeakReference<K, V>>(map) {
+
+    constructor() : this(null)
 
     override final fun produceRef(key: K, value: V, queue: CachedReferenceQueue<V>): CachedWeakReference<K, V>
             = CachedWeakReference(key, value, queue)

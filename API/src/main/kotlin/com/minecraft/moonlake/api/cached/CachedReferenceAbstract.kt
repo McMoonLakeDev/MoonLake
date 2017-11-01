@@ -31,7 +31,7 @@ abstract class CachedReferenceAbstract<K, V, R: CachedRef<K, V>> : CachedReferen
 
     protected constructor() : this(null)
     protected constructor(map: MutableMap<K, R>?) {
-        this.cachedMap = map ?: HashMap()
+        this.cachedMap = if(map == null) HashMap() else HashMap(map)
         this.queue = CachedReferenceQueue()
     }
 
@@ -52,7 +52,6 @@ abstract class CachedReferenceAbstract<K, V, R: CachedRef<K, V>> : CachedReferen
     }
 
     override fun gc() {
-        this.removeCache()
         this.cachedMap.clear()
     }
 

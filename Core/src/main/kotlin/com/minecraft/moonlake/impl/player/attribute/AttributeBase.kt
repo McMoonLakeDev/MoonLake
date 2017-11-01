@@ -22,13 +22,12 @@ import com.minecraft.moonlake.api.attribute.AttributeModifier
 import com.minecraft.moonlake.api.attribute.AttributeType
 import com.minecraft.moonlake.api.player.MoonLakePlayer
 
-open class AttributeBase(protected val player: MoonLakePlayer, private val _type: AttributeType) : Attribute {
-
-    override val type: AttributeType
-        get() = _type
+open class AttributeBase(
+        protected val player: MoonLakePlayer,
+        override val type: AttributeType) : Attribute {
 
     override val defValue: Double
-        get() = _type.def
+        get() = type.def
 
     override var baseValue: Double
         get() = throw UnsupportedOperationException()

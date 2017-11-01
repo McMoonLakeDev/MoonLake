@@ -41,18 +41,11 @@ import com.minecraft.moonlake.api.reflect.StructureModifier
 import com.minecraft.moonlake.api.utility.MinecraftReflection
 import java.lang.reflect.Method
 
-class NBTWrappedElement<T>(private val _handle: Any, private var _name: String) : NBTWrapper<T> {
+class NBTWrappedElement<T>(override val handle: Any, override var name: String) : NBTWrapper<T> {
 
     /** member */
 
     private var _type: NBTType? = null
-
-    override val handle: Any
-        get() = _handle
-
-    override var name: String
-        get() = _name
-        set(value) { _name = value }
 
     override val type: NBTType
         get() {

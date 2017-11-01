@@ -42,18 +42,10 @@ import org.bukkit.World
 
 open class RegionCuboid(
         world: World,
-        private var _pos1: RegionVector,
-        private var _pos2: RegionVector) : RegionAbstract(world), RegionFlat {
+        var pos1: RegionVector,
+        var pos2: RegionVector) : RegionAbstract(world), RegionFlat {
 
     /** api */
-
-    var pos1: RegionVector
-        get() = _pos1
-        set(value) { _pos1 = value }
-
-    var pos2: RegionVector
-        get() = _pos2
-        set(value) { _pos2 = value }
 
     override val minimumPoint: RegionVector
         get() = RegionVector(Math.min(pos1.x, pos2.x), Math.min(pos1.y, pos2.y), Math.min(pos1.z, pos2.z))

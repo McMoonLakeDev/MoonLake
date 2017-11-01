@@ -32,13 +32,13 @@ abstract class PacketOutBukkitAbstract : PacketBukkitAbstract, PacketOutBukkit {
             = send(receiver.bukkitPlayer)
 
     override fun send(receiver: Player) = try {
-        Packets.sendPacket(receiver, handle)
+        Packets.sendPacket(receiver, Packets.createBufferPacket(this))
     } catch(e: Exception) {
         throw PacketException(e)
     }
 
     override fun send(receivers: Array<Player>) {
-        val packet = handle
+        val packet = Packets.createBufferPacket(this)
         receivers.forEach {
             try {
                 Packets.sendPacket(it, packet)

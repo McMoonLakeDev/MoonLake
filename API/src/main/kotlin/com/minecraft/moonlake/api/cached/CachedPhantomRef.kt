@@ -17,7 +17,10 @@
 
 package com.minecraft.moonlake.api.cached
 
-abstract class CachedPhantomRef<K, V> : CachedReferenceAbstract<K, V, CachedPhantomReference<K, V>>() {
+abstract class CachedPhantomRef<K, V>(
+        map: MutableMap<K, CachedPhantomReference<K, V>>?) : CachedReferenceAbstract<K, V, CachedPhantomReference<K, V>>(map) {
+
+    constructor() : this(null)
 
     override final fun produceRef(key: K, value: V, queue: CachedReferenceQueue<V>): CachedPhantomReference<K, V>
             = CachedPhantomReference(key, value, queue)

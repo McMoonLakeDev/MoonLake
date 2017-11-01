@@ -41,10 +41,7 @@ import org.bukkit.World
 import org.bukkit.block.Block
 import org.bukkit.entity.Entity
 
-abstract class RegionAbstract(private val _world: World) : Region {
-
-    override val world: World
-        get() = _world
+abstract class RegionAbstract(override final val world: World) : Region {
 
     override val center: RegionVector
         get() = (minimumPoint + maximumPoint) / 2

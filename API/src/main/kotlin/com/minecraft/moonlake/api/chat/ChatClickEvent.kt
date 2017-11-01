@@ -21,10 +21,25 @@ data class ChatClickEvent(val action: Action, val value: String) {
 
     enum class Action {
 
+        /**
+         * Chat Click Event: Open URL (聊天点击事件: 打开链接)
+         */
         OPEN_URL,
+        /**
+         * Chat Click Event: Open File (聊天点击事件: 打开文件)
+         */
         OPEN_FILE,
+        /**
+         * Chat Click Event: Suggest Command (聊天点击事件: 提示命令)
+         */
         SUGGEST_COMMAND,
+        /**
+         * Chat Click Event: Run Command (聊天点击事件: 执行命令)
+         */
         RUN_COMMAND,
+        /**
+         * Chat Click Event: Change Page (聊天点击事件: 改变页面)
+         */
         CHANGE_PAGE,
         ;
     }

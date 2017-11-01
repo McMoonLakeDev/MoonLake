@@ -22,10 +22,10 @@ import com.minecraft.moonlake.api.isCombatOrLaterVer
 class PacketInBlockPlaceLegacyAdapter : PacketLegacyAdapter<PacketInBlockPlace, PacketInBlockPlaceLegacy>() {
 
     override val packet: Class<PacketInBlockPlace>
-        get() = PacketInBlockPlace::class.java
+        get() = PacketInBlockPlace::class.java // 1.9+
 
     override val packetLegacy: Class<PacketInBlockPlaceLegacy>
-        get() = PacketInBlockPlaceLegacy::class.java
+        get() = PacketInBlockPlaceLegacy::class.java // 1.8.x
 
     override val isLegacy: Boolean
         get() = !isCombatOrLaterVer

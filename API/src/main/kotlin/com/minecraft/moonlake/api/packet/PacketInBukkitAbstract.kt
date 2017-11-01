@@ -32,13 +32,13 @@ abstract class PacketInBukkitAbstract : PacketBukkitAbstract, PacketInBukkit {
             = receive(sender.bukkitPlayer)
 
     override fun receive(sender: Player) = try {
-        Packets.processPacket(sender, handle)
+        Packets.processPacket(sender, Packets.createBufferPacket(this))
     } catch(e: Exception) {
         throw PacketException(e)
     }
 
     override fun receive(senders: Array<Player>) {
-        val packet = handle
+        val packet = Packets.createBufferPacket(this)
         senders.forEach {
             try {
                 Packets.processPacket(it, packet)

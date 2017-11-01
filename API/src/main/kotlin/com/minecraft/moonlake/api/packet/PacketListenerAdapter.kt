@@ -20,7 +20,10 @@ package com.minecraft.moonlake.api.packet
 import org.bukkit.plugin.Plugin
 import java.util.*
 
-open class PacketListenerAdapter(private val _plugin: Plugin, private val _priority: PacketListenerPriority, vararg types: Class<out Packet>) : PacketListener {
+open class PacketListenerAdapter(
+        override final val plugin: Plugin,
+        override final val priority: PacketListenerPriority,
+        vararg types: Class<out Packet>) : PacketListener {
 
     private val _sendingTypes: MutableSet<Class<out PacketOut>> = HashSet()
     private val _receivingTypes: MutableSet<Class<out PacketIn>> = HashSet()
@@ -46,12 +49,6 @@ open class PacketListenerAdapter(private val _plugin: Plugin, private val _prior
         }
     }
 
-    override final val plugin: Plugin
-        get() = _plugin
-
-    override final val priority: PacketListenerPriority
-        get() = _priority
-
     override final val sendingTypes: Set<Class<out PacketOut>>
         get() = if(_sendingTypes.isEmpty()) Collections.emptySet() else HashSet(_sendingTypes)
 
@@ -73,8 +70,8 @@ open class PacketListenerAdapter(private val _plugin: Plugin, private val _prior
     }
 
     override final fun hashCode(): Int {
-        var result = _plugin.hashCode()
-        result = 31 * result + _priority.hashCode()
+        var result = plugin.hashCode()
+        result = 31 * result + priority.hashCode()
         result = 31 * result + _sendingTypes.hashCode()
         result = 31 * result + _receivingTypes.hashCode()
         return result

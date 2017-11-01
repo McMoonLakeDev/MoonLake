@@ -21,9 +21,21 @@ data class ChatHoverEvent(val action: Action, val value: ChatComponent) {
 
     enum class Action {
 
+        /**
+         * Chat Hover Event: Show Text (聊天移动事件: 显示文本)
+         */
         SHOW_TEXT,
+        /**
+         * Chat Hover Event: Show Achievement (聊天移动事件: 显示成就)
+         */
         SHOW_ACHIEVEMENT,
+        /**
+         * Chat Hover Event: Show Item (聊天移动事件: 显示物品栈)
+         */
         SHOW_ITEM,
+        /**
+         * Chat Hover Event: Show Entity (聊天移动事件: 显示实体)
+         */
         SHOW_ENTITY,
         ;
     }

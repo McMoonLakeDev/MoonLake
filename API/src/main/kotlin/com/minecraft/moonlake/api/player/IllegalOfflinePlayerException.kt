@@ -21,6 +21,6 @@ import com.minecraft.moonlake.api.exception.MoonLakeException
 
 open class IllegalOfflinePlayerException : MoonLakeException {
 
-    constructor() : super("玩家离线或不存在服务器异常.")
-    constructor(name: String) : super("玩家 '$name' 离线或不存在服务器异常.")
+    constructor() : super("玩家离线或不存在服务器.")
+    constructor(name: String) : super("玩家 '$name' 离线或不存在服务器.")
 }
