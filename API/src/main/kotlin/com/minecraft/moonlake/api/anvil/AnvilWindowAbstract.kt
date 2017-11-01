@@ -20,7 +20,7 @@ package com.minecraft.moonlake.api.anvil
 import com.minecraft.moonlake.api.player.MoonLakePlayer
 import org.bukkit.plugin.Plugin
 
-abstract class AnvilWindowAbstract(override val plugin: Plugin) : AnvilWindow {
+abstract class AnvilWindowAbstract(override final val plugin: Plugin) : AnvilWindow {
 
     protected var openHandler: AnvilWindowEventHandler<AnvilWindowOpenEvent>? = null
     protected var inputHandler: AnvilWindowEventHandler<AnvilWindowInputEvent>? = null
