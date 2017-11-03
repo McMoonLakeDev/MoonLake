@@ -18,8 +18,8 @@
 package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.Valuable
-import com.mcmoonlake.api.player.PlayerInfo
 import com.mcmoonlake.api.util.Enums
+import com.mcmoonlake.api.player.PlayerInfo
 import com.mojang.authlib.GameProfile
 import com.mojang.authlib.properties.Property
 import org.bukkit.GameMode
@@ -30,7 +30,7 @@ data class PacketOutPlayerInfo(var action: Action, var info: MutableList<PlayerI
     @Deprecated("")
     constructor() : this(Action.REMOVE_PLAYER, ArrayList())
 
-    override fun read(data: PacketBuffer) { // TODO v1.13
+    override fun read(data: PacketBuffer) {
         action = Enums.ofValuable(Action::class.java, data.readVarInt()) ?: Action.REMOVE_PLAYER
         val length = data.readVarInt()
         (0 until length).forEach {
@@ -56,7 +56,7 @@ data class PacketOutPlayerInfo(var action: Action, var info: MutableList<PlayerI
         }
     }
 
-    override fun write(data: PacketBuffer) { // TODO v1.13
+    override fun write(data: PacketBuffer) {
         data.writeVarInt(action.value())
         data.writeVarInt(info.size)
         for(playerInfo in info) {

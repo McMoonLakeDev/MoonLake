@@ -16,8 +16,9 @@
 #
 
 name: MoonLakeTest
-main: com.minecraft.moonlake.test.MoonLakePluginTest
+main: com.mcmoonlake.test.MoonLakePluginTest
 version: ${project.version}
-author: Month_Light
+author: lgou2w
+authors: [lgou2w, Month_Light, MoonLake]
 website: http://www.mcmoonlake.com
 depend: [MoonLake]

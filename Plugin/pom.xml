@@ -5,7 +5,7 @@
 
     <parent>
         <artifactId>MoonLakeParent</artifactId>
-        <groupId>com.minecraft.moonlake</groupId>
+        <groupId>com.mcmoonlake</groupId>
         <version>2.0</version>
     </parent>
 
@@ -29,6 +29,13 @@
     </repositories>
 
     <dependencies>
+        <!-- Gson Dependency --> <!-- In order to be compatible with v1.8 server -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>Gson</artifactId>
+            <version>2.8.0</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- Spigot Dependency -->
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -52,68 +59,68 @@
         </dependency>
         <!-- API Dependency -->
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeAPI</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <!-- Core Dependency -->
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.8-R1</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.8-R2</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.8-R3</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.9-R1</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.9-R2</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.10-R1</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.11-R1</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.12-R1</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.12-R2</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
@@ -125,7 +132,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>

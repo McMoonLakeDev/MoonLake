@@ -5,7 +5,7 @@
 
     <parent>
         <artifactId>MoonLakeParent</artifactId>
-        <groupId>com.minecraft.moonlake</groupId>
+        <groupId>com.mcmoonlake</groupId>
         <version>2.0</version>
     </parent>
 
@@ -16,18 +16,18 @@
     <dependencies>
         <!-- API Dependency -->
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeAPI</artifactId>
             <version>2.0</version>
         </dependency>
         <!-- Core Dependency -->
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore</artifactId>
             <version>2.0</version>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.10-R1</artifactId>
             <version>2.0</version>
         </dependency>
