@@ -5,7 +5,7 @@
 
     <parent>
         <artifactId>MoonLakeParent</artifactId>
-        <groupId>com.minecraft.moonlake</groupId>
+        <groupId>com.mcmoonlake</groupId>
         <version>2.0</version>
     </parent>
 
@@ -59,68 +59,68 @@
         </dependency>
         <!-- API Dependency -->
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeAPI</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <!-- Core Dependency -->
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.8-R1</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.8-R2</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.8-R3</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.9-R1</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.9-R2</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.10-R1</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.11-R1</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.12-R1</artifactId>
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.minecraft.moonlake</groupId>
+            <groupId>com.mcmoonlake</groupId>
             <artifactId>MoonLakeCore-v1.12-R2</artifactId>
             <version>2.0</version>
             <scope>compile</scope>

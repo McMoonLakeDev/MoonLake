@@ -16,11 +16,11 @@
 #
 
 name: MoonLake
-main: com.minecraft.moonlake.MoonLakePlugin
+main: com.mcmoonlake.MoonLakePlugin
 version: ${project.version}
 prefix: MoonLake
 description: Minecraft MoonLake Core API Plugin
 website: http://www.mcmoonlake.com/
-author: Month_Light
-authors: [Month_Light, MoonLake]
+author: lgou2w
+authors: [lgou2w, Month_Light, MoonLake]
 softdepend: [Vault, WorldEdit, PlaceholderAPI]
