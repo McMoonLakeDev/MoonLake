@@ -17,6 +17,8 @@
 
 package com.minecraft.moonlake.api.packet
 
+import com.minecraft.moonlake.api.util.clamp
+
 data class PacketOutEntityVelocity(
         var entityId: Int,
         var velocityX: Int,
@@ -25,6 +27,12 @@ data class PacketOutEntityVelocity(
 
     @Deprecated("")
     constructor() : this(-1, 0, 0, 0)
+
+    init {
+        velocityX = (clamp(velocityX.toDouble(), -3.9, 3.9) * 8000.0).toInt()
+        velocityY = (clamp(velocityY.toDouble(), -3.9, 3.9) * 8000.0).toInt()
+        velocityZ = (clamp(velocityZ.toDouble(), -3.9, 3.9) * 8000.0).toInt()
+    }
 
     override fun read(data: PacketBuffer) {
         entityId = data.readVarInt()
