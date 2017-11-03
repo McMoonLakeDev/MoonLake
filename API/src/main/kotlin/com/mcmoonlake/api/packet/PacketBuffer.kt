@@ -373,4 +373,13 @@ data class PacketBuffer(private var byteBuf: ByteBuf) {
     override fun toString(): String {
         return "PacketBuffer(byteBuf=$byteBuf)"
     }
+
+    companion object {
+
+        /**
+         * * Empty bytes of PacketBuffer.
+         */
+        @JvmField
+        val EMPTY = PacketBuffer(Unpooled.EMPTY_BUFFER)
+    }
 }

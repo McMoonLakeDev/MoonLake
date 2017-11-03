@@ -20,7 +20,7 @@ package com.mcmoonlake.api.packet
 data class PacketInPayload(var channel: String, var data: PacketBuffer) : PacketInBukkitAbstract("PacketPlayInCustomPayload") {
 
     @Deprecated("")
-    constructor() : this("MoonLake", PacketBuffer())
+    constructor() : this("MoonLake", PacketBuffer.EMPTY)
 
     override fun read(data: PacketBuffer) {
         channel = data.readString()
