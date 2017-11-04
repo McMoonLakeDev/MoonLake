@@ -356,10 +356,13 @@ class MoonLakePluginTest : JavaPlugin() {
         }.registerEvent(this)
 
         val packets = arrayOf(
-                PacketOutOpenSignEditor::class.java,
-                PacketOutOpenWindow::class.java,
-                PacketOutRemoveEntityEffect::class.java,
-                PacketOutResourcePackSend::class.java)
+                PacketOutSelectAdvancementTab::class.java,
+                PacketOutSetCooldown::class.java,
+                PacketOutTabComplete::class.java,
+                PacketOutTileEntityData::class.java,
+                PacketOutTransaction::class.java,
+                PacketOutUnloadChunk::class.java,
+                PacketOutUpdateHealth::class.java)
 
         PacketListeners.registerListener(object: PacketListenerAdapter(this, *packets) {
             override fun onSending(event: PacketEvent) {

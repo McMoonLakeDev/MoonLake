@@ -99,8 +99,8 @@ object Packets {
         registerPacketBukkit("PacketPlayInWindowClick", PacketInWindowClick::class.java)
 
         // Freshly
-        registerPacketBukkitFreshly("PacketPlayInTeleportAccept", PacketInTeleportAccept::class.java)
-        registerPacketBukkitFreshly("PacketPlayInVehicleMove", PacketInVehicleMove::class.java)
+        registerPacketBukkitFreshly("PacketPlayInTeleportAccept", PacketInTeleportAccept::class.java) // 1.9+
+        registerPacketBukkitFreshly("PacketPlayInVehicleMove", PacketInVehicleMove::class.java) // 1.9+
 
         // Legacy
         registerPacketBukkitLegacy("PacketPlayInBlockPlace", PacketInBlockPlaceLegacyAdapter())
@@ -156,11 +156,18 @@ object Packets {
         registerPacketBukkit("PacketPlayOutRespawn", PacketOutRespawn::class.java)
         registerPacketBukkit("PacketPlayOutServerDifficulty", PacketOutServerDifficulty::class.java)
         registerPacketBukkit("PacketPlayOutSetSlot", PacketOutSetSlot::class.java)
+        registerPacketBukkit("PacketPlayOutTabComplete", PacketOutTabComplete::class.java)
+        registerPacketBukkit("PacketPlayOutTileEntityData", PacketOutTileEntityData::class.java)
         registerPacketBukkit("PacketPlayOutTitle", PacketOutTitle::class.java)
+        registerPacketBukkit("PacketPlayOutTransaction", PacketOutTransaction::class.java)
+        registerPacketBukkit("PacketPlayOutUpdateHealth", PacketOutUpdateHealth::class.java)
         registerPacketBukkit("PacketPlayOutWorldParticles", PacketOutParticles::class.java)
 
         // Freshly
-        registerPacketBukkitFreshly("PacketPlayOutMount", PacketOutMount::class.java)
+        registerPacketBukkitFreshly("PacketPlayOutMount", PacketOutMount::class.java) // 1.9+
+        registerPacketBukkitFreshly("PacketPlayOutSelectAdvancementTab", PacketOutSelectAdvancementTab::class.java) // 1.12+
+        registerPacketBukkitFreshly("PacketPlayOutSetCooldown", PacketOutSetCooldown::class.java) // 1.9+
+        registerPacketBukkitFreshly("PacketPlayOutUnloadChunk", PacketOutUnloadChunk::class.java) // 1.9+
 
         // Legacy
         registerPacketBukkitLegacy(PacketOutNamedSoundLegacyAdapter())
