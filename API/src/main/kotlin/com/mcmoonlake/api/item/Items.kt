@@ -35,6 +35,12 @@ import java.lang.reflect.Modifier
 
 object Items {
 
+    /**
+     * * Air of ItemStack.
+     */
+    @JvmField
+    val AIR = ItemStack(Material.AIR)
+
     @JvmStatic
     private val itemGetById: AccessorMethod by lazy {
         Accessors.getAccessorMethod(MinecraftReflection.getItemClass(), "getById", true, Int::class.java) }

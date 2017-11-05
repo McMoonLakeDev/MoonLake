@@ -161,6 +161,9 @@ object Packets {
         registerPacketBukkit("PacketPlayOutTitle", PacketOutTitle::class.java)
         registerPacketBukkit("PacketPlayOutTransaction", PacketOutTransaction::class.java)
         registerPacketBukkit("PacketPlayOutUpdateHealth", PacketOutUpdateHealth::class.java)
+        registerPacketBukkit("PacketPlayOutUpdateTime", PacketOutUpdateTime::class.java)
+        registerPacketBukkit("PacketPlayOutWindowData", PacketOutWindowData::class.java)
+        registerPacketBukkit("PacketPlayOutWindowItems", PacketOutWindowItems::class.java)
         registerPacketBukkit("PacketPlayOutWorldParticles", PacketOutParticles::class.java)
 
         // Freshly
@@ -168,6 +171,7 @@ object Packets {
         registerPacketBukkitFreshly("PacketPlayOutSelectAdvancementTab", PacketOutSelectAdvancementTab::class.java) // 1.12+
         registerPacketBukkitFreshly("PacketPlayOutSetCooldown", PacketOutSetCooldown::class.java) // 1.9+
         registerPacketBukkitFreshly("PacketPlayOutUnloadChunk", PacketOutUnloadChunk::class.java) // 1.9+
+        registerPacketBukkitFreshly("PacketPlayOutVehicleMove", PacketOutVehicleMove::class.java) // 1.9+
 
         // Legacy
         registerPacketBukkitLegacy(PacketOutNamedSoundLegacyAdapter())
