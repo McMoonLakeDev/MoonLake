@@ -18,6 +18,7 @@
 package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.converter.ConverterEquivalentIgnoreNull
+import com.mcmoonlake.api.isCombatOrLaterVer
 import com.mcmoonlake.api.reflect.accessor.AccessorConstructor
 import com.mcmoonlake.api.reflect.accessor.AccessorField
 import com.mcmoonlake.api.reflect.accessor.AccessorMethod
@@ -131,10 +132,12 @@ object Packets {
         registerPacketBukkit("PacketPlayOutCloseWindow", PacketOutCloseWindow::class.java)
         registerPacketBukkit("PacketPlayOutCollect", PacketOutCollect::class.java)
         registerPacketBukkit("PacketPlayOutCombatEvent", PacketOutCombatEvent::class.java)
+        registerPacketBukkit("PacketPlayOutScoreboardDisplayObjective", PacketOutDisplayObjective::class.java)
         registerPacketBukkit("PacketPlayOutCustomPayload", PacketOutPayload::class.java)
         registerPacketBukkit("PacketPlayOutEntityDestroy", PacketOutEntityDestroy::class.java)
         registerPacketBukkit("PacketPlayOutEntityEffect", PacketOutEntityEffect::class.java)
         registerPacketBukkit("PacketPlayOutEntityEquipment", PacketOutEntityEquipment::class.java)
+        registerPacketBukkit("PacketPlayOutEntityHeadRotation", PacketOutEntityHeadRotation::class.java)
         registerPacketBukkit("PacketPlayOutEntityStatus", PacketOutEntityStatus::class.java)
         registerPacketBukkit("PacketPlayOutEntityTeleport", PacketOutEntityTeleport::class.java)
         registerPacketBukkit("PacketPlayOutEntityVelocity", PacketOutEntityVelocity::class.java)
@@ -160,16 +163,22 @@ object Packets {
         registerPacketBukkit("PacketPlayOutTileEntityData", PacketOutTileEntityData::class.java)
         registerPacketBukkit("PacketPlayOutTitle", PacketOutTitle::class.java)
         registerPacketBukkit("PacketPlayOutTransaction", PacketOutTransaction::class.java)
+        registerPacketBukkit("PacketPlayOutUpdateAttributes", PacketOutUpdateAttributes::class.java)
         registerPacketBukkit("PacketPlayOutUpdateHealth", PacketOutUpdateHealth::class.java)
         registerPacketBukkit("PacketPlayOutUpdateTime", PacketOutUpdateTime::class.java)
         registerPacketBukkit("PacketPlayOutWindowData", PacketOutWindowData::class.java)
         registerPacketBukkit("PacketPlayOutWindowItems", PacketOutWindowItems::class.java)
+        registerPacketBukkit("PacketPlayOutWorldEvent", PacketOutWorldEvent::class.java)
+        registerPacketBukkit("PacketPlayOutWorldBorder", PacketOutWorldBorder::class.java)
         registerPacketBukkit("PacketPlayOutWorldParticles", PacketOutParticles::class.java)
 
         // Freshly
+        registerPacketBukkitFreshly("PacketPlayOutBoss", PacketOutBossBar::class.java) // 1.9+
         registerPacketBukkitFreshly("PacketPlayOutMount", PacketOutMount::class.java) // 1.9+
         registerPacketBukkitFreshly("PacketPlayOutSelectAdvancementTab", PacketOutSelectAdvancementTab::class.java) // 1.12+
         registerPacketBukkitFreshly("PacketPlayOutSetCooldown", PacketOutSetCooldown::class.java) // 1.9+
+        if(isCombatOrLaterVer) // Otherwise it will conflict with version 1.8.x
+            registerPacketBukkitFreshly("PacketPlayOutNamedSoundEffect", PacketOutSoundEffect::class.java) // 1.9+
         registerPacketBukkitFreshly("PacketPlayOutUnloadChunk", PacketOutUnloadChunk::class.java) // 1.9+
         registerPacketBukkitFreshly("PacketPlayOutVehicleMove", PacketOutVehicleMove::class.java) // 1.9+
 
