@@ -23,7 +23,12 @@ import com.mcmoonlake.api.currentBukkitVersion
 import com.mcmoonlake.api.isOrLater
 import com.mcmoonlake.api.version.MinecraftBukkitVersion
 
-data class PacketOutTitle(var action: Action, var title: ChatComponent?, var fadeIn: Int, var stay: Int, var fadeOut: Int) : PacketOutBukkitAbstract("PacketPlayOutTitle") {
+data class PacketOutTitle(
+        var action: Action,
+        var title: ChatComponent?,
+        var fadeIn: Int,
+        var stay: Int,
+        var fadeOut: Int) : PacketOutBukkitAbstract("PacketPlayOutTitle") {
 
     constructor(fadeIn: Int, stay: Int, fadeOut: Int) : this(Action.TIMES, null, fadeIn, stay, fadeOut)
     constructor(action: Action, title: ChatComponent?) : this(action, title, -1, -1, -1)

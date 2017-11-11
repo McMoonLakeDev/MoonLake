@@ -17,7 +17,11 @@
 
 package com.mcmoonlake.api.packet
 
-data class PacketInSteerVehicle(var strafeSpeed: Float, var forwardSpeed: Float, var jumping: Boolean, var sneaking: Boolean) : PacketInBukkitAbstract("PacketPlayInSteerVehicle") {
+data class PacketInSteerVehicle(
+        var strafeSpeed: Float,
+        var forwardSpeed: Float,
+        var jumping: Boolean,
+        var sneaking: Boolean) : PacketInBukkitAbstract("PacketPlayInSteerVehicle") {
 
     @Deprecated("")
     constructor() : this(0f, 0f, false, false)

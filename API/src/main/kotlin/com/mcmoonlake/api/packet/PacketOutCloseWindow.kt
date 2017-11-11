@@ -17,7 +17,8 @@
 
 package com.mcmoonlake.api.packet
 
-data class PacketOutCloseWindow(var windowId: Int) : PacketOutBukkitAbstract("PacketPlayOutCloseWindow") {
+data class PacketOutCloseWindow(
+        var windowId: Int) : PacketOutBukkitAbstract("PacketPlayOutCloseWindow") {
 
     @Deprecated("")
     constructor() : this(-1)

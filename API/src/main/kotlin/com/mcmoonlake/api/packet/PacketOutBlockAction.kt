@@ -21,7 +21,11 @@ import com.mcmoonlake.api.block.BlockPosition
 import org.bukkit.Material
 import org.bukkit.block.Block
 
-data class PacketOutBlockAction(var blockPosition: BlockPosition, var action: Int, var parameter: Int, var block: Material) : PacketOutBukkitAbstract("PacketPlayOutBlockAction") {
+data class PacketOutBlockAction(
+        var blockPosition: BlockPosition,
+        var action: Int,
+        var parameter: Int,
+        var block: Material) : PacketOutBukkitAbstract("PacketPlayOutBlockAction") {
 
     constructor(block: Block, action: Int, parameter: Int) : this(BlockPosition(block.x, block.y, block.z), action, parameter, block.type)
 

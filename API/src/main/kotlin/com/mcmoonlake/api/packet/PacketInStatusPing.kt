@@ -17,7 +17,8 @@
 
 package com.mcmoonlake.api.packet
 
-data class PacketInStatusPing(var id: Long) : PacketInBukkitAbstract("PacketStatusInPing"), PacketStatus {
+data class PacketInStatusPing(
+        var id: Long) : PacketInBukkitAbstract("PacketStatusInPing"), PacketStatus {
 
     @Deprecated("")
     constructor() : this(-1L)

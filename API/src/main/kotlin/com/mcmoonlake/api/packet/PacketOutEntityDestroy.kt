@@ -19,7 +19,8 @@ package com.mcmoonlake.api.packet
 
 import java.util.*
 
-data class PacketOutEntityDestroy(var entityId: IntArray) : PacketOutBukkitAbstract("PacketPlayOutEntityDestroy") {
+data class PacketOutEntityDestroy(
+        var entityId: IntArray) : PacketOutBukkitAbstract("PacketPlayOutEntityDestroy") {
 
     @Deprecated("")
     constructor() : this(intArrayOf())

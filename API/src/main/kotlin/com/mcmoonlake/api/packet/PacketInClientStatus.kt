@@ -20,7 +20,8 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.Valuable
 import com.mcmoonlake.api.util.Enums
 
-data class PacketInClientStatus(var status: Status) : PacketInBukkitAbstract("PacketPlayInClientCommand") {
+data class PacketInClientStatus(
+        var status: Status) : PacketInBukkitAbstract("PacketPlayInClientCommand") {
 
     @Deprecated("")
     constructor() : this(Status.PERFORM_RESPAWN)

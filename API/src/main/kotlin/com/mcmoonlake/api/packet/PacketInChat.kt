@@ -21,7 +21,8 @@ import com.mcmoonlake.api.currentBukkitVersion
 import com.mcmoonlake.api.isOrLater
 import com.mcmoonlake.api.version.MinecraftBukkitVersion
 
-data class PacketInChat(var message: String) : PacketInBukkitAbstract("PacketPlayInChat") {
+data class PacketInChat(
+        var message: String) : PacketInBukkitAbstract("PacketPlayInChat") {
 
     @Deprecated("")
     constructor() : this("")

@@ -20,7 +20,9 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.Valuable
 import com.mcmoonlake.api.util.Enums
 
-data class PacketOutAnimation(var entityId: Int, var animation: Type) : PacketOutBukkitAbstract("PacketPlayOutAnimation") {
+data class PacketOutAnimation(
+        var entityId: Int,
+        var animation: Type) : PacketOutBukkitAbstract("PacketPlayOutAnimation") {
 
     @Deprecated("")
     constructor() : this(-1, Type.HURT_EFFECT)

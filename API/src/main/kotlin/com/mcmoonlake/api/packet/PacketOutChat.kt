@@ -19,7 +19,6 @@ package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.chat.ChatAction
 import com.mcmoonlake.api.chat.ChatComponent
-import com.mcmoonlake.api.chat.ChatComponentText
 
 data class PacketOutChat(
         var message: ChatComponent,
@@ -28,7 +27,7 @@ data class PacketOutChat(
     constructor(message: ChatComponent) : this(message, ChatAction.CHAT)
 
     @Deprecated("")
-    constructor() : this(ChatComponentText(), ChatAction.CHAT)
+    constructor() : this(ChatComponent.NULL, ChatAction.CHAT)
 
     override fun read(data: PacketBuffer) {
         message = data.readChatComponent()

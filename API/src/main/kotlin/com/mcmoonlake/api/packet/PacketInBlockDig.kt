@@ -18,11 +18,14 @@
 package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.Valuable
-import com.mcmoonlake.api.util.Enums
 import com.mcmoonlake.api.block.BlockDirection
 import com.mcmoonlake.api.block.BlockPosition
+import com.mcmoonlake.api.util.Enums
 
-data class PacketInBlockDig(var status: Status, var blockPosition: BlockPosition, var direction: BlockDirection) : PacketInBukkitAbstract("PacketPlayInBlockDig") {
+data class PacketInBlockDig(
+        var status: Status,
+        var blockPosition: BlockPosition,
+        var direction: BlockDirection) : PacketInBukkitAbstract("PacketPlayInBlockDig") {
 
     @Deprecated("")
     constructor() : this(Status.STOP_DESTROY_BLOCK, BlockPosition.ZERO, BlockDirection.UP)

@@ -18,12 +18,12 @@
 package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.chat.ChatComponent
-import com.mcmoonlake.api.chat.ChatComponentText
 
-data class PacketOutKickDisconnect(var reason: ChatComponent) : PacketOutBukkitAbstract("PacketPlayOutKickDisconnect") {
+data class PacketOutKickDisconnect(
+        var reason: ChatComponent) : PacketOutBukkitAbstract("PacketPlayOutKickDisconnect") {
 
     @Deprecated("")
-    constructor() : this(ChatComponentText())
+    constructor() : this(ChatComponent.NULL)
 
     override fun read(data: PacketBuffer) {
         reason = data.readChatComponent()

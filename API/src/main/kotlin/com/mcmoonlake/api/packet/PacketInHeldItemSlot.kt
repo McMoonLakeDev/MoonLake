@@ -17,7 +17,8 @@
 
 package com.mcmoonlake.api.packet
 
-data class PacketInHeldItemSlot(var slot: Int) : PacketInBukkitAbstract("PacketPlayInHeldItemSlot") {
+data class PacketInHeldItemSlot(
+        var slot: Int) : PacketInBukkitAbstract("PacketPlayInHeldItemSlot") {
 
     @Deprecated("")
     constructor() : this(0)

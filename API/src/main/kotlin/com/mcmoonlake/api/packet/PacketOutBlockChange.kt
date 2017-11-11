@@ -20,7 +20,9 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.block.BlockData
 import com.mcmoonlake.api.block.BlockPosition
 
-data class PacketOutBlockChange(var blockPosition: BlockPosition, var blockData: BlockData) : PacketOutBukkitAbstract("PacketPlayOutBlockChange") {
+data class PacketOutBlockChange(
+        var blockPosition: BlockPosition,
+        var blockData: BlockData) : PacketOutBukkitAbstract("PacketPlayOutBlockChange") {
 
     @Deprecated("")
     constructor() : this(BlockPosition.ZERO, BlockData.AIR)

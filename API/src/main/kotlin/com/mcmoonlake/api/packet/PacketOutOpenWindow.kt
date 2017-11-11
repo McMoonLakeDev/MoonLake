@@ -18,7 +18,6 @@
 package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.chat.ChatComponent
-import com.mcmoonlake.api.chat.ChatComponentText
 
 data class PacketOutOpenWindow(
         var windowId: Int,
@@ -32,7 +31,7 @@ data class PacketOutOpenWindow(
         var entityHorseId: Int = -1) : PacketOutBukkitAbstract("PacketPlayOutOpenWindow") {
 
     @Deprecated("")
-    constructor() : this(-1, "Null", ChatComponentText(), 0)
+    constructor() : this(-1, "Null", ChatComponent.NULL, 0)
 
     override fun read(data: PacketBuffer) {
         windowId = data.readUnsignedByte().toInt()

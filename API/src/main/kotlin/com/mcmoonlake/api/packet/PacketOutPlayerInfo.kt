@@ -25,7 +25,9 @@ import com.mojang.authlib.properties.Property
 import org.bukkit.GameMode
 import java.util.*
 
-data class PacketOutPlayerInfo(var action: Action, var info: MutableList<PlayerInfo>) : PacketOutBukkitAbstract("PacketPlayOutPlayerInfo") {
+data class PacketOutPlayerInfo(
+        var action: Action,
+        var info: MutableList<PlayerInfo>) : PacketOutBukkitAbstract("PacketPlayOutPlayerInfo") {
 
     @Deprecated("")
     constructor() : this(Action.REMOVE_PLAYER, ArrayList())

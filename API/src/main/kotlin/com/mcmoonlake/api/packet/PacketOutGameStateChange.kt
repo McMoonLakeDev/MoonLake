@@ -17,7 +17,9 @@
 
 package com.mcmoonlake.api.packet
 
-data class PacketOutGameStateChange(var reason: Int, var value: Float) : PacketOutBukkitAbstract("PacketPlayOutGameStateChange") {
+data class PacketOutGameStateChange(
+        var reason: Int,
+        var value: Float) : PacketOutBukkitAbstract("PacketPlayOutGameStateChange") {
 
     @Deprecated("")
     constructor() : this(-1, 0f)

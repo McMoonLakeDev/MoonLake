@@ -352,11 +352,20 @@ class MoonLakePluginTest : JavaPlugin() {
                     val player = event.player.toMoonLakePlayer()
                     player.sendMessage(player.getAttribute(AttributeType.ATTACK_DAMAGE).modifiers.joinToString())
                 }
+                if(event.message == "/cc null") {
+                    val cct = ChatComponentText()
+                    val cc1 = ChatComponent.NULL
+                    val cc2 = ChatComponent.NULL
+                    println(cct == cc1)
+                    println(cc1 == cc2)
+                }
             }
         }.registerEvent(this)
 
         val packets = arrayOf(
-                PacketOutUpdateAttributes::class.java)
+                PacketOutBossBar::class.java, // Should be in the 1.8.x version will be filtered
+                PacketOutDisplayObjective::class.java,
+                PacketOutSoundEffect::class.java) // Should be in the 1.8.x version will be filtered
 
         PacketListeners.registerListener(object: PacketListenerAdapter(this, *packets) {
             override fun onSending(event: PacketEvent) {

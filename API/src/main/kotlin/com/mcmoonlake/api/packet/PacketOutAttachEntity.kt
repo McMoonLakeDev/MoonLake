@@ -19,7 +19,9 @@ package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.isCombatOrLaterVer
 
-data class PacketOutAttachEntity(var entityId: Int, var holderId: Int) : PacketOutBukkitAbstract("PacketPlayOutAttachEntity") {
+data class PacketOutAttachEntity(
+        var entityId: Int,
+        var holderId: Int) : PacketOutBukkitAbstract("PacketPlayOutAttachEntity") {
 
     private var leash: Boolean = false
 

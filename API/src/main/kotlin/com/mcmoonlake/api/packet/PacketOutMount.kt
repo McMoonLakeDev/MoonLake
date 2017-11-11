@@ -19,7 +19,9 @@ package com.mcmoonlake.api.packet
 
 import java.util.*
 
-data class PacketOutMount(var entityId: Int, var passengers: IntArray) : PacketOutBukkitAbstract("PacketPlayOutMount"), PacketBukkitFreshly {
+data class PacketOutMount(
+        var entityId: Int,
+        var passengers: IntArray) : PacketOutBukkitAbstract("PacketPlayOutMount"), PacketBukkitFreshly {
 
     @Deprecated("")
     constructor() : this(-1, intArrayOf())

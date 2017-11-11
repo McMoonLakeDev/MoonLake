@@ -19,7 +19,10 @@ package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.block.BlockPosition
 
-data class PacketOutBlockBreakAnimation(var entityId: Int, var blockPosition: BlockPosition, var value: Int) : PacketOutBukkitAbstract("PacketPlayOutBlockBreakAnimation") {
+data class PacketOutBlockBreakAnimation(
+        var entityId: Int,
+        var blockPosition: BlockPosition,
+        var value: Int) : PacketOutBukkitAbstract("PacketPlayOutBlockBreakAnimation") {
 
     @Deprecated("")
     constructor() : this(-1, BlockPosition.ZERO, 0)

@@ -17,7 +17,11 @@
 
 package com.mcmoonlake.api.packet
 
-data class PacketInPosition(var x: Double, var y: Double, var z: Double, var isOnGround: Boolean) : PacketInBukkitAbstract("PacketPlayInFlying\$PacketPlayInPosition", "PacketPlayInPosition") {
+data class PacketInPosition(
+        var x: Double,
+        var y: Double,
+        var z: Double,
+        var isOnGround: Boolean) : PacketInBukkitAbstract("PacketPlayInFlying\$PacketPlayInPosition", "PacketPlayInPosition") {
 
     @Deprecated("")
     constructor() : this(.0, .0, .0, false)

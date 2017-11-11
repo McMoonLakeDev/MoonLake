@@ -19,7 +19,8 @@ package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.isJavaEditionOrLaterVer
 
-data class PacketInKeepAlive(var id: Long) : PacketInBukkitAbstract("PacketPlayInKeepAlive") {
+data class PacketInKeepAlive(
+        var id: Long) : PacketInBukkitAbstract("PacketPlayInKeepAlive") {
 
     @Deprecated("")
     constructor() : this(-1L)

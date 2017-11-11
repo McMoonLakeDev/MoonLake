@@ -20,10 +20,12 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.chat.ChatComponent
 import com.mcmoonlake.api.chat.ChatComponentText
 
-data class PacketOutListHeaderFooter(var header: ChatComponent, var footer: ChatComponent?) : PacketOutBukkitAbstract("PacketPlayOutPlayerListHeaderFooter") {
+data class PacketOutListHeaderFooter(
+        var header: ChatComponent,
+        var footer: ChatComponent?) : PacketOutBukkitAbstract("PacketPlayOutPlayerListHeaderFooter") {
 
     @Deprecated("")
-    constructor() : this(ChatComponentText(""), null)
+    constructor() : this(ChatComponent.NULL, null)
 
     override fun read(data: PacketBuffer) {
         header = data.readChatComponent()

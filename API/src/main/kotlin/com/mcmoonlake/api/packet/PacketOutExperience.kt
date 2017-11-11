@@ -17,7 +17,10 @@
 
 package com.mcmoonlake.api.packet
 
-data class PacketOutExperience(var progress: Float, var level: Int, var totalExperience: Int) : PacketOutBukkitAbstract("PacketPlayOutExperience") {
+data class PacketOutExperience(
+        var progress: Float,
+        var level: Int,
+        var totalExperience: Int) : PacketOutBukkitAbstract("PacketPlayOutExperience") {
 
     @Deprecated("")
     constructor() : this(0f, 0, 0)

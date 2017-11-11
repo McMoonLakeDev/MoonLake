@@ -20,7 +20,10 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.Valuable
 import com.mcmoonlake.api.util.Enums
 
-data class PacketInEntityAction(var entityId: Int, var action: Action, var jumpBoost: Int = 0) : PacketInBukkitAbstract("PacketPlayInEntityAction") {
+data class PacketInEntityAction(
+        var entityId: Int,
+        var action: Action,
+        var jumpBoost: Int = 0) : PacketInBukkitAbstract("PacketPlayInEntityAction") {
 
     @Deprecated("")
     constructor() : this(-1, Action.STOP_SNEAKING, 0)

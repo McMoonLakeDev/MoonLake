@@ -20,7 +20,9 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.block.BlockPosition
 import java.util.*
 
-data class PacketInUpdateSign(var blockPosition: BlockPosition, var lines: Array<String>) : PacketInBukkitAbstract("PacketPlayInUpdateSign") {
+data class PacketInUpdateSign(
+        var blockPosition: BlockPosition,
+        var lines: Array<String>) : PacketInBukkitAbstract("PacketPlayInUpdateSign") {
 
     @Deprecated("")
     constructor() : this(BlockPosition.ZERO, arrayOf())

@@ -17,7 +17,8 @@
 
 package com.mcmoonlake.api.packet
 
-data class PacketOutCamera(var entityId: Int) : PacketOutBukkitAbstract("PacketPlayOutCamera") {
+data class PacketOutCamera(
+        var entityId: Int) : PacketOutBukkitAbstract("PacketPlayOutCamera") {
 
     @Deprecated("")
     constructor() : this(-1)

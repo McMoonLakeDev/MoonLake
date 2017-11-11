@@ -22,7 +22,8 @@ import com.mcmoonlake.api.isFrostburnOrLaterVer
 import com.mcmoonlake.api.notNull
 import com.mcmoonlake.api.util.Enums
 
-data class PacketInResourcePackStatus(var status: Status,
+data class PacketInResourcePackStatus(
+        var status: Status,
         /**
          * * Resource package hash value, valid only in version 1.9 or earlier.
          * * 资源包哈希值, 仅在 1.9 或更早的版本有效.

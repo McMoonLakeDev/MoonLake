@@ -17,7 +17,9 @@
 
 package com.mcmoonlake.api.packet
 
-data class PacketOutUpdateTime(var worldAge: Long, var dayTime: Long) : PacketOutBukkitAbstract("PacketPlayOutUpdateTime") {
+data class PacketOutUpdateTime(
+        var worldAge: Long,
+        var dayTime: Long) : PacketOutBukkitAbstract("PacketPlayOutUpdateTime") {
 
     @Deprecated("")
     constructor() : this(0, 0)

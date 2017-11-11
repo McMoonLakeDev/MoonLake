@@ -20,7 +20,8 @@ package com.mcmoonlake.api.packet
 import com.mojang.authlib.GameProfile
 import java.util.*
 
-data class PacketInLoginStart(var profile: GameProfile) : PacketInBukkitAbstract("PacketLoginInStart"), PacketLogin {
+data class PacketInLoginStart(
+        var profile: GameProfile) : PacketInBukkitAbstract("PacketLoginInStart"), PacketLogin {
 
     @Deprecated("")
     constructor() : this(GameProfile(null as UUID?, "Unknown"))

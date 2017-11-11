@@ -17,7 +17,9 @@
 
 package com.mcmoonlake.api.packet
 
-data class PacketOutResourcePackSend(var url: String, var hash: String) : PacketOutBukkitAbstract("PacketPlayOutResourcePackSend") {
+data class PacketOutResourcePackSend(
+        var url: String,
+        var hash: String) : PacketOutBukkitAbstract("PacketPlayOutResourcePackSend") {
 
     @Deprecated("")
     constructor() : this("", "")

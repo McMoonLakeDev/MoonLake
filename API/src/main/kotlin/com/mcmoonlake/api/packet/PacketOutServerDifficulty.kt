@@ -19,7 +19,8 @@ package com.mcmoonlake.api.packet
 
 import org.bukkit.Difficulty
 
-data class PacketOutServerDifficulty(var difficulty: Difficulty) : PacketOutBukkitAbstract("PacketPlayOutServerDifficulty") {
+data class PacketOutServerDifficulty(
+        var difficulty: Difficulty) : PacketOutBukkitAbstract("PacketPlayOutServerDifficulty") {
 
     @Deprecated("")
     constructor() : this(Difficulty.EASY)

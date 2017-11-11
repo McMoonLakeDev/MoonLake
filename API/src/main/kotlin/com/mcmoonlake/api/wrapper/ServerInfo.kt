@@ -33,7 +33,12 @@ import java.io.IOException
 import java.util.*
 import javax.imageio.ImageIO
 
-data class ServerInfo(val version: Version, val players: Players, val description: ChatComponent, val modInfo: ModInfo?, val favicon: BufferedImage?) {
+data class ServerInfo(
+        val version: Version,
+        val players: Players,
+        val description: ChatComponent,
+        val modInfo: ModInfo?,
+        val favicon: BufferedImage?) {
 
     fun toJson(): String
             = Companion.toJson(this)

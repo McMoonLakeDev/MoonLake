@@ -19,7 +19,10 @@ package com.mcmoonlake.api.packet
 
 import org.bukkit.inventory.ItemStack
 
-data class PacketOutSetSlot(var windowId: Int, var slot: Int, var itemStack: ItemStack?) : PacketOutBukkitAbstract("PacketPlayOutSetSlot") {
+data class PacketOutSetSlot(
+        var windowId: Int,
+        var slot: Int,
+        var itemStack: ItemStack?) : PacketOutBukkitAbstract("PacketPlayOutSetSlot") {
 
     @Deprecated("")
     constructor() : this(-1, -1, null)

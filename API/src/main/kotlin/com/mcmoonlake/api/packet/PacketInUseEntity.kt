@@ -26,7 +26,11 @@ import org.bukkit.World
 import org.bukkit.entity.Entity
 import org.bukkit.util.Vector
 
-data class PacketInUseEntity(var entityId: Int, var action: Action, var target: Vector?, var hand: EnumHand?) : PacketInBukkitAbstract("PacketPlayInUseEntity") {
+data class PacketInUseEntity(
+        var entityId: Int,
+        var action: Action,
+        var target: Vector?,
+        var hand: EnumHand?) : PacketInBukkitAbstract("PacketPlayInUseEntity") {
 
     @Deprecated("")
     constructor() : this(-1, Action.INTERACT, null, null)

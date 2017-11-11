@@ -34,4 +34,37 @@ interface ChatComponent {
     fun toJson(): String
 
     fun toRaw(color: Boolean = true): String
+
+    companion object {
+        /**
+         * * Null of ChatComponent
+         */
+        val NULL: ChatComponent by lazy {
+            object: ChatComponent {
+                override var style: ChatStyle
+                    get() = throw UnsupportedOperationException()
+                    set(value) = throw UnsupportedOperationException()
+                override fun setStyle(style: ChatStyle?): ChatComponent
+                        = throw UnsupportedOperationException()
+                override val extras: MutableList<ChatComponent>
+                    get() = throw UnsupportedOperationException()
+                override val extraSize: Int
+                    get() = 0
+                override fun append(text: String): ChatComponent
+                        = throw UnsupportedOperationException()
+                override fun append(extra: ChatComponent): ChatComponent
+                        = throw UnsupportedOperationException()
+                override fun toJson(): String
+                        = throw UnsupportedOperationException()
+                override fun toRaw(color: Boolean): String
+                        = "NULL"
+                override fun toString(): String
+                        = "ChatComponent(NULL)"
+                override fun hashCode(): Int
+                        = 0
+                override fun equals(other: Any?): Boolean
+                        = other === NULL
+            }
+        }
+    }
 }

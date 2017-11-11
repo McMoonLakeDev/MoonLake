@@ -20,7 +20,9 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.util.Enums
 import com.mcmoonlake.api.wrapper.EnumHand
 
-data class PacketInBlockPlace(var timestamp: Long, var hand: EnumHand) : PacketInBukkitAbstract("PacketPlayInBlockPlace"), PacketBukkitLegacy {
+data class PacketInBlockPlace(
+        var timestamp: Long,
+        var hand: EnumHand) : PacketInBukkitAbstract("PacketPlayInBlockPlace"), PacketBukkitLegacy {
 
     @Deprecated("")
     constructor() : this(-1L, EnumHand.MAIN)

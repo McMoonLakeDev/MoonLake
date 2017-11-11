@@ -17,7 +17,8 @@
 
 package com.mcmoonlake.api.packet
 
-data class PacketOutLoginSetCompression(var threshold: Int) : PacketOutBukkitAbstract("PacketLoginOutSetCompression"), PacketLogin {
+data class PacketOutLoginSetCompression(
+        var threshold: Int) : PacketOutBukkitAbstract("PacketLoginOutSetCompression"), PacketLogin {
 
     @Deprecated("")
     constructor() : this(256)

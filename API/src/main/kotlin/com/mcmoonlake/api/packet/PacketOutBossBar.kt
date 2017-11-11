@@ -19,7 +19,6 @@ package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.Valuable
 import com.mcmoonlake.api.chat.ChatComponent
-import com.mcmoonlake.api.chat.ChatComponentText
 import com.mcmoonlake.api.util.Enums
 import com.mcmoonlake.api.wrapper.BarColor
 import com.mcmoonlake.api.wrapper.BarStyle
@@ -38,7 +37,7 @@ data class PacketOutBossBar(
         var createFog: Boolean) : PacketOutBukkitAbstract("PacketPlayOutBoss"), PacketBukkitFreshly {
 
     @Deprecated("")
-    constructor() : this(UUID.randomUUID(), Action.ADD, ChatComponentText(), 1f, BarColor.PINK, BarStyle.PROGRESS, false, false, false)
+    constructor() : this(UUID.randomUUID(), Action.ADD, ChatComponent.NULL, 1f, BarColor.PINK, BarStyle.PROGRESS, false, false, false)
 
     override fun read(data: PacketBuffer) {
         uuid = data.readUUID()
