@@ -57,7 +57,7 @@ interface ChatComponent {
                 override fun toJson(): String
                         = throw UnsupportedOperationException()
                 override fun toRaw(color: Boolean): String
-                        = "NULL"
+                        = throw UnsupportedOperationException()
                 override fun toString(): String
                         = "ChatComponent(NULL)"
                 override fun hashCode(): Int
