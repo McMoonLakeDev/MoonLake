@@ -132,7 +132,6 @@ object Packets {
         registerPacketBukkit("PacketPlayOutCloseWindow", PacketOutCloseWindow::class.java)
         registerPacketBukkit("PacketPlayOutCollect", PacketOutCollect::class.java)
         registerPacketBukkit("PacketPlayOutCombatEvent", PacketOutCombatEvent::class.java)
-        registerPacketBukkit("PacketPlayOutScoreboardDisplayObjective", PacketOutDisplayObjective::class.java)
         registerPacketBukkit("PacketPlayOutCustomPayload", PacketOutPayload::class.java)
         registerPacketBukkit("PacketPlayOutEntityDestroy", PacketOutEntityDestroy::class.java)
         registerPacketBukkit("PacketPlayOutEntityEffect", PacketOutEntityEffect::class.java)
@@ -157,6 +156,9 @@ object Packets {
         registerPacketBukkit("PacketPlayOutRemoveEntityEffect", PacketOutRemoveEntityEffect::class.java)
         registerPacketBukkit("PacketPlayOutResourcePackSend", PacketOutResourcePackSend::class.java)
         registerPacketBukkit("PacketPlayOutRespawn", PacketOutRespawn::class.java)
+        registerPacketBukkit("PacketPlayOutScoreboardDisplayObjective", PacketOutDisplayObjective::class.java)
+        registerPacketBukkit("PacketPlayOutScoreboardObjective", PacketOutObjective::class.java)
+        registerPacketBukkit("PacketPlayOutScoreboardScore", PacketOutScore::class.java)
         registerPacketBukkit("PacketPlayOutServerDifficulty", PacketOutServerDifficulty::class.java)
         registerPacketBukkit("PacketPlayOutSetSlot", PacketOutSetSlot::class.java)
         registerPacketBukkit("PacketPlayOutTabComplete", PacketOutTabComplete::class.java)
@@ -279,7 +281,7 @@ object Packets {
     private fun getPacketConverter(): ConverterEquivalentIgnoreNull<PacketBukkit> {
         return object: ConverterEquivalentIgnoreNull<PacketBukkit> {
             override fun getGenericValue(specific: PacketBukkit): Any {
-                val handle = createPacket(specific.type)
+                val handle = createPacket(specific.typeClass)
                 val packetBuffer = PacketBuffer()
                 specific.write(packetBuffer)
                 packetRead.invoke(handle, createPacketDataSerializer(packetBuffer.getByteBuf()))

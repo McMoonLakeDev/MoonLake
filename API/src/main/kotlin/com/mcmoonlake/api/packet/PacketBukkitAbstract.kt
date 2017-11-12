@@ -19,9 +19,9 @@ package com.mcmoonlake.api.packet
 
 abstract class PacketBukkitAbstract(private val clazz: Class<*>) : PacketAbstract(), PacketBukkit {
 
-    private val handleSrc: Any by lazy { Packets.createPacket(type) }
+    private val handleSrc: Any by lazy { Packets.createPacket(typeClass) }
 
-    override val type: Class<*>
+    override val typeClass: Class<*>
         get() = clazz
 
     override val handle: Any
