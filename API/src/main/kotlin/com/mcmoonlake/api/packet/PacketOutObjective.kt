@@ -33,7 +33,7 @@ data class PacketOutObjective(
     override fun read(data: PacketBuffer) {
         name = data.readString()
         mode = data.readByte().toInt()
-        if(mode == 0 || mode == 1) {
+        if(mode == 0 || mode == 2) {
             value = data.readString()
             type = Enums.ofValuable(Type::class.java, data.readString())
         }
