@@ -18,6 +18,7 @@
 package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.particle.Particle
+import java.util.*
 
 data class PacketOutParticles(
         var particle: Particle,
@@ -62,5 +63,35 @@ data class PacketOutParticles(
         data.writeFloat(speed)
         data.writeInt(amount)
         (0 until arguments.size).forEach { data.writeVarInt(arguments[it]) }
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + particle.hashCode()
+        result = 31 * result + longDistance.hashCode()
+        result = 31 * result + x.hashCode()
+        result = 31 * result + y.hashCode()
+        result = 31 * result + z.hashCode()
+        result = 31 * result + xOffset.hashCode()
+        result = 31 * result + yOffset.hashCode()
+        result = 31 * result + zOffset.hashCode()
+        result = 31 * result + speed.hashCode()
+        result = 31 * result + amount.hashCode()
+        result = 31 * result + Arrays.hashCode(arguments)
+        return result
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if(other === this)
+            return true
+        if(other is PacketOutParticles) {
+            return super.equals(other) &&
+                    particle == other.particle &&
+                    longDistance == other.longDistance &&
+                    x == other.x && y == other.y  && z == other.z &&
+                    xOffset == other.xOffset && yOffset == other.yOffset && zOffset == other.zOffset &&
+                    speed == other.speed && amount == other.amount && Arrays.equals(arguments, other.arguments)
+        }
+        return false
     }
 }

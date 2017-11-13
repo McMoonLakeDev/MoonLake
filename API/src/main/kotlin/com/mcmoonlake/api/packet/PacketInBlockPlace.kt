@@ -19,6 +19,7 @@ package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.util.Enums
 import com.mcmoonlake.api.wrapper.EnumHand
+import java.io.IOException
 
 data class PacketInBlockPlace(
         var timestamp: Long,
@@ -29,7 +30,7 @@ data class PacketInBlockPlace(
 
     override fun read(data: PacketBuffer) {
         timestamp = System.currentTimeMillis()
-        hand = Enums.ofValuable(EnumHand::class.java, data.readVarInt()) ?: EnumHand.MAIN
+        hand = Enums.ofValuable(EnumHand::class.java, data.readVarInt()) ?: throw IOException("Unknown Hand Type.")
     }
 
     override fun write(data: PacketBuffer) {

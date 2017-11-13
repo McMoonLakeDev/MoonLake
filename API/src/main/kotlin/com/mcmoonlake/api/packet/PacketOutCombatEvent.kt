@@ -21,6 +21,7 @@ import com.mcmoonlake.api.Valuable
 import com.mcmoonlake.api.chat.ChatComponent
 import com.mcmoonlake.api.chat.ChatComponentText
 import com.mcmoonlake.api.util.Enums
+import java.io.IOException
 
 data class PacketOutCombatEvent(
         var event: Event,
@@ -33,7 +34,7 @@ data class PacketOutCombatEvent(
     constructor() : this(Event.ENTER_COMBAT, -1, -1, -1, null)
 
     override fun read(data: PacketBuffer) {
-        event = Enums.ofValuable(Event::class.java, data.readVarInt()) ?: Event.ENTER_COMBAT
+        event = Enums.ofValuable(Event::class.java, data.readVarInt()) ?: throw IOException("Unknown Event Type.")
         if(event == Event.END_COMBAT) {
             duration = data.readVarInt()
             entityId = data.readInt()

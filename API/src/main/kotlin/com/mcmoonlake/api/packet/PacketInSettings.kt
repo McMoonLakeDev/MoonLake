@@ -21,6 +21,7 @@ import com.mcmoonlake.api.isCombatOrLaterVer
 import com.mcmoonlake.api.util.Enums
 import com.mcmoonlake.api.wrapper.EnumChatVisibility
 import com.mcmoonlake.api.wrapper.EnumMainHand
+import java.io.IOException
 
 data class PacketInSettings(
         var locale: String,
@@ -36,7 +37,7 @@ data class PacketInSettings(
     override fun read(data: PacketBuffer) {
         locale = data.readString()
         viewDistance = data.readByte().toInt()
-        chatVisibility = Enums.ofValuable(EnumChatVisibility::class.java, data.readVarInt()) ?: EnumChatVisibility.FULL
+        chatVisibility = Enums.ofValuable(EnumChatVisibility::class.java, data.readVarInt()) ?: throw IOException("Unknown Visibility Type.")
         chatColor = data.readBoolean()
         skinDisplayed = data.readByte().toInt()
         if(isCombatOrLaterVer)

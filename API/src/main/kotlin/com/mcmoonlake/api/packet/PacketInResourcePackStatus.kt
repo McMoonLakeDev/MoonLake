@@ -21,6 +21,7 @@ import com.mcmoonlake.api.Valuable
 import com.mcmoonlake.api.isFrostburnOrLaterVer
 import com.mcmoonlake.api.notNull
 import com.mcmoonlake.api.util.Enums
+import java.io.IOException
 
 data class PacketInResourcePackStatus(
         var status: Status,
@@ -35,7 +36,7 @@ data class PacketInResourcePackStatus(
 
     override fun read(data: PacketBuffer) {
         hash = if(!isFrostburnOrLaterVer) data.readString() else null
-        status = Enums.ofValuable(Status::class.java, data.readVarInt()) ?: Status.DECLINED
+        status = Enums.ofValuable(Status::class.java, data.readVarInt()) ?: throw IOException("Unknown Status Type.")
     }
 
     override fun write(data: PacketBuffer) {

@@ -25,6 +25,7 @@ import com.mcmoonlake.api.wrapper.EnumHand
 import org.bukkit.World
 import org.bukkit.entity.Entity
 import org.bukkit.util.Vector
+import java.io.IOException
 
 data class PacketInUseEntity(
         var entityId: Int,
@@ -37,7 +38,7 @@ data class PacketInUseEntity(
 
     override fun read(data: PacketBuffer) {
         entityId = data.readVarInt()
-        action = Enums.ofValuable(Action::class.java, data.readVarInt()) ?: Action.INTERACT
+        action = Enums.ofValuable(Action::class.java, data.readVarInt()) ?: throw IOException("Unknown Action Type.")
         if(action == Action.INTERACT_AT)
             target = Vector(data.readFloat(), data.readFloat(), data.readFloat())
         if((action == Action.INTERACT || action == Action.INTERACT_AT) && isCombatOrLaterVer)

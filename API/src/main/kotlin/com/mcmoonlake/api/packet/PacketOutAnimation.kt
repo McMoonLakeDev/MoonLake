@@ -19,6 +19,7 @@ package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.Valuable
 import com.mcmoonlake.api.util.Enums
+import java.io.IOException
 
 data class PacketOutAnimation(
         var entityId: Int,
@@ -29,7 +30,7 @@ data class PacketOutAnimation(
 
     override fun read(data: PacketBuffer) {
         entityId = data.readVarInt()
-        animation = Enums.ofValuable(Type::class.java, data.readUnsignedByte().toInt()) ?: Type.HURT_EFFECT
+        animation = Enums.ofValuable(Type::class.java, data.readUnsignedByte().toInt()) ?: throw IOException("Unknown Animation Type.")
     }
 
     override fun write(data: PacketBuffer) {

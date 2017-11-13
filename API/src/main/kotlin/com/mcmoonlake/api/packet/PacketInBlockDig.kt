@@ -21,6 +21,7 @@ import com.mcmoonlake.api.Valuable
 import com.mcmoonlake.api.block.BlockDirection
 import com.mcmoonlake.api.block.BlockPosition
 import com.mcmoonlake.api.util.Enums
+import java.io.IOException
 
 data class PacketInBlockDig(
         var status: Status,
@@ -31,9 +32,9 @@ data class PacketInBlockDig(
     constructor() : this(Status.STOP_DESTROY_BLOCK, BlockPosition.ZERO, BlockDirection.UP)
 
     override fun read(data: PacketBuffer) {
-        status = Enums.ofValuable(Status::class.java, data.readVarInt()) ?: Status.STOP_DESTROY_BLOCK
+        status = Enums.ofValuable(Status::class.java, data.readVarInt()) ?: throw IOException("Unknown Status Type.")
         blockPosition = data.readBlockPosition()
-        direction = Enums.ofValuable(BlockDirection::class.java, data.readUnsignedByte().toInt()) ?: BlockDirection.UP
+        direction = Enums.ofValuable(BlockDirection::class.java, data.readUnsignedByte().toInt()) ?: throw IOException("Unknown Direction Type.")
     }
 
     override fun write(data: PacketBuffer) {

@@ -362,10 +362,9 @@ class MoonLakePluginTest : JavaPlugin() {
             }
         }.registerEvent(this)
 
-        val packets = arrayOf(
-                PacketOutBossBar::class.java, // Should be in the 1.8.x version will be filtered
-                PacketOutDisplayObjective::class.java,
-                PacketOutSoundEffect::class.java) // Should be in the 1.8.x version will be filtered
+        val packets = arrayOf(PacketOutObjective::class.java,
+                PacketOutScore::class.java,
+                PacketOutTeam::class.java)
 
         PacketListeners.registerListener(object: PacketListenerAdapter(this, *packets) {
             override fun onSending(event: PacketEvent) {

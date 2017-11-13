@@ -23,6 +23,7 @@ import com.mcmoonlake.api.util.Enums
 import com.mojang.authlib.GameProfile
 import com.mojang.authlib.properties.Property
 import org.bukkit.GameMode
+import java.io.IOException
 import java.util.*
 
 data class PacketOutPlayerInfo(
@@ -33,7 +34,7 @@ data class PacketOutPlayerInfo(
     constructor() : this(Action.REMOVE_PLAYER, ArrayList())
 
     override fun read(data: PacketBuffer) { // TODO v1.13
-        action = Enums.ofValuable(Action::class.java, data.readVarInt()) ?: Action.REMOVE_PLAYER
+        action = Enums.ofValuable(Action::class.java, data.readVarInt()) ?: throw IOException("Unknown Action Type.")
         val length = data.readVarInt()
         (0 until length).forEach {
             val id = data.readUUID()

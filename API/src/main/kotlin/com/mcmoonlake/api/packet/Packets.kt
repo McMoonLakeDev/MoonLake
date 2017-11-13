@@ -159,6 +159,7 @@ object Packets {
         registerPacketBukkit("PacketPlayOutScoreboardDisplayObjective", PacketOutDisplayObjective::class.java)
         registerPacketBukkit("PacketPlayOutScoreboardObjective", PacketOutObjective::class.java)
         registerPacketBukkit("PacketPlayOutScoreboardScore", PacketOutScore::class.java)
+        registerPacketBukkit("PacketPlayOutScoreboardTeam", PacketOutTeam::class.java)
         registerPacketBukkit("PacketPlayOutServerDifficulty", PacketOutServerDifficulty::class.java)
         registerPacketBukkit("PacketPlayOutSetSlot", PacketOutSetSlot::class.java)
         registerPacketBukkit("PacketPlayOutTabComplete", PacketOutTabComplete::class.java)
