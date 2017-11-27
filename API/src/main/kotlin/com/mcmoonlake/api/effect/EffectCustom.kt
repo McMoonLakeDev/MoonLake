@@ -20,4 +20,6 @@ package com.mcmoonlake.api.effect
 import org.bukkit.Color
 
 data class EffectCustom(val type: EffectType, val duration: Int, val amplifier: Int, val ambient: Boolean = true, val particle: Boolean = true, val color: Color? = null) {
+
+    // TODO ConfigurationSerializable
 }

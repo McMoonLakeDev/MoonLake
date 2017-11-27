@@ -25,6 +25,8 @@ import java.util.*
 
 data class PlayerInfo(val profile: GameProfile, val displayName: ChatComponent?, val mode: GameMode?, val latency: Int) {
 
+    // TODO ConfigurationSerializable
+
     constructor(id: UUID, displayName: String?, mode: GameMode? = GameMode.SURVIVAL, latency: Int = 0) : this(GameProfile(id, null), ChatSerializer.fromRawOrNull(displayName), mode, latency)
     constructor(id: UUID, name: String, displayName: String? = null, mode: GameMode? = GameMode.SURVIVAL, latency: Int = 0) : this(GameProfile(id, name), ChatSerializer.fromRawOrNull(displayName), mode, latency)
 }

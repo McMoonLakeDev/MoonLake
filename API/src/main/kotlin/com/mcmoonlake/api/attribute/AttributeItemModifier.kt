@@ -22,6 +22,8 @@ import java.util.*
 
 data class AttributeItemModifier(val type: AttributeType, val operation: Operation, val slot: Slot?, val amount: Double, val uuid: UUID) : Comparable<AttributeItemModifier> {
 
+    // TODO ConfigurationSerializable
+
     override fun compareTo(other: AttributeItemModifier): Int {
         return ComparisonChain.start()
                 .compare(type, other.type)

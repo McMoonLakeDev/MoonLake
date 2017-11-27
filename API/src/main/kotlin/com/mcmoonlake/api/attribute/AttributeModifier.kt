@@ -22,6 +22,8 @@ import java.util.*
 
 data class AttributeModifier(val name: String, val operation: Operation, val amount: Double, val uuid: UUID = UUID.randomUUID()) : Comparable<AttributeModifier> {
 
+    // TODO ConfigurationSerializable
+
     override fun compareTo(other: AttributeModifier): Int {
         return ComparisonChain.start()
                 .compare(name, other.name)

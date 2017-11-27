@@ -33,6 +33,8 @@ data class PlayerAbilities(
         var flySpeed: Float = .05f,
         var walkSpeed: Float = .1f) : NBTSavable, NBTReadable, Comparable<PlayerAbilities> {
 
+    // TODO ConfigurationSerializable
+
     override fun save(root: NBTCompound) {
         val abilities = NBTFactory.ofCompound("abilities")
         abilities.putBoolean("invulnerable", isInvulnerable)

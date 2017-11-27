@@ -40,6 +40,8 @@ data class ServerInfo(
         val modInfo: ModInfo?,
         val favicon: BufferedImage?) {
 
+    // TODO ConfigurationSerializable
+
     fun toJson(): String
             = Companion.toJson(this)
 
