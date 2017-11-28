@@ -21,7 +21,10 @@ import com.mcmoonlake.api.nbt.NBTCompound
 import com.mcmoonlake.api.nbt.NBTFactory
 import com.mcmoonlake.api.nbt.NBTReadable
 import com.mcmoonlake.api.nbt.NBTSavable
+import com.mcmoonlake.api.parseBoolean
+import com.mcmoonlake.api.parseFloat
 import com.mcmoonlake.api.util.ComparisonChain
+import org.bukkit.configuration.serialization.ConfigurationSerializable
 import org.bukkit.entity.Player
 
 data class PlayerAbilities(
@@ -31,9 +34,7 @@ data class PlayerAbilities(
         var canInstantlyBuild: Boolean,
         var mayBuild: Boolean = true,
         var flySpeed: Float = .05f,
-        var walkSpeed: Float = .1f) : NBTSavable, NBTReadable, Comparable<PlayerAbilities> {
-
-    // TODO ConfigurationSerializable
+        var walkSpeed: Float = .1f) : NBTSavable, NBTReadable, ConfigurationSerializable, Comparable<PlayerAbilities> {
 
     override fun save(root: NBTCompound) {
         val abilities = NBTFactory.ofCompound("abilities")
@@ -69,11 +70,36 @@ data class PlayerAbilities(
             .compare(walkSpeed, other.walkSpeed)
             .result
 
+    override fun serialize(): MutableMap<String, Any> {
+        val result = LinkedHashMap<String, Any>()
+        result.put("invulnerable", isInvulnerable)
+        result.put("flying", isFlying)
+        result.put("mayfly", canFly)
+        result.put("instabuild", canInstantlyBuild)
+        result.put("mayBuild", mayBuild)
+        result.put("flySpeed", flySpeed)
+        result.put("walkSpeed", walkSpeed)
+        return result
+    }
+
     companion object {
 
         @JvmStatic
         @JvmName("ofPlayer")
         fun ofPlayer(player: Player): PlayerAbilities
                 = PlayerAbilities(false, false, false, false).also { it.read(NBTFactory.readEntityTag(player)) }
+
+        @JvmStatic
+        @JvmName("deserialize")
+        fun deserialize(args: Map<String, Any>): PlayerAbilities {
+            val isInvulnerable = args["invulnerable"]?.parseBoolean() ?: false
+            val isFlying = args["flying"]?.parseBoolean() ?: false
+            val canFly = args["mayfly"]?.parseBoolean() ?: false
+            val canInstantlyBuild = args["instabuild"]?.parseBoolean() ?: false
+            val mayBuild = args["mayBuild"]?.parseBoolean() ?: false
+            val flySpeed = args["flySpeed"]?.parseFloat() ?: 0f
+            val walkSpeed = args["walkSpeed"]?.parseFloat() ?: 0f
+            return PlayerAbilities(isInvulnerable, isFlying, canFly, canInstantlyBuild, mayBuild, flySpeed, walkSpeed)
+        }
     }
 }

@@ -17,9 +17,56 @@
 
 package com.mcmoonlake.api.effect
 
+import com.mcmoonlake.api.parseBoolean
+import com.mcmoonlake.api.parseInt
+import com.mcmoonlake.api.util.ComparisonChain
 import org.bukkit.Color
+import org.bukkit.configuration.serialization.ConfigurationSerializable
 
-data class EffectCustom(val type: EffectType, val duration: Int, val amplifier: Int, val ambient: Boolean = true, val particle: Boolean = true, val color: Color? = null) {
+data class EffectCustom(
+        val type: EffectType,
+        val duration: Int,
+        val amplifier: Int,
+        val ambient: Boolean = true,
+        val particle: Boolean = true,
+        val color: Color? = null) : ConfigurationSerializable, Comparable<EffectCustom> {
 
-    // TODO ConfigurationSerializable
+    override fun compareTo(other: EffectCustom): Int {
+        return ComparisonChain.start()
+                .compare(type, other.type)
+                .compare(duration, other.duration)
+                .compare(amplifier, other.amplifier)
+                .compare(ambient, other.ambient)
+                .compare(particle, other.particle)
+                .compare(color?.asRGB() ?: -1, other.color?.asRGB() ?: -1)
+                .result
+    }
+
+    override fun serialize(): MutableMap<String, Any> {
+        val result = LinkedHashMap<String, Any>()
+        result.put("type", type.type)
+        result.put("duration", duration)
+        result.put("amplifier", amplifier)
+        result.put("ambient", ambient)
+        result.put("particle", particle)
+        if(color != null) result.put("color", color.asRGB())
+        return result
+    }
+
+    /** static */
+
+    companion object {
+
+        @JvmStatic
+        @JvmName("deserialize")
+        fun deserialize(args: Map<String, Any>): EffectCustom {
+            val type = EffectType.fromName(args["type"].toString())
+            val duration = args["duration"]?.parseInt() ?: 0
+            val amplifier = args["amplifier"]?.parseInt() ?: 0
+            val ambient = args["ambient"]?.parseBoolean() ?: false
+            val particle = args["particle"]?.parseBoolean() ?: false
+            val color = args["color"]?.parseInt() ?: -1
+            return EffectCustom(type, duration, amplifier, ambient, particle, if(color == -1) null else Color.fromBGR(color))
+        }
+    }
 }

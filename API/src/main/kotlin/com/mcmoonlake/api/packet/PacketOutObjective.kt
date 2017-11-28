@@ -19,7 +19,7 @@ package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.Valuable
 import com.mcmoonlake.api.notNull
-import com.mcmoonlake.api.util.Enums
+import com.mcmoonlake.api.ofValuable
 
 data class PacketOutObjective(
         var name: String,
@@ -35,7 +35,7 @@ data class PacketOutObjective(
         mode = data.readByte().toInt()
         if(mode == 0 || mode == 2) {
             value = data.readString()
-            type = Enums.ofValuable(Type::class.java, data.readString())
+            type = ofValuable(data.readString())
         }
     }
 

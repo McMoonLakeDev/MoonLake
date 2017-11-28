@@ -20,12 +20,12 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.Valuable
 import com.mcmoonlake.api.entity.Entities
 import com.mcmoonlake.api.isCombatOrLaterVer
-import com.mcmoonlake.api.util.Enums
+import com.mcmoonlake.api.ofValuable
+import com.mcmoonlake.api.ofValuableNotNull
 import com.mcmoonlake.api.wrapper.EnumHand
 import org.bukkit.World
 import org.bukkit.entity.Entity
 import org.bukkit.util.Vector
-import java.io.IOException
 
 data class PacketInUseEntity(
         var entityId: Int,
@@ -38,11 +38,11 @@ data class PacketInUseEntity(
 
     override fun read(data: PacketBuffer) {
         entityId = data.readVarInt()
-        action = Enums.ofValuable(Action::class.java, data.readVarInt()) ?: throw IOException("Unknown Action Type.")
+        action = ofValuableNotNull(data.readVarInt())
         if(action == Action.INTERACT_AT)
             target = Vector(data.readFloat(), data.readFloat(), data.readFloat())
         if((action == Action.INTERACT || action == Action.INTERACT_AT) && isCombatOrLaterVer)
-            hand = Enums.ofValuable(EnumHand::class.java, data.readVarInt(), EnumHand.MAIN)
+            hand = ofValuable(data.readVarInt(), EnumHand.MAIN)
     }
 
     override fun write(data: PacketBuffer) {

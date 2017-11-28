@@ -18,8 +18,7 @@
 package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.Valuable
-import com.mcmoonlake.api.util.Enums
-import java.io.IOException
+import com.mcmoonlake.api.ofValuableNotNull
 
 
 data class PacketOutDisplayObjective(
@@ -30,7 +29,7 @@ data class PacketOutDisplayObjective(
     constructor() : this(DisplaySlot.SIDEBAR, "Scoreboard")
 
     override fun read(data: PacketBuffer) {
-        slot = Enums.ofValuable(DisplaySlot::class.java, data.readByte().toInt()) ?: throw IOException("Unknown Display Slot.")
+        slot = ofValuableNotNull(data.readByte().toInt())
         name = data.readString()
     }
 

@@ -18,8 +18,7 @@
 package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.Valuable
-import com.mcmoonlake.api.util.Enums
-import java.io.IOException
+import com.mcmoonlake.api.ofValuableNotNull
 
 data class PacketInClientStatus(
         var status: Status) : PacketInBukkitAbstract("PacketPlayInClientCommand") {
@@ -28,7 +27,7 @@ data class PacketInClientStatus(
     constructor() : this(Status.PERFORM_RESPAWN)
 
     override fun read(data: PacketBuffer) {
-        status = Enums.ofValuable(Status::class.java, data.readVarInt()) ?: throw IOException("Unknown Status Type.")
+        status = ofValuableNotNull(data.readVarInt())
     }
 
     override fun write(data: PacketBuffer) {

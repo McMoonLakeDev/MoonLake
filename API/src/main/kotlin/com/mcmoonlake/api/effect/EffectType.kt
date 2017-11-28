@@ -24,8 +24,6 @@ import org.bukkit.potion.PotionEffectType
 
 enum class EffectType(val id: Int, val type: String, val mcVer: MinecraftVersion? = null) : AdapterBukkit<PotionEffectType>, Valuable<Int> {
 
-    // TODO ConfigurationSerializable
-
     /**
      * Effect Type: Speed (效果类型: 速度)
      */

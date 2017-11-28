@@ -20,8 +20,7 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.Valuable
 import com.mcmoonlake.api.isCombatOrLaterVer
 import com.mcmoonlake.api.notNull
-import com.mcmoonlake.api.util.Enums
-import java.io.IOException
+import com.mcmoonlake.api.ofValuableNotNull
 
 data class PacketOutTeam(
         var name: String,
@@ -44,7 +43,7 @@ data class PacketOutTeam(
 
     override fun read(data: PacketBuffer) {
         name = data.readString()
-        action = Enums.ofValuable(Action::class.java, data.readByte().toInt()) ?: throw IOException("Unknown Action Type.")
+        action = ofValuableNotNull(data.readByte().toInt())
         if(action == Action.CREATE || action == Action.UPDATE) {
             displayName = data.readString()
             prefix = data.readString()

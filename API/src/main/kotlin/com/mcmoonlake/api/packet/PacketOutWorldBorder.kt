@@ -18,8 +18,7 @@
 package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.Valuable
-import com.mcmoonlake.api.util.Enums
-import java.io.IOException
+import com.mcmoonlake.api.ofValuableNotNull
 
 data class PacketOutWorldBorder(
         var action: Action,
@@ -37,7 +36,7 @@ data class PacketOutWorldBorder(
     constructor() : this(Action.INITIALIZE, .0, .0, .0, 0L, .0, .0, 0, 0, 0)
 
     override fun read(data: PacketBuffer) {
-        action = Enums.ofValuable(Action::class.java, data.readVarInt()) ?: throw IOException("Unknown Action Type.")
+        action = ofValuableNotNull(data.readVarInt())
         when(action) {
             Action.SET_SIZE -> size = data.readDouble()
             Action.LERP_SIZE -> {

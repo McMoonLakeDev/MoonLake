@@ -19,7 +19,7 @@ package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.block.BlockDirection
 import com.mcmoonlake.api.block.BlockPosition
-import com.mcmoonlake.api.util.Enums
+import com.mcmoonlake.api.ofValuableNotNull
 import org.bukkit.inventory.ItemStack
 
 data class PacketInBlockPlaceLegacy(
@@ -37,7 +37,7 @@ data class PacketInBlockPlaceLegacy(
     override fun read(data: PacketBuffer) {
         timestamp = System.currentTimeMillis()
         blockPosition = data.readBlockPosition()
-        direction = Enums.ofValuable(BlockDirection::class.java, data.readUnsignedByte().toInt())
+        direction = ofValuableNotNull(data.readUnsignedByte().toInt())
         itemStack = data.readItemStack()
         cursorX = data.readUnsignedByte().toFloat() / 16f
         cursorY = data.readUnsignedByte().toFloat() / 16f

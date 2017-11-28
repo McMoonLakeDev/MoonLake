@@ -39,6 +39,7 @@ import com.mcmoonlake.api.player.MoonLakePlayer
 import com.mcmoonlake.api.player.MoonLakePlayerCached
 import com.mcmoonlake.api.region.*
 import com.mcmoonlake.api.task.MoonLakeRunnable
+import com.mcmoonlake.api.util.Enums
 import com.mcmoonlake.api.version.MinecraftBukkitVersion
 import com.mcmoonlake.api.version.MinecraftVersion
 import org.bukkit.*
@@ -118,6 +119,13 @@ fun <T, C: Comparable<T>> C.isRange(min: T, max: T): Boolean
 
 fun <T, C: Comparable<T>> C.isOrRange(min: T, max: T): Boolean
         = compareTo(min) >= 0 && compareTo(max) <= 0
+
+inline fun <V, reified T> ofValuable(value: V?, def: T? = null): T? where T: Enum<T>, T: Valuable<V>
+        = Enums.ofValuable(T::class.java, value, def)
+
+@Throws(IllegalArgumentException::class)
+inline fun <V, reified T> ofValuableNotNull(value: V?): T where T: Enum<T>, T: Valuable<V>
+        = ofValuable(value) ?: throw IllegalArgumentException("未知的枚举 ${T::class.java.canonicalName} 类型值: $value")
 
 /** version function */
 
@@ -283,6 +291,15 @@ fun Any.parseDouble(def: Double = .0): Double = when(this is Number) {
     else -> try {
         toString().toDouble()
     } catch (e: NumberFormatException) {
+        def
+    }
+}
+
+fun Any.parseBoolean(def: Boolean = false): Boolean = when(this is Boolean) {
+    true -> this as Boolean
+    else -> try {
+        toString().toBoolean()
+    } catch (e: Exception) {
         def
     }
 }

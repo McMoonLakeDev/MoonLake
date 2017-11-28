@@ -20,7 +20,7 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.effect.EffectCustom
 import com.mcmoonlake.api.effect.EffectType
 import com.mcmoonlake.api.isCombatOrLaterVer
-import com.mcmoonlake.api.util.Enums
+import com.mcmoonlake.api.ofValuable
 
 data class PacketOutEntityEffect(
         var entityId: Int,
@@ -41,7 +41,7 @@ data class PacketOutEntityEffect(
 
     override fun read(data: PacketBuffer) {
         entityId = data.readVarInt()
-        effect = Enums.ofValuable(EffectType::class.java, data.readByte().toInt())
+        effect = ofValuable(data.readByte().toInt())
         amplifier = data.readByte().toInt()
         duration = data.readVarInt()
         if(!isCombatOrLaterVer) {

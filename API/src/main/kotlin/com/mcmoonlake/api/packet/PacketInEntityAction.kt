@@ -18,8 +18,7 @@
 package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.Valuable
-import com.mcmoonlake.api.util.Enums
-import java.io.IOException
+import com.mcmoonlake.api.ofValuableNotNull
 
 data class PacketInEntityAction(
         var entityId: Int,
@@ -31,7 +30,7 @@ data class PacketInEntityAction(
 
     override fun read(data: PacketBuffer) {
         entityId = data.readVarInt()
-        action = Enums.ofValuable(Action::class.java, data.readVarInt()) ?: throw IOException("Unknown Action Type.")
+        action = ofValuableNotNull(data.readVarInt())
         jumpBoost = data.readVarInt()
     }
 

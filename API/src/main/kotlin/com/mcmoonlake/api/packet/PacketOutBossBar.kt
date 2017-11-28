@@ -19,10 +19,10 @@ package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.Valuable
 import com.mcmoonlake.api.chat.ChatComponent
-import com.mcmoonlake.api.util.Enums
+import com.mcmoonlake.api.ofValuable
+import com.mcmoonlake.api.ofValuableNotNull
 import com.mcmoonlake.api.wrapper.BarColor
 import com.mcmoonlake.api.wrapper.BarStyle
-import java.io.IOException
 import java.util.*
 
 data class PacketOutBossBar(
@@ -41,21 +41,21 @@ data class PacketOutBossBar(
 
     override fun read(data: PacketBuffer) {
         uuid = data.readUUID()
-        action = Enums.ofValuable(Action::class.java, data.readVarInt()) ?: throw IOException("Unknown Action Type.")
+        action = ofValuableNotNull(data.readVarInt())
         when(action) {
             Action.ADD -> {
                 name = data.readChatComponent()
                 health = data.readFloat()
-                color = Enums.ofValuable(BarColor::class.java, data.readVarInt()) ?: BarColor.PINK
-                style = Enums.ofValuable(BarStyle::class.java, data.readVarInt()) ?: BarStyle.PROGRESS
+                color = ofValuable(data.readVarInt()) ?: BarColor.PINK
+                style = ofValuable(data.readVarInt()) ?: BarStyle.PROGRESS
                 setFlags(data.readUnsignedByte().toInt())
             }
             Action.REMOVE -> {}
             Action.UPDATE_PCT -> health = data.readFloat()
             Action.UPDATE_NAME -> name = data.readChatComponent()
             Action.UPDATE_STYLE -> {
-                color = Enums.ofValuable(BarColor::class.java, data.readVarInt()) ?: BarColor.PINK
-                style = Enums.ofValuable(BarStyle::class.java, data.readVarInt()) ?: BarStyle.PROGRESS
+                color = ofValuable(data.readVarInt()) ?: BarColor.PINK
+                style = ofValuable(data.readVarInt()) ?: BarStyle.PROGRESS
             }
             Action.UPDATE_PROPERTIES -> setFlags(data.readUnsignedByte().toInt())
         }

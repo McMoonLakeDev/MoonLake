@@ -18,9 +18,8 @@
 package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.Valuable
-import com.mcmoonlake.api.util.Enums
+import com.mcmoonlake.api.ofValuableNotNull
 import org.bukkit.inventory.ItemStack
-import java.io.IOException
 
 data class PacketInWindowClick(
         var windowId: Int,
@@ -38,7 +37,7 @@ data class PacketInWindowClick(
         slot = data.readShort().toInt()
         button = data.readByte().toInt()
         action = data.readShort().toInt()
-        clickType = Enums.ofValuable(ClickType::class.java, data.readVarInt()) ?: throw IOException("Unknown Click Type.")
+        clickType = ofValuableNotNull(data.readVarInt())
         clickedItem = data.readItemStack()
     }
 

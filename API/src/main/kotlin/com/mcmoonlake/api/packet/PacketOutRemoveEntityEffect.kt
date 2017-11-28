@@ -18,8 +18,7 @@
 package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.effect.EffectType
-import com.mcmoonlake.api.util.Enums
-import java.io.IOException
+import com.mcmoonlake.api.ofValuableNotNull
 
 data class PacketOutRemoveEntityEffect(
         var entityId: Int,
@@ -30,7 +29,7 @@ data class PacketOutRemoveEntityEffect(
 
     override fun read(data: PacketBuffer) {
         entityId = data.readVarInt()
-        effect = Enums.ofValuable(EffectType::class.java, data.readUnsignedByte().toInt()) ?: throw IOException("Unknown Effect Type.")
+        effect = ofValuableNotNull(data.readUnsignedByte().toInt())
     }
 
     override fun write(data: PacketBuffer) {

@@ -18,7 +18,7 @@
 package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.isCombatOrLaterVer
-import com.mcmoonlake.api.util.Enums
+import com.mcmoonlake.api.ofValuable
 import com.mcmoonlake.api.wrapper.EnumHand
 
 data class PacketInArmAnimation(
@@ -33,7 +33,7 @@ data class PacketInArmAnimation(
 
     override fun read(data: PacketBuffer) {
         if(isCombatOrLaterVer)
-            hand = Enums.ofValuable(EnumHand::class.java, data.readVarInt())
+            hand = ofValuable(data.readVarInt())
     }
 
     override fun write(data: PacketBuffer) {

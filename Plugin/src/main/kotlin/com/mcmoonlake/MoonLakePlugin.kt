@@ -17,11 +17,15 @@
 
 package com.mcmoonlake
 
+import com.mcmoonlake.api.attribute.AttributeItemModifier
+import com.mcmoonlake.api.attribute.AttributeModifier
 import com.mcmoonlake.api.depend.DependPlaceholderAPI
 import com.mcmoonlake.api.depend.DependPlugins
 import com.mcmoonlake.api.depend.DependVaultEconomy
 import com.mcmoonlake.api.depend.DependWorldEdit
+import com.mcmoonlake.api.effect.EffectCustom
 import com.mcmoonlake.api.isSpigotServer
+import com.mcmoonlake.api.player.PlayerInfo
 import com.mcmoonlake.api.region.*
 import com.mcmoonlake.api.registerEvent
 import com.mcmoonlake.api.service.ServiceConfig
@@ -78,6 +82,10 @@ class MoonLakePlugin : JavaPlugin(), com.mcmoonlake.api.MoonLake {
     /** register moonlake wrapped configuration serializable class */
     private fun registerConfigurationSerializable() {
         arrayOf(
+                AttributeItemModifier::class.java,
+                AttributeModifier::class.java,
+                EffectCustom::class.java,
+                PlayerInfo::class.java,
                 RegionVector::class.java,
                 RegionVector2D::class.java,
                 RegionVectorBlock::class.java,

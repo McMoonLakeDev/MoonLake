@@ -20,7 +20,7 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.attribute.AttributeModifier
 import com.mcmoonlake.api.attribute.AttributeSnapshot
 import com.mcmoonlake.api.attribute.Operation
-import com.mcmoonlake.api.util.Enums
+import com.mcmoonlake.api.ofValuable
 
 data class PacketOutUpdateAttributes(
         var entityId: Int,
@@ -41,7 +41,7 @@ data class PacketOutUpdateAttributes(
             (0 until modifierSize).forEach {
                 val uuid = data.readUUID()
                 val amount = data.readDouble()
-                val operation = Enums.ofValuable(Operation::class.java, data.readByte().toInt()) ?: Operation.ADD
+                val operation = ofValuable(data.readByte().toInt()) ?: Operation.ADD
                 modifiers.add(AttributeModifier("Unknown synced attribute modifier", operation, amount, uuid))
             }
             attributes.add(AttributeSnapshot(type, value, modifiers))
