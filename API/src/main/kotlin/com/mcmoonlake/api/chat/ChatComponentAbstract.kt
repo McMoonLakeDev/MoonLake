@@ -18,6 +18,9 @@
 package com.mcmoonlake.api.chat
 
 import com.mcmoonlake.api.notNull
+import com.mcmoonlake.api.packet.PacketOutChat
+import com.mcmoonlake.api.player.MoonLakePlayer
+import org.bukkit.entity.Player
 
 abstract class ChatComponentAbstract : ChatComponent {
 
@@ -63,6 +66,18 @@ abstract class ChatComponentAbstract : ChatComponent {
 
     override fun toRaw(color: Boolean): String
             = ChatSerializer.toRaw(this, color)
+
+    override fun send(player: MoonLakePlayer, action: ChatAction)
+            = send(player.bukkitPlayer, action)
+
+    override fun send(player: Player, action: ChatAction)
+            = PacketOutChat(this, action).send(player)
+
+    override fun plus(text: String): ChatComponent
+            = plus(ChatSerializer.fromRaw(text))
+
+    override fun plus(extra: ChatComponent): ChatComponent
+            = append(extra)
 
     override fun equals(other: Any?): Boolean {
         if(other === this)

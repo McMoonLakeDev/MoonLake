@@ -17,6 +17,9 @@
 
 package com.mcmoonlake.api.chat
 
+import com.mcmoonlake.api.player.MoonLakePlayer
+import org.bukkit.entity.Player
+
 interface ChatComponent {
 
     var style: ChatStyle
@@ -34,6 +37,14 @@ interface ChatComponent {
     fun toJson(): String
 
     fun toRaw(color: Boolean = true): String
+
+    fun send(player: Player, action: ChatAction = ChatAction.CHAT)
+
+    fun send(player: MoonLakePlayer, action: ChatAction = ChatAction.CHAT)
+
+    operator fun plus(text: String): ChatComponent
+
+    operator fun plus(extra: ChatComponent): ChatComponent
 
     companion object {
         /**
@@ -57,6 +68,14 @@ interface ChatComponent {
                 override fun toJson(): String
                         = throw UnsupportedOperationException()
                 override fun toRaw(color: Boolean): String
+                        = throw UnsupportedOperationException()
+                override fun send(player: MoonLakePlayer, action: ChatAction)
+                        = throw UnsupportedOperationException()
+                override fun send(player: Player, action: ChatAction)
+                        = throw UnsupportedOperationException()
+                override fun plus(text: String): ChatComponent
+                        = throw UnsupportedOperationException()
+                override fun plus(extra: ChatComponent): ChatComponent
                         = throw UnsupportedOperationException()
                 override fun toString(): String
                         = "ChatComponent(NULL)"

@@ -359,6 +359,21 @@ class MoonLakePluginTest : JavaPlugin() {
                     println(cct == cc1)
                     println(cc1 == cc2)
                 }
+                if(event.message == "/cc plus") {
+                    val text = ChatComponentText("start")
+                    val text2 = text + "&a&lAppend"
+                    println(text2)
+                }
+                if(event.message == "/cc send") {
+                    ChatComponentFancy("test")
+                            .withBold()
+                            .color(ChatColor.RED)
+                            .build()
+                            .send(event.player)
+
+                    (ChatSerializer.fromRaw("2333") + "&6Append" + "&9Append")
+                            .send(event.player)
+                }
             }
         }.registerEvent(this)
 
