@@ -23,6 +23,13 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
+/**
+ * ## AnvilWindow (铁砧窗口)
+ *
+ * @see [AnvilWindows]
+ * @author lgou2w
+ * @since 2.0
+ */
 interface AnvilWindow {
 
     /**

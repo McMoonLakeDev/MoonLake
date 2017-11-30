@@ -19,5 +19,23 @@ package com.mcmoonlake.api.anvil
 
 import org.bukkit.entity.Player
 
-class AnvilWindowOpenEvent(anvilWindow: AnvilWindow, player: Player) : AnvilWindowEvent(anvilWindow, player) {
+/**
+ * ## AnvilWindowOpenEvent (铁砧窗口打开事件)
+ *
+ * * Called when the anvil window is opened.
+ * * 当此铁砧窗口被打开时触发.
+ *
+ * @see [AnvilWindow]
+ * @see [AnvilWindow.handleOpen]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor AnvilWindowOpenEvent
+ * @param anvilWindow Anvil window object for event.
+ * @param anvilWindow 事件的铁砧窗口对象.
+ * @param player Player object for event.
+ * @param player 事件的玩家对象.
+ */
+class AnvilWindowOpenEvent(
+        anvilWindow: AnvilWindow,
+        player: Player) : AnvilWindowEvent(anvilWindow, player) {
 }

@@ -20,7 +20,33 @@ package com.mcmoonlake.api.anvil
 import com.mcmoonlake.api.event.Cancellable
 import org.bukkit.entity.Player
 
-class AnvilWindowInputEvent(anvilWindow: AnvilWindow, player: Player, var input: String?) : AnvilWindowEvent(anvilWindow, player), Cancellable {
+/**
+ * ## AnvilWindowInputEvent (铁砧窗口输入事件)
+ *
+ * * Called when the anvil window is by the player input.
+ * * 当此铁砧窗口在被玩家输入时触发.
+ *
+ * @see [AnvilWindow]
+ * @see [AnvilWindow.handleInput]
+ * @see [Cancellable]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor AnvilWindowInputEvent
+ * @param anvilWindow Anvil window object for event.
+ * @param anvilWindow 事件的铁砧窗口对象.
+ * @param player Player object for event.
+ * @param player 事件的玩家对象.
+ * @param input Input object for event.
+ * @param input 事件的输入对象.
+ */
+class AnvilWindowInputEvent(
+        anvilWindow: AnvilWindow,
+        player: Player,
+        /**
+         * * Input object for current event.
+         * * 当前事件的输入对象.
+         */
+        var input: String?) : AnvilWindowEvent(anvilWindow, player), Cancellable {
 
     private var cancel: Boolean = false
 

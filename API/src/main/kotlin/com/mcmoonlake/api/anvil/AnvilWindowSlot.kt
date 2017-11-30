@@ -19,18 +19,33 @@ package com.mcmoonlake.api.anvil
 
 import com.mcmoonlake.api.Valuable
 
-enum class AnvilWindowSlot(val slot: Int) : Valuable<Int> {
+/**
+ * ## AnvilWindowSlot (铁砧窗口槽位)
+ *
+ * @see [Valuable]
+ * @author lgou2w
+ * @since 2.0
+ */
+enum class AnvilWindowSlot(
+        /**
+         * * Current slot index value.
+         * * 当前槽位索引值.
+         */
+        val slot: Int) : Valuable<Int> {
 
     /**
-     * Anvil Window Slot: Left Input (铁砧窗口槽: 左输入)
+     * * Anvil Window Slot: Left Input
+     * * 铁砧窗口槽: 左输入
      */
     INPUT_LEFT(0),
     /**
-     * Anvil Window Slot: Right Input (铁砧窗口槽: 右输入)
+     * * Anvil Window Slot: Right Input
+     * * 铁砧窗口槽: 右输入
      */
     INPUT_RIGHT(1),
     /**
-     * Anvil Window Slot: Output (铁砧窗口槽: 输出)
+     * * Anvil Window Slot: Output
+     * * 铁砧窗口槽: 输出
      */
     OUTPUT(2),
     ;
@@ -42,6 +57,13 @@ enum class AnvilWindowSlot(val slot: Int) : Valuable<Int> {
 
     companion object {
 
+        /**
+         * * Obtain the anvil window slot from a given slot index value.
+         * * 从给定的槽位索引值中获取铁砧窗口槽
+         *
+         * @param slot Slot index value.
+         * @param slot 槽位索引值.
+         */
         @JvmStatic
         @JvmName("fromSlot")
         fun fromSlot(slot: Int): AnvilWindowSlot? = when(slot) {

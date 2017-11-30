@@ -27,6 +27,16 @@ import com.mcmoonlake.api.utility.MinecraftPlayerMembers
 import org.bukkit.plugin.Plugin
 import java.util.*
 
+/**
+ * ## AnvilWindows
+ *
+ * * Used to create an [AnvilWindow] interface instance.
+ * * 用于创建 [AnvilWindow] 接口实例.
+ *
+ * @see [AnvilWindows.create]
+ * @author lgou2w
+ * @since 2.0
+ */
 object AnvilWindows {
 
     @JvmStatic
@@ -36,11 +46,23 @@ object AnvilWindows {
         getMoonLake().logger.fine("Anvil Window Using: ${clazz.canonicalName}")
         Accessors.getAccessorConstructor(clazz, false, Plugin::class.java) }
 
+    /**
+     * * Create a new instance of the [AnvilWindow] interface using the specified [plugin] object.
+     * * 使用给定的 [plugin] 对象创建一个 [AnvilWindow] 接口的新实例.
+     *
+     * @see [com.mcmoonlake.api.newAnvilWindow]
+     */
     @JvmStatic
     @JvmName("create")
     fun create(plugin: Plugin): AnvilWindow
             = anvilWindowConstructor.newInstance(plugin)
 
+    /**
+     * * Releases and close any [AnvilWindow] Id references currently stored on [AnvilWindows].
+     * * 释放并关闭当前在 [AnvilWindows] 存储的所有 [AnvilWindow] Id 引用.
+     *
+     * ### It is not recommended to call this function.
+     */
     @JvmStatic
     @JvmName("releaseAll")
     fun releaseAll() {

@@ -19,5 +19,30 @@ package com.mcmoonlake.api.anvil
 
 import org.bukkit.entity.Player
 
-abstract class AnvilWindowEvent(val anvilWindow: AnvilWindow, val player: Player) {
+/**
+ * ## AnvilWindowEvent (铁砧窗口事件)
+ *
+ * @see [AnvilWindowClickEvent]
+ * @see [AnvilWindowCloseEvent]
+ * @see [AnvilWindowInputEvent]
+ * @see [AnvilWindowOpenEvent]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor AnvilWindowEvent
+ * @param anvilWindow Anvil window object for event.
+ * @param anvilWindow 事件的铁砧窗口对象.
+ * @param player Player object for event.
+ * @param player 事件的玩家对象.
+ */
+abstract class AnvilWindowEvent(
+        /**
+         * * Anvil window object for current event.
+         * * 当前事件的铁砧窗口对象.
+         */
+        val anvilWindow: AnvilWindow,
+        /**
+         * * Player object for current event.
+         * * 当前事件的玩家对象.
+         */
+        val player: Player) {
 }

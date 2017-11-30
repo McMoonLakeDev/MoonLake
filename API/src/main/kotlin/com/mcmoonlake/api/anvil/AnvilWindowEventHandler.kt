@@ -19,5 +19,12 @@ package com.mcmoonlake.api.anvil
 
 import com.mcmoonlake.api.funs.Executor
 
+/**
+ * ## AnvilWindowEventHandler (铁砧窗口事件处理器)
+ *
+ * @see [Executor]
+ * @author lgou2w
+ * @since 2.0
+ */
 interface AnvilWindowEventHandler<in T: AnvilWindowEvent> : Executor<T> {
 }

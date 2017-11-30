@@ -20,6 +20,17 @@ package com.mcmoonlake.api.anvil
 import com.mcmoonlake.api.player.MoonLakePlayer
 import org.bukkit.plugin.Plugin
 
+/**
+ * ## AnvilWindowAbstract (铁砧窗口抽象类)
+ *
+ * @see [AnvilWindow]
+ * @see [AnvilWindows]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor AnvilWindowAbstract
+ * @param plugin The current anvil window plugin object.
+ * @param plugin 当前铁砧窗口的插件对象.
+ */
 abstract class AnvilWindowAbstract(override final val plugin: Plugin) : AnvilWindow {
 
     protected var openHandler: AnvilWindowEventHandler<AnvilWindowOpenEvent>? = null
@@ -70,6 +81,10 @@ abstract class AnvilWindowAbstract(override final val plugin: Plugin) : AnvilWin
     override fun open(player: MoonLakePlayer)
             = open(player.bukkitPlayer)
 
+    /**
+     * * Release the current anvil window can be `null` member variables and resources.
+     * * 释放当前铁砧窗口可 `null` 成员变量和资源.
+     */
     open protected fun release() {
         openHandler = null
         inputHandler = null
@@ -77,10 +92,24 @@ abstract class AnvilWindowAbstract(override final val plugin: Plugin) : AnvilWin
         closeHandler = null
     }
 
+    /**
+     * * Add the id of the current anvil window to [AnvilWindows].
+     * * 将当前铁砧窗口的 Id 添加到 [AnvilWindows].
+     *
+     * @param windowId Current anvil window Id.
+     * @param windowId 当前铁砧窗口 Id.
+     */
     open protected fun addWindowId(windowId: Int) {
         AnvilWindows.windowIds.add(windowId)
     }
 
+    /**
+     * * Remove the id of the current anvil window from [AnvilWindows].
+     * * 从 [AnvilWindows] 中移除当前铁砧窗口的 Id.
+     *
+     * @param windowId Current anvil window Id.
+     * @param windowId 当前铁砧窗口 Id.
+     */
     open protected fun removeWindowId(windowId: Int) {
         AnvilWindows.windowIds.remove(windowId)
     }

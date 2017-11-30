@@ -19,5 +19,23 @@ package com.mcmoonlake.api.anvil
 
 import org.bukkit.entity.Player
 
-class AnvilWindowCloseEvent(anvilWindow: AnvilWindow, player: Player) : AnvilWindowEvent(anvilWindow, player) {
+/**
+ * ## AnvilWindowCloseEvent (铁砧窗口关闭事件)
+ *
+ * * Called when the anvil window is closed.
+ * * 当此铁砧窗口被关闭时触发.
+ *
+ * @see [AnvilWindow]
+ * @see [AnvilWindow.handleClose]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor AnvilWindowCloseEvent
+ * @param anvilWindow Anvil window object for event.
+ * @param anvilWindow 事件的铁砧窗口对象.
+ * @param player Player object for event.
+ * @param player 事件的玩家对象.
+ */
+class AnvilWindowCloseEvent(
+        anvilWindow: AnvilWindow,
+        player: Player) : AnvilWindowEvent(anvilWindow, player) {
 }
