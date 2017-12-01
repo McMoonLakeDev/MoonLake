@@ -17,6 +17,7 @@
 
 package com.mcmoonlake.api.attribute
 
+import com.mcmoonlake.api.item.ItemBuilder
 import com.mcmoonlake.api.ofValuable
 import com.mcmoonlake.api.ofValuableNotNull
 import com.mcmoonlake.api.parseDouble
@@ -25,11 +26,54 @@ import com.mcmoonlake.api.util.ComparisonChain
 import org.bukkit.configuration.serialization.ConfigurationSerializable
 import java.util.*
 
+/**
+ * ## AttributeItemModifier (属性物品修改器)
+ *
+ * * Add or remove modifiers to the specified item stack.
+ * * 从物品栈中添加或移除此修改器.
+ *
+ * @see [ItemBuilder]
+ * @see [ItemBuilder.getAttribute]
+ * @see [ConfigurationSerializable]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor AttributeItemModifier
+ * @param type Attribute type.
+ * @param type 属性类型.
+ * @param operation Operation mode.
+ * @param operation 运算模式.
+ * @param slot This modifier takes effect in which slot of the player. If `null` then all slots.
+ * @param slot 此修改器在玩家哪个槽位生效. 如果 `null` 则所有槽位.
+ * @param amount Operation amount.
+ * @param amount 运算数量.
+ * @param uuid Unique id.
+ * @param uuid 唯一 Id.
+ */
 data class AttributeItemModifier(
+        /**
+         * * The type of this modifier.
+         * * 此修改器的类型.
+         */
         val type: AttributeType,
+        /**
+         * * The operation mode of this modifier.
+         * * 此修改器的运算模式.
+         */
         val operation: Operation,
+        /**
+         * * The modifier is takes effect in which slot.  If `null` then all slots.
+         * * 此修改器的生效槽位. 如果 `null` 则所有槽位.
+         */
         val slot: Slot?,
+        /**
+         * * The operation amount of this modifier.
+         * * 此修改器的运算数量.
+         */
         val amount: Double,
+        /**
+         * * The unique id of this modifier.
+         * * 此修改器的唯一 Id.
+         */
         val uuid: UUID) : ConfigurationSerializable, Comparable<AttributeItemModifier> {
 
     override fun compareTo(other: AttributeItemModifier): Int {

@@ -17,7 +17,28 @@
 
 package com.mcmoonlake.api.attribute
 
+import com.mcmoonlake.api.player.MoonLakePlayer
+
+/**
+ * ## Attributable (可属性能力)
+ *
+ * * Get the attribute object from the given attribute type.
+ * * 从给定的属性类型获取属性对象.
+ *
+ * @see [Attribute]
+ * @see [AttributeType]
+ * @see [MoonLakePlayer]
+ * @author lgou2w
+ * @since 2.0
+ */
 interface Attributable {
 
+    /**
+     * * Get the attribute object from the given attribute type.
+     * * 从给定的属性类型获取属性对象.
+     *
+     * @param type Attribute type.
+     * @param type 属性类型.
+     */
     fun getAttribute(type: AttributeType): Attribute
 }

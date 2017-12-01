@@ -21,6 +21,7 @@ import com.mcmoonlake.api.converter.ConverterEquivalent
 import com.mcmoonlake.api.currentMCVersion
 import com.mcmoonlake.api.entity.Entities
 import com.mcmoonlake.api.exception.MoonLakeException
+import com.mcmoonlake.api.isExplorationOrLaterVer
 import com.mcmoonlake.api.isOrLater
 import com.mcmoonlake.api.parseInt
 import com.mcmoonlake.api.reflect.ExactReflect
@@ -32,9 +33,18 @@ import com.mcmoonlake.api.util.Enums
 import com.mcmoonlake.api.utility.MinecraftReflection
 import com.mcmoonlake.api.version.IllegalBukkitVersionException
 import org.bukkit.entity.LivingEntity
+import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 import java.util.*
 
+/**
+ * ## Attributes
+ *
+ * @see [Attribute]
+ * @see [Attributable]
+ * @author lgou2w
+ * @since 2.0
+ */
 object Attributes {
 
     /**
@@ -46,10 +56,14 @@ object Attributes {
     /** api */
 
     /**
-     * Gets the attribute instance of the specified entity.
+     * * Gets the attribute instance of the specified entity.
+     * * 获取指定实体的属性实例.
      *
      * @throws IllegalBukkitVersionException If the server does not support attribute type.
+     * @throws IllegalBukkitVersionException 如果服务器不支持的属性类型.
      * @throws NoSuchElementException If the entity does not have this attribute type.
+     * @throws NoSuchElementException 如果实体没有存在的属性类型.
+     * @see [getEntityAttributeOrPut]
      */
     @JvmStatic
     @JvmName("getEntityAttribute")
@@ -63,9 +77,11 @@ object Attributes {
     }
 
     /**
-     * Gets the instance of the specified entity, which is added if the entity has no instance.
+     * * Gets the attribute instance of the specified entity, which is added if the entity has no instance.
+     * * 获取指定实体的属性实例, 如果实体没有实例则添加到该实体.
      *
      * @throws IllegalBukkitVersionException If the server does not support attribute type.
+     * @throws IllegalBukkitVersionException 如果服务器不支持的属性类型.
      */
     @JvmStatic
     @JvmName("getEntityAttributeOrPut")
@@ -235,15 +251,26 @@ object Attributes {
                     = Operation::class.java
         } }
 
+    @JvmStatic
+    private fun forEachAttributePut(field: Field) {
+        field.isAccessible = true
+        val iAttribute = field.get(null)
+        val name = iAttributeGetName.invoke(iAttribute) as String
+        val type = Enums.ofValuable(AttributeType::class.java, name)
+        if(type != null && (type.mcVer == null || currentMCVersion().isOrLater(type.mcVer)))
+            attributeSupportMap.put(type, iAttribute)
+    }
+
     init {
         FuzzyReflect.fromClass(getGenericAttributesClass(), true).getFieldListByType(getIAttributeClass())
-                .forEach {
-                    it.isAccessible = true
-                    val iAttribute = it.get(null)
-                    val name = iAttributeGetName.invoke(iAttribute) as String
-                    val type = Enums.ofValuable(AttributeType::class.java, name)
-                    if(type != null && (type.mcVer == null || currentMCVersion().isOrLater(type.mcVer)))
-                        attributeSupportMap.put(type, iAttribute)
-                }
+                .forEach { forEachAttributePut(it) }
+        FuzzyReflect.fromClass(MinecraftReflection.getMinecraftClass("EntityZombie"), true).getFieldListByType(getIAttributeClass())
+                .forEach { forEachAttributePut(it) }
+        val horseClass = if(isExplorationOrLaterVer)
+            MinecraftReflection.getMinecraftClass("EntityHorseAbstract")
+        else
+            MinecraftReflection.getMinecraftClass("EntityHorse")
+        FuzzyReflect.fromClass(horseClass, true).getFieldListByType(getIAttributeClass())
+                .forEach { forEachAttributePut(it) }
     }
 }

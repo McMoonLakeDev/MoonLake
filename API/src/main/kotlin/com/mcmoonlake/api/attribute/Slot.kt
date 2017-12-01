@@ -19,30 +19,51 @@ package com.mcmoonlake.api.attribute
 
 import com.mcmoonlake.api.Valuable
 
-enum class Slot(val type: String) : Valuable<String> {
+/**
+ * ## Slot (槽位)
+ *
+ * * Enumeration can be used for attribute item stack modifier takes effect in which slot.
+ * * 枚举可用于属性物品修改器的生效槽位.
+ *
+ * @see [AttributeItemModifier]
+ * @author lgou2w
+ * @since 2.0
+ */
+enum class Slot(
+        /**
+         * * Enum type name.
+         * * 枚举类型名称.
+         */
+        val type: String) : Valuable<String> {
 
     /**
-     * Attribute Slot: Main hand (属性部位: 主手)
+     * * Attribute Slot: Main hand
+     * * 属性部位: 主手
      */
     MAIN_HAND("mainhand"),
     /**
-     * Attribute Slot: Off hand (属性部位: 副手)
+     * * Attribute Slot: Off hand
+     * * 属性部位: 副手
      */
     OFF_HAND("offhand"),
     /**
-     * Attribute Slot: Head (属性部分: 头)
+     * * Attribute Slot: Head
+     * * 属性部位: 头
      */
     HEAD("head"),
     /**
-     * Attribute Slot: Legs (属性部分: 腿)
+     * * Attribute Slot: Legs
+     * * 属性部位: 腿
      */
     LEGS("legs"),
     /**
-     * Attribute Slot: Chest (属性部分: 胸)
+     * * Attribute Slot: Chest
+     * * 属性部位: 胸
      */
     CHEST("chest"),
     /**
-     * Attribute Slot: Feet (属性部分: 脚)
+     * * Attribute Slot: Feet
+     * * 属性部位: 脚
      */
     FEET("feet"),
     ;

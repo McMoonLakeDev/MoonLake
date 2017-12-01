@@ -17,19 +17,66 @@
 
 package com.mcmoonlake.api.attribute
 
+/**
+ * ## Attribute (属性)
+ *
+ * @see [Attributable]
+ * @author lgou2w
+ * @since 2.0
+ */
 interface Attribute {
 
+    /**
+     * * Get the type of this attribute.
+     * * 获取此属性的类型.
+     *
+     * @see [AttributeType]
+     */
     val type: AttributeType
 
+    /**
+     * * Get the default value of this attribute.
+     * * 获取此属性的默认值
+     *
+     * @see [AttributeType.def]
+     */
     val defValue: Double
 
+    /**
+     * * Gets or sets the base value of this attribute.
+     * * 获取或设置此属性的基础值.
+     */
     var baseValue: Double
 
+    /**
+     * * Get the value of this attribute after all associated modifiers have been applied.
+     * * 在应用了所有关联的修改器后, 获取此属性的最终值.
+     */
     val value: Double
 
+    /**
+     * * Get all modifiers present on this attribute.
+     * * 获取此属性的所有修改器.
+     */
     val modifiers: Collection<AttributeModifier>
 
+    /**
+     * * Add a modifier to this attribute.
+     * * 添加一个修改器到此属性.
+     *
+     * @param modifier Modifier.
+     * @param modifier 修改器.
+     * @see [AttributeModifier]
+     */
     fun addModifier(modifier: AttributeModifier)
 
+    /**
+     * * Remove a modifier from this attribute.
+     * * 从此属性删除一个修改器.
+     *
+     * @param modifier Modifier.
+     * @param modifier 修改器.
+     * @see [AttributeModifier]
+     */
     fun removeModifier(modifier: AttributeModifier)
 }

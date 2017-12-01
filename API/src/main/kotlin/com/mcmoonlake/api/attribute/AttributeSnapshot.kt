@@ -17,5 +17,36 @@
 
 package com.mcmoonlake.api.attribute
 
-data class AttributeSnapshot(val type: String, val value: Double, val modifiers: List<AttributeModifier>) {
+import com.mcmoonlake.api.packet.PacketOutUpdateAttributes
+
+/**
+ * ## AttributeSnapshot (属性快照)
+ *
+ * @see [PacketOutUpdateAttributes]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor AttributeSnapshot
+ * @param type Type name.
+ * @param type 类型名称.
+ * @param value Value.
+ * @param value 值.
+ * @param modifiers Modifier lists.
+ * @param modifiers 修改器列表.
+ */
+data class AttributeSnapshot(
+        /**
+         * * The type name of this attribute snapshot.
+         * * 此属性快照的类型名称.
+         */
+        val type: String,
+        /**
+         * * The value of this attribute snapshot.
+         * * 此属性快照的值.
+         */
+        val value: Double,
+        /**
+         * * The modifier lists of this attribute snapshot.
+         * * 此属性快照的修改器列表.
+         */
+        val modifiers: List<AttributeModifier>) {
 }

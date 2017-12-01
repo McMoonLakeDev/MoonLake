@@ -25,10 +25,41 @@ import com.mcmoonlake.api.util.ComparisonChain
 import org.bukkit.configuration.serialization.ConfigurationSerializable
 import java.util.*
 
+/**
+ * ## AttributeModifier (属性修改器)
+ *
+ * * Add or remove this modifier from the attribute.
+ * * 从属性中添加或移除此修改器.
+ *
+ * @see [Attribute]
+ * @see [Attribute.addModifier]
+ * @see [Attribute.removeModifier]
+ * @see [ConfigurationSerializable]
+ * @author lgou2w
+ * @since 2.0
+ */
 data class AttributeModifier(
+        /**
+         * * The name of this modifier.
+         * * 此修改器的名字.
+         */
         val name: String,
+        /**
+         * * The operation mode of this modifier.
+         * * 此修改器的运算模式.
+         *
+         * @see [Operation]
+         */
         val operation: Operation,
+        /**
+         * * The operation amount of this modifier.
+         * * 此修改器的运算数量.
+         */
         val amount: Double,
+        /**
+         * * The unique id of this modifier.
+         * * 此修改器的唯一 Id.
+         */
         val uuid: UUID = UUID.randomUUID()) : ConfigurationSerializable, Comparable<AttributeModifier> {
 
     override fun compareTo(other: AttributeModifier): Int {

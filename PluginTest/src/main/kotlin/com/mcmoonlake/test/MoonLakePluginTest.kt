@@ -20,6 +20,7 @@ package com.mcmoonlake.test
 import com.mcmoonlake.api.*
 import com.mcmoonlake.api.anvil.AnvilWindowSlot
 import com.mcmoonlake.api.attribute.AttributeType
+import com.mcmoonlake.api.attribute.Attributes
 import com.mcmoonlake.api.attribute.Operation
 import com.mcmoonlake.api.attribute.Slot
 import com.mcmoonlake.api.block.Blocks
@@ -373,6 +374,13 @@ class MoonLakePluginTest : JavaPlugin() {
 
                     (ChatSerializer.fromRaw("2333") + "&6Append" + "&9Append")
                             .send(event.player)
+                }
+                if(event.message == "/att zombie") {
+                    val zombie = Zombie::class.java.spawn(event.player.location)
+                    val attribute = Attributes.getEntityAttribute(zombie, AttributeType.ZOMBIE_SPAWN_REINFORCEMENTS)
+                    event.player.sendMessage("Current Value: ${attribute.value}")
+                    attribute.baseValue = AttributeType.ZOMBIE_SPAWN_REINFORCEMENTS.max
+                    event.player.sendMessage("Value: ${attribute.value}")
                 }
             }
         }.registerEvent(this)

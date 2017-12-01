@@ -19,20 +19,40 @@ package com.mcmoonlake.api.attribute
 
 import com.mcmoonlake.api.Valuable
 
-enum class Operation(val value: Int) : Valuable<Int> {
+/**
+ * ## Operation (运算模式)
+ *
+ * * Enumerate the operation mode available for the attribute modifier.
+ * * 枚举可用于属性修改器的运算模式.
+ *
+ * @see [Valuable]
+ * @see [AttributeModifier]
+ * @see [AttributeItemModifier]
+ * @author lgou2w
+ * @since 2.0
+ */
+enum class Operation(
+        /**
+         * * Enum value.
+         * * 枚举值.
+         */
+        val value: Int) : Valuable<Int> {
 
     /**
-     * Attribute Operation Mode: Add (属性运算模式: 增加)
+     * * Attribute Operation Mode: Add
+     * * 属性运算模式: 增加
      * - Increment X by Amount
      */
     ADD(0),
     /**
-     * Attribute Operation Mode: Multiply (属性运算模式: 百分比)
+     * * Attribute Operation Mode: Multiply
+     * * 属性运算模式: 百分比
      * - Increment Y by X * Amount
      */
     MULTIPLY(1),
     /**
-     * Attribute Operation Mode: Multiply Inc (属性运算模式: 百分比增加)
+     * * Attribute Operation Mode: Multiply Inc
+     * * 属性运算模式: 百分比增加
      * - Y = Y * (1 + Amount) (equivalent to Increment Y by Y * Amount)
      */
     MULTIPLY_INC(2),
