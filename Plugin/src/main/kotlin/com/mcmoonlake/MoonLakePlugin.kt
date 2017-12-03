@@ -19,6 +19,7 @@ package com.mcmoonlake
 
 import com.mcmoonlake.api.attribute.AttributeItemModifier
 import com.mcmoonlake.api.attribute.AttributeModifier
+import com.mcmoonlake.api.block.BlockPosition
 import com.mcmoonlake.api.depend.DependPlaceholderAPI
 import com.mcmoonlake.api.depend.DependPlugins
 import com.mcmoonlake.api.depend.DependVaultEconomy
@@ -84,6 +85,7 @@ class MoonLakePlugin : JavaPlugin(), com.mcmoonlake.api.MoonLake {
         arrayOf(
                 AttributeItemModifier::class.java,
                 AttributeModifier::class.java,
+                BlockPosition::class.java,
                 EffectCustom::class.java,
                 PlayerInfo::class.java,
                 RegionVector::class.java,

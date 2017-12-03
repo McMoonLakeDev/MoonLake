@@ -19,30 +19,46 @@ package com.mcmoonlake.api.block
 
 import com.mcmoonlake.api.Valuable
 
+/**
+ * ## BlockDirection (方块方向)
+ *
+ * * Enumerate the orientation face of a block.
+ * * 枚举方块的方向面.
+ *
+ * @see [Valuable]
+ * @author lgou2w
+ * @since 2.0
+ */
 enum class BlockDirection : Valuable<Int> {
 
     /**
-     * Block Direction: Down (方块方向: 下面)
+     * * Block Direction: Down
+     * * 方块方向: 下面
      */
     DOWN,
     /**
-     * Block Direction: Up (方块方向: 上面)
+     * * Block Direction: Up
+     * * 方块方向: 上面
      */
     UP,
     /**
-     * Block Direction: North (方块方向: 北面)
+     * * Block Direction: North
+     * * 方块方向: 北面
      */
     NORTH,
     /**
-     * Block Direction: SOUTH (方块方向: 南面)
+     * * Block Direction: SOUTH
+     * * 方块方向: 南面
      */
     SOUTH,
     /**
-     * Block Direction: WEST (方块方向: 西面)
+     * * Block Direction: WEST
+     * * 方块方向: 西面
      */
     WEST,
     /**
-     * Block Direction: EAST (方块方向: 东面)
+     * * Block Direction: EAST
+     * * 方块方向: 东面
      */
     EAST,
     ;

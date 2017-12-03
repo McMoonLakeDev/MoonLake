@@ -17,9 +17,42 @@
 
 package com.mcmoonlake.api.block
 
+import com.mcmoonlake.api.parseInt
 import com.mcmoonlake.api.util.ComparisonChain
+import org.bukkit.configuration.serialization.ConfigurationSerializable
 
-data class BlockPosition(val x: Int, val y: Int, val z: Int) : Comparable<BlockPosition> {
+/**
+ * ## BlockPosition (方块位置)
+ *
+ * * Stores the coordinates of a block in three-dimensional space.
+ * * 存储在三维空间中方块的坐标.
+ *
+ * @author lgou2w
+ * @since 2.0
+ * @constructor BlockPosition
+ * @param x X coordinate.
+ * @param x X 坐标
+ * @param y Y coordinate.
+ * @param y Y 坐标.
+ * @param z Z coordinate.
+ * @param z Z 坐标.
+ */
+data class BlockPosition(
+        /**
+         * * The X coordinate value of this block.
+         * * 此方块的 X 坐标值.
+         */
+        val x: Int,
+        /**
+         * * The Y coordinate value of this block.
+         * * 此方块的 Y 坐标值.
+         */
+        val y: Int,
+        /**
+         * * The Z coordinate value of this block.
+         * * 此方块的 Z 坐标值.
+         */
+        val z: Int) : ConfigurationSerializable, Comparable<BlockPosition> {
 
     override fun compareTo(other: BlockPosition): Int
             = ComparisonChain.start()
@@ -28,9 +61,32 @@ data class BlockPosition(val x: Int, val y: Int, val z: Int) : Comparable<BlockP
             .compare(z, other.z)
             .result
 
+    override fun serialize(): MutableMap<String, Any> {
+        val result = LinkedHashMap<String, Any>()
+        result.put("x", x)
+        result.put("y", y)
+        result.put("z", z)
+        return result
+    }
+
+    /** static */
+
     companion object {
 
+        /**
+         * * A block position that represents a value of `0` coordinates.
+         * * 代表一个 `0` 坐标值的方块位置.
+         */
         @JvmField
         val ZERO = BlockPosition(0, 0, 0)
+
+        @JvmStatic
+        @JvmName("deserialize")
+        fun deserialize(args: Map<String, Any>): BlockPosition {
+            val x = args["x"]?.parseInt() ?: 0
+            val y = args["y"]?.parseInt() ?: 0
+            val z = args["z"]?.parseInt() ?: 0
+            return BlockPosition(x, y, z)
+        }
     }
 }
