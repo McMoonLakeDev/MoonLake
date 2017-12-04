@@ -19,9 +19,31 @@ package com.mcmoonlake.api.cached
 
 import java.lang.ref.Reference
 
+/**
+ * ## CachedRef (高速缓存引用值)
+ *
+ * * Super interface for soft, weak, and phantom reference value.
+ * * 软, 弱和虚引用值的超级接口.
+ *
+ * @see [CachedSoftReference]
+ * @see [CachedWeakReference]
+ * @see [CachedPhantomReference]
+ * @author lgou2w
+ * @since 2.0
+ */
 interface CachedRef<out K, V> {
 
+    /**
+     * * Get the reference object for this cached ref.
+     * * 获取此高速缓存引用值的引用对象.
+     *
+     * @see [Reference]
+     */
     fun reference(): Reference<V>
 
+    /**
+     * * Get the key object for this cached ref.
+     * * 获取此高速缓存引用值的键对象.
+     */
     fun key(): K
 }

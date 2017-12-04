@@ -19,5 +19,12 @@ package com.mcmoonlake.api.cached
 
 import java.lang.ref.ReferenceQueue
 
+/**
+ * ## CachedReferenceQueue (高速缓存引用值队列)
+ *
+ * @see [ReferenceQueue]
+ * @author lgou2w
+ * @since 2.0
+ */
 open class CachedReferenceQueue<T> : ReferenceQueue<T>() {
 }

@@ -18,11 +18,28 @@
 package com.mcmoonlake.api.cached
 
 import java.lang.ref.PhantomReference
-import java.lang.ref.Reference
 
-open class CachedPhantomReference<out K, V>(private val key: K, referent: V, queue: CachedReferenceQueue<in V>) : PhantomReference<V>(referent, queue), CachedRef<K, V> {
+/**
+ * ## CachedPhantomReference (高速缓存虚引用值)
+ *
+ * @see [CachedRef]
+ * @see [PhantomReference]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor CachedPhantomReference
+ * @param key Key.
+ * @param key 键.
+ * @param referent Value of referent.
+ * @param referent 值引用.
+ * @param queue Reference queue of value referent.
+ * @param queue 值引用队列.
+ */
+open class CachedPhantomReference<out K, V>(
+        private val key: K,
+        referent: V,
+        queue: CachedReferenceQueue<in V>) : PhantomReference<V>(referent, queue), CachedRef<K, V> {
 
-    override fun reference(): Reference<V>
+    override fun reference(): PhantomReference<V>
             = this
 
     override fun key(): K

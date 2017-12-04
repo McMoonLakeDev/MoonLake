@@ -17,9 +17,28 @@
 
 package com.mcmoonlake.api.cached
 
+/**
+ * ## CachedReference (高速缓存引用)
+ *
+ * @see [Cached]
+ * @see [CachedReferenceAbstract]
+ * @author lgou2w
+ * @since 2.0
+ */
 interface CachedReference<K, V, R: CachedRef<K, V>> : Cached {
 
+    /**
+     * * Get the cache size for this cached reference.
+     * * 从此高速缓存引用获取缓存大小.
+     */
     fun size(): Int
 
+    /**
+     * * Gets the value specified by this cache reference from the given key.
+     * * 从给定的键获取此高速缓存引用指定的值.
+     *
+     * @param key Key.
+     * @param key 键.
+     */
     fun getCache(key: K): V
 }

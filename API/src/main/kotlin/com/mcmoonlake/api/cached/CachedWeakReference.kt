@@ -17,12 +17,29 @@
 
 package com.mcmoonlake.api.cached
 
-import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 
-open class CachedWeakReference<out K, V>(private val key: K, referent: V, queue: CachedReferenceQueue<in V>) : WeakReference<V>(referent, queue), CachedRef<K, V> {
+/**
+ * ## CachedWeakReference (高速缓存弱引用值)
+ *
+ * @see [CachedRef]
+ * @see [WeakReference]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor CachedWeakReference
+ * @param key Key.
+ * @param key 键.
+ * @param referent Value of referent.
+ * @param referent 值引用.
+ * @param queue Reference queue of value referent.
+ * @param queue 值引用队列.
+ */
+open class CachedWeakReference<out K, V>(
+        private val key: K,
+        referent: V,
+        queue: CachedReferenceQueue<in V>) : WeakReference<V>(referent, queue), CachedRef<K, V> {
 
-    override fun reference(): Reference<V>
+    override fun reference(): WeakReference<V>
             = this
 
     override fun key(): K

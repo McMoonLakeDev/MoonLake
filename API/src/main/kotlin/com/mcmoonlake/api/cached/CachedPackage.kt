@@ -22,6 +22,13 @@ import com.mcmoonlake.api.reflect.ClassSource
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * ## CachedPackage (高速缓存包)
+ *
+ * @see [Cached]
+ * @author lgou2w
+ * @since 2.0
+ */
 class CachedPackage : Cached {
 
     /** member */
@@ -32,6 +39,14 @@ class CachedPackage : Cached {
 
     /** constructor */
 
+    /**
+     * CachedPackage
+     *
+     * @param packageName The target package name.
+     * @param packageName 目标包名.
+     * @param source The target class source.
+     * @param source 目标类源.
+     */
     constructor(packageName: String, source: ClassSource) {
         this.cachedMap = ConcurrentHashMap()
         this.packageName = packageName
@@ -40,6 +55,15 @@ class CachedPackage : Cached {
 
     /** api */
 
+    /**
+     * * Get the class of the current cached package from the given class name.
+     * * 从给定的类名获取当前高速缓存包的类.
+     *
+     * @param className Class name.
+     * @param className 类名称.
+     * @throws MoonLakeException If the class does not exist.
+     * @throws MoonLakeException 如果类不存在.
+     */
     @Throws(MoonLakeException::class)
     fun getPackageClass(className: String): Class<*> {
         if(cachedMap.containsKey(className)) {
@@ -58,6 +82,15 @@ class CachedPackage : Cached {
         }
     }
 
+    /**
+     * * Sets the class for this given class name for this cache package. Removed if [clazz] is `null`.
+     * * 设置此高速缓存包的给定类名的类. 如果 [clazz] 为 `null` 则移除.
+     *
+     * @param className Class name.
+     * @param className 类名称.
+     * @param clazz Class.
+     * @param clazz 类.
+     */
     fun setPackageClass(className: String, clazz: Class<*>?) {
         if(clazz != null)
             cachedMap.put(className, Optional.of(clazz))
@@ -66,7 +99,7 @@ class CachedPackage : Cached {
     }
 
     override fun gc() {
-        this.cachedMap.clear()
+        cachedMap.clear()
     }
 
     /** implement */

@@ -17,7 +17,18 @@
 
 package com.mcmoonlake.api.cached
 
+/**
+ * ## Cached (高速缓存)
+ *
+ * @see [CachedReference]
+ * @author lgou2w
+ * @since 2.0
+ */
 interface Cached {
 
+    /**
+     * * Clear all caches for the current cached.
+     * * 清除当前高速缓存的所有缓存.
+     */
     fun gc()
 }

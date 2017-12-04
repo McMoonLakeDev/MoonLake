@@ -17,9 +17,23 @@
 
 package com.mcmoonlake.api.cached
 
+/**
+ * ## CachedSoftRef (高速缓存软引用)
+ *
+ * @see [CachedReferenceAbstract]
+ * @see [CachedSoftReference]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor CachedSoftRef
+ * @param map Cache map. If `null` then use a non-thread-safe [HashMap].
+ * @param map 缓存映射. 如果为 `null` 则使用非线程安全的 [HashMap].
+ */
 abstract class CachedSoftRef<K, V>(
         map: MutableMap<K, CachedSoftReference<K, V>>?) : CachedReferenceAbstract<K, V, CachedSoftReference<K, V>>(map) {
 
+    /**
+     * @constructor CachedSoftRef
+     */
     constructor() : this(null)
 
     override final fun produceRef(key: K, value: V, queue: CachedReferenceQueue<V>): CachedSoftReference<K, V>
