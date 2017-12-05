@@ -19,32 +19,53 @@ package com.mcmoonlake.api.chat
 
 import com.mcmoonlake.api.Valuable
 
-enum class ChatAction(val value: Byte) : Valuable<Byte> {
+/**
+ * ## ChatAction (聊天交互)
+ *
+ * * Enum minecraft chat action position.
+ * * 枚举 Minecraft 聊天交互位置.
+ *
+ * @see [Valuable]
+ * @author lgou2w
+ * @since 2.0
+ */
+enum class ChatAction(
+        /**
+         * * Enum value.
+         * * 枚举值.
+         */
+        val value: Int) : Valuable<Int> {
 
     /**
-     * Chat Action: Chat (聊天类型: 聊天)
+     * * Chat Action: Chat
+     * * 聊天交互: 聊天栏
      */
     CHAT(0),
     /**
-     * Chat Action: System (聊天类型: 系统)
+     * * Chat Action: System
+     * * 聊天交互: 系统栏
      */
     SYSTEM(1),
     /**
-     * Chat Action: Action Bar (聊天类型: 交互栏)
+     * * Chat Action: Action Bar
+     * * 聊天交互: 交互栏
      */
     ACTIONBAR(2),
     ;
 
-    override fun value(): Byte
+    override fun value(): Int
             = value
 
     /** static */
 
     companion object {
 
+        /**
+         *
+         */
         @JvmStatic
         @JvmName("fromValue")
-        fun fromValue(value: Byte): ChatAction = when(value.toInt()) {
+        fun fromValue(value: Int): ChatAction = when(value) {
             0 -> CHAT
             1 -> SYSTEM
             2 -> ACTIONBAR

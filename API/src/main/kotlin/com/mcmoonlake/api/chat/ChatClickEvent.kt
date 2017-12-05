@@ -17,28 +17,65 @@
 
 package com.mcmoonlake.api.chat
 
-data class ChatClickEvent(val action: Action, val value: String) {
+/**
+ * ## ChatClickEvent (聊天点击事件)
+ *
+ * @see [ChatComponent]
+ * @see [ChatStyle]
+ * @see [ChatStyle.setClickEvent]
+ * @author lgou2w
+ * @since 2.0
+ * @param action Click action type.
+ * @param action 点击交互类型.
+ * @param value Action value.
+ * @param value 交互值.
+ */
+data class ChatClickEvent(
+        /**
+         * * The action type of this chat click event.
+         * * 此聊天点击事件的交互类型.
+         *
+         * @see [Action]
+         */
+        val action: Action,
+        /**
+         * * The action value of this chat click event.
+         * * 此聊天点击事件的交互值.
+         */
+        val value: String) {
 
+    /**
+     * ## Action (交互类型)
+     *
+     * @see [ChatClickEvent]
+     * @author lgou2w
+     * @since 2.0
+     */
     enum class Action {
 
         /**
-         * Chat Click Event: Open URL (聊天点击事件: 打开链接)
+         * * Chat Click Type: Open URL
+         * * 聊天点击类型: 打开链接
          */
         OPEN_URL,
         /**
-         * Chat Click Event: Open File (聊天点击事件: 打开文件)
+         * * Chat Click Type: Open File
+         * * 聊天点击类型: 打开文件
          */
         OPEN_FILE,
         /**
-         * Chat Click Event: Suggest Command (聊天点击事件: 提示命令)
+         * * Chat Click Type: Suggest Command
+         * * 聊天点击类型: 提示命令
          */
         SUGGEST_COMMAND,
         /**
-         * Chat Click Event: Run Command (聊天点击事件: 执行命令)
+         * * Chat Click Type: Run Command
+         * * 聊天点击类型: 执行命令
          */
         RUN_COMMAND,
         /**
-         * Chat Click Event: Change Page (聊天点击事件: 改变页面)
+         * * Chat Click Type: Change Page
+         * * 聊天点击类型: 改变页面
          */
         CHANGE_PAGE,
         ;
