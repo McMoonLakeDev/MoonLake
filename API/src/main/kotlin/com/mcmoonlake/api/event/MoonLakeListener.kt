@@ -19,5 +19,12 @@ package com.mcmoonlake.api.event
 
 import org.bukkit.event.Listener
 
+/**
+ * ## MoonLakeListener (月色之湖监听器)
+ *
+ * @see [Listener]
+ * @author lgou2w
+ * @since 2.0
+ */
 interface MoonLakeListener : Listener {
 }

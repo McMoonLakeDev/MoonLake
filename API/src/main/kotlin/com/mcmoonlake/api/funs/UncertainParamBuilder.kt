@@ -17,7 +17,26 @@
 
 package com.mcmoonlake.api.funs
 
+/**
+ * ## UncertainParamBuilder (不定长度参数构建者)
+ *
+ * @see [Builder]
+ * @see [SingleParamBuilder]
+ * @author lgou2w
+ * @since 2.0
+ * @param R Result type.
+ * @param R 结果类型.
+ * @param P Input type.
+ * @param P 输入类型.
+ */
 interface UncertainParamBuilder<out R, in P> {
 
+    /**
+     * * Apply the given parameters and build a result type object.
+     * * 应用给定参数并构建一个结果类型对象.
+     *
+     * @param params Parameter.
+     * @param params 参数.
+     */
     fun build(vararg params: P): R
 }

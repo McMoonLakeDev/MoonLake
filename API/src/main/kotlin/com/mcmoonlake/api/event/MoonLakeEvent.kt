@@ -19,10 +19,27 @@ package com.mcmoonlake.api.event
 
 import org.bukkit.event.Event
 
+/**
+ * ## MoonLakeEvent (月色之湖事件)
+ *
+ * @see [Event]
+ * @author lgou2w
+ * @since 2.0
+ */
 abstract class MoonLakeEvent : Event {
 
     /** constructor */
 
+    /**
+     * @constructor MoonLakeEvent
+     */
     constructor() : super()
+
+    /**
+     * @constructor MoonLakeEvent
+     *
+     * @param isAsync Whether this event is executed asynchronously.
+     * @param isAsync 此事件是否为异步执行.
+     */
     constructor(isAsync: Boolean) : super(isAsync)
 }

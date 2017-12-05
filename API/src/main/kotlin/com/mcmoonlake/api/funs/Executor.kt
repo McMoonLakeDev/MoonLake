@@ -17,7 +17,22 @@
 
 package com.mcmoonlake.api.funs
 
+/**
+ * ## Executor (执行者)
+ *
+ * @author lgou2w
+ * @since 2.0
+ * @param T Execution parameter type.
+ * @param T 执行参数类型.
+ */
 interface Executor<in T> {
 
+    /**
+     * * Executes the given parameter type object.
+     * * 执行给定的参数类型对象.
+     *
+     * @param param Parameter.
+     * @param param 参数.
+     */
     fun execute(param: T)
 }

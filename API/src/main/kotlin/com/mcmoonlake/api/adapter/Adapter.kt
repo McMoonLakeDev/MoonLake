@@ -17,5 +17,11 @@
 
 package com.mcmoonlake.api.adapter
 
+/**
+ * ## Adapter (适配器)
+ *
+ * @author lgou2w
+ * @since 2.0
+ */
 interface Adapter {
 }

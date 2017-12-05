@@ -31,11 +31,11 @@ data class PacketOutChat(
 
     override fun read(data: PacketBuffer) {
         message = data.readChatComponent()
-        action = ChatAction.fromValue(data.readByte())
+        action = ChatAction.fromValue(data.readByte().toInt())
     }
 
     override fun write(data: PacketBuffer) {
         data.writeChatComponent(message)
-        data.writeByte(action.value)
+        data.writeByte(action.value())
     }
 }

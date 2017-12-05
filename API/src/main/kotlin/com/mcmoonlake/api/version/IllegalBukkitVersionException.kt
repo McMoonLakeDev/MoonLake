@@ -21,6 +21,10 @@ import com.mcmoonlake.api.exception.MoonLakeException
 
 class IllegalBukkitVersionException : MoonLakeException {
 
-    constructor() : super("当前 Bukkit 版本不支持操作时异常.")
+    constructor() : super("当前 Bukkit 版本不支持该操作.")
     constructor(message: String?) : super(message)
+
+    companion object {
+        private const val serialVersionUID = 5987847054477043130L
+    }
 }

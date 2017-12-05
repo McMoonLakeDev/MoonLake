@@ -23,4 +23,8 @@ open class IllegalOfflinePlayerException : MoonLakeException {
 
     constructor() : super("玩家离线或不存在服务器.")
     constructor(name: String) : super("玩家 '$name' 离线或不存在服务器.")
+
+    companion object {
+        private const val serialVersionUID = 7888511736307774360L
+    }
 }

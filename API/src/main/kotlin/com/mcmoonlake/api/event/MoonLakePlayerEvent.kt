@@ -19,5 +19,23 @@ package com.mcmoonlake.api.event
 
 import com.mcmoonlake.api.player.MoonLakePlayer
 
-abstract class MoonLakePlayerEvent(val player: MoonLakePlayer, isAsync: Boolean = false) : MoonLakeEvent(isAsync) {
+/**
+ * ## MoonLakePlayerEvent (月色之湖玩家事件)
+ *
+ * @see [MoonLakeEvent]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor MoonLakePlayerEvent
+ * @param player MoonLake Player.
+ * @param player 月色之湖玩家.
+ * @param isAsync Whether this event is executed asynchronously.
+ * @param isAsync 此事件是否为异步执行.
+ */
+abstract class MoonLakePlayerEvent(
+        /**
+         * * This event moonlake player object.
+         * * 此事件的月色之湖玩家对象.
+         */
+        val player: MoonLakePlayer,
+        isAsync: Boolean = false) : MoonLakeEvent(isAsync) {
 }

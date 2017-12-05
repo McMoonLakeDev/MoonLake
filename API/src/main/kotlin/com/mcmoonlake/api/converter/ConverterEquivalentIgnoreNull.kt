@@ -34,6 +34,15 @@
 
 package com.mcmoonlake.api.converter
 
+/**
+ * ## ConverterEquivalentIgnoreNull (忽略 Null 等量转换器)
+ *
+ * @see [Converter]
+ * @see [ConverterEquivalent]
+ * @see [ConverterEquivalentOptional]
+ * @author ProtocolLib, lgou2w
+ * @since 2.0
+ */
 interface ConverterEquivalentIgnoreNull<T> : ConverterEquivalent<T> {
 
     override fun getGeneric(specific: T?): Any?
@@ -42,7 +51,13 @@ interface ConverterEquivalentIgnoreNull<T> : ConverterEquivalent<T> {
     override fun getSpecific(generic: Any?): T?
             = if(generic == null) null else getSpecificValue(generic)
 
+    /**
+     * @see [getGeneric]
+     */
     fun getGenericValue(specific: T): Any
 
+    /**
+     * @see [getSpecific]
+     */
     fun getSpecificValue(generic: Any): T
 }

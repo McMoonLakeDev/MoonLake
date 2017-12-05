@@ -17,7 +17,20 @@
 
 package com.mcmoonlake.api.adapter
 
-interface AdapterBukkit<out R> {
+/**
+ * ## AdapterBukkit (适配器 Bukkit)
+ *
+ * @see [Adapter]
+ * @author lgou2w
+ * @since 2.0
+ * @param R Result type.
+ * @param R 结果类型.
+ */
+interface AdapterBukkit<out R> : Adapter {
 
+    /**
+     * * Cast to result type.
+     * * 转换为结果类型.
+     */
     fun cast(): R
 }

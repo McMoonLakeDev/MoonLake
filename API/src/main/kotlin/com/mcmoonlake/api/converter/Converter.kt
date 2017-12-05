@@ -17,5 +17,11 @@
 
 package com.mcmoonlake.api.converter
 
+/**
+ * ## Converter (转换器)
+ *
+ * @author lgou2w
+ * @since 2.0
+ */
 interface Converter {
 }

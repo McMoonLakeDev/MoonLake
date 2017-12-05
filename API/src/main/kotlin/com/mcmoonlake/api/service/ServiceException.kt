@@ -25,4 +25,8 @@ open class ServiceException : MoonLakeException {
     constructor(message: String?) : super(message)
     constructor(message: String?, cause: Throwable?) : super(message, cause)
     constructor(cause: Throwable?) : super(cause)
+
+    companion object {
+        private const val serialVersionUID = 3851583620680250060L
+    }
 }

@@ -17,7 +17,21 @@
 
 package com.mcmoonlake.api.funs
 
+/**
+ * ## Builder (构建者)
+ *
+ * @see [SingleParamBuilder]
+ * @see [UncertainParamBuilder]
+ * @author lgou2w
+ * @since 2.0
+ * @param R Result type.
+ * @param R 结果类型.
+ */
 interface Builder<out R> {
 
+    /**
+     * * Build a result type object.
+     * * 构建一个结果类型对象.
+     */
     fun build(): R
 }

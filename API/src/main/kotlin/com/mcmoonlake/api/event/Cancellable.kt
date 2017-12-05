@@ -17,5 +17,12 @@
 
 package com.mcmoonlake.api.event
 
+/**
+ * ## Cancellable (可阻止能力)
+ *
+ * @see [org.bukkit.event.Cancellable]
+ * @author lgou2w
+ * @since 2.0
+ */
 interface Cancellable : org.bukkit.event.Cancellable {
 }
