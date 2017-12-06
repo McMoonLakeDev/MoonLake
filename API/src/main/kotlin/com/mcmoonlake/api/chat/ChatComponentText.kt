@@ -17,22 +17,39 @@
 
 package com.mcmoonlake.api.chat
 
-open class ChatComponentText : ChatComponentAbstract {
+/**
+ * ## ChatComponentText (聊天组件文本)
+ *
+ * @see [ChatComponent]
+ * @see [ChatComponentAbstract]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor ChatComponentText
+ * @param text Text.
+ * @param text 文本.
+ */
+open class ChatComponentText(
+        /**
+         * * Gets or sets the text object for this chat component text.
+         * * 获取或设置此聊天组件文本的文本对象.
+         */
+        var text: String) : ChatComponentAbstract() {
 
-    private var text: String
-
+    /**
+     * @constructor ChatComponentText
+     *
+     * * Using `null` string.
+     * * 使用 `null` 字符串.
+     */
     constructor() : this("null")
 
-    constructor(text: String) : super() {
-        this.text = text
-    }
-
-    constructor(text: ChatComponentText) : super() {
-        this.text = text.text
-    }
-
-    fun getText(): String
-            = text
+    /**
+     * @constructor ChatComponentText
+     *
+     * @param text Chat component text.
+     * @param text 聊天组件文本.
+     */
+    constructor(text: ChatComponentText) : this(text.text)
 
     fun setText(text: String): ChatComponentText
             { this.text = text; return this; }

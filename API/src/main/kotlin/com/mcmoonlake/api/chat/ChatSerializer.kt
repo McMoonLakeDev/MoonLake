@@ -30,6 +30,9 @@ import java.lang.StringBuilder
 import java.lang.reflect.Type
 import java.util.regex.Pattern
 
+/**
+ * ## ChatSerializer (聊天串行器)
+ */
 object ChatSerializer {
 
     @JvmStatic
@@ -45,16 +48,41 @@ object ChatSerializer {
                 .create()
     }
 
+    /**
+     * * Converts a given chat component to an `ICBC` object for `NMS`.
+     * * 将给定的聊天组件转换为 `NMS` 的 `ICBC` 对象.
+     *
+     * @see [fromNMS]
+     * @param component Chat component.
+     * @param component 聊天组件.
+     */
     @JvmStatic
     @JvmName("toNMS")
     fun toNMS(component: ChatComponent): Any
             = CONVERTER.getGenericValue(component)
 
+    /**
+     * * Converts the `ICBC` for a given `NMS` to a [] object.
+     * * 将给定 `NMS` 的 `ICBC` 转换为 [ChatComponent] 对象.
+     *
+     * @see [toNMS]
+     * @param generic NMS ICBC
+     */
     @JvmStatic
     @JvmName("fromNMS")
     fun fromNMS(generic: Any): ChatComponent
             = CONVERTER.getSpecificValue(generic)
 
+    /**
+     * * Converts the given raw `JSON` message to a [ChatComponent] object.
+     * * 将给定的源 `JSON` 消息转换为 [ChatComponent] 对象.
+     *
+     * @see [toJson]
+     * @param json Raw `JSON` message.
+     * @param json 源 `JSON` 消息.
+     * @throws JsonParseException If parsing failed.
+     * @throws JsonParseException 如果解析时失败.
+     */
     @JvmStatic
     @JvmName("fromJson")
     @Throws(JsonParseException::class)
@@ -66,6 +94,16 @@ object ChatSerializer {
         throw JsonParseException(e)
     }
 
+    /**
+     * * Converts the raw source `JSON` message to [ChatComponent] object in [JsonReader.lenient] mode.
+     * * 将给定的源 `JSON` 消息以 [JsonReader.lenient] 模式转换为 [ChatComponent] 对象.
+     *
+     * @see [toJson]
+     * @param json Raw `JSON` message.
+     * @param json 源 `JSON` 消息.
+     * @throws JsonParseException If parsing failed.
+     * @throws JsonParseException 如果解析时失败.
+     */
     @JvmStatic
     @JvmName("fromJsonLenient")
     @Throws(JsonParseException::class)
@@ -77,11 +115,28 @@ object ChatSerializer {
         throw JsonParseException(e)
     }
 
+    /**
+     * * Converts the given chat component to a `JSON` raw message.
+     * * 将给定的聊天组件转换为 `JSON` 源消息.
+     *
+     * @see [fromJson]
+     * @see [fromJsonLenient]
+     * @param component Chat component.
+     * @param component 聊天组件.
+     */
     @JvmStatic
     @JvmName("toJson")
-    fun toJson(chatComponent: ChatComponent): String
-            = GSON.toJson(chatComponent)
+    fun toJson(component: ChatComponent): String
+            = GSON.toJson(component)
 
+    /**
+     * * Converts the given raw string to [ChatComponent] object.
+     * * 将给定的源字符串转换为 [ChatComponent] 对象.
+     *
+     * @see [toRaw]
+     * @param raw Raw string.
+     * @param raw 源字符串.
+     */
     @JvmStatic
     @JvmName("fromRaw")
     fun fromRaw(raw: String?): ChatComponent {
@@ -90,6 +145,14 @@ object ChatSerializer {
         return RawMessage(raw.toColor()).get()
     }
 
+    /**
+     * * Converts the given raw string to [ChatComponent] object. If `null` then the result is `null`.
+     * * 将给定的源字符串转换为 [ChatComponent] 对象. 如果 `null` 则结果为 `null`.
+     *
+     * @see [toRaw]
+     * @param raw Raw string.
+     * @param raw 源字符串.
+     */
     @JvmStatic
     @JvmName("fromRawOrNull")
     fun fromRawOrNull(raw: String?): ChatComponent?
@@ -153,19 +216,30 @@ object ChatSerializer {
         }
     }
 
+    /**
+     * * Converts the given chat component to a raw string object.
+     * * 将给定的聊天组件转换为源字符串对象.
+     *
+     * @see [fromRaw]
+     * @see [fromRawOrNull]
+     * @param component Chat component.
+     * @param component 聊天组件.
+     * @param color Whether it has a color.
+     * @param color 是否拥有颜色.
+     */
     @JvmStatic
     @JvmName("toRaw")
-    fun toRaw(chatComponent: ChatComponent, color: Boolean = true): String {
+    fun toRaw(component: ChatComponent, color: Boolean = true): String {
         val builder = StringBuilder()
-        toRaw0(chatComponent, color, builder)
+        toRaw0(component, color, builder)
         return builder.toString()
     }
 
     @JvmStatic
     @JvmName("toRaw0")
-    private fun toRaw0(chatComponent: ChatComponent, color: Boolean = true, builder: StringBuilder) {
+    private fun toRaw0(component: ChatComponent, color: Boolean = true, builder: StringBuilder) {
         if(color) {
-            val chatStyle = chatComponent.style
+            val chatStyle = component.style
             if(chatStyle.color != null)
                 appendColor(builder, chatStyle.color.notNull())
             if(chatStyle.bold != null)
@@ -179,9 +253,9 @@ object ChatSerializer {
             if(chatStyle.obfuscated != null)
                 appendColor(builder, ChatColor.OBFUSCATED)
         }
-        if(chatComponent is ChatComponentText)
-            builder.append(chatComponent.getText())
-        chatComponent.extras.forEach { toRaw0(it, color, builder) }
+        if(component is ChatComponentText)
+            builder.append(component.text)
+        component.extras.forEach { toRaw0(it, color, builder) }
     }
 
     @JvmStatic
@@ -260,7 +334,7 @@ object ChatSerializer {
                 val jsonObjectHoverEvent = JsonObject()
                 jsonObjectHoverEvent.addProperty("action", src.hoverEvent?.action.toString().toLowerCase())
                 if(src.hoverEvent?.value is ChatComponentRaw)
-                    jsonObjectHoverEvent.addProperty("value", (src.hoverEvent?.value as ChatComponentRaw).getText())
+                    jsonObjectHoverEvent.addProperty("value", (src.hoverEvent?.value as ChatComponentRaw).text)
                 else
                     jsonObjectHoverEvent.add("value", context.serialize(src.hoverEvent?.value))
                 jsonObject.add("hoverEvent", jsonObjectHoverEvent)
@@ -299,7 +373,7 @@ object ChatSerializer {
                         if(withs[it] is ChatComponentText) {
                             val componentText = withs[it] as ChatComponentText
                             if(componentText.style.isEmpty() && componentText.extras.isEmpty())
-                                withs[it] = componentText.getText()
+                                withs[it] = componentText.text
                         }
                     }
                     component = ChatComponentTranslation(translate).addWiths(withs.filterNotNull().toTypedArray())
@@ -349,12 +423,12 @@ object ChatSerializer {
                 jsonObject.add("extra", jsonArray)
             }
             if(src is ChatComponentText) {
-                jsonObject.addProperty("text", src.getText())
+                jsonObject.addProperty("text", src.text)
             } else if(src is ChatComponentTranslation) {
-                jsonObject.addProperty("translate", src.getKey())
-                if(!src.getWiths().isEmpty()) {
+                jsonObject.addProperty("translate", src.key)
+                if(!src.withs.isEmpty()) {
                     val jsonArray = JsonArray()
-                    src.getWiths().forEach {
+                    src.withs.forEach {
                         if(it is ChatComponent)
                             jsonArray.add(serialize(it, it::class.java, context))
                         else
@@ -364,14 +438,14 @@ object ChatSerializer {
                 }
             } else if(src is ChatComponentScore) {
                 val jsonObjectScore = JsonObject()
-                jsonObjectScore.addProperty("name", src.getName())
-                jsonObjectScore.addProperty("objective", src.getObjective())
-                if(src.getValue() != null) jsonObjectScore.addProperty("value", src.getValue())
+                jsonObjectScore.addProperty("name", src.name)
+                jsonObjectScore.addProperty("objective", src.objective)
+                if(src.value != null) jsonObjectScore.addProperty("value", src.value)
                 jsonObject.add("score", jsonObjectScore)
             } else if(src is ChatComponentSelector) {
-                jsonObject.addProperty("selector", src.getSelector())
+                jsonObject.addProperty("selector", src.selector)
             } else if(src is ChatComponentKeybind) {
-                jsonObject.addProperty("keybind", src.getKeybind())
+                jsonObject.addProperty("keybind", src.keybind)
             } else {
                 throw JsonParseException("不知道如何序列化 $src 聊天组件.")
             }

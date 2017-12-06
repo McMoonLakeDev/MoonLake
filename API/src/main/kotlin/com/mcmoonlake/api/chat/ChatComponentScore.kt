@@ -17,25 +17,53 @@
 
 package com.mcmoonlake.api.chat
 
-open class ChatComponentScore(private var name: String, private var objective: String) : ChatComponentAbstract() {
+/**
+ * ## ChatComponentScore (聊天组件分数)
+ *
+ * @see [ChatComponent]
+ * @see [ChatComponentAbstract]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor ChatComponentScore
+ * @param name Score name.
+ * @param name 分数名.
+ * @param objective Score Objective.
+ * @param objective 分数目标.
+ * @param value Score value.
+ * @param value 分数值.
+ */
+open class ChatComponentScore(
+        /**
+         * * Gets or sets the score name object for this chat component score.
+         * * 获取或设置此聊天组件分数的分数名对象.
+         */
+        var name: String,
+        /**
+         * * Gets or sets the score objective object for this chat component score.
+         * * 获取或设置此聊天组件分数的分数目标对象.
+         */
+        var objective: String,
+        /**
+         * * Gets or sets the score value object for this chat component score.
+         * * 获取或设置此聊天组件分数的分数值对象.
+         */
+        var value: String? = null) : ChatComponentAbstract() {
 
-    private var value: String? = null
-
-    fun getName(): String
-            = name
-
+    /**
+     * @see [ChatComponentScore.name]
+     */
     fun setName(name: String): ChatComponentScore
             { this.name = name; return this; }
 
-    fun getObjective(): String
-            = objective
-
+    /**
+     * @see [ChatComponentScore.objective]
+     */
     fun setObjective(objective: String): ChatComponentScore
             { this.objective = objective; return this; }
 
-    fun getValue(): String?
-            = value
-
+    /**
+     * @see [ChatComponentScore.value]
+     */
     fun setValue(value: String?): ChatComponentScore
             { this.value = value; return this; }
 

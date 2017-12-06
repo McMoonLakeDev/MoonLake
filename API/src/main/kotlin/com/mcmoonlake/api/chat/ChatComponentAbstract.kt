@@ -22,6 +22,17 @@ import com.mcmoonlake.api.packet.PacketOutChat
 import com.mcmoonlake.api.player.MoonLakePlayer
 import org.bukkit.entity.Player
 
+/**
+ * ## ChatComponentAbstract (聊天组件抽象)
+ *
+ * @see [ChatComponent]
+ * @see [ChatComponentText]
+ * @see [ChatComponentTranslation]
+ * @see [ChatComponentScore]
+ * @see [ChatComponentSelector]
+ * @author lgou2w
+ * @since 2.0
+ */
 abstract class ChatComponentAbstract : ChatComponent {
 
     private var _style: ChatStyle? = null

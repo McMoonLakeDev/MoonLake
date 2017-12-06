@@ -17,11 +17,27 @@
 
 package com.mcmoonlake.api.chat
 
-open class ChatComponentSelector(private var selector: String) : ChatComponentAbstract() {
+/**
+ * ## ChatComponentSelector (聊天组件选择器)
+ *
+ * @see [ChatComponent]
+ * @see [ChatComponentAbstract]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor ChatComponentSelector
+ * @param selector Selector.
+ * @param selector 选择器.
+ */
+open class ChatComponentSelector(
+        /**
+         * * Gets or sets the selector object for this chat component selector.
+         * * 获取或设置此聊天组件选择器的选择器对象.
+         */
+        var selector: String) : ChatComponentAbstract() {
 
-    fun getSelector(): String
-            = selector
-
+    /**
+     * @see [ChatComponentSelector.selector]
+     */
     fun setSelector(selector: String): ChatComponentSelector
             { this.selector = selector; return this; }
 

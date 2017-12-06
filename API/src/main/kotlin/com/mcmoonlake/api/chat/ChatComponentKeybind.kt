@@ -17,11 +17,27 @@
 
 package com.mcmoonlake.api.chat
 
-open class ChatComponentKeybind(private var keybind: String) : ChatComponentAbstract() {
+/**
+ * ## ChatComponentKeybind (聊天组件按键)
+ *
+ * @see [ChatComponent]
+ * @see [ChatComponentAbstract]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor ChatComponentKeybind
+ * @param keybind Keybind
+ * @param keybind 按键
+ */
+open class ChatComponentKeybind(
+        /**
+         * * Gets or sets the keybind object for this chat component keybind.
+         * * 获取或设置此聊天组件按键的按键对象.
+         */
+        var keybind: String) : ChatComponentAbstract() {
 
-    fun getKeybind(): String
-            = keybind
-
+    /**
+     * @see [ChatComponentKeybind.keybind]
+     */
     fun setKeybind(keybind: String): ChatComponentKeybind
             { this.keybind = keybind; return this; }
 

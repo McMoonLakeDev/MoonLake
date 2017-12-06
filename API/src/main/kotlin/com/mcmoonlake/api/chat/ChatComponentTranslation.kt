@@ -17,21 +17,42 @@
 
 package com.mcmoonlake.api.chat
 
-open class ChatComponentTranslation(private var key: String) : ChatComponentAbstract() {
+/**
+ * ## ChatComponentTranslation (聊天组件翻译)
+ *
+ * @see [ChatComponent]
+ * @see [ChatComponentAbstract]
+ * @author lgou2w
+ * @since 2.0
+ * @constructor ChatComponentTranslation
+ * @param key Key.
+ * @param key 键.
+ * @param withs Parameters.
+ * @param withs 参数.
+ */
+open class ChatComponentTranslation(
+        /**
+         * * Gets or sets the key object for this chat component translation.
+         * * 获取或设置此聊天组件翻译的键对象.
+         */
+        var key: String,
+        /**
+         * * Gets or sets the withs list object for this chat component translation.
+         * * 获取或设置此聊天组件翻译的参数列表对象.
+         */
+        var withs: MutableList<Any> = ArrayList()) : ChatComponentAbstract() {
 
-    private var withs: MutableList<Any> = ArrayList()
-
-    fun getKey(): String
-            = key
-
+    /**
+     * @see [ChatComponentTranslation.key]
+     */
     fun setKey(key: String): ChatComponentTranslation
             { this.key = key; return this; }
 
+    /**
+     * @see [ChatComponentTranslation.withs]
+     */
     fun addWiths(withs: Array<Any>): ChatComponentTranslation
             { this.withs.addAll(withs); return this; }
-
-    fun getWiths(): List<Any>
-            = withs
 
     override fun equals(other: Any?): Boolean {
         if(other === this)

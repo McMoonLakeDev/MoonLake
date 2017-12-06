@@ -17,24 +17,62 @@
 
 package com.mcmoonlake.api.chat
 
-data class ChatHoverEvent(val action: Action, val value: ChatComponent) {
+import com.mcmoonlake.api.chat.ChatHoverEvent.Action
 
+/**
+ * ## ChatHoverEvent (聊天移动事件)
+ *
+ * @see [ChatComponent]
+ * @see [ChatStyle]
+ * @see [ChatStyle.setHoverEvent]
+ * @author lgou2w
+ * @since 2.0
+ * @param action Hover action type.
+ * @param action 点击交互类型.
+ * @param value Action value.
+ * @param value 交互值.
+ */
+data class ChatHoverEvent(
+        /**
+         * * The action type of this chat hover event.
+         * * 此聊天移动事件的交互类型.
+         *
+         * @see [Action]
+         */
+        val action: Action,
+        /**
+         * * The action value of this chat hover event.
+         * * 此聊天移动事件的交互值.
+         */
+        val value: ChatComponent) {
+
+    /**
+     * ## Action (交互类型)
+     *
+     * @see [ChatHoverEvent]
+     * @author lgou2w
+     * @since 2.0
+     */
     enum class Action {
 
         /**
-         * Chat Hover Event: Show Text (聊天移动事件: 显示文本)
+         * * Chat Hover Event: Show Text
+         * * 聊天移动事件: 显示文本
          */
         SHOW_TEXT,
         /**
-         * Chat Hover Event: Show Achievement (聊天移动事件: 显示成就)
+         * * Chat Hover Event: Show Achievement
+         * * 聊天移动事件: 显示成就
          */
         SHOW_ACHIEVEMENT,
         /**
-         * Chat Hover Event: Show Item (聊天移动事件: 显示物品栈)
+         * * Chat Hover Event: Show Item
+         * * 聊天移动事件: 显示物品栈
          */
         SHOW_ITEM,
         /**
-         * Chat Hover Event: Show Entity (聊天移动事件: 显示实体)
+         * * Chat Hover Event: Show Entity
+         * * 聊天移动事件: 显示实体
          */
         SHOW_ENTITY,
         ;

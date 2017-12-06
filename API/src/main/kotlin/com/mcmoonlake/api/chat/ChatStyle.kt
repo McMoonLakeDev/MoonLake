@@ -17,6 +17,12 @@
 
 package com.mcmoonlake.api.chat
 
+/**
+ * ## ChatStyle (聊天样式)
+ *
+ * @author lgou2w
+ * @since 2.0
+ */
 open class ChatStyle {
 
     /** member */
