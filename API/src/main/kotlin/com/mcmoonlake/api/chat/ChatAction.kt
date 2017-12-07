@@ -61,7 +61,15 @@ enum class ChatAction(
     companion object {
 
         /**
+         * * Gets the chat action object from the given enumeration value. If unknown, the result is [CHAT].
+         * * 从给定的枚举值获取聊天交互对象. 如果未知则结果为 [CHAT].
          *
+         * @see [ChatAction]
+         * @see [ChatAction.CHAT]
+         * @see [ChatAction.SYSTEM]
+         * @see [ChatAction.ACTIONBAR]
+         * @param value Enum value.
+         * @param value 枚举值.
          */
         @JvmStatic
         @JvmName("fromValue")

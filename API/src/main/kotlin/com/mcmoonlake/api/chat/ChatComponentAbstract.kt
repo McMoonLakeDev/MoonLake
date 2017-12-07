@@ -30,6 +30,7 @@ import org.bukkit.entity.Player
  * @see [ChatComponentTranslation]
  * @see [ChatComponentScore]
  * @see [ChatComponentSelector]
+ * @see [ChatComponentKeybind]
  * @author lgou2w
  * @since 2.0
  */

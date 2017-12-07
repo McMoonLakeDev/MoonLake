@@ -91,27 +91,51 @@ open class ChatStyle {
     private fun getParent(): ChatStyle
             = parent ?: ROOT
 
+    /**
+     * @see [ChatColor]
+     */
     open fun getColor(): ChatColor?
             = color ?: getParent().getColor()
 
+    /**
+     * @see [ChatColor.BOLD]
+     */
     open fun getBold(): Boolean?
             = bold ?: getParent().getBold()
 
+    /**
+     * @see [ChatColor.ITALIC]
+     */
     open fun getItalic(): Boolean?
             = italic ?: getParent().getItalic()
 
+    /**
+     * @see [ChatColor.STRIKETHROUGH]
+     */
     open fun getStrikethrough(): Boolean?
             = strikethrough ?: getParent().getStrikethrough()
 
+    /**
+     * @see [ChatColor.UNDERLINE]
+     */
     open fun getUnderlined(): Boolean?
             = underlined ?: getParent().getUnderlined()
 
+    /**
+     * @see [ChatColor.OBFUSCATED]
+     */
     open fun getObfuscated(): Boolean?
             = obfuscated ?: getParent().getObfuscated()
 
+    /**
+     * @see [ChatClickEvent]
+     */
     open fun getClickEvent(): ChatClickEvent?
             = clickEvent ?: getParent().getClickEvent()
 
+    /**
+     * @see [ChatHoverEvent]
+     */
     open fun getHoverEvent(): ChatHoverEvent?
             = hoverEvent ?: getParent().getHoverEvent()
 
@@ -121,36 +145,68 @@ open class ChatStyle {
     open fun setParent(parent: ChatStyle?): ChatStyle
             { this.parent = parent; return this; }
 
+    /**
+     * @see [ChatColor]
+     */
     open fun setColor(color: ChatColor?): ChatStyle
             { this.color = color; return this; }
 
+    /**
+     * @see [ChatColor.BOLD]
+     */
     open fun setBold(bold: Boolean?): ChatStyle
             { this.bold = bold; return this; }
 
+    /**
+     * @see [ChatColor.ITALIC]
+     */
     open fun setItalic(italic: Boolean?): ChatStyle
             { this.italic = italic; return this; }
 
+    /**
+     * @see [ChatColor.STRIKETHROUGH]
+     */
     open fun setStrikethrough(strikethrough: Boolean?): ChatStyle
             { this.strikethrough = strikethrough; return this; }
 
+    /**
+     * @see [ChatColor.UNDERLINE]
+     */
     open fun setUnderlined(underlined: Boolean?): ChatStyle
             { this.underlined = underlined; return this; }
 
+    /**
+     * @see [ChatColor.OBFUSCATED]
+     */
     open fun setObfuscated(obfuscated: Boolean?): ChatStyle
             { this.obfuscated = obfuscated; return this; }
 
+    /**
+     * @see [ChatClickEvent]
+     */
     open fun setClickEvent(clickEvent: ChatClickEvent?): ChatStyle
             { this.clickEvent = clickEvent; return this; }
 
+    /**
+     * @see [ChatHoverEvent]
+     */
     open fun setHoverEvent(hoverEvent: ChatHoverEvent?): ChatStyle
             { this.hoverEvent = hoverEvent; return this; }
 
     open fun setInsertion(insertion: String?): ChatStyle
             { this.insertion = insertion; return this; }
 
+    /**
+     * * Get this chat style is empty.
+     * * 获取此聊天样式是否为空.
+     */
     fun isEmpty(): Boolean
             = color == null && bold == null && italic == null && strikethrough == null && underlined == null && obfuscated == null && clickEvent == null && hoverEvent == null && insertion == null
 
+    /**
+     * * Shallow a clone of this chat style object.
+     * * 浅克隆一份此聊天样式的对象.
+     */
     fun clone(): ChatStyle {
         val copy = ChatStyle()
         copy.color = color

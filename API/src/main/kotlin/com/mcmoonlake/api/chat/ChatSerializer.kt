@@ -32,6 +32,10 @@ import java.util.regex.Pattern
 
 /**
  * ## ChatSerializer (聊天串行器)
+ *
+ * @see [ChatComponent]
+ * @author lgou2w
+ * @since 2.0
  */
 object ChatSerializer {
 

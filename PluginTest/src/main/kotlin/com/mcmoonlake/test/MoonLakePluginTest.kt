@@ -382,6 +382,10 @@ class MoonLakePluginTest : JavaPlugin() {
                     attribute.baseValue = AttributeType.ZOMBIE_SPAWN_REINFORCEMENTS.max
                     event.player.sendMessage("Value: ${attribute.value}")
                 }
+                if(event.message == "/cc fshow") {
+                    val itemStack = event.player.itemInHand
+                    ItemShow(itemStack).build().send(event.player)
+                }
             }
         }.registerEvent(this)
 
@@ -394,6 +398,18 @@ class MoonLakePluginTest : JavaPlugin() {
                 println(event.packet)
             }
         })
+    }
+
+    class ItemShow(itemStack: ItemStack) : ChatComponentFancy("[") {
+        init {
+            color(ChatColor.WHITE)
+            then(itemStack.itemMeta.displayName ?: itemStack.type.name)
+            color(ChatColor.AQUA)
+            withBold()
+            tooltipItem(itemStack)
+            then("]")
+            color(ChatColor.WHITE)
+        }
     }
 
     override fun onDisable() {

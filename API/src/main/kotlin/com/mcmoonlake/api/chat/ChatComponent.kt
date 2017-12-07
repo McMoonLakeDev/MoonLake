@@ -27,7 +27,14 @@ import org.bukkit.entity.Player
  * * `JSON` operations component for minecraft client and server chat communication. [Details](https://minecraft.gamepedia.com/Commands#Raw_JSON_text)
  * * Minecraft 客户端和服务端聊天通信的 `JSON` 操作组件. [详情](https://minecraft.gamepedia.com/Commands#Raw_JSON_text)
  *
+ * @see [ChatSerializer]
  * @see [ChatComponentFancy]
+ * @see [ChatComponentAbstract]
+ * @see [ChatComponentText]
+ * @see [ChatComponentTranslation]
+ * @see [ChatComponentScore]
+ * @see [ChatComponentSelector]
+ * @see [ChatComponentKeybind]
  * @author lgou2w
  * @since 2.0
  */
