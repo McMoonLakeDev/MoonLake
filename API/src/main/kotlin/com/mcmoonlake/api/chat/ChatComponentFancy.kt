@@ -236,12 +236,13 @@ open class ChatComponentFancy(component: ChatComponent) : Builder<ChatComponent>
      * * 设置此花式组件最后一个组件具有移动显示文本事件.
      *
      * @see [tooltipTexts]
+     * @see [tooltipComponent]
      * @see [ChatHoverEvent.Action.SHOW_TEXT]
      * @param text Text. Can use `\n` newline.
      * @param text 文本. 可用 `\n` 换行.
      */
     fun tooltipText(text: String): ChatComponentFancy
-            { last.style.setHoverEvent(ChatHoverEvent(ChatHoverEvent.Action.SHOW_TEXT, ChatComponentText(text))); return this; }
+            = tooltipComponent(ChatSerializer.fromRaw(text))
 
     /**
      * * The last component that sets this fancy component has a hover tooltip multi-line text event.
@@ -256,6 +257,17 @@ open class ChatComponentFancy(component: ChatComponent) : Builder<ChatComponent>
         val text = texts.mapIndexed { index, str -> if(index != lastIndex) str + '\n' else str }
         return tooltipText(text.joinToString(separator = ""))
     }
+
+    /**
+     * * The last component that sets this fancy component has a hover tooltip text event.
+     * * 设置此花式组件最后一个组件具有移动显示文本事件.
+     *
+     * @see [ChatHoverEvent.Action.SHOW_TEXT]
+     * @param component Chat component.
+     * @param component 聊天组件.
+     */
+    fun tooltipComponent(component: ChatComponent): ChatComponentFancy
+            { last.style.setHoverEvent(ChatHoverEvent(ChatHoverEvent.Action.SHOW_TEXT, component)); return this; }
 
     /**
      * * The last component that sets this fancy component has a hover tooltip item stack event.
