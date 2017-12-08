@@ -105,8 +105,8 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         private const val TAG_SKULL_OWNER = "SkullOwner"
         private const val TAG_SKULL_PROPERTIES = "Properties"
         private const val TAG_SKULL_TEXTURES = "textures"
-        private const val TAG_SKULL_TEXURES_ID = "Id"
-        private const val TAG_SKULL_TEXURES_VALUE = "Value"
+        private const val TAG_SKULL_TEXTURES_ID = "Id"
+        private const val TAG_SKULL_TEXTURES_VALUE = "Value"
         private const val TAG_POTION = "Potion"
         private const val TAG_POTION_ID = "Id"
         private const val TAG_POTION_AMPLIFIER = "Amplifier"
@@ -441,7 +441,7 @@ abstract class ItemBuilderAbstract : ItemBuilder {
             val properties = (skullOwner as NBTCompound).getCompoundOrNull(TAG_SKULL_PROPERTIES)
             val textures = properties?.getListOrNull<NBTCompound>(TAG_SKULL_TEXTURES)
             if(textures != null) for(texture in textures) {
-                value = texture.getStringOrNull(TAG_SKULL_TEXURES_VALUE)
+                value = texture.getStringOrNull(TAG_SKULL_TEXTURES_VALUE)
                 if(value != null)
                     break
             }
@@ -452,10 +452,10 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     override fun setSkullTexture(value: String): ItemBuilder {
         tag.getCompoundOrDefault(TAG_SKULL_OWNER)
-                    .putString(TAG_SKULL_TEXURES_ID, UUID.randomUUID().toString())
+                    .putString(TAG_SKULL_TEXTURES_ID, UUID.randomUUID().toString())
                     .getCompoundOrDefault(TAG_SKULL_PROPERTIES)
                     .getListOrDefault<NBTCompound>(TAG_SKULL_TEXTURES).clearSelf()
-                    .addCompound(NBTFactory.ofCompound().putString(TAG_SKULL_TEXURES_VALUE, value))
+                    .addCompound(NBTFactory.ofCompound().putString(TAG_SKULL_TEXTURES_VALUE, value))
         return this
     }
 

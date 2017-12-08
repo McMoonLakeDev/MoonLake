@@ -75,19 +75,19 @@ object Items {
     @JvmName("toMojangson")
     @Deprecated("The future version 1.13 may be subject to change.")
     fun toMojangson(itemStack: ItemStack): String
-            = NBTFactory.writeStackNBT(itemStack).toMojangson() // Because it is compatible with MojangsonParser // TODO v1.13
+            = NBTFactory.readStackNBT(itemStack).toMojangson() // Because it is compatible with MojangsonParser // TODO v1.13
 
     @JvmStatic
     @JvmName("toBase64")
     @Throws(IOException::class)
     fun toBase64(itemStack: ItemStack): String
-            = NBTFactory.writeDataBase64(NBTFactory.writeStackNBT(itemStack))
+            = NBTFactory.writeDataBase64(NBTFactory.readStackNBT(itemStack))
 
     @JvmStatic
     @JvmName("toCompoundFile")
     @Throws(IOException::class)
     fun toCompoundFile(itemStack: ItemStack, outFile: File, compress: Boolean = true)
-            = NBTFactory.writeDataCompoundFile(NBTFactory.writeStackNBT(itemStack), outFile, compress)
+            = NBTFactory.writeDataCompoundFile(NBTFactory.readStackNBT(itemStack), outFile, compress)
 
     @JvmStatic
     private val mojangsonParser: AccessorMethod by lazy {
@@ -103,18 +103,19 @@ object Items {
     fun fromMojangson(value: String): ItemStack {
         val handle = mojangsonParser.invoke(null, value) ?: throw IllegalArgumentException("Null of Mojangson Parser.")
         val wrapped = NBTFactory.fromNMS<NBTCompound>(handle) as NBTCompound
-        return NBTFactory.readStackNBT(wrapped)
+        return NBTFactory.createStackNBT(wrapped)
     }
 
     @JvmStatic
     @JvmName("fromBase64")
     @Throws(IOException::class)
     fun fromBase64(value: String): ItemStack
-            = NBTFactory.readStackNBT(NBTFactory.readDataBase64Compound(value).notNull())
+            = NBTFactory.createStackNBT(NBTFactory.readDataBase64Compound(value).notNull())
 
     @JvmStatic
     @JvmName("fromCompoundFile")
     @Throws(IOException::class)
     fun fromCompoundFile(inFile: File, compress: Boolean = true): ItemStack
-            = if(!inFile.exists() || inFile.isDirectory) throw FileNotFoundException(inFile.absolutePath) else NBTFactory.readStackNBT(NBTFactory.readDataCompoundFile(inFile, compress).notNull())
+            = if(!inFile.exists() || inFile.isDirectory) throw FileNotFoundException(inFile.absolutePath)
+            else NBTFactory.createStackNBT(NBTFactory.readDataCompoundFile(inFile, compress).notNull())
 }

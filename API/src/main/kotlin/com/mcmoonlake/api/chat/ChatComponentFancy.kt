@@ -289,7 +289,7 @@ open class ChatComponentFancy(component: ChatComponent) : Builder<ChatComponent>
      * @param itemStack 物品栈.
      */
     fun tooltipItem(itemStack: ItemStack): ChatComponentFancy
-            = tooltipItem(NBTFactory.writeStackNBT(itemStack).toMojangson()) // TODO v1.13
+            = tooltipItem(NBTFactory.readStackNBT(itemStack).toMojangson()) // TODO v1.13
 
     /**
      * * Add the given fancy component to this fancy component.
