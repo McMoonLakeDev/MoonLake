@@ -42,10 +42,10 @@ import org.bukkit.inventory.ItemStack
  * @author lgou2w
  * @since 2.0
  * @constructor ChatComponentFancy
- * @param text The first text.
- * @param text 第一个文本.
+ * @param component The first component.
+ * @param component 第一个组件.
  */
-open class ChatComponentFancy(text: String) : Builder<ChatComponent> {
+open class ChatComponentFancy(component: ChatComponent) : Builder<ChatComponent> {
 
     /**
      * * Extra component list.
@@ -54,8 +54,15 @@ open class ChatComponentFancy(text: String) : Builder<ChatComponent> {
 
     init {
         this.extras = ArrayList()
-        this.then(text)
+        this.then(component)
     }
+
+    /**
+     * @constructor ChatComponentFancy
+     * @param text The first text.
+     * @param text 第一个文本.
+     */
+    constructor(text: String) : this(ChatComponentText(text))
 
     /**
      * * Get the last component of the extra component list for this chat component fancy.
