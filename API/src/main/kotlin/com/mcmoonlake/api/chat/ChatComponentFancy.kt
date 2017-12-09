@@ -259,6 +259,18 @@ open class ChatComponentFancy(component: ChatComponent) : Builder<ChatComponent>
     }
 
     /**
+     * * The last component that sets this fancy component has a hover tooltip multi-line text event.
+     * * 设置此花式组件最后一个组件具有移动显示多行文本事件.
+     *
+     * @see [tooltipTexts]
+     * @see [ChatHoverEvent.Action.SHOW_TEXT]
+     * @param collection Text collection.
+     * @param collection 文本集合.
+     */
+    fun tooltipTexts(collection: Collection<String>): ChatComponentFancy
+            = tooltipTexts(*collection.toTypedArray())
+
+    /**
      * * The last component that sets this fancy component has a hover tooltip text event.
      * * 设置此花式组件最后一个组件具有移动显示文本事件.
      *
