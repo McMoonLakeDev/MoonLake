@@ -358,7 +358,7 @@ object ChatSerializer {
                     val component1 = deserialize(it, it::class.java, context)
                     if(component == null)
                         component = component1
-                    if(component1 != null)
+                    else if(component1 != null)
                         component?.append(component1)
                 }
                 return component

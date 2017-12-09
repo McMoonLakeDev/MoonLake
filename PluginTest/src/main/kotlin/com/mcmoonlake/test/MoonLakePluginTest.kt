@@ -39,6 +39,10 @@ import com.mcmoonlake.api.packet.*
 import com.mcmoonlake.api.particle.Particle
 import com.mcmoonlake.api.player.PlayerInfo
 import com.mcmoonlake.api.task.MoonLakeRunnable
+import net.md_5.bungee.api.chat.ComponentBuilder
+import net.md_5.bungee.api.chat.HoverEvent
+import net.md_5.bungee.api.chat.TextComponent
+import net.md_5.bungee.chat.ComponentSerializer
 import org.bukkit.*
 import org.bukkit.entity.Pig
 import org.bukkit.entity.Zombie
@@ -385,6 +389,15 @@ class MoonLakePluginTest : JavaPlugin() {
                 if(event.message == "/cc fshow") {
                     val itemStack = event.player.itemInHand
                     ItemShow(itemStack).build().send(event.player)
+                }
+                if(event.message == "/cc md_5-issues") {
+                    val component = TextComponent("test")
+                    component.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("testa").create())
+                    val json = ComponentSerializer.toString(component)
+                    println(json)
+                    val me = ChatSerializer.fromJson(json)
+                    println(me.toJson())
+                    me.send(event.player)
                 }
             }
         }.registerEvent(this)

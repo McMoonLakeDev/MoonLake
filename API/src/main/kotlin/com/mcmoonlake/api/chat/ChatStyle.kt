@@ -241,8 +241,7 @@ open class ChatStyle {
     }
 
     override fun hashCode(): Int {
-        var result = parent?.hashCode() ?: 0
-        result = 31 * result + (color?.hashCode() ?: 0)
+        var result = color?.hashCode() ?: 0
         result = 31 * result + (bold?.hashCode() ?: 0)
         result = 31 * result + (italic?.hashCode() ?: 0)
         result = 31 * result + (underlined?.hashCode() ?: 0)
@@ -255,6 +254,6 @@ open class ChatStyle {
     }
 
     override fun toString(): String {
-        return "ChatStyle(parent=$parent, color=$color, bold=$bold, italic=$italic, underlined=$underlined, strikethrough=$strikethrough, obfuscated=$obfuscated, clickEvent=$clickEvent, hoverEvent=$hoverEvent, insertion=$insertion)"
+        return "ChatStyle(hasParent=${parent != null}, color=$color, bold=$bold, italic=$italic, underlined=$underlined, strikethrough=$strikethrough, obfuscated=$obfuscated, clickEvent=$clickEvent, hoverEvent=$hoverEvent, insertion=$insertion)"
     }
 }
