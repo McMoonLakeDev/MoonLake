@@ -17,7 +17,16 @@
 
 package com.mcmoonlake.api.depend
 
+/**
+ * ## DependPlugins
+ *
+ * @see [DependPlugin]
+ * @author lgou2w
+ * @since 2.0
+ */
 object DependPlugins {
+
+    // TODO Optimization
 
     @JvmStatic
     private val names: MutableMap<String, Class<out DependPlugin>> by lazy {

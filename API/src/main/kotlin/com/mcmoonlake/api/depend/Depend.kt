@@ -17,5 +17,11 @@
 
 package com.mcmoonlake.api.depend
 
+/**
+ * ## Depend (依赖)
+ *
+ * @author lgou2w
+ * @since 2.0
+ */
 interface Depend {
 }

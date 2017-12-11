@@ -19,6 +19,13 @@ package com.mcmoonlake.api.depend
 
 import com.mcmoonlake.api.exception.MoonLakeException
 
+/**
+ * ## DependPluginException (依赖插件异常)
+ *
+ * @see [MoonLakeException]
+ * @author lgou2w
+ * @since 2.0
+ */
 open class DependPluginException : MoonLakeException {
 
     constructor() : super()

@@ -21,19 +21,35 @@ import com.mcmoonlake.api.player.MoonLakePlayer
 import com.mcmoonlake.api.region.Region
 import com.mcmoonlake.api.wrapper.EconomyResponse
 
-interface DependPlayer {
+/**
+ * ## DependPlayer (依赖玩家)
+ *
+ * @see [Depend]
+ * @author lgou2w
+ * @since 2.0
+ */
+interface DependPlayer : Depend {
 
     /**
      * PlaceholderAPI
      *  @see [DependPlaceholderAPI]
      */
 
+    /**
+     * @see [DependPlaceholderAPI.setPlaceholders]
+     */
     @Throws(DependPluginException::class)
     fun setPlaceholders(text: String): String
 
+    /**
+     * @see [DependPlaceholderAPI.setBracketPlaceholders]
+     */
     @Throws(DependPluginException::class)
     fun setPlaceholdersBracket(text: String): String
 
+    /**
+     * @see [DependPlaceholderAPI.setRelationalPlaceholders]
+     */
     @Throws(DependPluginException::class)
     fun setPlaceholdersRelational(target: MoonLakePlayer, text: String): String
 
@@ -42,30 +58,57 @@ interface DependPlayer {
      * @see [DependVaultEconomy]
      */
 
+    /**
+     * @see [DependVaultEconomy.format]
+     */
     @Throws(DependPluginException::class)
     fun formatEconomy(value: Double): String
 
+    /**
+     * @see [DependVaultEconomy.hasAccount]
+     */
     @Throws(DependPluginException::class)
     fun hasEconomyAccount(world: String? = null): Boolean
 
+    /**
+     * @see [DependVaultEconomy.createAccount]
+     */
     @Throws(DependPluginException::class)
     fun createEconomyAccount(world: String? = null): Boolean
 
+    /**
+     * @see [DependVaultEconomy.getBalance]
+     */
     @Throws(DependPluginException::class)
     fun getEconomyBalance(world: String? = null): Double
 
+    /**
+     * @see [DependVaultEconomy.hasBalance]
+     */
     @Throws(DependPluginException::class)
     fun hasEconomyBalance(value: Double, world: String? = null): Boolean
 
+    /**
+     * @see [DependVaultEconomy.withdraw]
+     */
     @Throws(DependPluginException::class)
     fun withdrawEconomy(value: Double, world: String? = null): EconomyResponse
 
+    /**
+     * @see [DependVaultEconomy.deposit]
+     */
     @Throws(DependPluginException::class)
     fun depositEconomy(value: Double, world: String? = null): EconomyResponse
 
+    /**
+     * @see [DependVaultEconomy.isBankOwner]
+     */
     @Throws(DependPluginException::class)
     fun isEconomyBankOwner(name: String): EconomyResponse
 
+    /**
+     * @see [DependVaultEconomy.isBankMember]
+     */
     @Throws(DependPluginException::class)
     fun isEconomyBankMember(name: String): EconomyResponse
 
@@ -74,9 +117,15 @@ interface DependPlayer {
      * @see [DependWorldEdit]
      */
 
+    /**
+     * @see [DependWorldEdit.getSelection]
+     */
     @Throws(DependPluginException::class)
     fun getWorldEditSelection(): Region?
 
+    /**
+     * @see [DependWorldEdit.setSelection]
+     */
     @Throws(DependPluginException::class, IllegalArgumentException::class)
     fun setWorldEditSelection(region: Region)
 }

@@ -23,6 +23,20 @@ import java.io.File
 import java.io.InputStream
 import java.util.logging.Logger
 
+/**
+ * ## DependPluginAbstract (依赖插件抽象)
+ *
+ * @see [DependPlugin]
+ * @author lgou2w
+ * @since 2.0
+ * @param T Plugin type.
+ * @param T 插件类型.
+ * @constructor DependPluginAbstract
+ * @param plugin Plugin.
+ * @param plugin 插件.
+ * @throws DependPluginException If the plugin does not exist or is not enabled.
+ * @throws DependPluginException 如果插件不存在或未启用.
+ */
 abstract class DependPluginAbstract<out T: Plugin> @Throws(DependPluginException::class) constructor(plugin: Plugin?) : DependPlugin {
 
     private val _plugin: T
@@ -38,46 +52,46 @@ abstract class DependPluginAbstract<out T: Plugin> @Throws(DependPluginException
         }
     }
 
-    override val plugin: T
+    override final val plugin: T
             = _plugin
 
-    override val pluginPrefix: String
+    override final val pluginPrefix: String
         get() = plugin.description.prefix
 
-    override val pluginName: String
+    override final val pluginName: String
         get() = plugin.description.name
 
-    override val pluginMain: String
+    override final val pluginMain: String
         get() = plugin.description.main
 
-    override val pluginVersion: String
+    override final val pluginVersion: String
         get() = plugin.description.version
 
-    override val pluginWebsite: String
+    override final val pluginWebsite: String
         get() = plugin.description.website
 
-    override val pluginDescription: String
+    override final val pluginDescription: String
         get() = plugin.description.description
 
-    override val pluginAuthors: Set<String>
+    override final val pluginAuthors: Set<String>
         get() = plugin.description.authors.toSet()
 
-    override val pluginDepends: Set<String>
+    override final val pluginDepends: Set<String>
         get() = plugin.description.depend.toSet()
 
-    override val pluginSoftDepends: Set<String>
+    override final val pluginSoftDepends: Set<String>
         get() = plugin.description.softDepend.toSet()
 
-    override val dataFolder: File
+    override final val dataFolder: File
         get() = plugin.dataFolder
 
-    override val logger: Logger
+    override final val logger: Logger
         get() = plugin.logger
 
-    override val config: FileConfiguration?
+    override final val config: FileConfiguration?
         get() = plugin.config
 
-    override fun getResource(filename: String): InputStream?
+    override final fun getResource(filename: String): InputStream?
             = plugin.getResource(filename)
 
     override fun equals(other: Any?): Boolean {

@@ -17,6 +17,13 @@
 
 package com.mcmoonlake.api.depend
 
+/**
+ * ## DependPluginVersionException (依赖插件版本异常)
+ *
+ * @see [DependPluginException]
+ * @author lgou2w
+ * @since 2.0
+ */
 class DependPluginVersionException : DependPluginException {
 
     constructor() : super()

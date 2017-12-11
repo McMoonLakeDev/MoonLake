@@ -19,7 +19,20 @@ package com.mcmoonlake.api.depend
 
 import org.bukkit.plugin.Plugin
 
-interface DependPlugin : DependPluginInfo {
+/**
+ * ## DependPlugin (依赖插件)
+ *
+ * @see [Depend]
+ * @see [DependPluginInfo]
+ * @see [DependPluginAbstract]
+ * @author lgou2w
+ * @since 2.0
+ */
+interface DependPlugin : Depend, DependPluginInfo {
 
+    /**
+     * * Get this plugin dependent plugin object.
+     * * 获取此依赖插件的插件对象.
+     */
     val plugin: Plugin
 }

@@ -23,13 +23,39 @@ import java.io.File
 import java.io.InputStream
 import java.util.logging.Logger
 
+/**
+ * ## DependPluginInfo (依赖插件信息)
+ *
+ * @see [PluginInfo]
+ * @author lgou2w
+ * @since 2.0
+ */
 interface DependPluginInfo : PluginInfo {
 
+    /**
+     * * Get this dependent plugin data folder object.
+     * * 获取此依赖插件的数据目录对象.
+     */
     val dataFolder: File
 
+    /**
+     * * Get this dependent plugin logger object.
+     * * 获取此依赖插件的日志对象.
+     */
     val logger: Logger
 
+    /**
+     * * Get this dependent plugin configuration object.
+     * * 获取此依赖插件的配置文件对象.
+     */
     val config: FileConfiguration?
 
+    /**
+     * * Gets this dependent plugin resource Input stream from the given file name.
+     * * 从给定的文件名获取此依赖插件的资源输入流.
+     *
+     * @param filename File name.
+     * @param filename 文件名.
+     */
     fun getResource(filename: String): InputStream?
 }
