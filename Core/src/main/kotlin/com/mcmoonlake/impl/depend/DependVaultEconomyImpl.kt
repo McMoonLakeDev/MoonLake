@@ -55,7 +55,7 @@ class DependVaultEconomyImpl : DependPluginAbstract<Vault>(getPlugin(DependVault
         return com.mcmoonlake.api.wrapper.EconomyResponse(value.amount, value.balance, type, value.errorMessage)
     }
 
-    override val name: String
+    override val implName: String
         get() = economy.name
 
     override fun fractionalDigits(): Int

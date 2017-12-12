@@ -17,6 +17,12 @@
 
 package com.mcmoonlake.api.depend
 
+import com.mcmoonlake.api.getPlugin
+import com.mcmoonlake.api.reflect.accessor.AccessorMethod
+import com.mcmoonlake.api.reflect.accessor.Accessors
+import org.bukkit.plugin.java.JavaPlugin
+import java.io.File
+
 /**
  * ## DependPlugins
  *
@@ -26,41 +32,66 @@ package com.mcmoonlake.api.depend
  */
 object DependPlugins {
 
-    // TODO Optimization
-
     @JvmStatic
-    private val names: MutableMap<String, Class<out DependPlugin>> by lazy {
-        HashMap<String, Class<out DependPlugin>>() }
+    private val VALUES: MutableMap<Class<out DependPlugin>, DependPlugin> = HashMap()
     @JvmStatic
-    private val values: MutableMap<Class<out DependPlugin>, DependPlugin> by lazy {
-        HashMap<Class<out DependPlugin>, DependPlugin>() }
+    private val IMPLEMENTS: MutableMap<Class<out DependPlugin>, Class<out DependPluginAbstract<*>>> = HashMap()
     @JvmStatic
-    private val implements: MutableMap<Class<out DependPlugin>, Class<out DependPluginAbstract<*>>> by lazy {
-        HashMap<Class<out DependPlugin>, Class<out DependPluginAbstract<*>>>() }
+    private val JAVA_PLUGIN_GET_FILE: AccessorMethod by lazy { Accessors.getAccessorMethod(JavaPlugin::class.java, "getFile", true) }
 
     @JvmStatic
     @JvmName("of")
-    @Synchronized
     @Throws(DependPluginException::class)
     fun <T: DependPlugin> of(clazz: Class<T>): T {
-        var depend = values[clazz]
-        if(depend == null) {
-            val implClazz = implements[clazz]
-            if(implClazz == null || !implClazz.interfaces.contains(clazz))
-                throw DependPluginException("依赖插件接口类不存在实现类或实现类未实现接口.")
-            val value = implClazz.newInstance()
-            values.put(clazz, value)
-            names.put(value.pluginName, clazz)
-            depend = value
+        synchronized(this) {
+            var DEPEND = VALUES[clazz]
+            if(DEPEND != null && !isDependRealAlive(DEPEND)) {
+                VALUES.remove(clazz) // remove cache
+                throw DependPluginException("依赖插件缓存引用存在, 但是检测真实插件时未加载或插件文件不存在.")
+            }
+            if(DEPEND == null) {
+                val IMPLEMENT = IMPLEMENTS[clazz]
+                if(IMPLEMENT == null || !IMPLEMENT.interfaces.contains(clazz))
+                    throw DependPluginException("依赖插件接口类不存在实现类或实现类未实现接口.")
+                val VALUE = try {
+                    IMPLEMENT.newInstance()
+                } catch(e: Exception) {
+                    when(e) {
+                        is DependPluginException -> throw e
+                        else -> throw DependPluginException(e)
+                    }
+                }
+                VALUES.put(clazz, VALUE)
+                DEPEND = VALUE
+            }
+            if(DEPEND != null && clazz.isInstance(DEPEND))
+                return clazz.cast(DEPEND)
+            throw DependPluginException("无法依赖插件.")
         }
-        if(depend != null && clazz.isInstance(depend))
-            return clazz.cast(depend)
-        throw DependPluginException("无法依赖插件.")
+    }
+
+    @JvmStatic
+    @JvmName("isDependRealAlive")
+    private fun isDependRealAlive(depend: DependPlugin): Boolean {
+        val DEPEND = getPlugin(depend.name)
+        return if(DEPEND is JavaPlugin) {
+            DEPEND.isEnabled && isDependRealAliveFile(DEPEND)
+        } else {
+            DEPEND != null && DEPEND.isEnabled
+        }
+    }
+
+    @JvmStatic
+    @JvmName("isDependRealAliveFile")
+    private fun isDependRealAliveFile(depend: JavaPlugin): Boolean = try {
+        val FILE = JAVA_PLUGIN_GET_FILE.invoke(depend) as File?
+        FILE != null && FILE.exists()
+    } catch(e: Exception) {
+        false
     }
 
     @JvmStatic
     @JvmName("ofSafe")
-    @Synchronized
     fun <T: DependPlugin> ofSafe(clazz: Class<T>): T? = try {
         of(clazz)
     } catch(e: DependPluginException) {
@@ -69,45 +100,39 @@ object DependPlugins {
 
     @JvmStatic
     @JvmName("register")
-    @Synchronized
     @Throws(DependPluginException::class)
     fun <T: DependPlugin> register(clazz: Class<T>, implClazz: Class<out DependPluginAbstract<*>>): Boolean {
         if(!implClazz.interfaces.contains(clazz))
             throw DependPluginException("依赖插件实现类未实现接口类.")
-        if(implements.containsKey(clazz))
-            throw DependPluginException("依赖插件接口类 $clazz 已经被注册.")
-        return implements.put(clazz, implClazz) == null
+        synchronized(this) {
+            if(IMPLEMENTS.containsKey(clazz))
+                throw DependPluginException("依赖插件接口类 $clazz 已经被注册.")
+            return IMPLEMENTS.put(clazz, implClazz) == null
+        }
     }
 
     @JvmStatic
-    @JvmName("unregister")
-    @Synchronized
-    fun <T: DependPlugin> unregister(clazz: Class<T>): Boolean {
-        if(!implements.containsKey(clazz))
-            return false
-        return implements.remove(clazz) != null && values.remove(clazz) != null
-    }
+    @JvmName("unregister0")
+    private fun <T: DependPlugin> unregister0(clazz: Class<T>?): Boolean
+            = clazz != null && (IMPLEMENTS.remove(clazz) != null).also { if(it) VALUES.remove(clazz) }
 
     @JvmStatic
     @JvmName("unregister")
-    @Synchronized
-    fun unregister(name: String): Boolean {
-        val clazz = names[name] ?: return false
-        return unregister(clazz) && names.remove(name) != null
-    }
+    fun <T: DependPlugin> unregister(clazz: Class<T>): Boolean
+            = synchronized(this) { unregister0(clazz) }
+
+    @JvmStatic
+    @JvmName("unregister")
+    fun unregister(pluginName: String): Boolean
+            = synchronized(this) { unregister0(VALUES.entries.find { it.value.name == pluginName }?.key) }
 
     @JvmStatic
     @JvmName("unregisterAll")
-    @Synchronized
-    fun unregisterAll() {
-        implements.clear()
-        values.clear()
-        names.clear()
-    }
+    fun unregisterAll()
+            = synchronized(this) { IMPLEMENTS.clear(); VALUES.clear(); }
 
     @JvmStatic
     @JvmName("contains")
-    @Synchronized
-    fun contains(name: String): Boolean
-            = names.contains(name)
+    fun contains(pluginName: String): Boolean
+            = synchronized(this) { VALUES.values.find { it.name == pluginName } != null }
 }

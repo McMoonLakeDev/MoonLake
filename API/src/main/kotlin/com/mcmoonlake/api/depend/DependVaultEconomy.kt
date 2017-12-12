@@ -30,10 +30,10 @@ import org.bukkit.OfflinePlayer
 interface DependVaultEconomy : DependPlugin {
 
     /**
-     * * Gets name of economy method.
-     * * 获取经济方法的名称.
+     * * Gets name of economy implement.
+     * * 获取经济实现的名称.
      */
-    val name: String
+    val implName: String
 
     /**
      * * This function returns the number of digits the plugin keeps or `-1` if no rounding occurs.

@@ -17,6 +17,7 @@
 
 package com.mcmoonlake
 
+import com.mcmoonlake.api.*
 import com.mcmoonlake.api.attribute.AttributeItemModifier
 import com.mcmoonlake.api.attribute.AttributeModifier
 import com.mcmoonlake.api.block.BlockPosition
@@ -25,14 +26,11 @@ import com.mcmoonlake.api.depend.DependPlugins
 import com.mcmoonlake.api.depend.DependVaultEconomy
 import com.mcmoonlake.api.depend.DependWorldEdit
 import com.mcmoonlake.api.effect.EffectCustom
-import com.mcmoonlake.api.isSpigotServer
 import com.mcmoonlake.api.player.PlayerInfo
 import com.mcmoonlake.api.region.*
-import com.mcmoonlake.api.registerEvent
 import com.mcmoonlake.api.service.ServiceConfig
 import com.mcmoonlake.api.service.ServiceManager
 import com.mcmoonlake.api.service.ServicePacketListener
-import com.mcmoonlake.api.setMoonLake
 import com.mcmoonlake.api.version.MinecraftVersion
 import com.mcmoonlake.impl.depend.DependPlaceholderAPIImpl
 import com.mcmoonlake.impl.depend.DependVaultEconomyImpl
@@ -45,7 +43,7 @@ import com.mcmoonlake.impl.service.ServicePacketListenerSpigotImpl
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.plugin.java.JavaPlugin
 
-class MoonLakePlugin : JavaPlugin(), com.mcmoonlake.api.MoonLake {
+class MoonLakePlugin : JavaPlugin(), MoonLake {
 
     private val serviceManagerImpl = ServiceManagerImpl()
 
@@ -56,6 +54,7 @@ class MoonLakePlugin : JavaPlugin(), com.mcmoonlake.api.MoonLake {
     }
 
     override fun onEnable() {
+        this.check() ?: return
         this.registerServiceCore()
         this.registerMoonLakePluginListeners()
         this.logger.info("Server ${MinecraftVersion.currentVersion()} NMS: ${MinecraftVersion.currentVersion().bukkitVersion.version}")
@@ -68,6 +67,15 @@ class MoonLakePlugin : JavaPlugin(), com.mcmoonlake.api.MoonLake {
 
     override val serviceManager: ServiceManager
         get() = serviceManagerImpl
+
+    /** check minecraft server version supported */
+    private fun check(): Boolean? = if(!MinecraftVersion.currentVersion().isOrLater(MinecraftVersion.V1_8)) {
+        this.logger.severe("月色之湖核心 API 插件不支持 1.7.x 或更低的版本.")
+        this.server.pluginManager.disablePlugin(this)
+        null
+    } else {
+        true
+    }
 
     /** register moonlake service core */
     private fun registerServiceCore() {

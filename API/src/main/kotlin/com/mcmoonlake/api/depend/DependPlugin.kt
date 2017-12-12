@@ -35,4 +35,10 @@ interface DependPlugin : Depend, DependPluginInfo {
      * * 获取此依赖插件的插件对象.
      */
     val plugin: Plugin
+
+    /**
+     * * Get this plugin dependent plugin name.
+     * * 获取此依赖插件的插件名称.
+     */
+    val name: String
 }

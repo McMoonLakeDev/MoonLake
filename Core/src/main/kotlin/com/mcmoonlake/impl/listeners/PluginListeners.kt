@@ -29,7 +29,7 @@ class PluginListeners : MoonLakeListener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun onDisable(event: PluginDisableEvent) {
-        if(event.plugin is com.mcmoonlake.api.MoonLake) {
+        if(event.plugin is MoonLake) {
             AnvilWindows.releaseAll()
             DependPlugins.unregisterAll()
         } else {

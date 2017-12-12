@@ -32,28 +32,26 @@ import java.util.logging.Logger
  * @param T Plugin type.
  * @param T 插件类型.
  * @constructor DependPluginAbstract
- * @param plugin Plugin.
- * @param plugin 插件.
+ * @param target Target Plugin.
+ * @param target 目标插件.
  * @throws DependPluginException If the plugin does not exist or is not enabled.
  * @throws DependPluginException 如果插件不存在或未启用.
  */
-abstract class DependPluginAbstract<out T: Plugin> @Throws(DependPluginException::class) constructor(plugin: Plugin?) : DependPlugin {
+abstract class DependPluginAbstract<out T: Plugin> @Throws(DependPluginException::class) constructor(target: Plugin?) : DependPlugin {
 
-    private val _plugin: T
+    private val targetName: String
 
     init {
-        if(plugin == null || !plugin.isEnabled)
+        if(target == null || !target.isEnabled)
             throw DependPluginException("依赖插件不存在或没有加载.")
-        try {
-            @Suppress("UNCHECKED_CAST")
-            this._plugin = plugin as T
-        } catch(e: Exception) {
-            throw DependPluginException(e)
-        }
+        this.targetName = target.name
     }
 
     override final val plugin: T
-            = _plugin
+            = target as T
+
+    override final val name: String
+        get() = targetName // is not: plugin.name
 
     override final val pluginPrefix: String
         get() = plugin.description.prefix

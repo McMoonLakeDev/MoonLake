@@ -29,15 +29,15 @@ open class ChatStyle {
 
     private var parent: ChatStyle? = null
 
-    internal var color: ChatColor? = null
-    internal var bold: Boolean? = null
-    internal var italic: Boolean? = null
-    internal var underlined: Boolean? = null
-    internal var strikethrough: Boolean? = null
-    internal var obfuscated: Boolean? = null
-    internal var clickEvent: ChatClickEvent? = null
-    internal var hoverEvent: ChatHoverEvent? = null
-    internal var insertion: String? = null
+    @JvmField internal var color: ChatColor? = null
+    @JvmField internal var bold: Boolean? = null
+    @JvmField internal var italic: Boolean? = null
+    @JvmField internal var underlined: Boolean? = null
+    @JvmField internal var strikethrough: Boolean? = null
+    @JvmField internal var obfuscated: Boolean? = null
+    @JvmField internal var clickEvent: ChatClickEvent? = null
+    @JvmField internal var hoverEvent: ChatHoverEvent? = null
+    @JvmField internal var insertion: String? = null
 
     /** static */
 

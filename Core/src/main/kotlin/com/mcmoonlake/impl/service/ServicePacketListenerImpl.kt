@@ -250,6 +250,7 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
     internal class ChannelPacketListenerHandler(private val service: ServicePacketListenerImpl) : ChannelDuplexHandler() {
 
         @Volatile
+        @JvmField
         internal var player: Player? = null
 
         override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
@@ -278,11 +279,7 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
     }
 
     companion object {
-
-        @JvmField
-        internal val HANDLER = "packet_handler"
-
-        @JvmField
-        internal val NAME = "packet_moonlake"
+        private const val HANDLER = "packet_handler"
+        private const val NAME = "packet_moonlake"
     }
 }
