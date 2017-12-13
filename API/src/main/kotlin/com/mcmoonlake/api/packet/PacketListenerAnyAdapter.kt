@@ -17,15 +17,30 @@
 
 package com.mcmoonlake.api.packet
 
-class PacketInStatusStart : PacketInBukkitAbstract("PacketStatusInStart"), PacketStatus {
+import org.bukkit.plugin.Plugin
+import java.util.*
 
-    override fun read(data: PacketBuffer) {
-    }
+open class PacketListenerAnyAdapter(
+        override val plugin: Plugin,
+        override val priority: PacketListenerPriority) : PacketListener {
 
-    override fun write(data: PacketBuffer) {
-    }
+    constructor(plugin: Plugin) : this(plugin, PacketListenerPriority.NORMAL)
 
-    override fun toString(): String {
-        return "PacketInStatusStart()"
-    }
+    /**
+     * * N/A
+     */
+    override val sendingTypes: Set<Class<out PacketOut>>
+        get() = Collections.emptySet()
+
+    /**
+     * * N/A
+     */
+    override val receivingTypes: Set<Class<out PacketIn>>
+        get() = Collections.emptySet()
+
+    override fun onSending(event: PacketEvent) { }
+
+    override fun onReceiving(event: PacketEvent) { }
+
+    override fun handlerException(ex: Exception) { ex.printStackTrace() }
 }

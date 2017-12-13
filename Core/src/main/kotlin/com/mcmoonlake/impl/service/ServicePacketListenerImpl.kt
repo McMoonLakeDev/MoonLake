@@ -21,6 +21,7 @@ import com.mcmoonlake.api.*
 import com.mcmoonlake.api.event.MoonLakeListener
 import com.mcmoonlake.api.packet.PacketEvent
 import com.mcmoonlake.api.packet.PacketListener
+import com.mcmoonlake.api.packet.PacketListenerAnyAdapter
 import com.mcmoonlake.api.packet.Packets
 import com.mcmoonlake.api.reflect.FuzzyReflect
 import com.mcmoonlake.api.reflect.accessor.AccessorField
@@ -225,8 +226,13 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
         val event = PacketEvent(packet, wrapped, player)
         synchronized(listeners) {
             if(listeners.isNotEmpty()) listeners.forEach {
-                val filter = if(direction == Direction.IN) it.receivingTypes else it.sendingTypes
-                if(filter.find { it.isInstance(wrapped) } != null) try {
+                val consume = if(it is PacketListenerAnyAdapter) {
+                    true
+                } else {
+                    val filter = if(direction == Direction.IN) it.receivingTypes else it.sendingTypes
+                    filter.find { it.isInstance(wrapped) } != null
+                }
+                if(consume) try {
                     when(direction) {
                         Direction.IN -> it.onReceiving(event)
                         else -> it.onSending(event)
