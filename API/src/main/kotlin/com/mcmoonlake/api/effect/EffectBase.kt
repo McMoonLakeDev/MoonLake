@@ -75,10 +75,10 @@ class EffectBase private constructor(val value: String, val effect: EffectType? 
         val 浑浊药水 = EffectBase(WATER_THICK)
 
         @JvmField
-        val WATER_AWKWAARD = EffectBase("awkward")
+        val WATER_AWKWARD = EffectBase("awkward")
 
         @JvmField
-        val 粗制药水 = EffectBase(WATER_AWKWAARD)
+        val 粗制药水 = EffectBase(WATER_AWKWARD)
 
         @JvmField
         val NIGHT_VISION = EffectBase("night_vision", EffectType.NIGHT_VISION)
