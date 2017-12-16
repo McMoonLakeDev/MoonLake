@@ -39,6 +39,20 @@ object DependPlugins {
     @JvmStatic
     private val JAVA_PLUGIN_GET_FILE: AccessorMethod by lazy { Accessors.getAccessorMethod(JavaPlugin::class.java, "getFile", true) }
 
+    /**
+     * * Obtain the implementation object from the given dependent plugin class.
+     * * 从给定的依赖插件类获取实现对象.
+     *
+     * @param clazz Depend plugin class.
+     * @param clazz 依赖插件类.
+     * @throws DependPluginException If the implementation object exists, the real plugin is not enabled or the plugin file does not exist.
+     * @throws DependPluginException If dependent plugin class does not exist implementation class.
+     * @throws DependPluginException If can not dependent plugin.
+     * @throws DependPluginException 如果实现对象存在, 但是真实插件未加载或插件文件不存在.
+     * @throws DependPluginException 如果依赖插件类不存在实现类.
+     * @throws DependPluginException 如果无法依赖插件.
+     * @see [ofSafe]
+     */
     @JvmStatic
     @JvmName("of")
     @Throws(DependPluginException::class)
@@ -90,6 +104,14 @@ object DependPlugins {
         false
     }
 
+    /**
+     * * Safe obtain the implementation object from the given dependent plugin class.
+     * * 从给定的依赖插件类安全地获取实现对象.
+     *
+     * @param clazz Depend plugin class.
+     * @param clazz 依赖插件类.
+     * @see [of]
+     */
     @JvmStatic
     @JvmName("ofSafe")
     fun <T: DependPlugin> ofSafe(clazz: Class<T>): T? = try {
@@ -98,6 +120,19 @@ object DependPlugins {
         null
     }
 
+    /**
+     * * The given dependent plugin class is registered for the given implementation class.
+     * * 将给定的依赖插件类注册给定的实现类.
+     *
+     * @param clazz Depend plugin class.
+     * @param clazz 依赖插件类.
+     * @param implClazz Depend plugin implementation class.
+     * @param implClazz 依赖插件实现类.
+     * @throws DependPluginException If dependent plugin implementation class interface class is not implemented
+     * @throws DependPluginException If dependent plugin class has been registered.
+     * @throws DependPluginException 如果依赖插件实现类未实现接口类.
+     * @throws DependPluginException 如果依赖插件类已被注册.
+     */
     @JvmStatic
     @JvmName("register")
     @Throws(DependPluginException::class)
@@ -116,21 +151,46 @@ object DependPlugins {
     private fun <T: DependPlugin> unregister0(clazz: Class<T>?): Boolean
             = clazz != null && (IMPLEMENTS.remove(clazz) != null).also { if(it) VALUES.remove(clazz) }
 
+    /**
+     * * Unregister the implementation from the given dependent plugin class.
+     * * 从给定的依赖插件类注销实现.
+     *
+     * @param clazz Depend plugin class.
+     * @param clazz 依赖插件类.
+     */
     @JvmStatic
     @JvmName("unregister")
     fun <T: DependPlugin> unregister(clazz: Class<T>): Boolean
             = synchronized(this) { unregister0(clazz) }
 
+    /**
+     * * Unregister the implementation from the given dependent plugin name.
+     * * 从给定的依赖插件名称注销实现.
+     *
+     * @param pluginName Depend plugin name.
+     * @param pluginName 依赖插件名称.
+     */
     @JvmStatic
     @JvmName("unregister")
     fun unregister(pluginName: String): Boolean
             = synchronized(this) { unregister0(VALUES.entries.find { it.value.name == pluginName }?.key) }
 
+    /**
+     * * Unregister all dependent plugin implementation.
+     * * 注销依赖插件的所有实现.
+     */
     @JvmStatic
     @JvmName("unregisterAll")
     fun unregisterAll()
             = synchronized(this) { IMPLEMENTS.clear(); VALUES.clear(); }
 
+    /**
+     * * Whether to have the implementation object gets from the given dependent plugin name.
+     * * 从给定的依赖插件名获取是否拥有实现对象.
+     *
+     * @param pluginName Depend plugin name.
+     * @param pluginName 依赖插件名称.
+     */
     @JvmStatic
     @JvmName("contains")
     fun contains(pluginName: String): Boolean
