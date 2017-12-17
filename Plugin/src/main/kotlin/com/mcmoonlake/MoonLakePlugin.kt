@@ -62,7 +62,7 @@ class MoonLakePlugin : JavaPlugin(), MoonLake {
     }
 
     override fun onDisable() {
-        serviceManager.shutdown()
+        serviceManagerImpl.shutdown()
     }
 
     override val serviceManager: ServiceManager

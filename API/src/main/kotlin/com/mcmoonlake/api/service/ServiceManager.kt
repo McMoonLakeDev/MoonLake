@@ -17,8 +17,6 @@
 
 package com.mcmoonlake.api.service
 
-import com.mcmoonlake.api.MoonLake
-
 interface ServiceManager {
 
     fun <T: Service> registerService(clazz: Class<T>, service: T): Boolean
@@ -38,10 +36,4 @@ interface ServiceManager {
     fun <T: Service> getServiceSafe(clazz: Class<T>): T?
 
     fun <T: Service> hasService(clazz: Class<T>): Boolean
-
-    /**
-     * Called when the [MoonLake] plugin is disabled.
-     * This function will unload all services, including the core, do not call.
-     */
-    fun shutdown()
 }
