@@ -223,7 +223,7 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
 
     private fun onExecuteAndFilterPacketAsync(direction: Direction, player: Player?, channel: Channel, packet: Any): Any? {
         val wrapped = Packets.createBufferPacketSafe(packet) ?: return packet
-        val event = PacketEvent(packet, wrapped, player)
+        val event = PacketEvent(packet, wrapped, channel, player)
         synchronized(listeners) {
             if(listeners.isNotEmpty()) listeners.forEach {
                 val consume = if(it is PacketListenerAnyAdapter) {

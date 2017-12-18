@@ -18,15 +18,20 @@
 package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.event.Cancellable
+import io.netty.channel.Channel
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.lang.ref.WeakReference
 import java.util.*
 
-class PacketEvent(source: Any, var packet: PacketBukkit, player: Player?) : EventObject(source), Cancellable {
+class PacketEvent(source: Any, var packet: PacketBukkit, channel: Channel?, player: Player?) : EventObject(source), Cancellable {
 
+    private val channelRef: WeakReference<Channel?> = WeakReference(channel)
     private val playerRef: WeakReference<Player?> = WeakReference(player)
     private var cancel = false
+
+    val channel: Channel?
+        get() = channelRef.get()
 
     val player: Player?
         get() = playerRef.get()
