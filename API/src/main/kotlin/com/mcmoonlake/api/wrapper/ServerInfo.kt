@@ -60,8 +60,7 @@ data class ServerInfo(
             return false
         }
     }
-    data class ModSample(val modid: String, val version: String)
-    data class ModInfo(val type: String, val modList: Array<ModSample>) {
+    data class ModInfo(val type: String, val modList: Array<Mod>) {
         override fun hashCode(): Int {
             var result = type.hashCode()
             result = 31 * result + Arrays.hashCode(modList)
@@ -80,11 +79,11 @@ data class ServerInfo(
             @JvmField
             val SAMPLE = ModInfo("FML", arrayOf(
                     // Forge Mod List
-                    ModSample("mcp", "9.19"),
-                    ModSample("FML", "8.0.99.99"),
-                    ModSample("Forge", "11.15.1.1722"),
+                    Mod("mcp", "9.19"),
+                    Mod("FML", "8.0.99.99"),
+                    Mod("Forge", "11.15.1.1722"),
                     // Other Mod List
-                    ModSample("rpcraft", "2.0")
+                    Mod("rpcraft", "2.0")
             ))
         }
     }
@@ -156,12 +155,12 @@ data class ServerInfo(
             var favicon: BufferedImage? = null
             if(jsonObject.has("modinfo")) {
                 val jsonModInfo = jsonObject["modinfo"].asJsonObject
-                val modList = ArrayList<ModSample>()
+                val modList = ArrayList<Mod>()
                 if(jsonModInfo.has("modList")) {
                     val jsonModList = jsonModInfo["modList"].asJsonArray
                     jsonModList.forEach {
                         val jsonMod = it.asJsonObject
-                        modList.add(ModSample(jsonMod["modid"].asString, jsonMod["version"].asString))
+                        modList.add(Mod(jsonMod["modid"].asString, jsonMod["version"].asString))
                     }
                 }
                 modInfo = ModInfo(jsonModInfo["type"]?.asString ?: "FML", modList.toTypedArray())
