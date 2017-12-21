@@ -396,17 +396,21 @@ class MoonLakePluginTest : JavaPlugin() {
 //                    println(me.toJson())
 //                    me.send(event.player)
 //                }
+                if(event.message == "/forgehs mods") {
+                    val mods = event.player.toMoonLakePlayer().getForgeMods()
+                    event.player.sendMessage("client mods -> ${mods?.joinToString(separator = " | ") ?: "empty"}")
+                }
             }
         }.registerEvent(this)
 
-        PacketListeners.registerListener(object: PacketListenerAnyAdapter(this) {
-            override fun onSending(event: PacketEvent) {
-                println(event.packet)
-            }
-            override fun onReceiving(event: PacketEvent) {
-                println(event.packet)
-            }
-        })
+//        PacketListeners.registerListener(object: PacketListenerAnyAdapter(this) {
+//            override fun onSending(event: PacketEvent) {
+//                println(event.packet)
+//            }
+//            override fun onReceiving(event: PacketEvent) {
+//                println(event.packet)
+//            }
+//        })
     }
 
     class ItemShow(itemStack: ItemStack) : ChatComponentFancy("[") {

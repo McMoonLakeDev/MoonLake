@@ -25,7 +25,9 @@ import com.mcmoonlake.api.chat.ChatComponent
 import com.mcmoonlake.api.chat.ChatComponentFancy
 import com.mcmoonlake.api.depend.DependPlayer
 import com.mcmoonlake.api.effect.EffectType
+import com.mcmoonlake.api.service.ServiceException
 import com.mcmoonlake.api.version.IllegalBukkitVersionException
+import com.mcmoonlake.api.wrapper.Mod
 import com.mojang.authlib.GameProfile
 import org.bukkit.*
 import org.bukkit.block.Block
@@ -308,6 +310,12 @@ interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, DependPlaye
     fun sendTitle(title: ChatComponent, subTitle: ChatComponent? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20)
 
     fun sendTitleReset()
+
+    @Throws(ServiceException::class)
+    fun getForgeMods(): Array<Mod>?
+
+    @Throws(ServiceException::class)
+    fun resetForgeMods(): Boolean
 
     /** Minecraft Bukkit 1.9 */
 

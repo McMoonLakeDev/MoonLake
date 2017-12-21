@@ -29,8 +29,10 @@ import com.mcmoonlake.api.depend.DependWorldEdit
 import com.mcmoonlake.api.effect.EffectType
 import com.mcmoonlake.api.packet.PacketOutChat
 import com.mcmoonlake.api.region.Region
+import com.mcmoonlake.api.service.ServiceForgeHandshake
 import com.mcmoonlake.api.utility.MinecraftPlayerMembers
 import com.mcmoonlake.api.wrapper.EconomyResponse
+import com.mcmoonlake.api.wrapper.Mod
 import com.mojang.authlib.GameProfile
 import org.bukkit.*
 import org.bukkit.block.Block
@@ -557,6 +559,17 @@ abstract class MoonLakePlayerAbstract(val player: Player) : MoonLakePlayer {
 
     override fun sendTitleReset()
             = sendPacketTitleReset(bukkitPlayer)
+
+    /** forge handshake service */
+
+    private val forgeHandshakeService: ServiceForgeHandshake
+        get() = getMoonLake().serviceManager.getService(ServiceForgeHandshake::class.java)
+
+    override fun getForgeMods(): Array<Mod>?
+            = forgeHandshakeService.getMods(this)
+
+    override fun resetForgeMods(): Boolean
+            = forgeHandshakeService.resetMods(this)
 
     /** depend plugin */
 

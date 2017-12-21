@@ -17,10 +17,7 @@
 
 package com.mcmoonlake.impl.service
 
-import com.mcmoonlake.api.service.Service
-import com.mcmoonlake.api.service.ServiceException
-import com.mcmoonlake.api.service.ServiceManager
-import com.mcmoonlake.api.service.ServiceRegistrable
+import com.mcmoonlake.api.service.*
 import java.util.concurrent.ConcurrentHashMap
 
 class ServiceManagerImpl : ServiceManager {
@@ -40,8 +37,9 @@ class ServiceManagerImpl : ServiceManager {
     }
 
     override fun <T: Service> getService(clazz: Class<T>): T = try {
-        clazz.cast(services[clazz])
-    } catch(e: Exception) {
+        val service = services[clazz] ?: throw ServiceNotFoundException("获取服务类 $clazz 不存在的服务实现.")
+        clazz.cast(service)
+    } catch(e: ClassCastException) {
         throw ServiceException(e)
     }
 
