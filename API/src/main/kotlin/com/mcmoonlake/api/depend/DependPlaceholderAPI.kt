@@ -31,20 +31,34 @@ interface DependPlaceholderAPI : DependPlugin {
     /**
      * * Set placeholders in the text specified placeholders are matched with the pattern `%<placeholder>%` when set with this method.
      * * 使用此方法进行设置时, 在给定的文本中设置占位符, 占位符与模式 `%<placeholder>%` 匹配.
+     *
+     * @param player Player.
+     * @param player 玩家.
+     * @param text Text.
+     * @param text 文本.
      */
     fun setPlaceholders(player: Player, text: String): String
 
     /**
      * * Set placeholders in the text specified placeholders are matched with the pattern `{<placeholder>}` when set with this method.
      * * 使用此方法进行设置时, 在给定的文本中设置占位符, 占位符与模式 `{<placeholder>}` 匹配.
+     *
+     * @param player Player.
+     * @param player 玩家.
+     * @param text Text.
+     * @param text 文本.
      */
     fun setBracketPlaceholders(player: Player, text: String): String
 
     /**
-     * * Not sure
+     * * Not sure. See [Update](https://www.spigotmc.org/resources/placeholderapi.6245/update?update=167267).
      *
+     * @param one Players one.
+     * @param two Players two.
+     * @param text Text.
+     * @param text 文本.
      * @throws DependPluginVersionException If the dependent plugin is less than `2.8.0` version.
-     * @throws DependPluginVersionException 如果依靠插件小于 `2.8.0` 版本.
+     * @throws DependPluginVersionException 如果依赖插件小于 `2.8.0` 版本.
      */
     @Throws(DependPluginVersionException::class)
     fun setRelationalPlaceholders(one: Player, two: Player, text: String): String
