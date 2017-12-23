@@ -2,6 +2,7 @@ language: java
 jdk:
   - oraclejdk8
 install:
+  - cd BuildTools
   - if [ -e "craftbukkit-1.8.jar" ]; then echo "CraftBukkit-1.8.jar OK."; else java -jar BuildTools.jar --rev 1.8; fi
   - if [ -e "craftbukkit-1.8.3.jar" ]; then echo "CraftBukkit-1.8.3.jar OK."; else java -jar BuildTools.jar --rev 1.8.3; fi
   - if [ -e "craftbukkit-1.8.8.jar" ]; then echo "CraftBukkit-1.8.8.jar OK."; else java -jar BuildTools.jar --rev 1.8.8; fi
@@ -11,6 +12,7 @@ install:
   - if [ -e "craftbukkit-1.11.2.jar" ]; then echo "CraftBukkit-1.11.2.jar OK."; else java -jar BuildTools.jar --rev 1.11.2; fi
   - if [ -e "craftbukkit-1.12.1.jar" ]; then echo "CraftBukkit-1.12.1.jar OK."; else java -jar BuildTools.jar --rev 1.12.1; fi
   - if [ -e "craftbukkit-1.12.2.jar" ]; then echo "CraftBukkit-1.12.2.jar OK."; else java -jar BuildTools.jar --rev 1.12.2; fi
+  - cd ..
 script:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dgpg.skip=true
 cache:
