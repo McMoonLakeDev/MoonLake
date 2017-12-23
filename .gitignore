@@ -19,3 +19,6 @@ hs_err_pid*
 /doc/
 /META-INF/
 *.iml
+
+# BuildTools
+!BuildTools.jar
