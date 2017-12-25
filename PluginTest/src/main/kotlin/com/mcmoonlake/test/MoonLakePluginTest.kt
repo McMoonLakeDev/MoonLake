@@ -400,17 +400,18 @@ class MoonLakePluginTest : JavaPlugin() {
                     val mods = event.player.toMoonLakePlayer().getForgeMods()
                     event.player.sendMessage("client mods -> ${mods?.joinToString(separator = " | ") ?: "empty"}")
                 }
+                if(event.message == "/packet listener") {
+                    PacketListeners.registerListener(object: PacketListenerAnyAdapter(this@MoonLakePluginTest) {
+                        override fun onSending(event: PacketEvent) {
+                            println(event.packet)
+                        }
+                        override fun onReceiving(event: PacketEvent) {
+                            println(event.packet)
+                        }
+                    })
+                }
             }
         }.registerEvent(this)
-
-//        PacketListeners.registerListener(object: PacketListenerAnyAdapter(this) {
-//            override fun onSending(event: PacketEvent) {
-//                println(event.packet)
-//            }
-//            override fun onReceiving(event: PacketEvent) {
-//                println(event.packet)
-//            }
-//        })
     }
 
     class ItemShow(itemStack: ItemStack) : ChatComponentFancy("[") {

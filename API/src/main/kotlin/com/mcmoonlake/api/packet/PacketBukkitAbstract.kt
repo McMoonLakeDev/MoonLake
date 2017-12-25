@@ -17,29 +17,22 @@
 
 package com.mcmoonlake.api.packet
 
-abstract class PacketBukkitAbstract(private val clazz: Class<*>) : PacketAbstract(), PacketBukkit {
-
-    private val handleSrc: Any by lazy { Packets.createPacket(typeClass) }
-
-    override val typeClass: Class<*>
-        get() = clazz
-
-    override val handle: Any
-        get() = handleSrc
+abstract class PacketBukkitAbstract(
+        override val typeClass: Class<*>) : PacketAbstract(), PacketBukkit {
 
     override fun equals(other: Any?): Boolean {
         if(other === this)
             return true
         if(other is PacketBukkitAbstract)
-            return clazz == other.clazz
+            return typeClass == other.typeClass
         return false
     }
 
     override fun hashCode(): Int {
-        return clazz.hashCode()
+        return typeClass.hashCode()
     }
 
     override fun toString(): String {
-        return "PacketBukkitAbstract(clazz=$clazz)"
+        return "PacketBukkitAbstract(clazz=$typeClass)"
     }
 }

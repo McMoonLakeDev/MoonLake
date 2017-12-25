@@ -20,6 +20,4 @@ package com.mcmoonlake.api.packet
 interface PacketBukkit : Packet {
 
     val typeClass: Class<*>
-
-    val handle: Any
 }

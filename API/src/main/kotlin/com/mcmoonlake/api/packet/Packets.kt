@@ -17,7 +17,6 @@
 
 package com.mcmoonlake.api.packet
 
-import com.mcmoonlake.api.converter.ConverterEquivalentIgnoreNull
 import com.mcmoonlake.api.isCombatOrLaterVer
 import com.mcmoonlake.api.reflect.accessor.AccessorConstructor
 import com.mcmoonlake.api.reflect.accessor.AccessorField
@@ -50,9 +49,6 @@ object Packets {
     @JvmStatic
     private val sendPacket: AccessorMethod by lazy {
         Accessors.getAccessorMethod(MinecraftReflection.getPlayerConnectionClass(), "sendPacket", false, MinecraftReflection.getPacketClass()) }
-    @JvmStatic
-    private val converter: ConverterEquivalentIgnoreNull<PacketBukkit> by lazy {
-        getPacketConverter() }
     @JvmStatic
     private val lookupBukkit: MutableMap<Class<*>, Class<out PacketBukkit>> by lazy {
         Collections.synchronizedMap(HashMap<Class<*>, Class<out PacketBukkit>>()) }
@@ -203,23 +199,37 @@ object Packets {
     @JvmName("createPacket")
     @Throws(IllegalArgumentException::class)
     fun createPacket(clazz: Class<*>): Any
-            = if(MinecraftReflection.getPacketClass().isAssignableFrom(clazz)) clazz.newInstance() else throw IllegalArgumentException("无效的数据包 $clazz 类.")
+            = if(MinecraftReflection.getPacketClass().isAssignableFrom(clazz)) clazz.newInstance()
+            else throw IllegalArgumentException("无效的数据包 $clazz 类.")
 
     @JvmStatic
     @JvmName("createBufferPacket")
-    fun createBufferPacket(wrapped: PacketBukkit): Any
-            = converter.getGenericValue(wrapped)
+    fun createBufferPacket(wrapped: PacketBukkit): Any {
+        val handle = createPacket(wrapped.typeClass)
+        val packetBuffer = PacketBuffer()
+        wrapped.write(packetBuffer)
+        packetRead.invoke(handle, createPacketDataSerializer(packetBuffer.getByteBuf()))
+        packetBuffer.release()
+        return handle
+    }
 
     @JvmStatic
     @JvmName("createBufferPacket")
     @Throws(UnsupportedOperationException::class)
-    fun createBufferPacket(packet: Any): PacketBukkit
-            = converter.getSpecificValue(packet)
+    fun createBufferPacket(packet: Any): PacketBukkit {
+        val wrapped = createPacketBukkit(packet::class.java)
+        val packetDataSerializer = createPacketDataSerializer()
+        val packetBuffer = PacketBuffer(packetDataSerializerBuffer.get(packetDataSerializer) as ByteBuf)
+        packetWrite.invoke(packet, packetDataSerializer)
+        wrapped.read(packetBuffer)
+        packetBuffer.release()
+        return wrapped
+    }
 
     @JvmStatic
     @JvmName("createBufferPacketSafe")
     fun createBufferPacketSafe(packet: Any): PacketBukkit?
-            = if(isRegistered(packet::class.java)) converter.getSpecificValue(packet) else null
+            = if(isRegistered(packet::class.java)) createBufferPacket(packet) else null
 
     @JvmStatic
     @JvmName("createPacketDataSerializer")
@@ -276,32 +286,6 @@ object Packets {
     @JvmName("isRegisteredWrapped")
     fun <T: Packet> isRegisteredWrapped(clazz: Class<out T>): Boolean
             = lookupBukkit.entries.firstOrNull { it.value == clazz } != null
-
-    @JvmStatic
-    @JvmName("getPacketConverter")
-    private fun getPacketConverter(): ConverterEquivalentIgnoreNull<PacketBukkit> {
-        return object: ConverterEquivalentIgnoreNull<PacketBukkit> {
-            override fun getGenericValue(specific: PacketBukkit): Any {
-                val handle = createPacket(specific.typeClass)
-                val packetBuffer = PacketBuffer()
-                specific.write(packetBuffer)
-                packetRead.invoke(handle, createPacketDataSerializer(packetBuffer.getByteBuf()))
-                packetBuffer.release()
-                return handle
-            }
-            override fun getSpecificValue(generic: Any): PacketBukkit {
-                val wrapped = createPacketBukkit(generic::class.java)
-                val packetDataSerializer = createPacketDataSerializer()
-                val packetBuffer = PacketBuffer(packetDataSerializerBuffer.get(packetDataSerializer) as ByteBuf)
-                packetWrite.invoke(generic, packetDataSerializer)
-                wrapped.read(packetBuffer)
-                packetBuffer.release()
-                return wrapped
-            }
-            override fun getSpecificType(): Class<PacketBukkit>
-                    = PacketBukkit::class.java
-        }
-    }
 
     @JvmStatic
     @JvmName("registerInternalAndCheckStructure")
