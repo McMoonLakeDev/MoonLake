@@ -410,6 +410,26 @@ class MoonLakePluginTest : JavaPlugin() {
                         }
                     })
                 }
+                if(event.message == "/lightning") {
+                    event.player
+                            .toMoonLakePlayer()
+                            .getTargetBlock(100)
+                            ?.world?.strikeLightning(event.player.location)
+                }
+                if(event.message == "/packet s-listener") {
+                    val packets = arrayOf(
+                            PacketOutSpawnEntity::class.java,
+                            PacketOutSpawnExperienceOrb::class.java,
+                            PacketOutSpawnPainting::class.java,
+                            PacketOutSpawnWeather::class.java,
+                            PacketOutStatistic::class.java
+                    )
+                    PacketListeners.registerListener(object: PacketListenerAdapter(this@MoonLakePluginTest, *packets) {
+                        override fun onSending(event: PacketEvent) {
+                            println(event.packet)
+                        }
+                    })
+                }
             }
         }.registerEvent(this)
     }

@@ -144,6 +144,7 @@ object Packets {
         registerPacketBukkit("PacketPlayOutKickDisconnect", PacketOutKickDisconnect::class.java)
         registerPacketBukkit("PacketPlayOutLogin", PacketOutJoinGame::class.java)
         registerPacketBukkit("PacketPlayOutMultiBlockChange", PacketOutMultiBlockChange::class.java)
+        // TODO PacketPlayOutNamedEntitySpawn
         registerPacketBukkit("PacketPlayOutOpenSignEditor", PacketOutOpenSignEditor::class.java)
         registerPacketBukkit("PacketPlayOutOpenWindow", PacketOutOpenWindow::class.java)
         registerPacketBukkit("PacketPlayOutPlayerInfo", PacketOutPlayerInfo::class.java)
@@ -158,6 +159,12 @@ object Packets {
         registerPacketBukkit("PacketPlayOutScoreboardTeam", PacketOutTeam::class.java)
         registerPacketBukkit("PacketPlayOutServerDifficulty", PacketOutServerDifficulty::class.java)
         registerPacketBukkit("PacketPlayOutSetSlot", PacketOutSetSlot::class.java)
+        registerPacketBukkit("PacketPlayOutSpawnEntity", PacketOutSpawnEntity::class.java)
+        registerPacketBukkit("PacketPlayOutSpawnEntityExperienceOrb", PacketOutSpawnExperienceOrb::class.java)
+        // TODO PacketPlayOutSpawnEntityLiving
+        registerPacketBukkit("PacketPlayOutSpawnEntityPainting", PacketOutSpawnPainting::class.java)
+        registerPacketBukkit("PacketPlayOutSpawnEntityWeather", PacketOutSpawnWeather::class.java)
+        registerPacketBukkit("PacketPlayOutStatistic", PacketOutStatistic::class.java)
         registerPacketBukkit("PacketPlayOutTabComplete", PacketOutTabComplete::class.java)
         registerPacketBukkit("PacketPlayOutTileEntityData", PacketOutTileEntityData::class.java)
         registerPacketBukkit("PacketPlayOutTitle", PacketOutTitle::class.java)

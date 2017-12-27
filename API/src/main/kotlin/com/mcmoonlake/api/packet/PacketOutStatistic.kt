@@ -17,35 +17,25 @@
 
 package com.mcmoonlake.api.packet
 
-import com.mcmoonlake.api.Valuable
-import com.mcmoonlake.api.ofValuableNotNull
-
-data class PacketInClientStatus(
-        var status: Status) : PacketInBukkitAbstract("PacketPlayInClientCommand") {
+data class PacketOutStatistic(
+        var statistics: MutableMap<String, Int>) : PacketOutBukkitAbstract("PacketPlayOutStatistic") {
 
     @Deprecated("")
-    constructor() : this(Status.PERFORM_RESPAWN)
+    constructor() : this(HashMap())
 
     override fun read(data: PacketBuffer) {
-        status = ofValuableNotNull(data.readVarInt())
+        statistics = (0 until data.readVarInt()).associate {
+            val name = data.readString()
+            val value = data.readVarInt()
+            name.to(value)
+        }.toMutableMap()
     }
 
     override fun write(data: PacketBuffer) {
-        data.writeVarInt(status.value())
-    }
-
-    enum class Status : Valuable<Int> {
-
-        PERFORM_RESPAWN,
-        REQUEST_STATS,
-        /**
-         * * Valid before version 1.12 only.
-         * * 仅在 1.12 之前版本有效.
-         */
-        OPEN_INVENTORY_ACHIEVEMENT,
-        ;
-
-        override fun value(): Int
-                = ordinal
+        data.writeVarInt(statistics.size)
+        statistics.forEach {
+            data.writeString(it.key)
+            data.writeVarInt(it.value)
+        }
     }
 }

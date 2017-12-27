@@ -19,35 +19,29 @@ package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.isCombatOrLaterVer
 
-data class PacketOutEntityTeleport(
+data class PacketOutSpawnExperienceOrb(
         var entityId: Int,
         var x: Double,
         var y: Double,
         var z: Double,
-        var yaw: Float,
-        var pitch: Float,
-        var isOnGround: Boolean) : PacketOutBukkitAbstract("PacketPlayOutEntityTeleport") {
+        var count: Int) : PacketOutBukkitAbstract("PacketPlayOutSpawnEntityExperienceOrb") {
 
     @Deprecated("")
-    constructor() : this(-1, .0, .0, .0, 0f, 0f, false)
+    constructor() : this(-1, .0, .0, .0, 0)
 
     override fun read(data: PacketBuffer) {
         entityId = data.readVarInt()
         x = if(!isCombatOrLaterVer) data.readInt() / 32.0 else data.readDouble()
         y = if(!isCombatOrLaterVer) data.readInt() / 32.0 else data.readDouble()
         z = if(!isCombatOrLaterVer) data.readInt() / 32.0 else data.readDouble()
-        yaw = data.readByte() / 256f * 360f
-        pitch = data.readByte() / 256f * 360f
-        isOnGround = data.readBoolean()
+        count = data.readShort().toInt()
     }
 
     override fun write(data: PacketBuffer) {
         data.writeVarInt(entityId)
-        if(!isCombatOrLaterVer) data.writeInt(Math.floor(x * 32.0).toInt()) else data.writeDouble(x)
-        if(!isCombatOrLaterVer) data.writeInt(Math.floor(y * 32.0).toInt()) else data.writeDouble(y)
-        if(!isCombatOrLaterVer) data.writeInt(Math.floor(z * 32.0).toInt()) else data.writeDouble(z)
-        data.writeByte((yaw * 256f / 360f).toInt())
-        data.writeByte((pitch * 256f / 360f).toInt())
-        data.writeBoolean(isOnGround)
+        if(!isCombatOrLaterVer) data.writeInt((x * 32.0).toInt()) else data.writeDouble(x)
+        if(!isCombatOrLaterVer) data.writeInt((y * 32.0).toInt()) else data.writeDouble(y)
+        if(!isCombatOrLaterVer) data.writeInt((z * 32.0).toInt()) else data.writeDouble(z)
+        data.writeShort(count)
     }
 }
