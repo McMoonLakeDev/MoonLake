@@ -96,6 +96,7 @@ object Packets {
         registerPacketBukkit("PacketPlayInWindowClick", PacketInWindowClick::class.java)
 
         // Freshly
+        registerPacketBukkitFreshly("PacketPlayInAutoRecipe", PacketInAutoRecipe::class.java) // 1.12+
         registerPacketBukkitFreshly("PacketPlayInTeleportAccept", PacketInTeleportAccept::class.java) // 1.9+
         registerPacketBukkitFreshly("PacketPlayInVehicleMove", PacketInVehicleMove::class.java) // 1.9+
 
@@ -179,6 +180,7 @@ object Packets {
         registerPacketBukkit("PacketPlayOutWorldParticles", PacketOutParticles::class.java)
 
         // Freshly
+        registerPacketBukkitFreshly("PacketPlayOutAutoRecipe", PacketOutAutoRecipe::class.java) // 1.12+
         registerPacketBukkitFreshly("PacketPlayOutBoss", PacketOutBossBar::class.java) // 1.9+
         registerPacketBukkitFreshly("PacketPlayOutMount", PacketOutMount::class.java) // 1.9+
         registerPacketBukkitFreshly("PacketPlayOutSelectAdvancementTab", PacketOutSelectAdvancementTab::class.java) // 1.12+
