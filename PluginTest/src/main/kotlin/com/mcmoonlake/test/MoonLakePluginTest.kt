@@ -443,6 +443,19 @@ class MoonLakePluginTest : JavaPlugin() {
                         }
                     })
                 }
+                if(event.message == "/packet recipe") {
+                    val packets = arrayOf(
+                            PacketInRecipeDisplayed::class.java,
+                            PacketOutRecipes::class.java)
+                    PacketListeners.registerListener(object: PacketListenerAdapter(this@MoonLakePluginTest, *packets) {
+                        override fun onSending(event: PacketEvent) {
+                            println(event.packet)
+                        }
+                        override fun onReceiving(event: PacketEvent) {
+                            println(event.packet)
+                        }
+                    })
+                }
             }
         }.registerEvent(this)
     }

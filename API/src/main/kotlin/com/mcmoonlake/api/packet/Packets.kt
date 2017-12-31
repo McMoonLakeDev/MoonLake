@@ -97,6 +97,7 @@ object Packets {
 
         // Freshly
         registerPacketBukkitFreshly("PacketPlayInAutoRecipe", PacketInAutoRecipe::class.java) // 1.12+
+        registerPacketBukkitFreshly("PacketPlayInRecipeDisplayed", PacketInRecipeDisplayed::class.java) // 1.12+
         registerPacketBukkitFreshly("PacketPlayInTeleportAccept", PacketInTeleportAccept::class.java) // 1.9+
         registerPacketBukkitFreshly("PacketPlayInVehicleMove", PacketInVehicleMove::class.java) // 1.9+
 
@@ -183,6 +184,7 @@ object Packets {
         registerPacketBukkitFreshly("PacketPlayOutAutoRecipe", PacketOutAutoRecipe::class.java) // 1.12+
         registerPacketBukkitFreshly("PacketPlayOutBoss", PacketOutBossBar::class.java) // 1.9+
         registerPacketBukkitFreshly("PacketPlayOutMount", PacketOutMount::class.java) // 1.9+
+        registerPacketBukkitFreshly("PacketPlayOutRecipes", PacketOutRecipes::class.java) // 1.12+
         registerPacketBukkitFreshly("PacketPlayOutSelectAdvancementTab", PacketOutSelectAdvancementTab::class.java) // 1.12+
         registerPacketBukkitFreshly("PacketPlayOutSetCooldown", PacketOutSetCooldown::class.java) // 1.9+
         if(isCombatOrLaterVer) // Otherwise it will conflict with version 1.8.x
