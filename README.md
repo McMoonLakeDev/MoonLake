@@ -67,6 +67,8 @@ MoonLake 使用 `Maven` 管理项目依赖关系.
 - Maven 3.3.x
 - Git
 
+> 本地 Maven 仓库 CraftBukkit 和 Bukkit 的构建. 更多内容查看 [BuildTools](https://www.spigotmc.org/wiki/buildtools/) 工具.
+
 运行:
 
 ```sh

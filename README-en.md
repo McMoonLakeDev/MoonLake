@@ -67,6 +67,8 @@ MoonLake uses `Maven` to manage project dependencies.
 - Maven 3.3.x
 - Git
 
+> Build of Craftbukkit and Bukkit for local maven repository. See [BuildTools](https://www.spigotmc.org/wiki/buildtools/) Tools for more information.
+
 Then run:
 
 ```sh

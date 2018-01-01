@@ -1,6 +1,9 @@
 language: java
 jdk:
   - oraclejdk8
+branches:
+  only:
+    - v2.0-alpha-kotlin
 install:
   - cd BuildTools
   - if [ -e "craftbukkit-1.8.jar" ]; then echo "CraftBukkit-1.8.jar OK."; else java -jar BuildTools.jar --rev 1.8; fi
