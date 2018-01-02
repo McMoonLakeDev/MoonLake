@@ -456,6 +456,19 @@ class MoonLakePluginTest : JavaPlugin() {
                         }
                     })
                 }
+                if(event.message == "/packet 2018-1-2") {
+                    val packets = arrayOf(
+                            PacketInAdvancements::class.java,
+                            PacketOutSpawnPosition::class.java)
+                    PacketListeners.registerListener(object: PacketListenerAdapter(this@MoonLakePluginTest, *packets) {
+                        override fun onSending(event: PacketEvent) {
+                            println(event.packet)
+                        }
+                        override fun onReceiving(event: PacketEvent) {
+                            println(event.packet)
+                        }
+                    })
+                }
             }
         }.registerEvent(this)
     }

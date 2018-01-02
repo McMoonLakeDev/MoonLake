@@ -96,6 +96,7 @@ object Packets {
         registerPacketBukkit("PacketPlayInWindowClick", PacketInWindowClick::class.java)
 
         // Freshly
+        registerPacketBukkitFreshly("PacketPlayInAdvancements", PacketInAdvancements::class.java) // 1.12+
         registerPacketBukkitFreshly("PacketPlayInAutoRecipe", PacketInAutoRecipe::class.java) // 1.12+
         registerPacketBukkitFreshly("PacketPlayInRecipeDisplayed", PacketInRecipeDisplayed::class.java) // 1.12+
         registerPacketBukkitFreshly("PacketPlayInTeleportAccept", PacketInTeleportAccept::class.java) // 1.9+
@@ -166,6 +167,7 @@ object Packets {
         // TODO PacketPlayOutSpawnEntityLiving
         registerPacketBukkit("PacketPlayOutSpawnEntityPainting", PacketOutSpawnPainting::class.java)
         registerPacketBukkit("PacketPlayOutSpawnEntityWeather", PacketOutSpawnWeather::class.java)
+        registerPacketBukkit("PacketPlayOutSpawnPosition", PacketOutSpawnPosition::class.java)
         registerPacketBukkit("PacketPlayOutStatistic", PacketOutStatistic::class.java)
         registerPacketBukkit("PacketPlayOutTabComplete", PacketOutTabComplete::class.java)
         registerPacketBukkit("PacketPlayOutTileEntityData", PacketOutTileEntityData::class.java)
