@@ -17,7 +17,26 @@
 
 package com.mcmoonlake.api.effect
 
-class EffectBase private constructor(val value: String, val effect: EffectType? = null) {
+/**
+ * ## EffectBase (效果基础)
+ *
+ * * Enumerate the base effects of minecraft potion. [Details](https://minecraft.gamepedia.com/Potion#Item_data)
+ * * 枚举 Minecraft 中药水的基础效果. [详情](https://minecraft.gamepedia.com/Potion#Item_data)
+ *
+ * @author lgou2w
+ * @since 2.0
+ */
+class EffectBase private constructor(
+        /**
+         * * The name of this effect base.
+         * * 此效果基础的名称.
+         */
+        val value: String,
+        /**
+         * * The type of this effect base.
+         * * 此效果基础的类型.
+         */
+        val effect: EffectType? = null) {
 
     private constructor(equivalent: EffectBase) : this(equivalent.value, equivalent.effect)
 
@@ -25,6 +44,10 @@ class EffectBase private constructor(val value: String, val effect: EffectType? 
         NAME_MAP.put(value, this)
     }
 
+    /**
+     * * Whether this effect base has a type.
+     * * 此效果基础是否有类型.
+     */
     fun hasEffect(): Boolean
             = effect != null
 
@@ -267,7 +290,7 @@ class EffectBase private constructor(val value: String, val effect: EffectType? 
         val 虚弱药水延长版 = EffectBase(WEAKNESS_LONG)
 
         @JvmField
-        val LUCK = EffectBase("luck", EffectType.WEAKNESS)
+        val LUCK = EffectBase("luck", EffectType.LUCK)
 
         @JvmField
         val 幸运药水 = EffectBase(LUCK)

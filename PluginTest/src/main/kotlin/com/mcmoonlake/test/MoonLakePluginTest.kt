@@ -31,6 +31,7 @@ import com.mcmoonlake.api.depend.DependPlugins
 import com.mcmoonlake.api.depend.DependVaultEconomy
 import com.mcmoonlake.api.depend.DependWorldEdit
 import com.mcmoonlake.api.effect.EffectBase
+import com.mcmoonlake.api.effect.EffectCustom
 import com.mcmoonlake.api.effect.EffectType
 import com.mcmoonlake.api.event.MoonLakeListener
 import com.mcmoonlake.api.item.*
@@ -468,6 +469,18 @@ class MoonLakePluginTest : JavaPlugin() {
                             println(event.packet)
                         }
                     })
+                }
+                if(event.message == "/effectest") {
+                    val effectCustom = EffectCustom(EffectType.SPEED, 30 * 20, 4)
+                    val effectBase = EffectBase.WATER_AWKWARD
+
+                    ItemBuilder.of(Material.POTION)
+                            .setPotionBase(effectBase)
+                            .addPotionEffect(effectCustom)
+                            .build().givePlayer(event.player)
+
+                    effectCustom.apply(event.player)
+                            .consumer { event.player.sendMessage("apply effect -> $it") }
                 }
             }
         }.registerEvent(this)

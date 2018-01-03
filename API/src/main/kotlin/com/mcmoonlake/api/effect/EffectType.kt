@@ -22,114 +22,167 @@ import com.mcmoonlake.api.adapter.AdapterBukkit
 import com.mcmoonlake.api.version.MinecraftVersion
 import org.bukkit.potion.PotionEffectType
 
-enum class EffectType(val id: Int, val type: String, val mcVer: MinecraftVersion? = null) : AdapterBukkit<PotionEffectType>, Valuable<Int> {
+/**
+ * * EffectType (效果类型)
+ *
+ * * Enum the type of effect in minecraft.
+ * * 枚举在 Minecraft 中的效果类型.
+ *
+ * @see [AdapterBukkit]
+ * @see [Valuable]
+ * @author lgou2w
+ * @since 2.0
+ */
+enum class EffectType(
+        /**
+         * * The id of this effect type.
+         * * 此效果类型的 Id.
+         */
+        val id: Int,
+        /**
+         * * The type name of this effect type.
+         * * 此效果类型的类型名称.
+         */
+        val type: String,
+        /**
+         * * Supported versions for this effect type.
+         * * 此效果类型支持的版本.
+         */
+        val mcVer: MinecraftVersion? = null) : AdapterBukkit<PotionEffectType>, Valuable<Int> {
 
     /**
-     * Effect Type: Speed (效果类型: 速度)
+     * * Effect Type: Speed.
+     * * 效果类型: 速度.
      */
     SPEED(1, "SPEED"),
     /**
-     * Effect Type: Slow (效果类型: 缓慢)
+     * * Effect Type: Slow.
+     *  * 效果类型: 缓慢.
      */
     SLOW(2, "SLOW"),
     /**
-     * Effect Type: Fast Digging (效果类型: 急迫)
+     * * Effect Type: Fast Digging.
+     * * 效果类型: 急迫.
      */
     FAST_DIGGING(3, "FAST_DIGGING"),
     /**
-     * Effect Type: Slow Digging (效果类型: 挖掘疲劳)
+     * * Effect Type: Slow Digging.
+     * * 效果类型: 挖掘疲劳.
      */
     SLOW_DIGGING(4, "SLOW_DIGGING"),
     /**
-     * Effect Type: Increase Damage (效果类型: 力量)
+     * * Effect Type: Increase Damage.
+     * * 效果类型: 力量.
      */
     INCREASE_DAMAGE(5, "INCREASE_DAMAGE"),
     /**
-     * Effect Type: Heal (效果类型: 瞬间治疗)
+     * * Effect Type: Heal.
+     * * 效果类型: 瞬间治疗.
      */
     HEAL(6, "HEAL"),
     /**
-     * Effect Type: Harm (效果类型: 瞬间伤害)
+     * * Effect Type: Harm.
+     * * 效果类型: 瞬间伤害.
      */
     HARM(7, "HARM"),
     /**
-     * Effect Type: Jump (效果类型: 跳跃提升)
+     * * Effect Type: Jump.
+     * * 效果类型: 跳跃提升.
      */
     JUMP(8, "JUMP"),
     /**
-     * Effect Type: Confusion (效果类型: 反胃)
+     * * Effect Type: Confusion.
+     * * 效果类型: 反胃.
      */
     CONFUSION(9, "CONFUSION"),
     /**
-     * Effect Type: Regeneration (效果类型: 生命恢复)
+     * * Effect Type: Regeneration.
+     * * 效果类型: 生命恢复.
      */
     REGENERATION(10, "REGENERATION"),
     /**
-     * Effect Type: Damage Resistance (效果类型: 抗性提升)
+     * * Effect Type: Damage Resistance.
+     * * 效果类型: 抗性提升.
      */
     DAMAGE_RESISTANCE(11, "DAMAGE_RESISTANCE"),
     /**
-     * Effect Type: Fire Resistance (效果类型: 防火)
+     * * Effect Type: Fire Resistance.
+     * * 效果类型: 防火.
      */
     FIRE_RESISTANCE(12, "FIRE_RESISTANCE"),
     /**
-     * Effect Type: Water Breathing (效果类型: 水下呼吸)
+     * * Effect Type: Water Breathing.
+     * * 效果类型: 水下呼吸.
      */
     WATER_BREATHING(13, "WATER_BREATHING"),
     /**
-     * Effect Type: Invisibility (效果类型: 隐身)
+     * * Effect Type: Invisibility.
+     * * 效果类型: 隐身.
      */
     INVISIBILITY(14, "INVISIBILITY"),
     /**
-     * Effect Type: Blindness (效果类型: 失明)
+     * * Effect Type: Blindness.
+     * * 效果类型: 失明.
      */
     BLINDNESS(15, "BLINDNESS"),
     /**
-     * Effect Type: Night Vision (效果类型: 夜视)
+     * * Effect Type: Night Vision.
+     * * 效果类型: 夜视.
      */
     NIGHT_VISION(16, "NIGHT_VISION"),
     /**
-     * Effect Type: Hunger (效果类型: 饥饿)
+     * * Effect Type: Hunger.
+     * * 效果类型: 饥饿.
      */
     HUNGER(17, "HUNGER"),
     /**
-     * Effect Type: Weakness (效果类型: 虚弱)
+     * * Effect Type: Weakness.
+     * * 效果类型: 虚弱.
      */
     WEAKNESS(18, "WEAKNESS"),
     /**
-     * Effect Type: Poison (效果类型: 中毒)
+     * * Effect Type: Poison.
+     * * 效果类型: 中毒.
      */
     POISON(19, "POISON"),
     /**
-     * Effect Type: Wither (效果类型: 凋零)
+     * * Effect Type: Wither.
+     * * 效果类型: 凋零.
      */
     WITHER(20, "WITHER"),
     /**
-     * Effect Type: Health Boost (效果类型: 生命提升)
+     * * Effect Type: Health Boost.
+     * * 效果类型: 生命提升.
      */
     HEALTH_BOOST(21, "HEALTH_BOOST"),
     /**
-     * Effect Type: Absorption (效果类型: 伤害吸收)
+     * * Effect Type: Absorption.
+     * * 效果类型: 伤害吸收.
      */
     ABSORPTION(22, "ABSORPTION"),
     /**
-     * Effect Type: Saturation (效果类型: 饱和)
+     * * Effect Type: Saturation.
+     * * 效果类型: 饱和.
      */
     SATURATION(23, "SATURATION"),
     /**
-     * Effect Type: Glowing (效果类型: 发光)
+     * * Effect Type: Glowing.
+     * * 效果类型: 发光.
      */
     GLOWING(24, "GLOWING", MinecraftVersion.V1_9),
     /**
-     * Effect Type: Levitation (效果类型: 漂浮)
+     * * Effect Type: Levitation.
+     * * 效果类型: 漂浮.
      */
     LEVITATION(25, "LEVITATION", MinecraftVersion.V1_9),
     /**
-     * Effect Type: Luck (效果类型: 幸运)
+     * * Effect Type: Luck.
+     * * 效果类型: 幸运.
      */
     LUCK(26, "LUCK", MinecraftVersion.V1_9),
     /**
-     * Effect Type: Un Luck (效果类型: 霉运)
+     * * Effect Type: Un Luck.
+     * * 效果类型: 霉运.
      */
     UNLUCK(27, "UNLUCK", MinecraftVersion.V1_9),
     ;
@@ -142,8 +195,18 @@ enum class EffectType(val id: Int, val type: String, val mcVer: MinecraftVersion
 
     companion object {
 
+        /**
+         * * Get the effect type from the specified type name.
+         * * 从指定类型名称获取效果类型.
+         *
+         * @param name Effect type.
+         * @param name 效果类型名称.
+         * @throws IllegalArgumentException If the given type name is invalid.
+         * @throws IllegalArgumentException 如果给定的类型名称是无效的.
+         */
         @JvmStatic
         @JvmName("fromName")
+        @Throws(IllegalArgumentException::class)
         fun fromName(name: String): EffectType
                 = EffectType.valueOf(name.toUpperCase())
     }
