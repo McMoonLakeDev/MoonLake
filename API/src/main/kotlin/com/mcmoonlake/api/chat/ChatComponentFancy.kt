@@ -232,6 +232,17 @@ open class ChatComponentFancy(component: ChatComponent) : Builder<ChatComponent>
             { last.style.setClickEvent(ChatClickEvent(ChatClickEvent.Action.RUN_COMMAND, command)); return this; }
 
     /**
+     * * The last component that sets this fancy component has a click change page event.
+     * * 设置此花式组件最后一个组件具有点击改变页面事件.
+     *
+     * @see [ChatClickEvent.Action.CHANGE_PAGE]
+     * @param index Page index.
+     * @param index 页面索引.
+     */
+    fun changePage(index: Int): ChatComponentFancy
+            { last.style.setClickEvent(ChatClickEvent(ChatClickEvent.Action.CHANGE_PAGE, index.toString())); return this; }
+
+    /**
      * * The last component that sets this fancy component has a hover tooltip text event.
      * * 设置此花式组件最后一个组件具有移动显示文本事件.
      *

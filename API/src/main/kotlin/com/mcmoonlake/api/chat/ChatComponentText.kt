@@ -38,10 +38,10 @@ open class ChatComponentText(
     /**
      * @constructor ChatComponentText
      *
-     * * Using `null` string.
-     * * 使用 `null` 字符串.
+     * * Using `empty` string.
+     * * 使用 `空` 字符串.
      */
-    constructor() : this("null")
+    constructor() : this("")
 
     /**
      * @constructor ChatComponentText
