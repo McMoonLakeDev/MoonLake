@@ -49,6 +49,7 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
+import java.net.URL
 import java.util.*
 
 class MoonLakePluginTest : JavaPlugin() {
@@ -481,6 +482,29 @@ class MoonLakePluginTest : JavaPlugin() {
 
                     effectCustom.apply(event.player)
                             .consumer { event.player.sendMessage("apply effect -> $it") }
+                }
+                if(event.message == "/task sync-future") {
+                    // If the future is synchronized, then the server thread will be blocked until the future work is completed
+                    callTaskSyncFuture {
+                        URL("https://github.com").readBytes().size +
+                        URL("https://github.com/lgou2w").readBytes().size
+                    }.whenComplete { value, ex ->
+                        if(ex != null)
+                            event.player.sendMessage("Sync future ex: ${ex.message}")
+                        else
+                            event.player.sendMessage("Sync future done. value size: $value")
+                    }
+                }
+                if(event.message == "/task async-future") {
+                    // Asynchronous future does not block server threads
+                    callTaskAsyncFuture {
+                        URL("https://github.com").readBytes()
+                    }.whenComplete { value, ex ->
+                        if(ex != null)
+                            event.player.sendMessage("Async future ex: ${ex.message}")
+                        else
+                            event.player.sendMessage("Async future value size: ${value.size}")
+                    }
                 }
             }
         }.registerEvent(this)

@@ -74,6 +74,7 @@ import java.lang.reflect.Modifier
 import java.text.MessageFormat
 import java.util.*
 import java.util.concurrent.Callable
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Future
 import java.util.concurrent.FutureTask
 
@@ -411,10 +412,13 @@ fun Location.toRegionVectorBlock(): RegionVectorBlock
 fun Location.toRegionVector2D(): RegionVector2D
         = RegionVector2D(x, z)
 
-fun <T, R> ((_: T) -> R).toFunction(): Function<T, R> = object: Function<T, R> {
+fun <T, R> ((T) -> R).toFunction(): Function<T, R> = object: Function<T, R> {
     override fun apply(param: T): R
             = this@toFunction(param)
 }
+
+fun <T> (() -> T).toCallable(): Callable<T>
+        = Callable { this@toCallable() }
 
 /** event function */
 
@@ -510,50 +514,52 @@ fun Plugin.runTaskLaterAsync(task: () -> Unit, delay: Long): BukkitTask
 fun Plugin.runTaskTimerAsync(task: () -> Unit, delay: Long, period: Long): BukkitTask
         = Bukkit.getScheduler().runTaskTimerAsynchronously(this, task, delay, period)
 
-fun <T> Plugin.callMethodSync(callback: Callable<T>): Future<T>
+fun <T> Plugin.callTaskSyncMethod(callback: Callable<T>): Future<T>
         = Bukkit.getScheduler().callSyncMethod(this, callback)
 
-fun <T> Plugin.callMethodSync(callback: () -> T): Future<T>
-        = Bukkit.getScheduler().callSyncMethod(this, { callback() })
+fun <T> Plugin.callTaskSyncMethod(callback: () -> T): Future<T>
+        = Bukkit.getScheduler().callSyncMethod(this, callback.toCallable())
 
-fun <T> Plugin.callTaskSync(callback: Callable<T>, consumer: (value: T) -> Unit)
-        = callTaskConsumer(callback, consumer, -1L, false)
+fun <T> Plugin.callTaskSyncFuture(callback: Callable<T>): CompletableFuture<T>
+        = callTaskFuture0(callback)
 
-fun <T> Plugin.callTaskSync(callback: () -> T, consumer: (value: T) -> Unit)
-        = callTaskConsumer(Callable { callback() }, consumer, -1L, false)
+fun <T> Plugin.callTaskSyncFuture(callback: () -> T): CompletableFuture<T>
+        = callTaskFuture0(callback.toCallable())
 
-fun <T> Plugin.callTaskSync(callback: Callable<T>, consumer: (value: T) -> Unit, delay: Long)
-        = callTaskConsumer(callback, consumer, delay, false)
+fun <T> Plugin.callTaskAsyncFuture(callback: Callable<T>): CompletableFuture<T>
+        = callTaskFuture0(callback, -1, true)
 
-fun <T> Plugin.callTaskSync(callback: () -> T, consumer: (value: T) -> Unit, delay: Long)
-        = callTaskConsumer(Callable { callback() }, consumer, delay, false)
+fun <T> Plugin.callTaskAsyncFuture(callback: () -> T): CompletableFuture<T>
+        = callTaskFuture0(callback.toCallable(), -1, true)
 
-fun <T> Plugin.callTaskAsync(callback: Callable<T>, consumer: (value: T) -> Unit)
-        = callTaskConsumer(callback, consumer, -1L, true)
+fun <T> Plugin.callTaskLaterAsyncFuture(delay: Long, callback: Callable<T>): CompletableFuture<T>
+        = callTaskFuture0(callback, delay, true)
 
-fun <T> Plugin.callTaskAsync(callback: () -> T, consumer: (value: T) -> Unit)
-        = callTaskConsumer(Callable { callback() }, consumer, -1L, true)
+fun <T> Plugin.callTaskLaterAsyncFuture(delay: Long, callback: () -> T): CompletableFuture<T>
+        = callTaskFuture0(callback.toCallable(), delay, true)
 
-fun <T> Plugin.callTaskAsync(callback: Callable<T>, consumer: (value: T) -> Unit, delay: Long)
-        = callTaskConsumer(callback, consumer, delay, true)
-
-fun <T> Plugin.callTaskAsync(callback: () -> T, consumer: (value: T) -> Unit, delay: Long)
-        = callTaskConsumer(Callable { callback() }, consumer, delay, true)
-
-private fun <T> Plugin.callTaskConsumer(callback: Callable<T>, consumer: (value: T) -> Unit, delay: Long = -1, async: Boolean = false) {
+private fun <T> Plugin.callTaskFuture0(callback: Callable<T>, delay: Long = -1, async: Boolean = false): CompletableFuture<T> {
+    val future = CompletableFuture<T>()
     val futureTask = FutureTask(callback)
     val runnable = Runnable {
         try {
             futureTask.run()
-            consumer(futureTask.get())
-        } catch (e: Exception) {
-            throw MoonLakeException(e)
+            future.complete(futureTask.get())
+        } catch(e: Exception) {
+            future.completeExceptionally(e)
         }
     }
     when(delay <= 0) {
-        true -> async.let { if(it) runTaskAsync(runnable) else runTask(runnable) }
-        else -> async.let { if(it) runTaskLaterAsync(runnable, delay) else runTaskLater(runnable, delay) }
+        true -> {
+            if(async) runTaskAsync(runnable)
+            else runnable.run() // Blocking of synchronization futures
+        }
+        else -> {
+            if(async) runTaskLaterAsync(runnable, delay)
+            else runTaskLater(runnable, delay)
+        }
     }
+    return future
 }
 
 fun cancelTask(task: BukkitTask?)
@@ -746,19 +752,19 @@ inline fun <T: Entity, R> Class<T>.spawnLet(location: Location, consumer: (entit
 
 /** packet function */
 
-fun sendPacketTitle(player: Player, title: String, subTitle: String? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20)
-        = sendPacketTitle(player, ChatSerializer.fromRaw(title), if(subTitle == null) null else ChatSerializer.fromRaw(subTitle), fadeIn, stay, fadeOut)
+fun Player.sendPacketTitle(title: String, subTitle: String? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20)
+        = sendPacketTitle(ChatSerializer.fromRaw(title), if(subTitle == null) null else ChatSerializer.fromRaw(subTitle), fadeIn, stay, fadeOut)
 
-fun sendPacketTitle(player: Player, title: ChatComponent, subTitle: ChatComponent? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20) {
+fun Player.sendPacketTitle(title: ChatComponent, subTitle: ChatComponent? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20) {
     var packet = PacketOutTitle(PacketOutTitle.Action.TITLE, title)
-    packet.send(player)
+    packet.send(this)
     if(subTitle != null) {
         packet = PacketOutTitle(PacketOutTitle.Action.SUBTITLE, subTitle)
-        packet.send(player)
+        packet.send(this)
     }
     packet = PacketOutTitle(fadeIn, stay, fadeOut)
-    packet.send(player)
+    packet.send(this)
 }
 
-fun sendPacketTitleReset(player: Player)
-        = PacketOutTitle(PacketOutTitle.Action.RESET, null).send(player)
+fun Player.sendPacketTitleReset()
+        = PacketOutTitle(PacketOutTitle.Action.RESET, null).send(this)

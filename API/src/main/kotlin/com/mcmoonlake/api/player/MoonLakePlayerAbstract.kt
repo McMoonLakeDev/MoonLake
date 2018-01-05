@@ -552,13 +552,13 @@ abstract class MoonLakePlayerAbstract(val player: Player) : MoonLakePlayer {
         set(value) { bukkitPlayer.setGravity(value) }
 
     override fun sendTitle(title: String, subTitle: String?, fadeIn: Int, stay: Int, fadeOut: Int)
-            = sendPacketTitle(bukkitPlayer, title, subTitle, fadeIn, stay, fadeOut)
+            = bukkitPlayer.sendPacketTitle(title, subTitle, fadeIn, stay, fadeOut)
 
     override fun sendTitle(title: ChatComponent, subTitle: ChatComponent?, fadeIn: Int, stay: Int, fadeOut: Int)
-            = sendPacketTitle(bukkitPlayer, title, subTitle, fadeIn, stay, fadeOut)
+            = bukkitPlayer.sendPacketTitle(title, subTitle, fadeIn, stay, fadeOut)
 
     override fun sendTitleReset()
-            = sendPacketTitleReset(bukkitPlayer)
+            = bukkitPlayer.sendPacketTitleReset()
 
     /** forge handshake service */
 
