@@ -27,6 +27,7 @@ import com.mcmoonlake.api.reflect.FuzzyReflect
 import com.mcmoonlake.api.reflect.accessor.AccessorField
 import com.mcmoonlake.api.reflect.accessor.Accessors
 import com.mcmoonlake.api.service.ServiceConfig
+import com.mcmoonlake.api.service.ServiceException
 import com.mcmoonlake.api.service.ServicePacketListener
 import com.mcmoonlake.api.utility.MinecraftConverters
 import com.mcmoonlake.api.utility.MinecraftPlayerMembers
@@ -53,26 +54,27 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
         }
         eventListener = listener
         eventListener?.registerEvent(getMoonLake())
-        var result = false
         try {
             injectChannelServer()
             injectOnlinePlayers()
-            result = true
+            getMoonLake().logger.info("数据包监听器服务初始化工作完成.")
         } catch(e: Exception) {
-            // If you fail again try again
-            getMoonLake().runTask {
-                result = try {
+            getMoonLake().logger.warning("数据包监听器服务首次初始化失败, 3秒后再次尝试.")
+            getMoonLake().callTaskLaterSyncFuture(3 * 20L) { // 3 seconds
+                try {
                     injectChannelServer()
                     injectOnlinePlayers()
                     true
                 } catch(e: Exception) {
-                    handlerException(e)
-                    false
+                    throw e
                 }
+            }.whenComplete { result, ex ->
+                if(ex != null)
+                    throw ServiceException("数据包监听器服务初始化工作失败, 服务不可用.", ex) // if error
+                if(result)
+                    getMoonLake().logger.info("数据包监听器服务初始化工作完成.")
             }
         }
-        if(result) getMoonLake().logger.info("数据包监听器服务初始化工作完成.")
-        else getMoonLake().logger.warning("数据包监听器服务初始化工作异常, 请提交异常栈信息.")
     }
 
     override fun onUnloaded() {

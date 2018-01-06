@@ -20,8 +20,11 @@ package com.mcmoonlake.api.service
 interface Service {
 
     /**
-     * Called when the service is registered.
+     * Called when the service is registered. If the service initialization error, then the service will not be cached and can not be initialized again.
+     *
+     * @throws ServiceException If an exception is thrown when initializing.
      */
+    @Throws(ServiceException::class)
     fun onInitialize()
 
     /**

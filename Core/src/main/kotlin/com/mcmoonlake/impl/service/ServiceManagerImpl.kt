@@ -27,7 +27,12 @@ class ServiceManagerImpl : ServiceManager {
     override fun <T: Service> registerService(clazz: Class<T>, service: T): Boolean {
         if((service is ServiceRegistrable && !service.registrable()) || services.containsKey(clazz))
             return false
-        return (services.put(clazz, service) == null).also { if(it) service.onInitialize() }
+        return try {
+            service.onInitialize()
+            services.put(clazz, service) == null
+        } catch(e: Exception) {
+            false
+        }
     }
 
     override fun <T: Service> unregisterService(clazz: Class<T>): Boolean {

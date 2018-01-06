@@ -17,24 +17,29 @@
 
 package com.mcmoonlake.api.service
 
+import java.util.concurrent.atomic.AtomicBoolean
+
 abstract class ServiceAbstract : Service {
 
     /**
-     * 判断此服务是否已被初始化完毕，否则可进行卸载
+     * * If the service initialization error, then the service will not be cached and can not be initialized again.
+     * * 如果服务初始化时错误，那么服务不会被缓存以及无法再次初始化.
      */
-    private var initialized = false
+    private var initialized = AtomicBoolean(false)
 
     override final fun onInitialize() {
-        if(!initialized) {
-            initialized = true
+        if(initialized.compareAndSet(false, true)) try {
             onInitialized()
+        } catch(e: Exception) {
+            throw ServiceException(e) // throw e
         }
     }
 
     override final fun onUnload() {
-        if(initialized) {
-            initialized = false
+        if(initialized.compareAndSet(true, false)) try {
             onUnloaded()
+        } catch(e: Exception) {
+            // e.printStackTrace() // ignore
         }
     }
 

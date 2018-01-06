@@ -506,6 +506,17 @@ class MoonLakePluginTest : JavaPlugin() {
                             event.player.sendMessage("Async future value size: ${value.size}")
                     }
                 }
+                if(event.message == "/task sync-later-future") {
+                    callTaskLaterSyncFuture(5 * 20L) { // Start synchronization after 10 seconds delay
+                        URL("https://github.com").readBytes().size +
+                        URL("https://github.com/lgou2w").readBytes().size
+                    }.whenComplete { value, ex ->
+                        if(ex != null)
+                            event.player.sendMessage("Sync later future ex: ${ex.message}")
+                        else
+                            event.player.sendMessage("Sync later future value size: ${value}")
+                    }
+                }
             }
         }.registerEvent(this)
     }

@@ -532,6 +532,12 @@ fun <T> Plugin.callTaskAsyncFuture(callback: Callable<T>): CompletableFuture<T>
 fun <T> Plugin.callTaskAsyncFuture(callback: () -> T): CompletableFuture<T>
         = callTaskFuture0(callback.toCallable(), -1, true)
 
+fun <T> Plugin.callTaskLaterSyncFuture(delay: Long, callback: Callable<T>): CompletableFuture<T>
+        = callTaskFuture0(callback, delay, false)
+
+fun <T> Plugin.callTaskLaterSyncFuture(delay: Long, callback: () -> T): CompletableFuture<T>
+        = callTaskFuture0(callback.toCallable(), delay, false)
+
 fun <T> Plugin.callTaskLaterAsyncFuture(delay: Long, callback: Callable<T>): CompletableFuture<T>
         = callTaskFuture0(callback, delay, true)
 
