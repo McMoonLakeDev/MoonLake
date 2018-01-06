@@ -507,7 +507,7 @@ class MoonLakePluginTest : JavaPlugin() {
                     }
                 }
                 if(event.message == "/task sync-later-future") {
-                    callTaskLaterSyncFuture(5 * 20L) { // Start synchronization after 10 seconds delay
+                    callTaskLaterSyncFuture(5 * 20L) { // Start synchronization after 5 seconds delay
                         URL("https://github.com").readBytes().size +
                         URL("https://github.com/lgou2w").readBytes().size
                     }.whenComplete { value, ex ->

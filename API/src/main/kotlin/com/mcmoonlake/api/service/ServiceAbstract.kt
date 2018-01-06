@@ -31,7 +31,10 @@ abstract class ServiceAbstract : Service {
         if(initialized.compareAndSet(false, true)) try {
             onInitialized()
         } catch(e: Exception) {
-            throw ServiceException(e) // throw e
+            when(e) {
+                is ServiceException -> throw e
+                else -> throw ServiceException(e.message, e.cause ?: e)
+            }
         }
     }
 

@@ -31,6 +31,7 @@ class ServiceManagerImpl : ServiceManager {
             service.onInitialize()
             services.put(clazz, service) == null
         } catch(e: Exception) {
+            e.printStackTrace() // print
             false
         }
     }
