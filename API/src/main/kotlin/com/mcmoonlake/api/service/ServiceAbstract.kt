@@ -25,7 +25,7 @@ abstract class ServiceAbstract : Service {
      * * If the service initialization error, then the service will not be cached and can not be initialized again.
      * * 如果服务初始化时错误，那么服务不会被缓存以及无法再次初始化.
      */
-    private var initialized = AtomicBoolean(false)
+    private val initialized = AtomicBoolean(false)
 
     override final fun onInitialize() {
         if(initialized.compareAndSet(false, true)) try {
