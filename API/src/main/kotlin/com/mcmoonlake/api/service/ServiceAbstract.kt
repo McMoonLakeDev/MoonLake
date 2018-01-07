@@ -17,6 +17,7 @@
 
 package com.mcmoonlake.api.service
 
+import com.mcmoonlake.api.throwGiven
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class ServiceAbstract : Service {
@@ -31,10 +32,7 @@ abstract class ServiceAbstract : Service {
         if(initialized.compareAndSet(false, true)) try {
             onInitialized()
         } catch(e: Exception) {
-            when(e) {
-                is ServiceException -> throw e
-                else -> throw ServiceException(e.message, e.cause ?: e)
-            }
+            e.throwGiven { ServiceException(it.message, it.cause ?: it) }
         }
     }
 

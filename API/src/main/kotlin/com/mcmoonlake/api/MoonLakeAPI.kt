@@ -225,6 +225,13 @@ fun Throwable.throwMoonLake(): Nothing = when(this is MoonLakeException) {
     else -> throw MoonLakeException(this)
 }
 
+@Throws(Throwable::class)
+inline fun <T: Throwable, reified R: Throwable> T.throwGiven(block: (T) -> R): Nothing
+        = when(R::class.java.isInstance(this)) {
+    true -> throw this
+    else -> throw block(this)
+}
+
 /**
  * Returns true if this is null or true
  */

@@ -20,6 +20,7 @@ package com.mcmoonlake.api.depend
 import com.mcmoonlake.api.getPlugin
 import com.mcmoonlake.api.reflect.accessor.AccessorMethod
 import com.mcmoonlake.api.reflect.accessor.Accessors
+import com.mcmoonlake.api.throwGiven
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 
@@ -70,10 +71,7 @@ object DependPlugins {
                 val VALUE = try {
                     IMPLEMENT.newInstance()
                 } catch(e: Exception) {
-                    when(e) {
-                        is DependPluginException -> throw e
-                        else -> throw DependPluginException(e)
-                    }
+                    e.throwGiven { DependPluginException(it.message, it.cause ?: it) }
                 }
                 VALUES.put(clazz, VALUE)
                 DEPEND = VALUE
