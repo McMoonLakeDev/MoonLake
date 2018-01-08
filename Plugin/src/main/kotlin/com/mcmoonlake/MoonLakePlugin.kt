@@ -82,8 +82,11 @@ class MoonLakePlugin : JavaPlugin(), MoonLake {
         val configService = ServiceConfigImpl()
         serviceManager.registerService(ServiceConfig::class.java, configService)
         if(configService.hasPacketListener()) {
-            // If the server is spigot, use the timings service.
-            val service = if(!isSpigotServer) ServicePacketListenerImpl() else ServicePacketListenerSpigotImpl()
+            val service = when {
+                isPaperSpigotServer -> ServicePacketListenerImpl() // Ok, PaperSpigot timings can not be made on asynchronous threads.
+                isSpigotServer -> ServicePacketListenerSpigotImpl() // If the server is spigot, use the timings service.
+                else -> ServicePacketListenerImpl()
+            }
             serviceManager.registerService(ServicePacketListener::class.java, service)
         }
     }

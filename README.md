@@ -41,8 +41,8 @@
 
 - [x] [Bukkit](https://bukkit.org)
 - [x] [Spigot](https://spigotmc.org)
-- [x] [PaperSpigot](https://ci.destroystokyo.com/view/All/job/PaperSpigot/)
-- [x] [PaperClip](https://ci.destroystokyo.com/view/All/job/PaperSpigot/)
+- [x] PaperSpigot ([Mirror](https://yivesmirror.com/downloads/paperspigot))
+- [x] [PaperClip](https://ci.destroystokyo.com/job/Paper/)
 
 ## 安装
 

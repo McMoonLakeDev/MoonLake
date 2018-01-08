@@ -183,11 +183,27 @@ private val spigotServer: Boolean by lazy {
     }
 }
 
+private val paperSpigotServer: Boolean by lazy {
+    try {
+        Class.forName("co.aikar.timings.Timing")
+        Class.forName("com.destroystokyo.paper.PaperConfig")
+        true
+    } catch(e: Exception) {
+        false
+    }
+}
+
 /**
  * Returns true if the server is spigot.
  */
 val isSpigotServer: Boolean
     get() = spigotServer
+
+/**
+ * Returns true if the server is paper spigot.
+ */
+val isPaperSpigotServer: Boolean
+    get() = spigotServer && paperSpigotServer
 
 fun String.toColor(): String
         = com.mcmoonlake.api.chat.ChatColor.translateAlternateColorCodes('&', this)
