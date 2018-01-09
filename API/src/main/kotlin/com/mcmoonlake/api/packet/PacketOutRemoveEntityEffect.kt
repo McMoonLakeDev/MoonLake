@@ -22,7 +22,8 @@ import com.mcmoonlake.api.ofValuableNotNull
 
 data class PacketOutRemoveEntityEffect(
         var entityId: Int,
-        var effect: EffectType) : PacketOutBukkitAbstract("PacketPlayOutRemoveEntityEffect") {
+        var effect: EffectType
+) : PacketOutBukkitAbstract("PacketPlayOutRemoveEntityEffect") {
 
     @Deprecated("")
     constructor() : this(-1, EffectType.SPEED)

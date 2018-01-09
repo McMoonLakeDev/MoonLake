@@ -20,7 +20,8 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.chat.ChatComponent
 
 data class PacketOutKickDisconnect(
-        var reason: ChatComponent) : PacketOutBukkitAbstract("PacketPlayOutKickDisconnect") {
+        var reason: ChatComponent
+) : PacketOutBukkitAbstract("PacketPlayOutKickDisconnect") {
 
     @Deprecated("")
     constructor() : this(ChatComponent.NULL)

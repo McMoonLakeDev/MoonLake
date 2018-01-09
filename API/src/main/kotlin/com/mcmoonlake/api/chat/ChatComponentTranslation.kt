@@ -40,7 +40,9 @@ open class ChatComponentTranslation(
          * * Gets or sets the withs list object for this chat component translation.
          * * 获取或设置此聊天组件翻译的参数列表对象.
          */
-        var withs: MutableList<Any> = ArrayList()) : ChatComponentAbstract() {
+        var withs: MutableList<Any> = ArrayList()
+
+) : ChatComponentAbstract() {
 
     /**
      * @see [ChatComponentTranslation.key]

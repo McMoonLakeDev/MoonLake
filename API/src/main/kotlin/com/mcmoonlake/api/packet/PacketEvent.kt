@@ -24,7 +24,13 @@ import org.bukkit.entity.Player
 import java.lang.ref.WeakReference
 import java.util.*
 
-class PacketEvent(source: Any, var packet: PacketBukkit, channel: Channel?, player: Player?) : EventObject(source), Cancellable {
+class PacketEvent(
+        source: Any,
+        var packet: PacketBukkit,
+        channel: Channel?,
+        player: Player?
+) : EventObject(source),
+        Cancellable {
 
     private val channelRef: WeakReference<Channel?> = WeakReference(channel)
     private val playerRef: WeakReference<Player?> = WeakReference(player)

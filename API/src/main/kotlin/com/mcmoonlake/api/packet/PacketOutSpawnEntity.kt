@@ -38,7 +38,9 @@ data class PacketOutSpawnEntity(
          * * Valid only in version 1.9 or later.
          * * 仅在 1.9 或更高版本有效.
          */
-        var uuid: UUID?) : PacketOutBukkitAbstract("PacketPlayOutSpawnEntity") {
+        var uuid: UUID?
+
+) : PacketOutBukkitAbstract("PacketPlayOutSpawnEntity") {
 
     @Deprecated("")
     constructor() : this(-1, -1, .0, .0, .0, 0f, 0f, -1, 0, 0, 0, null)

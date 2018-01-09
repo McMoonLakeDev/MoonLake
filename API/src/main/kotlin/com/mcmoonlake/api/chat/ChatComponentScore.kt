@@ -47,7 +47,9 @@ open class ChatComponentScore(
          * * Gets or sets the score value object for this chat component score.
          * * 获取或设置此聊天组件分数的分数值对象.
          */
-        var value: String? = null) : ChatComponentAbstract() {
+        var value: String? = null
+
+) : ChatComponentAbstract() {
 
     /**
      * @see [ChatComponentScore.name]

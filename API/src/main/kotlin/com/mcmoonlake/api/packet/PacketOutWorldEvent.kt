@@ -23,7 +23,8 @@ data class PacketOutWorldEvent(
         var id: Int,
         var location: BlockPosition,
         var data: Int,
-        var volume: Boolean) : PacketOutBukkitAbstract("PacketPlayOutWorldEvent") {
+        var volume: Boolean
+) : PacketOutBukkitAbstract("PacketPlayOutWorldEvent") {
 
     @Deprecated("")
     constructor() : this(-1, BlockPosition.ZERO, 0, false)

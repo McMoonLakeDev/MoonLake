@@ -27,7 +27,8 @@ data class PacketInWindowClick(
         var button: Int,
         var action: Int,
         var clickType: ClickType,
-        var clickedItem: ItemStack?) : PacketInBukkitAbstract("PacketPlayInWindowClick") {
+        var clickedItem: ItemStack?
+) : PacketInBukkitAbstract("PacketPlayInWindowClick") {
 
     @Deprecated("")
     constructor() : this(-1, 0, 0, 0, ClickType.PICKUP, null)

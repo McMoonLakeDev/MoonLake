@@ -29,7 +29,9 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-open class MoonLakePlayerBase(player: Player) : MoonLakePlayerAbstract(player) {
+open class MoonLakePlayerBase(
+        player: Player
+) : MoonLakePlayerAbstract(player) {
 
     override val ping: Int
         get() = MinecraftPlayerMembers.PING.get(bukkitPlayer) as Int

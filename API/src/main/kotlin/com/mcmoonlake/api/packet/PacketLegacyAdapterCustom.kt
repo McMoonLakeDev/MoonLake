@@ -17,7 +17,8 @@
 
 package com.mcmoonlake.api.packet
 
-abstract class PacketLegacyAdapterCustom<P: PacketBukkitLegacy, T> : PacketLegacyAdapter<P, T>() where T: PacketBukkitLegacy, T: PacketLegacy {
+abstract class PacketLegacyAdapterCustom<P: PacketBukkitLegacy, T>
+    : PacketLegacyAdapter<P, T>() where T: PacketBukkitLegacy, T: PacketLegacy {
 
     abstract val packetName: String
 

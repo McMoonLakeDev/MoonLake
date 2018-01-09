@@ -21,7 +21,10 @@ import com.mcmoonlake.api.attribute.AttributeType
 import com.mcmoonlake.api.player.MoonLakePlayer
 import org.bukkit.attribute.Attribute
 
-open class AttributeImpl_v1_12_R2(player: MoonLakePlayer, type: AttributeType) : AttributeImpl_v1_12_R1(player, type) {
+open class AttributeImpl_v1_12_R2(
+        player: MoonLakePlayer,
+        type: AttributeType
+) : AttributeImpl_v1_12_R1(player, type) {
 
     override val adapter: Attribute?
         get() = super.adapter

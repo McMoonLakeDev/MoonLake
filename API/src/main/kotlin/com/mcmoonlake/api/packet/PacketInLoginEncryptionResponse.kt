@@ -21,7 +21,9 @@ import java.util.*
 
 data class PacketInLoginEncryptionResponse(
         var sharedKey: ByteArray,
-        var verifyToken: ByteArray) : PacketInBukkitAbstract("PacketLoginInEncryptionBegin"), PacketLogin {
+        var verifyToken: ByteArray
+) : PacketInBukkitAbstract("PacketLoginInEncryptionBegin"),
+        PacketLogin {
 
     @Deprecated("")
     constructor() : this(byteArrayOf(), byteArrayOf())

@@ -20,7 +20,9 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.wrapper.ServerInfo
 
 data class PacketOutStatusServerInfo(
-        var info: ServerInfo) : PacketOutBukkitAbstract("PacketStatusOutServerInfo"), PacketStatus {
+        var info: ServerInfo
+) : PacketOutBukkitAbstract("PacketStatusOutServerInfo"),
+        PacketStatus {
 
     @Deprecated("")
     constructor() : this(ServerInfo.SAMPLE)

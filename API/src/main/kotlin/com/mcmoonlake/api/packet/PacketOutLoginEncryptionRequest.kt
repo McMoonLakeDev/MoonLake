@@ -24,7 +24,9 @@ import java.util.*
 data class PacketOutLoginEncryptionRequest(
         var serverId: String,
         var publicKey: PublicKey,
-        var verifyToken: ByteArray) : PacketOutBukkitAbstract("PacketLoginOutEncryptionBegin"), PacketLogin {
+        var verifyToken: ByteArray
+) : PacketOutBukkitAbstract("PacketLoginOutEncryptionBegin"),
+        PacketLogin {
 
     @Deprecated("")
     constructor() : this("Unknown", EMPTY_KEY, byteArrayOf())

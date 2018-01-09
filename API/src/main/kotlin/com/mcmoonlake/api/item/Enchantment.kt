@@ -21,7 +21,13 @@ import com.mcmoonlake.api.Valuable
 import com.mcmoonlake.api.adapter.AdapterBukkit
 import com.mcmoonlake.api.version.MinecraftVersion
 
-enum class Enchantment(val id: Int, val max: Int, val type: String, val mcVer: MinecraftVersion? = null) : AdapterBukkit<org.bukkit.enchantments.Enchantment>, Valuable<String> {
+enum class Enchantment(
+        val id: Int,
+        val max: Int,
+        val type: String,
+        val mcVer: MinecraftVersion? = null
+) : AdapterBukkit<org.bukkit.enchantments.Enchantment>,
+        Valuable<String> {
 
     /**
      * Enchantment: Environmental Protection (附魔类型: 保护)

@@ -20,7 +20,8 @@ package com.mcmoonlake.api.packet
 data class PacketInLook(
         var yaw: Float,
         var pitch: Float,
-        var isOnGround: Boolean) : PacketInBukkitAbstract("PacketPlayInFlying\$PacketPlayInLook", "PacketPlayInLook") {
+        var isOnGround: Boolean
+) : PacketInBukkitAbstract("PacketPlayInFlying\$PacketPlayInLook", "PacketPlayInLook") {
 
     @Deprecated("")
     constructor() : this(0f, 0f, false)

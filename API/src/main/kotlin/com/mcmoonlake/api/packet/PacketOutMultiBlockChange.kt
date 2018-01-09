@@ -24,45 +24,28 @@ import java.util.*
 data class PacketOutMultiBlockChange(
         var chunkX: Int,
         var chunkZ: Int,
-        var blockData: Array<Data>) : PacketOutBukkitAbstract("PacketPlayOutMultiBlockChange") {
+        var blockData: MutableList<Data>
+) : PacketOutBukkitAbstract("PacketPlayOutMultiBlockChange") {
 
     @Deprecated("")
-    constructor() : this(0, 0, emptyArray())
+    constructor() : this(0, 0, ArrayList())
 
     override fun read(data: PacketBuffer) {
         chunkX = data.readInt()
         chunkZ = data.readInt()
-        val length = data.readVarInt()
-        blockData = if(length > 0) {
-            val list = ArrayList<Data>()
-            (0 until length).forEach { list.add(Data(data.readShort().toInt(), BlockData.fromId(data.readVarInt()))) }
-            list.toTypedArray()
-        } else {
-            emptyArray()
-        }
+        blockData = (0 until data.readVarInt()).map {
+            Data(data.readShort().toInt(), BlockData.fromId(data.readVarInt()))
+        }.toMutableList()
     }
 
     override fun write(data: PacketBuffer) {
         data.writeInt(chunkX)
         data.writeInt(chunkZ)
         data.writeVarInt(blockData.size)
-        blockData.forEach { data.writeShort(it.offset); data.writeVarInt(it.blockData.toId()) }
-    }
-
-    override fun hashCode(): Int {
-        var result = super.hashCode()
-        result = 31 * result + chunkX.hashCode()
-        result = 31 * result + chunkZ.hashCode()
-        result = 31 * result + Arrays.hashCode(blockData)
-        return result
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if(other === this)
-            return true
-        if(other is PacketOutMultiBlockChange)
-            return super.equals(other) && chunkX == other.chunkX && chunkZ == other.chunkZ && Arrays.equals(blockData, other.blockData)
-        return false
+        blockData.forEach {
+            data.writeShort(it.offset);
+            data.writeVarInt(it.blockData.toId())
+        }
     }
 
     data class Data(val offset: Int, var blockData: BlockData) {

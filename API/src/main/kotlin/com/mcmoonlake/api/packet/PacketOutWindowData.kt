@@ -20,7 +20,8 @@ package com.mcmoonlake.api.packet
 data class PacketOutWindowData(
         var windowId: Int,
         var property: Int,
-        var value: Int) : PacketOutBukkitAbstract("PacketPlayOutWindowData") {
+        var value: Int
+) : PacketOutBukkitAbstract("PacketPlayOutWindowData") {
 
     @Deprecated("")
     constructor() : this(-1, 0, 0)

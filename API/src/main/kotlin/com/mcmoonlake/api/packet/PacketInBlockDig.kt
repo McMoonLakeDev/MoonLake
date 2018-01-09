@@ -25,7 +25,8 @@ import com.mcmoonlake.api.ofValuableNotNull
 data class PacketInBlockDig(
         var status: Status,
         var blockPosition: BlockPosition,
-        var direction: BlockDirection) : PacketInBukkitAbstract("PacketPlayInBlockDig") {
+        var direction: BlockDirection
+) : PacketInBukkitAbstract("PacketPlayInBlockDig") {
 
     @Deprecated("")
     constructor() : this(Status.STOP_DESTROY_BLOCK, BlockPosition.ZERO, BlockDirection.UP)

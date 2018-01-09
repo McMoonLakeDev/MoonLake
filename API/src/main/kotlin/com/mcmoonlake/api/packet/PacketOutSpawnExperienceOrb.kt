@@ -24,7 +24,8 @@ data class PacketOutSpawnExperienceOrb(
         var x: Double,
         var y: Double,
         var z: Double,
-        var count: Int) : PacketOutBukkitAbstract("PacketPlayOutSpawnEntityExperienceOrb") {
+        var count: Int
+) : PacketOutBukkitAbstract("PacketPlayOutSpawnEntityExperienceOrb") {
 
     @Deprecated("")
     constructor() : this(-1, .0, .0, .0, 0)

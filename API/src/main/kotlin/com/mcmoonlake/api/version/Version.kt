@@ -19,7 +19,11 @@ package com.mcmoonlake.api.version
 
 import com.mcmoonlake.api.util.ComparisonChain
 
-open class Version(val major: Int, val minor: Int, val build: Int) : Comparable<Version> {
+open class Version(
+        val major: Int,
+        val minor: Int,
+        val build: Int
+) : Comparable<Version> {
 
     open fun getVersion(): String
             = "$major.$minor.$build"

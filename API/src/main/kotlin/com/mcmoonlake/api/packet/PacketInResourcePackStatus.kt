@@ -28,7 +28,9 @@ data class PacketInResourcePackStatus(
          * * Resource package hash value, valid only in version 1.9 or earlier.
          * * 资源包哈希值, 仅在 1.9 或更早的版本有效.
          */
-        var hash: String?) : PacketInBukkitAbstract("PacketPlayInResourcePackStatus") {
+        var hash: String?
+
+) : PacketInBukkitAbstract("PacketPlayInResourcePackStatus") {
 
     @Deprecated("")
     constructor() : this(Status.DECLINED, "")

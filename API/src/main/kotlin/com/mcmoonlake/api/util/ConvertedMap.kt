@@ -36,7 +36,10 @@ package com.mcmoonlake.api.util
 
 import com.google.common.collect.Collections2
 
-abstract class ConvertedMap <K, VI, VO>(private val inner: MutableMap<K, VI>) : ConvertedAbstract<VI, VO>(), MutableMap<K, VO> {
+abstract class ConvertedMap <K, VI, VO>(
+        private val inner: MutableMap<K, VI>
+) : ConvertedAbstract<VI, VO>(),
+        MutableMap<K, VO> {
 
     private val outConverter: (key: K, inner: VI) -> VO = { key, inner ->  toOut(key, inner) }
     private val inConverter: (key: K, outer: VO) -> VI = { key, outer ->  toIn(key, outer) }

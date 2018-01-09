@@ -20,7 +20,9 @@ package com.mcmoonlake.api.packet
 data class PacketInAutoRecipe(
         var windowId: Int,
         var recipeId: Int,
-        var makeAll: Boolean) : PacketInBukkitAbstract("PacketPlayInAutoRecipe"), PacketBukkitFreshly {
+        var makeAll: Boolean
+) : PacketInBukkitAbstract("PacketPlayInAutoRecipe"),
+        PacketBukkitFreshly {
 
     @Deprecated("")
     constructor() : this(-1, -1, false)

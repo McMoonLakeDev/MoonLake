@@ -23,7 +23,11 @@ import org.bukkit.Bukkit
 import java.util.*
 import java.util.regex.Pattern
 
-class MinecraftBukkitVersion(val major: Int, val minor: Int, val release: Int) : Comparable<MinecraftBukkitVersion> {
+class MinecraftBukkitVersion(
+        val major: Int,
+        val minor: Int,
+        val release: Int
+) : Comparable<MinecraftBukkitVersion> {
 
     /** static */
 

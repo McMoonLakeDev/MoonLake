@@ -34,7 +34,10 @@
 
 package com.mcmoonlake.api.util
 
-abstract class ConvertedCollection<VI, VO>(private val inner: MutableCollection<VI>) : ConvertedAbstract<VI, VO>(), MutableCollection<VO> {
+abstract class ConvertedCollection<VI, VO>(
+        private val inner: MutableCollection<VI>
+) : ConvertedAbstract<VI, VO>(),
+        MutableCollection<VO> {
 
     override fun add(element: VO): Boolean
             = inner.add(toIn(element))

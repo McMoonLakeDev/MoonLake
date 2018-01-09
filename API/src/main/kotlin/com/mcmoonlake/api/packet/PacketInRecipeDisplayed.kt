@@ -25,7 +25,9 @@ data class PacketInRecipeDisplayed(
         var action: Action,
         var recipeId: Int?,
         var craftingBookOpen: Boolean?,
-        var craftingFilter: Boolean?) : PacketInBukkitAbstract("PacketPlayInRecipeDisplayed"), PacketBukkitFreshly {
+        var craftingFilter: Boolean?
+) : PacketInBukkitAbstract("PacketPlayInRecipeDisplayed"),
+        PacketBukkitFreshly {
 
     @Deprecated("")
     constructor() : this(Action.SHOWN, -1, null, null)

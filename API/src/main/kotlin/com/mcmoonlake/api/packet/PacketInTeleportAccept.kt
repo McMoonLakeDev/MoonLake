@@ -18,7 +18,9 @@
 package com.mcmoonlake.api.packet
 
 data class PacketInTeleportAccept(
-        var teleportId: Int) : PacketInBukkitAbstract("PacketPlayInTeleportAccept"), PacketBukkitFreshly {
+        var teleportId: Int
+) : PacketInBukkitAbstract("PacketPlayInTeleportAccept"),
+        PacketBukkitFreshly {
 
     @Deprecated("")
     constructor() : this(-1)

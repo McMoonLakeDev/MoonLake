@@ -34,7 +34,9 @@ data class PacketOutBossBar(
         var style: BarStyle,
         var darkenSky: Boolean,
         var playEndBossMusic: Boolean,
-        var createFog: Boolean) : PacketOutBukkitAbstract("PacketPlayOutBoss"), PacketBukkitFreshly {
+        var createFog: Boolean
+) : PacketOutBukkitAbstract("PacketPlayOutBoss"),
+        PacketBukkitFreshly {
 
     @Deprecated("")
     constructor() : this(UUID.randomUUID(), Action.ADD, ChatComponent.NULL, 1f, BarColor.PINK, BarStyle.PROGRESS, false, false, false)

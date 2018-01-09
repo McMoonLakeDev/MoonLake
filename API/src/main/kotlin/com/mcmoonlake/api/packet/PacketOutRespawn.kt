@@ -26,7 +26,8 @@ data class PacketOutRespawn(
         var dimension: World.Environment,
         var difficulty: Difficulty,
         var mode: GameMode,
-        var worldType: WorldType) : PacketOutBukkitAbstract("PacketPlayOutRespawn") {
+        var worldType: WorldType
+) : PacketOutBukkitAbstract("PacketPlayOutRespawn") {
 
     @Deprecated("")
     constructor() : this(World.Environment.NORMAL, Difficulty.EASY, GameMode.SURVIVAL, WorldType.NORMAL)

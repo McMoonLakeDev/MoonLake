@@ -37,5 +37,6 @@ import org.bukkit.entity.Player
  */
 class AnvilWindowCloseEvent(
         anvilWindow: AnvilWindow,
-        player: Player) : AnvilWindowEvent(anvilWindow, player) {
+        player: Player
+) : AnvilWindowEvent(anvilWindow, player) {
 }

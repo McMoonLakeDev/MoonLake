@@ -37,5 +37,6 @@ abstract class MoonLakePlayerEvent(
          * * 此事件的月色之湖玩家对象.
          */
         val player: MoonLakePlayer,
-        isAsync: Boolean = false) : MoonLakeEvent(isAsync) {
+        isAsync: Boolean = false
+) : MoonLakeEvent(isAsync) {
 }

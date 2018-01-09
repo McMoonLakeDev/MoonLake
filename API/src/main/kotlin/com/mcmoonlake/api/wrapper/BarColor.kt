@@ -19,7 +19,9 @@ package com.mcmoonlake.api.wrapper
 
 import com.mcmoonlake.api.Valuable
 
-enum class BarColor(val value: Int) : Valuable<Int> {
+enum class BarColor(
+        val value: Int
+) : Valuable<Int> {
 
     PINK(0),
     BLUE(1),

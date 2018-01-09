@@ -59,7 +59,9 @@ enum class AttributeType(
          * * Minecraft version supported by this attribute type. If `null` then all is supported.
          * * 此属性类型支持的 Minecraft 版本. 如果 `null` 则支持所有.
          */
-        val mcVer: MinecraftVersion? = null) : Valuable<String> {
+        val mcVer: MinecraftVersion? = null
+
+) : Valuable<String> {
 
     /**
      * * Attribute Type: Max Health

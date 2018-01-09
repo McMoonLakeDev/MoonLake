@@ -21,7 +21,10 @@ import com.mcmoonlake.api.attribute.AttributeType
 import com.mcmoonlake.api.player.MoonLakePlayer
 import org.bukkit.attribute.Attribute
 
-open class AttributeImpl_v1_11_R1(player: MoonLakePlayer, type: AttributeType) : AttributeImpl_v1_9_R1(player, type) {
+open class AttributeImpl_v1_11_R1(
+        player: MoonLakePlayer,
+        type: AttributeType
+) : AttributeImpl_v1_9_R1(player, type) {
 
     override val adapter: Attribute?
         get() = if(type == AttributeType.ARMOR_TOUGHNESS) org.bukkit.attribute.Attribute.GENERIC_ARMOR_TOUGHNESS else super.adapter

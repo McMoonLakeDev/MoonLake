@@ -36,7 +36,9 @@
 
 package com.mcmoonlake.api.region
 
-class RegionIterator(private val region: Region) : MutableIterator<RegionVectorBlock> {
+class RegionIterator(
+        private val region: Region
+) : MutableIterator<RegionVectorBlock> {
 
     private val maxX: Int
     private val maxY: Int

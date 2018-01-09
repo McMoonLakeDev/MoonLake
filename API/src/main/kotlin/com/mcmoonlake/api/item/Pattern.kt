@@ -19,9 +19,13 @@ package com.mcmoonlake.api.item
 
 import com.mcmoonlake.api.Valuable
 
-data class Pattern(val color: Color, val type: Type) {
+data class Pattern(
+        val color: Color,
+        val type: Type) {
 
-    enum class Color(val data: Int) : Valuable<Int> {
+    enum class Color(
+            val data: Int
+    ) : Valuable<Int> {
 
         /**
          * Banner Color: White (旗帜颜色: 白色)
@@ -93,7 +97,9 @@ data class Pattern(val color: Color, val type: Type) {
                 = data
     }
 
-    enum class Type(val identifier: String) : Valuable<String> {
+    enum class Type(
+            val identifier: String
+    ) : Valuable<String> {
 
         BASE("b"),
         SQUARE_BOTTOM_LEFT("bl"),

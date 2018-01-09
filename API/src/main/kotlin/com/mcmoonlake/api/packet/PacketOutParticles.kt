@@ -31,10 +31,11 @@ data class PacketOutParticles(
         var zOffset: Float,
         var speed: Float,
         var amount: Int,
-        var arguments: IntArray) : PacketOutBukkitAbstract("PacketPlayOutWorldParticles") {
+        var arguments: MutableList<Int>
+) : PacketOutBukkitAbstract("PacketPlayOutWorldParticles") {
 
     @Deprecated("")
-    constructor() : this(Particle.BARRIER, false, -1f, -1f, -1f, 0f, 0f, 0f, 0f, 1, intArrayOf())
+    constructor() : this(Particle.BARRIER, false, -1f, -1f, -1f, 0f, 0f, 0f, 0f, 1, ArrayList())
 
     override fun read(data: PacketBuffer) {
         particle = Particle.fromId(data.readInt())
@@ -47,7 +48,7 @@ data class PacketOutParticles(
         zOffset = data.readFloat()
         speed = data.readFloat()
         amount = data.readInt()
-        arguments = IntArray(particle.dataLength)
+        arguments = ArrayList(particle.dataLength)
         (0 until arguments.size).forEach { arguments[it] = data.readVarInt() }
     }
 
@@ -63,35 +64,5 @@ data class PacketOutParticles(
         data.writeFloat(speed)
         data.writeInt(amount)
         (0 until arguments.size).forEach { data.writeVarInt(arguments[it]) }
-    }
-
-    override fun hashCode(): Int {
-        var result = super.hashCode()
-        result = 31 * result + particle.hashCode()
-        result = 31 * result + longDistance.hashCode()
-        result = 31 * result + x.hashCode()
-        result = 31 * result + y.hashCode()
-        result = 31 * result + z.hashCode()
-        result = 31 * result + xOffset.hashCode()
-        result = 31 * result + yOffset.hashCode()
-        result = 31 * result + zOffset.hashCode()
-        result = 31 * result + speed.hashCode()
-        result = 31 * result + amount.hashCode()
-        result = 31 * result + Arrays.hashCode(arguments)
-        return result
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if(other === this)
-            return true
-        if(other is PacketOutParticles) {
-            return super.equals(other) &&
-                    particle == other.particle &&
-                    longDistance == other.longDistance &&
-                    x == other.x && y == other.y  && z == other.z &&
-                    xOffset == other.xOffset && yOffset == other.yOffset && zOffset == other.zOffset &&
-                    speed == other.speed && amount == other.amount && Arrays.equals(arguments, other.arguments)
-        }
-        return false
     }
 }

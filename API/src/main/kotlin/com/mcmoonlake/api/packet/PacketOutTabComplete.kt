@@ -18,7 +18,8 @@
 package com.mcmoonlake.api.packet
 
 data class PacketOutTabComplete(
-        var matches: MutableList<String>) : PacketOutBukkitAbstract("PacketPlayOutTabComplete") {
+        var matches: MutableList<String>
+) : PacketOutBukkitAbstract("PacketPlayOutTabComplete") {
 
     @Deprecated("")
     constructor() : this(ArrayList())

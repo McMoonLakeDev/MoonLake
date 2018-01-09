@@ -37,7 +37,9 @@ import java.util.logging.Logger
  * @throws DependPluginException If the plugin does not exist or is not enabled.
  * @throws DependPluginException 如果插件不存在或未启用.
  */
-abstract class DependPluginAbstract<out T: Plugin> @Throws(DependPluginException::class) constructor(target: Plugin?) : DependPlugin {
+abstract class DependPluginAbstract<out T: Plugin> @Throws(DependPluginException::class) constructor(
+        target: Plugin?
+) : DependPlugin {
 
     private val targetName: String
 

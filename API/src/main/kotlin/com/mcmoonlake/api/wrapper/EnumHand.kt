@@ -22,7 +22,9 @@ import com.mcmoonlake.api.Valuable
 /**
  * Only applies to Minecraft 1.9+
  */
-enum class EnumHand(val value: Int) : Valuable<Int> {
+enum class EnumHand(
+        val value: Int
+) : Valuable<Int> {
 
     /**
      * Enum Hand: Main (枚举手: 主)

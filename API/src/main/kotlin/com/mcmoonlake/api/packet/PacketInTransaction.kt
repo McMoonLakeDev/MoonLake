@@ -20,7 +20,8 @@ package com.mcmoonlake.api.packet
 data class PacketInTransaction(
         var windowId: Int,
         var action: Int,
-        var accepted: Boolean) : PacketInBukkitAbstract("PacketPlayInTransaction") {
+        var accepted: Boolean
+) : PacketInBukkitAbstract("PacketPlayInTransaction") {
 
     @Deprecated("")
     constructor() : this(-1, -1, false)

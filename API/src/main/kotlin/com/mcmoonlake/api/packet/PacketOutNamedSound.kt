@@ -24,9 +24,13 @@ import org.bukkit.SoundCategory
 data class PacketOutNamedSound(
         var sound: String,
         var category: SoundCategory,
-        var x: Int, var y: Int, var z: Int,
+        var x: Int,
+        var y: Int,
+        var z: Int,
         var volume: Float,
-        var pitch: Float) : PacketOutBukkitAbstract("PacketPlayOutCustomSoundEffect"), PacketBukkitLegacy { // 1.9+
+        var pitch: Float
+) : PacketOutBukkitAbstract("PacketPlayOutCustomSoundEffect"),
+        PacketBukkitLegacy { // 1.9+
 
     @Deprecated("")
     constructor() : this("null", SoundCategory.MUSIC, 0, 0, 0, 1f, 1f)

@@ -33,7 +33,9 @@ data class PacketOutSpawnPainting(
          * * Valid only in version 1.9 or later.
          * * 仅在 1.9 或更高版本有效.
          */
-        var uuid: UUID?) : PacketOutBukkitAbstract("PacketPlayOutSpawnEntityPainting") {
+        var uuid: UUID?
+
+) : PacketOutBukkitAbstract("PacketPlayOutSpawnEntityPainting") {
 
     @Deprecated("")
     constructor() : this(-1, "", BlockPosition.ZERO, Direction.SOUTH, null)

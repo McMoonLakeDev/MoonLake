@@ -19,7 +19,9 @@ package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.Valuable
 
-enum class PacketListenerPriority(val value: Int) : Valuable<Int> {
+enum class PacketListenerPriority(
+        val value: Int
+) : Valuable<Int> {
 
     LOWEST(0),
     LOW(1),

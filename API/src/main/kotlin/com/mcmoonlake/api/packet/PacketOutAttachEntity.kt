@@ -21,7 +21,8 @@ import com.mcmoonlake.api.isCombatOrLaterVer
 
 data class PacketOutAttachEntity(
         var entityId: Int,
-        var holderId: Int) : PacketOutBukkitAbstract("PacketPlayOutAttachEntity") {
+        var holderId: Int
+) : PacketOutBukkitAbstract("PacketPlayOutAttachEntity") {
 
     private var leash: Boolean = false
 

@@ -23,7 +23,8 @@ import com.mcmoonlake.api.ofValuableNotNull
 
 data class PacketOutDisplayObjective(
         var slot: DisplaySlot,
-        var name: String) : PacketOutBukkitAbstract("PacketPlayOutScoreboardDisplayObjective") {
+        var name: String
+) : PacketOutBukkitAbstract("PacketPlayOutScoreboardDisplayObjective") {
 
     @Deprecated("")
     constructor() : this(DisplaySlot.SIDEBAR, "Scoreboard")

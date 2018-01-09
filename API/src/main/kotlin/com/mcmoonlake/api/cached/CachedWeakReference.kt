@@ -37,7 +37,9 @@ import java.lang.ref.WeakReference
 open class CachedWeakReference<out K, V>(
         private val key: K,
         referent: V,
-        queue: CachedReferenceQueue<in V>) : WeakReference<V>(referent, queue), CachedRef<K, V> {
+        queue: CachedReferenceQueue<in V>
+) : WeakReference<V>(referent, queue),
+        CachedRef<K, V> {
 
     override fun reference(): WeakReference<V>
             = this

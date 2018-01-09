@@ -18,7 +18,8 @@
 package com.mcmoonlake.api.packet
 
 data class PacketOutStatistic(
-        var statistics: MutableMap<String, Int>) : PacketOutBukkitAbstract("PacketPlayOutStatistic") {
+        var statistics: MutableMap<String, Int>
+) : PacketOutBukkitAbstract("PacketPlayOutStatistic") {
 
     @Deprecated("")
     constructor() : this(HashMap())

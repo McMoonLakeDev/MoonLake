@@ -31,7 +31,8 @@ data class PacketOutJoinGame(
         var difficulty: Difficulty,
         var maxPlayer: Int,
         var worldType: WorldType,
-        var reducedDebug: Boolean) : PacketOutBukkitAbstract("PacketPlayOutLogin") {
+        var reducedDebug: Boolean
+) : PacketOutBukkitAbstract("PacketPlayOutLogin") {
 
     @Deprecated("")
     constructor() : this(-1, GameMode.SURVIVAL, false, World.Environment.NORMAL, Difficulty.EASY, 20, WorldType.NORMAL, false)

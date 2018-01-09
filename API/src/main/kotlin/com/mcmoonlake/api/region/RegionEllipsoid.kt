@@ -42,7 +42,8 @@ import org.bukkit.World
 open class RegionEllipsoid(
         world: World,
         override var center: RegionVector,
-        var radius: RegionVector) : RegionAbstract(world) {
+        var radius: RegionVector
+) : RegionAbstract(world) {
 
     /** api */
 

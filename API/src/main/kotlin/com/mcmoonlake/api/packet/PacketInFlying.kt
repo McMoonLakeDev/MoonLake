@@ -18,7 +18,8 @@
 package com.mcmoonlake.api.packet
 
 data class PacketInFlying(
-        var isOnGround: Boolean) : PacketInBukkitAbstract("PacketPlayInFlying") {
+        var isOnGround: Boolean
+) : PacketInBukkitAbstract("PacketPlayInFlying") {
 
     @Deprecated("")
     constructor() : this(false)

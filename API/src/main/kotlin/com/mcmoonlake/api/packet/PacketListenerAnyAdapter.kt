@@ -22,7 +22,8 @@ import java.util.*
 
 open class PacketListenerAnyAdapter(
         override val plugin: Plugin,
-        override val priority: PacketListenerPriority) : PacketListener {
+        override val priority: PacketListenerPriority
+) : PacketListener {
 
     constructor(plugin: Plugin) : this(plugin, PacketListenerPriority.NORMAL)
 

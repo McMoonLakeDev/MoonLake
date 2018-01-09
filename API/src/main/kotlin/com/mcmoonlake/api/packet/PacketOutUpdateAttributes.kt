@@ -24,7 +24,8 @@ import com.mcmoonlake.api.ofValuable
 
 data class PacketOutUpdateAttributes(
         var entityId: Int,
-        var attributes: MutableList<AttributeSnapshot>) : PacketOutBukkitAbstract("PacketPlayOutUpdateAttributes") {
+        var attributes: MutableList<AttributeSnapshot>
+) : PacketOutBukkitAbstract("PacketPlayOutUpdateAttributes") {
 
     @Deprecated("")
     constructor() : this(-1, ArrayList())

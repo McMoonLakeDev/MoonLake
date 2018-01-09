@@ -45,39 +45,11 @@ data class ServerInfo(
 
     data class Version(val name: String, val protocol: Int)
     data class PlayerSample(val name: String, val id: UUID)
-    data class Players(val max: Int, val online: Int, val sample: Array<PlayerSample>) {
-        override fun hashCode(): Int {
-            var result = max.hashCode()
-            result = 31 * result + online.hashCode()
-            result = 31 * result + Arrays.hashCode(sample)
-            return result
-        }
-        override fun equals(other: Any?): Boolean {
-            if(other === this)
-                return true
-            if(other is Players)
-                return max == other.max && online == other.online && Arrays.equals(sample, other.sample)
-            return false
-        }
-    }
-    data class ModInfo(val type: String, val modList: Array<Mod>) {
-        override fun hashCode(): Int {
-            var result = type.hashCode()
-            result = 31 * result + Arrays.hashCode(modList)
-            return result
-        }
-        override fun equals(other: Any?): Boolean {
-            if(other === this)
-                return true
-            if(other is ModInfo)
-                return type == other.type && Arrays.equals(modList, other.modList)
-            return false
-        }
-
+    data class Players(val max: Int, val online: Int, val sample: List<PlayerSample>)
+    data class ModInfo(val type: String, val modList: List<Mod>) {
         companion object {
-
             @JvmField
-            val SAMPLE = ModInfo("FML", arrayOf(
+            val SAMPLE = ModInfo("FML", listOf(
                     // Forge Mod List
                     Mod("mcp", "9.19"),
                     Mod("FML", "8.0.99.99"),
@@ -91,7 +63,7 @@ data class ServerInfo(
     companion object {
 
         @JvmField
-        val SAMPLE = ServerInfo(Version("1.8.9", 47), Players(20, 0, arrayOf()), ChatComponentText("A Minecraft Server"), null, null)
+        val SAMPLE = ServerInfo(Version("1.8.9", 47), Players(20, 0, emptyList()), ChatComponentText("A Minecraft Server"), null, null)
 
         @JvmStatic
         @JvmName("toJson")
@@ -149,7 +121,7 @@ data class ServerInfo(
                     sample.add(PlayerSample(jsonSample["name"].asString, UUID.fromString(jsonSample["id"].asString)))
                 }
             }
-            val players = Players(jsonPlayers["max"].asInt, jsonPlayers["online"].asInt, sample.toTypedArray())
+            val players = Players(jsonPlayers["max"].asInt, jsonPlayers["online"].asInt, sample)
             val description = ChatSerializer.fromJsonLenient(jsonObject["description"].toString())
             var modInfo: ModInfo? = null
             var favicon: BufferedImage? = null
@@ -163,7 +135,7 @@ data class ServerInfo(
                         modList.add(Mod(jsonMod["modid"].asString, jsonMod["version"].asString))
                     }
                 }
-                modInfo = ModInfo(jsonModInfo["type"]?.asString ?: "FML", modList.toTypedArray())
+                modInfo = ModInfo(jsonModInfo["type"]?.asString ?: "FML", modList)
             }
             if(jsonObject.has("favicon"))
                 favicon = faviconFromString(jsonObject["favicon"].asString)

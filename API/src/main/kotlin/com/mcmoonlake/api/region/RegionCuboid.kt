@@ -43,7 +43,9 @@ import org.bukkit.World
 open class RegionCuboid(
         world: World,
         var pos1: RegionVector,
-        var pos2: RegionVector) : RegionAbstract(world), RegionFlat {
+        var pos2: RegionVector
+) : RegionAbstract(world),
+        RegionFlat {
 
     /** api */
 

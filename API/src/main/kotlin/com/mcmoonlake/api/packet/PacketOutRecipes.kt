@@ -26,7 +26,9 @@ data class PacketOutRecipes(
         var craftingBookOpen: Boolean,
         var craftingFilter: Boolean,
         var recipeIds: List<Int>,
-        var recipeIdsTwo: List<Int>?) : PacketOutBukkitAbstract("PacketPlayOutRecipes"), PacketBukkitFreshly {
+        var recipeIdsTwo: List<Int>?
+) : PacketOutBukkitAbstract("PacketPlayOutRecipes"),
+        PacketBukkitFreshly {
 
     @Deprecated("")
     constructor() : this(Action.REMOVE, false, false, ArrayList(), null)

@@ -36,7 +36,9 @@
 
 package com.mcmoonlake.api.region
 
-class RegionIteratorFlat(private val region: Region) : MutableIterator<RegionVector2D> {
+class RegionIteratorFlat(
+        private val region: Region
+) : MutableIterator<RegionVector2D> {
 
     private val y: Int
     private val minX: Int

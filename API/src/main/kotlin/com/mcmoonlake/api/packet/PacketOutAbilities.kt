@@ -26,7 +26,8 @@ data class PacketOutAbilities(
         var canFly: Boolean,
         var canInstantlyBuild: Boolean,
         var flySpeed: Float,
-        var walkSpeed: Float) : PacketOutBukkitAbstract("PacketPlayOutAbilities") {
+        var walkSpeed: Float
+) : PacketOutBukkitAbstract("PacketPlayOutAbilities") {
 
     constructor(abilities: PlayerAbilities) : this(abilities.isInvulnerable, abilities.isFlying, abilities.canFly, abilities.canInstantlyBuild, abilities.flySpeed, abilities.walkSpeed)
     constructor(player: Player) : this(PlayerAbilities.ofPlayer(player))

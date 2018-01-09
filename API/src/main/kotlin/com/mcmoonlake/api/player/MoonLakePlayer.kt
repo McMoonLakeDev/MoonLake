@@ -42,7 +42,14 @@ import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.util.Vector
 import java.net.InetSocketAddress
 
-interface MoonLakePlayer : AnimalTamer, Attributable, CommandSender, DependPlayer, InventoryHolder, Metadatable, Comparable<MoonLakePlayer> {
+interface MoonLakePlayer
+    : AnimalTamer,
+        Attributable,
+        CommandSender,
+        DependPlayer,
+        InventoryHolder,
+        Metadatable,
+        Comparable<MoonLakePlayer> {
 
     /** Base Function */
 

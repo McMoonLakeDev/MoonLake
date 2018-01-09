@@ -21,7 +21,8 @@ import com.mcmoonlake.api.block.BlockPosition
 
 data class PacketOutBed(
         var entityId: Int,
-        var blockPosition: BlockPosition) : PacketOutBukkitAbstract("PacketPlayOutBed") {
+        var blockPosition: BlockPosition
+) : PacketOutBukkitAbstract("PacketPlayOutBed") {
 
     @Deprecated("")
     constructor() : this(-1, BlockPosition.ZERO)

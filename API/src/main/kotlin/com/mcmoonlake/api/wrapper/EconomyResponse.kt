@@ -17,7 +17,11 @@
 
 package com.mcmoonlake.api.wrapper
 
-data class EconomyResponse(val amount: Double, val balance: Double, val type: Type, val errorMessage: String? = null) {
+data class EconomyResponse(
+        val amount: Double,
+        val balance: Double,
+        val type: Type,
+        val errorMessage: String? = null) {
 
     fun transactionSuccess(): Boolean
             = type == Type.SUCCESS

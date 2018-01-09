@@ -23,7 +23,8 @@ import java.util.*
 open class PacketListenerAdapter(
         override final val plugin: Plugin,
         override final val priority: PacketListenerPriority,
-        vararg types: Class<out Packet>) : PacketListener {
+        vararg types: Class<out Packet>
+) : PacketListener {
 
     private val _sendingTypes: MutableSet<Class<out PacketOut>> = HashSet()
     private val _receivingTypes: MutableSet<Class<out PacketIn>> = HashSet()

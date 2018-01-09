@@ -44,7 +44,9 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable
 
 open class RegionVector2D(
         val x: Double,
-        val z: Double) : ConfigurationSerializable, Comparable<RegionVector2D> {
+        val z: Double
+) : ConfigurationSerializable,
+        Comparable<RegionVector2D> {
 
     /** constructor */
 

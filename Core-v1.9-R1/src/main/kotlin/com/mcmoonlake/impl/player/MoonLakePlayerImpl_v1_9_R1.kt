@@ -29,7 +29,9 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 
-open class MoonLakePlayerImpl_v1_9_R1(player: Player) : MoonLakePlayerImpl_v1_8_R3(player) {
+open class MoonLakePlayerImpl_v1_9_R1(
+        player: Player
+) : MoonLakePlayerImpl_v1_8_R3(player) {
 
     override fun getAttribute(type: AttributeType): Attribute
             = AttributeImpl_v1_9_R1(this, type)

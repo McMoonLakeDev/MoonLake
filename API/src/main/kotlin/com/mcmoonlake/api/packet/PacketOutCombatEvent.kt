@@ -27,7 +27,8 @@ data class PacketOutCombatEvent(
         var playerId: Int,
         var entityId: Int,
         var duration: Int,
-        var deathMessage: ChatComponent?) : PacketOutBukkitAbstract("PacketPlayOutCombatEvent") {
+        var deathMessage: ChatComponent?
+) : PacketOutBukkitAbstract("PacketPlayOutCombatEvent") {
 
     @Deprecated("")
     constructor() : this(Event.ENTER_COMBAT, -1, -1, -1, null)

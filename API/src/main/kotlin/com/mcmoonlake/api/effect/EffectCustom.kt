@@ -81,7 +81,11 @@ data class EffectCustom(
          * * Particle color for this custom effect.
          * * 此自定义效果的粒子颜色.
          */
-        val color: Color? = null) : ConfigurationSerializable, Comparable<EffectCustom>, Function<LivingEntity, Boolean> {
+        val color: Color? = null
+
+) : ConfigurationSerializable,
+        Comparable<EffectCustom>,
+        Function<LivingEntity, Boolean> {
 
     override fun compareTo(other: EffectCustom): Int {
         return ComparisonChain.start()

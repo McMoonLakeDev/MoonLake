@@ -39,7 +39,9 @@ import java.lang.reflect.Field
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 
-class ExactReflect(val source: Class<*>, val forceAccess: Boolean) {
+class ExactReflect(
+        val source: Class<*>,
+        val forceAccess: Boolean) {
 
     /** static */
 

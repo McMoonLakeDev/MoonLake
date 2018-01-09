@@ -33,7 +33,9 @@ open class ChatComponentText(
          * * Gets or sets the text object for this chat component text.
          * * 获取或设置此聊天组件文本的文本对象.
          */
-        var text: String) : ChatComponentAbstract() {
+        var text: String
+
+) : ChatComponentAbstract() {
 
     /**
      * @constructor ChatComponentText

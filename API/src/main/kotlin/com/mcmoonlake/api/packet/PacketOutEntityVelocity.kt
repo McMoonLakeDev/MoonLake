@@ -23,7 +23,8 @@ data class PacketOutEntityVelocity(
         var entityId: Int,
         var velocityX: Int,
         var velocityY: Int,
-        var velocityZ: Int) : PacketOutBukkitAbstract("PacketPlayOutEntityVelocity") {
+        var velocityZ: Int
+) : PacketOutBukkitAbstract("PacketPlayOutEntityVelocity") {
 
     @Deprecated("")
     constructor() : this(-1, 0, 0, 0)

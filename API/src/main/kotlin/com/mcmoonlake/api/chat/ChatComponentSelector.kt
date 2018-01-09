@@ -33,7 +33,9 @@ open class ChatComponentSelector(
          * * Gets or sets the selector object for this chat component selector.
          * * 获取或设置此聊天组件选择器的选择器对象.
          */
-        var selector: String) : ChatComponentAbstract() {
+        var selector: String
+
+) : ChatComponentAbstract() {
 
     /**
      * @see [ChatComponentSelector.selector]

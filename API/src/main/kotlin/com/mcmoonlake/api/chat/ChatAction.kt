@@ -34,7 +34,9 @@ enum class ChatAction(
          * * Enum value.
          * * 枚举值.
          */
-        val value: Int) : Valuable<Int> {
+        val value: Int
+
+) : Valuable<Int> {
 
     /**
      * * Chat Action: Chat

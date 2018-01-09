@@ -19,7 +19,8 @@ package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.isCombatOrLaterVer
 
-class PacketOutNamedSoundLegacyAdapter : PacketLegacyAdapterCustom<PacketOutNamedSound, PacketOutNamedSoundLegacy>() {
+class PacketOutNamedSoundLegacyAdapter
+    : PacketLegacyAdapterCustom<PacketOutNamedSound, PacketOutNamedSoundLegacy>() {
 
     override val packet: Class<PacketOutNamedSound>
         get() = PacketOutNamedSound::class.java

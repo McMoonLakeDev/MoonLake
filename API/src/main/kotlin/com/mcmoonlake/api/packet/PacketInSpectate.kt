@@ -20,7 +20,8 @@ package com.mcmoonlake.api.packet
 import java.util.*
 
 data class PacketInSpectate(
-        var target: UUID) : PacketInBukkitAbstract("PacketPlayInSpectate") {
+        var target: UUID
+) : PacketInBukkitAbstract("PacketPlayInSpectate") {
 
     @Deprecated("")
     constructor() : this(UUID.randomUUID())

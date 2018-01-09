@@ -28,7 +28,9 @@ data class PacketInTabComplete(
          * * Whether it is selected as a command block, only valid at 1.9 or later.
          * * 是否选中的为命令方块, 仅在 1.9 或更高版本有效.
          */
-        var isCommandBlock: Boolean) : PacketInBukkitAbstract("PacketPlayInTabComplete") {
+        var isCommandBlock: Boolean
+
+) : PacketInBukkitAbstract("PacketPlayInTabComplete") {
 
     @Deprecated("")
     constructor() : this("", null, false)

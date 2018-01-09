@@ -58,7 +58,9 @@ import org.bukkit.util.Vector
 import java.net.InetSocketAddress
 import java.util.*
 
-abstract class MoonLakePlayerAbstract(val player: Player) : MoonLakePlayer {
+abstract class MoonLakePlayerAbstract(
+        val player: Player
+) : MoonLakePlayer {
 
     init {
         if(!player.isOnline)

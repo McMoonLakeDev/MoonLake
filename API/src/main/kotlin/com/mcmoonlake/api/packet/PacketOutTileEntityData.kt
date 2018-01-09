@@ -23,7 +23,8 @@ import com.mcmoonlake.api.nbt.NBTCompound
 data class PacketOutTileEntityData(
         var blockPosition: BlockPosition,
         var action: Int,
-        var value: NBTCompound?) : PacketOutBukkitAbstract("PacketPlayOutTileEntityData") {
+        var value: NBTCompound?
+) : PacketOutBukkitAbstract("PacketPlayOutTileEntityData") {
 
     @Deprecated("")
     constructor() : this(BlockPosition.ZERO, 0, null)

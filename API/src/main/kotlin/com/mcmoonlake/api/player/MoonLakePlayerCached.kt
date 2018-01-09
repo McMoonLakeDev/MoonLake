@@ -33,7 +33,8 @@ import org.bukkit.event.player.PlayerQuitEvent
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-class MoonLakePlayerCached private constructor(): CachedWeakRef<UUID, MoonLakePlayer>(ConcurrentHashMap()) {
+class MoonLakePlayerCached private constructor()
+    : CachedWeakRef<UUID, MoonLakePlayer>(ConcurrentHashMap()) {
 
     /** static */
 

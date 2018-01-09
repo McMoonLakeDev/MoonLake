@@ -31,7 +31,9 @@ enum class AnvilWindowSlot(
          * * Current slot index value.
          * * 当前槽位索引值.
          */
-        val slot: Int) : Valuable<Int> {
+        val slot: Int
+
+) : Valuable<Int> {
 
     /**
      * * Anvil Window Slot: Left Input

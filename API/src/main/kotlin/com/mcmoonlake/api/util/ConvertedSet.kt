@@ -34,5 +34,8 @@
 
 package com.mcmoonlake.api.util
 
-abstract class ConvertedSet<VI, VO>(inner: MutableCollection<VI>) : ConvertedCollection<VI, VO>(inner), MutableSet<VO> {
+abstract class ConvertedSet<VI, VO>(
+        inner: MutableCollection<VI>
+) : ConvertedCollection<VI, VO>(inner),
+        MutableSet<VO> {
 }

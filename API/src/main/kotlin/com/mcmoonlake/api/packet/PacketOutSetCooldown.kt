@@ -21,7 +21,9 @@ import org.bukkit.Material
 
 data class PacketOutSetCooldown(
         var material: Material,
-        var tick: Int) : PacketOutBukkitAbstract("PacketPlayOutSetCooldown"), PacketBukkitFreshly {
+        var tick: Int
+) : PacketOutBukkitAbstract("PacketPlayOutSetCooldown"),
+        PacketBukkitFreshly {
 
     @Deprecated("")
     constructor() : this(Material.AIR, 0)

@@ -41,7 +41,9 @@ data class BlockData(
          * * The data value of this block data.
          * * 此方块数据的数据值.
          */
-        val data: Int) : Comparable<BlockData> {
+        val data: Int
+
+) : Comparable<BlockData> {
 
     override fun compareTo(other: BlockData): Int {
         return ComparisonChain.start()

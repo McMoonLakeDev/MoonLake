@@ -33,7 +33,9 @@ open class ChatComponentKeybind(
          * * Gets or sets the keybind object for this chat component keybind.
          * * 获取或设置此聊天组件按键的按键对象.
          */
-        var keybind: String) : ChatComponentAbstract() {
+        var keybind: String
+
+) : ChatComponentAbstract() {
 
     /**
      * @see [ChatComponentKeybind.keybind]

@@ -21,7 +21,9 @@ data class PacketInHandshake(
         var version: Int,
         var host: String,
         var port: Int,
-        var nextState: Int) : PacketInBukkitAbstract("PacketHandshakingInSetProtocol"), PacketHandshaking {
+        var nextState: Int
+) : PacketInBukkitAbstract("PacketHandshakingInSetProtocol"),
+        PacketHandshaking {
 
     @Deprecated("")
     constructor() : this(-1, "127.0.0.1", 25565, -1)

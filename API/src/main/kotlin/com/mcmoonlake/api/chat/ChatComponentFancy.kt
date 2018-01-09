@@ -45,7 +45,9 @@ import org.bukkit.inventory.ItemStack
  * @param component The first component.
  * @param component 第一个组件.
  */
-open class ChatComponentFancy(component: ChatComponent) : Builder<ChatComponent> {
+open class ChatComponentFancy(
+        component: ChatComponent
+) : Builder<ChatComponent> {
 
     /**
      * * Extra component list.

@@ -36,7 +36,9 @@ data class PacketOutTeam(
          * * Collision rules, Valid only in version 1.9 or later.
          * * 碰撞规则, 仅在 1.9 或更高版本有效.
          */
-        var collisionRule: String?) : PacketOutBukkitAbstract("PacketPlayOutScoreboardTeam") {
+        var collisionRule: String?
+
+) : PacketOutBukkitAbstract("PacketPlayOutScoreboardTeam") {
 
     @Deprecated("")
     constructor() : this("Team", Action.REMOVE, null, null, null, null, null, null, null, null)
@@ -80,7 +82,9 @@ data class PacketOutTeam(
         }
     }
 
-    enum class Action(val value: Int) : Valuable<Int> {
+    enum class Action(
+            val value: Int
+    ) : Valuable<Int> {
 
         CREATE(0),
         REMOVE(1),

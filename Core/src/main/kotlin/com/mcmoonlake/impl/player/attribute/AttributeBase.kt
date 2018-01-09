@@ -24,7 +24,8 @@ import com.mcmoonlake.api.player.MoonLakePlayer
 
 open class AttributeBase(
         protected val player: MoonLakePlayer,
-        override val type: AttributeType) : Attribute {
+        override val type: AttributeType
+) : Attribute {
 
     override val defValue: Double
         get() = type.def

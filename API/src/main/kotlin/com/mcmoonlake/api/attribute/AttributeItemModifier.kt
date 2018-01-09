@@ -74,7 +74,10 @@ data class AttributeItemModifier(
          * * The unique id of this modifier.
          * * 此修改器的唯一 Id.
          */
-        val uuid: UUID) : ConfigurationSerializable, Comparable<AttributeItemModifier> {
+        val uuid: UUID
+
+) : ConfigurationSerializable,
+        Comparable<AttributeItemModifier> {
 
     override fun compareTo(other: AttributeItemModifier): Int {
         return ComparisonChain.start()

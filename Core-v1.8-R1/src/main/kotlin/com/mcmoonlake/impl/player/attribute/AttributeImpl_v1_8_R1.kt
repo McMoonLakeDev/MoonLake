@@ -23,7 +23,10 @@ import com.mcmoonlake.api.attribute.AttributeType
 import com.mcmoonlake.api.attribute.Attributes
 import com.mcmoonlake.api.player.MoonLakePlayer
 
-open class AttributeImpl_v1_8_R1(player: MoonLakePlayer, type: AttributeType) : AttributeBase(player, type) {
+open class AttributeImpl_v1_8_R1(
+        player: MoonLakePlayer,
+        type: AttributeType
+) : AttributeBase(player, type) {
 
     private val handle: Attribute by lazy {
         Attributes.getEntityAttribute(player.bukkitPlayer, type) }

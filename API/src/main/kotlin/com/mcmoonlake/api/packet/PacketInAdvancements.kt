@@ -23,7 +23,9 @@ import com.mcmoonlake.api.ofValuableNotNull
 
 data class PacketInAdvancements(
         var action: Action,
-        var key: String?) : PacketOutBukkitAbstract("PacketPlayInAdvancements"), PacketBukkitFreshly {
+        var key: String?
+) : PacketOutBukkitAbstract("PacketPlayInAdvancements"),
+        PacketBukkitFreshly {
 
     @Deprecated("")
     constructor() : this(Action.CLOSED_SCREEN, null)

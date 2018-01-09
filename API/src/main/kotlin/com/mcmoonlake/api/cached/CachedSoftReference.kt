@@ -37,7 +37,9 @@ import java.lang.ref.SoftReference
 open class CachedSoftReference<out K, V>(
         private val key: K,
         referent: V,
-        queue: CachedReferenceQueue<in V>) : SoftReference<V>(referent, queue), CachedRef<K, V> {
+        queue: CachedReferenceQueue<in V>
+) : SoftReference<V>(referent, queue),
+        CachedRef<K, V> {
 
     override fun reference(): SoftReference<V>
             = this

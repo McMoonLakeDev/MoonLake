@@ -34,7 +34,11 @@ data class PlayerAbilities(
         var canInstantlyBuild: Boolean,
         var mayBuild: Boolean = true,
         var flySpeed: Float = .05f,
-        var walkSpeed: Float = .1f) : NBTSavable, NBTReadable, ConfigurationSerializable, Comparable<PlayerAbilities> {
+        var walkSpeed: Float = .1f
+) : ConfigurationSerializable,
+        NBTSavable,
+        NBTReadable,
+        Comparable<PlayerAbilities> {
 
     override fun save(root: NBTCompound) {
         val abilities = NBTFactory.ofCompound("abilities")

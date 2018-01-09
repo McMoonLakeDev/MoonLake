@@ -19,7 +19,8 @@ package com.mcmoonlake.api.packet
 
 data class PacketOutEntityStatus(
         var entityId: Int,
-        var status: Byte) : PacketOutBukkitAbstract("PacketPlayOutEntityStatus") {
+        var status: Byte
+) : PacketOutBukkitAbstract("PacketPlayOutEntityStatus") {
 
     @Deprecated("")
     constructor() : this(-1, -1)

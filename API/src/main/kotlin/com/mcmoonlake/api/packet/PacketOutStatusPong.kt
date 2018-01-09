@@ -18,7 +18,9 @@
 package com.mcmoonlake.api.packet
 
 data class PacketOutStatusPong(
-        var id: Long) : PacketOutBukkitAbstract("PacketStatusOutPong"), PacketStatus {
+        var id: Long
+) : PacketOutBukkitAbstract("PacketStatusOutPong"),
+        PacketStatus {
 
     @Deprecated("")
     constructor() : this(-1L)

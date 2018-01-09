@@ -19,7 +19,9 @@ package com.mcmoonlake.api.wrapper
 
 import com.mcmoonlake.api.Valuable
 
-enum class BarStyle(val value: Int) : Valuable<Int> {
+enum class BarStyle(
+        val value: Int
+) : Valuable<Int> {
 
     PROGRESS(0),
     NOTCHED_6(1),

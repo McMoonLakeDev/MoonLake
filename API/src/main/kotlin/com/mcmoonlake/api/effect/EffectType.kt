@@ -48,7 +48,10 @@ enum class EffectType(
          * * Supported versions for this effect type.
          * * 此效果类型支持的版本.
          */
-        val mcVer: MinecraftVersion? = null) : AdapterBukkit<PotionEffectType>, Valuable<Int> {
+        val mcVer: MinecraftVersion? = null
+
+) : AdapterBukkit<PotionEffectType>,
+        Valuable<Int> {
 
     /**
      * * Effect Type: Speed.

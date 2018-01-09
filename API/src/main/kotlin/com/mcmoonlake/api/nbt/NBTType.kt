@@ -34,7 +34,9 @@
 
 package com.mcmoonlake.api.nbt
 
-enum class NBTType(val rawId: Int, valueType: Class<*>) {
+enum class NBTType(
+        val rawId: Int,
+        val valueType: Class<*>) {
 
     /** enums */
 

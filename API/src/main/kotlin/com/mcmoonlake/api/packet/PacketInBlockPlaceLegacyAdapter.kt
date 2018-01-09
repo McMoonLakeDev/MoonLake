@@ -19,7 +19,8 @@ package com.mcmoonlake.api.packet
 
 import com.mcmoonlake.api.isCombatOrLaterVer
 
-class PacketInBlockPlaceLegacyAdapter : PacketLegacyAdapter<PacketInBlockPlace, PacketInBlockPlaceLegacy>() {
+class PacketInBlockPlaceLegacyAdapter
+    : PacketLegacyAdapter<PacketInBlockPlace, PacketInBlockPlaceLegacy>() {
 
     override val packet: Class<PacketInBlockPlace>
         get() = PacketInBlockPlace::class.java // 1.9+

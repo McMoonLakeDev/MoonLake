@@ -28,7 +28,9 @@ data class PacketOutOpenWindow(
          * * Only available when [windowType] is `EntityHorse`.
          * * 仅当 [windowType] 为 `EntityHorse` 时可用.
          */
-        var entityHorseId: Int = -1) : PacketOutBukkitAbstract("PacketPlayOutOpenWindow") {
+        var entityHorseId: Int = -1
+
+) : PacketOutBukkitAbstract("PacketPlayOutOpenWindow") {
 
     @Deprecated("")
     constructor() : this(-1, "Null", ChatComponent.NULL, 0)

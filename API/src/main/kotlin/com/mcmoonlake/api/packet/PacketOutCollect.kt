@@ -26,7 +26,9 @@ data class PacketOutCollect(
          * * Pick up the amount, Only valid at 1.11 or higher.
          * * 拾取数量, 仅在 1.11 或更高版本有效.
          */
-        var pickupCount: Int) : PacketOutBukkitAbstract("PacketPlayOutCollect") {
+        var pickupCount: Int
+
+) : PacketOutBukkitAbstract("PacketPlayOutCollect") {
 
     @Deprecated("")
     constructor() : this(-1, -1, -1)

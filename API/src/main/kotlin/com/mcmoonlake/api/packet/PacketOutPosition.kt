@@ -30,7 +30,8 @@ data class PacketOutPosition(
          * Only valid in version 1.9 or later.
          */
         var teleportId: Int,
-        var teleportFlags: MutableSet<Flag>) : PacketOutBukkitAbstract("PacketPlayOutPosition") {
+        var teleportFlags: MutableSet<Flag>
+) : PacketOutBukkitAbstract("PacketPlayOutPosition") {
 
     constructor(x: Double, y: Double, z: Double, yaw: Float, pitch: Float) : this(x, y, z, yaw, pitch, -1, HashSet())
     constructor(x: Double, y: Double, z: Double, yaw: Float, pitch: Float, teleportFlags: MutableSet<Flag>) : this(x, y, z, yaw, pitch, -1, teleportFlags)

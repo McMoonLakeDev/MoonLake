@@ -17,7 +17,9 @@
 
 package com.mcmoonlake.api.reflect
 
-enum class DataType(val primitive: Class<*>, val reference: Class<*>) {
+enum class DataType(
+        val primitive: Class<*>,
+        val reference: Class<*>) {
 
     /** enums */
 

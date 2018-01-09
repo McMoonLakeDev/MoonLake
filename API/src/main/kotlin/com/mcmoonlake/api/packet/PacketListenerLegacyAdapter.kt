@@ -23,7 +23,8 @@ import java.util.*
 open class PacketListenerLegacyAdapter<P: PacketBukkitLegacy, T>(
         override final val plugin: Plugin,
         override final val priority: PacketListenerPriority,
-        val legacyAdapter: PacketLegacyAdapter<P, T>) : PacketListener where T: PacketBukkitLegacy, T: PacketLegacy {
+        val legacyAdapter: PacketLegacyAdapter<P, T>
+) : PacketListener where T: PacketBukkitLegacy, T: PacketLegacy {
 
     private val _sendingTypes: MutableSet<Class<out PacketOut>> = HashSet()
     private val _receivingTypes: MutableSet<Class<out PacketIn>> = HashSet()

@@ -601,14 +601,23 @@ enum class Particle {
         /** implement */
 
         private fun createPacket(center: Location): PacketOutParticles {
-            var arguments = intArrayOf()
-            if(data != null) {
-                arguments = when(particle) {
-                    ITEM_CRACK -> data.packetData.toIntArray()
-                    else -> intArrayOf(data.packetData[0].or(data.packetData[1].shl(12)))
-                }
+            val arguments = ArrayList<Int>()
+            if(data != null) when(particle) {
+                ITEM_CRACK -> arguments.addAll(data.packetData)
+                else -> arguments.add(data.packetData[0].or(data.packetData[1].shl(12)))
             }
-            return PacketOutParticles(particle, longDistance, center.x.toFloat(), center.y.toFloat(), center.z.toFloat(), offsetX, offsetY, offsetZ, speed, amount, arguments)
+            return PacketOutParticles(
+                    particle,
+                    longDistance,
+                    center.x.toFloat(),
+                    center.y.toFloat(), 
+                    center.z.toFloat(),
+                    offsetX,
+                    offsetY,
+                    offsetZ,
+                    speed,
+                    amount,
+                    arguments)
         }
     }
 }

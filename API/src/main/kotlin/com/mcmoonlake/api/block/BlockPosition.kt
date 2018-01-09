@@ -52,7 +52,10 @@ data class BlockPosition(
          * * The Z coordinate value of this block.
          * * 此方块的 Z 坐标值.
          */
-        val z: Int) : ConfigurationSerializable, Comparable<BlockPosition> {
+        val z: Int
+
+) : ConfigurationSerializable,
+        Comparable<BlockPosition> {
 
     override fun compareTo(other: BlockPosition): Int
             = ComparisonChain.start()

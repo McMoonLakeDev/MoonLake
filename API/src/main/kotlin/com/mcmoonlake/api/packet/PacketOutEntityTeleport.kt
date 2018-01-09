@@ -26,7 +26,8 @@ data class PacketOutEntityTeleport(
         var z: Double,
         var yaw: Float,
         var pitch: Float,
-        var isOnGround: Boolean) : PacketOutBukkitAbstract("PacketPlayOutEntityTeleport") {
+        var isOnGround: Boolean
+) : PacketOutBukkitAbstract("PacketPlayOutEntityTeleport") {
 
     @Deprecated("")
     constructor() : this(-1, .0, .0, .0, 0f, 0f, false)

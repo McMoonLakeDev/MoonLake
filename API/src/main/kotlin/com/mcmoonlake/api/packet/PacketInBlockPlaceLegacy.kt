@@ -29,7 +29,10 @@ data class PacketInBlockPlaceLegacy(
         var itemStack: ItemStack?,
         var cursorX: Float,
         var cursorY: Float,
-        var cursorZ: Float) : PacketInBukkitAbstract("PacketPlayInBlockPlace"), PacketBukkitLegacy, PacketLegacy {
+        var cursorZ: Float
+) : PacketInBukkitAbstract("PacketPlayInBlockPlace"),
+        PacketBukkitLegacy,
+        PacketLegacy {
 
     @Deprecated("")
     constructor() : this(-1L, BlockPosition.ZERO, null, null, 0f, 0f, 0f)

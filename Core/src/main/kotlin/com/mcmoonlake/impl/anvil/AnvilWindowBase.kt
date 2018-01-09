@@ -39,7 +39,9 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
-open class AnvilWindowBase(plugin: Plugin) : AnvilWindowAbstract(plugin) {
+open class AnvilWindowBase(
+        plugin: Plugin
+) : AnvilWindowAbstract(plugin) {
 
     protected var handle: Any? = null
     protected var windowId: Int = -1

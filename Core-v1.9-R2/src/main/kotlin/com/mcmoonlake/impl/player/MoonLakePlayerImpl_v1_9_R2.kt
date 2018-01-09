@@ -19,5 +19,7 @@ package com.mcmoonlake.impl.player
 
 import org.bukkit.entity.Player
 
-open class MoonLakePlayerImpl_v1_9_R2(player: Player) : MoonLakePlayerImpl_v1_9_R1(player) {
+open class MoonLakePlayerImpl_v1_9_R2(
+        player: Player
+) : MoonLakePlayerImpl_v1_9_R1(player) {
 }

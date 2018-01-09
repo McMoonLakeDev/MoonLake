@@ -34,7 +34,9 @@ enum class Slot(
          * * Enum type name.
          * * 枚举类型名称.
          */
-        val type: String) : Valuable<String> {
+        val type: String
+
+) : Valuable<String> {
 
     /**
      * * Attribute Slot: Main hand

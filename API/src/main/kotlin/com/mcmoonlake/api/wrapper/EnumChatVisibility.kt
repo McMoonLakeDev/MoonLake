@@ -19,7 +19,9 @@ package com.mcmoonlake.api.wrapper
 
 import com.mcmoonlake.api.Valuable
 
-enum class EnumChatVisibility(val value: Int) : Valuable<Int> {
+enum class EnumChatVisibility(
+        val value: Int
+) : Valuable<Int> {
 
     /**
      * Enum Chat Visibility: Full (聊天可见度: 全部)

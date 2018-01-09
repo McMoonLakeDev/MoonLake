@@ -18,7 +18,9 @@
 package com.mcmoonlake.api.packet
 
 abstract class PacketBukkitAbstract(
-        override val typeClass: Class<*>) : PacketAbstract(), PacketBukkit {
+        override val typeClass: Class<*>
+) : PacketAbstract(),
+        PacketBukkit {
 
     override fun equals(other: Any?): Boolean {
         if(other === this)

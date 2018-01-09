@@ -28,7 +28,8 @@ data class PacketOutTitle(
         var title: ChatComponent?,
         var fadeIn: Int,
         var stay: Int,
-        var fadeOut: Int) : PacketOutBukkitAbstract("PacketPlayOutTitle") {
+        var fadeOut: Int
+) : PacketOutBukkitAbstract("PacketPlayOutTitle") {
 
     constructor(fadeIn: Int, stay: Int, fadeOut: Int) : this(Action.TIMES, null, fadeIn, stay, fadeOut)
     constructor(action: Action, title: ChatComponent?) : this(action, title, -1, -1, -1)

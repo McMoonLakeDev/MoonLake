@@ -32,7 +32,9 @@ data class PacketOutEntityEffect(
          * * Only valid at 1.9 or higher.
          * * 仅在 1.9 或更高版本有效.
          */
-        var ambient: Boolean) : PacketOutBukkitAbstract("PacketPlayOutEntityEffect") {
+        var ambient: Boolean
+
+) : PacketOutBukkitAbstract("PacketPlayOutEntityEffect") {
 
     @Deprecated("")
     constructor() : this(-1, null, 0, 0, false, false)

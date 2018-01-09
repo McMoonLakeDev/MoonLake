@@ -30,7 +30,8 @@ data class PacketOutWorldBorder(
         var centerZ: Double,
         var portalTeleportBoundary: Int,
         var warningTime: Int,
-        var warningBlocks: Int) : PacketOutBukkitAbstract("PacketPlayOutWorldBorder") {
+        var warningBlocks: Int
+) : PacketOutBukkitAbstract("PacketPlayOutWorldBorder") {
 
     @Deprecated("")
     constructor() : this(Action.INITIALIZE, .0, .0, .0, 0L, .0, .0, 0, 0, 0)

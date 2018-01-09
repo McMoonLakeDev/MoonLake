@@ -21,7 +21,8 @@ import org.bukkit.inventory.ItemStack
 
 data class PacketInSetCreativeSlot(
         var slot: Int,
-        var itemStack: ItemStack?) : PacketInBukkitAbstract("PacketPlayInSetCreativeSlot") {
+        var itemStack: ItemStack?
+) : PacketInBukkitAbstract("PacketPlayInSetCreativeSlot") {
 
     @Deprecated("")
     constructor() : this(0, null)

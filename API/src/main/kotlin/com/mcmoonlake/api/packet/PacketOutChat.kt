@@ -22,7 +22,8 @@ import com.mcmoonlake.api.chat.ChatComponent
 
 data class PacketOutChat(
         var message: ChatComponent,
-        var action: ChatAction) : PacketOutBukkitAbstract("PacketPlayOutChat") {
+        var action: ChatAction
+) : PacketOutBukkitAbstract("PacketPlayOutChat") {
 
     constructor(message: ChatComponent) : this(message, ChatAction.CHAT)
 

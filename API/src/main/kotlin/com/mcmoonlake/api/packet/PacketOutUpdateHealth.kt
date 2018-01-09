@@ -20,7 +20,8 @@ package com.mcmoonlake.api.packet
 data class PacketOutUpdateHealth(
         var health: Float,
         var foodLevel: Int,
-        var foodSaturation: Float) : PacketOutBukkitAbstract("PacketPlayOutUpdateHealth") {
+        var foodSaturation: Float
+) : PacketOutBukkitAbstract("PacketPlayOutUpdateHealth") {
 
     @Deprecated("")
     constructor() : this(20f, 20, 0f)

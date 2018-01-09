@@ -19,7 +19,9 @@ package com.mcmoonlake.api.packet
 
 data class PacketOutUnloadChunk(
         var chunkX: Int,
-        var chunkZ: Int) : PacketOutBukkitAbstract("PacketPlayOutUnloadChunk"), PacketBukkitFreshly {
+        var chunkZ: Int
+) : PacketOutBukkitAbstract("PacketPlayOutUnloadChunk"),
+        PacketBukkitFreshly {
 
     @Deprecated("")
     constructor() : this(0, 0)

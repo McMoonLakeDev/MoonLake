@@ -20,7 +20,9 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.notNull
 
 data class PacketOutSelectAdvancementTab(
-        var key: String?) : PacketOutBukkitAbstract("PacketPlayOutSelectAdvancementTab"), PacketBukkitFreshly {
+        var key: String?
+) : PacketOutBukkitAbstract("PacketPlayOutSelectAdvancementTab"),
+        PacketBukkitFreshly {
 
     @Deprecated("")
     constructor() : this(null)

@@ -19,9 +19,13 @@ package com.mcmoonlake.api.packet
 
 data class PacketOutNamedSoundLegacy(
         var sound: String,
-        var x: Int, var y: Int, var z: Int,
+        var x: Int,
+        var y: Int,
+        var z: Int,
         var volume: Float,
-        var pitch: Float) : PacketOutBukkitAbstract("PacketPlayOutNamedSoundEffect"), PacketBukkitLegacy, PacketLegacy { // 1.8.x
+        var pitch: Float
+) : PacketOutBukkitAbstract("PacketPlayOutNamedSoundEffect"),
+        PacketBukkitLegacy, PacketLegacy { // 1.8.x
 
     @Deprecated("")
     constructor() : this("null", 0, 0, 0, 1f, 1f)

@@ -45,7 +45,9 @@ open class RegionCylinder(
         private var _center: RegionVector2D,
         private var _radius: RegionVector2D,
         private var _minY: Int = 0,
-        private var _maxY: Int = 0) : RegionAbstract(world), RegionFlat {
+        private var _maxY: Int = 0
+) : RegionAbstract(world),
+        RegionFlat {
 
     private var hasY: Boolean = false
 

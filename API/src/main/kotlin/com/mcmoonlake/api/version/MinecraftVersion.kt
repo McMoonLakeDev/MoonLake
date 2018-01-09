@@ -22,7 +22,13 @@ import com.mcmoonlake.api.util.ComparisonChain
 import org.bukkit.Bukkit
 import java.util.regex.Pattern
 
-class MinecraftVersion(major: Int, minor: Int, build: Int, private val pre: Int? = null) : Version(major, minor, build),  Comparable<Version> {
+class MinecraftVersion(
+        major: Int,
+        minor: Int,
+        build: Int,
+        private val pre: Int? = null
+) : Version(major, minor, build),
+        Comparable<Version> {
 
     /** static */
 

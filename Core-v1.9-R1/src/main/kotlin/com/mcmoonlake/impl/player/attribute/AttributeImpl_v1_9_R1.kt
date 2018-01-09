@@ -24,7 +24,10 @@ import com.mcmoonlake.api.player.MoonLakePlayer
 import com.mcmoonlake.api.util.Enums
 import org.bukkit.attribute.AttributeInstance
 
-open class AttributeImpl_v1_9_R1(player: MoonLakePlayer, type: AttributeType) : AttributeImpl_v1_8_R1(player, type) {
+open class AttributeImpl_v1_9_R1(
+        player: MoonLakePlayer,
+        type: AttributeType
+) : AttributeImpl_v1_8_R1(player, type) {
 
     override var baseValue: Double
         get() = instance?.baseValue ?: super.baseValue

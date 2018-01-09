@@ -28,7 +28,9 @@ import net.milkbowl.vault.economy.EconomyResponse
 import org.bukkit.OfflinePlayer
 import org.bukkit.plugin.RegisteredServiceProvider
 
-class DependVaultEconomyImpl : DependPluginAbstract<Vault>(getPlugin(DependVaultEconomy.NAME)), DependVaultEconomy {
+class DependVaultEconomyImpl
+    : DependPluginAbstract<Vault>(getPlugin(DependVaultEconomy.NAME)),
+        DependVaultEconomy {
 
     /**
      * Vault 插件存在不代表 Economy 功能是否拥有服务实现, 所以初始化的时候获取并判断是否不为 null 否之抛出异常

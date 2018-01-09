@@ -22,7 +22,8 @@ import org.bukkit.inventory.ItemStack
 
 data class PacketOutWindowItems(
         var windowId: Int,
-        var items: MutableList<ItemStack>) : PacketOutBukkitAbstract("PacketPlayOutWindowItems") {
+        var items: MutableList<ItemStack>
+) : PacketOutBukkitAbstract("PacketPlayOutWindowItems") {
 
     @Deprecated("")
     constructor() : this(-1, ArrayList())

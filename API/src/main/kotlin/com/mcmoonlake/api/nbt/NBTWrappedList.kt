@@ -37,7 +37,11 @@ package com.mcmoonlake.api.nbt
 import com.mcmoonlake.api.notNull
 import com.mcmoonlake.api.util.ConvertedList
 
-class NBTWrappedList<T>(handle: Any, name: String) : NBTWrapper<MutableList<NBTBase<T>>>, NBTList<T> {
+class NBTWrappedList<T>(
+        handle: Any,
+        name: String
+) : NBTWrapper<MutableList<NBTBase<T>>>,
+        NBTList<T> {
 
     private val container: NBTWrappedElement<MutableList<Any>> = NBTWrappedElement(handle, name)
     private val savedList: ConvertedList<Any, NBTBase<T>> by lazy {

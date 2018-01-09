@@ -41,7 +41,10 @@ import com.mcmoonlake.api.reflect.StructureModifier
 import com.mcmoonlake.api.utility.MinecraftReflection
 import java.lang.reflect.Method
 
-class NBTWrappedElement<T>(override val handle: Any, override var name: String) : NBTWrapper<T> {
+class NBTWrappedElement<T>(
+        override val handle: Any,
+        override var name: String
+) : NBTWrapper<T> {
 
     /** member */
 

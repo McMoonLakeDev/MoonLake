@@ -25,7 +25,9 @@ import me.clip.placeholderapi.PlaceholderAPI
 import me.clip.placeholderapi.PlaceholderAPIPlugin
 import org.bukkit.entity.Player
 
-class DependPlaceholderAPIImpl : DependPluginAbstract<PlaceholderAPIPlugin>(getPlugin(DependPlaceholderAPI.NAME)), DependPlaceholderAPI {
+class DependPlaceholderAPIImpl
+    : DependPluginAbstract<PlaceholderAPIPlugin>(getPlugin(DependPlaceholderAPI.NAME)),
+        DependPlaceholderAPI {
 
     override fun setPlaceholders(player: Player, text: String): String
             = PlaceholderAPI.setPlaceholders(player, text)

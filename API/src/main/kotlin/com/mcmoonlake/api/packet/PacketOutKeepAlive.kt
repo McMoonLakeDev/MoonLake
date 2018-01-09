@@ -20,7 +20,8 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.isJavaEditionOrLaterVer
 
 data class PacketOutKeepAlive(
-        var id: Long) : PacketOutBukkitAbstract("PacketPlayOutKeepAlive") {
+        var id: Long
+) : PacketOutBukkitAbstract("PacketPlayOutKeepAlive") {
 
     @Deprecated("")
     constructor() : this(-1L)

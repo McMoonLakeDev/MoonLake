@@ -29,7 +29,8 @@ data class PacketInSettings(
         var chatVisibility: EnumChatVisibility,
         var chatColor: Boolean,
         var skinDisplayed: Int,
-        var hand: EnumMainHand?) : PacketInBukkitAbstract("PacketPlayInSettings") {
+        var hand: EnumMainHand?
+) : PacketInBukkitAbstract("PacketPlayInSettings") {
 
     @Deprecated("")
     constructor() : this("en_US", 12, EnumChatVisibility.FULL, true, 0x80, null)

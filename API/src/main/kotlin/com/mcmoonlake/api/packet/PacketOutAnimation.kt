@@ -22,7 +22,8 @@ import com.mcmoonlake.api.ofValuableNotNull
 
 data class PacketOutAnimation(
         var entityId: Int,
-        var animation: Type) : PacketOutBukkitAbstract("PacketPlayOutAnimation") {
+        var animation: Type
+) : PacketOutBukkitAbstract("PacketPlayOutAnimation") {
 
     @Deprecated("")
     constructor() : this(-1, Type.HURT_EFFECT)

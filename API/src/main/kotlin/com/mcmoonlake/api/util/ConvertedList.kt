@@ -34,7 +34,10 @@
 
 package com.mcmoonlake.api.util
 
-abstract class ConvertedList<VI, VO>(private val inner: MutableList<VI>) : ConvertedCollection<VI, VO>(inner), MutableList<VO> {
+abstract class ConvertedList<VI, VO>(
+        private val inner: MutableList<VI>
+) : ConvertedCollection<VI, VO>(inner),
+        MutableList<VO> {
 
     override fun add(index: Int, element: VO)
             = inner.add(index, toIn(element))

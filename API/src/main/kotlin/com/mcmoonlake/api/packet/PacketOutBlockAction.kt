@@ -25,7 +25,8 @@ data class PacketOutBlockAction(
         var blockPosition: BlockPosition,
         var action: Int,
         var parameter: Int,
-        var block: Material) : PacketOutBukkitAbstract("PacketPlayOutBlockAction") {
+        var block: Material
+) : PacketOutBukkitAbstract("PacketPlayOutBlockAction") {
 
     constructor(block: Block, action: Int, parameter: Int) : this(BlockPosition(block.x, block.y, block.z), action, parameter, block.type)
 

@@ -36,8 +36,8 @@
 
 package com.mcmoonlake.api.region
 
-import com.mcmoonlake.api.util.ComparisonChain
 import com.mcmoonlake.api.parseDouble
+import com.mcmoonlake.api.util.ComparisonChain
 import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.configuration.serialization.ConfigurationSerializable
@@ -45,7 +45,9 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable
 open class RegionVector(
         val x: Double,
         val y: Double,
-        val z: Double) : ConfigurationSerializable, Comparable<RegionVector> {
+        val z: Double
+) : ConfigurationSerializable,
+        Comparable<RegionVector> {
 
     /** constructor */
 

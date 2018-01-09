@@ -37,7 +37,11 @@ package com.mcmoonlake.api.nbt
 import com.mcmoonlake.api.exception.MoonLakeException
 import com.mcmoonlake.api.util.ConvertedMap
 
-class NBTWrappedCompound(handle: Any, name: String) : NBTWrapper<MutableMap<String, NBTBase<*>>>, NBTCompound {
+class NBTWrappedCompound(
+        handle: Any,
+        name: String
+) : NBTWrapper<MutableMap<String, NBTBase<*>>>,
+        NBTCompound {
 
     private val container: NBTWrappedElement<MutableMap<String, Any>> = NBTWrappedElement(handle, name)
     private val savedMap: ConvertedMap<String, Any, NBTBase<*>> by lazy {

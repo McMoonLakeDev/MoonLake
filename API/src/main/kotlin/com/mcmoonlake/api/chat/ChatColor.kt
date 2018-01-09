@@ -37,7 +37,9 @@ enum class ChatColor(
          * * Whether this chat color is a format character.
          * * 此聊天颜色是否为格式符.
          */
-        val isFormat: Boolean = false) : Valuable<Char> {
+        val isFormat: Boolean = false
+
+) : Valuable<Char> {
 
     /** enums */
 

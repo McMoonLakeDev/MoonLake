@@ -34,7 +34,8 @@ import java.io.IOException
 import java.nio.charset.Charset
 import java.util.*
 
-data class PacketBuffer(private var byteBuf: ByteBuf) {
+data class PacketBuffer(
+        private var byteBuf: ByteBuf) {
 
     /** constructor */
 

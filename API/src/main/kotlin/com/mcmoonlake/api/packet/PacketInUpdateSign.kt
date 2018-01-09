@@ -22,7 +22,8 @@ import java.util.*
 
 data class PacketInUpdateSign(
         var blockPosition: BlockPosition,
-        var lines: Array<String>) : PacketInBukkitAbstract("PacketPlayInUpdateSign") {
+        var lines: Array<String>
+) : PacketInBukkitAbstract("PacketPlayInUpdateSign") {
 
     @Deprecated("")
     constructor() : this(BlockPosition.ZERO, arrayOf())

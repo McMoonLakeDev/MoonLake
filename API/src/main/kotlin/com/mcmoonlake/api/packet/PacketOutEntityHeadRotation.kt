@@ -19,7 +19,8 @@ package com.mcmoonlake.api.packet
 
 data class PacketOutEntityHeadRotation(
         var entityId: Int,
-        var yaw: Byte) : PacketOutBukkitAbstract("PacketPlayOutEntityHeadRotation") {
+        var yaw: Byte
+) : PacketOutBukkitAbstract("PacketPlayOutEntityHeadRotation") {
 
     @Deprecated("")
     constructor() : this(-1, 0)

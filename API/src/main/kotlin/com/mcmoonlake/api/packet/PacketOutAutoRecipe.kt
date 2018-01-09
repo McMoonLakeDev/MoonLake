@@ -19,7 +19,9 @@ package com.mcmoonlake.api.packet
 
 data class PacketOutAutoRecipe(
         var windowId: Int,
-        var recipeId: Int) : PacketOutBukkitAbstract("PacketPlayOutAutoRecipe"), PacketBukkitFreshly {
+        var recipeId: Int
+) : PacketOutBukkitAbstract("PacketPlayOutAutoRecipe"),
+        PacketBukkitFreshly {
 
     @Deprecated("")
     constructor() : this(-1, -1)

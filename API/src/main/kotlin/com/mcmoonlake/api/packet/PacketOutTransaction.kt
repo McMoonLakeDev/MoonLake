@@ -20,7 +20,8 @@ package com.mcmoonlake.api.packet
 data class PacketOutTransaction(
         var windowId: Int,
         var action: Int,
-        var accepted: Boolean) : PacketOutBukkitAbstract("PacketPlayOutTransaction") {
+        var accepted: Boolean
+) : PacketOutBukkitAbstract("PacketPlayOutTransaction") {
 
     @Deprecated("")
     constructor() : this(-1, 0, false)

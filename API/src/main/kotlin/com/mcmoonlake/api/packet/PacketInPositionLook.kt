@@ -23,7 +23,8 @@ data class PacketInPositionLook(
         var z: Double,
         var yaw: Float,
         var pitch: Float,
-        var isOnGround: Boolean) : PacketInBukkitAbstract("PacketPlayInFlying\$PacketPlayInPositionLook", "PacketPlayInPositionLook") {
+        var isOnGround: Boolean
+) : PacketInBukkitAbstract("PacketPlayInFlying\$PacketPlayInPositionLook", "PacketPlayInPositionLook") {
 
     @Deprecated("")
     constructor() : this(.0, .0, .0, 0f, 0f, false)

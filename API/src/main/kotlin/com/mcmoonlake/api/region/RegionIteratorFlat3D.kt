@@ -36,7 +36,10 @@
 
 package com.mcmoonlake.api.region
 
-class RegionIteratorFlat3D(region: RegionFlat, private val flatIterator: MutableIterator<RegionVector2D>) : MutableIterator<RegionVectorBlock> {
+class RegionIteratorFlat3D(
+        region: RegionFlat,
+        private val flatIterator: MutableIterator<RegionVector2D>
+) : MutableIterator<RegionVectorBlock> {
 
     private val minY: Int = region.minimumY
     private val maxY: Int = region.maximumY

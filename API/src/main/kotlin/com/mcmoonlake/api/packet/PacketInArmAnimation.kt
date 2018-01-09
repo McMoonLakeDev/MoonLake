@@ -26,7 +26,9 @@ data class PacketInArmAnimation(
          * * Arm hand, only valid at 1.9 or higher.
          * * 手臂, 仅在 1.9 或更高版本有效.
          */
-        var hand: EnumHand?) : PacketInBukkitAbstract("PacketPlayInArmAnimation") {
+        var hand: EnumHand?
+
+) : PacketInBukkitAbstract("PacketPlayInArmAnimation") {
 
     @Deprecated("")
     constructor() : this(null)

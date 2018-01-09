@@ -25,7 +25,8 @@ import org.bukkit.inventory.ItemStack
 data class PacketOutEntityEquipment(
         var entityId: Int,
         var equipmentSlot: EquipmentSlot,
-        var itemStack: ItemStack?) : PacketOutBukkitAbstract("PacketPlayOutEntityEquipment") {
+        var itemStack: ItemStack?
+) : PacketOutBukkitAbstract("PacketPlayOutEntityEquipment") {
 
     @Deprecated("")
     constructor() : this(-1, EquipmentSlot.HAND, null)

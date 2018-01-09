@@ -20,7 +20,8 @@ package com.mcmoonlake.api.packet
 import com.mcmoonlake.api.block.BlockPosition
 
 data class PacketOutOpenSignEditor(
-        var blockPosition: BlockPosition) : PacketOutBukkitAbstract("PacketPlayOutOpenSignEditor") {
+        var blockPosition: BlockPosition
+) : PacketOutBukkitAbstract("PacketPlayOutOpenSignEditor") {
 
     @Deprecated("")
     constructor() : this(BlockPosition.ZERO)

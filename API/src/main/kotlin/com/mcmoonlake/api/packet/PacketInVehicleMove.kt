@@ -22,7 +22,9 @@ data class PacketInVehicleMove(
         var y: Double,
         var z: Double,
         var yaw: Float,
-        var pitch: Float) : PacketInBukkitAbstract("PacketPlayInVehicleMove"), PacketBukkitFreshly {
+        var pitch: Float
+) : PacketInBukkitAbstract("PacketPlayInVehicleMove"),
+        PacketBukkitFreshly {
 
     @Deprecated("")
     constructor() : this(.0, .0, .0, 0f, 0f)

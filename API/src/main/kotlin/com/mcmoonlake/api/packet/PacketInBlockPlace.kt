@@ -22,7 +22,9 @@ import com.mcmoonlake.api.wrapper.EnumHand
 
 data class PacketInBlockPlace(
         var timestamp: Long,
-        var hand: EnumHand) : PacketInBukkitAbstract("PacketPlayInBlockPlace"), PacketBukkitLegacy {
+        var hand: EnumHand
+) : PacketInBukkitAbstract("PacketPlayInBlockPlace"),
+        PacketBukkitLegacy {
 
     @Deprecated("")
     constructor() : this(-1L, EnumHand.MAIN)

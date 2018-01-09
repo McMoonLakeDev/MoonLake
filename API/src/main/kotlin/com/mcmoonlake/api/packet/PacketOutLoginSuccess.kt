@@ -21,7 +21,9 @@ import com.mojang.authlib.GameProfile
 import java.util.*
 
 data class PacketOutLoginSuccess(
-        var profile: GameProfile) : PacketOutBukkitAbstract("PacketLoginOutSuccess"), PacketLogin {
+        var profile: GameProfile
+) : PacketOutBukkitAbstract("PacketLoginOutSuccess"),
+        PacketLogin {
 
     @Deprecated("")
     constructor() : this(GameProfile(null as UUID?, "Unknown"))

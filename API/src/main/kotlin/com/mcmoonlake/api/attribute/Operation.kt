@@ -36,7 +36,9 @@ enum class Operation(
          * * Enum value.
          * * 枚举值.
          */
-        val value: Int) : Valuable<Int> {
+        val value: Int
+
+) : Valuable<Int> {
 
     /**
      * * Attribute Operation Mode: Add

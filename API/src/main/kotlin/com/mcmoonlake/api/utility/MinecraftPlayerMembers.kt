@@ -26,7 +26,9 @@ import com.mojang.authlib.GameProfile
 import io.netty.channel.Channel
 import org.bukkit.entity.Player
 
-enum class MinecraftPlayerMembers(val clazz: Class<*>) : Valuable<String> {
+enum class MinecraftPlayerMembers(
+        val clazz: Class<*>
+) : Valuable<String> {
 
     /**
      * Minecraft Entity Player Field Member: Ping (实体玩家字段成员: 延迟)

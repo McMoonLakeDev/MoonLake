@@ -19,7 +19,8 @@ package com.mcmoonlake.api.packet
 
 data class PacketInPayload(
         var channel: String,
-        var data: PacketBuffer) : PacketInBukkitAbstract("PacketPlayInCustomPayload") {
+        var data: PacketBuffer
+) : PacketInBukkitAbstract("PacketPlayInCustomPayload") {
 
     @Deprecated("")
     constructor() : this("MoonLake", PacketBuffer.EMPTY)

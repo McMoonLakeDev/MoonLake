@@ -39,7 +39,9 @@ import java.lang.reflect.Field
 import java.lang.reflect.Method
 import java.util.regex.Pattern
 
-class FuzzyReflect(val source: Class<*>, val forceAccess: Boolean) {
+class FuzzyReflect(
+        val source: Class<*>,
+        val forceAccess: Boolean) {
 
     /** static */
 

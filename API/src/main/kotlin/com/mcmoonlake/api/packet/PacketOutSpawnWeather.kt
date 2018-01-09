@@ -24,7 +24,8 @@ data class PacketOutSpawnWeather(
         var type: Int,
         var x: Double,
         var y: Double,
-        var z: Double) : PacketOutBukkitAbstract("PacketPlayOutSpawnEntityWeather") {
+        var z: Double
+) : PacketOutBukkitAbstract("PacketPlayOutSpawnEntityWeather") {
 
     @Deprecated("")
     constructor() : this(-1, -1, .0, .0, .0)

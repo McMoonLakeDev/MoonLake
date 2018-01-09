@@ -23,7 +23,9 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.plugin.Plugin
 
-open class AnvilWindowImpl_v1_8_R2(plugin: Plugin) : AnvilWindowBase(plugin) {
+open class AnvilWindowImpl_v1_8_R2(
+        plugin: Plugin
+) : AnvilWindowBase(plugin) {
 
     override fun open(player: Player) {
         super.open(player)

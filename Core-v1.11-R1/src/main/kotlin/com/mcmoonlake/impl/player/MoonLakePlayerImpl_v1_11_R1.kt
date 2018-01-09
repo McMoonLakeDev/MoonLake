@@ -22,7 +22,9 @@ import com.mcmoonlake.api.attribute.AttributeType
 import com.mcmoonlake.impl.player.attribute.AttributeImpl_v1_11_R1
 import org.bukkit.entity.Player
 
-open class MoonLakePlayerImpl_v1_11_R1(player: Player) : MoonLakePlayerImpl_v1_10_R1(player) {
+open class MoonLakePlayerImpl_v1_11_R1(
+        player: Player
+) : MoonLakePlayerImpl_v1_10_R1(player) {
 
     override fun getAttribute(type: AttributeType): Attribute
             = AttributeImpl_v1_11_R1(this, type)

@@ -19,7 +19,8 @@ package com.mcmoonlake.api.packet
 
 data class PacketInEnchantItem(
         var windowId: Int,
-        var enchantButton: Int) : PacketInBukkitAbstract("PacketPlayInEnchantItem") {
+        var enchantButton: Int
+) : PacketInBukkitAbstract("PacketPlayInEnchantItem") {
 
     @Deprecated("")
     constructor() : this(-1, -1)

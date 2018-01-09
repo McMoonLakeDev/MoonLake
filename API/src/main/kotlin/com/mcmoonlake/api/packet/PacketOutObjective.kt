@@ -25,7 +25,8 @@ data class PacketOutObjective(
         var name: String,
         var mode: Int,
         var value: String?,
-        var type: Type?) : PacketOutBukkitAbstract("PacketPlayOutScoreboardObjective") {
+        var type: Type?
+) : PacketOutBukkitAbstract("PacketPlayOutScoreboardObjective") {
 
     @Deprecated("")
     constructor() : this("Scoreboard", -1, null, null)

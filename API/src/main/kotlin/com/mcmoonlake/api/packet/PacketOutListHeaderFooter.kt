@@ -22,7 +22,8 @@ import com.mcmoonlake.api.chat.ChatComponentText
 
 data class PacketOutListHeaderFooter(
         var header: ChatComponent,
-        var footer: ChatComponent?) : PacketOutBukkitAbstract("PacketPlayOutPlayerListHeaderFooter") {
+        var footer: ChatComponent?
+) : PacketOutBukkitAbstract("PacketPlayOutPlayerListHeaderFooter") {
 
     @Deprecated("")
     constructor() : this(ChatComponent.NULL, null)

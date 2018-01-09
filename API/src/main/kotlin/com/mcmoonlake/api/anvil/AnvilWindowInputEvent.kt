@@ -46,7 +46,10 @@ class AnvilWindowInputEvent(
          * * Input object for current event.
          * * 当前事件的输入对象.
          */
-        var input: String?) : AnvilWindowEvent(anvilWindow, player), Cancellable {
+        var input: String?
+
+) : AnvilWindowEvent(anvilWindow, player),
+        Cancellable {
 
     private var cancel: Boolean = false
 

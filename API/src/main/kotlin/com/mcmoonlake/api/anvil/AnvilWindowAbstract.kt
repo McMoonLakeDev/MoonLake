@@ -31,7 +31,9 @@ import org.bukkit.plugin.Plugin
  * @param plugin The current anvil window plugin object.
  * @param plugin 当前铁砧窗口的插件对象.
  */
-abstract class AnvilWindowAbstract(override final val plugin: Plugin) : AnvilWindow {
+abstract class AnvilWindowAbstract(
+        override final val plugin: Plugin
+) : AnvilWindow {
 
     protected var openHandler: AnvilWindowEventHandler<AnvilWindowOpenEvent>? = null
     protected var inputHandler: AnvilWindowEventHandler<AnvilWindowInputEvent>? = null

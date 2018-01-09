@@ -21,7 +21,9 @@ import java.util.*
 
 data class PacketOutMount(
         var entityId: Int,
-        var passengers: IntArray) : PacketOutBukkitAbstract("PacketPlayOutMount"), PacketBukkitFreshly {
+        var passengers: IntArray
+) : PacketOutBukkitAbstract("PacketPlayOutMount"),
+        PacketBukkitFreshly {
 
     @Deprecated("")
     constructor() : this(-1, intArrayOf())

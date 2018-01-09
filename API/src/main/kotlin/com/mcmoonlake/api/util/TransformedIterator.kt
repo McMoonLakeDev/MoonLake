@@ -36,7 +36,9 @@ package com.mcmoonlake.api.util
 import com.mcmoonlake.api.funs.Function
 import com.mcmoonlake.api.toFunction
 
-abstract class TransformedIterator<in T, out R>(private val iterator: MutableIterator<T>) : MutableIterator<R> {
+abstract class TransformedIterator<in T, out R>(
+        private val iterator: MutableIterator<T>
+) : MutableIterator<R> {
 
     /** api */
 

@@ -54,7 +54,10 @@ class AnvilWindowClickEvent(
          * * Click item stack object for current event.
          * * 当前事件的点击物品栈.
          */
-        val clickItemStack: ItemStack) : AnvilWindowEvent(anvilWindow, player), Cancellable {
+        val clickItemStack: ItemStack
+
+) : AnvilWindowEvent(anvilWindow, player),
+        Cancellable {
 
     private var cancel: Boolean = false
 

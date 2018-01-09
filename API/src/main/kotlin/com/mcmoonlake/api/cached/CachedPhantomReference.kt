@@ -37,7 +37,9 @@ import java.lang.ref.PhantomReference
 open class CachedPhantomReference<out K, V>(
         private val key: K,
         referent: V,
-        queue: CachedReferenceQueue<in V>) : PhantomReference<V>(referent, queue), CachedRef<K, V> {
+        queue: CachedReferenceQueue<in V>
+) : PhantomReference<V>(referent, queue),
+        CachedRef<K, V> {
 
     override fun reference(): PhantomReference<V>
             = this

@@ -27,7 +27,8 @@ import java.util.*
 
 data class PacketOutPlayerInfo(
         var action: Action,
-        var info: MutableList<PlayerInfo>) : PacketOutBukkitAbstract("PacketPlayOutPlayerInfo") {
+        var info: MutableList<PlayerInfo>
+) : PacketOutBukkitAbstract("PacketPlayOutPlayerInfo") {
 
     @Deprecated("")
     constructor() : this(Action.REMOVE_PLAYER, ArrayList())
@@ -93,7 +94,9 @@ data class PacketOutPlayerInfo(
         }
     }
 
-    enum class Action(val value: Int) : Valuable<Int> {
+    enum class Action(
+            val value: Int
+    ) : Valuable<Int> {
 
         /**
          * PlayerInfo Action: Add Player (玩家信息交互: 添加玩家)

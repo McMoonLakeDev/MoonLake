@@ -29,7 +29,8 @@ package com.mcmoonlake.api.cached
  * @param map 缓存映射. 如果为 `null` 则使用非线程安全的 [HashMap].
  */
 abstract class CachedSoftRef<K, V>(
-        map: MutableMap<K, CachedSoftReference<K, V>>?) : CachedReferenceAbstract<K, V, CachedSoftReference<K, V>>(map) {
+        map: MutableMap<K, CachedSoftReference<K, V>>?
+) : CachedReferenceAbstract<K, V, CachedSoftReference<K, V>>(map) {
 
     /**
      * @constructor CachedSoftRef

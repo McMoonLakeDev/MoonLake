@@ -28,7 +28,8 @@ data class PacketOutExplosion(
         var affectedPositions: MutableList<BlockPosition>?,
         var velocityX: Float,
         var velocityY: Float,
-        var velocityZ: Float) : PacketOutBukkitAbstract("PacketPlayOutExplosion") {
+        var velocityZ: Float
+) : PacketOutBukkitAbstract("PacketPlayOutExplosion") {
 
     @Deprecated("")
     constructor() : this(.0, .0, .0, 0f, null, 0f, 0f, 0f)

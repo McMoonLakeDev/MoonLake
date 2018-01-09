@@ -28,7 +28,9 @@ data class PacketOutSoundEffect(
         var category: SoundCategory,
         var x: Int, var y: Int, var z: Int,
         var volume: Float,
-        var pitch: Float) : PacketOutBukkitAbstract("PacketPlayOutNamedSoundEffect"), PacketBukkitFreshly {
+        var pitch: Float
+) : PacketOutBukkitAbstract("PacketPlayOutNamedSoundEffect"),
+        PacketBukkitFreshly {
 
     @Deprecated("")
     constructor() : this(Sound.AMBIENT_CAVE, SoundCategory.MUSIC, 0, 0, 0, 1f, 0f)

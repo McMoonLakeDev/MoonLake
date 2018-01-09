@@ -23,7 +23,8 @@ import com.mcmoonlake.api.ofValuableNotNull
 data class PacketInEntityAction(
         var entityId: Int,
         var action: Action,
-        var jumpBoost: Int = 0) : PacketInBukkitAbstract("PacketPlayInEntityAction") {
+        var jumpBoost: Int = 0
+) : PacketInBukkitAbstract("PacketPlayInEntityAction") {
 
     @Deprecated("")
     constructor() : this(-1, Action.STOP_SNEAKING, 0)
