@@ -47,7 +47,7 @@ enum class MinecraftPlayerMembers(
     /**
      * Minecraft Entity Player Field Member: Connection (实体玩家字段成员: 连接)
      */
-    CONNECTION(MinecraftReflection.getPlayerConnectionClass()) {
+    CONNECTION(MinecraftReflection.playerConnectionClass) {
         override fun value(): String
                 = "playerConnection"
 
@@ -55,7 +55,7 @@ enum class MinecraftPlayerMembers(
             return try {
                 super.get()
             } catch(e: NoSuchFieldException) {
-                { Accessors.getAccessorField(MinecraftReflection.getEntityPlayerClass(), clazz, true) }
+                { Accessors.getAccessorField(MinecraftReflection.entityPlayerClass, clazz, true) }
             }
         }
     },
@@ -63,11 +63,11 @@ enum class MinecraftPlayerMembers(
      * Minecraft Entity Player Field Member: Network Manager (实体玩家字段成员: 网络管理器)
      * - Parent: [CONNECTION]
      */
-    NETWORK_MANAGER(MinecraftReflection.getNetworkManagerClass()) { // parent = connection
+    NETWORK_MANAGER(MinecraftReflection.networkManagerClass) { // parent = connection
         override fun value(): String
                 = "networkManager"
         override fun get(): () -> AccessorField
-                = { Accessors.getAccessorField(MinecraftReflection.getPlayerConnectionClass(), clazz, true) }
+                = { Accessors.getAccessorField(MinecraftReflection.playerConnectionClass, clazz, true) }
         override fun get(player: Player): Any?
                 = field.get(CONNECTION.get(player))
         override fun set(player: Player, value: Any?)
@@ -81,7 +81,7 @@ enum class MinecraftPlayerMembers(
         override fun value(): String
                 = "channel"
         override fun get(): () -> AccessorField
-                = { Accessors.getAccessorField(MinecraftReflection.getNetworkManagerClass(), clazz, true) }
+                = { Accessors.getAccessorField(MinecraftReflection.networkManagerClass, clazz, true) }
         override fun get(player: Player): Any?
                 = field.get(NETWORK_MANAGER.get(player))
         override fun set(player: Player, value: Any?)
@@ -94,7 +94,7 @@ enum class MinecraftPlayerMembers(
         override fun value(): String
                 = "profile"
         override fun get(): () -> AccessorField
-                = { Accessors.getAccessorField(MinecraftReflection.getEntityHumanClass(), clazz, true) }
+                = { Accessors.getAccessorField(MinecraftReflection.entityHumanClass, clazz, true) }
     },
     /**
      * Minecraft Entity Player Field Member: Active Container (实体玩家字段成员: 交互容器)
@@ -115,7 +115,7 @@ enum class MinecraftPlayerMembers(
             = field.set(Entities.asNMSEntity(player), value)
 
     open protected fun get(): () -> AccessorField
-            = { Accessors.getAccessorField(MinecraftReflection.getEntityPlayerClass(), value(), true) }
+            = { Accessors.getAccessorField(MinecraftReflection.entityPlayerClass, value(), true) }
 
     companion object {
 

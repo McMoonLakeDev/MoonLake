@@ -40,15 +40,14 @@ object MinecraftConverters {
 
     @JvmStatic
     private val chatSerializerGson: AccessorField by lazy {
-        Accessors.getAccessorField(MinecraftReflection.getChatSerializerClass(), Gson::class.java, true) }
+        Accessors.getAccessorField(MinecraftReflection.chatSerializerClass, Gson::class.java, true) }
 
     @JvmStatic
-    @JvmName("getChatComponent")
-    fun getChatComponent(): ConverterEquivalent<ChatComponent> {
-        return object: ConverterEquivalentIgnoreNull<ChatComponent> {
+    val chatComponent: ConverterEquivalent<ChatComponent>
+        get() = object: ConverterEquivalentIgnoreNull<ChatComponent> {
             override fun getGenericValue(specific: ChatComponent): Any {
                 val gson = chatSerializerGson.get(null) as Gson
-                val adapter = gson.getAdapter(MinecraftReflection.getIChatBaseComponentClass())
+                val adapter = gson.getAdapter(MinecraftReflection.iChatBaseComponentClass)
                 return adapter.read(JsonReader(StringReader(specific.toJson())))
             }
             override fun getSpecificValue(generic: Any): ChatComponent {
@@ -59,21 +58,19 @@ object MinecraftConverters {
             override fun getSpecificType(): Class<ChatComponent>
                     = ChatComponent::class.java
         }
-    }
 
     /** world */
 
     @JvmStatic
     private val craftWorldGetHandle: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(MinecraftReflection.getCraftWorldClass(), "getHandle", true) }
+        Accessors.getAccessorMethod(MinecraftReflection.craftWorldClass, "getHandle", true) }
     @JvmStatic
     private val worldGetWorld: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(MinecraftReflection.getWorldClass(), "getWorld", true) }
+        Accessors.getAccessorMethod(MinecraftReflection.worldClass, "getWorld", true) }
 
     @JvmStatic
-    @JvmName("getWorld")
-    fun getWorld(): ConverterEquivalent<World> {
-        return object: ConverterEquivalentIgnoreNull<World> {
+    val world: ConverterEquivalent<World>
+        get() = object: ConverterEquivalentIgnoreNull<World> {
             override fun getGenericValue(specific: World): Any
                     = craftWorldGetHandle.invoke(specific) as Any
             override fun getSpecificValue(generic: Any): World
@@ -81,24 +78,23 @@ object MinecraftConverters {
             override fun getSpecificType(): Class<World>
                     = World::class.java
         }
-    }
 
     /** entity */
 
     @JvmStatic
     private val craftEntityGetHandle: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(MinecraftReflection.getCraftEntityClass(), "getHandle") }
+        Accessors.getAccessorMethod(MinecraftReflection.craftEntityClass, "getHandle") }
     @JvmStatic
     private val entityGetBukkitEntity: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(MinecraftReflection.getEntityClass(), "getBukkitEntity") }
+        Accessors.getAccessorMethod(MinecraftReflection.entityClass, "getBukkitEntity") }
 
     @JvmStatic
     @JvmName("getEntity")
-    @Suppress("UNCHECKED_CAST")
     fun <T: Entity> getEntity(clazz: Class<T>): ConverterEquivalent<T> {
         return object: ConverterEquivalentIgnoreNull<T> {
             override fun getGenericValue(specific: T): Any
                     = craftEntityGetHandle.invoke(specific) as Any
+            @Suppress("UNCHECKED_CAST")
             override fun getSpecificValue(generic: Any): T
                     = entityGetBukkitEntity.invoke(generic) as T
             override fun getSpecificType(): Class<T>
@@ -110,16 +106,15 @@ object MinecraftConverters {
 
     @JvmStatic
     private val craftItemStackAsNMSCopy: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(MinecraftReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", false, ItemStack::class.java) }
+        Accessors.getAccessorMethod(MinecraftReflection.craftItemStackClass, "asNMSCopy", false, ItemStack::class.java) }
 
     @JvmStatic
     private val craftItemStackAsCraftMirror: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(MinecraftReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asCraftMirror", false, MinecraftReflection.getItemStackClass()) }
+        Accessors.getAccessorMethod(MinecraftReflection.craftItemStackClass, "asCraftMirror", false, MinecraftReflection.itemStackClass) }
 
     @JvmStatic
-    @JvmName("getItemStack")
-    fun getItemStack(): ConverterEquivalent<ItemStack> {
-        return object: ConverterEquivalentIgnoreNull<ItemStack> {
+    val itemStack: ConverterEquivalent<ItemStack>
+        get() = object: ConverterEquivalentIgnoreNull<ItemStack> {
             override fun getGenericValue(specific: ItemStack): Any
                     = craftItemStackAsNMSCopy.invoke(null, specific) as Any
             override fun getSpecificValue(generic: Any): ItemStack
@@ -127,14 +122,12 @@ object MinecraftConverters {
             override fun getSpecificType(): Class<ItemStack>
                     = ItemStack::class.java
         }
-    }
 
     /** nbt */
 
     @JvmStatic
-    @JvmName("getNBT")
-    fun getNBT(): ConverterEquivalent<NBTBase<*>> {
-        return object: ConverterEquivalentIgnoreNull<NBTBase<*>> {
+    val nbt: ConverterEquivalent<NBTBase<*>>
+        get() = object: ConverterEquivalentIgnoreNull<NBTBase<*>> {
             override fun getGenericValue(specific: NBTBase<*>): Any
                     = NBTFactory.fromBase(specific).handle
             override fun getSpecificValue(generic: Any): NBTBase<*>
@@ -142,21 +135,19 @@ object MinecraftConverters {
             override fun getSpecificType(): Class<NBTBase<*>>
                     = NBTBase::class.java
         }
-    }
 
     /** server */
 
     @JvmStatic
     private val craftServerMinecraft: AccessorField by lazy {
-        Accessors.getAccessorField(MinecraftReflection.getCraftServerClass(), MinecraftReflection.getMinecraftServerClass(), true) }
+        Accessors.getAccessorField(MinecraftReflection.craftServerClass, MinecraftReflection.minecraftServerClass, true) }
     @JvmStatic
     private val minecraftServerCraft: AccessorField by lazy {
-        Accessors.getAccessorField(MinecraftReflection.getMinecraftServerClass(), MinecraftReflection.getCraftServerClass(), true) }
+        Accessors.getAccessorField(MinecraftReflection.minecraftServerClass, MinecraftReflection.craftServerClass, true) }
 
     @JvmStatic
-    @JvmName("getServer")
-    fun getServer(): ConverterEquivalent<Server> {
-        return object: ConverterEquivalentIgnoreNull<Server> {
+    val server: ConverterEquivalent<Server>
+        get() = object: ConverterEquivalentIgnoreNull<Server> {
             override fun getSpecificValue(generic: Any): Server
                     = minecraftServerCraft.get(generic) as Server
             override fun getGenericValue(specific: Server): Any
@@ -164,5 +155,4 @@ object MinecraftConverters {
             override fun getSpecificType(): Class<Server>
                     = Server::class.java
         }
-    }
 }

@@ -172,7 +172,7 @@ object Attributes {
 
     @JvmStatic
     private val entityLivingGetAttributeMap: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(FuzzyReflect.fromClass(MinecraftReflection.getEntityLivingClass(), true)
+        Accessors.getAccessorMethod(FuzzyReflect.fromClass(MinecraftReflection.entityLivingClass, true)
                 .getMethodByParameters("getAttributeMap", getAttributeMapClass(), arrayOf())) }
 
     @JvmStatic
@@ -182,7 +182,7 @@ object Attributes {
 
     @JvmStatic
     private val entityLivingGetAttributeInstance: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(FuzzyReflect.fromClass(MinecraftReflection.getEntityLivingClass(), true)
+        Accessors.getAccessorMethod(FuzzyReflect.fromClass(MinecraftReflection.entityLivingClass, true)
                 .getMethodByParameters("getAttributeInstance", getAttributeInstanceClass(), arrayOf(getIAttributeClass()))) }
 
     @JvmStatic

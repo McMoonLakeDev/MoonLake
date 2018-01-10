@@ -35,7 +35,6 @@
 package com.mcmoonlake.api.nbt
 
 import com.mcmoonlake.api.*
-import com.mcmoonlake.api.converter.ConverterEquivalent
 import com.mcmoonlake.api.entity.Entities
 import com.mcmoonlake.api.exception.MoonLakeException
 import com.mcmoonlake.api.reflect.FuzzyReflect
@@ -61,7 +60,7 @@ object NBTFactory {
 
     @JvmStatic
     private val nbtBaseCreateTag: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(MinecraftReflection.getNBTBaseClass(), "createTag", true, Byte::class.java) }
+        Accessors.getAccessorMethod(MinecraftReflection.nbtBaseClass, "createTag", true, Byte::class.java) }
     @JvmStatic
     private val nbtStreamClass: Class<*> by lazy {
         MinecraftReflection.getMinecraftClass("NBTCompressedStreamTools") }
@@ -75,38 +74,35 @@ object NBTFactory {
     @JvmStatic
     private val nbtStreamRead: AccessorMethod by lazy {
         Accessors.getAccessorMethod(FuzzyReflect.fromClass(nbtStreamClass, true)
-                .getMethodByParameters("read", MinecraftReflection.getNBTBaseClass(), arrayOf(DataInput::class.java, Int::class.java, nbtReadLimiterClass)), true) }
+                .getMethodByParameters("read", MinecraftReflection.nbtBaseClass, arrayOf(DataInput::class.java, Int::class.java, nbtReadLimiterClass)), true) }
     @JvmStatic
     private val nbtStreamWrite: AccessorMethod by lazy {
         Accessors.getAccessorMethod(FuzzyReflect.fromClass(nbtStreamClass, true)
-                .getMethodByParameters("write", Void::class.java, arrayOf(MinecraftReflection.getNBTBaseClass(), DataOutput::class.java)), true) }
+                .getMethodByParameters("write", Void::class.java, arrayOf(MinecraftReflection.nbtBaseClass, DataOutput::class.java)), true) }
     @JvmStatic
     private val itemStackModifier: StructureModifier<*> by lazy {
-        StructureModifier.of(MinecraftReflection.getItemStackClass(), Object::class.java) }
-    @JvmStatic
-    private val itemStackConverter: ConverterEquivalent<ItemStack> by lazy {
-        MinecraftConverters.getItemStack() }
+        StructureModifier.of(MinecraftReflection.itemStackClass, Object::class.java) }
     @JvmStatic
     private val itemStackConstructor: AccessorConstructor<out Any> by lazy {
-        Accessors.getAccessorConstructor(MinecraftReflection.getItemStackClass(), false, MinecraftReflection.getNBTTagCompoundClass()) }
+        Accessors.getAccessorConstructor(MinecraftReflection.itemStackClass, false, MinecraftReflection.nbtTagCompoundClass) }
     @JvmStatic
     private val craftItemStackHandle: AccessorField by lazy {
-        Accessors.getAccessorField(MinecraftReflection.getCraftItemStackClass(), MinecraftReflection.getItemStackClass(), true) }
+        Accessors.getAccessorField(MinecraftReflection.craftItemStackClass, MinecraftReflection.itemStackClass, true) }
     @JvmStatic
     private val entitySave: AccessorMethod by lazy {
-        val nbtClazz = MinecraftReflection.getNBTTagCompoundClass()
+        val nbtClazz = MinecraftReflection.nbtTagCompoundClass
         if(!currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_9_R2))
-            Accessors.getAccessorMethod(MinecraftReflection.getEntityClass(), "e", false, nbtClazz)
-        Accessors.getAccessorMethod(FuzzyReflect.fromClass(MinecraftReflection.getEntityClass()).getMethodByParameters("save", nbtClazz, arrayOf(nbtClazz))) }
+            Accessors.getAccessorMethod(MinecraftReflection.entityClass, "e", false, nbtClazz)
+        Accessors.getAccessorMethod(FuzzyReflect.fromClass(MinecraftReflection.entityClass).getMethodByParameters("save", nbtClazz, arrayOf(nbtClazz))) }
     @JvmStatic
     private val entityRead: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(MinecraftReflection.getEntityClass(), "f", false, MinecraftReflection.getNBTTagCompoundClass()) }
+        Accessors.getAccessorMethod(MinecraftReflection.entityClass, "f", false, MinecraftReflection.nbtTagCompoundClass) }
     @JvmStatic
     private val entityLivingSave: AccessorMethod by lazy {
-            Accessors.getAccessorMethod(MinecraftReflection.getEntityLivingClass(), "a", false, MinecraftReflection.getNBTTagCompoundClass()) }
+            Accessors.getAccessorMethod(MinecraftReflection.entityLivingClass, "a", false, MinecraftReflection.nbtTagCompoundClass) }
     @JvmStatic
     private val entityLivingRead: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(MinecraftReflection.getEntityLivingClass(), "b", false, MinecraftReflection.getNBTTagCompoundClass()) }
+        Accessors.getAccessorMethod(MinecraftReflection.entityLivingClass, "b", false, MinecraftReflection.nbtTagCompoundClass) }
 
     @JvmStatic
     @JvmName("fromBase")
@@ -226,7 +222,7 @@ object NBTFactory {
     @JvmStatic
     @JvmName("readStackTag")
     fun readStackTag(itemStack: ItemStack): NBTCompound? {
-        return when(MinecraftReflection.getCraftItemStackClass().isInstance(itemStack)) {
+        return when(MinecraftReflection.craftItemStackClass.isInstance(itemStack)) {
             true -> getCraftStackTag(itemStack)
             else -> getOriginStackTag(itemStack)
         }
@@ -240,7 +236,7 @@ object NBTFactory {
     @JvmStatic
     @JvmName("writeStackTag")
     fun writeStackTag(itemStack: ItemStack, tag: NBTCompound?): ItemStack {
-        when(MinecraftReflection.getCraftItemStackClass().isInstance(itemStack)) {
+        when(MinecraftReflection.craftItemStackClass.isInstance(itemStack)) {
             true -> setCraftStackTag(itemStack, tag)
             else -> setOriginStackTag(itemStack, tag)
         }
@@ -256,7 +252,7 @@ object NBTFactory {
         nbt.putShort("Damage", durability)
         if(tag != null) nbt.put("tag", tag)
         val nmsItemStack = itemStackConstructor.newInstance(fromBase(nbt).handle)
-        return itemStackConverter.getSpecific(nmsItemStack) as ItemStack
+        return MinecraftConverters.itemStack.getSpecific(nmsItemStack) as ItemStack
     }
 
     @JvmStatic
@@ -430,7 +426,7 @@ object NBTFactory {
     private fun getCraftStackTag(itemStack: ItemStack): NBTCompound? {
         val nmsItemStack = craftItemStackHandle.get(itemStack)
         val modifier = itemStackModifier.withTarget<Any>(nmsItemStack)
-                .withType(MinecraftReflection.getNBTBaseClass(), MinecraftConverters.getNBT())
+                .withType(MinecraftReflection.nbtBaseClass, MinecraftConverters.nbt)
         return modifier.read(0) as NBTCompound?
     }
 
@@ -439,14 +435,15 @@ object NBTFactory {
     private fun setCraftStackTag(itemStack: ItemStack, tag: NBTCompound?) {
         val nmsItemStack = craftItemStackHandle.get(itemStack)
         val modifier = itemStackModifier.withTarget<Any>(nmsItemStack)
-                .withType(MinecraftReflection.getNBTBaseClass(), MinecraftConverters.getNBT())
+                .withType(MinecraftReflection.nbtBaseClass, MinecraftConverters.nbt)
         modifier.write(0, tag)
     }
 
     @JvmStatic
     @JvmName("getOriginStackTag")
     private fun getOriginStackTag(itemStack: ItemStack): NBTCompound? {
-        val copyItemStack = itemStackConverter.getSpecific(itemStackConverter.getGeneric(itemStack)).notNull()
+        val itemStackConverter = MinecraftConverters.itemStack
+        val copyItemStack = itemStackConverter.getSpecific(itemStackConverter.getGeneric(itemStack)) as ItemStack
         copyItemStack.itemMeta = itemStack.itemMeta
         return getCraftStackTag(copyItemStack)
     }
@@ -457,7 +454,8 @@ object NBTFactory {
         if(tag == null) {
             itemStack.itemMeta = null
         } else {
-            val copyItemStack = itemStackConverter.getSpecific(itemStackConverter.getGeneric(itemStack)).notNull()
+            val itemStackConverter = MinecraftConverters.itemStack
+            val copyItemStack = itemStackConverter.getSpecific(itemStackConverter.getGeneric(itemStack)) as ItemStack
             setCraftStackTag(copyItemStack, tag)
             itemStack.itemMeta = copyItemStack.itemMeta
         }

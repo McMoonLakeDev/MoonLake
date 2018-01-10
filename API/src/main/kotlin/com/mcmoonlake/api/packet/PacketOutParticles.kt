@@ -48,8 +48,7 @@ data class PacketOutParticles(
         zOffset = data.readFloat()
         speed = data.readFloat()
         amount = data.readInt()
-        arguments = ArrayList(particle.dataLength)
-        (0 until arguments.size).forEach { arguments[it] = data.readVarInt() }
+        arguments = (0 until particle.dataLength).map { data.readVarInt() }.toMutableList()
     }
 
     override fun write(data: PacketBuffer) {
@@ -63,6 +62,6 @@ data class PacketOutParticles(
         data.writeFloat(zOffset)
         data.writeFloat(speed)
         data.writeInt(amount)
-        (0 until arguments.size).forEach { data.writeVarInt(arguments[it]) }
+        arguments.forEach { data.writeVarInt(it) }
     }
 }

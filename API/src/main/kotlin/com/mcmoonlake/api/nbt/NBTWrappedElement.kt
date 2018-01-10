@@ -80,7 +80,7 @@ class NBTWrappedElement<T>(
         var modifier = modifiers[index]
         if(modifier == null) synchronized(this) {
             if(modifiers[index] == null)
-                modifiers[index] = StructureModifier.of(handle::class.java, MinecraftReflection.getNBTBaseClass())
+                modifiers[index] = StructureModifier.of(handle::class.java, MinecraftReflection.nbtBaseClass)
             modifier = modifiers[index]
         }
         return modifier.notNull()
@@ -137,7 +137,7 @@ class NBTWrappedElement<T>(
 
         @JvmStatic
         private val nbtBaseGetTypeId: Method by lazy {
-            FuzzyReflect.fromClass(MinecraftReflection.getNBTBaseClass())
+            FuzzyReflect.fromClass(MinecraftReflection.nbtBaseClass)
                     .getMethodByParameters("getTypeId", Byte::class.java, arrayOf())
         }
 

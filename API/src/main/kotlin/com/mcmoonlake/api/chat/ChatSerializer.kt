@@ -43,7 +43,7 @@ object ChatSerializer {
     private val GSON: Gson
     @JvmStatic
     private val CONVERTER: ConverterEquivalentIgnoreNull<ChatComponent> by lazy {
-        MinecraftConverters.getChatComponent() as ConverterEquivalentIgnoreNull }
+        MinecraftConverters.chatComponent as ConverterEquivalentIgnoreNull }
 
     init {
         GSON = GsonBuilder()

@@ -33,22 +33,22 @@ object Packets {
 
     @JvmStatic
     private val packetDataSerializerConstructor: AccessorConstructor<out Any> by lazy {
-        Accessors.getAccessorConstructor(MinecraftReflection.getPacketDataSerializerClass(), false, ByteBuf::class.java) }
+        Accessors.getAccessorConstructor(MinecraftReflection.packetDataSerializerClass, false, ByteBuf::class.java) }
     @JvmStatic
     private val packetDataSerializerBuffer: AccessorField by lazy {
-        Accessors.getAccessorField(MinecraftReflection.getPacketDataSerializerClass(), ByteBuf::class.java, true) }
+        Accessors.getAccessorField(MinecraftReflection.packetDataSerializerClass, ByteBuf::class.java, true) }
     @JvmStatic
     private val packetRead: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(MinecraftReflection.getPacketClass(), "a", false, MinecraftReflection.getPacketDataSerializerClass()) }
+        Accessors.getAccessorMethod(MinecraftReflection.packetClass, "a", false, MinecraftReflection.packetDataSerializerClass) }
     @JvmStatic
     private val packetWrite: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(MinecraftReflection.getPacketClass(), "b", false, MinecraftReflection.getPacketDataSerializerClass()) }
+        Accessors.getAccessorMethod(MinecraftReflection.packetClass, "b", false, MinecraftReflection.packetDataSerializerClass) }
     @JvmStatic
     private val processPacket: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(MinecraftReflection.getPacketClass(), Void::class.java, true, arrayOf(MinecraftReflection.getPacketListenerClass())) }
+        Accessors.getAccessorMethod(MinecraftReflection.packetClass, Void::class.java, true, arrayOf(MinecraftReflection.packetListenerClass)) }
     @JvmStatic
     private val sendPacket: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(MinecraftReflection.getPlayerConnectionClass(), "sendPacket", false, MinecraftReflection.getPacketClass()) }
+        Accessors.getAccessorMethod(MinecraftReflection.playerConnectionClass, "sendPacket", false, MinecraftReflection.packetClass) }
     @JvmStatic
     private val lookupBukkit: MutableMap<Class<*>, Class<out PacketBukkit>> by lazy {
         Collections.synchronizedMap(HashMap<Class<*>, Class<out PacketBukkit>>()) }
@@ -212,7 +212,7 @@ object Packets {
     @JvmName("createPacket")
     @Throws(IllegalArgumentException::class)
     fun createPacket(clazz: Class<*>): Any
-            = if(MinecraftReflection.getPacketClass().isAssignableFrom(clazz)) clazz.newInstance()
+            = if(MinecraftReflection.packetClass.isAssignableFrom(clazz)) clazz.newInstance()
             else throw IllegalArgumentException("无效的数据包 $clazz 类.")
 
     @JvmStatic

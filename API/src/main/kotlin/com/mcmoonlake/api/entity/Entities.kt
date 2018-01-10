@@ -17,7 +17,6 @@
 
 package com.mcmoonlake.api.entity
 
-import com.mcmoonlake.api.converter.ConverterEquivalent
 import com.mcmoonlake.api.reflect.FuzzyReflect
 import com.mcmoonlake.api.reflect.accessor.AccessorMethod
 import com.mcmoonlake.api.reflect.accessor.Accessors
@@ -30,25 +29,21 @@ object Entities {
 
     @JvmStatic
     private val worldGetEntityById: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(FuzzyReflect.fromClass(MinecraftReflection.getWorldClass(), true)
-                .getMethodByParameters("getEntity", MinecraftReflection.getEntityClass(), arrayOf(Int::class.java))) }
+        Accessors.getAccessorMethod(FuzzyReflect.fromClass(MinecraftReflection.worldClass, true)
+                .getMethodByParameters("getEntity", MinecraftReflection.entityClass, arrayOf(Int::class.java))) }
 
     @JvmStatic
     @JvmName("getEntity")
     fun getEntity(world: World, entityId: Int): Entity?
-            = asBukkitEntity(worldGetEntityById.invoke(MinecraftConverters.getWorld().getGeneric(world), entityId))
-
-    @JvmStatic
-    private val entityConverter: ConverterEquivalent<Entity> by lazy {
-        MinecraftConverters.getEntity(Entity::class.java) }
+            = asBukkitEntity(worldGetEntityById.invoke(MinecraftConverters.world.getGeneric(world), entityId))
 
     @JvmStatic
     @JvmName("asNMSEntity")
     fun asNMSEntity(entity: Entity?): Any?
-            = entityConverter.getGeneric(entity)
+            = MinecraftConverters.getEntity(Entity::class.java).getGeneric(entity)
 
     @JvmStatic
     @JvmName("asBukkitEntity")
     fun asBukkitEntity(nmsEntity: Any?): Entity?
-            = entityConverter.getSpecific(nmsEntity)
+            = MinecraftConverters.getEntity(Entity::class.java).getSpecific(nmsEntity)
 }

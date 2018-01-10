@@ -45,21 +45,19 @@ object MinecraftReflection {
 
     /** member */
 
+    private const val PACKAGE_CRAFTBUKKIT = "org.bukkit.craftbukkit"
+    private const val PACKAGE_MINECRAFT_SERVER = "net.minecraft.server"
+
     @JvmStatic
-    private val craftBukkitFullPackage: String by lazy {
-        "org.bukkit.craftbukkit.${MinecraftBukkitVersion.currentVersion().version}" }
+    private val PACKAGE_FULL_CRAFTBUKKIT = "$PACKAGE_CRAFTBUKKIT.${MinecraftBukkitVersion.currentVersion().version}"
     @JvmStatic
-    private val minecraftFullPackage: String by lazy {
-        "net.minecraft.server.${MinecraftBukkitVersion.currentVersion().version}" }
+    private val PACKAGE_FULL_MINECRAFT_SERVER = "$PACKAGE_MINECRAFT_SERVER.${MinecraftBukkitVersion.currentVersion().version}"
     @JvmStatic
-    private val craftBukkitPackage: CachedPackage by lazy {
-        CachedPackage(craftBukkitFullPackage, source) }
+    private val PACKAGE_CACHED_CRAFTBUKKIT: CachedPackage by lazy { CachedPackage(PACKAGE_FULL_CRAFTBUKKIT, SOURCE) }
     @JvmStatic
-    private val minecraftPackage: CachedPackage by lazy {
-        CachedPackage(minecraftFullPackage, source) }
+    private val PACKAGE_CACHED_MINECRAFT_SERVER: CachedPackage by lazy { CachedPackage(PACKAGE_FULL_MINECRAFT_SERVER, SOURCE) }
     @JvmStatic
-    private val source: ClassSource by lazy {
-        ClassSource.fromClassLoader() }
+    private val SOURCE: ClassSource by lazy { ClassSource.fromClassLoader() }
 
     /** api */
 
@@ -67,7 +65,7 @@ object MinecraftReflection {
     @JvmName("getMinecraftClass")
     @Throws(MoonLakeException::class)
     fun getMinecraftClass(className: String): Class<*>
-            = minecraftPackage.getPackageClass(className)
+            = PACKAGE_CACHED_MINECRAFT_SERVER.getPackageClass(className)
 
     @JvmStatic
     @JvmName("getMinecraftClass")
@@ -103,152 +101,196 @@ object MinecraftReflection {
     @JvmStatic
     @JvmName("setMinecraftClass")
     fun setMinecraftClass(className: String, clazz: Class<*>?): Class<*>?
-            { minecraftPackage.setPackageClass(className, clazz); return clazz; }
+            { PACKAGE_CACHED_MINECRAFT_SERVER.setPackageClass(className, clazz); return clazz; }
 
     @JvmStatic
     @JvmName("getCraftBukkitClass")
     @Throws(MoonLakeException::class)
     fun getCraftBukkitClass(className: String): Class<*>
-            = craftBukkitPackage.getPackageClass(className)
+            = PACKAGE_CACHED_CRAFTBUKKIT.getPackageClass(className)
+
+    @JvmStatic
+    @JvmName("getCraftBukkitClassOrNull")
+    fun getCraftBukkitClassOrNull(className: String): Class<*>? = try {
+        getCraftBukkitClass(className)
+    } catch(e: MoonLakeException) {
+        null
+    }
 
     @JvmStatic
     @JvmName("setCraftBukkitClass")
     fun setCraftBukkitClass(className: String, clazz: Class<*>?): Class<*>?
-            { craftBukkitPackage.setPackageClass(className, clazz); return clazz; }
+            { PACKAGE_CACHED_CRAFTBUKKIT.setPackageClass(className, clazz); return clazz; }
 
+    /**
+     * * NMS -> ChatSerializer
+     */
     @JvmStatic
-    @JvmName("getChatSerializerClass")
-    @Throws(MoonLakeException::class)
-    fun getChatSerializerClass(): Class<*> {
-        if(currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_8_R2))
-            return getMinecraftClass("IChatBaseComponent\$ChatSerializer") // 1.8.3+
-        return getMinecraftClass("ChatSerializer")
-    }
+    val chatSerializerClass: Class<*>
+        get() {
+            if(currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_8_R2))
+                return getMinecraftClass("IChatBaseComponent\$ChatSerializer") // 1.8.3+
+            return getMinecraftClass("ChatSerializer")
+        }
 
+    /**
+     * * NMS -> IChatBaseComponent
+     */
     @JvmStatic
-    @JvmName("getIChatBaseComponentClass")
-    @Throws(MoonLakeException::class)
-    fun getIChatBaseComponentClass(): Class<*>
-            = getMinecraftClass("IChatBaseComponent")
+    val iChatBaseComponentClass: Class<*>
+        get() = getMinecraftClass("IChatBaseComponent")
 
+    /**
+     * * NMS -> World
+     */
     @JvmStatic
-    @JvmName("getWorldClass")
-    @Throws(MoonLakeException::class)
-    fun getWorldClass(): Class<*>
-            = getMinecraftClass("World")
+    val worldClass: Class<*>
+        get() = getMinecraftClass("World")
 
+    /**
+     * * NMS -> WorldServer
+     */
     @JvmStatic
-    @JvmName("getWorldServerClass")
-    @Throws(MoonLakeException::class)
-    fun getWorldServerClass(): Class<*>
-            = getMinecraftClass("WorldServer")
+    val worldServerClass: Class<*>
+         get() = getMinecraftClass("WorldServer")
 
+    /**
+     * * OBC -> CraftWorld
+     */
     @JvmStatic
-    @JvmName("getCraftWorldClass")
-    fun getCraftWorldClass(): Class<*>
-            = getCraftBukkitClass("CraftWorld")
+    val craftWorldClass: Class<*>
+        get() = getCraftBukkitClass("CraftWorld")
 
+    /**
+     * * NMS -> Entity
+     */
     @JvmStatic
-    @JvmName("getEntityClass")
-    @Throws(MoonLakeException::class)
-    fun getEntityClass(): Class<*>
-            = getMinecraftClass("Entity")
+    val entityClass: Class<*>
+        get() = getMinecraftClass("Entity")
 
+    /**
+     * * NMS -> EntityLiving
+     */
     @JvmStatic
-    @JvmName("getEntityLivingClass")
-    @Throws(MoonLakeException::class)
-    fun getEntityLivingClass(): Class<*>
-            = getMinecraftClass("EntityLiving")
+    val entityLivingClass: Class<*>
+        get() = getMinecraftClass("EntityLiving")
 
+    /**
+     * * OBC -> entity.CraftEntity
+     */
     @JvmStatic
-    @JvmName("getCraftEntityClass")
-    fun getCraftEntityClass(): Class<*>
-            = getCraftBukkitClass("entity.CraftEntity")
+    val craftEntityClass: Class<*>
+        get() = getCraftBukkitClass("entity.CraftEntity")
 
+    /**
+     * * NMS -> EntityPlayer
+     */
     @JvmStatic
-    @JvmName("getEntityPlayerClass")
-    @Throws(MoonLakeException::class)
-    fun getEntityPlayerClass(): Class<*>
-            = getMinecraftClass("EntityPlayer")
+    val entityPlayerClass: Class<*>
+        get() = getMinecraftClass("EntityPlayer")
 
+    /**
+     * * OBC -> entity.CraftPlayer
+     */
     @JvmStatic
-    @JvmName("getCraftPlayerClass")
-    fun getCraftPlayerClass(): Class<*>
-            = getCraftBukkitClass("entity.CraftPlayer")
+    val craftPlayerClass: Class<*>
+        get() = getCraftBukkitClass("entity.CraftPlayer")
 
+    /**
+     * * NMS -> EntityHuman
+     */
     @JvmStatic
-    @JvmName("getEntityHumanClass")
-    @Throws(MoonLakeException::class)
-    fun getEntityHumanClass(): Class<*>
-            = getMinecraftClass("EntityHuman")
+    val entityHumanClass: Class<*>
+        get() = getMinecraftClass("EntityHuman")
 
+    /**
+     * * NMS -> Item
+     */
     @JvmStatic
-    @JvmName("getItemClass")
-    @Throws(MoonLakeException::class)
-    fun getItemClass(): Class<*>
-            = getMinecraftClass("Item")
+    val itemClass: Class<*>
+        get() = getMinecraftClass("Item")
 
+    /**
+     * * NMS -> ItemStack
+     */
     @JvmStatic
-    @JvmName("getItemStackClass")
-    @Throws(MoonLakeException::class)
-    fun getItemStackClass(): Class<*>
-            = getMinecraftClass("ItemStack")
+    val itemStackClass: Class<*>
+        get() = getMinecraftClass("ItemStack")
 
+    /**
+     * * OBC -> inventory.CraftItemStack
+     */
     @JvmStatic
-    @JvmName("getCraftItemStack")
-    fun getCraftItemStackClass(): Class<*>
-            = getCraftBukkitClass("inventory.CraftItemStack")
+    val craftItemStackClass: Class<*>
+        get() = getCraftBukkitClass("inventory.CraftItemStack")
 
+    /**
+     * * NMS -> NBTBase
+     */
     @JvmStatic
-    @JvmName("getNBTBaseClass")
-    @Throws(MoonLakeException::class)
-    fun getNBTBaseClass(): Class<*>
-            = getMinecraftClass("NBTBase")
+    val nbtBaseClass: Class<*>
+        get() = getMinecraftClass("NBTBase")
 
+    /**
+     * * NMS -> NBTTagCompound
+     */
     @JvmStatic
-    @JvmName("getNBTTagCompoundClass")
-    @Throws(MoonLakeException::class)
-    fun getNBTTagCompoundClass(): Class<*>
-            = getMinecraftClass("NBTTagCompound")
+    val nbtTagCompoundClass: Class<*>
+        get() = getMinecraftClass("NBTTagCompound")
 
+    /**
+     * * NMS -> PlayerConnection
+     */
     @JvmStatic
-    @JvmName("getPlayerConnectionClass")
-    @Throws(MoonLakeException::class)
-    fun getPlayerConnectionClass(): Class<*>
-            = getMinecraftClass("PlayerConnection")
+    val playerConnectionClass: Class<*>
+        get() = getMinecraftClass("PlayerConnection")
 
+    /**
+     * * NMS -> Packet
+     */
     @JvmStatic
-    @JvmName("getPacketClass")
-    fun getPacketClass(): Class<*>
-            = getMinecraftClass("Packet")
+    val packetClass: Class<*>
+        get() = getMinecraftClass("Packet")
 
+    /**
+     * * NMS -> PacketListener
+     */
     @JvmStatic
-    @JvmName("getPacketListenerClass")
-    fun getPacketListenerClass(): Class<*>
-            = getMinecraftClass("PacketListener")
+    val packetListenerClass: Class<*>
+        get() = getMinecraftClass("PacketListener")
 
+    /**
+     * * NMS -> PacketDataSerializer
+     */
     @JvmStatic
-    @JvmName("getPacketDataSerializerClass")
-    fun getPacketDataSerializerClass(): Class<*>
-            = getMinecraftClass("PacketDataSerializer")
+    val packetDataSerializerClass: Class<*>
+        get() = getMinecraftClass("PacketDataSerializer")
 
+    /**
+     * * NMS -> NetworkManager
+     */
     @JvmStatic
-    @JvmName("getNetworkManagerClass")
-    fun getNetworkManagerClass(): Class<*>
-            = getMinecraftClass("NetworkManager")
+    val networkManagerClass: Class<*>
+        get() = getMinecraftClass("NetworkManager")
 
+    /**
+     * * NMS -> MinecraftServer
+     */
     @JvmStatic
-    @JvmName("getMinecraftServerClass")
-    fun getMinecraftServerClass(): Class<*>
-            = getMinecraftClass("MinecraftServer")
+    val minecraftServerClass: Class<*>
+        get() = getMinecraftClass("MinecraftServer")
 
+    /**
+     * * NMS -> ServerConnection
+     */
     @JvmStatic
-    @JvmName("getServerConnectionClass")
-    fun getServerConnectionClass(): Class<*>
-            = getMinecraftClass("ServerConnection")
+    val serverConnectionClass: Class<*>
+        get() = getMinecraftClass("ServerConnection")
 
+    /**
+     * * OBC -> CraftServer
+     */
     @JvmStatic
-    @JvmName("getCraftServerClass")
-    fun getCraftServerClass(): Class<*>
-            = getCraftBukkitClass("CraftServer")
+    val craftServerClass: Class<*>
+        get() = getCraftBukkitClass("CraftServer")
 }

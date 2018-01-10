@@ -52,13 +52,13 @@ object ItemCooldowns {
         Accessors.getAccessorField(itemCooldownClass, Int::class.java, true) }
     @JvmStatic
     private val itemCooldownSet: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(itemCooldownClass, Void::class.java, true, arrayOf(MinecraftReflection.getItemClass(), Int::class.java)) }
+        Accessors.getAccessorMethod(itemCooldownClass, Void::class.java, true, arrayOf(MinecraftReflection.itemClass, Int::class.java)) }
     @JvmStatic
     private val itemCooldownHas: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(itemCooldownClass, Boolean::class.java, true, arrayOf(MinecraftReflection.getItemClass())) }
+        Accessors.getAccessorMethod(itemCooldownClass, Boolean::class.java, true, arrayOf(MinecraftReflection.itemClass)) }
     @JvmStatic
     private val entityHumanItemCooldown: AccessorField by lazy {
-        Accessors.getAccessorField(FuzzyReflect.fromClass(MinecraftReflection.getEntityHumanClass(), true)
+        Accessors.getAccessorField(FuzzyReflect.fromClass(MinecraftReflection.entityHumanClass, true)
                 .getFieldByType("itemCooldown", itemCooldownClass), true) }
 
     @JvmStatic

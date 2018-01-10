@@ -122,16 +122,16 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
     private val serverChannels: MutableList<Channel> by lazy {
         ArrayList<Channel>() }
     private val networkManagers: MutableList<Any> by lazy {
-        val mcServer = MinecraftConverters.getServer().getGeneric(Bukkit.getServer())
+        val mcServer = MinecraftConverters.server.getGeneric(Bukkit.getServer())
         val serverConnection = minecraftServerConnection.get(mcServer) ?: throw IllegalStateException("Null of Minecraft Server Connection.")
         @Suppress("UNCHECKED_CAST")
         Accessors.getAccessorMethod(serverConnection::class.java, List::class.java, true, arrayOf(serverConnection::class.java))
                 .invoke(serverConnection, serverConnection) as MutableList<Any> }
     private val minecraftServerConnection: AccessorField by lazy {
-        Accessors.getAccessorField(MinecraftReflection.getMinecraftServerClass(), MinecraftReflection.getServerConnectionClass(), true) }
+        Accessors.getAccessorField(MinecraftReflection.minecraftServerClass, MinecraftReflection.serverConnectionClass, true) }
 
     private fun injectChannelServer() {
-        val mcServer = MinecraftConverters.getServer().getGeneric(Bukkit.getServer())
+        val mcServer = MinecraftConverters.server.getGeneric(Bukkit.getServer())
         val serverConnection = minecraftServerConnection.get(mcServer) ?: return
         for(field in FuzzyReflect.fromClass(serverConnection::class.java, true).getFieldListByType(List::class.java)) {
             field.isAccessible = true

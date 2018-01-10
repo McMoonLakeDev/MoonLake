@@ -17,7 +17,6 @@
 
 package com.mcmoonlake.api.item
 
-import com.mcmoonlake.api.converter.ConverterEquivalent
 import com.mcmoonlake.api.nbt.NBTCompound
 import com.mcmoonlake.api.nbt.NBTFactory
 import com.mcmoonlake.api.notNull
@@ -43,7 +42,7 @@ object Items {
 
     @JvmStatic
     private val itemGetById: AccessorMethod by lazy {
-        Accessors.getAccessorMethod(MinecraftReflection.getItemClass(), "getById", true, Int::class.java) }
+        Accessors.getAccessorMethod(MinecraftReflection.itemClass, "getById", true, Int::class.java) }
 
     @JvmStatic
     @JvmName("getItemById")
@@ -58,18 +57,14 @@ object Items {
             = itemGetById.invoke(null, type.id) // TODO v1.13
 
     @JvmStatic
-    private val itemStackConverter: ConverterEquivalent<ItemStack> by lazy {
-        MinecraftConverters.getItemStack() }
-
-    @JvmStatic
     @JvmName("asNMSCopy")
     fun asNMSCopy(itemStack: ItemStack?): Any?
-            = itemStackConverter.getGeneric(itemStack)
+            = MinecraftConverters.itemStack.getGeneric(itemStack)
 
     @JvmStatic
     @JvmName("asBukkitCopy")
     fun asBukkitCopy(nmsItemStack: Any?): ItemStack?
-            = itemStackConverter.getSpecific(nmsItemStack)
+            = MinecraftConverters.itemStack.getSpecific(nmsItemStack)
 
     @JvmStatic
     @JvmName("toMojangson")
@@ -93,7 +88,7 @@ object Items {
     private val mojangsonParser: AccessorMethod by lazy {
         Accessors.getAccessorMethod(
                 FuzzyReflect.fromClass(MinecraftReflection.getMinecraftClass("MojangsonParser"), true)
-                        .getMethodListByParameters(MinecraftReflection.getNBTTagCompoundClass(), arrayOf(String::class.java))
+                        .getMethodListByParameters(MinecraftReflection.nbtTagCompoundClass, arrayOf(String::class.java))
                         .first { Modifier.isStatic(it.modifiers) }, true) }
 
     @JvmStatic

@@ -145,7 +145,7 @@ open class AnvilWindowBase(
     /** implement */
 
     private val containerAnvilEntityHuman: AccessorField by lazy {
-        Accessors.getAccessorField(MinecraftReflection.getMinecraftClass("ContainerAnvil"), MinecraftReflection.getEntityHumanClass(), true) }
+        Accessors.getAccessorField(MinecraftReflection.getMinecraftClass("ContainerAnvil"), MinecraftReflection.entityHumanClass, true) }
 
     protected fun getContainerAnvilPlayerHandle(): Any
             = containerAnvilEntityHuman.get(handle) as Any
