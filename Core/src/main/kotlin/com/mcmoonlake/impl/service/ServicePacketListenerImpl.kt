@@ -17,12 +17,10 @@
 
 package com.mcmoonlake.impl.service
 
+import com.google.common.collect.MapMaker
 import com.mcmoonlake.api.*
 import com.mcmoonlake.api.event.MoonLakeListener
-import com.mcmoonlake.api.packet.PacketEvent
-import com.mcmoonlake.api.packet.PacketListener
-import com.mcmoonlake.api.packet.PacketListenerAnyAdapter
-import com.mcmoonlake.api.packet.Packets
+import com.mcmoonlake.api.packet.*
 import com.mcmoonlake.api.reflect.FuzzyReflect
 import com.mcmoonlake.api.reflect.accessor.AccessorField
 import com.mcmoonlake.api.reflect.accessor.Accessors
@@ -37,7 +35,8 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
-import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerLoginEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.Plugin
 import java.util.*
 import java.util.logging.Level
@@ -49,8 +48,11 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
     override fun onInitialized() {
         val listener = object: MoonLakeListener {
             @EventHandler(priority = EventPriority.MONITOR)
-            fun onJoin(event: PlayerJoinEvent)
+            fun onLogin(event: PlayerLoginEvent)
                     = injectChannelPlayer(event.player)
+            @EventHandler(priority = EventPriority.LOWEST)
+            fun onQuit(event: PlayerQuitEvent)
+                    = channelLookup.remove(event.player.name)
         }
         eventListener = listener
         eventListener?.registerEvent(getMoonLake())
@@ -82,6 +84,7 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
         unregisterListenerAll()
         unInjectOnlinePlayers()
         unInjectChannelServer()
+        channelLookup.clear()
     }
 
     override fun registrable(): Boolean
@@ -159,8 +162,10 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
         }
     }
 
+    private val channelLookup = MapMaker().weakValues().makeMap<String, Channel>()
+
     private fun getChannelPlayer(player: Player): Channel
-            = MinecraftPlayerMembers.CHANNEL.get(player) as Channel
+            = channelLookup.getOrPut(player.name) { MinecraftPlayerMembers.CHANNEL.get(player) as Channel }
 
     private fun injectChannelPlayer(player: Player)
             { injectChannel(getChannelPlayer(player)).player = player }
@@ -225,6 +230,8 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
 
     private fun onExecuteAndFilterPacketAsync(direction: Direction, player: Player?, channel: Channel, packet: Any): Any? {
         val wrapped = Packets.createBufferPacketSafe(packet) ?: return packet
+        if(wrapped is PacketInLoginStart)
+            channelLookup.put(wrapped.profile.name, channel)
         val event = PacketEvent(packet, wrapped, channel, player)
         synchronized(listeners) {
             if(listeners.isNotEmpty()) listeners.forEach {
