@@ -74,7 +74,7 @@ MoonLake 使用 `Maven` 管理项目依赖关系.
 ```sh
 git clone https://github.com/McMoonLakeDev/MoonLake.git
 cd MoonLake
-mvn clean package
+mvn clean install
 ```
 
 您可以在对应模块的 `target` 目录中找到输出的文件.

@@ -74,7 +74,7 @@ Then run:
 ```sh
 git clone https://github.com/McMoonLakeDev/MoonLake.git
 cd MoonLake
-mvn clean package
+mvn clean install
 ```
 
 You can find the output file in the `target` directory of the corresponding module.
