@@ -28,7 +28,7 @@ abstract class ServiceAbstract : Service {
      */
     private val initialized = AtomicBoolean(false)
 
-    override final fun onInitialize() {
+    final override fun onInitialize() {
         if(initialized.compareAndSet(false, true)) try {
             onInitialized()
         } catch(e: Exception) {
@@ -36,7 +36,7 @@ abstract class ServiceAbstract : Service {
         }
     }
 
-    override final fun onUnload() {
+    final override fun onUnload() {
         if(initialized.compareAndSet(true, false)) try {
             onUnloaded()
         } catch(e: Exception) {

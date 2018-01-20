@@ -53,10 +53,10 @@ abstract class ConvertedMap <K, VI, VO>(
     override fun containsValue(value: VO): Boolean
             = inner.containsValue(toIn(value))
 
-    open protected fun toOut(key: K, inner: VI): VO
+    protected open fun toOut(key: K, inner: VI): VO
             = toOut(inner)
 
-    open protected fun toIn(key: K, outer: VO): VI
+    protected open fun toIn(key: K, outer: VO): VI
             = toIn(outer)
 
     override fun get(key: K): VO? {

@@ -42,7 +42,7 @@ import org.bukkit.block.Block
 import org.bukkit.entity.Entity
 
 abstract class RegionAbstract(
-        override final val world: World
+        final override val world: World
 ) : Region {
 
     override val center: RegionVector
@@ -108,5 +108,5 @@ abstract class RegionAbstract(
 
     /** abstract */
 
-    override abstract fun serialize(): MutableMap<String, Any>
+    abstract override fun serialize(): MutableMap<String, Any>
 }

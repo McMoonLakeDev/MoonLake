@@ -110,7 +110,7 @@ abstract class CachedReferenceAbstract<K, V, R: CachedRef<K, V>> : CachedReferen
      * * Check the this cached queue for value reference and garbage collection.
      * * 检测此高速缓存队列的值引用以进行垃圾回收.
      */
-    open protected fun checkCacheReference() {
+    protected open fun checkCacheReference() {
         var ref: Reference<out V>? = null
         @Suppress("UNCHECKED_CAST")
         while (queue.poll().apply { ref = this } != null)
@@ -125,7 +125,7 @@ abstract class CachedReferenceAbstract<K, V, R: CachedRef<K, V>> : CachedReferen
      * @param key Key.
      * @param key 键.
      */
-    open protected fun removeCache(key: K) {
+    protected open fun removeCache(key: K) {
         if(cachedMap.containsKey(key))
             cachedMap.remove(key)
         checkCacheReference()

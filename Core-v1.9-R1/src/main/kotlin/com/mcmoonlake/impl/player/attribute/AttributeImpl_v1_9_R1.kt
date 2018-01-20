@@ -60,7 +60,7 @@ open class AttributeImpl_v1_9_R1(
                 player.bukkitPlayer.getAttribute(adapter)
         }
 
-    open protected val adapter: org.bukkit.attribute.Attribute?
+    protected open val adapter: org.bukkit.attribute.Attribute?
         get() = when(type) {
             AttributeType.MAX_HEALTH -> org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH
             AttributeType.FOLLOW_RANGE -> org.bukkit.attribute.Attribute.GENERIC_FOLLOW_RANGE

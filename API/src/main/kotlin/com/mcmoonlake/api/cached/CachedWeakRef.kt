@@ -37,6 +37,6 @@ abstract class CachedWeakRef<K, V>(
      */
     constructor() : this(null)
 
-    override final fun produceRef(key: K, value: V, queue: CachedReferenceQueue<V>): CachedWeakReference<K, V>
+    final override fun produceRef(key: K, value: V, queue: CachedReferenceQueue<V>): CachedWeakReference<K, V>
             = CachedWeakReference(key, value, queue)
 }

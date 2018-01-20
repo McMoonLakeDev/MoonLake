@@ -49,49 +49,49 @@ abstract class DependPluginAbstract<out T: Plugin> @Throws(DependPluginException
         this.targetName = target.name
     }
 
-    override final val plugin: T
+    final override val plugin: T
             = target as T
 
-    override final val name: String
+    final override val name: String
         get() = targetName // is not: plugin.name
 
-    override final val pluginPrefix: String
+    final override val pluginPrefix: String
         get() = plugin.description.prefix
 
-    override final val pluginName: String
+    final override val pluginName: String
         get() = plugin.description.name
 
-    override final val pluginMain: String
+    final override val pluginMain: String
         get() = plugin.description.main
 
-    override final val pluginVersion: String
+    final override val pluginVersion: String
         get() = plugin.description.version
 
-    override final val pluginWebsite: String
+    final override val pluginWebsite: String
         get() = plugin.description.website
 
-    override final val pluginDescription: String
+    final override val pluginDescription: String
         get() = plugin.description.description
 
-    override final val pluginAuthors: Set<String>
+    final override val pluginAuthors: Set<String>
         get() = plugin.description.authors.toSet()
 
-    override final val pluginDepends: Set<String>
+    final override val pluginDepends: Set<String>
         get() = plugin.description.depend.toSet()
 
-    override final val pluginSoftDepends: Set<String>
+    final override val pluginSoftDepends: Set<String>
         get() = plugin.description.softDepend.toSet()
 
-    override final val dataFolder: File
+    final override val dataFolder: File
         get() = plugin.dataFolder
 
-    override final val logger: Logger
+    final override val logger: Logger
         get() = plugin.logger
 
-    override final val config: FileConfiguration?
+    final override val config: FileConfiguration?
         get() = plugin.config
 
-    override final fun getResource(filename: String): InputStream?
+    final override fun getResource(filename: String): InputStream?
             = plugin.getResource(filename)
 
     override fun equals(other: Any?): Boolean {

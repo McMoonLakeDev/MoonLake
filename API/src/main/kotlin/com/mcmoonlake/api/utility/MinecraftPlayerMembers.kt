@@ -114,7 +114,7 @@ enum class MinecraftPlayerMembers(
     open fun set(player: Player, value: Any?)
             = field.set(Entities.asNMSEntity(player), value)
 
-    open protected fun get(): () -> AccessorField
+    protected open fun get(): () -> AccessorField
             = { Accessors.getAccessorField(MinecraftReflection.entityPlayerClass, value(), true) }
 
     companion object {

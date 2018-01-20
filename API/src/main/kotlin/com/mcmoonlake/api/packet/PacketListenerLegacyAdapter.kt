@@ -21,8 +21,8 @@ import org.bukkit.plugin.Plugin
 import java.util.*
 
 open class PacketListenerLegacyAdapter<P: PacketBukkitLegacy, T>(
-        override final val plugin: Plugin,
-        override final val priority: PacketListenerPriority,
+        final override val plugin: Plugin,
+        final override val priority: PacketListenerPriority,
         val legacyAdapter: PacketLegacyAdapter<P, T>
 ) : PacketListener where T: PacketBukkitLegacy, T: PacketLegacy {
 
@@ -41,10 +41,10 @@ open class PacketListenerLegacyAdapter<P: PacketBukkitLegacy, T>(
         }
     }
 
-    override final val sendingTypes: Set<Class<out PacketOut>>
+    final override val sendingTypes: Set<Class<out PacketOut>>
         get() = if(_sendingTypes.isEmpty()) Collections.emptySet() else HashSet(_sendingTypes)
 
-    override final val receivingTypes: Set<Class<out PacketIn>>
+    final override val receivingTypes: Set<Class<out PacketIn>>
         get() = if(_receivingTypes.isEmpty()) Collections.emptySet() else HashSet(_receivingTypes)
 
     override fun onSending(event: PacketEvent) {}
@@ -53,7 +53,7 @@ open class PacketListenerLegacyAdapter<P: PacketBukkitLegacy, T>(
 
     override fun handlerException(ex: Exception) { ex.printStackTrace() }
 
-    override final fun equals(other: Any?): Boolean {
+    final override fun equals(other: Any?): Boolean {
         if(other === this)
             return true
         if(other is PacketListenerLegacyAdapter<*, *>)
@@ -61,7 +61,7 @@ open class PacketListenerLegacyAdapter<P: PacketBukkitLegacy, T>(
         return false
     }
 
-    override final fun hashCode(): Int {
+    final override fun hashCode(): Int {
         var result = plugin.hashCode()
         result = 31 * result + priority.hashCode()
         result = 31 * result + legacyAdapter.hashCode()
@@ -70,7 +70,7 @@ open class PacketListenerLegacyAdapter<P: PacketBukkitLegacy, T>(
         return result
     }
 
-    override final fun toString(): String {
+    final override fun toString(): String {
         return "PacketListenerLegacy(plugin=$plugin, priority=$priority, legacyAdapter=$legacyAdapter, sendingTypes=$_sendingTypes, receivingTypes=$_receivingTypes)"
     }
 

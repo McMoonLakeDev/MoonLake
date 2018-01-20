@@ -32,6 +32,7 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
+import java.util.*
 
 interface ItemBuilder : Builder<ItemStack> {
 
@@ -86,13 +87,13 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun getAttribute(block: (self: ItemBuilder, attribute: Set<AttributeItemModifier>?) -> Unit): ItemBuilder
 
-    fun addAttribute(type: AttributeType, operation: Operation, amount: Double): ItemBuilder
+    fun addAttribute(type: AttributeType, operation: Operation, amount: Double, uuid: UUID = UUID.randomUUID()): ItemBuilder
 
-    fun addAttribute(type: AttributeType, operation: Operation, slot: Slot?, amount: Double): ItemBuilder
+    fun addAttribute(type: AttributeType, operation: Operation, slot: Slot?, amount: Double, uuid: UUID = UUID.randomUUID()): ItemBuilder
 
-    fun addAttribute(type: AttributeType, name: String = type.value(), operation: Operation, amount: Double): ItemBuilder
+    fun addAttribute(type: AttributeType, name: String = type.value(), operation: Operation, amount: Double, uuid: UUID = UUID.randomUUID()): ItemBuilder
 
-    fun addAttribute(type: AttributeType, name: String = type.value(), operation: Operation, slot: Slot?, amount: Double): ItemBuilder
+    fun addAttribute(type: AttributeType, name: String = type.value(), operation: Operation, slot: Slot?, amount: Double, uuid: UUID = UUID.randomUUID()): ItemBuilder
 
     fun clearAttribute(): ItemBuilder
 

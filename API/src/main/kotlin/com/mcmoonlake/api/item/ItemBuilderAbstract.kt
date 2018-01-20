@@ -132,7 +132,7 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     /**
      * Check the tag contains a key and the key is empty, cleared.
      */
-    open protected fun checkEmptyTag(tag: NBTCompound): NBTCompound {
+    protected open fun checkEmptyTag(tag: NBTCompound): NBTCompound {
         if(tag.containsKey(TAG_DISPLAY) && tagDisplay().isEmpty())
             tag.remove(TAG_DISPLAY)
         if(tag.containsKey(TAG_DISPLAY_LORE) && tagDisplayLore().isEmpty())
@@ -168,40 +168,40 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         return tag
     }
 
-    open protected fun tagDisplay(): NBTCompound
+    protected open fun tagDisplay(): NBTCompound
             = tag.getCompoundOrDefault(TAG_DISPLAY)
 
-    open protected fun tagDisplayLore(): NBTList<String>
+    protected open fun tagDisplayLore(): NBTList<String>
             = tagDisplay().getListOrDefault(TAG_DISPLAY_LORE)
 
-    open protected fun tagEnchant(): NBTList<NBTCompound>
+    protected open fun tagEnchant(): NBTList<NBTCompound>
             = tag.getListOrDefault(TAG_ENCH)
 
-    open protected fun tagAttributeModifiers(): NBTList<NBTCompound>
+    protected open fun tagAttributeModifiers(): NBTList<NBTCompound>
             = tag.getListOrDefault(TAG_ATTRIBUTE_MODIFIERS)
 
-    open protected fun tagStoredEnchantments(): NBTList<NBTCompound>
+    protected open fun tagStoredEnchantments(): NBTList<NBTCompound>
             = tag.getListOrDefault(TAG_STORED_ENCHANTMENTS)
 
-    open protected fun tagPages(): NBTList<String>
+    protected open fun tagPages(): NBTList<String>
             = tag.getListOrDefault(TAG_BOOK_PAGES)
 
-    open protected fun tagEntityTag(): NBTCompound
+    protected open fun tagEntityTag(): NBTCompound
             = tag.getCompoundOrDefault(TAG_ENTITY_TAG)
 
-    open protected fun tagCustomPotionEffects(): NBTList<NBTCompound>
+    protected open fun tagCustomPotionEffects(): NBTList<NBTCompound>
             = tag.getListOrDefault(TAG_CUSTOM_POTION_EFFECTS)
 
-    open protected fun tagBlockEntityTag(): NBTCompound
+    protected open fun tagBlockEntityTag(): NBTCompound
             = tag.getCompoundOrDefault(TAG_BLOCK_ENTITY_TAG)
 
-    open protected fun tagFireworks(): NBTCompound
+    protected open fun tagFireworks(): NBTCompound
             = tag.getCompoundOrDefault(TAG_FIREWORKS)
 
-    open protected fun tagFireworksExplosions(): NBTList<NBTCompound>
+    protected open fun tagFireworksExplosions(): NBTList<NBTCompound>
             = tagFireworks().getListOrDefault(TAG_FIREWORKS_EXPLOSIONS)
 
-    open protected fun tagBannerPatterns(): NBTList<NBTCompound>
+    protected open fun tagBannerPatterns(): NBTList<NBTCompound>
             = tagBlockEntityTag().getListOrDefault(TAG_BANNER_PATTERNS)
 
     /** general */
@@ -312,25 +312,24 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         return this
     }
 
-    override fun addAttribute(type: AttributeType, operation: Operation, amount: Double): ItemBuilder
-            = addAttribute(type, type.value(), operation, amount)
+    override fun addAttribute(type: AttributeType, operation: Operation, amount: Double, uuid: UUID): ItemBuilder
+            = addAttribute(type, type.value(), operation, amount, uuid)
 
-    override fun addAttribute(type: AttributeType, operation: Operation, slot: Slot?, amount: Double): ItemBuilder
-            = addAttribute(type, type.value(), operation, slot, amount)
+    override fun addAttribute(type: AttributeType, operation: Operation, slot: Slot?, amount: Double, uuid: UUID): ItemBuilder
+            = addAttribute(type, type.value(), operation, slot, amount, uuid)
 
-    override fun addAttribute(type: AttributeType, name: String, operation: Operation, amount: Double): ItemBuilder
-            = addAttribute(type, name, operation, null, amount)
+    override fun addAttribute(type: AttributeType, name: String, operation: Operation, amount: Double, uuid: UUID): ItemBuilder
+            = addAttribute(type, name, operation, null, amount, uuid)
 
-    override fun addAttribute(type: AttributeType, name: String, operation: Operation, slot: Slot?, amount: Double): ItemBuilder {
+    override fun addAttribute(type: AttributeType, name: String, operation: Operation, slot: Slot?, amount: Double, uuid: UUID): ItemBuilder {
         val attribute = NBTFactory.ofCompound()
-        val attributeUUID = UUID.randomUUID()
         if(slot != null) attribute.putString(TAG_ATTRIBUTE_SLOT, slot.value())
         attribute.putString(TAG_ATTRIBUTE_NAME, name) // nameable
         attribute.putString(TAG_ATTRIBUTE_TYPE, type.value())
         attribute.putInt(TAG_ATTRIBUTE_OPERATION, operation.value())
         attribute.putDouble(TAG_ATTRIBUTE_AMOUNT, amount)
-        attribute.putLong(TAG_ATTRIBUTE_UUID_MOST, attributeUUID.mostSignificantBits)
-        attribute.putLong(TAG_ATTRIBUTE_UUID_LEAST, attributeUUID.leastSignificantBits)
+        attribute.putLong(TAG_ATTRIBUTE_UUID_MOST, uuid.mostSignificantBits)
+        attribute.putLong(TAG_ATTRIBUTE_UUID_LEAST, uuid.leastSignificantBits)
         tagAttributeModifiers().addCompound(attribute)
         return this
     }
@@ -375,7 +374,7 @@ abstract class ItemBuilderAbstract : ItemBuilder {
             { tagDisplay().putInt(TAG_LEATHER_ARMOR_COLOR, color.asRGB()); return this; }
 
     override fun setLeatherColor(red: Int, green: Int, blue: Int): ItemBuilder
-            = setLeatherColor(Color.fromBGR(red, green, blue))
+            = setLeatherColor(Color.fromRGB(red, green, blue))
 
     /** book */
 

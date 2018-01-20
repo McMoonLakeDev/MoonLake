@@ -67,16 +67,16 @@ abstract class MoonLakePlayerAbstract(
             throw IllegalOfflinePlayerException(player.name)
     }
 
-    override final val bukkitPlayer: Player
+    final override val bukkitPlayer: Player
         get() = player
 
-    override final fun spigot(): CommandSender.Spigot
+    final override fun spigot(): CommandSender.Spigot
             = throw UnsupportedOperationException()
 
-    override final fun getName(): String
+    final override fun getName(): String
             = bukkitPlayer.name
 
-    override final fun getUniqueId(): UUID
+    final override fun getUniqueId(): UUID
             = bukkitPlayer.uniqueId
 
     override fun sendMessage(message: String)
@@ -628,13 +628,13 @@ abstract class MoonLakePlayerAbstract(
 
     /** significant */
 
-    override final fun compareTo(other: MoonLakePlayer): Int
+    final override fun compareTo(other: MoonLakePlayer): Int
             = name.compareTo(other.name)
 
-    override final fun hashCode(): Int
+    final override fun hashCode(): Int
             = name.hashCode()
 
-    override final fun equals(other: Any?): Boolean {
+    final override fun equals(other: Any?): Boolean {
         if(other === this)
             return true
         if(other is MoonLakePlayer)

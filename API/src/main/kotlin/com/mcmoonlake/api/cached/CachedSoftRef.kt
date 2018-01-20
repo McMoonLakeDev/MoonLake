@@ -37,6 +37,6 @@ abstract class CachedSoftRef<K, V>(
      */
     constructor() : this(null)
 
-    override final fun produceRef(key: K, value: V, queue: CachedReferenceQueue<V>): CachedSoftReference<K, V>
+    final override fun produceRef(key: K, value: V, queue: CachedReferenceQueue<V>): CachedSoftReference<K, V>
             = CachedSoftReference(key, value, queue)
 }

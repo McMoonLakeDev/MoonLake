@@ -100,7 +100,7 @@ open class AnvilWindowBase(
         this.windowId = -1
     }
 
-    open protected fun registerListener() {
+    protected open fun registerListener() {
         this.listener = object: MoonLakeListener {
             @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
             fun onClick(event: InventoryClickEvent) {
@@ -129,17 +129,17 @@ open class AnvilWindowBase(
         this.listener?.registerEvent(plugin)
     }
 
-    open protected fun releaseListener() {
+    protected open fun releaseListener() {
         if(listener != null)
             listener?.unregisterAll()
         listener = null
     }
 
-    open protected fun getInventory(): Inventory {
+    protected open fun getInventory(): Inventory {
         throw UnsupportedOperationException()
     }
 
-    open protected fun handleException(e: Exception?)
+    protected open fun handleException(e: Exception?)
             = e?.printStackTrace()
 
     /** implement */

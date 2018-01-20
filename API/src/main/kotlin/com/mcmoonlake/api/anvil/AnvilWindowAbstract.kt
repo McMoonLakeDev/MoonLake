@@ -32,7 +32,7 @@ import org.bukkit.plugin.Plugin
  * @param plugin 当前铁砧窗口的插件对象.
  */
 abstract class AnvilWindowAbstract(
-        override final val plugin: Plugin
+        final override val plugin: Plugin
 ) : AnvilWindow {
 
     protected var openHandler: AnvilWindowEventHandler<AnvilWindowOpenEvent>? = null
@@ -87,7 +87,7 @@ abstract class AnvilWindowAbstract(
      * * Release the current anvil window can be `null` member variables and resources.
      * * 释放当前铁砧窗口可 `null` 成员变量和资源.
      */
-    open protected fun release() {
+    protected open fun release() {
         openHandler = null
         inputHandler = null
         clickHandler = null
@@ -101,7 +101,7 @@ abstract class AnvilWindowAbstract(
      * @param windowId Current anvil window Id.
      * @param windowId 当前铁砧窗口 Id.
      */
-    open protected fun addWindowId(windowId: Int) {
+    protected open fun addWindowId(windowId: Int) {
         AnvilWindows.windowIds.add(windowId)
     }
 
@@ -112,7 +112,7 @@ abstract class AnvilWindowAbstract(
      * @param windowId Current anvil window Id.
      * @param windowId 当前铁砧窗口 Id.
      */
-    open protected fun removeWindowId(windowId: Int) {
+    protected open fun removeWindowId(windowId: Int) {
         AnvilWindows.windowIds.remove(windowId)
     }
 }
