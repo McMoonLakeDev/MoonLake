@@ -17,12 +17,17 @@
 
 package com.mcmoonlake.api
 
-import com.mcmoonlake.api.service.ServiceManager
-import org.bukkit.plugin.Plugin
+object Contents {
 
-interface MoonLake : Plugin, PluginInfo {
+    /** The main class of the moonlake core plugin */
 
-    /** api */
+    const val CLASS_MAIN = "com.mcmoonlake.MoonLakePlugin"
 
-    val serviceManager: ServiceManager
+    /** Communication channel name for other applications */
+
+    const val CHANNEL = "MoonLake"
+    const val CHANNEL_BC = "MoonLake|BC"
+    const val CHANNEL_MOD = "MoonLake|Mod"
+    const val CHANNEL_FORGE = "MoonLake|Forge"
+    const val CHANNEL_PROTOCOL = "MoonLake|Protocol"
 }

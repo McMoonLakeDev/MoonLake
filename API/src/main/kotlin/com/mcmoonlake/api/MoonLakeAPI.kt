@@ -21,6 +21,7 @@ package com.mcmoonlake.api
 
 import com.mcmoonlake.api.anvil.AnvilWindow
 import com.mcmoonlake.api.anvil.AnvilWindows
+import com.mcmoonlake.api.chat.ChatAction
 import com.mcmoonlake.api.chat.ChatComponent
 import com.mcmoonlake.api.chat.ChatSerializer
 import com.mcmoonlake.api.depend.DependPlugin
@@ -34,6 +35,7 @@ import com.mcmoonlake.api.item.ItemBuilder
 import com.mcmoonlake.api.nbt.NBTCompound
 import com.mcmoonlake.api.nbt.NBTFactory
 import com.mcmoonlake.api.nbt.NBTList
+import com.mcmoonlake.api.packet.PacketOutChat
 import com.mcmoonlake.api.packet.PacketOutTitle
 import com.mcmoonlake.api.player.MoonLakePlayer
 import com.mcmoonlake.api.player.MoonLakePlayerCached
@@ -765,17 +767,23 @@ inline fun <T: Entity, R> Class<T>.spawnLet(location: Location, consumer: (entit
 
 /** packet function */
 
+fun Player.sendPacketChat(raw: String, action: ChatAction = ChatAction.CHAT)
+        = sendPacketChat(ChatSerializer.fromRaw(raw), action)
+
+fun Player.sendPacketChat(component: ChatComponent, action: ChatAction = ChatAction.CHAT)
+        = PacketOutChat(component, action).send(this)
+
 fun Player.sendPacketTitle(title: String, subTitle: String? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20)
         = sendPacketTitle(ChatSerializer.fromRaw(title), if(subTitle == null) null else ChatSerializer.fromRaw(subTitle), fadeIn, stay, fadeOut)
 
 fun Player.sendPacketTitle(title: ChatComponent, subTitle: ChatComponent? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20) {
-    var packet = PacketOutTitle(PacketOutTitle.Action.TITLE, title)
+    var packet = PacketOutTitle(fadeIn, stay, fadeOut)
     packet.send(this)
     if(subTitle != null) {
         packet = PacketOutTitle(PacketOutTitle.Action.SUBTITLE, subTitle)
         packet.send(this)
     }
-    packet = PacketOutTitle(fadeIn, stay, fadeOut)
+    packet = PacketOutTitle(PacketOutTitle.Action.TITLE, title)
     packet.send(this)
 }
 
