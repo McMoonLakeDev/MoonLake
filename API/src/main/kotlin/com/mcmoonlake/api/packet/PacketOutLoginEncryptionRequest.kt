@@ -17,7 +17,7 @@
 
 package com.mcmoonlake.api.packet
 
-import com.mcmoonlake.api.security.Ciphers
+import com.mcmoonlake.api.security.RSAUtils
 import java.security.PublicKey
 import java.util.*
 
@@ -33,7 +33,7 @@ data class PacketOutLoginEncryptionRequest(
 
     override fun read(data: PacketBuffer) {
         serverId = data.readString()
-        publicKey = Ciphers.decodePublicKey(data.readBytes(data.readVarInt()))
+        publicKey = RSAUtils.decodePublicKey(data.readBytes(data.readVarInt()))
         verifyToken = data.readBytes(data.readVarInt())
     }
 

@@ -19,15 +19,10 @@
 
 package com.mcmoonlake.api.security
 
-import java.io.IOException
-import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
-import java.security.*
-import java.security.spec.X509EncodedKeySpec
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import java.util.*
-import javax.crypto.Cipher
-import javax.crypto.SecretKey
-import javax.crypto.spec.SecretKeySpec
 
 /**
  * Base64 Encoder & Decoder
@@ -156,61 +151,4 @@ internal object Hex {
     @JvmName("encodeHexString")
     fun encodeHexString(src: ByteArray): String
             = String(encodeHex(src))
-}
-
-/**
- * Cipher Util
- */
-object Ciphers {
-
-    @JvmStatic
-    @JvmName("decodePublicKey")
-    @Throws(IOException::class)
-    fun decodePublicKey(encodedKey: ByteArray): PublicKey = try {
-        KeyFactory.getInstance("RSA").generatePublic(X509EncodedKeySpec(encodedKey))
-    } catch(e: GeneralSecurityException) {
-        throw IOException("无法解密公钥.", e)
-    }
-
-    @JvmStatic
-    @JvmName("decryptSharedKey")
-    @Throws(IOException::class)
-    fun decryptSharedKey(privateKey: PrivateKey, sharedKey: ByteArray): SecretKey
-            = SecretKeySpec(decryptData(privateKey, sharedKey), "AES")
-
-    @JvmStatic
-    @JvmName("encryptData")
-    @Throws(IOException::class)
-    fun encryptData(key: Key, data: ByteArray): ByteArray
-            = runEncryption(Cipher.ENCRYPT_MODE, key, data)
-
-    @JvmStatic
-    @JvmName("decryptData")
-    @Throws(IOException::class)
-    fun decryptData(key: Key, data: ByteArray): ByteArray
-            = runEncryption(Cipher.DECRYPT_MODE, key, data)
-
-    @JvmStatic
-    @JvmName("encryptServerId")
-    @Throws(IOException::class)
-    fun encryptServerId(serverId: String, publicKey: PublicKey, secretKey: SecretKey): ByteArray = try {
-        val digest = sha1Digest
-        digest.update(serverId.toByteArray(Charsets.ISO_8859_1))
-        digest.update(secretKey.encoded)
-        digest.update(publicKey.encoded)
-        digest.digest()
-    } catch(e: UnsupportedEncodingException) {
-        throw IOException("无法生成服务器 Id 哈希值.", e)
-    }
-
-    @JvmStatic
-    @JvmName("runEncryption")
-    @Throws(IOException::class)
-    private fun runEncryption(mode: Int, key: Key, data: ByteArray): ByteArray = try {
-        val cipher = Cipher.getInstance(key.algorithm)
-        cipher.init(mode, key)
-        cipher.doFinal(data)
-    } catch(e: GeneralSecurityException) {
-        throw IOException("无法运行加密.", e)
-    }
 }
