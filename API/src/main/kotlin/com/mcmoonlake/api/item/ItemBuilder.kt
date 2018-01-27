@@ -97,13 +97,21 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun clearAttribute(): ItemBuilder
 
-    fun getCanDestroy(block: (self: ItemBuilder, canDestroy: Set<Material>?) -> Unit): ItemBuilder
+    fun getCanDestroy(block: (self: ItemBuilder, canDestroy: List<Material>?) -> Unit): ItemBuilder
 
-    fun setCanDestroy(vararg type: Material): ItemBuilder
+    fun setCanDestroy(vararg types: Material): ItemBuilder
 
-    fun getCanPlaceOn(block: (self: ItemBuilder, canPlaceOn: Set<Material>?) -> Unit): ItemBuilder
+    fun addCanDestroy(vararg types: Material): ItemBuilder
 
-    fun setCanPlaceOn(vararg type: Material): ItemBuilder
+    fun clearCanDestroy(): ItemBuilder
+
+    fun getCanPlaceOn(block: (self: ItemBuilder, canPlaceOn: List<Material>?) -> Unit): ItemBuilder
+
+    fun setCanPlaceOn(vararg types: Material): ItemBuilder
+
+    fun addCanPlaceOn(vararg types: Material): ItemBuilder
+
+    fun clearCanPlaceOn(): ItemBuilder
 
     fun getRepairCost(block: (self: ItemBuilder, repairCost: Int?) -> Unit): ItemBuilder
 
@@ -251,6 +259,19 @@ interface ItemBuilder : Builder<ItemStack> {
     fun addBannerPattern(pattern: Pattern): ItemBuilder
 
     fun clearBannerPattern(): ItemBuilder
+
+    /**
+     * knowledge book meta
+     * @see org.bukkit.inventory.meta.KnowledgeBookMeta
+     */
+
+    fun getKnowledgeBookRecipe(block: (self: ItemBuilder, recipes: List<Material>?) -> Unit): ItemBuilder
+
+    fun setKnowledgeBookRecipe(recipes: List<Material>): ItemBuilder
+
+    fun addKnowledgeBookRecipe(vararg recipes: Material): ItemBuilder
+
+    fun clearKnowledgeBookRecipe(): ItemBuilder
 
     /** static */
 

@@ -517,6 +517,21 @@ class MoonLakePluginTest : JavaPlugin() {
                             event.player.sendMessage("Sync later future value size: ${value}")
                     }
                 }
+                if(event.message == "/ib knowledgebook") {
+                    Material.matchMaterial("KNOWLEDGE_BOOK").newItemBuilder()
+                            .addKnowledgeBookRecipe(Material.TNT)
+                            .addKnowledgeBookRecipe(Material.ARROW)
+                            .getKnowledgeBookRecipe { _, recipes -> println(recipes) }
+                            .addCanDestroy(Material.STONE)
+                            .clearCanDestroy()
+                            .setCanDestroy(Material.GRASS)
+                            .build()
+                            .givePlayer(event.player)
+                }
+                if(event.message == "/ib jbook") {
+                    event.player.itemInHand.newItemBuilder()
+                            .getBookPages { _, pages -> event.player.sendMessage(pages?.toTypedArray() ?: emptyArray()) }
+                }
             }
         }.registerEvent(this)
     }

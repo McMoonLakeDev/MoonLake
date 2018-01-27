@@ -125,6 +125,7 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         private const val TAG_FIREWORKS_TYPE = "Type"
         private const val TAG_FIREWORKS_COLORS = "Colors"
         private const val TAG_FIREWORKS_FADE_COLORS = "FadeColors"
+        private const val TAG_KNOWLEDGE_BOOK_RECIPES = "Recipes"
     }
 
     /** protected */
@@ -165,6 +166,8 @@ abstract class ItemBuilderAbstract : ItemBuilder {
             tagFireworks().remove(TAG_FIREWORKS_EXPLOSIONS)
         if(tag.containsKey(TAG_FIREWORKS) && tagFireworks().isEmpty())
             tag.remove(TAG_FIREWORKS)
+        if(tag.containsKey(TAG_KNOWLEDGE_BOOK_RECIPES) && tagKnowledgeBookRecipes().isEmpty())
+            tag.remove(TAG_KNOWLEDGE_BOOK_RECIPES)
         return tag
     }
 
@@ -203,6 +206,9 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     protected open fun tagBannerPatterns(): NBTList<NBTCompound>
             = tagBlockEntityTag().getListOrDefault(TAG_BANNER_PATTERNS)
+
+    protected open fun tagKnowledgeBookRecipes(): NBTList<String>
+            = tag.getListOrDefault(TAG_KNOWLEDGE_BOOK_RECIPES)
 
     /** general */
 
@@ -337,27 +343,47 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun clearAttribute(): ItemBuilder
             { tag.remove(TAG_ATTRIBUTE_MODIFIERS); return this; }
 
-    private fun getMaterialFromStringList(key: String): Set<Material>?
-            = tag.getListOrNull<String>(key)?.mapNotNull { Material.matchMaterial(it.replaceFirst("minecraft:", "", true)) }?.toSet()
+    // TODO v1.13
+    private fun namespaceToMaterial(key: String): Material?
+            = Material.matchMaterial(key.replaceFirst("minecraft:", "", true))
 
-    private fun setMaterialFromArray(key: String, vararg type: Material): ItemBuilder {
-        val list = NBTFactory.ofList<String>(key)
-        type.forEach { list.addString("minecraft:${it.name.toLowerCase()}") }
-        tag.putList(list)
+    // TODO v1.13
+    private fun materialToNamespace(type: Material): String
+            = "minecraft:${type.name.toLowerCase()}"
+
+    private fun getMaterialFromStringList(key: String): List<Material>?
+            = tag.getListOrNull<String>(key)
+            ?.mapNotNull { namespaceToMaterial(it) }
+
+    override fun getCanDestroy(block: (self: ItemBuilder, canDestroy: List<Material>?) -> Unit): ItemBuilder
+            { block(this, getMaterialFromStringList(TAG_CAN_DESTROY)); return this; }
+
+    override fun setCanDestroy(vararg types: Material): ItemBuilder
+            { clearCanDestroy(); return addCanDestroy(*types); }
+
+    override fun addCanDestroy(vararg types: Material): ItemBuilder {
+        val canDestroy = tag.getListOrDefault<String>(TAG_CAN_DESTROY)
+        types.forEach { canDestroy.addString(materialToNamespace(it)) }
         return this
     }
 
-    override fun getCanDestroy(block: (self: ItemBuilder, canDestroy: Set<Material>?) -> Unit): ItemBuilder
-            { block(this, getMaterialFromStringList(TAG_CAN_DESTROY)); return this; }
+    override fun clearCanDestroy(): ItemBuilder
+            { tag.remove(TAG_CAN_DESTROY); return this; }
 
-    override fun setCanDestroy(vararg type: Material): ItemBuilder
-            = setMaterialFromArray(TAG_CAN_DESTROY, *type)
-
-    override fun getCanPlaceOn(block: (self: ItemBuilder, canPlaceOn: Set<Material>?) -> Unit): ItemBuilder
+    override fun getCanPlaceOn(block: (self: ItemBuilder, canPlaceOn: List<Material>?) -> Unit): ItemBuilder
             { block(this, getMaterialFromStringList(TAG_CAN_PLACE_ON)); return this; }
 
-    override fun setCanPlaceOn(vararg type: Material): ItemBuilder
-            = setMaterialFromArray(TAG_CAN_PLACE_ON, *type)
+    override fun setCanPlaceOn(vararg types: Material): ItemBuilder
+            { clearCanPlaceOn(); return addCanPlaceOn(*types); }
+
+    override fun addCanPlaceOn(vararg types: Material): ItemBuilder {
+        val canPlaceOn = tag.getListOrDefault<String>(TAG_CAN_PLACE_ON)
+        types.forEach { canPlaceOn.addString(materialToNamespace(it)) }
+        return this
+    }
+
+    override fun clearCanPlaceOn(): ItemBuilder
+            { tag.remove(TAG_CAN_PLACE_ON); return this; }
 
     override fun getRepairCost(block: (self: ItemBuilder, repairCost: Int?) -> Unit): ItemBuilder
             { block(this, tag.getIntOrNull(TAG_REPAIR_COST)); return this; }
@@ -626,4 +652,21 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     override fun clearBannerPattern(): ItemBuilder
             { tagBlockEntityTag().remove(TAG_BANNER_PATTERNS); return this; }
+
+    /** knowledge book */
+
+    override fun getKnowledgeBookRecipe(block: (self: ItemBuilder, recipes: List<Material>?) -> Unit): ItemBuilder
+            { block(this, getMaterialFromStringList(TAG_KNOWLEDGE_BOOK_RECIPES)); return this; }
+
+    override fun setKnowledgeBookRecipe(recipes: List<Material>): ItemBuilder
+            { clearKnowledgeBookRecipe(); return addKnowledgeBookRecipe(*recipes.toTypedArray()); }
+
+    override fun addKnowledgeBookRecipe(vararg recipes: Material): ItemBuilder {
+        val knowledgeBookRecipes = tagKnowledgeBookRecipes()
+        recipes.forEach { knowledgeBookRecipes.addString(materialToNamespace(it)) }
+        return this
+    }
+
+    override fun clearKnowledgeBookRecipe(): ItemBuilder
+            { tag.remove(TAG_KNOWLEDGE_BOOK_RECIPES); return this; }
 }
