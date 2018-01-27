@@ -21,6 +21,7 @@ import com.mcmoonlake.api.attribute.AttributeItemModifier
 import com.mcmoonlake.api.attribute.AttributeType
 import com.mcmoonlake.api.attribute.Operation
 import com.mcmoonlake.api.attribute.Slot
+import com.mcmoonlake.api.chat.ChatComponent
 import com.mcmoonlake.api.effect.EffectBase
 import com.mcmoonlake.api.effect.EffectCustom
 import com.mcmoonlake.api.effect.EffectType
@@ -426,7 +427,7 @@ abstract class ItemBuilderAbstract : ItemBuilder {
             { block(this, tag.getListOrNull<String>(TAG_BOOK_PAGES)?.toList()); return this; }
 
     override fun setBookPages(vararg pages: String): ItemBuilder
-            { clearBookPage(); return addBookPages(*pages); }
+            { clearBookPages(); return addBookPages(*pages); }
 
     override fun setBookPages(pages: Collection<String>): ItemBuilder
             = setBookPages(*pages.toTypedArray())
@@ -437,7 +438,13 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun addBookPages(pages: Collection<String>): ItemBuilder
             = addBookPages(*pages.toTypedArray())
 
-    override fun clearBookPage(): ItemBuilder
+    override fun setBookPages(vararg pages: ChatComponent): ItemBuilder
+            = setBookPages(pages.map { it.toJson() })
+
+    override fun addBookPages(vararg pages: ChatComponent): ItemBuilder
+            = addBookPages(pages.map { it.toJson() })
+
+    override fun clearBookPages(): ItemBuilder
             { tag.remove(TAG_BOOK_PAGES); return this; }
 
     /** enchantment storage */
@@ -655,18 +662,18 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     /** knowledge book */
 
-    override fun getKnowledgeBookRecipe(block: (self: ItemBuilder, recipes: List<Material>?) -> Unit): ItemBuilder
+    override fun getKnowledgeBookRecipes(block: (self: ItemBuilder, recipes: List<Material>?) -> Unit): ItemBuilder
             { block(this, getMaterialFromStringList(TAG_KNOWLEDGE_BOOK_RECIPES)); return this; }
 
-    override fun setKnowledgeBookRecipe(recipes: List<Material>): ItemBuilder
-            { clearKnowledgeBookRecipe(); return addKnowledgeBookRecipe(*recipes.toTypedArray()); }
+    override fun setKnowledgeBookRecipes(recipes: List<Material>): ItemBuilder
+            { clearKnowledgeBookRecipes(); return addKnowledgeBookRecipes(*recipes.toTypedArray()); }
 
-    override fun addKnowledgeBookRecipe(vararg recipes: Material): ItemBuilder {
+    override fun addKnowledgeBookRecipes(vararg recipes: Material): ItemBuilder {
         val knowledgeBookRecipes = tagKnowledgeBookRecipes()
         recipes.forEach { knowledgeBookRecipes.addString(materialToNamespace(it)) }
         return this
     }
 
-    override fun clearKnowledgeBookRecipe(): ItemBuilder
+    override fun clearKnowledgeBookRecipes(): ItemBuilder
             { tag.remove(TAG_KNOWLEDGE_BOOK_RECIPES); return this; }
 }

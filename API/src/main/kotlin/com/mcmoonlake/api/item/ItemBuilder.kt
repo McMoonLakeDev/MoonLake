@@ -21,6 +21,7 @@ import com.mcmoonlake.api.attribute.AttributeItemModifier
 import com.mcmoonlake.api.attribute.AttributeType
 import com.mcmoonlake.api.attribute.Operation
 import com.mcmoonlake.api.attribute.Slot
+import com.mcmoonlake.api.chat.ChatComponent
 import com.mcmoonlake.api.effect.EffectBase
 import com.mcmoonlake.api.effect.EffectCustom
 import com.mcmoonlake.api.effect.EffectType
@@ -155,7 +156,11 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun addBookPages(pages: Collection<String>): ItemBuilder
 
-    fun clearBookPage(): ItemBuilder
+    fun setBookPages(vararg pages: ChatComponent): ItemBuilder
+
+    fun addBookPages(vararg pages: ChatComponent): ItemBuilder
+
+    fun clearBookPages(): ItemBuilder
 
     /**
      * enchantment storage meta
@@ -265,13 +270,13 @@ interface ItemBuilder : Builder<ItemStack> {
      * @see org.bukkit.inventory.meta.KnowledgeBookMeta
      */
 
-    fun getKnowledgeBookRecipe(block: (self: ItemBuilder, recipes: List<Material>?) -> Unit): ItemBuilder
+    fun getKnowledgeBookRecipes(block: (self: ItemBuilder, recipes: List<Material>?) -> Unit): ItemBuilder
 
-    fun setKnowledgeBookRecipe(recipes: List<Material>): ItemBuilder
+    fun setKnowledgeBookRecipes(recipes: List<Material>): ItemBuilder
 
-    fun addKnowledgeBookRecipe(vararg recipes: Material): ItemBuilder
+    fun addKnowledgeBookRecipes(vararg recipes: Material): ItemBuilder
 
-    fun clearKnowledgeBookRecipe(): ItemBuilder
+    fun clearKnowledgeBookRecipes(): ItemBuilder
 
     /** static */
 

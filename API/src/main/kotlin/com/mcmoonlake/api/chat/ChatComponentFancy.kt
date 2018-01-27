@@ -327,6 +327,15 @@ open class ChatComponentFancy(
             { extras.addAll(componentFancy.extras); return this; }
 
     /**
+     * * Then add line breaks to the list of chat component fancy.
+     * * 然后将换行符添加到花式组件列表.
+     *
+     * @see [then]
+     */
+    fun thenNewLine(): ChatComponentFancy
+            = then("\n")
+
+    /**
      * * Gets the extra component list size for this fancy component.
      * * 获取此花式组件的附加组件列表大小.
      */

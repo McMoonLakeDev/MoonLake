@@ -519,9 +519,9 @@ class MoonLakePluginTest : JavaPlugin() {
                 }
                 if(event.message == "/ib knowledgebook") {
                     Material.matchMaterial("KNOWLEDGE_BOOK").newItemBuilder()
-                            .addKnowledgeBookRecipe(Material.TNT)
-                            .addKnowledgeBookRecipe(Material.ARROW)
-                            .getKnowledgeBookRecipe { _, recipes -> println(recipes) }
+                            .addKnowledgeBookRecipes(Material.TNT)
+                            .addKnowledgeBookRecipes(Material.ARROW)
+                            .getKnowledgeBookRecipes { _, recipes -> println(recipes) }
                             .addCanDestroy(Material.STONE)
                             .clearCanDestroy()
                             .setCanDestroy(Material.GRASS)
@@ -530,7 +530,24 @@ class MoonLakePluginTest : JavaPlugin() {
                 }
                 if(event.message == "/ib jbook") {
                     event.player.itemInHand.newItemBuilder()
-                            .getBookPages { _, pages -> event.player.sendMessage(pages?.toTypedArray() ?: emptyArray()) }
+                            .clearBookPages()
+                            .addBookPages(ChatComponentFancy("1")
+                                    .color(ChatColor.RED)
+                                    .thenNewLine()
+                                    .then("2").color(ChatColor.GOLD)
+                                    .thenNewLine()
+                                    .then("3").color(ChatColor.YELLOW)
+                                    .thenNewLine()
+                                    .then("4").color(ChatColor.GREEN)
+                                    .thenNewLine()
+                                    .then("5").color(ChatColor.AQUA)
+                                    .build())
+                            .addBookPages(ChatComponentFancy("点我回索引")
+                                    .color(ChatColor.GOLD)
+                                    .changePage(1)
+                                    .build())
+                            .build()
+                            .also { event.player.itemInHand = it }
                 }
             }
         }.registerEvent(this)
