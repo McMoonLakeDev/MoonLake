@@ -47,9 +47,9 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
 
     override fun onInitialized() {
         val listener = object: MoonLakeListener {
-            @EventHandler(priority = EventPriority.MONITOR)
+            @EventHandler(priority = EventPriority.LOWEST)
             fun onLogin(event: PlayerLoginEvent)
-                    = injectChannelPlayer(event.player)
+                    = try { injectChannelPlayer(event.player) } catch(e: Exception) { /* ignore */ }
             @EventHandler(priority = EventPriority.LOWEST)
             fun onQuit(event: PlayerQuitEvent)
                     = channelLookup.remove(event.player.name)
@@ -57,24 +57,38 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
         eventListener = listener
         eventListener?.registerEvent(getMoonLake())
         try {
-            injectChannelServer()
-            injectOnlinePlayers()
-            getMoonLake().logger.info("数据包监听器服务初始化工作完成.")
+            if(!isLateBind()) {
+                injectChannelServer()
+                injectOnlinePlayers()
+                getMoonLake().logger.info("数据包监听器服务初始化工作完成.")
+            } else {
+                lateInject()
+            }
         } catch(e: Exception) {
-            getMoonLake().logger.warning("数据包监听器服务首次初始化失败, 3秒后再次尝试.")
-            getMoonLake().callTaskLaterSyncFuture(3 * 20L) { // 3 seconds
-                try {
-                    injectChannelServer()
-                    injectOnlinePlayers()
-                    true
-                } catch(e: Exception) {
-                    throw e
-                }
-            }.whenComplete { result, ex ->
-                if(ex != null)
-                    throw ServiceException("数据包监听器服务初始化工作失败, 服务不可用.", ex) // if error
-                if(result)
-                    getMoonLake().logger.info("数据包监听器服务初始化工作完成.")
+            getMoonLake().logger.warning("数据包监听器服务首次初始化失败, 1秒后再次尝试.")
+            lateInject()
+        }
+    }
+
+    private fun isLateBind(): Boolean = try {
+        if(!isSpigotServer)
+            false
+        else {
+            val clazz = Class.forName("org.spigotmc.SpigotConfig")
+            FuzzyReflect.fromClass(clazz, true).getFieldByName("lateBind").getBoolean(null)
+        }
+    } catch(e: Exception) {
+        false
+    }
+
+    private fun lateInject() {
+        getMoonLake().runTask {
+            try {
+                injectChannelServer()
+                injectOnlinePlayers()
+                getMoonLake().logger.info("数据包监听器服务延迟初始化工作完成.")
+            } catch(e: Exception) {
+                throw ServiceException("数据包监听器服务延迟初始化工作失败, 服务不可用.", e) // if error
             }
         }
     }
@@ -110,10 +124,10 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
     /** implements */
 
     private fun sortListeners()
-            = Collections.sort(listeners, { o1, o2 -> o2.priority.compareTo(o1.priority) })
+            = listeners.sortWith(Comparator { o1, o2 -> o2.priority.compareTo(o1.priority) })
 
     private fun sortListenersSync()
-            = synchronized(listeners, { Collections.sort(listeners, { o1, o2 -> o2.priority.compareTo(o1.priority) }) })
+            = synchronized(listeners, { listeners.sortWith(Comparator { o1, o2 -> o2.priority.compareTo(o1.priority) }) })
 
     private fun unloadEventListener() {
         if(eventListener != null) {
@@ -168,11 +182,14 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
             = channelLookup.getOrPut(player.name) { MinecraftPlayerMembers.CHANNEL.get(player) as Channel }
 
     private fun injectChannelPlayer(player: Player)
-            { injectChannel(getChannelPlayer(player)).player = player }
+            { injectChannel(getChannelPlayer(player))?.player = player }
 
     private fun unInjectChannelPlayer(player: Player) {
         val channel = getChannelPlayer(player)
-        channel.eventLoop().execute { channel.pipeline().remove(NAME) }
+        channel.eventLoop().execute {
+            if(channel.pipeline()[NAME] != null)
+                channel.pipeline().remove(NAME)
+        }
     }
 
     private fun injectOnlinePlayers()
@@ -181,7 +198,7 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
     private fun unInjectOnlinePlayers()
             { getOnlinePlayers().forEach { unInjectChannelPlayer(it) } }
 
-    private fun injectChannel(channel: Channel): ChannelPacketListenerHandler = try {
+    private fun injectChannel(channel: Channel): ChannelPacketListenerHandler? = try {
         var handler = channel.pipeline()[NAME] as ChannelPacketListenerHandler?
         if(handler == null) {
             handler = ChannelPacketListenerHandler(this)
@@ -189,7 +206,7 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
         }
         handler
     } catch(e: Exception) {
-        channel.pipeline()[NAME] as ChannelPacketListenerHandler
+        channel.pipeline()[NAME] as ChannelPacketListenerHandler?
     }
 
     private val channelEndInitializer = object: ChannelInitializer<Channel>() {
@@ -222,10 +239,10 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
         ex?.printStackTrace()
     }
 
-    open internal fun onReceivingAsync(sender: Player?, channel: Channel, packet: Any): Any?
+    internal open fun onReceivingAsync(sender: Player?, channel: Channel, packet: Any): Any?
             = onExecuteAndFilterPacketAsync(Direction.IN, sender, channel, packet)
 
-    open internal fun onSendingAsync(receiver: Player?, channel: Channel, packet: Any): Any?
+    internal open fun onSendingAsync(receiver: Player?, channel: Channel, packet: Any): Any?
             = onExecuteAndFilterPacketAsync(Direction.OUT, receiver, channel, packet)
 
     private fun onExecuteAndFilterPacketAsync(direction: Direction, player: Player?, channel: Channel, packet: Any): Any? {
