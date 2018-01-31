@@ -30,6 +30,8 @@ import com.mcmoonlake.api.depend.DependPlaceholderAPI
 import com.mcmoonlake.api.depend.DependPlugins
 import com.mcmoonlake.api.depend.DependVaultEconomy
 import com.mcmoonlake.api.depend.DependWorldEdit
+import com.mcmoonlake.api.dsl.buildEventListener
+import com.mcmoonlake.api.dsl.buildItemBuilderToStack
 import com.mcmoonlake.api.effect.EffectBase
 import com.mcmoonlake.api.effect.EffectCustom
 import com.mcmoonlake.api.effect.EffectType
@@ -44,6 +46,8 @@ import org.bukkit.*
 import org.bukkit.entity.Pig
 import org.bukkit.entity.Zombie
 import org.bukkit.event.EventHandler
+import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
@@ -548,6 +552,28 @@ class MoonLakePluginTest : JavaPlugin() {
                                     .build())
                             .build()
                             .also { event.player.itemInHand = it }
+                }
+                if(event.message == "/dsl ib") {
+
+                    buildItemBuilderToStack(Material.IRON_SWORD) {
+                        setDisplayName("DSL ItemBuilder")
+                        addLore("233")
+                    }.givePlayer(event.player)
+
+                }
+                if(event.message == "/dsl event-listener") {
+
+                    buildEventListener(this@MoonLakePluginTest) {
+                        event<BlockPlaceEvent> {
+                            player.sendMessage("你放置了一个方块 -> ${block.type}")
+                        }
+                        event<BlockBreakEvent> {
+                            player.sendMessage("你破坏了一个方块 -> ${block.type}")
+                            player.sendMessage("但是我给你阻止了")
+                            isCancelled = true
+                        }
+                    }
+
                 }
             }
         }.registerEvent(this)
