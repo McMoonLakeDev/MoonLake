@@ -32,6 +32,7 @@ import com.mcmoonlake.api.depend.DependVaultEconomy
 import com.mcmoonlake.api.depend.DependWorldEdit
 import com.mcmoonlake.api.dsl.buildEventListener
 import com.mcmoonlake.api.dsl.buildItemBuilderToStack
+import com.mcmoonlake.api.dsl.buildPacketListenerSpecified
 import com.mcmoonlake.api.effect.EffectBase
 import com.mcmoonlake.api.effect.EffectCustom
 import com.mcmoonlake.api.effect.EffectType
@@ -555,7 +556,7 @@ class MoonLakePluginTest : JavaPlugin() {
                 }
                 if(event.message == "/dsl ib") {
 
-                    buildItemBuilderToStack(Material.IRON_SWORD) {
+                    Material.IRON_SWORD.buildItemBuilderToStack {
                         setDisplayName("DSL ItemBuilder")
                         addLore("233")
                     }.givePlayer(event.player)
@@ -563,7 +564,7 @@ class MoonLakePluginTest : JavaPlugin() {
                 }
                 if(event.message == "/dsl event-listener") {
 
-                    buildEventListener(this@MoonLakePluginTest) {
+                    buildEventListener {
                         event<BlockPlaceEvent> {
                             player.sendMessage("你放置了一个方块 -> ${block.type}")
                         }
@@ -574,6 +575,23 @@ class MoonLakePluginTest : JavaPlugin() {
                         }
                     }
 
+                }
+                if(event.message == "/dsl packet-listener") {
+
+                    val listener = buildPacketListenerSpecified {
+                        priority = PacketListenerPriority.MONITOR
+                        types = arrayOf(PacketInUseEntity::class.java, PacketOutTitle::class.java)
+                        onSending {
+                            val packet = packet as PacketOutTitle
+                            packet.title = ChatSerializer.fromRaw("&a我给你的标题修改了233")
+                        }
+                        onReceiving {
+                            val packet = packet as PacketInUseEntity
+                            player?.sendMessage("你交互了实体 id -> ${packet.entityId}")
+                        }
+                    }
+
+                    PacketListeners.registerListener(listener)
                 }
             }
         }.registerEvent(this)

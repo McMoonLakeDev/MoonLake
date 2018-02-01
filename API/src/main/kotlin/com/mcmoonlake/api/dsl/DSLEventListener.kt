@@ -24,11 +24,24 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 
-data class Score(val plugin: Plugin) {
+data class DSLEventScore(val plugin: Plugin) {
 
-    inline fun <reified T: Event> event(priority: EventPriority = EventPriority.NORMAL, noinline block: T.() -> Unit)
-            = plugin.server.pluginManager.registerEvent(T::class.java, object: Listener {}, priority, { _, event -> block(event as T) }, plugin)
+    companion object {
+        /**
+         * * Empty instance object of Listener.
+         */
+        val EMPTY: Listener = object: Listener {}
+    }
+
+    inline fun <reified T: Event> event(
+            priority: EventPriority = EventPriority.NORMAL,
+            ignoreCancelled: Boolean = false,
+            noinline block: T.() -> Unit) {
+        plugin.server.pluginManager.registerEvent(T::class.java, EMPTY, priority, {
+            _, event -> block(event as T)
+        }, plugin, ignoreCancelled)
+    }
 }
 
-fun buildEventListener(plugin: Plugin, block: Score.() -> Unit)
-        = Score(plugin).block()
+inline fun Plugin.buildEventListener(block: DSLEventScore.() -> Unit)
+        = DSLEventScore(this).block()

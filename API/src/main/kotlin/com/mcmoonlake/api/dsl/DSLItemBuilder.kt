@@ -23,8 +23,8 @@ import com.mcmoonlake.api.item.ItemBuilder
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
-fun buildItemBuilder(material: Material, amount: Int = 1, durability: Int = 0, block: ItemBuilder.() -> Unit): ItemBuilder
-        = ItemBuilder.Companion.of(material, amount, durability).also(block)
+inline fun Material.buildItemBuilder(amount: Int = 1, durability: Int = 0, block: ItemBuilder.() -> Unit): ItemBuilder
+        = ItemBuilder.Companion.of(this, amount, durability).also(block)
 
-fun buildItemBuilderToStack(material: Material, amount: Int = 1, durability: Int = 0, block: ItemBuilder.() -> Unit): ItemStack
-        = ItemBuilder.Companion.of(material, amount, durability).also(block).build()
+inline fun Material.buildItemBuilderToStack(amount: Int = 1, durability: Int = 0, block: ItemBuilder.() -> Unit): ItemStack
+        = ItemBuilder.Companion.of(this, amount, durability).also(block).build()
