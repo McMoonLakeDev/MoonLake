@@ -32,6 +32,7 @@ import com.mcmoonlake.api.depend.DependVaultEconomy
 import com.mcmoonlake.api.depend.DependWorldEdit
 import com.mcmoonlake.api.dsl.buildEventListener
 import com.mcmoonlake.api.dsl.buildItemBuilderToStack
+import com.mcmoonlake.api.dsl.buildPacketListenerLegacy
 import com.mcmoonlake.api.dsl.buildPacketListenerSpecified
 import com.mcmoonlake.api.effect.EffectBase
 import com.mcmoonlake.api.effect.EffectCustom
@@ -591,6 +592,22 @@ class MoonLakePluginTest : JavaPlugin() {
                         }
                     }
 
+                    PacketListeners.registerListener(listener)
+                }
+                if(event.message == "/dsl packet-listener-legacy") {
+
+                    val listener = buildPacketListenerLegacy<PacketInBlockPlace, PacketInBlockPlaceLegacy> {
+                        adapter = PacketInBlockPlaceLegacyAdapter()
+                        onReceiving {
+                            if(!isLegacy) {
+                                val packet = packet as PacketInBlockPlace
+                                player?.sendMessage(packet.toString())
+                            } else {
+                                val packet = packet as PacketInBlockPlaceLegacy
+                                player?.sendMessage(packet.toString())
+                            }
+                        }
+                    }
                     PacketListeners.registerListener(listener)
                 }
             }

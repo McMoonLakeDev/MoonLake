@@ -68,8 +68,44 @@ class DSLPacketSpecifiedScore(plugin: Plugin) : DSLPacketScore(plugin) {
     }
 }
 
+class DSLPacketLegacyScore<P: PacketBukkitLegacy, T>(
+         plugin: Plugin
+ ) : DSLPacketScore(plugin) where T: PacketBukkitLegacy, T: PacketLegacy {
+
+     var adapter: PacketLegacyAdapter<P, T> = object: PacketLegacyAdapter<P, T>() {
+         override val packet: Class<P>
+             get() = throw INVALID_ADAPTER
+         override val packetLegacy: Class<T>
+             get() = throw INVALID_ADAPTER
+         override val isLegacy: Boolean
+             get() = throw INVALID_ADAPTER
+     }
+
+    companion object {
+        private val INVALID_ADAPTER = IllegalStateException("Invalid adapter, not yet initialized.")
+    }
+
+    /**
+     * * If the event's packet is legacy.
+     */
+    val PacketEvent.isLegacy: Boolean
+        get() = adapter.isLegacy
+
+    override fun get(): PacketListener = object: PacketListenerLegacyAdapter<P, T>(plugin, priority, adapter) {
+        override fun onSending(event: PacketEvent)
+                 = sending(event)
+        override fun onReceiving(event: PacketEvent)
+                 = receiving(event)
+        override fun handlerException(ex: Exception)
+                 = exception(ex)
+    }
+ }
+
 inline fun Plugin.buildPacketListener(block: DSLPacketScore.() -> Unit): PacketListener
         = DSLPacketScore(this).also(block).get()
 
 inline fun Plugin.buildPacketListenerSpecified(block: DSLPacketSpecifiedScore.() -> Unit): PacketListener
         = DSLPacketSpecifiedScore(this).also(block).get()
+
+inline fun <P: PacketBukkitLegacy, T> Plugin.buildPacketListenerLegacy(block: DSLPacketLegacyScore<P, T>.() -> Unit): PacketListener where T : PacketBukkitLegacy, T: PacketLegacy
+        = DSLPacketLegacyScore<P, T>(this).also(block).get()
