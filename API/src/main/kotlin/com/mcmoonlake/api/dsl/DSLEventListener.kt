@@ -24,7 +24,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 
-data class DSLEventScore(val plugin: Plugin) {
+data class DSLEventScope(val plugin: Plugin) {
 
     companion object {
         /**
@@ -43,5 +43,5 @@ data class DSLEventScore(val plugin: Plugin) {
     }
 }
 
-inline fun Plugin.buildEventListener(block: DSLEventScore.() -> Unit)
-        = DSLEventScore(this).block()
+inline fun Plugin.buildEventListener(block: DSLEventScope.() -> Unit)
+        = DSLEventScope(this).block()

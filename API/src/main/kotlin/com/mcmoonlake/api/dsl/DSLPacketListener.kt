@@ -22,7 +22,7 @@ package com.mcmoonlake.api.dsl
 import com.mcmoonlake.api.packet.*
 import org.bukkit.plugin.Plugin
 
-open class DSLPacketScore(val plugin: Plugin) {
+open class DSLPacketScope(val plugin: Plugin) {
 
     var priority: PacketListenerPriority = PacketListenerPriority.NORMAL
 
@@ -55,7 +55,7 @@ open class DSLPacketScore(val plugin: Plugin) {
     }
 }
 
-class DSLPacketSpecifiedScore(plugin: Plugin) : DSLPacketScore(plugin) {
+class DSLPacketSpecifiedScope(plugin: Plugin) : DSLPacketScope(plugin) {
 
     var types: Array<Class<out Packet>> = emptyArray()
 
@@ -69,9 +69,9 @@ class DSLPacketSpecifiedScore(plugin: Plugin) : DSLPacketScore(plugin) {
     }
 }
 
-class DSLPacketLegacyScore<P: PacketBukkitLegacy, T>(
+class DSLPacketLegacyScope<P: PacketBukkitLegacy, T>(
          plugin: Plugin
- ) : DSLPacketScore(plugin) where T: PacketBukkitLegacy, T: PacketLegacy {
+ ) : DSLPacketScope(plugin) where T: PacketBukkitLegacy, T: PacketLegacy {
 
      var adapter: PacketLegacyAdapter<P, T> = object: PacketLegacyAdapter<P, T>() {
          override val packet: Class<P>
@@ -102,11 +102,11 @@ class DSLPacketLegacyScore<P: PacketBukkitLegacy, T>(
     }
  }
 
-inline fun Plugin.buildPacketListener(block: DSLPacketScore.() -> Unit): PacketListener
-        = DSLPacketScore(this).also(block).get()
+inline fun Plugin.buildPacketListener(block: DSLPacketScope.() -> Unit): PacketListener
+        = DSLPacketScope(this).also(block).get()
 
-inline fun Plugin.buildPacketListenerSpecified(block: DSLPacketSpecifiedScore.() -> Unit): PacketListener
-        = DSLPacketSpecifiedScore(this).also(block).get()
+inline fun Plugin.buildPacketListenerSpecified(block: DSLPacketSpecifiedScope.() -> Unit): PacketListener
+        = DSLPacketSpecifiedScope(this).also(block).get()
 
-inline fun <P: PacketBukkitLegacy, T> Plugin.buildPacketListenerLegacy(block: DSLPacketLegacyScore<P, T>.() -> Unit): PacketListener where T : PacketBukkitLegacy, T: PacketLegacy
-        = DSLPacketLegacyScore<P, T>(this).also(block).get()
+inline fun <P: PacketBukkitLegacy, T> Plugin.buildPacketListenerLegacy(block: DSLPacketLegacyScope<P, T>.() -> Unit): PacketListener where T : PacketBukkitLegacy, T: PacketLegacy
+        = DSLPacketLegacyScope<P, T>(this).also(block).get()

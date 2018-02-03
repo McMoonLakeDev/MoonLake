@@ -39,7 +39,7 @@ import java.util.*
 @Retention(AnnotationRetention.RUNTIME)
 annotation class DSLItemBuilderSetterOnly
 
-class DSLItemBuilderScore(material: Material, amount: Int = 1, durability: Int = 0) {
+class DSLItemBuilderScope(material: Material, amount: Int = 1, durability: Int = 0) {
 
     private val builder = ItemBuilder.of(material, amount, durability)
 
@@ -91,13 +91,13 @@ class DSLItemBuilderScore(material: Material, amount: Int = 1, durability: Int =
         set(value) = builder.apply(value) { it.forEach { addEnchant(it.first, it.second) } }
         get() = emptyArray()
 
-    class EnchantScore {
+    class EnchantScope {
         var enchant: Enchantment? = null
         var level: Int? = null
     }
 
-    fun addEnchant(block: EnchantScore.() -> Unit)
-            = builder.apply(DSLItemBuilderScore.EnchantScore().apply(block)) {
+    fun addEnchant(block: EnchantScope.() -> Unit)
+            = builder.apply(DSLItemBuilderScope.EnchantScope().apply(block)) {
         val enchant = it.enchant
         val level = it.level
         if(enchant != null && level != null)
@@ -141,7 +141,7 @@ class DSLItemBuilderScore(material: Material, amount: Int = 1, durability: Int =
             return value
         }
 
-    class AttributeScore {
+    class AttributeScope {
         var type: AttributeType? = null
         var name: String? = null
         var operation: Operation? = null
@@ -150,8 +150,8 @@ class DSLItemBuilderScore(material: Material, amount: Int = 1, durability: Int =
         var uuid: UUID = UUID.randomUUID()
     }
 
-    fun addAttribute(block: DSLItemBuilderScore.AttributeScore.() -> Unit)
-            = builder.apply(DSLItemBuilderScore.AttributeScore().apply(block)) {
+    fun addAttribute(block: DSLItemBuilderScope.AttributeScope.() -> Unit)
+            = builder.apply(DSLItemBuilderScope.AttributeScope().apply(block)) {
         val type = it.type
         val operation = it.operation
         val amount = it.amount
@@ -211,5 +211,5 @@ class DSLItemBuilderScore(material: Material, amount: Int = 1, durability: Int =
             = builder
 }
 
-inline fun Material.buildItemBuilder(amount: Int = 1, durability: Int = 0, block: DSLItemBuilderScore.() -> Unit): ItemBuilder
-        = DSLItemBuilderScore(this, amount, durability).also(block).get()
+inline fun Material.buildItemBuilder(amount: Int = 1, durability: Int = 0, block: DSLItemBuilderScope.() -> Unit): ItemBuilder
+        = DSLItemBuilderScope(this, amount, durability).also(block).get()
