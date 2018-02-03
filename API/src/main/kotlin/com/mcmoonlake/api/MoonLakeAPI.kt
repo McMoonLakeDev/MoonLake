@@ -35,6 +35,8 @@ import com.mcmoonlake.api.item.ItemBuilder
 import com.mcmoonlake.api.nbt.NBTCompound
 import com.mcmoonlake.api.nbt.NBTFactory
 import com.mcmoonlake.api.nbt.NBTList
+import com.mcmoonlake.api.packet.PacketListener
+import com.mcmoonlake.api.packet.PacketListeners
 import com.mcmoonlake.api.packet.PacketOutChat
 import com.mcmoonlake.api.packet.PacketOutTitle
 import com.mcmoonlake.api.player.MoonLakePlayer
@@ -130,6 +132,9 @@ inline fun <V, reified T> ofValuable(value: V?, def: T? = null): T? where T: Enu
 inline fun <V, reified T> ofValuableNotNull(value: V?): T where T: Enum<T>, T: Valuable<V>
         = ofValuable(value) ?: throw IllegalArgumentException("未知的枚举 ${T::class.java.canonicalName} 类型值: $value")
 
+inline fun <E> Iterable<E>.except(block: () -> E): List<E>
+        { val element = block(); return filter { it != element } }
+
 /** version function */
 
 fun currentMCVersion(): MinecraftVersion
@@ -198,25 +203,25 @@ fun String.toColor(altColorChar: Char): String
         = com.mcmoonlake.api.chat.ChatColor.translateAlternateColorCodes(altColorChar, this)
 
 fun Array<out String>.toColor(): Array<out String>
-        = toList().map { it -> it.toColor() }.toTypedArray()
+        = toList().map { it.toColor() }.toTypedArray()
 
 fun Array<out String>.toColor(altColorChar: Char): Array<out String>
-        = toList().map { it -> it.toColor(altColorChar) }.toTypedArray()
+        = toList().map { it.toColor(altColorChar) }.toTypedArray()
 
 fun Iterable<String>.toColor(): List<String>
-        = map { it -> it.toColor() }.let { ArrayList(it) }
+        = map { it.toColor() }.let { ArrayList(it) }
 
 fun Iterable<String>.toColor(altColorChar: Char): List<String>
-        = map { it -> it.toColor(altColorChar) }
+        = map { it.toColor(altColorChar) }
 
 fun String.stripColor(): String
         = com.mcmoonlake.api.chat.ChatColor.stripColor(this)
 
 fun Array<out String>.stripColor(): Array<out String>
-        = toList().map { it -> it.stripColor() }.toTypedArray()
+        = toList().map { it.stripColor() }.toTypedArray()
 
 fun Iterable<String>.stripColor(): List<String>
-        = map { it -> it.stripColor() }
+        = map { it.stripColor() }
 
 fun String.messageFormat(vararg args: Any?): String
         = MessageFormat.format(this, args)
@@ -340,6 +345,9 @@ fun <T: ConfigurationSerializable> Configuration.deserialize(clazz: Class<T>, ke
 
 fun getOnlinePlayers(): Collection<Player>
         = Bukkit.getOnlinePlayers()
+
+fun getOnlinePlayersExcept(player: Player): Collection<Player>
+        = Bukkit.getOnlinePlayers().except { player }
 
 fun createInventory(holder: InventoryHolder?, type: InventoryType): Inventory
         = Bukkit.createInventory(holder, type)
@@ -714,26 +722,26 @@ fun <T> newNBTList(name: String = ""): NBTList<T>
 fun Material.newItemStack(amount: Int = 1, durability: Int = 0, tag: NBTCompound? = null): ItemStack
         = NBTFactory.createStack(this, amount, durability, tag)
 
-inline fun ItemStack.readTag(consumer: (tag: NBTCompound?) -> Unit): ItemStack
-        { consumer(NBTFactory.readStackTag(this)); return this; }
+inline fun ItemStack.readTag(block: (tag: NBTCompound?) -> Unit): ItemStack
+        { block(NBTFactory.readStackTag(this)); return this; }
 
-inline fun <R> ItemStack.readTagLet(consumer: (tag: NBTCompound?) -> R): R
-        = consumer(NBTFactory.readStackTag(this))
+inline fun <R> ItemStack.readTagLet(block: (tag: NBTCompound?) -> R): R
+        = block(NBTFactory.readStackTag(this))
 
-inline fun ItemStack.readTagSafe(consumer: (tag: NBTCompound) -> Unit): ItemStack
-        { consumer(NBTFactory.readStackTagSafe(this)); return this; }
+inline fun ItemStack.readTagSafe(block: (tag: NBTCompound) -> Unit): ItemStack
+        { block(NBTFactory.readStackTagSafe(this)); return this; }
 
-inline fun <R> ItemStack.readTagSafeLet(consumer: (tag: NBTCompound) -> R): R
-        = consumer(NBTFactory.readStackTagSafe(this))
+inline fun <R> ItemStack.readTagSafeLet(block: (tag: NBTCompound) -> R): R
+        = block(NBTFactory.readStackTagSafe(this))
 
 fun ItemStack.writeTag(tag: NBTCompound?): ItemStack
         = NBTFactory.writeStackTag(this, tag)
 
-inline fun <T: Entity> T.readTag(consumer: (tag: NBTCompound) -> Unit): T
-        { consumer(NBTFactory.readEntityTag(this)); return this; }
+inline fun <T: Entity> T.readTag(block: (tag: NBTCompound) -> Unit): T
+        { block(NBTFactory.readEntityTag(this)); return this; }
 
-inline fun <T: Entity, R> T.readTagLet(consumer: (tag: NBTCompound) -> R): R
-        = consumer(NBTFactory.readEntityTag(this))
+inline fun <T: Entity, R> T.readTagLet(block: (tag: NBTCompound) -> R): R
+        = block(NBTFactory.readEntityTag(this))
 
 fun <T: Entity> T.writeTag(tag: NBTCompound): T
         = NBTFactory.writeEntityTag(this, tag)
@@ -741,31 +749,45 @@ fun <T: Entity> T.writeTag(tag: NBTCompound): T
 /** depend plugin function */
 
 @Throws(DependPluginException::class)
-inline fun <T: DependPlugin> Class<T>.useDepend(consumer: (depend: T) -> Unit): T
-        = DependPlugins.of(this).also(consumer)
+inline fun <T: DependPlugin> Class<T>.useDepend(block: (depend: T) -> Unit): T
+        = DependPlugins.of(this).also(block)
 
 @Throws(DependPluginException::class)
-inline fun <T: DependPlugin, R> Class<T>.useDependLet(consumer: (depend: T) -> R): R
-        = consumer(DependPlugins.of(this))
+inline fun <T: DependPlugin, R> Class<T>.useDependLet(block: (depend: T) -> R): R
+        = block(DependPlugins.of(this))
 
-inline fun <T: DependPlugin> Class<T>.useDependSafe(consumer: (depend: T?) -> Unit): T?
-        = DependPlugins.ofSafe(this).also(consumer)
+inline fun <T: DependPlugin> Class<T>.useDependSafe(block: (depend: T?) -> Unit): T?
+        = DependPlugins.ofSafe(this).also(block)
 
-inline fun <T: DependPlugin, R> Class<T>.useDependSafeLet(consumer: (depend: T?) -> R): R
-        = consumer(DependPlugins.ofSafe(this))
+inline fun <T: DependPlugin, R> Class<T>.useDependSafeLet(block: (depend: T?) -> R): R
+        = block(DependPlugins.ofSafe(this))
 
 /** entity function */
 
 fun <T: Entity> Class<T>.spawn(location: Location): T
         = location.world.spawn(location, this)
 
-inline fun <T: Entity> Class<T>.spawn(location: Location, consumer: (entity: T) -> Unit): T
-        = spawn(location).also(consumer)
+inline fun <T: Entity> Class<T>.spawn(location: Location, block: T.() -> Unit): T
+        = spawn(location).also(block)
 
-inline fun <T: Entity, R> Class<T>.spawnLet(location: Location, consumer: (entity: T) -> R): R
-        = spawn(location).let(consumer)
+inline fun <T: Entity, R> Class<T>.spawnLet(location: Location, block: (T) -> R): R
+        = spawn(location).let(block)
 
 /** packet function */
+
+/**
+ * @see [PacketListeners.registerListener]
+ */
+@Throws(UnsupportedOperationException::class)
+fun PacketListener.register(): Boolean
+        = PacketListeners.registerListener(this)
+
+/**
+ * @see [PacketListeners.unregisterListener]
+ */
+@Throws(UnsupportedOperationException::class)
+fun PacketListener.unregister(): Boolean
+        = PacketListeners.unregisterListener(this)
 
 fun Player.sendPacketChat(raw: String, action: ChatAction = ChatAction.CHAT)
         = sendPacketChat(ChatSerializer.fromRaw(raw), action)
