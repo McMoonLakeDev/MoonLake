@@ -31,7 +31,7 @@ import com.mcmoonlake.api.depend.DependPlugins
 import com.mcmoonlake.api.depend.DependVaultEconomy
 import com.mcmoonlake.api.depend.DependWorldEdit
 import com.mcmoonlake.api.dsl.buildEventListener
-import com.mcmoonlake.api.dsl.buildItemBuilderToStack
+import com.mcmoonlake.api.dsl.buildItemBuilder
 import com.mcmoonlake.api.dsl.buildPacketListenerLegacy
 import com.mcmoonlake.api.dsl.buildPacketListenerSpecified
 import com.mcmoonlake.api.effect.EffectBase
@@ -557,10 +557,35 @@ class MoonLakePluginTest : JavaPlugin() {
                 }
                 if(event.message == "/dsl ib") {
 
-                    Material.IRON_SWORD.buildItemBuilderToStack {
-                        setDisplayName("DSL ItemBuilder")
-                        addLore("233")
-                    }.givePlayer(event.player)
+                    Material.IRON_SWORD.buildItemBuilder {
+                        displayName = "name"
+                        if(displayName == "name")
+                            displayName = "displayName"
+                        localizedName = "tile.name.tnt"
+                        lore = listOf("lore")
+                        addLore = arrayOf("add lore")
+                        enchant = mapOf(Enchantment.DURABILITY to 1)
+                        addEnchant {
+                            enchant = Enchantment.DAMAGE
+                            level = 1
+                        }
+                        addEnchants = arrayOf(Enchantment.FIRE_ASPECT to 1)
+                        addFlag = arrayOf(ItemFlag.HIDE_ENCHANTS)
+                        removeFlag = arrayOf(ItemFlag.HIDE_ENCHANTS)
+                        isUnbreakable = true
+                        addAttribute {
+                            type = AttributeType.MAX_HEALTH
+                            operation = Operation.ADD
+                            slot = Slot.MAIN_HAND
+                            amount = 4.0
+                        }
+                        canDestroy = arrayOf(Material.GRASS)
+                        addCanDestroy = arrayOf(Material.STONE)
+                        canPlaceOn = arrayOf(Material.GRASS)
+                        addCanPlaceOn = arrayOf(Material.STONE)
+                        repairCost = 10
+
+                    }.build().givePlayer(event.player)
 
                 }
                 if(event.message == "/dsl event-listener") {

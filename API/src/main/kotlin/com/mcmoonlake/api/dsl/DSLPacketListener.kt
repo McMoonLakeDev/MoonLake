@@ -43,6 +43,7 @@ open class DSLPacketScore(val plugin: Plugin) {
      *
      * @see [buildPacketListener]
      * @see [buildPacketListenerSpecified]
+     * @see [buildPacketListenerLegacy]
      */
     open fun get(): PacketListener = object: PacketListenerAnyAdapter(plugin, priority) {
         override fun onSending(event: PacketEvent)
