@@ -557,7 +557,7 @@ class MoonLakePluginTest : JavaPlugin() {
                 }
                 if(event.message == "/dsl ib") {
 
-                    Material.IRON_SWORD.buildItemBuilder {
+                    Material.POTION.buildItemBuilder {
                         displayName = "name"
                         if(displayName == "name")
                             displayName = "displayName"
@@ -584,7 +584,14 @@ class MoonLakePluginTest : JavaPlugin() {
                         canPlaceOn = arrayOf(Material.GRASS)
                         addCanPlaceOn = arrayOf(Material.STONE)
                         repairCost = 10
-
+                        potionColor = Color.GREEN
+                        potionBase = EffectBase.REGENERATION
+                        addPotionEffect {
+                            type = EffectType.SPEED
+                            duration = 10 * 20
+                            amplifier = 0
+                            particle = false
+                        }
                     }.build().givePlayer(event.player)
 
                 }
