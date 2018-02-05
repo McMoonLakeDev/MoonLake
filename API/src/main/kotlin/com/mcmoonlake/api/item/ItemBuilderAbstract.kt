@@ -552,8 +552,17 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         return this
     }
 
+    override fun setPotionEffect(effect: Collection<EffectCustom>): ItemBuilder
+            { clearPotionEffect(); effect.forEach { addPotionEffect(it) }; return this; }
+
     override fun addPotionEffect(effect: EffectCustom): ItemBuilder
             = addPotionEffect(effect.type, effect.duration, effect.amplifier, effect.ambient, effect.particle, effect.color)
+
+    override fun addPotionEffect(vararg effect: EffectCustom): ItemBuilder
+            { effect.forEach { addPotionEffect(it) }; return this; }
+
+    override fun addPotionEffect(effect: Collection<EffectCustom>): ItemBuilder
+            { effect.forEach { addPotionEffect(it) }; return this; }
 
     override fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean, particle: Boolean, color: Color?): ItemBuilder {
         val potionEffect = NBTFactory.ofCompound()
@@ -588,6 +597,9 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         block(this, effects)
         return this
     }
+
+    override fun setFireworkEffect(effect: Collection<FireworkEffect>): ItemBuilder
+            { clearFireworkEffect(); return addFireworkEffect(effect); }
 
     override fun addFireworkEffect(vararg effect: FireworkEffect): ItemBuilder {
         effect.forEach {

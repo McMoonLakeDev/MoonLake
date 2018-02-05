@@ -30,6 +30,10 @@ import com.mcmoonlake.api.depend.DependPlaceholderAPI
 import com.mcmoonlake.api.depend.DependPlugins
 import com.mcmoonlake.api.depend.DependVaultEconomy
 import com.mcmoonlake.api.depend.DependWorldEdit
+import com.mcmoonlake.api.dsl.buildEventListener
+import com.mcmoonlake.api.dsl.buildItemBuilder
+import com.mcmoonlake.api.dsl.buildPacketListenerLegacy
+import com.mcmoonlake.api.dsl.buildPacketListenerSpecified
 import com.mcmoonlake.api.effect.EffectBase
 import com.mcmoonlake.api.effect.EffectCustom
 import com.mcmoonlake.api.effect.EffectType
@@ -44,6 +48,8 @@ import org.bukkit.*
 import org.bukkit.entity.Pig
 import org.bukkit.entity.Zombie
 import org.bukkit.event.EventHandler
+import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
@@ -548,6 +554,120 @@ class MoonLakePluginTest : JavaPlugin() {
                                     .build())
                             .build()
                             .also { event.player.itemInHand = it }
+                }
+                if(event.message == "/dsl ib") {
+
+                    Material.POTION.buildItemBuilder {
+                        displayName = "name"
+                        if(displayName == "name")
+                            displayName = "displayName"
+                        localizedName = "tile.name.tnt"
+                        lore = listOf("lore")
+                        addLore = arrayOf("add lore")
+                        enchant = mapOf(Enchantment.DURABILITY to 1)
+                        addEnchant {
+                            enchant = Enchantment.DAMAGE
+                            level = 1
+                        }
+                        addEnchants = arrayOf(Enchantment.FIRE_ASPECT to 1)
+                        addFlag = arrayOf(ItemFlag.HIDE_ENCHANTS)
+                        removeFlag = arrayOf(ItemFlag.HIDE_ENCHANTS)
+                        isUnbreakable = true
+                        addAttribute {
+                            type = AttributeType.MAX_HEALTH
+                            operation = Operation.ADD
+                            slot = Slot.MAIN_HAND
+                            amount = 4.0
+                        }
+                        canDestroy = arrayOf(Material.GRASS)
+                        addCanDestroy = arrayOf(Material.STONE)
+                        canPlaceOn = arrayOf(Material.GRASS)
+                        addCanPlaceOn = arrayOf(Material.STONE)
+                        repairCost = 10
+                        potionColor = Color.GREEN
+                        potionBase = EffectBase.REGENERATION
+                        addPotionEffect {
+                            type = EffectType.SPEED
+                            duration = 10 * 20
+                            amplifier = 0
+                            particle = false
+                        }
+                    }.build().givePlayer(event.player)
+
+                    Material.FIREWORK.buildItemBuilder {
+                        displayName = "Creeper"
+                        addFirework {
+                            type = FireworkEffect.Type.CREEPER
+                            flicker = true
+                            trail = true
+                            colors = arrayOf(Color.GREEN)
+                            fadeColors = arrayOf(Color.RED)
+                        }
+                    }.build().givePlayer(event.player)
+
+                    Material.IRON_CHESTPLATE.buildItemBuilder {
+                        addAttribute {
+                            type = AttributeType.MAX_HEALTH
+                            operation = Operation.ADD
+                            amount = 2.0
+                            slot = Slot.CHEST
+                        }
+                        addAttribute {
+                            type = AttributeType.MAX_HEALTH
+                            name = "Add"
+                            operation = Operation.MULTIPLY
+                            amount = 0.2
+                            slot = Slot.CHEST
+                        }
+                    }.build().givePlayer(event.player)
+
+                }
+                if(event.message == "/dsl event-listener") {
+
+                    buildEventListener {
+                        event<BlockPlaceEvent> {
+                            player.sendMessage("你放置了一个方块 -> ${block.type}")
+                        }
+                        event<BlockBreakEvent> {
+                            player.sendMessage("你破坏了一个方块 -> ${block.type}")
+                            player.sendMessage("但是我给你阻止了")
+                            isCancelled = true
+                        }
+                    }
+
+                }
+                if(event.message == "/dsl packet-listener") {
+
+                    val listener = buildPacketListenerSpecified {
+                        priority = PacketListenerPriority.MONITOR
+                        types = arrayOf(PacketInUseEntity::class.java, PacketOutTitle::class.java)
+                        onSending {
+                            val packet = packet as PacketOutTitle
+                            packet.title = ChatSerializer.fromRaw("&a我给你的标题修改了233")
+                        }
+                        onReceiving {
+                            val packet = packet as PacketInUseEntity
+                            player?.sendMessage("你交互了实体 id -> ${packet.entityId}")
+                        }
+                    }
+
+                    PacketListeners.registerListener(listener)
+                }
+                if(event.message == "/dsl packet-listener-legacy") {
+
+                    val listener = buildPacketListenerLegacy<PacketInBlockPlace, PacketInBlockPlaceLegacy> {
+                        adapter = PacketInBlockPlaceLegacyAdapter()
+                        onReceiving {
+                            if(!isLegacy) {
+                                val packet = packet as PacketInBlockPlace
+                                player?.sendMessage(packet.toString())
+                            } else {
+                                val packet = packet as PacketInBlockPlaceLegacy
+                                player?.sendMessage(packet.toString())
+                            }
+                        }
+                    }
+                    PacketListeners.registerListener(listener)
                 }
             }
         }.registerEvent(this)

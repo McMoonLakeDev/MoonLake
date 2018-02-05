@@ -229,7 +229,13 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun getPotionEffect(block: (self: ItemBuilder, effect: Collection<EffectCustom>?) -> Unit): ItemBuilder
 
+    fun setPotionEffect(effect: Collection<EffectCustom>): ItemBuilder
+
     fun addPotionEffect(effect: EffectCustom): ItemBuilder
+
+    fun addPotionEffect(vararg effect: EffectCustom): ItemBuilder
+
+    fun addPotionEffect(effect: Collection<EffectCustom>): ItemBuilder
 
     fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean = true, particle: Boolean = true, color: Color? = null): ItemBuilder
 
@@ -241,6 +247,8 @@ interface ItemBuilder : Builder<ItemStack> {
      */
 
     fun getFireworkEffect(block: (self: ItemBuilder, effect: Collection<FireworkEffect>?) -> Unit): ItemBuilder
+
+    fun setFireworkEffect(effect: Collection<FireworkEffect>): ItemBuilder
 
     fun addFireworkEffect(vararg effect: FireworkEffect): ItemBuilder
 
