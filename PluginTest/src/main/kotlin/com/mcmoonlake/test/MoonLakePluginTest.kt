@@ -594,6 +594,33 @@ class MoonLakePluginTest : JavaPlugin() {
                         }
                     }.build().givePlayer(event.player)
 
+                    Material.FIREWORK.buildItemBuilder {
+                        displayName = "Creeper"
+                        addFirework {
+                            type = FireworkEffect.Type.CREEPER
+                            flicker = true
+                            trail = true
+                            colors = arrayOf(Color.GREEN)
+                            fadeColors = arrayOf(Color.RED)
+                        }
+                    }.build().givePlayer(event.player)
+
+                    Material.IRON_CHESTPLATE.buildItemBuilder {
+                        addAttribute {
+                            type = AttributeType.MAX_HEALTH
+                            operation = Operation.ADD
+                            amount = 2.0
+                            slot = Slot.CHEST
+                        }
+                        addAttribute {
+                            type = AttributeType.MAX_HEALTH
+                            name = "Add"
+                            operation = Operation.MULTIPLY
+                            amount = 0.2
+                            slot = Slot.CHEST
+                        }
+                    }.build().givePlayer(event.player)
+
                 }
                 if(event.message == "/dsl event-listener") {
 
