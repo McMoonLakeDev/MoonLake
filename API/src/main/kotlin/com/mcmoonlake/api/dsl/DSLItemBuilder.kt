@@ -37,6 +37,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemFlag
+import org.bukkit.inventory.ItemStack
 import java.util.*
 
 /**
@@ -53,9 +54,9 @@ annotation class DSLItemBuilderSetterOnly
 annotation class DSLItemBuilderMarker
 
 @DSLItemBuilderMarker
-class DSLItemBuilderScope(material: Material, amount: Int = 1, durability: Int = 0) {
+class DSLItemBuilderScope(itemStack: ItemStack) {
 
-    private val builder = ItemBuilder.of(material, amount, durability)
+    private val builder = ItemBuilder.of(itemStack)
 
     private inline fun <T> ItemBuilder.apply(value: T?, block: ItemBuilder.(T) -> Unit)
             = if(value != null) block(this, value) else {}
@@ -538,5 +539,8 @@ class DSLItemBuilderScope(material: Material, amount: Int = 1, durability: Int =
             = builder
 }
 
+inline fun ItemStack.buildItemBuilder(block: DSLItemBuilderScope.() -> Unit): ItemBuilder
+        = DSLItemBuilderScope(this).also(block).get()
+
 inline fun Material.buildItemBuilder(amount: Int = 1, durability: Int = 0, block: DSLItemBuilderScope.() -> Unit): ItemBuilder
-        = DSLItemBuilderScope(this, amount, durability).also(block).get()
+        = DSLItemBuilderScope(ItemStack(this, amount, durability.toShort())).also(block).get()

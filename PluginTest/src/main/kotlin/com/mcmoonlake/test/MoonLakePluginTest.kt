@@ -619,6 +619,13 @@ class MoonLakePluginTest : JavaPlugin() {
                             amount = 0.2
                             slot = Slot.CHEST
                         }
+                    }.build().buildItemBuilder {
+                        addAttribute {
+                            type = AttributeType.ARMOR
+                            operation = Operation.ADD
+                            amount = 6.0
+                            slot = Slot.CHEST
+                        }
                     }.build().givePlayer(event.player)
 
                 }

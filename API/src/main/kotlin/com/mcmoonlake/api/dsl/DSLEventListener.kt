@@ -24,7 +24,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 
-data class DSLEventScope(val plugin: Plugin) {
+class DSLEventScope(val plugin: Plugin) {
 
     companion object {
         /**
