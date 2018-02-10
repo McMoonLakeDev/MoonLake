@@ -68,6 +68,10 @@ interface NBTList<T> : NBTBase<MutableList<NBTBase<T>>>, Iterable<T> {
 
     fun remove(value: Any)
 
+    fun removeAt(element: T)
+
+    fun removeAll(elements: Collection<T>)
+
     fun getValue(index: Int): T
 
     fun size(): Int

@@ -40,6 +40,12 @@ interface ItemBuilder : Builder<ItemStack> {
     override fun build(): ItemStack
 
     /**
+     * nbt tag
+     */
+
+    // TODO NBT TAG FUNCTION
+
+    /**
      * general meta
      * @see org.bukkit.inventory.meta.ItemMeta
      */
@@ -48,9 +54,17 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setDisplayName(displayName: String): ItemBuilder
 
+    fun removeDisplayName(): ItemBuilder
+
+    fun removeDisplayNameIf(predicate: (displayName: String) -> Boolean): ItemBuilder
+
     fun getLocalizedName(block: (self: ItemBuilder, localizedName: String?) -> Unit): ItemBuilder
 
     fun setLocalizedName(localizedName: String): ItemBuilder
+
+    fun removeLocalizedName(): ItemBuilder
+
+    fun removeLocalizedNameIf(predicate: (localizedName: String) -> Boolean): ItemBuilder
 
     fun getLore(block: (self: ItemBuilder, lore: List<String>?) -> Unit): ItemBuilder
 
@@ -62,11 +76,19 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun addLore(lore: Collection<String>): ItemBuilder
 
+    fun removeLore(vararg lore: String): ItemBuilder
+
+    fun removeLoreIf(predicate: (lore: String) -> Boolean): ItemBuilder
+
     fun clearLore(): ItemBuilder
 
     fun getEnchant(block: (self: ItemBuilder, ench: Map<Enchantment, Int>?) -> Unit): ItemBuilder
 
     fun addEnchant(enchantment: Enchantment, level: Int): ItemBuilder
+
+    fun removeEnchant(enchantment: Enchantment): ItemBuilder
+
+    fun removeEnchantIf(predicate: (ench: Enchantment, level: Int) -> Boolean): ItemBuilder
 
     fun clearEnchant(): ItemBuilder
 
@@ -96,6 +118,10 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun addAttribute(type: AttributeType, name: String = type.value(), operation: Operation, slot: Slot?, amount: Double, uuid: UUID = UUID.randomUUID()): ItemBuilder
 
+    fun removeAttribute(type: AttributeType): ItemBuilder
+
+    fun removeAttributeIf(predicate: (type: AttributeType, name: String, operation: Operation, slot: Slot?, amount: Double, uuid: UUID) -> Boolean): ItemBuilder
+
     fun clearAttribute(): ItemBuilder
 
     fun getCanDestroy(block: (self: ItemBuilder, canDestroy: List<Material>?) -> Unit): ItemBuilder
@@ -104,6 +130,10 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun addCanDestroy(vararg types: Material): ItemBuilder
 
+    fun removeCanDestroy(vararg types: Material): ItemBuilder
+
+    fun removeCanDestroyIf(predicate: (type: Material) -> Boolean): ItemBuilder
+
     fun clearCanDestroy(): ItemBuilder
 
     fun getCanPlaceOn(block: (self: ItemBuilder, canPlaceOn: List<Material>?) -> Unit): ItemBuilder
@@ -111,6 +141,10 @@ interface ItemBuilder : Builder<ItemStack> {
     fun setCanPlaceOn(vararg types: Material): ItemBuilder
 
     fun addCanPlaceOn(vararg types: Material): ItemBuilder
+
+    fun removeCanPlaceOn(vararg types: Material): ItemBuilder
+
+    fun removeCanPlaceOnIf(predicate: (type: Material) -> Boolean): ItemBuilder
 
     fun clearCanPlaceOn(): ItemBuilder
 
@@ -128,6 +162,10 @@ interface ItemBuilder : Builder<ItemStack> {
     fun setLeatherColor(color: Color): ItemBuilder
 
     fun setLeatherColor(red: Int, green: Int, blue: Int): ItemBuilder
+
+    fun removeLeatherColor(): ItemBuilder
+
+    fun removeLeatherColorIf(predicate: (color: Color) -> Boolean): ItemBuilder
 
     /**
      * book meta
@@ -156,9 +194,18 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun addBookPages(pages: Collection<String>): ItemBuilder
 
+    fun removeBookPages(vararg pages: String): ItemBuilder
+
+//    // see below
+//    fun removeBookPagesIf(predicate: (page: String) -> Boolean): ItemBuilder
+
     fun setBookPages(vararg pages: ChatComponent): ItemBuilder
 
     fun addBookPages(vararg pages: ChatComponent): ItemBuilder
+
+    fun removeBookPages(vararg pages: ChatComponent): ItemBuilder
+
+    fun removeBookPagesIf(predicate: (page: ChatComponent) -> Boolean): ItemBuilder
 
     fun clearBookPages(): ItemBuilder
 
@@ -171,6 +218,10 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun addStoredEnchant(enchantment: Enchantment, level: Int): ItemBuilder
 
+    fun removeStoredEnchant(enchantment: Enchantment): ItemBuilder
+
+    fun removeStoredEnchantIf(predicate: (ench: Enchantment, level: Int) -> Boolean): ItemBuilder
+
     fun clearStoredEnchant(): ItemBuilder
 
     /**
@@ -182,9 +233,17 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setSkullOwner(owner: String): ItemBuilder
 
+    fun removeSkullOwner(): ItemBuilder
+
+    fun removeSkullOwnerIf(predicate: (owner: String) -> Boolean): ItemBuilder
+
     fun getSkullTexture(block: (self: ItemBuilder, value: String?) -> Unit): ItemBuilder
 
     fun setSkullTexture(value: String): ItemBuilder
+
+    fun removeSkullTexture(): ItemBuilder
+
+    fun removeSkullTextureIf(predicate: (value: String) -> Boolean): ItemBuilder
 
     /**
      * spawn egg meta
@@ -196,6 +255,10 @@ interface ItemBuilder : Builder<ItemStack> {
     fun setSpawnEggType(type: EntityType): ItemBuilder
 
     fun setSpawnEggType(entity: Entity): ItemBuilder
+
+    fun removeSpawnEggType(): ItemBuilder
+
+    fun removeSpawnEggTypeIf(predicate: (type: EntityType) -> Boolean): ItemBuilder
 
     /**
      * map meta
@@ -210,9 +273,17 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setMapLocationName(locationName: String): ItemBuilder
 
+    fun removeMapLocationName(): ItemBuilder
+
+    fun removeMapLocationNameIf(predicate: (locationName: String) -> Boolean): ItemBuilder
+
     fun getMapColor(block: (self: ItemBuilder, color: Color?) -> Unit): ItemBuilder
 
     fun setMapColor(color: Color): ItemBuilder
+
+    fun removeMapColor(): ItemBuilder
+
+    fun removeMapColorIf(predicate: (color: Color) -> Boolean): ItemBuilder
 
     /**
      * potion meta
@@ -223,9 +294,17 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun setPotionColor(color: Color): ItemBuilder
 
+    fun removePotionColor(): ItemBuilder
+
+    fun removePotionColorIf(predicate: (color: Color) -> Boolean): ItemBuilder
+
     fun getPotionBase(block: (self: ItemBuilder, base: EffectBase?) -> Unit): ItemBuilder
 
     fun setPotionBase(base: EffectBase): ItemBuilder
+
+    fun removePotionBase(): ItemBuilder
+
+    fun removePotionBaseIf(predicate: (base: EffectBase) -> Boolean): ItemBuilder
 
     fun getPotionEffect(block: (self: ItemBuilder, effect: Collection<EffectCustom>?) -> Unit): ItemBuilder
 
@@ -238,6 +317,10 @@ interface ItemBuilder : Builder<ItemStack> {
     fun addPotionEffect(effect: Collection<EffectCustom>): ItemBuilder
 
     fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean = true, particle: Boolean = true, color: Color? = null): ItemBuilder
+
+    fun removePotionEffect(type: EffectType): ItemBuilder
+
+    fun removePotionEffectIf(predicate: (type: EffectType, duration: Int, amplifier: Int, ambient: Boolean, particle: Boolean, color: Color?) -> Boolean): ItemBuilder
 
     fun clearPotionEffect(): ItemBuilder
 
@@ -253,6 +336,8 @@ interface ItemBuilder : Builder<ItemStack> {
     fun addFireworkEffect(vararg effect: FireworkEffect): ItemBuilder
 
     fun addFireworkEffect(effect: Collection<FireworkEffect>): ItemBuilder
+
+    fun removeFireworkEffectIf(predicate: (type: FireworkEffect.Type, flicker: Boolean, trail: Boolean, colors: Array<Color>, fadeColors: Array<Color>) -> Boolean): ItemBuilder
 
     fun clearFireworkEffect(): ItemBuilder
 
@@ -271,6 +356,10 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun addBannerPattern(pattern: Pattern): ItemBuilder
 
+    fun removeBannerPattern(type: Pattern.Type): ItemBuilder
+
+    fun removeBannerPatternIf(predicate: (type: Pattern.Type, color: Pattern.Color) -> Boolean): ItemBuilder
+
     fun clearBannerPattern(): ItemBuilder
 
     /**
@@ -283,6 +372,10 @@ interface ItemBuilder : Builder<ItemStack> {
     fun setKnowledgeBookRecipes(recipes: List<Material>): ItemBuilder
 
     fun addKnowledgeBookRecipes(vararg recipes: Material): ItemBuilder
+
+    fun removeKnowledgeBookRecipes(vararg recipes: Material): ItemBuilder
+
+    fun removeKnowledgeBookRecipesIf(predicate: (recipe: Material) -> Boolean): ItemBuilder
 
     fun clearKnowledgeBookRecipes(): ItemBuilder
 

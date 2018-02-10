@@ -676,6 +676,24 @@ class MoonLakePluginTest : JavaPlugin() {
                     }
                     PacketListeners.registerListener(listener)
                 }
+                if(event.message == "/ib 2018-2-10") {
+
+                    Material.IRON_SWORD.newItemBuilder()
+                            .setDisplayName("Display Name")
+                            .removeDisplayNameIf { it.startsWith("Display") }
+                            .setLocalizedName("Localized Name")
+                            .removeLocalizedNameIf { it.startsWith("Localized") }
+                            .addLore("Lore1", "Lore2")
+                            .removeLoreIf { it.startsWith("Lore") }
+                            .addEnchant(Enchantment.DAMAGE, 10)
+                            .removeEnchantIf { ench, level -> ench == Enchantment.DAMAGE && level > 5 }
+                            .addAttribute(AttributeType.ATTACK_DAMAGE, "DMG", Operation.ADD, 10.0)
+                            .removeAttributeIf { type, name, _, _, _, _ -> type == AttributeType.ATTACK_DAMAGE && name == "DMG" }
+                            .addCanDestroy(Material.GRASS, Material.STONE)
+                            .removeCanDestroyIf { it.isBlock }
+                            .build()
+                            .givePlayer(event.player)
+                }
             }
         }.registerEvent(this)
     }

@@ -22,6 +22,7 @@ import com.mcmoonlake.api.attribute.AttributeType
 import com.mcmoonlake.api.attribute.Operation
 import com.mcmoonlake.api.attribute.Slot
 import com.mcmoonlake.api.chat.ChatComponent
+import com.mcmoonlake.api.chat.ChatSerializer
 import com.mcmoonlake.api.effect.EffectBase
 import com.mcmoonlake.api.effect.EffectCustom
 import com.mcmoonlake.api.effect.EffectType
@@ -29,6 +30,8 @@ import com.mcmoonlake.api.nbt.NBTCompound
 import com.mcmoonlake.api.nbt.NBTFactory
 import com.mcmoonlake.api.nbt.NBTList
 import com.mcmoonlake.api.nbt.NBTType
+import com.mcmoonlake.api.ofValuable
+import com.mcmoonlake.api.ofValuableNotNull
 import com.mcmoonlake.api.util.Enums
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
@@ -211,6 +214,20 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     protected open fun tagKnowledgeBookRecipes(): NBTList<String>
             = tag.getListOrDefault(TAG_KNOWLEDGE_BOOK_RECIPES)
 
+    private fun <T> NBTCompound.removeTagIf(key: String, predicate: (value: T) -> Boolean): ItemBuilder {
+        val value = getValueOfNull(key)
+        if(value != null && predicate(value.value as T))
+            remove(key)
+        return this@ItemBuilderAbstract
+    }
+
+    private fun <T> NBTList<T>.removeTagIf(predicate: (value: T) -> Boolean): ItemBuilder {
+        val removeList = filter(predicate)
+        if(removeList.isNotEmpty())
+            removeAll(removeList)
+        return this@ItemBuilderAbstract
+    }
+
     /** general */
 
     override fun getDisplayName(block: (self: ItemBuilder, displayName: String?) -> Unit): ItemBuilder
@@ -219,11 +236,23 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun setDisplayName(displayName: String): ItemBuilder
             { tagDisplay().putString(TAG_DISPLAY_NAME, displayName); return this; }
 
+    override fun removeDisplayName(): ItemBuilder
+            { tagDisplay().remove(TAG_DISPLAY_NAME); return this; }
+
+    override fun removeDisplayNameIf(predicate: (displayName: String) -> Boolean): ItemBuilder
+            = tagDisplay().removeTagIf(TAG_DISPLAY_NAME, predicate)
+
     override fun getLocalizedName(block: (self: ItemBuilder, localizedName: String?) -> Unit): ItemBuilder
             { block(this, tagDisplay().getStringOrNull(TAG_DISPLAY_LOC_NAME)); return this; }
 
     override fun setLocalizedName(localizedName: String): ItemBuilder
             { tagDisplay().putString(TAG_DISPLAY_LOC_NAME, localizedName); return this; }
+
+    override fun removeLocalizedName(): ItemBuilder
+            { tagDisplay().remove(TAG_DISPLAY_LOC_NAME); return this; }
+
+    override fun removeLocalizedNameIf(predicate: (localizedName: String) -> Boolean): ItemBuilder
+            = tagDisplay().removeTagIf(TAG_DISPLAY_LOC_NAME, predicate)
 
     override fun getLore(block: (self: ItemBuilder, lore: List<String>?) -> Unit): ItemBuilder
             { block(this, tagDisplay().getListOrNull<String>(TAG_DISPLAY_LORE)?.toList()); return this; }
@@ -239,6 +268,12 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     override fun addLore(lore: Collection<String>): ItemBuilder
             { lore.forEach { tagDisplayLore().addString(it) }; return this; }
+
+    override fun removeLore(vararg lore: String): ItemBuilder
+            { val tag = tagDisplayLore(); lore.forEach { tag.remove(it) }; return this; }
+
+    override fun removeLoreIf(predicate: (lore: String) -> Boolean): ItemBuilder
+            = tagDisplayLore().removeTagIf(predicate)
 
     override fun clearLore(): ItemBuilder
             { if(tag.containsKey(TAG_DISPLAY)) tagDisplay().remove(TAG_DISPLAY_LORE); return this; }
@@ -259,6 +294,16 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     override fun addEnchant(enchantment: Enchantment, level: Int): ItemBuilder
             { tagEnchant().addCompound(NBTFactory.ofCompound().putShort(TAG_ENCH_ID, enchantment.id).putShort(TAG_ENCH_LVL, level)); return this; }
+
+    override fun removeEnchant(enchantment: Enchantment): ItemBuilder
+            = tagEnchant().removeTagIf { Enchantment.fromId(it.getShort(TAG_ENCH_ID).toInt()) == enchantment }
+
+    override fun removeEnchantIf(predicate: (ench: Enchantment, level: Int) -> Boolean): ItemBuilder
+            = tagEnchant().removeTagIf {
+        val enchantment = Enchantment.fromId(it.getShort(TAG_ENCH_ID).toInt())
+        val level = it.getShort(TAG_ENCH_LVL).toInt()
+        predicate(enchantment, level)
+    }
 
     override fun clearEnchant(): ItemBuilder
             { tag.remove(TAG_ENCH); return this; }
@@ -341,6 +386,24 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         return this
     }
 
+    override fun removeAttribute(type: AttributeType)
+            = tagAttributeModifiers().removeTagIf {
+        val type0: AttributeType? = ofValuable(it.getString(TAG_ATTRIBUTE_TYPE))
+        type == type0
+    }
+
+    override fun removeAttributeIf(predicate: (type: AttributeType, name: String, operation: Operation, slot: Slot?, amount: Double, uuid: UUID) -> Boolean): ItemBuilder
+            = tagAttributeModifiers().removeTagIf {
+        val type: AttributeType? = ofValuable(it.getString(TAG_ATTRIBUTE_TYPE))
+        val name = it.getString(TAG_ATTRIBUTE_NAME)
+        val operation: Operation = ofValuableNotNull(it.getInt(TAG_ATTRIBUTE_OPERATION))
+        val slot: Slot? = ofValuable(it.getStringOrNull(TAG_ATTRIBUTE_SLOT))
+        val amount = it.getDouble(TAG_ATTRIBUTE_AMOUNT)
+        val uuidMost = it.getLong(TAG_ATTRIBUTE_UUID_MOST)
+        val uuidLeast = it.getLong(TAG_ATTRIBUTE_UUID_LEAST)
+        type != null && predicate(type, name, operation, slot, amount, UUID(uuidMost, uuidLeast))
+    }
+
     override fun clearAttribute(): ItemBuilder
             { tag.remove(TAG_ATTRIBUTE_MODIFIERS); return this; }
 
@@ -368,6 +431,12 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         return this
     }
 
+    override fun removeCanDestroy(vararg types: Material): ItemBuilder
+            { tag.getListOrNull<String>(TAG_CAN_DESTROY)?.removeAll(types.map { materialToNamespace(it)}); return this; }
+
+    override fun removeCanDestroyIf(predicate: (type: Material) -> Boolean): ItemBuilder
+            { tag.getListOrNull<String>(TAG_CAN_DESTROY)?.removeTagIf { val type = namespaceToMaterial(it); type != null && predicate(type) }; return this; }
+
     override fun clearCanDestroy(): ItemBuilder
             { tag.remove(TAG_CAN_DESTROY); return this; }
 
@@ -382,6 +451,12 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         types.forEach { canPlaceOn.addString(materialToNamespace(it)) }
         return this
     }
+
+    override fun removeCanPlaceOn(vararg types: Material): ItemBuilder
+            { tag.getListOrNull<String>(TAG_CAN_PLACE_ON)?.removeAll(types.map { materialToNamespace(it)}); return this; }
+
+    override fun removeCanPlaceOnIf(predicate: (type: Material) -> Boolean): ItemBuilder
+            { tag.getListOrNull<String>(TAG_CAN_PLACE_ON)?.removeTagIf { val type = namespaceToMaterial(it); type != null && predicate(type) }; return this; }
 
     override fun clearCanPlaceOn(): ItemBuilder
             { tag.remove(TAG_CAN_PLACE_ON); return this; }
@@ -402,6 +477,12 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     override fun setLeatherColor(red: Int, green: Int, blue: Int): ItemBuilder
             = setLeatherColor(Color.fromRGB(red, green, blue))
+
+    override fun removeLeatherColor(): ItemBuilder
+            { tagDisplay().remove(TAG_LEATHER_ARMOR_COLOR); return this; }
+
+    override fun removeLeatherColorIf(predicate: (color: Color) -> Boolean): ItemBuilder
+            = tagDisplay().removeTagIf<Int>(TAG_LEATHER_ARMOR_COLOR) { predicate(Color.fromRGB(it)) }
 
     /** book */
 
@@ -438,11 +519,20 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun addBookPages(pages: Collection<String>): ItemBuilder
             = addBookPages(*pages.toTypedArray())
 
+    override fun removeBookPages(vararg pages: String): ItemBuilder
+            { tag.getListOrNull<String>(TAG_BOOK_PAGES)?.removeAll(pages.toList()); return this; }
+
     override fun setBookPages(vararg pages: ChatComponent): ItemBuilder
             = setBookPages(pages.map { it.toJson() })
 
     override fun addBookPages(vararg pages: ChatComponent): ItemBuilder
             = addBookPages(pages.map { it.toJson() })
+
+    override fun removeBookPages(vararg pages: ChatComponent): ItemBuilder
+            = removeBookPages(*pages.map { it.toJson() }.toTypedArray())
+
+    override fun removeBookPagesIf(predicate: (page: ChatComponent) -> Boolean): ItemBuilder
+            { tag.getListOrNull<String>(TAG_BOOK_PAGES)?.removeTagIf { predicate(ChatSerializer.fromJsonLenient(it)) }; return this; }
 
     override fun clearBookPages(): ItemBuilder
             { tag.remove(TAG_BOOK_PAGES); return this; }
@@ -455,6 +545,16 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun addStoredEnchant(enchantment: Enchantment, level: Int): ItemBuilder
             { tagStoredEnchantments().addCompound(NBTFactory.ofCompound().putShort(TAG_ENCH_ID, enchantment.id).putShort(TAG_ENCH_LVL, level)); return this; }
 
+    override fun removeStoredEnchant(enchantment: Enchantment): ItemBuilder
+            = tagStoredEnchantments().removeTagIf { Enchantment.fromId(it.getShort(TAG_ENCH_ID).toInt()) == enchantment }
+
+    override fun removeStoredEnchantIf(predicate: (ench: Enchantment, level: Int) -> Boolean): ItemBuilder
+            = tagStoredEnchantments().removeTagIf {
+        val enchantment = Enchantment.fromId(it.getShort(TAG_ENCH_ID).toInt())
+        val level = it.getShort(TAG_ENCH_LVL).toInt()
+        predicate(enchantment, level)
+    }
+
     override fun clearStoredEnchant(): ItemBuilder
             { tag.remove(TAG_STORED_ENCHANTMENTS); return this; }
 
@@ -465,6 +565,12 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     override fun setSkullOwner(owner: String): ItemBuilder
             { tag.putString(TAG_SKULL_OWNER, owner); return this; }
+
+    override fun removeSkullOwner(): ItemBuilder
+            { tag.remove(TAG_SKULL_OWNER); return this; }
+
+    override fun removeSkullOwnerIf(predicate: (owner: String) -> Boolean): ItemBuilder
+            = tag.removeTagIf(TAG_SKULL_OWNER, predicate)
 
     override fun getSkullTexture(block: (self: ItemBuilder, value: String?) -> Unit): ItemBuilder {
         val skullOwner = tag.getValueOfNull(TAG_SKULL_OWNER)
@@ -491,6 +597,17 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         return this
     }
 
+    override fun removeSkullTexture(): ItemBuilder
+            { tag.remove(TAG_SKULL_OWNER); return this; }
+
+    override fun removeSkullTextureIf(predicate: (value: String) -> Boolean): ItemBuilder {
+        tag.getCompoundOrNull(TAG_SKULL_OWNER)
+                ?.getCompoundOrNull(TAG_SKULL_PROPERTIES)
+                ?.getListOrNull<NBTCompound>(TAG_SKULL_TEXTURES)
+                ?.removeTagIf { predicate(it.getString(TAG_SKULL_TEXTURES_VALUE)) }
+        return this
+    }
+
     /** spawn egg */
 
     override fun getSpawnEggType(block: (self: ItemBuilder, type: EntityType?) -> Unit): ItemBuilder // TODO EntityType.fromName  // TODO v1.13
@@ -501,6 +618,16 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     override fun setSpawnEggType(entity: Entity): ItemBuilder
             { tag.putCompound(NBTFactory.readEntityTag(entity).putString(TAG_ENTITY_TAG_ID, entity.type.name)); return this; }
+
+    override fun removeSpawnEggType(): ItemBuilder
+            { tag.remove(TAG_ENTITY_TAG); return this; }
+
+    override fun removeSpawnEggTypeIf(predicate: (type: EntityType) -> Boolean): ItemBuilder
+            = tag.removeTagIf<NBTCompound>(TAG_ENTITY_TAG) {
+        val typeName = it.getStringOrNull(TAG_ENTITY_TAG_ID)
+        val type = if(typeName != null) EntityType.fromName(typeName) else null
+        type != null && predicate(type)
+    }
 
     /** map */
 
@@ -516,11 +643,23 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun setMapLocationName(locationName: String): ItemBuilder
             { tagDisplay().putString(TAG_DISPLAY_LOC_NAME, locationName); return this; }
 
+    override fun removeMapLocationName(): ItemBuilder
+            { tagDisplay().remove(TAG_DISPLAY_LOC_NAME); return this; }
+
+    override fun removeMapLocationNameIf(predicate: (locationName: String) -> Boolean): ItemBuilder
+            = tagDisplay().removeTagIf(TAG_DISPLAY_LOC_NAME, predicate)
+
     override fun getMapColor(block: (self: ItemBuilder, color: Color?) -> Unit): ItemBuilder
             { block(this, tag.getCompoundOrNull(TAG_DISPLAY)?.getIntOrNull(TAG_MAP_COLOR).let { if(it == null) null else Color.fromRGB(it) }); return this; }
 
     override fun setMapColor(color: Color): ItemBuilder
             { tagDisplay().putInt(TAG_MAP_COLOR, color.asRGB()); return this; }
+
+    override fun removeMapColor(): ItemBuilder
+            { tagDisplay().remove(TAG_MAP_COLOR); return this; }
+
+    override fun removeMapColorIf(predicate: (color: Color) -> Boolean): ItemBuilder
+            = tagDisplay().removeTagIf<Int>(TAG_MAP_COLOR) { predicate(Color.fromRGB(it)) }
 
     /** potion */
 
@@ -530,11 +669,23 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun setPotionColor(color: Color): ItemBuilder
             { tag.putInt(TAG_CUSTOM_POTION_COLOR, color.asRGB()); return this; }
 
+    override fun removePotionColor(): ItemBuilder
+            { tag.remove(TAG_CUSTOM_POTION_COLOR); return this; }
+
+    override fun removePotionColorIf(predicate: (color: Color) -> Boolean): ItemBuilder
+            = tag.removeTagIf<Int>(TAG_CUSTOM_POTION_COLOR) { predicate(Color.fromRGB(it)) }
+
     override fun getPotionBase(block: (self: ItemBuilder, base: EffectBase?) -> Unit): ItemBuilder
             { block(this, tag.getStringOrNull(TAG_POTION).let { if(it == null) null else EffectBase.fromName(it) }); return this; }
 
     override fun setPotionBase(base: EffectBase): ItemBuilder
             { tag.putString(TAG_POTION, base.value); return this; }
+
+    override fun removePotionBase(): ItemBuilder
+            { tag.remove(TAG_POTION); return this; }
+
+    override fun removePotionBaseIf(predicate: (base: EffectBase) -> Boolean): ItemBuilder
+            = tag.removeTagIf<String>(TAG_POTION) { val base = EffectBase.fromName(it); base != null && predicate(base) }
 
     override fun getPotionEffect(block: (self: ItemBuilder, effect: Collection<EffectCustom>?) -> Unit): ItemBuilder {
         val potionEffects = tag.getListOrNull<NBTCompound>(TAG_CUSTOM_POTION_EFFECTS)
@@ -574,6 +725,20 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         tagCustomPotionEffects().addCompound(potionEffect)
         if(color != null) return setPotionColor(color)
         return this
+    }
+
+    override fun removePotionEffect(type: EffectType): ItemBuilder
+            = tagCustomPotionEffects().removeTagIf { it.getByte(TAG_POTION_ID).toInt() == type.id }
+
+    override fun removePotionEffectIf(predicate: (type: EffectType, duration: Int, amplifier: Int, ambient: Boolean, particle: Boolean, color: Color?) -> Boolean): ItemBuilder
+            = tagCustomPotionEffects().removeTagIf {
+        val type: EffectType? = ofValuable(it.getByte(TAG_POTION_ID).toInt())
+        val duration = it.getInt(TAG_POTION_DURATION)
+        val amplifier = it.getByte(TAG_POTION_AMPLIFIER).toInt()
+        val ambient = it.getBoolean(TAG_POTION_AMBIENT)
+        val particle = it.getBoolean(TAG_POTION_SHOW_PARTICLES)
+        var color: Color? = null; getPotionColor { _, value -> color = value }
+        type != null && predicate(type, duration, amplifier, ambient, particle, color)
     }
 
     override fun clearPotionEffect(): ItemBuilder
@@ -634,6 +799,16 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun addFireworkEffect(effect: Collection<FireworkEffect>): ItemBuilder
             = addFireworkEffect(*effect.toTypedArray())
 
+    override fun removeFireworkEffectIf(predicate: (type: FireworkEffect.Type, flicker: Boolean, trail: Boolean, colors: Array<Color>, fadeColors: Array<Color>) -> Boolean): ItemBuilder
+            = tagFireworksExplosions().removeTagIf {
+        val type = fromNBT(it.getByte(TAG_FIREWORKS_TYPE).toInt())
+        val flicker = it.getBoolean(TAG_FIREWORKS_FLICKER)
+        val trail = it.getBoolean(TAG_FIREWORKS_TRAIL)
+        val colors = it.getIntArray(TAG_FIREWORKS_COLORS).map { Color.fromRGB(it) }.toTypedArray()
+        val fadeColors = it.getIntArray(TAG_FIREWORKS_FADE_COLORS).map { Color.fromRGB(it) }.toTypedArray()
+        type != null && predicate(type, flicker, trail, colors, fadeColors)
+    }
+
     override fun clearFireworkEffect(): ItemBuilder
             { tag.remove(TAG_FIREWORKS); return this; }
 
@@ -669,6 +844,19 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         return this
     }
 
+    override fun removeBannerPattern(type: Pattern.Type): ItemBuilder
+            = tagBannerPatterns().removeTagIf {
+        val type0: Pattern.Type? = ofValuable(it.getString(TAG_BANNER_PATTERN))
+        type0 == type
+    }
+
+    override fun removeBannerPatternIf(predicate: (type: Pattern.Type, color: Pattern.Color) -> Boolean): ItemBuilder
+            = tagBannerPatterns().removeTagIf {
+        val type: Pattern.Type? = ofValuable(it.getString(TAG_BANNER_PATTERN))
+        val color: Pattern.Color? = ofValuable(it.getInt(TAG_BANNER_COLOR))
+        type != null && color != null && predicate(type, color)
+    }
+
     override fun clearBannerPattern(): ItemBuilder
             { tagBlockEntityTag().remove(TAG_BANNER_PATTERNS); return this; }
 
@@ -685,6 +873,12 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         recipes.forEach { knowledgeBookRecipes.addString(materialToNamespace(it)) }
         return this
     }
+
+    override fun removeKnowledgeBookRecipes(vararg recipes: Material): ItemBuilder
+            { tagKnowledgeBookRecipes().removeAll(recipes.map { materialToNamespace(it) }); return this; }
+
+    override fun removeKnowledgeBookRecipesIf(predicate: (recipe: Material) -> Boolean): ItemBuilder
+            = tagKnowledgeBookRecipes().removeTagIf { val type = namespaceToMaterial(it); type != null && predicate(type) }
 
     override fun clearKnowledgeBookRecipes(): ItemBuilder
             { tag.remove(TAG_KNOWLEDGE_BOOK_RECIPES); return this; }
