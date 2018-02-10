@@ -163,7 +163,11 @@ class NBTWrappedList<T>(
     override fun removeAt(element: T) {
         val iterator = value.iterator()
         while(iterator.hasNext()) {
-            if(iterator.next().value == element)
+            val value = iterator.next()
+            val isPrimitive = value.type != NBTType.TAG_LIST && value.type != NBTType.TAG_COMPOUND
+            if(isPrimitive && value.value == element)
+                iterator.remove()
+            else if(NBTFactory.ofWrapper(value.type, value.name, value.value) as T == element)
                 iterator.remove()
         }
     }

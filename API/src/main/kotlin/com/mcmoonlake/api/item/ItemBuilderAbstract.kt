@@ -216,8 +216,13 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     private fun <T> NBTCompound.removeTagIf(key: String, predicate: (value: T) -> Boolean): ItemBuilder {
         val value = getValueOfNull(key)
-        if(value != null && predicate(value.value as T))
-            remove(key)
+        if(value != null) {
+            val isPrimitive = value.type != NBTType.TAG_LIST && value.type != NBTType.TAG_COMPOUND
+            if(isPrimitive && predicate(value.value as T))
+                remove(key)
+            else if(predicate(NBTFactory.ofWrapper(value.type, value.name, value.value) as T))
+                remove(key)
+        }
         return this@ItemBuilderAbstract
     }
 
