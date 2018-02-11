@@ -45,6 +45,7 @@ import com.mcmoonlake.api.particle.Particle
 import com.mcmoonlake.api.player.PlayerInfo
 import com.mcmoonlake.api.task.MoonLakeRunnable
 import org.bukkit.*
+import org.bukkit.entity.EntityType
 import org.bukkit.entity.Pig
 import org.bukkit.entity.Zombie
 import org.bukkit.event.EventHandler
@@ -688,9 +689,93 @@ class MoonLakePluginTest : JavaPlugin() {
                             .addEnchant(Enchantment.DAMAGE, 10)
                             .removeEnchantIf { ench, level -> ench == Enchantment.DAMAGE && level > 5 }
                             .addAttribute(AttributeType.ATTACK_DAMAGE, "DMG", Operation.ADD, 10.0)
-                            .removeAttributeIf { type, name, _, _, _, _ -> type == AttributeType.ATTACK_DAMAGE && name == "DMG" }
+                            .removeAttributeIf { attribute -> attribute.type == AttributeType.ATTACK_DAMAGE && attribute.name == "DMG" }
                             .addCanDestroy(Material.GRASS, Material.STONE)
                             .removeCanDestroyIf { it.isBlock }
+                            .build()
+                            .givePlayer(event.player)
+                }
+                if(event.message == "/ib 2018-2-11") {
+
+                    // leather
+                    Material.LEATHER_CHESTPLATE.newItemBuilder()
+                            .setLeatherColor(Color.RED)
+                            .removeLeatherColorIf { it == Color.RED }
+                            .build()
+                            .givePlayer(event.player)
+
+                    // book
+                    Material.BOOK_AND_QUILL.newItemBuilder()
+                            .addBookPages("abc")
+                            .removeBookPagesIf { it.toRaw(false) == "abc" }
+                            .build()
+                            .givePlayer(event.player)
+
+                    // enchantment storage
+                    Material.ENCHANTED_BOOK.newItemBuilder()
+                            .addStoredEnchant(Enchantment.DAMAGE, 10)
+                            .removeStoredEnchantIf { ench, level -> ench == Enchantment.DAMAGE && level > 5 }
+                            .build()
+                            .givePlayer(event.player)
+
+                    // skull
+                    Material.SKULL_ITEM.newItemBuilder()
+                            .setSkullOwner("lgou2w")
+                            .removeSkullOwnerIf { it == "lgou2w" }
+                            .build()
+                            .givePlayer(event.player)
+
+                    // spawned egg
+                    Material.MONSTER_EGG.newItemBuilder()
+                            .setSpawnEggType(EntityType.ZOMBIE)
+                            .removeSpawnEggTypeIf { it == EntityType.ZOMBIE }
+                            .build()
+                            .givePlayer(event.player)
+
+                    // map
+                    Material.MAP.newItemBuilder()
+                            .setMapLocationName("name")
+                            .removeMapLocationNameIf { it == "name" }
+                            .setMapColor(Color.RED)
+                            .removeMapColorIf { it == Color.RED }
+                            .build()
+                            .givePlayer(event.player)
+
+                    // potion
+                    Material.POTION.newItemBuilder()
+                            .setPotionColor(Color.RED)
+                            .removePotionColorIf { it == Color.RED }
+                            .setPotionBase(EffectBase.INVISIBILITY)
+                            .removePotionBaseIf { it == EffectBase.INVISIBILITY }
+                            .addPotionEffect(EffectType.SPEED, 10 * 20, 0)
+                            .removePotionEffectIf { it.type == EffectType.SPEED }
+                            .build()
+                            .givePlayer(event.player)
+
+                    // firework
+                    Material.FIREWORK.newItemBuilder()
+                            .addFireworkEffect(FireworkEffect.builder().with(FireworkEffect.Type.CREEPER).withColor(Color.RED).build())
+                            .removeFireworkEffectIf { it.type == FireworkEffect.Type.CREEPER }
+                            .build()
+                            .givePlayer(event.player)
+
+                    // banner
+                    Material.BANNER.newItemBuilder()
+                            .addBannerPattern(Pattern(Pattern.Color.RED, Pattern.Type.BASE))
+                            .removeBannerPatternIf { type, color -> type == Pattern.Type.BASE && color == Pattern.Color.RED }
+                            .build()
+                            .givePlayer(event.player)
+
+                    // knowledge book
+                    Material.matchMaterial("KNOWLEDGE_BOOK").newItemBuilder()
+                            .addKnowledgeBookRecipes(Material.TNT, Material.ARROW)
+                            .removeKnowledgeBookRecipesIf { it == Material.TNT || it == Material.ARROW }
+                            .build()
+                            .givePlayer(event.player)
+
+                    // nbt custom
+                    Material.IRON_SWORD.newItemBuilder()
+                            .getTagCompoundOrDefault("custom") { it.putString("key", "value") }
                             .build()
                             .givePlayer(event.player)
                 }

@@ -56,6 +56,11 @@ data class AttributeItemModifier(
          */
         val type: AttributeType,
         /**
+         * * The name of this modifier.
+         * * 此修改器的名称.
+         */
+        val name: String = type.name,
+        /**
          * * The operation mode of this modifier.
          * * 此修改器的运算模式.
          */
@@ -82,6 +87,7 @@ data class AttributeItemModifier(
     override fun compareTo(other: AttributeItemModifier): Int {
         return ComparisonChain.start()
                 .compare(type, other.type)
+                .compare(name, other.name)
                 .compare(operation, other.operation)
                 .compare(slot?.ordinal ?: -1, other.slot?.ordinal ?: -1)
                 .compare(amount, other.amount)
@@ -92,6 +98,7 @@ data class AttributeItemModifier(
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()
         result.put("type", type.value())
+        result.put("name", name)
         result.put("operation", operation.value())
         if(slot != null) result.put("slot", slot.value())
         result.put("amount", amount)
@@ -111,7 +118,8 @@ data class AttributeItemModifier(
             val slot: Slot? = ofValuable(args["slot"]?.toString())
             val amount = args["amount"]?.parseDouble() ?: .0
             val uuid = UUID.fromString(args["uuid"]?.toString())
-            return AttributeItemModifier(type, operation, slot, amount, uuid)
+            val name = args["name"]?.toString() ?: type.name
+            return AttributeItemModifier(type, name, operation, slot, amount, uuid)
         }
     }
 }

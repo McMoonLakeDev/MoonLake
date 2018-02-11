@@ -26,6 +26,9 @@ import com.mcmoonlake.api.effect.EffectBase
 import com.mcmoonlake.api.effect.EffectCustom
 import com.mcmoonlake.api.effect.EffectType
 import com.mcmoonlake.api.funs.Builder
+import com.mcmoonlake.api.nbt.NBTBase
+import com.mcmoonlake.api.nbt.NBTCompound
+import com.mcmoonlake.api.nbt.NBTList
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.Material
@@ -43,7 +46,23 @@ interface ItemBuilder : Builder<ItemStack> {
      * nbt tag
      */
 
-    // TODO NBT TAG FUNCTION
+    val tag: NBTCompound
+
+    fun getTagCompound(key: String, block: (target: NBTCompound) -> Unit): ItemBuilder
+
+    fun getTagCompoundOrDefault(key: String, block: (target: NBTCompound) -> Unit): ItemBuilder
+
+    fun getTagCompoundOrNull(key: String, block: (target: NBTCompound?) -> Unit): ItemBuilder
+
+    fun <T> getTagList(key: String, block: (target: NBTList<T>) -> Unit): ItemBuilder
+
+    fun <T> getTagListOrDefault(key: String, block: (target: NBTList<T>) -> Unit): ItemBuilder
+
+    fun <T> getTagListOrNull(key: String, block: (target: NBTList<T>?) -> Unit): ItemBuilder
+
+    fun removeTag(key: String): ItemBuilder
+
+    fun removeTagIf(key: String, predicate: (NBTBase<*>) -> Boolean): ItemBuilder
 
     /**
      * general meta
@@ -110,6 +129,8 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun getAttribute(block: (self: ItemBuilder, attribute: Set<AttributeItemModifier>?) -> Unit): ItemBuilder
 
+    fun addAttribute(attribute: AttributeItemModifier): ItemBuilder
+
     fun addAttribute(type: AttributeType, operation: Operation, amount: Double, uuid: UUID = UUID.randomUUID()): ItemBuilder
 
     fun addAttribute(type: AttributeType, operation: Operation, slot: Slot?, amount: Double, uuid: UUID = UUID.randomUUID()): ItemBuilder
@@ -120,7 +141,7 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun removeAttribute(type: AttributeType): ItemBuilder
 
-    fun removeAttributeIf(predicate: (type: AttributeType, name: String, operation: Operation, slot: Slot?, amount: Double, uuid: UUID) -> Boolean): ItemBuilder
+    fun removeAttributeIf(predicate: (attribute: AttributeItemModifier) -> Boolean): ItemBuilder
 
     fun clearAttribute(): ItemBuilder
 
@@ -320,7 +341,7 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun removePotionEffect(type: EffectType): ItemBuilder
 
-    fun removePotionEffectIf(predicate: (type: EffectType, duration: Int, amplifier: Int, ambient: Boolean, particle: Boolean, color: Color?) -> Boolean): ItemBuilder
+    fun removePotionEffectIf(predicate: (effect: EffectCustom) -> Boolean): ItemBuilder
 
     fun clearPotionEffect(): ItemBuilder
 
@@ -337,7 +358,7 @@ interface ItemBuilder : Builder<ItemStack> {
 
     fun addFireworkEffect(effect: Collection<FireworkEffect>): ItemBuilder
 
-    fun removeFireworkEffectIf(predicate: (type: FireworkEffect.Type, flicker: Boolean, trail: Boolean, colors: Array<Color>, fadeColors: Array<Color>) -> Boolean): ItemBuilder
+    fun removeFireworkEffectIf(predicate: (effect: FireworkEffect) -> Boolean): ItemBuilder
 
     fun clearFireworkEffect(): ItemBuilder
 
