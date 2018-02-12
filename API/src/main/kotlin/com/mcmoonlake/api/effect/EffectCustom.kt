@@ -87,6 +87,9 @@ data class EffectCustom(
         Comparable<EffectCustom>,
         Function<LivingEntity, Boolean> {
 
+    constructor(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean, particle: Boolean)
+            : this(type, duration, amplifier, ambient, particle, null)
+
     override fun compareTo(other: EffectCustom): Int {
         return ComparisonChain.start()
                 .compare(type, other.type)
@@ -100,12 +103,12 @@ data class EffectCustom(
 
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()
-        result.put("type", type.type)
-        result.put("duration", duration)
-        result.put("amplifier", amplifier)
-        result.put("ambient", ambient)
-        result.put("particle", particle)
-        if(color != null) result.put("color", color.asRGB())
+        result["type"] = type.type
+        result["duration"] = duration
+        result["amplifier"] = amplifier
+        result["ambient"] = ambient
+        result["particle"] = particle
+        if(color != null) result["color"] = color.asRGB()
         return result
     }
 

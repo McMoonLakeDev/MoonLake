@@ -62,9 +62,7 @@ enum class NBTType(
         private val ID_MAP: MutableMap<Int, NBTType> = HashMap()
 
         init {
-            values().forEach {
-                ID_MAP.put(it.rawId, it)
-            }
+            values().forEach { ID_MAP[it.rawId] = it }
         }
 
         @JvmStatic

@@ -165,6 +165,7 @@ class NBTWrappedList<T>(
         while(iterator.hasNext()) {
             val value = iterator.next()
             val isPrimitive = value.type != NBTType.TAG_LIST && value.type != NBTType.TAG_COMPOUND
+            @Suppress("UNCHECKED_CAST")
             if(isPrimitive && value.value == element)
                 iterator.remove()
             else if(NBTFactory.ofWrapper(value.type, value.name, value.value) as T == element)
@@ -177,6 +178,7 @@ class NBTWrappedList<T>(
         while(iterator.hasNext()) {
             val value = iterator.next()
             val isPrimitive = value.type != NBTType.TAG_LIST && value.type != NBTType.TAG_COMPOUND
+            @Suppress("UNCHECKED_CAST")
             if(isPrimitive && elements.contains(value.value))
                 iterator.remove()
             else if(elements.contains(NBTFactory.ofWrapper(value.type, value.name, value.value) as T))

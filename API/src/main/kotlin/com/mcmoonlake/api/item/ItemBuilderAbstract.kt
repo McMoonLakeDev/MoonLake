@@ -54,6 +54,7 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         this.tag0 = NBTFactory.readStackTagSafe(this.itemStack)
     }
 
+    @JvmOverloads
     constructor(type: Material, amount: Int = 1, durability: Int = 0) {
         this.itemStack = ItemStack(type, amount, durability.toShort())
         this.tag0 = NBTFactory.readStackTagSafe(this.itemStack)

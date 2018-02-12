@@ -74,10 +74,10 @@ class CachedPackage : Cached {
         }
         try {
             val clazz = source.loadClass(combine(packageName, className))
-            cachedMap.put(className, Optional.of(clazz))
+            cachedMap[className] = Optional.of(clazz)
             return clazz
         } catch(e: ClassNotFoundException) {
-            cachedMap.put(className, Optional.empty())
+            cachedMap[className] = Optional.empty()
             throw MoonLakeException("无法查找到类: $className", e)
         }
     }
@@ -93,7 +93,7 @@ class CachedPackage : Cached {
      */
     fun setPackageClass(className: String, clazz: Class<*>?) {
         if(clazz != null)
-            cachedMap.put(className, Optional.of(clazz))
+            cachedMap[className] = Optional.of(clazz)
         else
             cachedMap.remove(className)
     }

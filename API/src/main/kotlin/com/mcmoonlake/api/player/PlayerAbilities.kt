@@ -76,13 +76,13 @@ data class PlayerAbilities(
 
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()
-        result.put("invulnerable", isInvulnerable)
-        result.put("flying", isFlying)
-        result.put("mayfly", canFly)
-        result.put("instabuild", canInstantlyBuild)
-        result.put("mayBuild", mayBuild)
-        result.put("flySpeed", flySpeed)
-        result.put("walkSpeed", walkSpeed)
+        result["invulnerable"] = isInvulnerable
+        result["flying"] = isFlying
+        result["mayfly"] = canFly
+        result["instabuild"] = canInstantlyBuild
+        result["mayBuild"] = mayBuild
+        result["flySpeed"] = flySpeed
+        result["walkSpeed"] = walkSpeed
         return result
     }
 

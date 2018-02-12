@@ -134,6 +134,6 @@ abstract class CachedReferenceAbstract<K, V, R: CachedRef<K, V>> : CachedReferen
     private fun addCache(key: K, value: V) {
         checkCacheReference()
         val ref = produceRef(key, value, queue)
-        cachedMap.put(key, ref)
+        cachedMap[key] = ref
     }
 }

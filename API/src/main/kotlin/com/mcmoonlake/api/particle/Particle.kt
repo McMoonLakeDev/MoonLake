@@ -514,7 +514,7 @@ enum class Particle {
         private val ID_MAP: MutableMap<Int, Particle> = HashMap()
 
         init {
-            values().forEach { ID_MAP.put(it.id, it) }
+            values().forEach { ID_MAP[it.id] = it }
         }
 
         @JvmStatic

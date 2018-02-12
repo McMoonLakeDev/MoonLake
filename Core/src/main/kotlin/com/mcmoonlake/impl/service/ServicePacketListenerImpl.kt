@@ -248,7 +248,7 @@ open class ServicePacketListenerImpl : ServiceAbstractCore(), ServicePacketListe
     private fun onExecuteAndFilterPacketAsync(direction: Direction, player: Player?, channel: Channel, packet: Any): Any? {
         val wrapped = Packets.createBufferPacketSafe(packet) ?: return packet
         if(wrapped is PacketInLoginStart)
-            channelLookup.put(wrapped.profile.name, channel)
+            channelLookup[wrapped.profile.name] = channel
         val event = PacketEvent(packet, wrapped, channel, player)
         synchronized(listeners) {
             if(listeners.isNotEmpty()) listeners.forEach {

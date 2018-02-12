@@ -179,9 +179,9 @@ open class RegionCuboid(
 
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()
-        result.put("world", world.name)
-        result.put("pos1", pos1.serialize())
-        result.put("pos2", pos2.serialize())
+        result["world"] = world.name
+        result["pos1"] = pos1.serialize()
+        result["pos2"] = pos2.serialize()
         return result
     }
 

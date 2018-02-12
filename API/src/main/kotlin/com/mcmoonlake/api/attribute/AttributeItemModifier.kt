@@ -97,12 +97,12 @@ data class AttributeItemModifier(
 
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()
-        result.put("type", type.value())
-        result.put("name", name)
-        result.put("operation", operation.value())
-        if(slot != null) result.put("slot", slot.value())
-        result.put("amount", amount)
-        result.put("uuid", uuid.toString())
+        result["type"] = type.value()
+        result["name"] = name
+        result["operation"] = operation.value()
+        if(slot != null) result["slot"] = slot.value()
+        result["amount"] = amount
+        result["uuid"] = uuid.toString()
         return result
     }
 

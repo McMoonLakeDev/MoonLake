@@ -73,7 +73,7 @@ object DependPlugins {
                 } catch(e: Exception) {
                     e.throwGiven { DependPluginException(it.message, it.cause ?: it) }
                 }
-                VALUES.put(clazz, VALUE)
+                VALUES[clazz] = VALUE
                 DEPEND = VALUE
             }
             if(DEPEND != null && clazz.isInstance(DEPEND))

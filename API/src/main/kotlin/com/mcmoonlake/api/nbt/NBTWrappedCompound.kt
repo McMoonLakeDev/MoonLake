@@ -114,10 +114,10 @@ class NBTWrappedCompound(
     }
 
     override fun <T> put(entry: NBTBase<T>): NBTCompound
-            { value.put(entry.name, entry); return this; }
+            { value[entry.name] = entry; return this; }
 
     override fun <T> put(key: String, value: NBTBase<T>): NBTCompound
-            { this.value.put(key, value); return this; }
+            { this.value[key] = value; return this; }
 
     override fun getString(key: String): String
             = getValueExact<String>(key).value
@@ -129,7 +129,7 @@ class NBTWrappedCompound(
             = getValueOfDefault0<String>(key, NBTType.TAG_STRING).value
 
     override fun putString(key: String, value: String): NBTCompound
-            { this.value.put(key, NBTFactory.of(key, value)); return this; }
+            { this.value[key] = NBTFactory.of(key, value); return this; }
 
     override fun getByte(key: String): Byte
             = getValueExact<Number>(key).value.toByte()
@@ -141,7 +141,7 @@ class NBTWrappedCompound(
             = getValueOfDefault0<Number>(key, NBTType.TAG_BYTE).value.toByte()
 
     override fun putByte(key: String, value: Byte): NBTCompound
-            { this.value.put(key, NBTFactory.of(key, value)); return this; }
+            { this.value[key] = NBTFactory.of(key, value); return this; }
 
     override fun putByte(key: String, value: Int): NBTCompound
             = putByte(key, value.toByte())
@@ -156,7 +156,7 @@ class NBTWrappedCompound(
             = getValueOfDefault0<Number>(key, NBTType.TAG_SHORT).value.toShort()
 
     override fun putShort(key: String, value: Short): NBTCompound
-            { this.value.put(key, NBTFactory.of(key, value)); return this; }
+            { this.value[key] = NBTFactory.of(key, value); return this; }
 
     override fun putShort(key: String, value: Int): NBTCompound
             = putShort(key, value.toShort())
@@ -171,7 +171,7 @@ class NBTWrappedCompound(
             = getValueOfDefault0<Number>(key, NBTType.TAG_INT).value.toInt()
 
     override fun putInt(key: String, value: Int): NBTCompound
-            { this.value.put(key, NBTFactory.of(key, value)); return this; }
+            { this.value[key] = NBTFactory.of(key, value); return this; }
 
     override fun getLong(key: String): Long
             = getValueExact<Number>(key).value.toLong()
@@ -183,7 +183,7 @@ class NBTWrappedCompound(
             = getValueOfDefault0<Number>(key, NBTType.TAG_LONG).value.toLong()
 
     override fun putLong(key: String, value: Long): NBTCompound
-            { this.value.put(key, NBTFactory.of(key, value)); return this; }
+            { this.value[key] = NBTFactory.of(key, value); return this; }
 
     override fun getFloat(key: String): Float
             = getValueExact<Number>(key).value.toFloat()
@@ -195,7 +195,7 @@ class NBTWrappedCompound(
             = getValueOfDefault0<Number>(key, NBTType.TAG_FLOAT).value.toFloat()
 
     override fun putFloat(key: String, value: Float): NBTCompound
-            { this.value.put(key, NBTFactory.of(key, value)); return this; }
+            { this.value[key] = NBTFactory.of(key, value); return this; }
 
     override fun getDouble(key: String): Double
             = getValueExact<Number>(key).value.toDouble()
@@ -207,7 +207,7 @@ class NBTWrappedCompound(
             = getValueOfDefault0<Number>(key, NBTType.TAG_DOUBLE).value.toDouble()
 
     override fun putDouble(key: String, value: Double): NBTCompound
-            { this.value.put(key, NBTFactory.of(key, value)); return this; }
+            { this.value[key] = NBTFactory.of(key, value); return this; }
 
     override fun getByteArray(key: String): ByteArray
             = getValueExact<ByteArray>(key).value
@@ -219,7 +219,7 @@ class NBTWrappedCompound(
             = getValueOfDefault0<ByteArray>(key, NBTType.TAG_BYTE_ARRAY).value
 
     override fun putByteArray(key: String, value: ByteArray): NBTCompound
-            { this.value.put(key, NBTFactory.of(key, value)); return this; }
+            { this.value[key] = NBTFactory.of(key, value); return this; }
 
     override fun getIntArray(key: String): IntArray
             = getValueExact<IntArray>(key).value
@@ -231,7 +231,7 @@ class NBTWrappedCompound(
             = getValueOfDefault0<IntArray>(key, NBTType.TAG_INT_ARRAY).value
 
     override fun putIntArray(key: String, value: IntArray): NBTCompound
-            { this.value.put(key, NBTFactory.of(key, value)); return this; }
+            { this.value[key] = NBTFactory.of(key, value); return this; }
 
     override fun getBoolean(key: String): Boolean
             = getByte(key) == 1.toByte()
@@ -258,7 +258,7 @@ class NBTWrappedCompound(
             = getValueOfDefault0<NBTCompound>(key, NBTType.TAG_COMPOUND) as NBTCompound
 
     override fun putCompound(compound: NBTCompound): NBTCompound
-            { this.value.put(compound.name, compound); return this; }
+            { this.value[compound.name] = compound; return this; }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getList(key: String): NBTList<T>
@@ -273,7 +273,7 @@ class NBTWrappedCompound(
             = getValueOfDefault0<NBTList<T>>(key, NBTType.TAG_LIST) as NBTList<T>
 
     override fun <T> putList(list: NBTList<T>): NBTCompound
-            { this.value.put(list.name, list); return this; }
+            { this.value[list.name] = list; return this; }
 
     override fun isEmpty(): Boolean
             = size() <= 0

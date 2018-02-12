@@ -81,6 +81,11 @@ interface DependVaultEconomy : DependPlugin {
     fun hasAccount(player: OfflinePlayer, world: String? = null): Boolean
 
     /**
+     * @see [hasAccount]
+     */
+    fun hasAccount(player: OfflinePlayer) = hasAccount(player, null)
+
+    /**
      * * Attempts to create a player account for the given player.
      * * 尝试为给定的玩家创建玩家帐户.
      *
@@ -92,6 +97,11 @@ interface DependVaultEconomy : DependPlugin {
     fun createAccount(player: OfflinePlayer, world: String? = null): Boolean
 
     /**
+     * @see [createAccount]
+     */
+    fun createAccount(player: OfflinePlayer) = createAccount(player, null)
+
+    /**
      * * Gets balance of a player.
      * * 获取玩家的经济.
      *
@@ -101,6 +111,11 @@ interface DependVaultEconomy : DependPlugin {
      * @param world 世界特定账户.
      */
     fun getBalance(player: OfflinePlayer, world: String? = null): Double
+
+    /**
+     * @see [getBalance]
+     */
+    fun getBalance(player: OfflinePlayer) = getBalance(player, null)
 
     /**
      * * Check if the player has a given amount of balance.
@@ -116,6 +131,11 @@ interface DependVaultEconomy : DependPlugin {
     fun hasBalance(player: OfflinePlayer, value: Double, world: String? = null): Boolean
 
     /**
+     * @see [hasBalance]
+     */
+    fun hasBalance(player: OfflinePlayer, value: Double) = hasBalance(player, value, null)
+
+    /**
      * * Withdraw an amount from a player.
      * * 从玩家提取一笔金额.
      *
@@ -129,6 +149,11 @@ interface DependVaultEconomy : DependPlugin {
     fun withdraw(player: OfflinePlayer, value: Double, world: String? = null): EconomyResponse
 
     /**
+     * @see [withdraw]
+     */
+    fun withdraw(player: OfflinePlayer, value: Double) = withdraw(player, value, null)
+
+    /**
      * * Deposit an amount to a player.
      * * 将一笔金额存入玩家.
      *
@@ -140,6 +165,11 @@ interface DependVaultEconomy : DependPlugin {
      * @param world 世界特定账户.
      */
     fun deposit(player: OfflinePlayer, value: Double, world: String? = null): EconomyResponse
+
+    /**
+     * @see [deposit]
+     */
+    fun deposit(player: OfflinePlayer, value: Double) = deposit(player, value, null)
 
     /**
      * * Returns `true` if the given implementation supports banks.

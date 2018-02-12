@@ -71,10 +71,22 @@ interface DependPlayer : Depend {
     fun hasEconomyAccount(world: String? = null): Boolean
 
     /**
+     * @see [hasEconomyAccount]
+     */
+    @Throws(DependPluginException::class)
+    fun hasEconomyAccount() = hasEconomyAccount(null)
+
+    /**
      * @see [DependVaultEconomy.createAccount]
      */
     @Throws(DependPluginException::class)
     fun createEconomyAccount(world: String? = null): Boolean
+
+    /**
+     * @see [createEconomyAccount]
+     */
+    @Throws(DependPluginException::class)
+    fun createEconomyAccount() = createEconomyAccount(null)
 
     /**
      * @see [DependVaultEconomy.getBalance]
@@ -83,10 +95,22 @@ interface DependPlayer : Depend {
     fun getEconomyBalance(world: String? = null): Double
 
     /**
+     * @see [getEconomyBalance]
+     */
+    @Throws(DependPluginException::class)
+    fun getEconomyBalance() = getEconomyBalance(null)
+
+    /**
      * @see [DependVaultEconomy.hasBalance]
      */
     @Throws(DependPluginException::class)
     fun hasEconomyBalance(value: Double, world: String? = null): Boolean
+
+    /**
+     * @see [hasEconomyBalance]
+     */
+    @Throws(DependPluginException::class)
+    fun hasEconomyBalance(value: Double) = hasEconomyBalance(value, null)
 
     /**
      * @see [DependVaultEconomy.withdraw]
@@ -95,10 +119,22 @@ interface DependPlayer : Depend {
     fun withdrawEconomy(value: Double, world: String? = null): EconomyResponse
 
     /**
+     * @see [withdrawEconomy]
+     */
+    @Throws(DependPluginException::class)
+    fun withdrawEconomy(value: Double) = withdrawEconomy(value, null)
+
+    /**
      * @see [DependVaultEconomy.deposit]
      */
     @Throws(DependPluginException::class)
     fun depositEconomy(value: Double, world: String? = null): EconomyResponse
+
+    /**
+     * @see [depositEconomy]
+     */
+    @Throws(DependPluginException::class)
+    fun depositEconomy(value: Double) = depositEconomy(value, null)
 
     /**
      * @see [DependVaultEconomy.isBankOwner]

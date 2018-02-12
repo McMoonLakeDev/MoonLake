@@ -43,6 +43,7 @@ object Blocks {
      */
     @JvmStatic
     @JvmName("fakeAction")
+    @Deprecated("Removed when the first release version.")
     fun fakeAction(block: Block, action: Int, parameter: Int)
             = PacketOutBlockAction(block, action, parameter).sendToNearby(block.location, 64.0)
 
@@ -60,6 +61,7 @@ object Blocks {
     @JvmStatic
     @JvmName("fakeActionChest")
     @Throws(IllegalArgumentException::class)
+    @Deprecated("Removed when the first release version.")
     fun fakeActionChest(block: Block, open: Boolean) {
         val type = block.type
         if(type == Material.CHEST || type == Material.TRAPPED_CHEST || type == Material.ENDER_CHEST)

@@ -36,8 +36,8 @@
 
 package com.mcmoonlake.api.region
 
-import com.mcmoonlake.api.util.ComparisonChain
 import com.mcmoonlake.api.parseDouble
+import com.mcmoonlake.api.util.ComparisonChain
 import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.configuration.serialization.ConfigurationSerializable
@@ -190,8 +190,8 @@ open class RegionVector2D(
 
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()
-        result.put("x", x)
-        result.put("z", z)
+        result["x"] = x
+        result["z"] = z
         return result
     }
 

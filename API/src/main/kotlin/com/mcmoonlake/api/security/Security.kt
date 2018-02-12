@@ -35,12 +35,14 @@ fun base64E(src: ByteArray): ByteArray
 fun base64EString(src: ByteArray): String
         = Base64.getEncoder().encodeToString(src)
 
+@JvmOverloads
 fun base64EString(src: String, charset: Charset = Charsets.ISO_8859_1): String
         = Base64.getEncoder().encodeToString(src.toByteArray(charset))
 
 fun base64D(src: ByteArray): ByteArray
         = Base64.getDecoder().decode(src)
 
+@JvmOverloads
 fun base64DString(src: String, charset: Charset = Charsets.ISO_8859_1): ByteArray
         = Base64.getDecoder().decode(src.toByteArray(charset))
 
@@ -82,6 +84,7 @@ fun md5Byte(src: ByteArray): ByteArray
 fun md5(src: ByteArray): String
         = Hex.encodeHexString(md5Byte(src))
 
+@JvmOverloads
 fun md5(src: String, charset: Charset = Charsets.ISO_8859_1): String
         = md5(src.toByteArray(charset))
 
@@ -91,6 +94,7 @@ fun sha1Byte(src: ByteArray): ByteArray
 fun sha1(src: ByteArray): String
         = Hex.encodeHexString(sha1Byte(src))
 
+@JvmOverloads
 fun sha1(src: String, charset: Charset = Charsets.ISO_8859_1): String
         = sha1(src.toByteArray(charset))
 
@@ -100,6 +104,7 @@ fun sha256Byte(src: ByteArray): ByteArray
 fun sha256(src: ByteArray): String
         = Hex.encodeHexString(sha256Byte(src))
 
+@JvmOverloads
 fun sha256(src: String, charset: Charset = Charsets.ISO_8859_1): String
         = sha256(src.toByteArray(charset))
 
@@ -109,6 +114,7 @@ fun sha384Byte(src: ByteArray): ByteArray
 fun sha384(src: ByteArray): String
         = Hex.encodeHexString(sha384Byte(src))
 
+@JvmOverloads
 fun sha384(src: String, charset: Charset = Charsets.ISO_8859_1): String
         = sha384(src.toByteArray(charset))
 
@@ -118,6 +124,7 @@ fun sha512Byte(src: ByteArray): ByteArray
 fun sha512(src: ByteArray): String
         = Hex.encodeHexString(sha512Byte(src))
 
+@JvmOverloads
 fun sha512(src: String, charset: Charset = Charsets.ISO_8859_1): String
         = sha512(src.toByteArray(charset))
 

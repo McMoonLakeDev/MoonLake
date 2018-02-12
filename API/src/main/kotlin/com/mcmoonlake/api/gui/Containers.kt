@@ -35,5 +35,6 @@ object Containers {
     @JvmName("getContainerWindowId")
     @Throws(IllegalArgumentException::class)
     fun getWindowId(container: Any?): Int
-            = if(containerClass.isInstance(container)) (containerWindowId.get(container) as Int?) ?: -1 else throw IllegalArgumentException("参数 $container 不是容器实例.")
+            = if(containerClass.isInstance(container)) (containerWindowId.get(container) as Int?) ?: -1
+            else throw IllegalArgumentException("参数 $container 不是容器实例.")
 }

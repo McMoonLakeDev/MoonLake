@@ -542,5 +542,6 @@ class DSLItemBuilderScope(itemStack: ItemStack) {
 inline fun ItemStack.buildItemBuilder(block: DSLItemBuilderScope.() -> Unit): ItemBuilder
         = DSLItemBuilderScope(this).also(block).get()
 
+@JvmOverloads
 inline fun Material.buildItemBuilder(amount: Int = 1, durability: Int = 0, block: DSLItemBuilderScope.() -> Unit): ItemBuilder
         = DSLItemBuilderScope(ItemStack(this, amount, durability.toShort())).also(block).get()

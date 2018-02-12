@@ -43,8 +43,8 @@ enum class DataType(
 
         init {
             DataType.values().forEach {
-                CLASS_MAP.put(it.primitive, it)
-                CLASS_MAP.put(it.reference, it)
+                CLASS_MAP[it.primitive] = it
+                CLASS_MAP[it.reference] = it
             }
         }
 

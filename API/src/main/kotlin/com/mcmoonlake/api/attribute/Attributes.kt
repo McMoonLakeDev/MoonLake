@@ -258,7 +258,7 @@ object Attributes {
         val name = iAttributeGetName.invoke(iAttribute) as String
         val type = Enums.ofValuable(AttributeType::class.java, name)
         if(type != null && (type.mcVer == null || currentMCVersion().isOrLater(type.mcVer)))
-            attributeSupportMap.put(type, iAttribute)
+            attributeSupportMap[type] = iAttribute
     }
 
     init {

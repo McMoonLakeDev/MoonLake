@@ -210,12 +210,14 @@ object NBTFactory {
 
     @JvmStatic
     @JvmName("ofCompound")
+    @JvmOverloads
     fun ofCompound(name: String = ""): NBTCompound
             = ofWrapper<MutableMap<String, NBTBase<*>>>(NBTType.TAG_COMPOUND, name) as NBTCompound
 
     @JvmStatic
     @JvmName("ofList")
     @Suppress("UNCHECKED_CAST")
+    @JvmOverloads
     fun <T> ofList(name: String = ""): NBTList<T>
             = ofWrapper<MutableList<NBTBase<T>>>(NBTType.TAG_LIST, name) as NBTList<T>
 
@@ -245,6 +247,7 @@ object NBTFactory {
 
     @JvmStatic
     @JvmName("createStack")
+    @JvmOverloads
     fun createStack(type: Material, amount: Int = 1, durability: Int = 0, tag: NBTCompound? = null): ItemStack {
         val nbt = ofCompound()
         nbt.putString("id", "minecraft:${type.name.toLowerCase()}")
@@ -345,6 +348,7 @@ object NBTFactory {
     @JvmStatic
     @JvmName("writeDataCompoundFile")
     @Throws(IOException::class)
+    @JvmOverloads
     fun writeDataCompoundFile(compound: NBTCompound, file: File, compress: Boolean = true) {
         var stream: FileOutputStream? = null
         var output: DataOutputStream? = null
@@ -363,6 +367,7 @@ object NBTFactory {
     @JvmStatic
     @JvmName("readDataCompoundFile")
     @Throws(IOException::class)
+    @JvmOverloads
     fun readDataCompoundFile(file: File, compress: Boolean = true): NBTCompound? {
         if(!file.exists() || file.isDirectory)
             return null

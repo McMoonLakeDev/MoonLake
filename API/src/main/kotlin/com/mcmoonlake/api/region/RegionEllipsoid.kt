@@ -91,9 +91,9 @@ open class RegionEllipsoid(
 
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()
-        result.put("world", world.name)
-        result.put("center", center.serialize())
-        result.put("radius", center.serialize())
+        result["world"] = world.name
+        result["center"] = center.serialize()
+        result["radius"] = center.serialize()
         return result
     }
 

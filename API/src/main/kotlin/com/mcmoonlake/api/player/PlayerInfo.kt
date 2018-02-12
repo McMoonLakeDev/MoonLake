@@ -32,18 +32,22 @@ data class PlayerInfo(
         val latency: Int
 ) : ConfigurationSerializable {
 
-    constructor(id: UUID, displayName: String?, mode: GameMode? = GameMode.SURVIVAL, latency: Int = 0) : this(GameProfile(id, null), ChatSerializer.fromRawOrNull(displayName), mode, latency)
-    constructor(id: UUID, name: String, displayName: String? = null, mode: GameMode? = GameMode.SURVIVAL, latency: Int = 0) : this(GameProfile(id, name), ChatSerializer.fromRawOrNull(displayName), mode, latency)
+    constructor(id: UUID, displayName: String?, mode: GameMode? = GameMode.SURVIVAL, latency: Int = 0)
+            : this(GameProfile(id, null), ChatSerializer.fromRawOrNull(displayName), mode, latency)
+
+    @JvmOverloads
+    constructor(id: UUID, name: String, displayName: String? = null, mode: GameMode? = GameMode.SURVIVAL, latency: Int = 0)
+            : this(GameProfile(id, name), ChatSerializer.fromRawOrNull(displayName), mode, latency)
 
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()
         val resultProfile = LinkedHashMap<String, Any>()
-        resultProfile.put("id", profile.id.toString())
-        if(profile.name != null) resultProfile.put("name", profile.name)
-        result.put("profile", resultProfile)
-        if(displayName != null) result.put("displayName", displayName.toRaw())
-        result.put("mode", (mode ?: GameMode.SURVIVAL).name)
-        result.put("latency", latency)
+        resultProfile["id"] = profile.id.toString()
+        if(profile.name != null) resultProfile["name"] = profile.name
+        result["profile"] = resultProfile
+        if(displayName != null) result["displayName"] = displayName.toRaw()
+        result["mode"] = (mode ?: GameMode.SURVIVAL).name
+        result["latency"] = latency
         return result
     }
 

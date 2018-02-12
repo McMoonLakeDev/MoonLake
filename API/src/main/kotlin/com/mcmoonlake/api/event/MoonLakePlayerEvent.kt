@@ -39,4 +39,6 @@ abstract class MoonLakePlayerEvent(
         val player: MoonLakePlayer,
         isAsync: Boolean = false
 ) : MoonLakeEvent(isAsync) {
+
+        constructor(player: MoonLakePlayer) : this(player, false)
 }

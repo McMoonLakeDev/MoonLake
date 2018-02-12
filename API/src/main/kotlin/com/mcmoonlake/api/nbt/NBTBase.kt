@@ -42,6 +42,7 @@ interface NBTBase<T> {
 
     var value: T
 
+    // TODO v1.13 NBT Color Enhancement & Deprecated Remove ?
     /**
      * Convert the json string to the numeric carrying type suffix.
      */

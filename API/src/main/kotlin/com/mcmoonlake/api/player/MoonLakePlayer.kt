@@ -120,6 +120,15 @@ interface MoonLakePlayer
 
     fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean = true, particle: Boolean = true, color: Color? = null): Boolean
 
+    fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean = true, particle: Boolean = true)
+            = addPotionEffect(type, duration, amplifier, ambient, particle, null)
+
+    fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int, ambient: Boolean = true)
+            = addPotionEffect(type, duration, amplifier, ambient, true, null)
+
+    fun addPotionEffect(type: EffectType, duration: Int, amplifier: Int)
+            = addPotionEffect(type, duration, amplifier, true, true, null)
+
     fun removePotionEffect(type: EffectType)
 
     fun clearPotionEffects()
@@ -162,9 +171,15 @@ interface MoonLakePlayer
 
     fun send(component: ChatComponent, action: ChatAction = ChatAction.CHAT)
 
+    fun send(component: ChatComponent)
+            = send(component, ChatAction.CHAT)
+
     fun send(vararg component: ChatComponent)
 
     fun send(componentFancy: ChatComponentFancy, action: ChatAction = ChatAction.CHAT)
+
+    fun send(componentFancy: ChatComponentFancy)
+            = send(componentFancy, ChatAction.CHAT)
 
     fun onKick()
 
@@ -314,7 +329,25 @@ interface MoonLakePlayer
 
     fun sendTitle(title: String, subTitle: String? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20)
 
+    fun sendTitle(title: String, subTitle: String? = null)
+            = sendTitle(title, subTitle, 10, 70, 20)
+
+    fun sendTitle(title: String, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20)
+            = sendTitle(title, null, fadeIn, stay, fadeOut)
+
+    fun sendTitle(title: String)
+            = sendTitle(title, null, 10, 70, 20)
+
     fun sendTitle(title: ChatComponent, subTitle: ChatComponent? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20)
+
+    fun sendTitle(title: ChatComponent, subTitle: ChatComponent? = null)
+            = sendTitle(title, subTitle, 10, 70, 20)
+
+    fun sendTitle(title: ChatComponent, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20)
+            = sendTitle(title, null, fadeIn, stay, fadeOut)
+
+    fun sendTitle(title: ChatComponent)
+            = sendTitle(title, null, 10, 70, 20)
 
     fun sendTitleReset()
 

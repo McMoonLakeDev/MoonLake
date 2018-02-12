@@ -66,9 +66,9 @@ data class BlockPosition(
 
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()
-        result.put("x", x)
-        result.put("y", y)
-        result.put("z", z)
+        result["x"] = x
+        result["y"] = y
+        result["z"] = z
         return result
     }
 

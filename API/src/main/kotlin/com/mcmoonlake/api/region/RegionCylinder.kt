@@ -158,11 +158,11 @@ open class RegionCylinder(
 
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()
-        result.put("world", world.name)
-        result.put("center", _center.serialize())
-        result.put("radius", _radius.serialize())
-        result.put("minY", _minY)
-        result.put("maxY", _maxY)
+        result["world"] = world.name
+        result["center"] = _center.serialize()
+        result["radius"] = _radius.serialize()
+        result["minY"] = _minY
+        result["maxY"] = _maxY
         return result
     }
 

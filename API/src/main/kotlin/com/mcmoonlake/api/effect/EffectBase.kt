@@ -41,7 +41,7 @@ class EffectBase private constructor(
     private constructor(equivalent: EffectBase) : this(equivalent.value, equivalent.effect)
 
     init {
-        NAME_MAP.put(value, this)
+        NAME_MAP[value] = this
     }
 
     /**

@@ -96,8 +96,13 @@ fun setMoonLake(obj: MoonLake) {
 fun getMoonLake(): MoonLake
         = moonlake.notNull()
 
+/** type aliases */
+
+typealias Predicate<T> = (T) -> Boolean
+
 /** extended function */
 
+@JvmOverloads
 fun <T> T?.notNull(message: String = "验证的对象值为 null 时异常."): T
         = this ?: throw IllegalArgumentException(message)
 
@@ -125,6 +130,7 @@ fun <T, C: Comparable<T>> C.isRange(min: T, max: T): Boolean
 fun <T, C: Comparable<T>> C.isOrRange(min: T, max: T): Boolean
         = compareTo(min) >= 0 && compareTo(max) <= 0
 
+@JvmOverloads
 inline fun <V, reified T> ofValuable(value: V?, def: T? = null): T? where T: Enum<T>, T: Valuable<V>
         = Enums.ofValuable(T::class.java, value, def)
 
@@ -274,6 +280,7 @@ fun String.isDouble(): Boolean = when(isNullOrEmpty()) {
     }
 }
 
+@JvmOverloads
 fun Any.parseInt(def: Int = 0): Int = when(this is Number) {
     true -> (this as Number).toInt()
     else -> try {
@@ -283,6 +290,7 @@ fun Any.parseInt(def: Int = 0): Int = when(this is Number) {
     }
 }
 
+@JvmOverloads
 fun Any.parseLong(def: Long = 0L): Long = when(this is Number) {
     true -> (this as Number).toLong()
     else -> try {
@@ -292,6 +300,7 @@ fun Any.parseLong(def: Long = 0L): Long = when(this is Number) {
     }
 }
 
+@JvmOverloads
 fun Any.parseFloat(def: Float = .0f): Float = when(this is Number) {
     true -> (this as Number).toFloat()
     else -> try {
@@ -301,6 +310,7 @@ fun Any.parseFloat(def: Float = .0f): Float = when(this is Number) {
     }
 }
 
+@JvmOverloads
 fun Any.parseDouble(def: Double = .0): Double = when(this is Number) {
     true -> (this as Number).toDouble()
     else -> try {
@@ -310,6 +320,7 @@ fun Any.parseDouble(def: Double = .0): Double = when(this is Number) {
     }
 }
 
+@JvmOverloads
 fun Any.parseBoolean(def: Boolean = false): Boolean = when(this is Boolean) {
     true -> this as Boolean
     else -> try {
@@ -319,6 +330,7 @@ fun Any.parseBoolean(def: Boolean = false): Boolean = when(this is Boolean) {
     }
 }
 
+@JvmOverloads
 @Throws(MoonLakeException::class)
 fun <T: ConfigurationSerializable> Class<T>.deserialize(configuration: Configuration, key: String, def: T? = null): T? = configuration.get(key).let {
     when(it == null) {
@@ -339,6 +351,7 @@ fun <T: ConfigurationSerializable> Class<T>.deserialize(configuration: Configura
     }
 }
 
+@JvmOverloads
 @Throws(MoonLakeException::class)
 fun <T: ConfigurationSerializable> Configuration.deserialize(clazz: Class<T>, key: String, def: T? = null): T?
         = clazz.deserialize(this, key, def)
@@ -617,6 +630,7 @@ fun Entity.isInFront(target: Entity, angle: Double): Boolean = angle.let {
 fun Entity.isBehind(target: Entity, angle: Double): Boolean
         = !isInFront(target, angle)
 
+@JvmOverloads
 fun <T: LivingEntity> LivingEntity.getLivingTargets(clazz: Class<T>, range: Double, tolerance: Double = 4.0): List<T> {
     val entityList = getNearbyEntities(range, range, range)
     val facing = location.direction
@@ -632,9 +646,11 @@ fun <T: LivingEntity> LivingEntity.getLivingTargets(clazz: Class<T>, range: Doub
     }.toList()
 }
 
+@JvmOverloads
 fun LivingEntity.getLivingTargets(range: Double, tolerance: Double = 4.0): List<LivingEntity>
         = getLivingTargets(LivingEntity::class.java, range, tolerance)
 
+@JvmOverloads
 fun <T: LivingEntity> LivingEntity.getLivingTarget(clazz: Class<T>, range: Double, tolerance: Double = 4.0): T? {
     val targets = getLivingTargets(clazz, range, tolerance)
     if(targets.isEmpty()) return null
@@ -650,18 +666,23 @@ fun <T: LivingEntity> LivingEntity.getLivingTarget(clazz: Class<T>, range: Doubl
     return target
 }
 
+@JvmOverloads
 fun LivingEntity.getLivingTarget(range: Double, tolerance: Double = 4.0): LivingEntity?
         = getLivingTarget(LivingEntity::class.java, range, tolerance)
 
+@JvmOverloads
 fun <T: LivingEntity> MoonLakePlayer.getLivingTargets(clazz: Class<T>, range: Double, tolerance: Double = 4.0): List<T>
         = bukkitPlayer.getLivingTargets(clazz, range, tolerance)
 
+@JvmOverloads
 fun MoonLakePlayer.getLivingTargets(range: Double, tolerance: Double = 4.0): List<LivingEntity>
         = bukkitPlayer.getLivingTargets(range, tolerance)
 
+@JvmOverloads
 fun <T: LivingEntity> MoonLakePlayer.getLivingTarget(clazz: Class<T>, range: Double, tolerance: Double = 4.0): T?
         = bukkitPlayer.getLivingTarget(clazz, range, tolerance)
 
+@JvmOverloads
 fun MoonLakePlayer.getLivingTarget(range: Double, tolerance: Double = 4.0): LivingEntity?
         = bukkitPlayer.getLivingTarget(range, tolerance)
 
@@ -690,9 +711,11 @@ fun Plugin.newAnvilWindow(): AnvilWindow
 fun ItemStack.newItemBuilder(): ItemBuilder
         = ItemBuilder.of(this)
 
+@JvmOverloads
 fun Material.newItemBuilder(amount: Int = 1, durability: Int = 0): ItemBuilder
         = ItemBuilder.of(this, amount, durability)
 
+@JvmOverloads
 fun Material.newItemStack(amount: Int = 1, durability: Int = 0): ItemStack
         = ItemStack(this, amount, durability.toShort())
 
@@ -713,13 +736,16 @@ fun ItemStack.dropLocation(location: Location): Item
 
 /** nbt function */
 
+@JvmOverloads
 fun newNBTCompound(name: String = ""): NBTCompound
         = NBTFactory.ofCompound(name)
 
+@JvmOverloads
 fun <T> newNBTList(name: String = ""): NBTList<T>
         = NBTFactory.ofList(name)
 
-fun Material.newItemStack(amount: Int = 1, durability: Int = 0, tag: NBTCompound? = null): ItemStack
+@JvmOverloads
+fun Material.createItemStack(amount: Int = 1, durability: Int = 0, tag: NBTCompound? = null): ItemStack
         = NBTFactory.createStack(this, amount, durability, tag)
 
 inline fun ItemStack.readTag(block: (tag: NBTCompound?) -> Unit): ItemStack
@@ -789,15 +815,19 @@ fun PacketListener.register(): Boolean
 fun PacketListener.unregister(): Boolean
         = PacketListeners.unregisterListener(this)
 
+@JvmOverloads
 fun Player.sendPacketChat(raw: String, action: ChatAction = ChatAction.CHAT)
         = sendPacketChat(ChatSerializer.fromRaw(raw), action)
 
+@JvmOverloads
 fun Player.sendPacketChat(component: ChatComponent, action: ChatAction = ChatAction.CHAT)
         = PacketOutChat(component, action).send(this)
 
+@JvmOverloads
 fun Player.sendPacketTitle(title: String, subTitle: String? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20)
         = sendPacketTitle(ChatSerializer.fromRaw(title), if(subTitle == null) null else ChatSerializer.fromRaw(subTitle), fadeIn, stay, fadeOut)
 
+@JvmOverloads
 fun Player.sendPacketTitle(title: ChatComponent, subTitle: ChatComponent? = null, fadeIn: Int = 10, stay: Int = 70, fadeOut: Int = 20) {
     var packet = PacketOutTitle(fadeIn, stay, fadeOut)
     packet.send(this)

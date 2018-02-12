@@ -169,7 +169,7 @@ enum class Enchantment(
 
         init {
             val regex = Regex("(?i)[a-z]([a-z_\\d]*)")
-            values().forEach { if(it.name.matches(regex)) ID_MAP.put(it.id, it) }
+            values().forEach { if(it.name.matches(regex)) ID_MAP[it.id] = it }
         }
 
         @JvmStatic

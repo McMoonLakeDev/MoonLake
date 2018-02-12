@@ -104,12 +104,12 @@ data class PacketOutTitle(
 
             init {
                 val v11 = currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_11_R1)
-                ID_MAP.put(0, TITLE)
-                ID_MAP.put(1, SUBTITLE)
-                ID_MAP.put(2, if(v11) ACTIONBAR else TIMES)
-                ID_MAP.put(3, if(v11) TIMES else CLEAR)
-                ID_MAP.put(4, if(v11) CLEAR else RESET)
-                if(v11) ID_MAP.put(5, RESET)
+                ID_MAP[0] = TITLE
+                ID_MAP[1] = SUBTITLE
+                ID_MAP[2] = if(v11) ACTIONBAR else TIMES
+                ID_MAP[3] = if(v11) TIMES else CLEAR
+                ID_MAP[4] = if(v11) CLEAR else RESET
+                if(v11) ID_MAP[5] = RESET
             }
 
             @JvmStatic
