@@ -31,6 +31,9 @@ import com.mcmoonlake.api.item.Enchantment
 import com.mcmoonlake.api.item.Generation
 import com.mcmoonlake.api.item.ItemBuilder
 import com.mcmoonlake.api.item.Pattern
+import com.mcmoonlake.api.nbt.NBTBase
+import com.mcmoonlake.api.nbt.NBTCompound
+import com.mcmoonlake.api.nbt.NBTList
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.Material
@@ -60,6 +63,34 @@ class DSLItemBuilderScope(itemStack: ItemStack) {
 
     private inline fun <T> ItemBuilder.apply(value: T?, block: ItemBuilder.(T) -> Unit)
             = if(value != null) block(this, value) else {}
+
+    /**
+     * nbt tag
+     */
+
+    fun getTagCompound(key: String, block: (target: NBTCompound) -> Unit)
+            { builder.getTagCompound(key, block) }
+
+    fun getTagCompoundOrDefault(key: String, block: (target: NBTCompound) -> Unit)
+            { builder.getTagCompoundOrDefault(key, block) }
+
+    fun getTagCompoundOrNull(key: String, block: (target: NBTCompound?) -> Unit)
+            { builder.getTagCompoundOrNull(key, block) }
+
+    fun <T> getTagList(key: String, block: (target: NBTList<T>) -> Unit)
+            { builder.getTagList(key, block) }
+
+    fun <T> getTagListOrDefault(key: String, block: (target: NBTList<T>) -> Unit)
+            { builder.getTagListOrDefault(key, block) }
+
+    fun <T> getTagListOrNull(key: String, block: (target: NBTList<T>?) -> Unit)
+            { builder.getTagListOrNull(key, block) }
+
+    fun removeTag(key: String)
+            { builder.removeTag(key) }
+
+    fun removeTagIf(key: String, predicate: (NBTBase<*>) -> Boolean)
+            { builder.removeTagIf(key, predicate) }
 
     /**
      * general meta

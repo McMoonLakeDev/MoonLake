@@ -39,6 +39,7 @@ import com.mcmoonlake.api.effect.EffectCustom
 import com.mcmoonlake.api.effect.EffectType
 import com.mcmoonlake.api.event.MoonLakeListener
 import com.mcmoonlake.api.item.*
+import com.mcmoonlake.api.nbt.NBTCompound
 import com.mcmoonlake.api.nbt.NBTFactory
 import com.mcmoonlake.api.packet.*
 import com.mcmoonlake.api.particle.Particle
@@ -778,6 +779,24 @@ class MoonLakePluginTest : JavaPlugin() {
                             .getTagCompoundOrDefault("custom") { it.putString("key", "value") }
                             .build()
                             .givePlayer(event.player)
+                }
+                if(event.message == "/dsl ib-nbt") {
+
+                    Material.IRON_SWORD.buildItemBuilder {
+                        getTagCompoundOrDefault("Custom") {
+                            it.putString("Key", "Value")
+                        }
+                    }.build().givePlayer(event.player)
+
+                    Material.IRON_SWORD.buildItemBuilder {
+                        getTagCompoundOrDefault("Custom") {
+                            it.putString("Key", "Value")
+                        }
+                        removeTagIf("Custom") {
+                            (it as NBTCompound)
+                                    .getStringOrNull("Key") == "Value"
+                        }
+                    }.build().givePlayer(event.player)
                 }
             }
         }.registerEvent(this)
