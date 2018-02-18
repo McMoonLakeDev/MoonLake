@@ -6,7 +6,10 @@
 Minecraft MoonLake Core API Plugin
 By Month_Light Ver: 1.9-a5.4
 
-### 注: 此分支将在 Minecraft 1.13 版本停止更新, 未来请使用 [v2.0](https://github.com/McMoonLakeDev/MoonLake) 版本内容.
+---
+### 注: 已停止更新且存在大量未修复的问题, 请升级到 [v2.0](https://github.com/McMoonLakeDev/MoonLake) 版本内容.
+### Note: Stopped updating and large number of unfixed issues, Please upgrade [v2.0](https://github.com/McMoonLakeDev/MoonLake) version.
+---
 
 ## 简介
 这个插件提供了大量的 API 功能，实现了一些 Bukkit 无法做到的 NMS 功能<br />
