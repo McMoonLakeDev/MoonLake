@@ -471,6 +471,33 @@ class DSLItemBuilderScope(itemStack: ItemStack) {
             { builder.clearPotionEffect() }
 
     /**
+     * firework charge
+     * @see org.bukkit.inventory.meta.FireworkEffectMeta
+     */
+
+    var fireworkCharge: FireworkEffect?
+        set(value) = builder.apply(value) { setFireworkCharge(it) }
+        get() {
+            var value: FireworkEffect? = null
+            builder.getFireworkCharge { _, effect -> value = effect }
+            return value
+        }
+
+    fun setFireworkCharge(block: DSLItemBuilderScope.FireworkEffectScope.() -> Unit)
+            = builder.apply(DSLItemBuilderScope.FireworkEffectScope().apply(block)) {
+        val type = it.type
+        if(type != null) {
+            val effect = FireworkEffect.builder()
+                    .with(type)
+                    .flicker(it.flicker ?: false)
+                    .trail(it.trail ?: false)
+                    .withColor(*it.colors ?: arrayOf())
+                    .withFade(*it.fadeColors ?: arrayOf())
+            fireworkCharge = effect.build()
+        }
+    }
+
+    /**
      * firework meta
      * @see org.bukkit.inventory.meta.FireworkMeta
      */

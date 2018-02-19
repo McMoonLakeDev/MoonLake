@@ -346,6 +346,19 @@ interface ItemBuilder : Builder<ItemStack> {
     fun clearPotionEffect(): ItemBuilder
 
     /**
+     * firework charge meta
+     * @see org.bukkit.inventory.meta.FireworkEffectMeta
+     */
+
+    fun getFireworkCharge(block: (self: ItemBuilder, effect: FireworkEffect?) -> Unit): ItemBuilder
+
+    fun setFireworkCharge(effect: FireworkEffect): ItemBuilder
+
+    fun removeFireworkCharge(): ItemBuilder
+
+    fun removeFireworkChargeIf(predicate: (effect: FireworkEffect) -> Boolean): ItemBuilder
+
+    /**
      * firework meta
      * @see org.bukkit.inventory.meta.FireworkMeta
      */

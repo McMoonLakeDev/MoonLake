@@ -798,6 +798,30 @@ class MoonLakePluginTest : JavaPlugin() {
                         }
                     }.build().givePlayer(event.player)
                 }
+                if(event.message == "/dsl ib-firework-charge") {
+
+                    Material.FIREWORK_CHARGE.buildItemBuilder {
+                        setFireworkCharge {
+                            type = FireworkEffect.Type.BALL_LARGE
+                            flicker = true
+                            trail = true
+                            colors = arrayOf(Color.RED)
+                            fadeColors = arrayOf(Color.BLUE)
+                        }
+                    }.build().newItemBuilder()
+                            .removeFireworkChargeIf { it.type == FireworkEffect.Type.BALL_LARGE }
+                            .build().givePlayer(event.player)
+
+                    Material.FIREWORK_CHARGE.buildItemBuilder {
+                        setFireworkCharge {
+                            type = FireworkEffect.Type.BALL_LARGE
+                            flicker = true
+                            trail = true
+                            colors = arrayOf(Color.RED)
+                            fadeColors = arrayOf(Color.BLUE)
+                        }
+                    }.build().givePlayer(event.player)
+                }
             }
         }.registerEvent(this)
     }

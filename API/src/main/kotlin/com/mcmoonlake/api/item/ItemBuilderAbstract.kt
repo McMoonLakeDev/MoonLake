@@ -148,6 +148,7 @@ abstract class ItemBuilderAbstract : ItemBuilder {
         private const val TAG_BANNER_PATTERN = "Pattern"
         private const val TAG_FIREWORKS = "Fireworks"
         private const val TAG_FIREWORKS_FLIGHT = "Flight"
+        private const val TAG_FIREWORKS_EXPLOSION = "Explosion"
         private const val TAG_FIREWORKS_EXPLOSIONS = "Explosions"
         private const val TAG_FIREWORKS_FLICKER = "Flicker"
         private const val TAG_FIREWORKS_TRAIL = "Trail"
@@ -785,6 +786,54 @@ abstract class ItemBuilderAbstract : ItemBuilder {
 
     override fun clearPotionEffect(): ItemBuilder
             { tag.remove(TAG_POTION); tag.remove(TAG_CUSTOM_POTION_EFFECTS); return this; }
+
+    /** firework charge */
+
+    override fun getFireworkCharge(block: (self: ItemBuilder, effect: FireworkEffect?) -> Unit): ItemBuilder {
+        val explosion = tag.getCompoundOrNull(TAG_FIREWORKS_EXPLOSION)
+        var effect: FireworkEffect? = null
+        if(explosion != null) {
+            val type = explosion.getByteOrNull(TAG_FIREWORKS_TYPE).let { if(it == null) null else fromNBT(it.toInt()) }
+            if(type != null) {
+                val builder = FireworkEffect.builder().with(type)
+                explosion.getBooleanOrNull(TAG_FIREWORKS_FLICKER).also { if(it != null && it) builder.withFlicker() }
+                explosion.getBooleanOrNull(TAG_FIREWORKS_TRAIL).also { if(it != null && it) builder.withTrail() }
+                explosion.getIntArrayOrNull(TAG_FIREWORKS_COLORS).also { it?.forEach { builder.withColor(Color.fromRGB(it)) } }
+                explosion.getIntArrayOrNull(TAG_FIREWORKS_FADE_COLORS).also { it?.forEach { builder.withFade(Color.fromRGB(it)) } }
+                effect = builder.build()
+            }
+        }
+        block(this, effect)
+        return this
+    }
+
+    override fun setFireworkCharge(effect: FireworkEffect): ItemBuilder {
+        val explosion = tag.getCompoundOrDefault(TAG_FIREWORKS_EXPLOSION)
+        explosion.putBoolean(TAG_FIREWORKS_FLICKER, effect.hasFlicker())
+        explosion.putBoolean(TAG_FIREWORKS_TRAIL, effect.hasTrail())
+        explosion.putByte(TAG_FIREWORKS_TYPE, effect.type.nbt())
+        explosion.putIntArray(TAG_FIREWORKS_COLORS, effect.colors.map { it.asRGB() }.toIntArray())
+        explosion.putIntArray(TAG_FIREWORKS_FADE_COLORS, effect.fadeColors.map { it.asRGB() }.toIntArray())
+        return this
+    }
+
+    override fun removeFireworkCharge(): ItemBuilder
+            { tag.remove(TAG_FIREWORKS_EXPLOSION); return this; }
+
+    override fun removeFireworkChargeIf(predicate: (effect: FireworkEffect) -> Boolean): ItemBuilder
+            = tag.removeTagIf<NBTCompound>(TAG_FIREWORKS_EXPLOSION) {
+        var effect: FireworkEffect? = null
+        val type = it.getByteOrNull(TAG_FIREWORKS_TYPE).let { if(it == null) null else fromNBT(it.toInt()) }
+        if(type != null) {
+            val builder = FireworkEffect.builder().with(type)
+            it.getBooleanOrNull(TAG_FIREWORKS_FLICKER).also { if(it != null && it) builder.withFlicker() }
+            it.getBooleanOrNull(TAG_FIREWORKS_TRAIL).also { if(it != null && it) builder.withTrail() }
+            it.getIntArrayOrNull(TAG_FIREWORKS_COLORS).also { it?.forEach { builder.withColor(Color.fromRGB(it)) } }
+            it.getIntArrayOrNull(TAG_FIREWORKS_FADE_COLORS).also { it?.forEach { builder.withFade(Color.fromRGB(it)) } }
+            effect = builder.build()
+        }
+        effect != null && predicate(effect)
+    }
 
     /** firework */
 
