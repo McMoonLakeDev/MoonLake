@@ -43,9 +43,19 @@ interface NBTBase<T> {
     var value: T
 
     // TODO v1.13 NBT Color Enhancement & Deprecated Remove ?
+    // Color Enhancement Completed
+    /**
+     * Convert the json string to the numeric carrying type suffix.
+     *
+     * @param color Whether it has a color of 1.13
+     */
+    @Deprecated("The future version 1.13 may be subject to change.") // TODO v1.13
+    fun toMojangson(color: Boolean = false): String
+
     /**
      * Convert the json string to the numeric carrying type suffix.
      */
     @Deprecated("The future version 1.13 may be subject to change.") // TODO v1.13
     fun toMojangson(): String
+            = toMojangson(false)
 }

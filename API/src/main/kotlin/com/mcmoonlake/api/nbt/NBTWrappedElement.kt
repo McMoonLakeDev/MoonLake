@@ -34,6 +34,7 @@
 
 package com.mcmoonlake.api.nbt
 
+import com.mcmoonlake.api.chat.ChatColor
 import com.mcmoonlake.api.exception.MoonLakeException
 import com.mcmoonlake.api.notNull
 import com.mcmoonlake.api.reflect.FuzzyReflect
@@ -66,7 +67,7 @@ class NBTWrappedElement<T>(
     }
 
     fun setElementType(type: NBTType) {
-        val elementType = type.rawId.toByte()
+        val elementType = type.id.toByte()
         currentModifier().withTarget<Any>(handle).withType<Byte>(Byte::class.java).write(0, elementType)
     }
 
@@ -114,20 +115,26 @@ class NBTWrappedElement<T>(
         }
     }
 
-    override fun toMojangson(): String { // TODO v1.13
+    override fun toMojangson(color: Boolean): String {
         return buildString {
-            append("{")
-            when(type) {
-                NBTType.TAG_STRING -> append("\"$value\"")
-                NBTType.TAG_BYTE -> append("${value}b") // byte = b
-                NBTType.TAG_SHORT -> append("${value}s") // short = s
-                NBTType.TAG_INT -> append("$value") // int = N/A
-                NBTType.TAG_LONG -> append("${value}l") // long = l
-                NBTType.TAG_FLOAT -> append("${value}f") // float = f
-                NBTType.TAG_DOUBLE -> append("${value}d") // double = d
-                else -> append("$value")
+            append('{')
+            when {
+                type == NBTType.TAG_STRING -> {
+                    if(color) append("\"").append(ChatColor.GREEN)
+                            .append(value).append(ChatColor.RESET).append("\"") // string = GREEN
+                    else
+                        append("\"").append(value).append("\"")
+                }
+                type.isNumber() -> {
+                    val suffix = type.mojangsonSuffix ?: ""
+                    if(color) append(ChatColor.GOLD).append(value)
+                            .append(ChatColor.RED).append(suffix).append(ChatColor.RESET)
+                    else
+                        append(value).append(suffix)
+                }
+                else -> append(value)
             }
-            append("}")
+            append('}')
         }
     }
 

@@ -34,6 +34,7 @@
 
 package com.mcmoonlake.api.nbt
 
+import com.mcmoonlake.api.chat.ChatColor
 import com.mcmoonlake.api.exception.MoonLakeException
 import com.mcmoonlake.api.util.ConvertedMap
 
@@ -313,24 +314,38 @@ class NBTWrappedCompound(
         }
     }
 
-    override fun toMojangson(): String { // TODO v1.13
+    override fun toMojangson(color: Boolean): String {
         return buildString {
-            append("{")
+            append('{')
             val size = size()
             this@NBTWrappedCompound.forEachIndexed { index, it ->
-                when(it.type) {
-                    NBTType.TAG_STRING -> append("\"${it.name}\":\"${it.value}\"")
-                    NBTType.TAG_BYTE -> append("\"${it.name}\":${it.value}b") // byte = b
-                    NBTType.TAG_SHORT -> append("\"${it.name}\":${it.value}s") // short = s
-                    NBTType.TAG_INT -> append("\"${it.name}\":${it.value}") // int = N/A
-                    NBTType.TAG_LONG -> append("\"${it.name}\":${it.value}l") // long = l
-                    NBTType.TAG_FLOAT -> append("\"${it.name}\":${it.value}f") // float = f
-                    NBTType.TAG_DOUBLE -> append("\"${it.name}\":${it.value}d") // double = d
-                    else -> append("\"${it.name}\":${it.toMojangson()}") // to mojangson
+
+                if(color) append("\"").append(ChatColor.AQUA).append(it.name)
+                        .append(ChatColor.RESET).append("\"").append(": ")
+                else
+                    append("\"").append(it.name).append("\"").append(':')
+
+                when {
+                    it.type == NBTType.TAG_STRING -> {
+                        if(color) append("\"").append(ChatColor.GREEN)
+                                .append(it.value).append(ChatColor.RESET).append("\"")
+                        else
+                            append("\"").append(it.value).append("\"")
+                    }
+                    it.type.isNumber() -> {
+                        val suffix = it.type.mojangsonSuffix ?: ""
+                        if(color) append(ChatColor.GOLD).append(it.value)
+                                .append(ChatColor.RED).append(suffix).append(ChatColor.RESET)
+                        else append(it.value).append(suffix)
+                    }
+                    else -> append(it.toMojangson(color))
                 }
-                if(index != size - 1) append(",")
+                if(index != size - 1) {
+                    if(color) append(ChatColor.RESET).append(", ")
+                    else append(',')
+                }
             }
-            append("}")
+            append('}')
         }
     }
 }

@@ -76,6 +76,11 @@ class MoonLakePluginTest : JavaPlugin() {
                     val tag = NBTFactory.readStackTag(itemStack)
                     event.player.sendMessage(tag.toString())
                 }
+                if(event.message == "/nbt 1.13") {
+                    val itemStack = event.player.itemInHand
+                    val tag = NBTFactory.readStackTag(itemStack)
+                    event.player.sendMessage(tag?.toMojangson(true) ?: "null") // with color
+                }
                 if(event.message == "/nbt w") {
                     val itemStack = ItemStack(Material.DIAMOND_SWORD)
                     val tag = NBTFactory.readStackTagSafe(itemStack)

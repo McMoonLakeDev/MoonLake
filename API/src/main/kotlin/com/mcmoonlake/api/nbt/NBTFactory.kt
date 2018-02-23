@@ -141,7 +141,7 @@ object NBTFactory {
     @JvmStatic
     @JvmName("of")
     fun of(type: NBTType): Any
-            = nbtBaseCreateTag.invoke(null, type.rawId.toByte()) as Any
+            = nbtBaseCreateTag.invoke(null, type.id.toByte()) as Any
 
     @JvmStatic
     @JvmName("ofWrapper")

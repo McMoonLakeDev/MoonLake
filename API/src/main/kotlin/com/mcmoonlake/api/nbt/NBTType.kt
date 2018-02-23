@@ -35,40 +35,63 @@
 package com.mcmoonlake.api.nbt
 
 enum class NBTType(
-        val rawId: Int,
-        val valueType: Class<*>) {
+        val id: Int,
+        val primitive: Class<*>,
+        val reference: Class<*>,
+        val mojangsonSuffix: String? = null) {
 
     /** enums */
 
-    TAG_END(0, java.lang.Void::class.java),
-    TAG_BYTE(1, java.lang.Byte.TYPE),
-    TAG_SHORT(2, java.lang.Short.TYPE),
-    TAG_INT(3, java.lang.Integer.TYPE),
-    TAG_LONG(4, java.lang.Long.TYPE),
-    TAG_FLOAT(5, java.lang.Float.TYPE),
-    TAG_DOUBLE(6, java.lang.Double.TYPE),
-    TAG_BYTE_ARRAY(7, ByteArray::class.java),
-    TAG_STRING(8, java.lang.String::class.java),
-    TAG_LIST(9, java.util.List::class.java),
-    TAG_COMPOUND(10, java.util.Map::class.java),
-    TAG_INT_ARRAY(11, IntArray::class.java),
+    TAG_END(0, java.lang.Void.TYPE, java.lang.Void::class.java),
+    TAG_BYTE(1, java.lang.Byte.TYPE, java.lang.Byte::class.java, "b"),
+    TAG_SHORT(2, java.lang.Short.TYPE, java.lang.Short::class.java, "s"),
+    TAG_INT(3, java.lang.Integer.TYPE, java.lang.Integer::class.java, ""),
+    TAG_LONG(4, java.lang.Long.TYPE, java.lang.Long::class.java, "L"),
+    TAG_FLOAT(5, java.lang.Float.TYPE, java.lang.Float::class.java, "f"),
+    TAG_DOUBLE(6, java.lang.Double.TYPE, java.lang.Double::class.java, "d"),
+    TAG_BYTE_ARRAY(7, ByteArray::class.java, ByteArray::class.java),
+    TAG_STRING(8, java.lang.String::class.java, java.lang.String::class.java),
+    TAG_LIST(9, java.util.List::class.java, java.util.List::class.java),
+    TAG_COMPOUND(10, java.util.Map::class.java, java.util.Map::class.java),
+    TAG_INT_ARRAY(11, IntArray::class.java, IntArray::class.java),
     ;
+
+    /**
+     * @see [mojangsonSuffix]
+     */
+    fun isNumber(): Boolean
+            = this == TAG_BYTE ||
+            this == TAG_SHORT ||
+            this == TAG_INT ||
+            this == TAG_LONG ||
+            this == TAG_FLOAT ||
+            this == TAG_DOUBLE
 
     /** static */
 
     companion object {
 
-        @JvmStatic
-        private val ID_MAP: MutableMap<Int, NBTType> = HashMap()
+        @JvmStatic private val ID_MAP: MutableMap<Int, NBTType> = HashMap()
+        @JvmStatic private val CLASS_MAP: MutableMap<Class<*>, NBTType> = HashMap()
 
         init {
-            values().forEach { ID_MAP[it.rawId] = it }
+            values().forEach {
+                ID_MAP[it.id] = it
+                CLASS_MAP[it.primitive] = it
+                CLASS_MAP[it.reference] = it
+            }
         }
 
         @JvmStatic
         @JvmName("fromId")
         @Throws(IllegalArgumentException::class)
-        fun fromId(rawId: Int): NBTType
-                = ID_MAP[rawId] ?: throw IllegalArgumentException("未知的 NBT 类型 Id: $rawId")
+        fun fromId(id: Int): NBTType
+                = ID_MAP[id] ?: throw IllegalArgumentException("未知的 NBT 类型 Id: $id.")
+
+        @JvmStatic
+        @JvmName("fromClass")
+        @Throws(IllegalArgumentException::class)
+        fun fromClass(clazz: Class<*>): NBTType
+                = CLASS_MAP[clazz]?: throw IllegalArgumentException("未知的 NBT 类型 Class: $clazz.")
     }
 }

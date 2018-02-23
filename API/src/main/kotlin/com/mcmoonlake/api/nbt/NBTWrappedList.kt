@@ -34,6 +34,7 @@
 
 package com.mcmoonlake.api.nbt
 
+import com.mcmoonlake.api.chat.ChatColor
 import com.mcmoonlake.api.notNull
 import com.mcmoonlake.api.util.ConvertedList
 
@@ -237,22 +238,30 @@ class NBTWrappedList<T>(
         }
     }
 
-    override fun toMojangson(): String { // TODO v1.13
+    override fun toMojangson(color: Boolean): String {
         return buildString {
-            append("[")
+            append('[')
             if(size() > 0) {
-                when(elementType) {
-                    NBTType.TAG_STRING -> append("\"${joinToString("\",\"")}\"")
-                    NBTType.TAG_BYTE -> append(joinToString("b,", postfix = "b")) // byte = b
-                    NBTType.TAG_SHORT -> append(joinToString("s,", postfix = "s")) // short = s
-                    NBTType.TAG_INT -> append(joinToString(",")) // int = N/A
-                    NBTType.TAG_LONG -> append(joinToString("l,", postfix = "l")) // long = l
-                    NBTType.TAG_FLOAT -> append(joinToString("f,", postfix = "f")) // float = f
-                    NBTType.TAG_DOUBLE -> append(joinToString("d,", postfix = "d")) // double = d
-                    else -> append(this@NBTWrappedList.map { it as NBTBase<*> }.joinToString(",") { it.toMojangson() }) // to mojangson
+                when {
+                    elementType == NBTType.TAG_STRING -> {
+                        if(color) append("\"").append(ChatColor.GREEN)
+                                .append(joinToString("${ChatColor.RESET}\", \"${ChatColor.GREEN}"))
+                                .append(ChatColor.RESET).append("\"")
+                        else
+                            append("\"").append(joinToString("\",\"")).append("\"")
+                    }
+                    elementType.isNumber() -> {
+                        val suffix = elementType.mojangsonSuffix ?: ""
+                        if(color) append(ChatColor.GOLD)
+                                .append(joinToString("$suffix${ChatColor.RESET}, ${ChatColor.GOLD}", postfix = "$suffix${ChatColor.RESET}"))
+                        else
+                            append(joinToString("$suffix,", postfix = suffix))
+                    }
+                    else -> append(this@NBTWrappedList.map { it as NBTBase<*> }
+                            .joinToString(if(color) ", " else ",") { it.toMojangson(color) })
                 }
             }
-            append("]")
+            append(']')
         }
     }
 }
