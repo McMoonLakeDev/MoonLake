@@ -66,7 +66,7 @@ object ChatSerializer {
             = CONVERTER.getGenericValue(component)
 
     /**
-     * * Converts the `ICBC` for a given `NMS` to a [] object.
+     * * Converts the `ICBC` for a given `NMS` to a [ChatComponent] object.
      * * 将给定 `NMS` 的 `ICBC` 转换为 [ChatComponent] 对象.
      *
      * @see [toNMS]

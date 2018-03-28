@@ -19,22 +19,36 @@ package com.mcmoonlake.api.item
 
 import com.mcmoonlake.api.Valuable
 
+/**
+ * ## Generation (书本代)
+ *
+ * * Enumerate generations of books in Minecraft.
+ * * 枚举 Minecraft 中书本的代.
+ *
+ * @see [Valuable]
+ * @author lgou2w
+ * @since 2.0
+ */
 enum class Generation : Valuable<Int> {
 
     /**
-     * Book Generation: Original (书本代: 原作)
+     * * Book Generation: Original
+     * * 书本代: 原作
      */
     ORIGINAL,
     /**
-     * Book Generation: Copy of Original (书本代: 原作的副本)
+     * * Book Generation: Copy of Original
+     * * 书本代: 原作的副本
      */
     COPY_OF_ORIGINAL,
     /**
-     * Book Generation: Copy of Copy (书本代: 副本的副本)
+     * * Book Generation: Copy of Copy
+     * * 书本代: 副本的副本
      */
     COPY_OF_COPY,
     /**
-     * Book Generation: Tattered (书本代: 破烂的)
+     * * Book Generation: Tattered
+     * * 书本代: 破烂的
      */
     TATTERED,
     ;

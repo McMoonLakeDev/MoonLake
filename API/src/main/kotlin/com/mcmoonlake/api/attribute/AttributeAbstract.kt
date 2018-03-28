@@ -15,23 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mcmoonlake.api.exception
+package com.mcmoonlake.api.attribute
 
 /**
- * ## MoonLakeException (月色之湖异常)
+ * ## AttributeAbstract (属性抽象)
  *
- * @see [RuntimeException]
+ * @see [Attribute]
  * @author lgou2w
  * @since 2.0
+ * @constructor AttributeAbstract
+ * @param type Attribute Type.
+ * @param type 属性类型.
  */
-open class MoonLakeException : RuntimeException {
+abstract class AttributeAbstract(
+        override val type: AttributeType
+) : Attribute {
 
-    constructor() : super()
-    constructor(message: String?) : super(message)
-    constructor(message: String?, cause: Throwable?) : super(message, cause)
-    constructor(cause: Throwable?) : super(cause)
-
-    companion object {
-        private const val serialVersionUID = 6542382374402841030L
-    }
+    override val defValue: Double
+        get() = type.def
 }

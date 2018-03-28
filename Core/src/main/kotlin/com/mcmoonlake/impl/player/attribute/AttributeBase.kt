@@ -17,18 +17,15 @@
 
 package com.mcmoonlake.impl.player.attribute
 
-import com.mcmoonlake.api.attribute.Attribute
+import com.mcmoonlake.api.attribute.AttributeAbstract
 import com.mcmoonlake.api.attribute.AttributeModifier
 import com.mcmoonlake.api.attribute.AttributeType
 import com.mcmoonlake.api.player.MoonLakePlayer
 
 open class AttributeBase(
         protected val player: MoonLakePlayer,
-        override val type: AttributeType
-) : Attribute {
-
-    override val defValue: Double
-        get() = type.def
+        type: AttributeType
+) : AttributeAbstract(type) {
 
     override var baseValue: Double
         get() = throw UnsupportedOperationException()
