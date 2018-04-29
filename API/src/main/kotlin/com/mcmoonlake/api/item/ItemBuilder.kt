@@ -38,6 +38,14 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import java.util.*
 
+/**
+ * ## ItemBuilder (物品构建者)
+ *
+ * @see [Builder]
+ * @see [ItemStack]
+ * @author lgou2w
+ * @since 2.0
+ */
 interface ItemBuilder : Builder<ItemStack> {
 
     override fun build(): ItemStack
