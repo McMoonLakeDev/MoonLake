@@ -21,7 +21,7 @@ import com.mcmoonlake.api.player.MoonLakePlayer
 import com.mcmoonlake.api.wrapper.Mod
 import org.bukkit.entity.Player
 
-interface ServiceForgeHandshake : Service {
+interface ServiceForgeHandshake : ServiceBukkit {
 
     fun getMods(player: Player): Array<Mod>?
 

@@ -17,7 +17,10 @@
 
 package com.mcmoonlake.impl.service
 
+import com.mcmoonlake.api.getMoonLake
+import com.mcmoonlake.api.getServicesManager
 import com.mcmoonlake.api.service.*
+import org.bukkit.plugin.ServicePriority
 import java.util.concurrent.ConcurrentHashMap
 
 class ServiceManagerImpl : ServiceManager {
@@ -28,10 +31,12 @@ class ServiceManagerImpl : ServiceManager {
         if((service is ServiceRegistrable && !service.registrable()) || services.containsKey(clazz))
             return false
         return try {
+            if (service is ServiceBukkit) // Bukkit Service
+                getServicesManager().register(clazz, service, getMoonLake(), ServicePriority.Normal)
             service.onInitialize()
             services.put(clazz, service) == null
         } catch(e: Exception) {
-            e.printStackTrace() // print
+            e.printStackTrace() // ignore
             false
         }
     }
@@ -39,6 +44,8 @@ class ServiceManagerImpl : ServiceManager {
     override fun <T: Service> unregisterService(clazz: Class<T>): Boolean {
         if(ServiceAbstractCore::class.java.isInstance(services[clazz]))
             throw ServiceException("待卸载的服务 $clazz 类是核心服务, 不可卸载.")
+        if (ServiceBukkit::class.java.isInstance(clazz)) // Bukkit Service
+            getServicesManager().unregister(clazz)
         return services.remove(clazz).also { service -> service?.onUnload() } != null
     }
 

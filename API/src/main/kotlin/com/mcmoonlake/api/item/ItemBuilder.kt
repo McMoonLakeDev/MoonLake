@@ -428,7 +428,12 @@ interface ItemBuilder : Builder<ItemStack> {
         fun of(itemStack: ItemStack): ItemBuilder
                 = object: ItemBuilderAbstract(itemStack) {}
 
+        @JvmOverloads
         fun of(material: Material, amount: Int = 1, durability: Int = 0): ItemBuilder
                 = object: ItemBuilderAbstract(material, amount, durability) {}
+
+        @JvmOverloads
+        fun of(material: String, amount: Int = 1, durability: Int = 0): ItemBuilder
+                = of(Material.matchMaterial(material), amount, durability)
     }
 }

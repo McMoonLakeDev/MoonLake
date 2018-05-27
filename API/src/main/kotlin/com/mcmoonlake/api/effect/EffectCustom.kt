@@ -29,7 +29,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.potion.PotionEffect
 
 /**
- * * ## EffectCustom (效果自定义)
+ * ## EffectCustom (效果自定义)
  *
  * * Allow to create a custom duration, level potion effect.
  * * 允许创建出自定义持续时间、等级的药水效果.

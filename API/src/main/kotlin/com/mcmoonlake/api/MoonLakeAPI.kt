@@ -610,33 +610,30 @@ fun Plugin.cancelTasks()
 fun cancelAllTasks()
         = Bukkit.getScheduler().cancelAllTasks()
 
-/** target function */
+/** location target function */
 
-fun Entity.isInFront(target: Entity): Boolean {
-    val facing = location.direction
-    val relative = target.location.subtract(location).toVector().normalize()
+fun Location.isInFront(target: Location): Boolean {
+    val facing = direction
+    val relative = target.subtract(this).toVector().normalize()
     return facing.dot(relative) >= .0
 }
 
-fun Entity.isInFront(target: Entity, angle: Double): Boolean = angle.let {
-    if(it <= .0) return false
-    if(it >= 360.0) return true
-    val dotTarget = Math.cos(it)
-    val facing = location.direction
-    val relative = target.location.subtract(location).toVector().normalize()
+fun Location.isInFront(target: Location, angle: Double): Boolean {
+    if (angle <= .0) return false
+    if (angle >= 360.0) return true
+    val dotTarget = Math.cos(angle)
+    val facing = direction
+    val relative = target.subtract(this).toVector().normalize()
     return facing.dot(relative) >= dotTarget
 }
 
-fun Entity.isBehind(target: Entity, angle: Double): Boolean
-        = !isInFront(target, angle)
-
 @JvmOverloads
-fun <T: LivingEntity> LivingEntity.getLivingTargets(clazz: Class<T>, range: Double, tolerance: Double = 4.0): List<T> {
-    val entityList = getNearbyEntities(range, range, range)
-    val facing = location.direction
+fun <T: LivingEntity> Location.getLivingTargets(clazz: Class<T>, range: Double, tolerance: Double = 4.0): List<T> {
+    val entityList = world.getNearbyEntities(this, range, range, range)
+    val facing = direction
     val fLengthSq = facing.lengthSquared()
-    return entityList.filter { clazz.isInstance(it) && isInFront(it) }.map { clazz.cast(it) }.filter {
-        val  relative = it.location.subtract(location).toVector()
+    return entityList.filter { clazz.isInstance(it) && this@getLivingTargets.isInFront(it.location) }.map { clazz.cast(it) }.filter {
+        val  relative = it.location.subtract(this).toVector()
         val dot = relative.dot(facing)
         val rLengthSq = relative.lengthSquared()
         val cosSquared = dot * dot / (rLengthSq * fLengthSq)
@@ -647,17 +644,17 @@ fun <T: LivingEntity> LivingEntity.getLivingTargets(clazz: Class<T>, range: Doub
 }
 
 @JvmOverloads
-fun LivingEntity.getLivingTargets(range: Double, tolerance: Double = 4.0): List<LivingEntity>
+fun Location.getLivingTargets(range: Double, tolerance: Double = 4.0): List<LivingEntity>
         = getLivingTargets(LivingEntity::class.java, range, tolerance)
 
 @JvmOverloads
-fun <T: LivingEntity> LivingEntity.getLivingTarget(clazz: Class<T>, range: Double, tolerance: Double = 4.0): T? {
+fun <T: LivingEntity> Location.getLivingTarget(clazz: Class<T>, range: Double, tolerance: Double = 4.0): T? {
     val targets = getLivingTargets(clazz, range, tolerance)
     if(targets.isEmpty()) return null
     var target = targets.first()
-    var minDistance = target.location.distanceSquared(location)
+    var minDistance = target.location.distanceSquared(this)
     targets.forEach {
-        val distance = it.location.distanceSquared(location)
+        val distance = it.location.distanceSquared(this)
         if(distance < minDistance) {
             minDistance = distance
             target = it
@@ -665,6 +662,29 @@ fun <T: LivingEntity> LivingEntity.getLivingTarget(clazz: Class<T>, range: Doubl
     }
     return target
 }
+
+/** target function */
+
+fun Entity.isInFront(target: Entity): Boolean
+        = location.isInFront(target.location)
+
+fun Entity.isInFront(target: Entity, angle: Double): Boolean
+        = location.isInFront(target.location, angle)
+
+fun Entity.isBehind(target: Entity, angle: Double): Boolean
+        = !isInFront(target, angle)
+
+@JvmOverloads
+fun <T: LivingEntity> LivingEntity.getLivingTargets(clazz: Class<T>, range: Double, tolerance: Double = 4.0): List<T>
+        = location.getLivingTargets(clazz, range, tolerance)
+
+@JvmOverloads
+fun LivingEntity.getLivingTargets(range: Double, tolerance: Double = 4.0): List<LivingEntity>
+        = getLivingTargets(LivingEntity::class.java, range, tolerance)
+
+@JvmOverloads
+fun <T: LivingEntity> LivingEntity.getLivingTarget(clazz: Class<T>, range: Double, tolerance: Double = 4.0): T?
+        = location.getLivingTarget(clazz, range, tolerance)
 
 @JvmOverloads
 fun LivingEntity.getLivingTarget(range: Double, tolerance: Double = 4.0): LivingEntity?
@@ -737,11 +757,11 @@ fun ItemStack.dropLocation(location: Location): Item
 /** nbt function */
 
 @JvmOverloads
-fun newNBTCompound(name: String = ""): NBTCompound
+fun ofNBTCompound(name: String = ""): NBTCompound
         = NBTFactory.ofCompound(name)
 
 @JvmOverloads
-fun <T> newNBTList(name: String = ""): NBTList<T>
+fun <T> ofNBTList(name: String = ""): NBTList<T>
         = NBTFactory.ofList(name)
 
 @JvmOverloads

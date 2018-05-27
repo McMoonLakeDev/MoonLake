@@ -31,7 +31,14 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 
 /**
- * Only applies to Minecraft 1.9+
+ * ## ItemCooldowns (物品冷却时间)
+ *
+ * * Minecraft 1.9 After Cooldown Tool for ItemStack.
+ * * Minecraft 1.9 之后物品栈的冷却时间工具类.
+ *
+ * @see [Material]
+ * @author lgou2w
+ * @since 2.0
  */
 object ItemCooldowns {
 
@@ -71,7 +78,17 @@ object ItemCooldowns {
     }
 
     /**
+     * * Set the cooldown for the given player to specify the material type.
+     * * 将给定玩家的指定物品栈类型设置冷却时间.
+     *
+     * @param player Player.
+     * @param player 玩家.
+     * @param type Material type.
+     * @param type 物品栈类型.
+     * @param ticks Cooldown ticks.
+     * @param ticks 冷却时间刻. (20Tick=1s)
      * @throws IllegalBukkitVersionException If the version is less than 1.9
+     * @throws IllegalBukkitVersionException 如果版本小于 1.9
      */
     @JvmStatic
     @JvmName("set")
@@ -83,7 +100,15 @@ object ItemCooldowns {
     }
 
     /**
+     * * Get the cooldown for the given player's specified material type.
+     * * 获取给定玩家的指定物品栈类型的冷却时间.
+     *
+     * @param player Player.
+     * @param player 玩家.
+     * @param type Material type.
+     * @param type 物品栈类型.
      * @throws IllegalBukkitVersionException If the version is less than 1.9
+     * @throws IllegalBukkitVersionException 如果版本小于 1.9
      */
     @JvmStatic
     @JvmName("get")
@@ -99,7 +124,15 @@ object ItemCooldowns {
     }
 
     /**
+     * * Gets whether the given player has a cooldown for the specified material type.
+     * * 获取给定玩家的指定物品栈类型是否拥有冷却时间.
+     *
+     * @param player Player.
+     * @param player 玩家.
+     * @param type Material type.
+     * @param type 物品栈类型.
      * @throws IllegalBukkitVersionException If the version is less than 1.9
+     * @throws IllegalBukkitVersionException 如果版本小于 1.9
      */
     @JvmStatic
     @JvmName("has")

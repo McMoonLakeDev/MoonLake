@@ -20,7 +20,7 @@ package com.mcmoonlake.api.service
 import com.mcmoonlake.api.packet.PacketListener
 import org.bukkit.plugin.Plugin
 
-interface ServicePacketListener : ServiceRegistrable {
+interface ServicePacketListener : ServiceBukkit, ServiceRegistrable {
 
     fun registerListener(listener: PacketListener): Boolean
 

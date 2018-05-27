@@ -17,11 +17,15 @@
 
 package com.mcmoonlake.api.service
 
-interface ServiceConfig : ServiceBukkit {
-
-    fun reload()
-
-    fun hasVersionCheck(): Boolean
-
-    fun hasPacketListener(): Boolean
+/**
+ * ## ServiceBukkit (水桶服务)
+ *
+ * * The service that implements this interface registers with Bukkit when registering.
+ * * 实现此接口的服务注册的同时注册到 Bukkit 中.
+ *
+ * @see [org.bukkit.plugin.ServicesManager]
+ * @author lgou2w
+ * @since 2.0
+ */
+interface ServiceBukkit : Service {
 }
