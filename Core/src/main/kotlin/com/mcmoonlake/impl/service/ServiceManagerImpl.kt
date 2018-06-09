@@ -46,7 +46,12 @@ class ServiceManagerImpl : ServiceManager {
             throw ServiceException("待卸载的服务 $clazz 类是核心服务, 不可卸载.")
         if (ServiceBukkit::class.java.isInstance(clazz)) // Bukkit Service
             getServicesManager().unregister(clazz)
-        return services.remove(clazz).also { service -> service?.onUnload() } != null
+        return services.remove(clazz).also { service ->
+            try {
+                service?.onUnload()
+            } catch (e: Exception) {
+            }
+        } != null
     }
 
     override fun <T: Service> getService(clazz: Class<T>): T = try {
@@ -66,7 +71,12 @@ class ServiceManagerImpl : ServiceManager {
             = getServiceSafe(clazz) != null
 
     fun shutdown() {
-        services.values.forEach { it.onUnload() }
+        services.values.forEach {
+            try {
+                it.onUnload()
+            } catch (e: Exception) {
+            }
+        }
         services.clear()
     }
 }

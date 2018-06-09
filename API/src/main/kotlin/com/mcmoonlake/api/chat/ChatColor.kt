@@ -162,6 +162,9 @@ enum class ChatColor(
     override fun toString(): String
             = "$CHAR_COLOR$code"
 
+    operator fun plus(charSequence: CharSequence): String
+            = toString() + charSequence
+
     companion object {
 
         /**

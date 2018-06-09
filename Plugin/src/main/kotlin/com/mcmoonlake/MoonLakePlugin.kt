@@ -35,7 +35,7 @@ import com.mcmoonlake.api.version.MinecraftVersion
 import com.mcmoonlake.impl.depend.DependPlaceholderAPIImpl
 import com.mcmoonlake.impl.depend.DependVaultEconomyImpl
 import com.mcmoonlake.impl.depend.DependWorldEditImpl
-import com.mcmoonlake.impl.listeners.PluginListeners
+import com.mcmoonlake.impl.listener.GlobalListeners
 import com.mcmoonlake.impl.service.ServiceConfigImpl
 import com.mcmoonlake.impl.service.ServiceManagerImpl
 import com.mcmoonlake.impl.service.ServicePacketListenerImpl
@@ -74,6 +74,15 @@ class MoonLakePlugin : JavaPlugin(), MoonLake {
         this.server.pluginManager.disablePlugin(this)
         null
     } else {
+        // TODO v1.13 There may be many issues after this release that have not been fixed.
+        if (MinecraftVersion.currentVersion().isOrLater(MinecraftVersion(1, 13, 0))) {
+            this.logger.warning("--------------------------------------------------")
+            this.logger.warning("| 警告: 目前月色之湖核心 API 插件尚未全功能兼容 v1.13 版本.")
+            this.logger.warning("| 任何疑问和 Bugs 请反馈到 https://github.com/McMoonLakeDev/MoonLake/issues")
+            this.logger.warning("| Warning: The MoonLake Core API Plugin does not fully support v1.13.")
+            this.logger.warning("| Any questions and bugs please send feedback to https://github.com/McMoonLakeDev/MoonLake/issues")
+            this.logger.warning("--------------------------------------------------")
+        }
         true
     }
 
@@ -115,11 +124,12 @@ class MoonLakePlugin : JavaPlugin(), MoonLake {
         DependPlugins.register(DependWorldEdit::class.java, DependWorldEditImpl::class.java)
         DependPlugins.register(DependPlaceholderAPI::class.java, DependPlaceholderAPIImpl::class.java)
         DependPlugins.register(DependVaultEconomy::class.java, DependVaultEconomyImpl::class.java)
+        // TODO May increase more in the future.
     }
 
-    /** register moonlake plugin listeners */
+    /** register moonlake plugin listener */
     private fun registerMoonLakePluginListeners() {
-        PluginListeners().registerEvent(this)
+        GlobalListeners().registerEvent(this)
     }
 
     override val pluginPrefix: String

@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mcmoonlake.impl.listeners
+package com.mcmoonlake.impl.listener
 
 import com.mcmoonlake.api.MoonLake
 import com.mcmoonlake.api.anvil.AnvilWindows
@@ -25,10 +25,10 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.server.PluginDisableEvent
 
-class PluginListeners : MoonLakeListener {
+class GlobalListeners : MoonLakeListener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    fun onDisable(event: PluginDisableEvent) {
+    fun onPluginDisable(event: PluginDisableEvent) {
         if(event.plugin is MoonLake) {
             AnvilWindows.releaseAll()
             DependPlugins.unregisterAll()
