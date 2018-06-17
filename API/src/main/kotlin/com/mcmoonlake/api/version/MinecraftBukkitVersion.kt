@@ -122,7 +122,7 @@ class MinecraftBukkitVersion(
             ), V1_12_R2)
             map.put(arrayOf(
                     MinecraftVersion(1, 13, 0)
-                    // ---> net.minecraft.server.v1_13_R11
+                    // ---> net.minecraft.server.v1_13_R1
             ), V1_13_R1)
             return map
         }
