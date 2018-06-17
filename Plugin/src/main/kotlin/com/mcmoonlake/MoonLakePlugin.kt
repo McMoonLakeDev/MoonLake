@@ -75,7 +75,7 @@ class MoonLakePlugin : JavaPlugin(), MoonLake {
         null
     } else {
         // TODO v1.13 There may be many issues after this release that have not been fixed.
-        if (MinecraftVersion.currentVersion().isOrLater(MinecraftVersion(1, 13, 0))) {
+            if (MinecraftVersion.currentVersion().isOrLater(MinecraftVersion.V1_13)) {
             this.logger.warning("--------------------------------------------------")
             this.logger.warning("| 警告: 目前月色之湖核心 API 插件尚未全功能兼容 v1.13 版本.")
             this.logger.warning("| 任何疑问和 Bugs 请反馈到 https://github.com/McMoonLakeDev/MoonLake/issues")

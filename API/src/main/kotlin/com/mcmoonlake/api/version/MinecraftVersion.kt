@@ -34,6 +34,7 @@ class MinecraftVersion(
 
     companion object {
 
+        @JvmField val V1_13 = MinecraftVersion(1, 13, 0)
         @JvmField val V1_12 = MinecraftVersion(1, 12, 0)
         @JvmField val V1_11 = MinecraftVersion(1, 11, 0)
         @JvmField val V1_10 = MinecraftVersion(1, 10, 0)

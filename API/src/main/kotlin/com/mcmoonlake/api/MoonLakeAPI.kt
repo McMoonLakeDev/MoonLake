@@ -156,6 +156,7 @@ private val frostburnOrLaterVer = currentBukkitVersion().isOrLater(MinecraftBukk
 private val explorationOrLaterVer = currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_11_R1)
 private val colorWorldOrLaterVer = currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_12_R1)
 private val javaEditionOrLaterVer = currentMCVersion().isOrLater(MinecraftVersion(1, 12, 2))
+private val aquaticOrLaterVer = currentBukkitVersion().isOrLater(MinecraftBukkitVersion.V1_13_R1)
 
 /**
  * Returns if the server version is 1.9 or later.
@@ -186,6 +187,12 @@ val isColorWorldOrLaterVer: Boolean
  */
 val isJavaEditionOrLaterVer: Boolean
     get() = javaEditionOrLaterVer
+
+/**
+ * Returns if the server version is 1.13 or later.
+ */
+val isAquaticOrLaterVer: Boolean
+    get() = aquaticOrLaterVer
 
 private val spigotServer: Boolean by lazy {
     try {
