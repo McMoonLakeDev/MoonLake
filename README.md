@@ -15,7 +15,7 @@
 
 ## 介绍
 
-- 此分支将会是未来 `v2.0` 版本的内容. 旧内容请查看 [Override](https://github.com/McMoonLakeDev/MoonLake/tree/override) 分支.
+- 此分支将会是未来 `v2.0` 版本的内容. ~~旧内容请查看 [Override](https://github.com/McMoonLakeDev/MoonLake/tree/override) 分支.~~
 
 ## API
 
@@ -38,7 +38,7 @@
 
 ## 支持
 
-版本: `1.8.x` ~ `1.12.x`
+版本: `1.8.x` ~ `1.12.x` (1.13 即将推出支持!!!)
 
 - [x] [Bukkit](https://bukkit.org)
 - [x] [Spigot](https://spigotmc.org)

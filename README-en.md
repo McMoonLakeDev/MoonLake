@@ -15,7 +15,7 @@
 
 ## Introduction
 
-- This branch will be the content of the future `v2.0` version. For the old content, Please view the [Override](https://github.com/McMoonLakeDev/MoonLake/tree/override) branch.
+- This branch will be the content of the future `v2.0` version. ~~For the old content, Please view the [Override](https://github.com/McMoonLakeDev/MoonLake/tree/override) branch.~~
 
 ## API
 
@@ -38,7 +38,7 @@
 
 ## Support
 
-Version: `1.8.x` ~ `1.12.x`
+Version: `1.8.x` ~ `1.12.x` (1.13 Coming soon support!!!)
 
 - [x] [Bukkit](https://bukkit.org)
 - [x] [Spigot](https://spigotmc.org)
