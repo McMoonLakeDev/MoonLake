@@ -26,7 +26,6 @@
 - [x] Service
 - [x] Event
 - [x] Packet
-- [ ] Command Annotation
 - [x] Cached
 - [x] Particle
 - [x] NBT Component
@@ -38,7 +37,7 @@
 
 ## Support
 
-Version: `1.8.x` ~ `1.12.x` (1.13 Coming soon support!!!)
+Version: `1.8.x` ~ `1.12.x`
 
 - [x] [Bukkit](https://bukkit.org)
 - [x] [Spigot](https://spigotmc.org)
